@@ -29,25 +29,25 @@ cd $DIRECTORY
 if [ "$2" != "-skip-clone" ]; then
 
   # Delete old copies of fv-utils and fv-batch-import and clone fresh ones
-  if [ -d "$DIRECTORY/temp/fv-utils-temp" ]; then
+  if [ -d "$DIRECTORY/cypress/temp/fv-utils-temp" ]; then
     echo "Removing old fv-utils"
-    rm -rf $DIRECTORY/temp/fv-utils-temp
+    rm -rf $DIRECTORY/cypress/temp/fv-utils-temp
   fi
-  if [ -d "$DIRECTORY/temp/fv-batch-import-temp" ]; then
+  if [ -d "$DIRECTORY/cypress/temp/fv-batch-import-temp" ]; then
     echo "Removing old fv-batch-import"
-    rm -rf $DIRECTORY/temp/fv-batch-import-temp
+    rm -rf $DIRECTORY/cypress/temp/fv-batch-import-temp
   fi
 
   mkdir temp
 
-  git clone https://github.com/First-Peoples-Cultural-Council/fv-batch-import.git ./temp/fv-batch-import-temp
+  git clone https://github.com/First-Peoples-Cultural-Council/fv-batch-import.git ./cypress/temp/fv-batch-import-temp
   if [[ "$?" -ne 0 ]]; then
     echo
     echo -e 'git clone fv-batch-import failed \n'
     exit 1
     echo
   fi
-  git clone https://github.com/First-Peoples-Cultural-Council/fv-utils.git ./temp/fv-utils-temp
+  git clone https://github.com/First-Peoples-Cultural-Council/fv-utils.git ./cypress/temp/fv-utils-temp
   if [[ "$?" -ne 0 ]]; then
     echo
     echo -e 'git clone fv-utils failed \n'
@@ -57,7 +57,7 @@ if [ "$2" != "-skip-clone" ]; then
 
   # Compile jar files from fv-utils and fv-batch-upload
   echo
-  cd $DIRECTORY/temp/fv-utils-temp
+  cd $DIRECTORY/cypress/temp/fv-utils-temp
   mvn clean install
   # Check that the return code is zero
   if [[ "$?" -ne 0 ]]; then
@@ -67,7 +67,7 @@ if [ "$2" != "-skip-clone" ]; then
     echo
   fi
   echo
-  cd $DIRECTORY/temp/fv-batch-import-temp
+  cd $DIRECTORY/cypress/temp/fv-batch-import-temp
   mvn clean install
   # Check that the return code is zero
   if [[ "$?" -ne 0 ]]; then
@@ -114,7 +114,7 @@ fi
 echo
 
 # ----- TEST LANGUAGE ONE ------
-cd $DIRECTORY/temp/fv-utils-temp/target/
+cd $DIRECTORY/cypress/temp/fv-utils-temp/target/
 # Create a fresh TestLanguageOne directory and all files
 java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url $TARGET/nuxeo -language-directory Test/Test/ -language-name TestLanguageOne
 if [[ "$?" -ne 0 ]]; then
@@ -141,16 +141,16 @@ if [[ "$response" -ne 200 ]]; then
   echo
 fi
 # Import Word using fv-batch-import
-cd $DIRECTORY/temp/fv-batch-import-temp/target
-java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangTwoWord.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageTwo
+cd $DIRECTORY/cypress/temp/fv-batch-import-temp/target
+java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/cypress/scripts/files/testLangTwoWord.csv -data-path $DIRECTORY/cypress/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageTwo
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import TestLanguageTwo Words batch failed \n'
   exit 1
   echo
 fi
 # Import Phrase using fv-batch-import
-cd $DIRECTORY/scripts/batch_jarfiles/
-java -jar fv-batch-import-phrases.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangTwoPhrase.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageTwo
+cd $DIRECTORY/cypress/scripts/batch_jarfiles/
+java -jar fv-batch-import-phrases.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/cypress/scripts/files/testLangTwoPhrase.csv -data-path $DIRECTORY/cypress/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageTwo
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import TestLanguageTwo Phrases batch failed \n'
   exit 1
@@ -159,7 +159,7 @@ fi
 echo
 
 # ----- TEST LANGUAGE THREE ------
-cd $DIRECTORY/temp/fv-utils-temp/target/
+cd $DIRECTORY/cypress/temp/fv-utils-temp/target/
 # Create a fresh TestLanguageThree directory and all files
 java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url $TARGET/nuxeo -language-directory Test/Test/ -language-name TestLanguageThree
 if [[ "$?" -ne 0 ]]; then
@@ -213,16 +213,16 @@ if [[ "$response" -ne 200 ]]; then
   echo
 fi
 # Import Word using fv-batch-import
-cd $DIRECTORY/temp/fv-batch-import-temp/target
-java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangFiveWord.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageFive
+cd $DIRECTORY/cypress/temp/fv-batch-import-temp/target
+java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/cypress/scripts/files/testLangFiveWord.csv -data-path $DIRECTORY/cypress/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageFive
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import TestLanguageFive Words batch failed \n'
   exit 1
   echo
 fi
 # Import Phrase using fv-batch-import
-cd $DIRECTORY/scripts/batch_jarfiles/
-java -jar fv-batch-import-phrases.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangFivePhrase.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageFive
+cd $DIRECTORY/cypress/scripts/batch_jarfiles/
+java -jar fv-batch-import-phrases.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/cypress/scripts/files/testLangFivePhrase.csv -data-path $DIRECTORY/cypress/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageFive
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import TestLanguageFive Phrases batch failed \n'
   exit 1
@@ -231,7 +231,7 @@ fi
 echo
 
 # ----- TEST LANGUAGE SIX ------
-cd $DIRECTORY/temp/fv-utils-temp/target/
+cd $DIRECTORY/cypress/temp/fv-utils-temp/target/
 # Create a fresh TestLanguageSix directory and all files
 java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url $TARGET/nuxeo -language-directory Test/Test/ -language-name TestLanguageSix
 if [[ "$?" -ne 0 ]]; then
@@ -288,24 +288,24 @@ if [[ "$response" -ne 200 ]]; then
   echo
 fi
 # Import Words using fv-batch-import
-cd $DIRECTORY/temp/fv-batch-import-temp/target
-java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangSixWord.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageSix
+cd $DIRECTORY/cypress/temp/fv-batch-import-temp/target
+java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/cypress/scripts/files/testLangSixWord.csv -data-path $DIRECTORY/cypress/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageSix
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import TestLanguageSix Words batch failed \n'
   exit 1
   echo
 fi
 # Import Phrases using fv-batch-import
-cd $DIRECTORY/scripts/batch_jarfiles/
-java -jar fv-batch-import-phrases.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangSixPhrase.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageSix
+cd $DIRECTORY/cypress/scripts/batch_jarfiles/
+java -jar fv-batch-import-phrases.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/cypress/scripts/files/testLangSixPhrase.csv -data-path $DIRECTORY/cypress/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageSix
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import TestLanguageSix Phrases batch failed \n'
   exit 1
   echo
 fi
 # Import Alphabet using fv-batch-import
-cd $DIRECTORY/scripts/batch_jarfiles/
-java -jar fv-batch-import-alphabet.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/alphabet.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageSix
+cd $DIRECTORY/cypress/scripts/batch_jarfiles/
+java -jar fv-batch-import-alphabet.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/cypress/scripts/files/alphabet.csv -data-path $DIRECTORY/cypress/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageSix
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import TestLanguageSix Alphabet batch failed \n'
   exit 1
@@ -321,7 +321,7 @@ if [[ "$response" -ne 200 ]]; then
 fi
 
 # ----- TEST LANGUAGE SEVEN ------
-cd $DIRECTORY/temp/fv-utils-temp/target/
+cd $DIRECTORY/cypress/temp/fv-utils-temp/target/
 # Create a fresh TestLanguageSeven directory and all files
 java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url $TARGET/nuxeo -language-directory Test/Test/ -language-name TestLanguageSeven
 if [[ "$?" -ne 0 ]]; then
@@ -331,16 +331,16 @@ if [[ "$?" -ne 0 ]]; then
 fi
 echo
 # Import Alphabet using fv-batch-import
-cd $DIRECTORY/scripts/batch_jarfiles/
-java -jar fv-batch-import-alphabet.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangSevenAlphabet.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageSeven
+cd $DIRECTORY/cypress/scripts/batch_jarfiles/
+java -jar fv-batch-import-alphabet.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/cypress/scripts/files/testLangSevenAlphabet.csv -data-path $DIRECTORY/cypress/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageSeven
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import TestLanguageSeven Alphabet batch failed \n'
   exit 1
   echo
 fi
 # Import Words using fv-batch-import
-cd $DIRECTORY/temp/fv-batch-import-temp/target
-java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangSevenWord.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageSeven
+cd $DIRECTORY/cypress/temp/fv-batch-import-temp/target
+java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/cypress/scripts/files/testLangSevenWord.csv -data-path $DIRECTORY/cypress/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageSeven
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import TestLanguageSeven Words batch failed \n'
   exit 1
@@ -348,7 +348,7 @@ if [[ "$?" -ne 0 ]]; then
 fi
 
 # ----- TEST LANGUAGE EIGHT ------
-cd $DIRECTORY/temp/fv-utils-temp/target/
+cd $DIRECTORY/cypress/temp/fv-utils-temp/target/
 # Create a fresh TestLanguageEight directory and all files
 java -jar fv-nuxeo-utils-*.jar create-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url $TARGET/nuxeo -language-directory Test/Test/ -language-name TestLanguageEight
 if [[ "$?" -ne 0 ]]; then
@@ -373,16 +373,16 @@ if [[ "$response" -ne 200 ]]; then
   echo
 fi
 # Import Words using fv-batch-import
-cd $DIRECTORY/temp/fv-batch-import-temp/target
-java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangEightWord.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageEight
+cd $DIRECTORY/cypress/temp/fv-batch-import-temp/target
+java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/cypress/scripts/files/testLangEightWord.csv -data-path $DIRECTORY/cypress/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageEight
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import TestLanguageEight Words batch failed \n'
   exit 1
   echo
 fi
 # Import Alphabet using fv-batch-import
-cd $DIRECTORY/scripts/batch_jarfiles/
-java -jar fv-batch-import-alphabet.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/alphabet.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageEight
+cd $DIRECTORY/cypress/scripts/batch_jarfiles/
+java -jar fv-batch-import-alphabet.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/cypress/scripts/files/alphabet.csv -data-path $DIRECTORY/cypress/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageEight
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import TestLanguageEight Alphabet batch failed \n'
   exit 1
@@ -496,7 +496,7 @@ fi
 echo
 
 # Remove generated batch files
-cd $DIRECTORY/scripts/files/
+cd $DIRECTORY/cypress/scripts/files/
 count='find *_errors.csv | wc -l'
 if [[ $count != 0 ]]; then
   echo "Removing generated batch files"

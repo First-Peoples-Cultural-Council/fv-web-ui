@@ -8,7 +8,7 @@ DIRECTORY=$PWD
 echo $DIRECTORY 1>/dev/null
 
 # Delete existing TestLanguageFive directory and all files
-cd $DIRECTORY/temp/fv-utils-temp/target
+cd $DIRECTORY/cypress/temp/fv-utils-temp/target
 java -jar fv-nuxeo-utils-*.jar delete-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url $TARGET/nuxeo -language-directory Test/Test/ -language-name TestLanguageFive 1>/dev/null
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-utils TestLanguageFive teardown failed \n'; exit 1
@@ -24,19 +24,19 @@ if [[ "$response" -ne 200 ]]; then
     echo -e 'TestLanguageFive publish failed: Error ' $response ' \n'; exit 1
 fi
 # Import Word using fv-batch-import
-cd $DIRECTORY/temp/fv-batch-import-temp/target
-java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangFiveWord.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageFive 1>/dev/null
+cd $DIRECTORY/cypress/temp/fv-batch-import-temp/target
+java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/cypress/scripts/files/testLangFiveWord.csv -data-path $DIRECTORY/cypress/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageFive 1>/dev/null
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import TestLanguageFive Words batch failed \n'; exit 1
 fi
 # Import Phrase using fv-batch-import
-cd $DIRECTORY/scripts/batch_jarfiles/
-java -jar fv-batch-import-phrases.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/testLangFivePhrase.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageFive 1>/dev/null
+cd $DIRECTORY/cypress/scripts/batch_jarfiles/
+java -jar fv-batch-import-phrases.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/cypress/scripts/files/testLangFivePhrase.csv -data-path $DIRECTORY/cypress/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/TestLanguageFive 1>/dev/null
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import TestLanguageFive Phrases batch failed \n'; exit 1
 fi
 # Remove generated batch files
-cd $DIRECTORY/scripts/files/
+cd $DIRECTORY/cypress/scripts/files/
 count='find *_errors.csv | wc -l'
 if [[ $count != 0 ]]; then
     echo "Removing generated batch files" 1>/dev/null

@@ -153,7 +153,7 @@ public class MockDialectServiceImpl implements MockDialectService {
   @Override
   public DocumentModel generateMockDemoDialect(CoreSession session, int maxEntries, String name) {
     String desc = "This is a generated test dialect for demo and cypress test purposes.";
-    final String[] words = {"Alphabet", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Golf",
+    final String[] words = {"Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Golf",
         "Hotel",
         "India", "Juliet", "Kilo", "Lima", "Mike", "November", "Oscar", "Papa", "Quebec",
         "Romeo", "Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-Ray", "Yankee", "Zulu"};

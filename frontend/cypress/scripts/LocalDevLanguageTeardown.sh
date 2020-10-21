@@ -11,8 +11,8 @@ cd $DIRECTORY
 if [ "$2" != "-skip-clone" ]; then
     mkdir temp
 
-    FVUTILS=$DIRECTORY/temp/fv-utils-temp
-    FVBATCH=$DIRECTORY/temp/fv-batch-import-temp
+    FVUTILS=$DIRECTORY/cypress/temp/fv-utils-temp
+    FVBATCH=$DIRECTORY/cypress/temp/fv-batch-import-temp
 
     if [ -d "$FVBATCH" ]; then
       echo "pulling fv-batch-import"
@@ -21,7 +21,7 @@ if [ "$2" != "-skip-clone" ]; then
       cd $DIRECTORY
     else
         echo "cloning fv-batch-import"
-        git clone https://github.com/First-Peoples-Cultural-Council/fv-batch-import.git ./temp/fv-batch-import-temp
+        git clone https://github.com/First-Peoples-Cultural-Council/fv-batch-import.git ./cypress/temp/fv-batch-import-temp
         if [[ "$?" -ne 0 ]]; then
           echo
           echo -e 'git clone fv-batch-import failed \n'; exit 1
@@ -36,7 +36,7 @@ if [ "$2" != "-skip-clone" ]; then
       cd $DIRECTORY
     else
       echo "cloning fv-utils"
-      git clone https://github.com/First-Peoples-Cultural-Council/fv-utils.git ./temp/fv-utils-temp
+      git clone https://github.com/First-Peoples-Cultural-Council/fv-utils.git ./cypress/temp/fv-utils-temp
       if [[ "$?" -ne 0 ]]; then
         echo
         echo -e 'git clone fv-utils failed \n'; exit 1
@@ -46,7 +46,7 @@ if [ "$2" != "-skip-clone" ]; then
 
     # Compile jar files from fv-utils and fv-batch-upload
     echo
-    cd $DIRECTORY/temp/fv-utils-temp
+    cd $DIRECTORY/cypress/temp/fv-utils-temp
     mvn clean install
     # Check that the return code is zero
     if [[ "$?" -ne 0 ]]; then
@@ -55,7 +55,7 @@ if [ "$2" != "-skip-clone" ]; then
       echo
     fi
     echo
-    cd $DIRECTORY/temp/fv-batch-import-temp
+    cd $DIRECTORY/cypress/temp/fv-batch-import-temp
     mvn clean install
     # Check that the return code is zero
     if [[ "$?" -ne 0 ]]; then
@@ -66,7 +66,7 @@ if [ "$2" != "-skip-clone" ]; then
 fi
 echo
 
-cd $DIRECTORY/temp/fv-utils-temp/target/
+cd $DIRECTORY/cypress/temp/fv-utils-temp/target/
 # Delete existing TestLanguageOne directory and all files
 java -jar fv-nuxeo-utils-*.jar delete-language -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -url $TARGET/nuxeo -language-directory Test/Test/ -language-name DevLangOne
 if [[ "$?" -ne 0 ]]; then

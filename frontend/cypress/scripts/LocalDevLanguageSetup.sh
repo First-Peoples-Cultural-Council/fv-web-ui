@@ -10,8 +10,8 @@ TARGET="http://127.0.0.1:8080"
 if [ "$1" != "-skip-clone" ]; then
     mkdir temp
 
-    FVUTILS=$DIRECTORY/temp/fv-utils-temp
-    FVBATCH=$DIRECTORY/temp/fv-batch-import-temp
+    FVUTILS=$DIRECTORY/cypress/temp/fv-utils-temp
+    FVBATCH=$DIRECTORY/cypress/temp/fv-batch-import-temp
 
     if [ -d "$FVBATCH" ]; then
       echo "pulling fv-batch-import"
@@ -20,7 +20,7 @@ if [ "$1" != "-skip-clone" ]; then
       cd $DIRECTORY
     else
         echo "cloning fv-batch-import"
-        git clone https://github.com/First-Peoples-Cultural-Council/fv-batch-import.git ./temp/fv-batch-import-temp
+        git clone https://github.com/First-Peoples-Cultural-Council/fv-batch-import.git ./cypress/temp/fv-batch-import-temp
         if [[ "$?" -ne 0 ]]; then
           echo
           echo -e 'git clone fv-batch-import failed \n'; exit 1
@@ -35,7 +35,7 @@ if [ "$1" != "-skip-clone" ]; then
       cd $DIRECTORY
     else
       echo "cloning fv-utils"
-      git clone https://github.com/First-Peoples-Cultural-Council/fv-utils.git ./temp/fv-utils-temp
+      git clone https://github.com/First-Peoples-Cultural-Council/fv-utils.git ./cypress/temp/fv-utils-temp
       if [[ "$?" -ne 0 ]]; then
         echo
         echo -e 'git clone fv-utils failed \n'; exit 1
@@ -45,7 +45,7 @@ if [ "$1" != "-skip-clone" ]; then
 
     # Compile jar files from fv-utils and fv-batch-upload
     echo
-    cd $DIRECTORY/temp/fv-utils-temp
+    cd $DIRECTORY/cypress/temp/fv-utils-temp
     mvn clean install
     # Check that the return code is zero
     if [[ "$?" -ne 0 ]]; then
@@ -54,7 +54,7 @@ if [ "$1" != "-skip-clone" ]; then
       echo
     fi
     echo
-    cd $DIRECTORY/temp/fv-batch-import-temp
+    cd $DIRECTORY/cypress/temp/fv-batch-import-temp
     mvn clean install
     # Check that the return code is zero
     if [[ "$?" -ne 0 ]]; then
@@ -83,7 +83,7 @@ fi
 echo
 
 
-cd $DIRECTORY/temp/fv-utils-temp/target/
+cd $DIRECTORY/cypress/temp/fv-utils-temp/target/
 # Check for FV/Workspaces/Data/Test/Test directory and create it if it doesn't exist
 echo "Checking if Test/Test directory exists"
 Test_exists=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/Proxy.GetSourceDocument' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/Test/Test","context":{}}' -u $CYPRESS_FV_USERNAME:$CYPRESS_FV_PASSWORD)
@@ -111,8 +111,8 @@ echo
 
 
 # Import Word using fv-batch-import
-cd $DIRECTORY/temp/fv-batch-import-temp/target
-java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/DevLangOneWords.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/DevLangOne
+cd $DIRECTORY/cypress/temp/fv-batch-import-temp/target
+java -jar fv-batch-import-*.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/cypress/scripts/files/DevLangOneWords.csv -data-path $DIRECTORY/cypress/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/DevLangOne
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import DevLangOne Words batch failed \n'; exit 1
   echo
@@ -120,8 +120,8 @@ fi
 
 
 # Import Phrase using fv-batch-import
-cd $DIRECTORY/scripts/batch_jarfiles/
-java -jar fv-batch-import-phrases.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/DevLangOnePhrases.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/DevLangOne
+cd $DIRECTORY/cypress/scripts/batch_jarfiles/
+java -jar fv-batch-import-phrases.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/cypress/scripts/files/DevLangOnePhrases.csv -data-path $DIRECTORY/cypress/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/DevLangOne
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import DevLangOne Phrases batch failed \n'; exit 1
   echo
@@ -130,15 +130,15 @@ echo
 
 
 # Import Alphabet using fv-batch-import
-cd $DIRECTORY/scripts/batch_jarfiles/
-java -jar fv-batch-import-alphabet.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/scripts/files/alphabet.csv -data-path $DIRECTORY/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/DevLangOne
+cd $DIRECTORY/cypress/scripts/batch_jarfiles/
+java -jar fv-batch-import-alphabet.jar -url "$TARGET/nuxeo" -username $CYPRESS_FV_USERNAME -password $CYPRESS_FV_PASSWORD -domain FV -csv-file $DIRECTORY/cypress/scripts/files/alphabet.csv -data-path $DIRECTORY/cypress/scripts/files/testLangTwoMedia/ -dialect-id fillerID -language-path Test/Test/DevLangOne
 if [[ "$?" -ne 0 ]]; then
   echo -e 'fv-batch-import DevLangOne Alphabet batch failed \n'; exit 1
   echo
 fi
 
 # Remove generated batch files
-cd $DIRECTORY/scripts/files/
+cd $DIRECTORY/cypress/scripts/files/
 count='find *_errors.csv | wc -l'
 if [[ $count != 0 ]]; then
     echo "Removing generated batch files"
