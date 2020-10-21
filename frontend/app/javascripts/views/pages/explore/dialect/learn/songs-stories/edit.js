@@ -51,7 +51,7 @@ import BookEntryList from 'views/pages/explore/dialect/learn/songs-stories/entry
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
 
-import withForm from 'views/hoc/view/with-form'
+import withForm from 'componentsShared/withForm'
 import { string } from 'prop-types'
 
 const DEFAULT_LANGUAGE = 'english'

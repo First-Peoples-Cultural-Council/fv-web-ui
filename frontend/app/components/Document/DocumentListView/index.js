@@ -14,7 +14,7 @@ import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
-import withPagination from 'views/hoc/grid-list/with-pagination'
+import withPagination from 'componentsShared/withPagination'
 
 const GridView = React.lazy(() => import('views/pages/explore/dialect/learn/base/grid-view'))
 const DictionaryList = React.lazy(() => import('components/Browsing/DictionaryList'))

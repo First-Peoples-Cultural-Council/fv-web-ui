@@ -24,8 +24,8 @@ export default class Play extends React.Component {
       subject: null,
     }
 
-    var subjectReactOptions = []
-    var subjectsArray = []
+    const subjectReactOptions = []
+    let subjectsArray = []
 
     subjectsArray = _.sortBy(_.toArray(this.state.subjects), function(name) {
       return name
@@ -85,7 +85,7 @@ export default class Play extends React.Component {
 
           </div>
 
-          GAME: 
+          GAME:
           <GameWrapperView
                 router={this.props.router}
                 client={this.props.client}

@@ -24,7 +24,7 @@ import FVButton from 'components/FVButton'
 import IntroCardView from 'components/Browsing/intro-card-view'
 import TextHeader from 'components/Document/Typography/text-header'
 import FVLabel from 'components/FVLabel'
-import HomeData from 'views/pages/home/HomeData'
+import HomeData from 'views/pages/HomeData'
 
 /**
  * Explore Archive page shows all the families in the archive

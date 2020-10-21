@@ -9,11 +9,11 @@ import t from 'tcomb-form'
 import fields from 'common/schemas/filter-fields'
 import options from 'common/schemas/filter-options'
 
-import withToggle from 'views/hoc/view/with-toggle'
+import withToggle from 'componentsShared/withToggle'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import FormHelpers from 'common/FormHelpers'
-import '!style-loader!css-loader!./FilteredGridList.css'
+import '!style-loader!css-loader!./withFilter.css'
 import FVLabel from 'components/FVLabel'
 
 const FiltersWithToggle = withToggle()

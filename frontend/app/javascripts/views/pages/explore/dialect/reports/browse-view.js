@@ -25,7 +25,7 @@ import ReportsJson from './reports.json'
 import GeneralList from 'components/Browsing/general-list'
 import { ReportsCardView } from './list-view'
 
-import withFilter from 'views/hoc/grid-list/with-filter'
+import withFilter from 'componentsShared/withFilter'
 const FilteredCardList = withFilter(GeneralList)
 
 /**

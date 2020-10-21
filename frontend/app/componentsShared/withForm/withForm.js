@@ -16,7 +16,7 @@ import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
 import WarningBanner from 'components/WarningBanner'
 import RequestReview from 'components/RequestReview'
-import '!style-loader!css-loader!./ViewWith.css'
+import '!style-loader!css-loader!./withForm.css'
 
 const confirmationButtonsStyle = { padding: '4px', marginLeft: '5px', border: '1px solid gray' }
 

@@ -31,7 +31,7 @@ import PromiseWrapper from 'components/Document/PromiseWrapper'
 import PortalList from 'components/Browsing/portal-list'
 import FVLabel from 'components/FVLabel'
 
-import withFilter from 'views/hoc/grid-list/with-filter'
+import withFilter from 'componentsShared/withFilter'
 
 const FilteredPortalList = withFilter(PortalList)
 

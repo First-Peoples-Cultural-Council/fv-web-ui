@@ -46,8 +46,8 @@ import ActionInfo from '@material-ui/icons/Info'
 import ActionInfoOutline from '@material-ui/icons/InfoOutlined'
 
 import MediaList from 'components/Browsing/media-list'
-import withPagination from 'views/hoc/grid-list/with-pagination'
-import withFilter from 'views/hoc/grid-list/with-filter'
+import withPagination from 'componentsShared/withPagination'
+import withFilter from 'componentsShared/withFilter'
 import FVLabel from 'components/FVLabel'
 
 // const gridListStyle = { width: '100%', height: '100vh', overflowY: 'auto', marginBottom: 10 }

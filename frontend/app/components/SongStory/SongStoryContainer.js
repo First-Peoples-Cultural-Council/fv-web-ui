@@ -5,7 +5,7 @@ import SongStoryPresentation from 'components/SongStory/SongStoryPresentation'
 import SongStoryData from 'components/SongStory/SongStoryData'
 
 import PromiseWrapper from 'components/Document/PromiseWrapper'
-import withActions from 'views/hoc/view/with-actions'
+import withActions from 'componentsShared/withActions'
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 
 /**

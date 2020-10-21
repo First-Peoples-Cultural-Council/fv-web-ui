@@ -33,8 +33,8 @@ import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 import PromiseWrapper from 'components/Document/PromiseWrapper'
 
 import MediaList from 'components/Browsing/media-list'
-import withPagination from 'views/hoc/grid-list/with-pagination'
-import withFilter from 'views/hoc/grid-list/with-filter'
+import withPagination from 'componentsShared/withPagination'
+import withFilter from 'componentsShared/withFilter'
 import FVLabel from 'components/FVLabel'
 
 const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 20, filters: { 'properties.dc:title': '', dialect: '' } }

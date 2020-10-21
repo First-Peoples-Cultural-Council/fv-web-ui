@@ -43,7 +43,7 @@ import FVLabel from 'components/FVLabel'
 import GeneralList from 'components/Browsing/general-list'
 import { SongsStoriesCardView } from './list-view'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
-import withFilter from 'views/hoc/grid-list/with-filter'
+import withFilter from 'componentsShared/withFilter'
 
 const DEFAULT_LANGUAGE = 'english'
 

@@ -14,62 +14,61 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PageExploreDialects from './explore/archive/dialects'
-import PageExploreFamily from './explore/family'
-import PageExploreLanguage from './explore/language'
-import PageExploreDialect from './explore/dialect'
+import PageExploreDialects from 'views/pages/ExploreDialects'
+import PageExploreFamily from 'views/pages/ExploreFamily'
+import PageExploreLanguage from 'views/pages/ExploreLanguage'
+import PageExploreDialect from 'views/pages/explore/dialect'
 
-import PageDialectLearn from './explore/dialect/learn'
-import PageDialectMedia from './explore/dialect/media'
-import PageDialectPlay from './explore/dialect/play'
+import PageDialectLearn from 'views/pages/explore/dialect/learn'
+import PageDialectMedia from 'views/pages/explore/dialect/media'
+import PageDialectPlay from 'views/pages/explore/dialect/play'
 
-import PageJigsawGame from './explore/dialect/play/jigsaw'
-import PageWordSearch from './explore/dialect/play/wordsearch'
-import PageColouringBook from './explore/dialect/play/colouringbook'
-import PagePictureThis from './explore/dialect/play/picturethis'
-import PageHangman from './explore/dialect/play/hangman'
-import PageWordscramble from './explore/dialect/play/wordscramble'
-import PageQuiz from './explore/dialect/play/quiz'
-import PageConcentration from './explore/dialect/play/concentration'
+import PageJigsawGame from 'views/pages/explore/dialect/play/jigsaw'
+import PageWordSearch from 'views/pages/explore/dialect/play/wordsearch'
+import PageColouringBook from 'views/pages/explore/dialect/play/colouringbook'
+import PagePictureThis from 'views/pages/explore/dialect/play/picturethis'
+import PageHangman from 'views/pages/explore/dialect/play/hangman'
+import PageWordscramble from 'views/pages/explore/dialect/play/wordscramble'
+import PageQuiz from 'views/pages/explore/dialect/play/quiz'
+import PageConcentration from 'views/pages/explore/dialect/play/concentration'
 
-import PageDialectGalleries from './explore/dialect/gallery'
-import PageDialectGalleryView from './explore/dialect/gallery/view'
-import PageDialectReports from './explore/dialect/reports'
-import PageDialectReportsView from './explore/dialect/reports/view'
-import PageDialectUsers from './explore/dialect/users'
+import PageDialectGalleries from 'views/pages/explore/dialect/gallery'
+import PageDialectGalleryView from 'views/pages/explore/dialect/gallery/view'
+import PageDialectReports from 'views/pages/explore/dialect/reports'
+import PageDialectReportsView from 'views/pages/explore/dialect/reports/view'
+import PageDialectUsers from 'views/pages/explore/dialect/users'
 
 import PageDialectLearnWords from 'components/Words/WordsContainer'
-import PageDialectLearnPhrases from './explore/dialect/learn/phrases'
-import PageDialectLearnStoriesAndSongs from './explore/dialect/learn/songs-stories'
+import PageDialectLearnPhrases from 'views/pages/explore/dialect/learn/phrases'
+import PageDialectLearnStoriesAndSongs from 'views/pages/explore/dialect/learn/songs-stories'
 
-import PageDialectViewMedia from './explore/dialect/media/view'
+import PageDialectViewMedia from 'views/pages/explore/dialect/media/view'
 import PageDialectViewWord from 'components/Word/WordContainer'
 import PageDialectViewPhrase from 'components/Phrase/PhraseContainer'
 import PageDialectViewBook from 'components/SongStory/SongStoryContainer'
-import PageDialectViewAlphabet from './explore/dialect/learn/alphabet/'
-import PageDialectViewCharacter from './explore/dialect/learn/alphabet/view'
-import PageDialectLearnWordsCategories from './explore/dialect/learn/words/categories'
+import PageDialectViewAlphabet from 'views/pages/explore/dialect/learn/alphabet/'
+import PageDialectViewCharacter from 'views/pages/explore/dialect/learn/alphabet/view'
+import PageDialectLearnWordsCategories from 'views/pages/explore/dialect/learn/words/categories'
 
 import PhraseBooksGrid from 'components/PhraseBooksGrid'
 import WordsCategoriesGrid from 'components/WordsCategoriesGrid'
-import PageDialectLearnPhrasesByPhrasebook from './explore/dialect/learn/phrases/phrasesFilteredByPhrasebook'
+import PageDialectLearnPhrasesByPhrasebook from 'views/pages/explore/dialect/learn/phrases/phrasesFilteredByPhrasebook'
 
-import PageDialectImmersionList from './explore/dialect/immersion'
+import PageDialectImmersionList from 'views/pages/explore/dialect/immersion'
 
-import PageTest from './test.js'
-import PageDebugAPI from './debug-api.js'
-import PageDebugTypography from './debug-typography.js'
-import PageError from './error.js'
-import PageHome from './home/HomeLayout'
-import PageContent from './content'
-import PageIntro from './intro'
-import PagePlay from './play'
-import PageSearch from './search'
+import PageTest from 'views/pages/test.js'
+import PageDebugAPI from 'views/pages/debug-api.js'
+import PageDebugTypography from 'views/pages/debug-typography.js'
+import PageError from 'views/pages/error.js'
+import PageHome from 'views/pages/HomeLayout'
+import PageContent from 'views/pages/content'
+import PagePlay from 'views/pages/play'
+import PageSearch from 'views/pages/search'
 import PageTasks from 'components/Tasks/TasksContainer'
-import PageUserTasks from './tasks/users'
-import PageUsersRegister from './users/register'
-import PageUsersForgotPassword from './users/forgotpassword'
-import PageUsersProfile from './users/profile'
+import PageUserTasks from 'views/pages/userTasks'
+import PageUsersRegister from 'views/pages/users/register'
+import PageUsersForgotPassword from 'views/pages/users/forgotpassword'
+import PageUsersProfile from 'views/pages/users/profile'
 
 // KIDS
 import KidsHome from 'components/KidsHome'
@@ -77,54 +76,54 @@ import KidsPhrasesByPhrasebook from 'components/KidsPhrasesByPhrasebook/KidsPhra
 import KidsWordsByCategory from 'components/KidsWordsByCategory/KidsWordsByCategoryContainer'
 
 // EDIT
-import PageExploreDialectEdit from './explore/dialect/ExploreDialectEdit'
-import PageDialectGalleryEdit from './explore/dialect/gallery/edit'
-import PageDialectEditMedia from './explore/dialect/media/edit'
-import PageDialectWordEdit from './explore/dialect/learn/words/Edit'
-import PageDialectPhraseEdit from './explore/dialect/learn/phrases/Edit'
-import PageDialectBookEdit from './explore/dialect/learn/songs-stories/edit'
-import PageDialectBookEntryEdit from './explore/dialect/learn/songs-stories/entry/edit'
-import PageDialectAlphabetCharacterEdit from './explore/dialect/learn/alphabet/edit'
+import PageExploreDialectEdit from 'views/pages/explore/dialect/ExploreDialectEdit'
+import PageDialectGalleryEdit from 'views/pages/explore/dialect/gallery/edit'
+import PageDialectEditMedia from 'views/pages/explore/dialect/media/edit'
+import PageDialectWordEdit from 'views/pages/explore/dialect/learn/words/Edit'
+import PageDialectPhraseEdit from 'views/pages/explore/dialect/learn/phrases/Edit'
+import PageDialectBookEdit from 'views/pages/explore/dialect/learn/songs-stories/edit'
+import PageDialectBookEntryEdit from 'views/pages/explore/dialect/learn/songs-stories/entry/edit'
+import PageDialectAlphabetCharacterEdit from 'views/pages/explore/dialect/learn/alphabet/edit'
 
 // CREATE
-import { default as PageDialectWordsCreate } from './explore/dialect/learn/words/Create'
-import { default as CreateV2 } from './explore/dialect/create/Word'
-import { default as CreateAudio } from './explore/dialect/create/Audio'
-import { default as PageDialectPhrasesCreate } from './explore/dialect/learn/phrases/Create'
-import { default as PageDialectStoriesAndSongsCreate } from './explore/dialect/learn/songs-stories/create'
-import { default as PageDialectStoriesAndSongsBookEntryCreate } from './explore/dialect/learn/songs-stories/entry/create'
-import { default as PageDialectGalleryCreate } from './explore/dialect/gallery/create'
+import { default as PageDialectWordsCreate } from 'views/pages/explore/dialect/learn/words/Create'
+import { default as CreateV2 } from 'views/pages/explore/dialect/create/Word'
+import { default as CreateAudio } from 'views/pages/explore/dialect/create/Audio'
+import { default as PageDialectPhrasesCreate } from 'views/pages/explore/dialect/learn/phrases/Create'
+import { default as PageDialectStoriesAndSongsCreate } from 'views/pages/explore/dialect/learn/songs-stories/create'
+import { default as PageDialectStoriesAndSongsBookEntryCreate } from 'views/pages/explore/dialect/learn/songs-stories/entry/create'
+import { default as PageDialectGalleryCreate } from 'views/pages/explore/dialect/gallery/create'
 
 // CATEGORY
 // ----------------------
-import CategoryBrowse from './explore/dialect/Categories' // Browse
-import { default as CategoryDetail } from './explore/dialect/Category/detail' // Detail
-import { default as PageDialectCategoryCreate } from './explore/dialect/Category/createV1' // Create V1 for modal
-import { default as CategoryCreate } from './explore/dialect/Category/create' // Create
-import { default as CategoryEdit } from './explore/dialect/Category/edit' // Edit
+import CategoryBrowse from 'views/pages/explore/dialect/Categories' // Browse
+import { default as CategoryDetail } from 'views/pages/explore/dialect/Category/detail' // Detail
+import { default as PageDialectCategoryCreate } from 'views/pages/explore/dialect/Category/createV1' // Create V1 for modal
+import { default as CategoryCreate } from 'views/pages/explore/dialect/Category/create' // Create
+import { default as CategoryEdit } from 'views/pages/explore/dialect/Category/edit' // Edit
 
 // CONTRIBUTOR
 // ----------------------
-import ContributorBrowse from './explore/dialect/contributors' // Browse
-import { default as ContributorDetail } from './explore/dialect/Contributor/detail' // Detail
-import { default as ContributorCreateV1 } from './explore/dialect/Contributor/createV1' // Create V1
-import { default as ContributorCreate } from './explore/dialect/Contributor/create' // Create V2
-import { default as ContributorEdit } from './explore/dialect/Contributor/edit' // Edit
+import ContributorBrowse from 'views/pages/explore/dialect/contributors' // Browse
+import { default as ContributorDetail } from 'views/pages/explore/dialect/Contributor/detail' // Detail
+import { default as ContributorCreateV1 } from 'views/pages/explore/dialect/Contributor/createV1' // Create V1
+import { default as ContributorCreate } from 'views/pages/explore/dialect/Contributor/create' // Create V2
+import { default as ContributorEdit } from 'views/pages/explore/dialect/Contributor/edit' // Edit
 
 // PHRASEBOOK
 // ----------------------
-import PhrasebookBrowse from './explore/dialect/Phrasebooks' // Browse
-import { default as PhrasebookDetail } from './explore/dialect/Phrasebook/detail' // Detail
-import { default as PageDialectPhraseBooksCreate } from './explore/dialect/Phrasebook/createV1' // Create V1
-import { default as PhrasebookCreate } from './explore/dialect/Phrasebook/create' // Create V2
-import { default as PhrasebookEdit } from './explore/dialect/Phrasebook/edit' // Edit
+import PhrasebookBrowse from 'views/pages/explore/dialect/Phrasebooks' // Browse
+import { default as PhrasebookDetail } from 'views/pages/explore/dialect/Phrasebook/detail' // Detail
+import { default as PageDialectPhraseBooksCreate } from 'views/pages/explore/dialect/Phrasebook/createV1' // Create V1
+import { default as PhrasebookCreate } from 'views/pages/explore/dialect/Phrasebook/create' // Create V2
+import { default as PhrasebookEdit } from 'views/pages/explore/dialect/Phrasebook/edit' // Edit
 
 // RECORDER
 // ----------------------
-import RecorderBrowse from './explore/dialect/Recorders' // Browse
-import { default as RecorderDetail } from './explore/dialect/Recorder/detail' // Detail
-import { default as RecorderCreate } from './explore/dialect/Recorder/create' // Create
-import { default as RecorderEdit } from './explore/dialect/Recorder/edit' // Edit
+import RecorderBrowse from 'views/pages/explore/dialect/Recorders' // Browse
+import { default as RecorderDetail } from 'views/pages/explore/dialect/Recorder/detail' // Detail
+import { default as RecorderCreate } from 'views/pages/explore/dialect/Recorder/create' // Create
+import { default as RecorderEdit } from 'views/pages/explore/dialect/Recorder/edit' // Edit
 
 // DASHBOARD
 // ----------------------
@@ -133,7 +132,7 @@ import DashboardDetailTasks from 'components/DashboardDetailTasks'
 
 // MENTOR-APPRENTICE PHOTO PROJECT
 // ----------------------
-import PageMAPPhotoProject from './photo-project'
+import PageMAPPhotoProject from 'views/pages/photo-project'
 
 export {
   PageTest,
@@ -141,7 +140,6 @@ export {
   PageDebugAPI,
   PageDebugTypography,
   PageError,
-  PageIntro,
   PageHome,
   PageContent,
   PageExploreDialects,

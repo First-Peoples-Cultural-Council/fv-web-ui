@@ -31,7 +31,7 @@ import PromiseWrapper from 'components/Document/PromiseWrapper'
 import PortalList from 'components/Browsing/portal-list'
 import FVLabel from 'components/FVLabel'
 
-import withFilter from 'views/hoc/grid-list/with-filter'
+import withFilter from 'componentsShared/withFilter'
 
 const FilteredPortalList = withFilter(PortalList)
 
@@ -40,7 +40,7 @@ const FilteredPortalList = withFilter(PortalList)
  */
 
 const { array, func, object, string } = PropTypes
-export class Explore extends Component {
+export class ExploreLanguage extends Component {
   static propTypes = {
     routeParams: object.isRequired,
     // REDUX: reducers/state
@@ -160,4 +160,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Explore)
+export default connect(mapStateToProps, mapDispatchToProps)(ExploreLanguage)

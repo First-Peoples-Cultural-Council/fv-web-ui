@@ -35,7 +35,7 @@ import AuthorizationFilter from 'components/Document/AuthorizationFilter'
 import FVButton from 'components/FVButton'
 import PromiseWrapper from 'components/Document/PromiseWrapper'
 import GeneralList from 'components/Browsing/general-list'
-import withFilter from 'views/hoc/grid-list/with-filter'
+import withFilter from 'componentsShared/withFilter'
 import FVLabel from 'components/FVLabel'
 
 const DEFAULT_LANGUAGE = 'english'

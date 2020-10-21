@@ -37,7 +37,7 @@ import { Document } from 'nuxeo'
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
 
-import withForm from 'views/hoc/view/with-form'
+import withForm from 'componentsShared/withForm'
 import IntlService from 'common/services/intl'
 
 const intl = IntlService.instance

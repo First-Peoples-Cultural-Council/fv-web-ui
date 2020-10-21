@@ -34,7 +34,7 @@ import ConfirmationDelete from 'components/Confirmation'
 import FVButton from 'components/FVButton'
 
 import NavigationHelpers from 'common/NavigationHelpers'
-import withPagination from 'views/hoc/grid-list/with-pagination'
+import withPagination from 'componentsShared/withPagination'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'components/Browsing/DictionaryListSmallScreen'
 import '!style-loader!css-loader!./styles.css'
 
@@ -70,7 +70,7 @@ function Recorders(props) {
   const [paginationRequest, setPaginationRequest] = useState()
   usePaginationRequest({ pushWindowPath: props.pushWindowPath, paginationRequest })
 
-  const copy = useGetCopy(async () => {
+  const copy = useGetCopy(async() => {
     const success = await import(/* webpackChunkName: "RecordersInternationalization" */ './internationalization')
     return success.default
   })
@@ -79,7 +79,7 @@ function Recorders(props) {
     computeData: computeContributors,
     dataPath: `${routeParams.dialect_path}/Contributors`,
     deletedUids,
-    getData: async () => {
+    getData: async() => {
       // const { pageSize, page } = routeParams
       // const { sortBy, sortOrder } = search
 
@@ -220,7 +220,7 @@ function Recorders(props) {
           }}
           // Listview: computed data
           computedData={computedData}
-          sortHandler={async (sortData) => {
+          sortHandler={async(sortData) => {
             await props.setRouteParams({
               search: {
                 page: sortData.page,

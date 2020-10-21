@@ -45,7 +45,7 @@ import { Document } from 'nuxeo'
 // Views
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
-import withForm from 'views/hoc/view/with-form'
+import withForm from 'componentsShared/withForm'
 
 const EditViewWithForm = withForm(PromiseWrapper, true)
 

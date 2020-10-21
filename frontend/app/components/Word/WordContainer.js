@@ -3,7 +3,7 @@ import WordData from 'components/Word/WordData'
 
 import DetailWordPhrase from 'components/DetailWordPhrase'
 import PromiseWrapper from 'components/Document/PromiseWrapper'
-import withActions from 'views/hoc/view/with-actions'
+import withActions from 'componentsShared/withActions'
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 
 /**

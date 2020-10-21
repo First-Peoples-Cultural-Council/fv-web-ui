@@ -43,7 +43,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
 import PromiseWrapper from 'components/Document/PromiseWrapper'
-import withActions from 'views/hoc/view/with-actions'
+import withActions from 'componentsShared/withActions'
 
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 

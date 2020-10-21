@@ -31,7 +31,7 @@ import UIHelpers from 'common/UIHelpers'
 import DocumentListView from 'components/Document/DocumentListView'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 import GroupAssignmentDialog from 'views/pages/users/group-assignment-dialog'
-import withFilter from 'views/hoc/grid-list/with-filter'
+import withFilter from 'componentsShared/withFilter'
 
 const DefaultFetcherParams = { filters: { 'properties.dc:title': '', dialect: '' } }
 const FilteredPaginatedMediaList = withFilter(DocumentListView, DefaultFetcherParams)
