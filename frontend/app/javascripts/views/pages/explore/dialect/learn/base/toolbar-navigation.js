@@ -31,7 +31,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import Link from 'components/Link'
 import EditorInsertChart from '@material-ui/icons/InsertChart'
 import FVButton from 'components/FVButton'
-import AuthenticationFilter from 'components/Document/AuthenticationFilter'
+import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
 import FVLabel from 'components/FVLabel'
 
 /**

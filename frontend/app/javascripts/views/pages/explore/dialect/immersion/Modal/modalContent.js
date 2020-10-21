@@ -25,7 +25,7 @@ import options from 'common/schemas/options'
 import fields from 'common/schemas/fields'
 import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
-import AuthorizationFilter from 'components/Document/AuthorizationFilter/index'
+import AuthorizationFilter from 'componentsShared/AuthorizationFilter/index'
 
 import { DialogActions, DialogContent, DialogTitle, TextField, IconButton } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'

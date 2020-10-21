@@ -17,8 +17,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Immutable, { is } from 'immutable'
 import classNames from 'classnames'
-import AuthenticationFilter from 'components/Document/AuthenticationFilter'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -148,7 +148,7 @@ export class PhrasesCreate extends Component {
     return content
   }
 
-  fetchData = async(addToState = {}) => {
+  fetchData = async (addToState = {}) => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
 
     // Call fetchDialect2 if not already called:

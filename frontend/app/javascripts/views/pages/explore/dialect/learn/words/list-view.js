@@ -30,13 +30,13 @@ import selectn from 'selectn'
 import Edit from '@material-ui/icons/Edit'
 
 import { WORKSPACES } from 'common/Constants'
-import AuthorizationFilter from 'components/Document/AuthorizationFilter'
+import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
-import DocumentListView from 'components/Document/DocumentListView'
+import DocumentListView from 'componentsShared/DocumentListView'
 import FVButton from 'components/FVButton'
 import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
 import Preview from 'components/Editor/Preview'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import Link from 'components/Link'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
@@ -228,7 +228,7 @@ class WordsListView extends DataListView {
     }
 
     // Bind methods to 'this'
-    [
+    ;[
       '_onNavigateRequest', // no references in file
       '_handleRefetch', // Note: comes from DataListView
       '_handleSortChange', // Note: comes from DataListView

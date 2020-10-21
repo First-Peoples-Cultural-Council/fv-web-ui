@@ -32,9 +32,9 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import FVButton from 'components/FVButton'
-import AuthorizationFilter from 'components/Document/AuthorizationFilter'
+import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 import UserListView from 'views/pages/explore/dialect/users/list-view'
 import FVLabel from 'components/FVLabel'
 

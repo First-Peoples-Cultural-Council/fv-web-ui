@@ -27,7 +27,7 @@ import selectn from 'selectn'
 import t from 'tcomb-form'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 // Views
 import fields from 'common/schemas/fields'

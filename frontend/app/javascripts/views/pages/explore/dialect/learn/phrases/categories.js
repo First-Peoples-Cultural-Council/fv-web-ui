@@ -30,7 +30,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import CategoryList from 'components/Browsing/category-list'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 /**
  * Categories page for phrases

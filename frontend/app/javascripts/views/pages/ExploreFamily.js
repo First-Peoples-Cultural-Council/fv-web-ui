@@ -27,7 +27,7 @@ import { pushWindowPath } from 'reducers/windowPath'
 import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import PortalList from 'components/Browsing/portal-list'
 import FVLabel from 'components/FVLabel'
 

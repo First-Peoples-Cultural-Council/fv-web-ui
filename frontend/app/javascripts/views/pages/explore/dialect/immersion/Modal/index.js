@@ -24,7 +24,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import { createLabel, fetchLabel, updateLabel, publishLabel, unpublishLabel } from 'reducers/fvLabel'
 import { fetchDialect, fetchDialect2 } from 'reducers/fvDialect'
 import { addNewLabelToIntl } from 'reducers/locale'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import FVLabel from 'components/FVLabel'
 import { Document } from 'nuxeo'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -232,15 +232,15 @@ class LabelModal extends Component {
     const { loading } = this.state
     const computeEntities = label
       ? Immutable.fromJS([
-        {
-          id: label.uid,
-          entity: computeLabel,
-        },
-        {
-          id: dialectPath,
-          entity: computeDialect2,
-        },
-      ])
+          {
+            id: label.uid,
+            entity: computeLabel,
+          },
+          {
+            id: dialectPath,
+            entity: computeDialect2,
+          },
+        ])
       : null
     return (
       <div>

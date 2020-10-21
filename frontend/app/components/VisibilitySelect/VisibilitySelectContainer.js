@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import VisibilitySelectData from './VisibilitySelectData'
 import VisibilitySelectPresentation from './VisibilitySelectPresentation'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 /**
  * @summary VisibilitySelectContainer - a simple selct menu for displaying and selecting the visibility of a document that it is passed as a prop. DOES NOT handle network calls.

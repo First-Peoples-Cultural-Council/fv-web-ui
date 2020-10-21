@@ -32,7 +32,7 @@ import { searchDialectReset } from 'reducers/searchDialect'
 
 // FPCC
 // -------------------------------------------
-import AuthorizationFilter from 'components/Document/AuthorizationFilter'
+import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 
 import AlphabetCharactersPresentation from 'components/AlphabetCharacters/AlphabetCharactersPresentation'
 import AlphabetCharactersData from 'components/AlphabetCharacters/AlphabetCharactersData'
@@ -52,7 +52,7 @@ import NavigationHelpers, {
   updateUrlIfPageOrPageSizeIsDifferent,
 } from 'common/NavigationHelpers'
 import Preview from 'components/Editor/Preview'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
@@ -587,7 +587,7 @@ export class phrasesFilteredByPhrasebook extends Component {
       }
     )
   }
-  _sortHandler = async({ page, pageSize, sortBy, sortOrder } = {}) => {
+  _sortHandler = async ({ page, pageSize, sortBy, sortOrder } = {}) => {
     sortHandler({
       page,
       pageSize,

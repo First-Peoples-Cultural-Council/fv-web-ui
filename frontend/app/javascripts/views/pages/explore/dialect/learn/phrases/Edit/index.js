@@ -30,8 +30,8 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
 
-import AuthenticationFilter from 'components/Document/AuthenticationFilter'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 // Models
 import { Document } from 'nuxeo'
@@ -149,7 +149,7 @@ export class PhrasesEdit extends Component {
     return content
   }
 
-  fetchData = async(addToState = {}) => {
+  fetchData = async (addToState = {}) => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 

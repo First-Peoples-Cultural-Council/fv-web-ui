@@ -31,7 +31,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import { routeHasChanged } from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
 
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 import Typography from '@material-ui/core/Typography'
 

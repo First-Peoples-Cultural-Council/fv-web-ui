@@ -28,7 +28,7 @@ import { updateContributor } from 'reducers/fvContributor'
 import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import FVLabel from 'components/FVLabel'
 
 // Models

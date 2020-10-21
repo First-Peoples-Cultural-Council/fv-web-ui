@@ -31,7 +31,7 @@ import {
   dictionaryListSmallScreenTemplateWords,
 } from 'components/Browsing/DictionaryListSmallScreen'
 import { getSearchObject } from 'common/NavigationHelpers'
-import AuthorizationFilter from 'components/Document/AuthorizationFilter'
+import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 const SearchDialect = React.lazy(() => import('components/SearchDialect'))
 const FlashcardList = React.lazy(() => import('components/Browsing/flashcard-list'))
 const DictionaryListSmallScreen = React.lazy(() => import('components/Browsing/DictionaryListSmallScreen'))

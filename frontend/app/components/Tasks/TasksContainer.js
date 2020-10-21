@@ -2,7 +2,7 @@ import React from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 
-import DocumentView from 'components/Document/view'
+import DocumentView from 'components/DocumentView'
 import FVButton from 'components/FVButton'
 import Link from 'components/Link'
 import TablePresentation from 'components/Table/TablePresentation'

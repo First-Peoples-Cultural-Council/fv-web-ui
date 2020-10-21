@@ -2,7 +2,7 @@ import React from 'react'
 // import PropTypes from 'prop-types'
 import WordsListPresentation from './WordsListPresentation'
 import WordsListData from './WordsListData'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 /**
  * @summary WordsListContainer

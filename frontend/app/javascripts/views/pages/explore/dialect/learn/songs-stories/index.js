@@ -35,9 +35,9 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import NavigationHelpers, { appendPathArrayAfterLandmark, routeHasChanged } from 'common/NavigationHelpers'
 
-import AuthorizationFilter from 'components/Document/AuthorizationFilter'
+import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import FVLabel from 'components/FVLabel'
 
 import GeneralList from 'components/Browsing/general-list'

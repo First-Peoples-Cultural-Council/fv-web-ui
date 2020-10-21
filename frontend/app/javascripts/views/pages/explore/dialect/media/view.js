@@ -43,7 +43,7 @@ import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
 
 import Preview from 'components/Editor/Preview'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import PageToolbar from 'views/pages/explore/dialect/page-toolbar'
 
 import FVButton from 'components/FVButton'

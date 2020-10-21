@@ -30,11 +30,11 @@ import { searchDialectReset } from 'reducers/searchDialect'
 
 import selectn from 'selectn'
 
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
-import AuthorizationFilter from 'components/Document/AuthorizationFilter'
+import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 import PageDialectLearnBase from 'views/pages/explore/dialect/learn/base'
 import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
 
@@ -211,12 +211,12 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
       const cloneWordListView = phraseListView
         ? React.cloneElement(phraseListView, {
-          DEFAULT_PAGE_SIZE: 8,
-          disablePageSize: true,
-          filter: kidsFilter,
-          gridCols: 2,
-          gridListView: true,
-        })
+            DEFAULT_PAGE_SIZE: 8,
+            disablePageSize: true,
+            filter: kidsFilter,
+            gridCols: 2,
+            gridListView: true,
+          })
         : null
       return (
         <PromiseWrapper renderOnError computeEntities={computeEntities}>

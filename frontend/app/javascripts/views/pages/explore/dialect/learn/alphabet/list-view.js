@@ -25,12 +25,12 @@ import { fetchDialect2 } from 'reducers/fvDialect'
 import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 
-import DocumentListView from 'components/Document/DocumentListView'
+import DocumentListView from 'componentsShared/DocumentListView'
 
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 

@@ -28,8 +28,8 @@ import t from 'tcomb-form'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 
-import AuthenticationFilter from 'components/Document/AuthenticationFilter'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
 import StateLoading from 'components/Loading'
@@ -138,7 +138,7 @@ export class PageDialectWordsCreate extends Component {
     return content
   }
 
-  fetchData = async(addToState = {}) => {
+  fetchData = async (addToState = {}) => {
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)

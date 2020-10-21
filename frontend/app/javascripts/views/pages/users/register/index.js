@@ -29,7 +29,7 @@ import t from 'tcomb-form'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import Link from 'components/Link'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 import FVButton from 'components/FVButton'
 

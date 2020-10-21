@@ -11,7 +11,7 @@ import DocumentOperations from 'operations/DocumentOperations'
 import Preview from 'components/Editor/Preview'
 import ProviderHelpers from 'common/ProviderHelpers'
 import { WORKSPACES } from 'common/Constants'
-import AuthorizationFilter from 'components/Document/AuthorizationFilter/index'
+import AuthorizationFilter from 'componentsShared/AuthorizationFilter/index'
 import '!style-loader!css-loader!./FVLabel.css'
 
 function FVLabel({

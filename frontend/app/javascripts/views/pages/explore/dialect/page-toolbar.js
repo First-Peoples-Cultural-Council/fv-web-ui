@@ -37,7 +37,7 @@ import AdminMenu from 'components/AdminMenu'
 import RequestReview from 'components/RequestReview'
 import VisibilityMinimal from 'components/VisibilityMinimal'
 
-import AuthorizationFilter from 'components/Document/AuthorizationFilter'
+import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 
 import '!style-loader!css-loader!./PageToolbar.css'

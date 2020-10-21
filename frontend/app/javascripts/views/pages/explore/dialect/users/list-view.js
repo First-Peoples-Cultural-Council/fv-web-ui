@@ -25,10 +25,10 @@ import { pushWindowPath } from 'reducers/windowPath'
 import { fetchUser, userSuggestion, updateUser } from 'reducers/fvUser'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'components/Browsing/DictionaryListSmallScreen'
 import selectn from 'selectn'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
-import DocumentListView from 'components/Document/DocumentListView'
+import DocumentListView from 'componentsShared/DocumentListView'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 import GroupAssignmentDialog from 'views/pages/users/group-assignment-dialog'
 import withFilter from 'componentsShared/withFilter'
@@ -126,7 +126,7 @@ export class UsersListView extends DataListView {
     }
 
     // Bind methods to 'this'
-    [
+    ;[
       '_onNavigateRequest',
       '_onUserSelected',
       '_handleRefetch',

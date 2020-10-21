@@ -53,7 +53,7 @@ import Reorder from '@material-ui/icons/Reorder'
 import Search from '@material-ui/icons/Search'
 import TranslateIcon from '@material-ui/icons/Translate'
 
-import AuthenticationFilter from 'components/Document/AuthenticationFilter'
+import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
 import Login from 'components/Navigation/Login'
 import AppLeftNav from 'components/Navigation/AppLeftNav/index.v2'
 import Link from 'components/Link'

@@ -30,8 +30,8 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
-import AuthenticationFilter from 'components/Document/AuthenticationFilter'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
 import StateLoading from 'components/Loading'
@@ -104,9 +104,9 @@ export class WordsEdit extends Component {
       case typeof nextWord.equals === 'function' && nextWord.equals(previousWord) === false:
         return true
 
-        // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
-        //   console.log(4)
-        //   return true
+      // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
+      //   console.log(4)
+      //   return true
 
       case this.state.componentState != newState.componentState:
         return true
@@ -114,9 +114,9 @@ export class WordsEdit extends Component {
       case newProps.windowPath != this.props.windowPath:
         return true
 
-        // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
-        //   console.log(7)
-        //   return true
+      // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
+      //   console.log(7)
+      //   return true
 
       case is(newProps.computeWord, this.props.computeWord) === false:
         return true
@@ -171,7 +171,7 @@ export class WordsEdit extends Component {
     return content
   }
 
-  fetchData = async(addToState = {}) => {
+  fetchData = async (addToState = {}) => {
     await this.props.fetchDialect2(this.props.routeParams.dialect_path)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 

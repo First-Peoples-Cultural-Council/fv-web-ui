@@ -21,8 +21,8 @@ import { connect } from 'react-redux'
 
 import classNames from 'classnames'
 import selectn from 'selectn'
-import TextHeader from 'components/Document/Typography/text-header'
-import AuthorizationFilter from 'components/Document/AuthorizationFilter'
+import TextHeader from 'componentsShared/Typography/text-header'
+import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 import { EditableComponentHelper } from 'components/Editor/EditableComponent'
 
 /**

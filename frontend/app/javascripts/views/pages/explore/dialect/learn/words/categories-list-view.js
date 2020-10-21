@@ -28,7 +28,7 @@ import { pushWindowPath } from 'reducers/windowPath'
 import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import DocumentListView from 'components/Document/DocumentListView'
+import DocumentListView from 'componentsShared/DocumentListView'
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'components/Browsing/DictionaryListSmallScreen'
 import CategoriesData from 'components/Categories/CategoriesData'

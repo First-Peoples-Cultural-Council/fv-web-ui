@@ -29,7 +29,7 @@ import Link from 'components/Link'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 import '!style-loader!css-loader!./DocumentView.css'
 import FVLabel from 'components/FVLabel'

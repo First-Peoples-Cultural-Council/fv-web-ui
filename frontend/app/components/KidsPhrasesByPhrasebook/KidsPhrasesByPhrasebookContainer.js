@@ -17,7 +17,7 @@ import PropTypes from 'prop-types'
 import Pagination from 'components/Pagination'
 import KidsPhrasesByPhrasebookData from 'components/KidsPhrasesByPhrasebook/KidsPhrasesByPhrasebookData'
 import PhraseBooksGrid from 'components/PhraseBooksGrid'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 /**
  * @summary KidsPhrasesByPhrasebookContainer

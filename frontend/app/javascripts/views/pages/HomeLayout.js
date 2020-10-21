@@ -19,10 +19,10 @@ import selectn from 'selectn'
 import classNames from 'classnames'
 import { isMobile } from 'react-device-detect'
 
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import FVButton from 'components/FVButton'
 import IntroCardView from 'components/Browsing/intro-card-view'
-import TextHeader from 'components/Document/Typography/text-header'
+import TextHeader from 'componentsShared/Typography/text-header'
 import FVLabel from 'components/FVLabel'
 import HomeData from 'views/pages/HomeData'
 

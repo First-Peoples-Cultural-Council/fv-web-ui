@@ -28,7 +28,7 @@ import FVButton from 'components/FVButton'
 
 import Edit from '@material-ui/icons/Edit'
 
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 
 import ImmersionTable from './ImmersionTable'

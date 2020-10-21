@@ -5,8 +5,8 @@ import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import StateSuccessDefault from './states/successCreate'
 import StateCreate from './states/create'
-import AuthenticationFilter from 'components/Document/AuthenticationFilter'
-import PromiseWrapper from 'components/Document/PromiseWrapper'
+import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
+import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 // Immutable
 import Immutable from 'immutable'
@@ -88,14 +88,14 @@ export class Category extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "CategoryInternationalization" */ './internationalization').then((_copy) => {
-        return _copy.default
-      })
+          return _copy.default
+        })
 
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "CategoryValidator" */ './validator').then((_validator) => {
-        return _validator.default
-      })
+          return _validator.default
+        })
     await this._getData({ copy, validator })
   }
 
@@ -126,7 +126,7 @@ export class Category extends React.Component {
     return content
   }
 
-  _getData = async(addToState = {}) => {
+  _getData = async (addToState = {}) => {
     // Do any loading here...
     const { routeParams } = this.props
     await this.props.fetchDialect(`/${this.props.routeParams.dialect_path}`)
@@ -218,7 +218,7 @@ export class Category extends React.Component {
     )
   }
 
-  _getCategories = async() => {
+  _getCategories = async () => {
     const { computeCategories, routeParams } = this.props
     const categoriesPath = `/api/v1/path/${routeParams.dialect_path}/${categoryType.title.plural}/@children`
     // Set-up array for data extraction and allow for selecting no parent category - set Categories directory as value:
@@ -252,7 +252,7 @@ export class Category extends React.Component {
     return { hasError: _computeCategories.response.hasError, message: _computeCategories.response.errorMessage }
   }
 
-  _handleCreateItemSubmit = async(formData) => {
+  _handleCreateItemSubmit = async (formData) => {
     // Submit here
     const now = Date.now()
     const name = formData['dc:title']
@@ -297,7 +297,7 @@ export class Category extends React.Component {
       })
     }
   }
-  _onRequestSaveForm = async() => {
+  _onRequestSaveForm = async () => {
     const formData = getFormData({
       formReference: this.form,
     })
