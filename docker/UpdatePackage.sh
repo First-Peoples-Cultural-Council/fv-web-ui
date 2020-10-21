@@ -11,7 +11,10 @@ cd ../
 echo 'Building entire package '
 if [ "$1" == "-skip-tests" ]; then
 
+    echo '** SKIPPING TESTS **'
+
     if [ "$2" == "-minimal" ]; then
+      echo '** BUILDING MINIMAL PACKAGES **'
       mvn clean install -DskipTests -P '!full,!full-marketplace'
     else
       mvn clean install -DskipTests
@@ -25,8 +28,9 @@ if [ "$1" == "-skip-tests" ]; then
     echo ''
 else
 
-    if [ "$2" == "-minimal" ]; then
-      mvn clean install -DskipTests -P '!full,!full-marketplace'
+    if [ "$1" == "-minimal" ]; then
+      echo '** BUILDING MINIMAL PACKAGES **'
+      mvn clean install -P '!full,!full-marketplace'
     else
       mvn clean install
     fi
