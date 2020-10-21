@@ -81,8 +81,7 @@ public class PublishDialect extends AbstractMaintenanceOperation {
     }
 
     // Initiate worker to create proxies for everything relevant inside a dialect
-    CreateProxiesWorker proxyWorker = new CreateProxiesWorker(dialect.getRef(),
-        Constants.PUBLISH_DIALECT_JOB_ID, batchSize);
+    CreateProxiesWorker proxyWorker = new CreateProxiesWorker(dialect.getRef(), batchSize);
     workManager.schedule(proxyWorker, true);
   }
 }

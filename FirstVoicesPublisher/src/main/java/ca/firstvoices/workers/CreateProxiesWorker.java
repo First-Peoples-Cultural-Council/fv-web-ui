@@ -26,24 +26,22 @@ public class CreateProxiesWorker extends AbstractWork {
 
   private final String job;
 
-  private final DocumentRef jobContainerRef;
+  private final DocumentRef dialectRef;
 
   private final int batchSize;
 
   private final transient FirstVoicesPublisherService fvPublisherService = Framework
       .getService(FirstVoicesPublisherService.class);
 
-  public CreateProxiesWorker(DocumentRef dialectRef, String job, int batchSize) {
-    super(job);
+  public CreateProxiesWorker(DocumentRef dialectRef, int batchSize) {
+    super(Constants.PUBLISH_DIALECT_JOB_ID);
 
-    this.jobContainerRef = dialectRef;
-    this.job = job;
+    this.job = Constants.PUBLISH_DIALECT_JOB_ID;
+    this.dialectRef = dialectRef;
     this.batchSize = batchSize;
 
     RepositoryManager rpm = Framework.getService(RepositoryManager.class);
-
-    // See https://doc.nuxeo.com/nxdoc/work-and-workmanager/#work-construction
-    setDocument(rpm.getDefaultRepositoryName(), jobContainerRef.toString(), true);
+    setDocument(rpm.getDefaultRepositoryName(), dialectRef.toString(), true);
   }
 
   @Override
@@ -56,7 +54,7 @@ public class CreateProxiesWorker extends AbstractWork {
     CoreInstance
         .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
             session -> {
-              DocumentModel dialect = session.getDocument(jobContainerRef);
+              DocumentModel dialect = session.getDocument(dialectRef);
               setStatus("Starting create proxies for dialect `" + dialect.getTitle() + "`");
 
               try {
