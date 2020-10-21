@@ -4,7 +4,7 @@ import selectn from 'selectn'
 
 import classNames from 'classnames'
 
-import Pagination from 'components/Navigation/Pagination'
+import Pagination from 'componentsShared/Pagination'
 
 import { MenuItem, Select, TextField } from '@material-ui/core'
 

@@ -54,8 +54,8 @@ import Search from '@material-ui/icons/Search'
 import TranslateIcon from '@material-ui/icons/Translate'
 
 import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
-import Login from 'components/Navigation/Login'
-import AppLeftNav from 'components/Navigation/AppLeftNav/index.v2'
+import Login from 'components/Login'
+import AppLeftNav from 'components/AppLeftNav/index.v2'
 import Link from 'components/Link'
 
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
@@ -63,7 +63,7 @@ import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 import FVLabel from 'components/FVLabel'
 
-import '!style-loader!css-loader!./styles.css'
+import '!style-loader!css-loader!./Navigation.css'
 
 const { array, func, object, string, bool } = PropTypes
 

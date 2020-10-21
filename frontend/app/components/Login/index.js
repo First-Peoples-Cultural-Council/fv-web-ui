@@ -26,7 +26,7 @@ import { isMobile } from 'react-device-detect'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import '!style-loader!css-loader!./styles.css'
+import '!style-loader!css-loader!./Login.css'
 import FVLabel from 'components/FVLabel'
 
 const { func, object, string } = PropTypes
