@@ -104,9 +104,12 @@ public class CleanCategoryReferencesTest extends AbstractTestDataCreatorTest {
         session, dialect.getPathAsString(), 1, new String[]{"New Phrase Book"}, phrase_books);
 
     // generateFVPhrases will pick a random phrase book. We want both assigned.
-    phrases.get(0).setPropertyValue(FV_PHRASE_BOOKS_FIELD, new String[]{phraseBook.getId(), phraseBook2.getId()});
+    DocumentModel phrase1 = phrases.get(0);
+    phrase1.setPropertyValue(FV_PHRASE_BOOKS_FIELD, new String[]{phraseBook.getId(), phraseBook2.getId()});
 
-    assertEquals(2, PropertyUtils.getValuesAsList(phrases.get(0), FV_PHRASE_BOOKS_FIELD).size());
+    session.saveDocument(phrase1);
+
+    assertEquals(2, PropertyUtils.getValuesAsList(phrase1, FV_PHRASE_BOOKS_FIELD).size());
 
     // Delete 1 category and 1 phrase book
     trashService.trashDocument(category);
