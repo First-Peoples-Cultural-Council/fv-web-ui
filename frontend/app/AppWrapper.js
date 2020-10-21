@@ -23,7 +23,7 @@ import { changeSiteTheme } from 'reducers/navigation'
 
 import selectn from 'selectn'
 
-import AppFrontController from './AppFrontController'
+import AppFrontController from 'components/AppFrontController'
 
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 

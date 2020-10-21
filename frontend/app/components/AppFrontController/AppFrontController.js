@@ -21,7 +21,7 @@ import { withTheme } from '@material-ui/core/styles'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import { routeHasChanged /*, getSearchObject*/ } from 'common/NavigationHelpers'
-import { Redirector } from './Redirector'
+import { Redirector } from 'common/Redirector'
 // import UIHelpers from 'common/UIHelpers'
 import StringHelpers from 'common/StringHelpers'
 import FVButton from 'components/FVButton'

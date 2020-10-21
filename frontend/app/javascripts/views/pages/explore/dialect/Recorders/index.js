@@ -28,7 +28,7 @@ import NavigationCheck from '@material-ui/icons/Check'
 
 // CUSTOM
 // ----------------------------------------
-import { useGetCopy } from 'common'
+import { useGetCopy } from 'common/useGetCopy'
 import { useGetData, usePaginationRequest } from 'common/ListView'
 import ConfirmationDelete from 'components/Confirmation'
 import FVButton from 'components/FVButton'
@@ -70,7 +70,7 @@ function Recorders(props) {
   const [paginationRequest, setPaginationRequest] = useState()
   usePaginationRequest({ pushWindowPath: props.pushWindowPath, paginationRequest })
 
-  const copy = useGetCopy(async() => {
+  const copy = useGetCopy(async () => {
     const success = await import(/* webpackChunkName: "RecordersInternationalization" */ './internationalization')
     return success.default
   })
@@ -79,7 +79,7 @@ function Recorders(props) {
     computeData: computeContributors,
     dataPath: `${routeParams.dialect_path}/Contributors`,
     deletedUids,
-    getData: async() => {
+    getData: async () => {
       // const { pageSize, page } = routeParams
       // const { sortBy, sortOrder } = search
 
@@ -220,7 +220,7 @@ function Recorders(props) {
           }}
           // Listview: computed data
           computedData={computedData}
-          sortHandler={async(sortData) => {
+          sortHandler={async (sortData) => {
             await props.setRouteParams({
               search: {
                 page: sortData.page,

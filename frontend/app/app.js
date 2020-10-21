@@ -26,7 +26,7 @@ import { Provider } from 'react-redux'
 import store from 'state/store'
 
 // Views
-import AppWrapper from 'views/AppWrapper'
+import AppWrapper from './AppWrapper'
 
 require('!style-loader!css-loader!normalize.css')
 require('bootstrap/less/bootstrap')

@@ -37,7 +37,7 @@ import Link from 'components/Link'
 import FVTab from 'components/FVTab'
 import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import { Cover } from 'components/svg/cover'
+import { Cover } from 'views/pages/explore/dialect/learn/songs-stories/cover'
 import FVLabel from 'components/FVLabel'
 import { connect } from 'react-redux'
 

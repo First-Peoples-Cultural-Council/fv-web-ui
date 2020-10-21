@@ -26,7 +26,7 @@ import { setRouteParams } from 'reducers/navigation'
 // CUSTOM
 // ----------------------------------------
 
-import { useGetCopy } from 'common'
+import { useGetCopy } from 'common/useGetCopy'
 import { useGetData, usePaginationRequest } from 'common/ListView'
 import ConfirmationDelete from 'components/Confirmation'
 import FVButton from 'components/FVButton'
@@ -58,7 +58,7 @@ export const Phrasebooks = (props) => {
   const [paginationRequest, setPaginationRequest] = useState()
   usePaginationRequest({ pushWindowPath: props.pushWindowPath, paginationRequest })
 
-  const copy = useGetCopy(async() => {
+  const copy = useGetCopy(async () => {
     const success = await import(/* webpackChunkName: "PhrasebooksInternationalization" */ './internationalization')
     return success.default
   })
@@ -67,7 +67,7 @@ export const Phrasebooks = (props) => {
     computeData: computeCategories,
     dataPath,
     deletedUids,
-    getData: async() => {
+    getData: async () => {
       let currentAppliedFilter = '' // eslint-disable-line
       // TODO: ASK DANIEL ABOUT `filter` & `filter.currentAppliedFilter`
       // if (filter.has('currentAppliedFilter')) {
@@ -196,7 +196,7 @@ export const Phrasebooks = (props) => {
           }}
           // Listview: computed data
           computedData={computedData}
-          sortHandler={async(sortData) => {
+          sortHandler={async (sortData) => {
             await props.setRouteParams({
               search: {
                 page: sortData.page,

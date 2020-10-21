@@ -112,7 +112,7 @@ module.exports = (env) => ({
    * Entry
    */
   entry: {
-    app: path.resolve(sourceScriptsDirectory, 'app.js'),
+    app: path.resolve(sourceDirectory, 'app.js'),
     // createWord: path.resolve(sourceScriptsDirectory, 'views/pages/explore/dialect/learn/words/Create'),
     game_libs: ['pixi', 'p2', 'phaser'],
   },
@@ -120,18 +120,17 @@ module.exports = (env) => ({
   // These options change how modules are resolved
   resolve: {
     alias: {
-      styles: sourceStylesDirectory,
-      models: path.resolve(sourceScriptsDirectory, 'models'),
       views: path.resolve(sourceScriptsDirectory, 'views'),
-      conf: path.resolve(sourceScriptsDirectory, 'configuration'),
+      components: path.resolve(sourceDirectory, 'components'),
+      componentsShared: path.resolve(sourceDirectory, 'componentsShared'),
+      common: path.resolve(sourceDirectory, 'common'),
+      state: path.resolve(sourceDirectory, 'state'),
+      dataSources: path.resolve(sourceStateDirectory, 'dataSources'),
       operations: path.resolve(sourceStateDirectory, 'operations'),
       reducers: path.resolve(sourceStateDirectory, 'reducers'),
-      state: path.resolve(sourceDirectory, 'state'),
-      components: path.resolve(sourceScriptsDirectory, 'components'),
-      common: path.resolve(sourceDirectory, 'common'),
-      dataSources: path.resolve(sourceStateDirectory, 'dataSources'),
-      games: path.resolve(sourceAssetsDirectory, 'games'),
-      images: path.resolve(sourceAssetsDirectory, 'images'),
+      games: sourceGamesDirectory,
+      images: sourceImagesDirectory,
+      styles: sourceStylesDirectory,
       phaser: phaser,
       pixi: pixi,
       p2: p2,

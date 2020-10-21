@@ -4,12 +4,12 @@
     "baseUrl": "./",
     "paths": {
       "styles": ["./app/assets/stylesheets"],
-      "models": ["./app/javascripts/models"],
       "views": ["./app/javascripts/views"],
+      "components": ["./app/components"],
+      "componentsShared": ["./app/componentsShared"],
+      "common": ["./app/common"],
       "operations": ["./app/state/operations"],
       "reducers": ["./app/state/reducers"],
-      "components": ["./app/javascripts/components"],
-      "common": ["./app/common"],
       "games": ["./app/assets/games"],
       "images": ["./app/assets/images"]
     }

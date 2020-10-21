@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import Immutable from 'immutable'
-import StringHelpers from './StringHelpers'
+import StringHelpers from 'common/StringHelpers'
 import selectn from 'selectn'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 // Used by replaceAllWorkspaceSectionKeys() & switchWorkspaceSectionKeys()
