@@ -138,13 +138,17 @@ function useRegistrations() {
   const _computeUserDialects = ProviderHelpers.getEntry(computeUserDialects, userId)
   return {
     count,
-    dialectId: selectn(['response', 'entries', 0, 'uid'], _computeUserDialects),
-    dialectTitle: selectn(['response', 'entries', 0, 'title'], _computeUserDialects),
-    dialectPath: selectn(['response', 'entries', 0, 'path'], _computeUserDialects),
     fetchRegistrations,
     registrations,
     // resetRegistrations,
     userId,
+    userLanguages: (selectn(['response', 'entries'], _computeUserDialects) || []).map(({ uid, title, path }) => {
+      return {
+        id: uid,
+        title: title,
+        path: path,
+      }
+    }),
   }
 }
 

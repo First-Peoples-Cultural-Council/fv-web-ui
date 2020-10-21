@@ -634,7 +634,7 @@
             <category>Collaborative</category>
             <icon>/img/folder_orange.png</icon>
             <bigIcon>/img/folder_orange_100.png</bigIcon>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@Folder-create</layout>
@@ -655,7 +655,7 @@
         <type id="Domain">
             <label>Domain</label>
             <category>SuperDocument</category>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@Domain-create</layout>
@@ -699,7 +699,7 @@
         <type id="FVAudio">
             <label>Audio</label>
             <category>SimpleDocument</category>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>fvmedia@create</layout>
@@ -714,7 +714,7 @@
         <type id="FVBook">
             <label>Book</label>
             <category>LanguageAssets</category>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVBook-create</layout>
@@ -735,7 +735,7 @@
         <type id="FVBookEntry">
             <label>BookEntry</label>
             <category>LanguageAssets</category>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVBookEntry-create</layout>
@@ -750,7 +750,7 @@
         <type id="FVBooks">
             <label>Books</label>
             <category>LanguageAssets</category>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVBooks-create</layout>
@@ -771,7 +771,7 @@
         <type id="FVCategories">
             <label>Categories</label>
             <category>LanguageAssets</category>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVCategories-create</layout>
@@ -792,7 +792,7 @@
         <type id="FVCategory">
             <label>Category</label>
             <category>LanguageAssets</category>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVCategory-create</layout>
@@ -813,7 +813,7 @@
         <type id="FVLabelCategory">
             <label>Label Category</label>
             <category>LanguageAssets</category>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVCategory-create</layout>
@@ -834,7 +834,7 @@
         <type id="FVCharacter">
             <label>Character</label>
             <category>LanguageAssets</category>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVCharacter-create</layout>
@@ -849,7 +849,7 @@
         <type id="FVContributor">
             <label>Contributor</label>
             <category>LanguageAssets</category>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVContributor-create</layout>
@@ -866,7 +866,7 @@
             <category>LanguageAssets</category>
             <icon>/img/folder_violet.png</icon>
             <bigIcon>/img/folder_violet_100.png</bigIcon>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVContributors-create</layout>
@@ -908,7 +908,7 @@
         <type id="FVDraftFolder">
             <label>Draft Documents</label>
             <icon>/img/folder_red.png</icon>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVDraftFolder-create</layout>
@@ -990,7 +990,7 @@
             <category>LanguageAssets</category>
             <icon>/img/folder_green.png</icon>
             <bigIcon>/img/folder_green_100.png</bigIcon>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVLanguageFamily-create</layout>
@@ -1011,7 +1011,7 @@
         <type id="FVLink">
             <label>Link</label>
             <category>SimpleDocument</category>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVLink-create</layout>
@@ -1026,7 +1026,7 @@
         <type id="FVLinks">
             <label>Links</label>
             <category>LanguageAssets</category>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVLinks-create</layout>
@@ -1049,7 +1049,7 @@
             <category>SimpleDocument</category>
             <icon>/img/file.png</icon>
             <bigIcon>/img/file_100.png</bigIcon>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@File-create</layout>
@@ -1079,7 +1079,7 @@
         <type id="FVPhrase">
             <label>Phrase</label>
             <category>SimpleDocument</category>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVPhrase-create</layout>
@@ -1098,7 +1098,7 @@
         <type id="FVPicture">
             <label>Picture</label>
             <category>SimpleDocument</category>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>fvmedia@create</layout>
@@ -1115,7 +1115,7 @@
             <category>SimpleDocument</category>
             <icon>/img/file.png</icon>
             <bigIcon>/img/file_100.png</bigIcon>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVWord-create</layout>
@@ -1135,7 +1135,7 @@
             <category>SimpleDocument</category>
             <icon>/img/file.png</icon>
             <bigIcon>/img/file_100.png</bigIcon>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVPlaceName-create</layout>
@@ -1204,7 +1204,7 @@
         <type id="FVSong">
             <label>Song</label>
             <category>LanguageAssets</category>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@FVSong-create</layout>
@@ -1220,7 +1220,7 @@
         <type id="FVVideo">
             <label>Video</label>
             <category>SimpleDocument</category>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>fvmedia@create</layout>
@@ -1238,7 +1238,7 @@
             <category>Collaborative</category>
             <icon>/img/folder_green.png</icon>
             <bigIcon>/img/folder_green_100.png</bigIcon>
-            
+
             <default-view>view_documents</default-view>
             <layouts mode="create">
                 <layout>layout@Workspace-create</layout>
@@ -18305,7 +18305,7 @@ function run(input, params) {
             <inputType>document</inputType>
             <outputType>document</outputType>
             <category>javascript</category>
-            
+
             <script><![CDATA[function run(input, params) {
 
   /* Needs additional code to handle:
@@ -18471,7 +18471,7 @@ function run(input, params) {
         </directory>
         <directory name="parts_of_speech" extends="template-xvocabulary">
             <autoincrementIdField>false</autoincrementIdField>
-            <createTablePolicy>on_missing_columns</createTablePolicy>
+            <createTablePolicy>always</createTablePolicy>
             <table>studio_vocabulary_parts_of_speech</table>
             <dataFile>data/vocabularies/parts_of_speech.csv</dataFile>
             <parentDirectory>parts_of_speech</parentDirectory>

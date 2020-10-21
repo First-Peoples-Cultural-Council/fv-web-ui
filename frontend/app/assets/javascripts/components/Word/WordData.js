@@ -49,6 +49,7 @@ function WordData({ children }) {
   const audio = selectn('contextParameters.word.related_audio', wordRawData) || []
   const categories = selectn('contextParameters.word.categories', wordRawData) || []
   const culturalNotes = selectn('properties.fv:cultural_note', wordRawData) || []
+  const generalNote = selectn('properties.fv:general_note', wordRawData)
   const definitions = selectn('properties.fv:definitions', wordRawData)
   const docType = selectn('type', wordRawData)
   const literalTranslations = selectn('properties.fv:literal_translation', wordRawData)
@@ -109,6 +110,7 @@ function WordData({ children }) {
     culturalNotes,
     definitions,
     dialectClassName,
+    generalNote,
     literalTranslations,
     partOfSpeech,
     photos,

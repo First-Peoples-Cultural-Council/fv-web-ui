@@ -23,19 +23,28 @@ import useTasks from 'DataSource/useTasks'
  * @param {string} props.docDialectPath Used to determine if it's a public dialect
  * @param {string} props.docId Used with request to change visibility.
  * @param {string} props.docState Nuxeo 'state' of the document: 'New', 'Enabled', 'Disabled', or 'Published'
+ * @param {string} props.initialDocVisibility Requested visibility from member: 'team', 'members', or 'public'
  * @param {string} props.taskId Used when rejecting a task
  * @param {string} props.taskInitiator Initiator full name or email. Used for feedback after an admin takes an action.
  *
  * @returns {object} Data for RequestChangesPresentation
  */
-function RequestChangesData({ children, docDialectPath, docId, docState, taskId, taskInitiator }) {
+function RequestChangesData({
+  children,
+  docDialectPath,
+  docId,
+  docState,
+  initialDocVisibility,
+  taskId,
+  taskInitiator,
+}) {
   const { computePortal } = usePortal()
   const { routeParams } = useRoute()
   const formRefDrawer = useRef(null)
   const formRefModal = useRef(null)
   const [errors, setErrors] = useState()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [docVisibility, setDocVisibility] = useState('')
+  const [docVisibility, setDocVisibility] = useState(initialDocVisibility !== undefined ? initialDocVisibility : '')
   const { fetchDialect2, computeDialect2 } = useDialect()
   const {
     setProcessedTask,
@@ -55,13 +64,15 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId,
 
   const handleVisibilityChange = (event) => {
     const newVisibility = event.target.value
-    // Set visibility in local state
     setDocVisibility(newVisibility)
   }
-
   useEffect(() => {
-    setDocVisibility(convertStateToVisibility(docState))
-  }, [])
+    if (initialDocVisibility) {
+      setDocVisibility(initialDocVisibility)
+    } else {
+      setDocVisibility(convertStateToVisibility(docState))
+    }
+  }, [initialDocVisibility])
 
   useEffect(() => {
     if (docDialectPath) {
@@ -271,11 +282,12 @@ function RequestChangesData({ children, docDialectPath, docId, docState, taskId,
   })
 }
 
-const { func, string } = PropTypes
+const { func, oneOf, string } = PropTypes
 RequestChangesData.propTypes = {
   children: func,
   docId: string,
   docState: string,
+  initialDocVisibility: oneOf(['team', 'members', 'public']),
   taskId: string,
   taskInitiator: string,
 }

@@ -205,6 +205,7 @@ export class CreateV2 extends Component {
               <option value="conjunction">Conjunction</option>
               <option value="interjection">Interjection</option>
               <option value="particle">Particle</option>
+              <option value="command">Command</option>
               <option value="advanced">Advanced</option>
               <option value="pronoun_personal">Pronoun - Personal</option>
               <option value="pronoun_reflexive">Pronoun - Reflexive</option>
@@ -348,7 +349,7 @@ the 'Move Category up' and 'Move Category down' buttons`}
     newProps.fetchDialect2(newProps.routeParams.dialect_path)
   }
 
-  _onRequestSaveForm = async() => {
+  _onRequestSaveForm = async () => {
     const formData = getFormData({
       formReference: this.form,
       toParse,
@@ -410,7 +411,4 @@ const mapDispatchToProps = {
   replaceWindowPath,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CreateV2)
+export default connect(mapStateToProps, mapDispatchToProps)(CreateV2)

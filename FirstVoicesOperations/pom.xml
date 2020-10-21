@@ -9,7 +9,7 @@
     <artifactId>firstvoices-modules-parent</artifactId>
     <groupId>ca.firstvoices</groupId>
     <relativePath>../pom.xml</relativePath>
-    <version>3.5.1-SNAPSHOT</version>
+    <version>3.5.1</version>
   </parent>
   <dependencies>
     <dependency>

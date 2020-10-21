@@ -36,6 +36,7 @@
   <xs:element name="available_in_childrens_archive" type="xs:boolean"/>
   <xs:element name="cultural_note" type="nxs:stringList"/>
   <xs:element name="custom_order" type="xs:string"/>
+  <xs:element name="general_note" type="xs:string"/>
   <xs:element name="definitions" type="nxs:fv_definitionsListType"/>
   <xs:complexType name="fv_definitionsListType">
     <xs:sequence>

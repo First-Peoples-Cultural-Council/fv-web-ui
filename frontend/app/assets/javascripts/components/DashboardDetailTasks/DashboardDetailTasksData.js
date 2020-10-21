@@ -117,7 +117,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
     if (queryItem) {
       fetchDocumentSingleArg({
         pathOrId: queryItem,
-        headers: { 'enrichers.document': 'ancestry,phrase,book,permissions' },
+        headers: { 'enrichers.document': 'ancestry,word,phrase,book,permissions' },
       })
     }
   }, [queryItem])
@@ -130,6 +130,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
     const title = DOMPurify.sanitize(selectn('title', _selectedItemData))
     const commonData = {
       culturalNotes: selectn('properties.fv:cultural_note', _selectedItemData) || [],
+      generalNote: selectn('properties.fv:general_note', _selectedItemData),
       definitions: selectn('properties.fv:definitions', _selectedItemData),
       dialectPath: selectn('contextParameters.ancestry.dialect.path', _selectedItemData),
       id: uid,

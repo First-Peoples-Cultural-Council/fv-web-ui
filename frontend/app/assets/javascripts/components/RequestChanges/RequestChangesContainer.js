@@ -15,6 +15,7 @@ import RequestChangesData from 'components/RequestChanges/RequestChangesData'
  * @param {string} props.docState See: RequestChangesData
  * @param {string} props.processedMessage See: RequestChangesPresentation
  * @param {boolean} props.processedWasSuccessful See: RequestChangesPresentation
+ * @param {string} props.requestedVisibility Passed out to RequestChangesData as `initialDocVisibility`. See: RequestChangesData
  * @param {string} props.selectLabelText See: RequestChangesPresentation > VisibilitySelectPresentation
  * @param {string} props.subTitle See: RequestChangesPresentation
  * @param {string} props.taskId See: RequestChangesData
@@ -40,6 +41,7 @@ function RequestChangesContainer({
       docState={docState}
       taskId={taskId}
       taskInitiator={taskInitiator}
+      initialDocVisibility={requestedVisibility}
     >
       {({
         computeEntities,
@@ -67,7 +69,7 @@ function RequestChangesContainer({
             computeEntities={computeEntities}
             disableApproveButton={disableApproveButton}
             disableRequestChangesButton={disableRequestChangesButton}
-            docVisibility={requestedVisibility ? requestedVisibility : docVisibility}
+            docVisibility={docVisibility}
             errors={errors}
             formRefDrawer={formRefDrawer}
             formRefModal={formRefModal}
@@ -101,7 +103,7 @@ RequestChangesContainer.propTypes = {
   docState: oneOf(['New', 'Enabled', 'Disabled', 'Published']),
   processedMessage: string,
   processedWasSuccessful: bool,
-  requestedVisibility: oneOf(['New', 'Enabled', 'Disabled', 'Published']),
+  requestedVisibility: oneOf(['team', 'members', 'public']),
   selectLabelText: string,
   subTitle: string,
   taskId: string,
