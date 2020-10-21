@@ -26,6 +26,7 @@ import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static org.junit.Assert.assertNotNull;
 
 import ca.firstvoices.nuxeo.enrichers.UnpublishedChangesEnricher;
+import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import javax.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
@@ -58,6 +59,7 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @Deploy("FirstVoicesNuxeo.Test:OSGI-INF/extensions/fv-word-enricher-test-data.xml")
 
 @Deploy({"FirstVoicesData",
+    "FirstVoicesCoreIO",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.operations.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
@@ -78,9 +80,14 @@ public class UnpublishedChangesEnricherTest extends
 
   @Inject
   protected CoreSession session;
+
   DocumentModel dialectDoc;
+
   @Inject
-  private EnricherTestUtil testUtil;
+  protected EnricherTestUtil testUtil;
+
+  @Inject
+  protected FirstVoicesPublisherService fvPublisherService;
 
   public UnpublishedChangesEnricherTest() {
     super(DocumentModelJsonWriter.class, DocumentModel.class);
@@ -128,6 +135,8 @@ public class UnpublishedChangesEnricherTest extends
             Publish the document and make sure the enricher still returns the correct value.
          */
     dialectDoc.followTransition(PUBLISH_TRANSITION);
+    fvPublisherService.publish(session, dialectDoc);
+
     ctx = RenderingContext.CtxBuilder.enrichDoc(UnpublishedChangesEnricher.NAME)
         .properties("unpublished_changes_exist").get();
     json = jsonAssert(dialectDoc, ctx);
@@ -155,6 +164,8 @@ public class UnpublishedChangesEnricherTest extends
             unpublished_changes_exist = false
          */
     dialectDoc.followTransition(REPUBLISH_TRANSITION);
+    fvPublisherService.publish(session, dialectDoc);
+
     ctx = RenderingContext.CtxBuilder.enrichDoc(UnpublishedChangesEnricher.NAME)
         .properties("unpublished_changes_exist").get();
     json = jsonAssert(dialectDoc, ctx);
