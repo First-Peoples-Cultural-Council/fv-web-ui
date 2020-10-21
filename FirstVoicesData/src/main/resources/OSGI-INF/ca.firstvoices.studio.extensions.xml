@@ -1519,53 +1519,6 @@
             </rule>
         </filter>
     </action>
-    <action id="FVPublishCategoryParents" label="Publish All Parents" enabled="true" order="0" type="link" immediate="false" link="#{operationActionBean.doOperation('FVPublishCategoryParents')}">
-        <category>DOCUMENT_UPPER_ACTION</category>
-        <filter id="filter@FVPublishCategoryParents">
-            <rule grant="true">
-                <permission>Write</permission>
-                <type>FVCategory</type>
-                <facet>Publishable</facet>
-            </rule>
-        </filter>
-    </action>
-    <action id="FVPublishFromWorklist" label="Publish From Worklist" enabled="true" order="0" type="link" immediate="false" link="#{operationActionBean.doOperation('FVPublishFromWorklist')}">
-        <category>DEFAULT_LIST</category>
-        <filter id="filter@FVPublishFromWorklist">
-            <rule grant="true"/>
-            <rule grant="false">
-                <condition>!principal.isAdministrator()</condition>
-            </rule>
-            <rule grant="false">
-                <condition>#{documentsListsManager.isWorkingListEmpty("CURRENT_SELECTION") == true}</condition>
-            </rule>
-        </filter>
-    </action>
-    <action id="FVPublishOrRepublish" label="Publish/Republish" enabled="true" order="0" type="link" immediate="false" link="#{operationActionBean.doOperation('javascript.FVPublishOrRepublish')}">
-        <category>DOCUMENT_SUMMARY_CUSTOM_ACTIONS</category>
-        <filter id="filter@FVPublishOrRepublish">
-            <rule grant="true">
-                <facet>Publishable</facet>
-                <condition>#{(currentDocument.currentLifeCycleState != 'Disabled') &amp;&amp; (currentDocument.currentLifeCycleState != 'New') &amp;&amp; (documentManager.hasPermission(currentDocument.ref, 'Everything') || documentManager.hasPermission(currentDocument.ref, 'Approve')) }</condition>
-            </rule>
-            <rule grant="false">
-                <condition>!document.getPathAsString().startsWith("/FV/Workspaces/Data/")</condition>
-            </rule>
-        </filter>
-    </action>
-    <action id="FVSaveAndPublish" label="Save and Publish" enabled="true" order="0" type="link" immediate="false" link="#{operationActionBean.doOperation('FVSaveAndPublish')}">
-        <category>EDIT_DOCUMENT_FORM</category>
-        <filter id="filter@FVSaveAndPublish">
-            <rule grant="true">
-                <type>FVCharacter</type>
-                <facet>Publishable</facet>
-                <condition>#{(currentDocument.currentLifeCycleState != 'Disabled') &amp;&amp; (currentDocument.currentLifeCycleState != 'New') &amp;&amp; (documentManager.hasPermission(currentDocument.ref, 'Everything') || documentManager.hasPermission(currentDocument.ref, 'Approve')) }</condition>
-            </rule>
-            <rule grant="false">
-                <condition>!document.getPathAsString().startsWith("/FV/Workspaces/Data/")</condition>
-            </rule>
-        </filter>
-    </action>
     <action id="FVUnpublish" label="Unpublish" enabled="true" order="0" type="link" immediate="false" link="#{operationActionBean.doOperation('FVUnpublishDialect')}">
         <category>DOCUMENT_SUMMARY_CUSTOM_ACTIONS</category>
         <filter id="filter@FVUnpublish">
@@ -18192,35 +18145,7 @@
                 <param type="string" name="category">Automation</param>
             </operation>
         </chain>
-        <chain id="FVPublish">
-            <operation id="Context.FetchDocument"/>
-            <operation id="javascript.FVPublishOrRepublish"/>
-        </chain>
-        <chain id="FVPublishCategoryParents">
-            <operation id="Context.FetchDocument"/>
-            <operation id="FVPublishParents">
-                <param type="string" name="stopDocumentType">FVCategories</param>
-            </operation>
-            <operation id="Document.Save"/>
-        </chain>
-        <chain id="FVPublishFromWorklist">
-            <operation id="Seam.FetchFromWorklist"/>
-            <operation id="Document.FollowLifecycleTransition">
-                <param type="string" name="value">Publish</param>
-            </operation>
-        </chain>
-        <chain id="FVSaveAndPublish">
-            <operation id="Context.FetchDocument"/>
-            <operation id="Document.Save"/>
-            <operation id="javascript.FVPublishOrRepublish"/>
-            <operation id="WebUI.NavigateTo"/>
-        </chain>
-        <chain id="FVSimplePublish">
-            <operation id="Context.FetchDocument"/>
-            <operation id="Document.FollowLifecycleTransition">
-                <param type="string" name="value">Publish</param>
-            </operation>
-        </chain>
+        <!-- Note: this seems to be still used by Books and Galleries in the FE -->
         <chain id="FVUnpublishDialect">
             <operation id="Context.FetchDocument"/>
             <operation id="Document.FollowLifecycleTransition">
@@ -18253,23 +18178,6 @@
             <param type="string" name="type"/>
             <param type="string" name="name"/>
             <param type="string" name="properties"/>
-        </scriptedOperation>
-        <scriptedOperation id="javascript.FVPublishOrRepublish">
-            <inputType>document</inputType>
-            <outputType>document</outputType>
-            <category>javascript</category>
-            <description>Fill the ancestors of a document for easy access.</description>
-            <script><![CDATA[function run(input, params) {
-
-
-  	// When republishing juggle states from "Republished" to "Publish" so publish listener is activated
-        if (input.lifeCycle == 'Published') {
-	  input = Document.FollowLifecycleTransition(input, { 'value': 'Republish' });
-          return  Document.FollowLifecycleTransition(input, { 'value': 'Publish' });
-        }
-  	// When publishing for the first time, follow formal transition
-          return Document.FollowLifecycleTransition(input, { 'value': 'Publish' });
-}]]></script>
         </scriptedOperation>
         <scriptedOperation id="javascript.FVRelatePicture">
             <inputType>document</inputType>

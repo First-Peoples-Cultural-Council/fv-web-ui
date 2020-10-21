@@ -1,6 +1,7 @@
 package ca.firstvoices.maintenance.dialect.categories.services;
 
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
 
@@ -14,9 +15,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.nuxeo.ecm.automation.AutomationService;
-import org.nuxeo.ecm.automation.OperationContext;
-import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -150,20 +148,9 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
   @Override
   public void publishCategoriesTree(CoreSession session, DocumentModel dialect) {
-
-    AutomationService automationService = Framework.getService(AutomationService.class);
-
     DocumentModel localCategoriesDir = getLocalCategoriesDirectory(session, dialect);
-
-    try {
-      OperationContext operation = new OperationContext(session);
-      operation.setInput(localCategoriesDir);
-      automationService.run(operation, "FVPublish");
-
-    } catch (OperationException e) {
-      e.printStackTrace();
-    }
-
+    localCategoriesDir.followTransition(PUBLISH_TRANSITION);
+    session.save();
   }
 
   private DocumentModel getExistingCategory(DocumentModel category) {
