@@ -98,11 +98,11 @@ public class CategoriesObjectTest extends BaseTest {
             "FVCategory"));
     session.saveDocument(testSubCategory);
 
-    DocumentModel wsd = publisherService.publish(workspaceDialect);
+    DocumentModel wsd = publisherService.publish(session, workspaceDialect);
     session.saveDocument(wsd);
 
-    DocumentModel cat = publisherService.publish(testCategory);
-    publisherService.publish(testSubCategory);
+    DocumentModel cat = publisherService.publish(session, testCategory);
+    publisherService.publish(session, testSubCategory);
     categoryID = cat.getId();
 
     session.save();
