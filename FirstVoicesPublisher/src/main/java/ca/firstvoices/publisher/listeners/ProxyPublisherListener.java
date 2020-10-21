@@ -30,6 +30,8 @@ import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_F
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_TRANSITION;
 
 import ca.firstvoices.core.io.utils.DialectUtils;
+import ca.firstvoices.core.io.utils.DocumentUtils;
+import ca.firstvoices.data.exceptions.FVDocumentHierarchyException;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import ca.firstvoices.publisher.Constants;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
@@ -80,9 +82,9 @@ public class ProxyPublisherListener implements PostCommitEventListener {
     String transition = (String) ctx.getProperties().get(TRANSTION_EVENT_OPTION_TRANSITION);
     String transitionFrom = (String) ctx.getProperties().get(TRANSTION_EVENT_OPTION_FROM);
 
-    if (isDialectPublishingPending(doc)) {
-      // Do not trigger listeners while dialect publishing is pending
-      // since the creation of proxies is done via `CreateProxiesWorker`
+    if (DocumentUtils.isMutable(doc) && isDialectBusyOrUnavailable(doc)) {
+      // Do not trigger listener for immutable documents and while dialect publishing
+      // is pending since the creation of proxies is done via `CreateProxiesWorker`
       return;
     }
 
@@ -124,17 +126,23 @@ public class ProxyPublisherListener implements PostCommitEventListener {
    * @param doc current document fired to the listener
    * @return true is the dialect is in the process of publishing, false otherwise
    */
-  private boolean isDialectPublishingPending(DocumentModel doc) {
-    CoreSession session = doc.getCoreSession();
-    DocumentModel dialect = session.getDocument(DialectUtils.getDialect(doc).getRef());
+  private boolean isDialectBusyOrUnavailable(DocumentModel doc) {
+    try {
+      CoreSession session = doc.getCoreSession();
+      DocumentModel dialect = session.getDocument(DialectUtils.getDialect(doc).getRef());
 
-    if (!dialect.hasSchema("fv-maintenance")) {
-      return false;
+      if (!dialect.hasSchema("fv-maintenance")) {
+        return false;
+      }
+
+      return RequiredJobsUtils
+          .hasRequiredJobs(dialect,
+              Constants.PUBLISH_DIALECT_JOB_ID);
+    } catch (FVDocumentHierarchyException exception) {
+      // if we are not dealing with a document where a dialect can be extracted,
+      // we should not attempt to publish it
+      return true;
     }
-
-    return RequiredJobsUtils
-        .hasRequiredJobs(dialect,
-            Constants.PUBLISH_DIALECT_JOB_ID);
   }
 
 }
