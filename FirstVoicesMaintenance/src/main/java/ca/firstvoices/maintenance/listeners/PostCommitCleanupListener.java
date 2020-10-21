@@ -79,7 +79,7 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
   /**
    * This is assessed when the event bundle is sent to the listener
    *
-   * @return list of all events to handle; modify to handle more events.
+   * @return set of all events to handle; modify to handle more events.
    */
   private Set<String> getEventsToHandle() {
 
