@@ -60,19 +60,4 @@ public class GetUnpublishedChanges {
     Object jsonDiff = JaversBuilder.javers().build().getJsonConverter().toJson(diff);
     return new JSONBlob(jsonDiff.toString());
   }
-
-  //    // Untested: Potentially a method for comparing two arbitrary documents (probably better
-  //    to get these two docs as two doc id parameters)
-  //    @OperationMethod
-  //    public String run(DocumentModelList docs) throws IOException {
-  //
-  //        if (docs.size() > 2) {
-  //            throw new IOException("Only 2 docs for comparison are allowed");
-  //        }
-  //
-  //        session = docs.get(0).getCoreSession();
-  //        Diff diff = service.getChanges(session, docs.get(0), docs.get(1));
-  //
-  //        return diff.prettyPrint();
-  //    }
 }

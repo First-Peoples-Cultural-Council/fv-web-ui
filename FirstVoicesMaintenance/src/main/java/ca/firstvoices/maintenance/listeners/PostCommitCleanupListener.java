@@ -15,9 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.LifeCycleConstants;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.api.trash.TrashService;
@@ -41,8 +39,6 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
   public static final String GET_ALL_OPEN_TASKS_FOR_DOCUMENT = "GET_ALL_OPEN_TASKS_FOR_DOCUMENT";
 
   private ArrayList<String> endTaskEvents = new ArrayList<>();
-
-  private ArrayList<String> unpublishEvents = new ArrayList<>();
 
   private ArrayList<String> cleanReferencesEvents = new ArrayList<>();
 
@@ -70,7 +66,6 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
         DocumentModel doc = docCtx.getSourceDocument();
 
         endRelatedTask(event, doc);
-        //unpublishTrashedDocs(event, doc);
         cleanReferences(event, doc);
       }
     }
@@ -90,16 +85,12 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
     endTaskEvents.add(LifeCycleConstants.TRANSITION_EVENT);
     endTaskEvents.add(TrashService.DOCUMENT_TRASHED);
 
-    // Events that trigger un-publishing
-    unpublishEvents = new ArrayList<>();
-    unpublishEvents.add(TrashService.DOCUMENT_TRASHED);
-
     // Events that trigger cleaning references
     cleanReferencesEvents = new ArrayList<>();
     cleanReferencesEvents.add(TrashService.DOCUMENT_TRASHED);
 
     // Return combined set of all events
-    return Stream.of(endTaskEvents, unpublishEvents, cleanReferencesEvents)
+    return Stream.of(endTaskEvents, cleanReferencesEvents)
         .flatMap(Collection::stream)
         .collect(Collectors.toSet());
   }
@@ -112,24 +103,6 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
    */
   private boolean eventShouldBeHandled(EventBundle events) {
     return getEventsToHandle().stream().anyMatch((events::containsEventName));
-  }
-
-  /**
-   * Will remove the proxies for documents that are trashed. Only applies to non system admin
-   * operations, and mutable core documents
-   *
-   * @param event the current event handled in the bundle
-   * @param doc   the document to remove proxies for
-   */
-  private void unpublishTrashedDocs(Event event, DocumentModel doc) {
-    if (unpublishEvents.contains(event.getName()) && DocumentUtils.isMutable(doc)) {
-      CoreSession session = event.getContext().getCoreSession();
-      DocumentModelList proxies = session.getProxies(doc.getRef(), null);
-
-      for (DocumentModel proxy : proxies) {
-        session.removeDocument(proxy.getRef());
-      }
-    }
   }
 
   /**

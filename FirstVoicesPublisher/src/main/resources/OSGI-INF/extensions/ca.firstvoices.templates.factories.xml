@@ -17,7 +17,6 @@
         <templateItem typeName="FVLabelDictionary" id="Label Dictionary" title="Label Dictionary"
           description=""/>
         <templateItem typeName="FVAlphabet" id="Alphabet" title="Alphabet" description=""/>
-        <!--<templateItem typeName="Forum" id="Forum" title="Forum" description=""/>-->
         <templateItem typeName="FVPortal" id="Portal" title="Portal" description=""/>
         <templateItem typeName="FVResources" id="Resources" title="Resources" description=""/>
         <templateItem typeName="FVContributors" id="Contributors" title="Contributors"

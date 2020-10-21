@@ -23,8 +23,6 @@ package ca.firstvoices.publisher.listeners;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PHRASE;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
@@ -40,8 +38,6 @@ import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
  * @author dyona
  */
 public class AssignOriginListener implements EventListener {
-
-  private static final Log log = LogFactory.getLog(AssignOriginListener.class);
 
   private void saveOrigin(DocumentModel doc, String[] relatedMedia) {
     CoreSession session = doc.getCoreSession();

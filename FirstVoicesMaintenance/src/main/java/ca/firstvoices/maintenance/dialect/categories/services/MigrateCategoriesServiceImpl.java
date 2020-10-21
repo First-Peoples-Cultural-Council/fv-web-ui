@@ -4,12 +4,10 @@ import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
 
-import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.UnpublishedChangesService;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -40,8 +38,6 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
    * This method will migrate a category tree from Shared Categories to Local Categories. It does
    * not update references. It will also publish the categories if the dialect is published.
    *
-   * @param session
-   * @param dialect
    * @return true if categories were copied, false otherwise
    */
   @Override
@@ -93,8 +89,6 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
           "Migrate words could not run on " + dialect.getTitle() + " as " + "session is null.");
     }
 
-    FirstVoicesPublisherService publisherService = Framework
-        .getService(FirstVoicesPublisherService.class);
     UnpublishedChangesService unpublishedChangesService = Framework
         .getService(UnpublishedChangesService.class);
 
@@ -270,10 +264,8 @@ public class MigrateCategoriesServiceImpl implements MigrateCategoriesService {
 
     IterableQueryResult results = session
         .queryAndFetch(getUniqueCategoriesQuery(dictionaryId), "NXQL", true, (Object[]) null);
-    Iterator<Map<String, Serializable>> it = results.iterator();
 
-    while (it.hasNext()) {
-      Map<String, Serializable> item = it.next();
+    for (Map<String, Serializable> item : results) {
       String uid = (String) item.get("fv-word:categories/*");
       categoryIds.add(uid);
     }
