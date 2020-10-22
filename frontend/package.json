@@ -8,7 +8,7 @@
     "build": "gulp build:production",
     "build:production": "npm run production && npm run production:legacy",
     "cy:trashCopy": "npx trash cypress/integration/__cypress__/* !cypress/integration/__cypress__/__README__.js",
-    "cy:copy": "npx copyfiles -e ./app/QA/__cypress__/common/*.js ./app/QA/__cypress__/*.js cypress/integration/__cypress__ -f",
+    "cy:copy": "npx copyfiles -e ./app/qa/__cypress__/common/*.js ./app/qa/__cypress__/*.js cypress/integration/__cypress__ -f",
     "cy:open": "npm run cy:trashCopy && npm run cy:copy && cypress open --browser chrome",
     "cy:run": "npm run cy:trashCopy && npm run cy:copy && cypress run --headless --browser chrome --record true --tag \"local\"",
     "cy:run:debug": "npm run cy:trashCopy && npm run cy:copy && DEBUG=cypress:* cypress run --headless --browser chrome --record false",

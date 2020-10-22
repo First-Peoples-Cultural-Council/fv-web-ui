@@ -11,7 +11,6 @@ const rootDirectory = path.resolve(frontEndRootDirectory, '..')
 // Source Directories
 const sourceDirectory = path.resolve(frontEndRootDirectory, 'app')
 const sourceAssetsDirectory = path.resolve(sourceDirectory, 'assets')
-const sourceScriptsDirectory = path.resolve(sourceDirectory, 'javascripts')
 const sourceStateDirectory = path.resolve(sourceDirectory, 'state')
 const sourceStylesDirectory = path.resolve(sourceAssetsDirectory, 'stylesheets')
 const sourceImagesDirectory = path.resolve(sourceAssetsDirectory, 'images')
@@ -85,13 +84,13 @@ module.exports = (env) => ({
           // #context-path-issue
           // Ensure relative paths from CSS files are rewritten in local dev server
           from: /\/assets\/styles\/(.*)$/,
-          to: function(context) {
+          to: function (context) {
             return '/' + context.match[1]
           },
         },
         {
           from: /\/assets\/(.*)$/,
-          to: function(context) {
+          to: function (context) {
             return '/assets/' + context.match[1]
           },
         },
@@ -119,10 +118,12 @@ module.exports = (env) => ({
   // These options change how modules are resolved
   resolve: {
     alias: {
+      assets: sourceAssetsDirectory,
       components: path.resolve(sourceDirectory, 'components'),
       componentsShared: path.resolve(sourceDirectory, 'componentsShared'),
       common: path.resolve(sourceDirectory, 'common'),
-      state: path.resolve(sourceDirectory, 'state'),
+      qa: path.resolve(sourceDirectory, 'qa'),
+      state: sourceStateDirectory,
       dataSources: path.resolve(sourceStateDirectory, 'dataSources'),
       operations: path.resolve(sourceStateDirectory, 'operations'),
       reducers: path.resolve(sourceStateDirectory, 'reducers'),
