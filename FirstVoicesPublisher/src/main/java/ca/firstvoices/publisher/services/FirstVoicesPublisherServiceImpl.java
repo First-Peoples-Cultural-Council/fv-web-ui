@@ -24,6 +24,7 @@ import static ca.firstvoices.data.lifecycle.Constants.ENABLED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.data.lifecycle.Constants.UNPUBLISH_TRANSITION;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_ALPHABET;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_AUDIO;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
@@ -114,7 +115,13 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
         if (nonRecursiveTransitions.contains(PUBLISH_TRANSITION)) {
           // Handle publishing children if type is not configured to do that automatically
           // as defined by `noRecursionForTransitions` on the type.
-          transitionChildrenService.transitionChildren(PUBLISH_TRANSITION, ENABLED_STATE, child);
+          if (FV_ALPHABET.equals(child.getType())) {
+            // For alphabet we want to transition all characters to publish
+            transitionChildrenService.transitionChildren(PUBLISH_TRANSITION, null, child);
+          } else {
+            // For all other types, we only want to transition enabled
+            transitionChildrenService.transitionChildren(PUBLISH_TRANSITION, ENABLED_STATE, child);
+          }
         }
       }
     }

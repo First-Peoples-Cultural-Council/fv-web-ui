@@ -34,17 +34,6 @@
       <type name="FVResources" noRecursionForTransitions="Enable,Disable,Publish,Republish,RevertToNew,Unpublish">fv-lifecycle</type>
       <type name="FVSong">fv-lifecycle</type>
       <type name="FVVideo">fv-lifecycle</type>
-      <type name="INMorpheme">default</type>
-      <type name="INDemonstrative">default</type>
-      <type name="INDialect">default</type>
-      <type name="INDictionary">default</type>
-      <type name="INInfix">default</type>
-      <type name="INNounEnding">default</type>
-      <type name="INPersonalPronounce">default</type>
-      <type name="INPhrase">default</type>
-      <type name="INPlaceLocation">default</type>
-      <type name="INRoot">default</type>
-      <type name="INVerbEnding">default</type>
       <type name="Workspace">default</type>
     </types>
   </extension>

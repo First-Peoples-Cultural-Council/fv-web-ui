@@ -9,6 +9,7 @@ import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.REVERT_TO_NEW;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_AUDIO;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CONTRIBUTOR;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_LINK;
 import static org.junit.Assert.assertEquals;
@@ -75,16 +76,23 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
 
   DocumentModel dictionary = null;
 
+  DocumentModel alphabet = null;
+
   @Before
   public void setUp() {
     dialect = session.getDocument(new IdRef(this.dataCreator.getReference("testDialect")));
     dictionary = session.getDocument(new IdRef(this.dataCreator.getReference("testDictionary")));
+    alphabet = session.getDocument(new IdRef(this.dataCreator.getReference("testAlphabet")));
     portal = session.getDocument(new IdRef(this.dataCreator.getReference("testPortal")));
 
     DocumentModel workspacesData = session
         .getDocument(new IdRef(this.dataCreator.getReference("workspaceData")));
     DocumentModel sectionsData = session
         .getDocument(new IdRef(this.dataCreator.getReference("sectionsData")));
+
+    // Create an alphabet character
+    session.createDocument(
+        session.createDocumentModel(alphabet.getPathAsString(), "Character1", FV_CHARACTER));
 
     // Create some words for the tests
     String[] wordsArray = new String[]{"NewWord1", "NewWord2", "NewWord3", "NewWord4", "NewWord5"};
@@ -103,6 +111,8 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
 
     // Set publication target
     workspacesData.setPropertyValue("publish:sections", new String[]{sectionsData.getId()});
+
+    session.save();
 
     TransactionHelper.commitOrRollbackTransaction();
     TransactionHelper.startTransaction();
@@ -142,6 +152,11 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
     assertEquals(PUBLISHED_STATE, dictionary.getCurrentLifeCycleState());
     assertEquals(PUBLISHED_STATE, portal.getCurrentLifeCycleState());
     assertEquals(PUBLISHED_STATE, words.get(0).getCurrentLifeCycleState());
+
+    // Children of Alphabet should follow whatever transition the dialect did
+    for (DocumentModel character : session.getChildren(alphabet.getRef())) {
+      assertEquals(PUBLISHED_STATE, character.getCurrentLifeCycleState());
+    }
 
     session.save();
 
