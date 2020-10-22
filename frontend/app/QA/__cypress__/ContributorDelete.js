@@ -3,7 +3,7 @@
 
 // TODO: ENABLE WEBPACK ALIASES IN CYPRESS TESTS!
 // import copy from '/components/Contributor/internationalization'
-import copy from '../../../app/assets/javascripts/components/Contributor/internationalization.js'
+import copy from '../../../app/components/Contributor/internationalization.js'
 
 describe('ContributorDelete.js > Contributor', () => {
   it('Delete', () => {

@@ -5,7 +5,7 @@ import '@testing-library/cypress/add-commands'
 
 // TODO: ENABLE WEBPACK ALIASES IN CYPRESS TESTS!
 // import copy from '/components/Category/internationalization'
-import copy from '../../../app/assets/javascripts/components/Category/internationalization.js'
+import copy from '../../../app/components/Category/internationalization.js'
 describe('CategoryCreate.js > Category', () => {
   it('Create', () => {
     // Login

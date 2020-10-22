@@ -1,8 +1,8 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 import '@testing-library/cypress/add-commands'
-import testSearch from '../../../app/assets/javascripts/components/SearchDialect/__cypress__/common/testSearch.js'
-import testSearchWords from '../../../app/assets/javascripts/components/SearchDialect/__cypress__/common/testSearchWords.js'
+import testSearch from './common/testSearch.js'
+import testSearchWords from './common/testSearchWords.js'
 
 describe('SearchDialect-Words-Private.js > SearchDialect', () => {
   it('Should redirect with anon user, no redirect with member', () => {

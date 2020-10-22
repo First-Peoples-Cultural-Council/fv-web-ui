@@ -1,7 +1,7 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 import '@testing-library/cypress/add-commands'
-import testSearchPhrases from '../../../app/assets/javascripts/components/SearchDialect/__cypress__/common/testSearchPhrases.js'
+import testSearchPhrases from './common/testSearchPhrases.js'
 
 describe('SearchDialect-Phrases-Public.js > SearchDialect', () => {
   it('Select letter with enough results for pagination, confirm has data, navigate to next page, confirm has data', () => {
