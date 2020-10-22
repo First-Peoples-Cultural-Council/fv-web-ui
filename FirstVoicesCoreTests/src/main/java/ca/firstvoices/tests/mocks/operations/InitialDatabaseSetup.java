@@ -120,22 +120,20 @@ public class InitialDatabaseSetup {
 
     /*
         Setup permissions.
+        Grant Members and Guest READ to sections
      */
-    DocumentModel root = session.getDocument(new PathRef("/"));
+
     ACPImpl acp = new ACPImpl();
     ACLImpl acl = new ACLImpl("ACL.LOCAL_ACL");
+
+    acl.add(new ACE("Guest", "Read", true));
+    acl.add(new ACE("members", "Read", true));
+
     acp.addACL(acl);
-    ACE ace = new ACE("members", "Read", true);
-    acl.add(ace);
-    root.setACP(acp, false);
 
     DocumentModel sections = session.getDocument(new PathRef(FV_SECTIONS));
-    ACPImpl acpTwo = new ACPImpl();
-    ACLImpl aclTwo = new ACLImpl("ACL.LOCAL_ACL");
-    acpTwo.addACL(aclTwo);
-    ACE aceTwo = new ACE("Guest", "Read", true);
-    aclTwo.add(aceTwo);
-    sections.setACP(acpTwo, false);
+    sections.setACP(acp, false);
+
     /*
     Setup publication targets.
     */
