@@ -57,7 +57,7 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
  */
 @RunWith(FeaturesRunner.class)
 @Features({PlatformFeature.class, FirstVoicesDataFeature.class})
-@Deploy({"FirstVoicesData", "org.nuxeo.ecm.platform", "org.nuxeo.ecm.platform.commandline.executor",
+@Deploy({"FirstVoicesCoreIO", "FirstVoicesData", "org.nuxeo.ecm.platform", "org.nuxeo.ecm.platform.commandline.executor",
     "org.nuxeo.ecm.platform.picture.core", "org.nuxeo.ecm.platform.rendition.core",
     "org.nuxeo.ecm.platform.video.core", "org.nuxeo.ecm.platform.audio.core",
     "org.nuxeo.ecm.automation.scripting",
@@ -442,7 +442,7 @@ public class ComputeCustomOrderServiceImplTest {
 
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
     createWordsorPhrases(orderedWords, FV_WORD);
-    firstVoicesPublisherService.publishDialect(dialect);
+    firstVoicesPublisherService.transitionDialectToPublished(session, dialect);
 
     session.save();
 

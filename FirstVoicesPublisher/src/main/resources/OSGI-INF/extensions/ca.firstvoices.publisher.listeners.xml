@@ -1,16 +1,25 @@
 <component name="ca.bc.gov.nuxeo.listeners.listener.contrib.ProxyPublisherListener">
+
   <require>ca.firstvoices.publisher.services.FirstVoicesPublisherServiceImpl</require>
+  <require>ca.firstvoices.core.io.services.transitionChildrenState.contrib</require>
+
+  <!-- A work queue for handling publishing -->
+  <extension point="queues" target="org.nuxeo.ecm.core.work.service">
+    <queue id="fv-dialect-publishing">
+      <name>FV Dialect Publishing Queue</name>
+      <capacity>1</capacity>
+      <maxThreads>1</maxThreads>
+      <clearCompletedAfterSeconds>600</clearCompletedAfterSeconds>
+      <category>publishingWorkerQueue</category>
+    </queue>
+  </extension>
+
   <extension target="org.nuxeo.ecm.core.event.EventServiceComponent"
     point="listener">
 
-    <listener name="ProxyPublishedListener" async="false" postCommit="false"
-      class="ca.firstvoices.publisher.listeners.ProxyPublisherListener" priority="100">
+    <listener name="ProxyPublishedListener" async="true" postCommit="true"
+      class="ca.firstvoices.publisher.listeners.ProxyPublisherListener" priority="50">
       <event>lifecycle_transition_event</event>
-    </listener>
-
-    <listener name="DocumentDeletedUnpublishListener" async="false" postCommit="false"
-      class="ca.firstvoices.publisher.listeners.DocumentDeletedUnpublishListener" priority="150">
-      <event>documentTrashed</event>
     </listener>
 
     <listener name="AssignOriginListener"

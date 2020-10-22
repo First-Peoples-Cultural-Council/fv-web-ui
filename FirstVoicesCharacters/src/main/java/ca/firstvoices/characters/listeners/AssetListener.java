@@ -85,7 +85,7 @@ public class AssetListener implements EventListener {
         cleanupCharactersService.cleanConfusables(session, document, false);
       } catch (Exception e) {
         // Fail silently so that we can still capture the asset being created
-        log.severe("Failed during listener; document with Path " + document.getPathAsString()
+        log.severe("Failed during assetListener; document with Path " + document.getPathAsString()
             + "| Exception:" + e.toString());
       }
     }

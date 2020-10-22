@@ -29,26 +29,46 @@ import static ca.firstvoices.data.lifecycle.Constants.UNPUBLISH_TRANSITION;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_FROM;
 import static org.nuxeo.ecm.core.api.LifeCycleConstants.TRANSTION_EVENT_OPTION_TRANSITION;
 
+import ca.firstvoices.core.io.utils.DialectUtils;
+import ca.firstvoices.core.io.utils.DocumentUtils;
+import ca.firstvoices.data.exceptions.FVDocumentHierarchyException;
+import ca.firstvoices.maintenance.common.RequiredJobsUtils;
+import ca.firstvoices.publisher.Constants;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.LifeCycleConstants;
 import org.nuxeo.ecm.core.event.Event;
+import org.nuxeo.ecm.core.event.EventBundle;
 import org.nuxeo.ecm.core.event.EventContext;
-import org.nuxeo.ecm.core.event.EventListener;
+import org.nuxeo.ecm.core.event.PostCommitEventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.runtime.api.Framework;
 
 
 /**
- * Listener handles publishing, un-publishing and republishing of Workspace documents
- * After a workflow transition is made, proxies will be created for Workspace
- * documents in sections, via the publisher service.
+ * Listener handles publishing, un-publishing and republishing of Workspace documents After a
+ * workflow transition is made, proxies will be created for Workspace documents in sections, via the
+ * publisher service.
  */
-public class ProxyPublisherListener implements EventListener {
+public class ProxyPublisherListener implements PostCommitEventListener {
 
   protected FirstVoicesPublisherService service = Framework
       .getService(FirstVoicesPublisherService.class);
 
   @Override
+  public void handleEvent(EventBundle events) {
+    if (!events.containsEventName(LifeCycleConstants.TRANSITION_EVENT)) {
+      return;
+    }
+    for (Event event : events) {
+      String name = event.getName();
+      if (LifeCycleConstants.TRANSITION_EVENT.equals(name)) {
+        handleEvent(event);
+      }
+    }
+  }
+
   public void handleEvent(Event event) {
     EventContext ctx = event.getContext();
     if (!(ctx instanceof DocumentEventContext)) {
@@ -58,13 +78,20 @@ public class ProxyPublisherListener implements EventListener {
     if (doc == null) {
       return;
     }
+
     String transition = (String) ctx.getProperties().get(TRANSTION_EVENT_OPTION_TRANSITION);
     String transitionFrom = (String) ctx.getProperties().get(TRANSTION_EVENT_OPTION_FROM);
 
+    if (DocumentUtils.isMutable(doc) && isDialectBusyOrUnavailable(doc)) {
+      // Do not trigger listener for immutable documents and while dialect publishing
+      // is pending since the creation of proxies is done via `CreateProxiesWorker`
+      return;
+    }
+
     if (isPublishing(transition, transitionFrom)) {
-      service.publish(doc);
+      service.publish(doc.getCoreSession(), doc);
     } else if (isRepublishing(transition, transitionFrom)) {
-      service.doRepublish(doc);
+      service.republish(doc);
     } else if (isUnpublishing(transition, transitionFrom)) {
       service.unpublish(doc);
     }
@@ -72,7 +99,8 @@ public class ProxyPublisherListener implements EventListener {
 
   /**
    * Document is moving from a state other than REPUBLISHED, to public. Proxies need to be created
-   * @param transition transition event requested
+   *
+   * @param transition     transition event requested
    * @param transitionFrom state that the document is transitioning from (i.e. current state)
    */
   private boolean isPublishing(String transition, String transitionFrom) {
@@ -93,4 +121,28 @@ public class ProxyPublisherListener implements EventListener {
     return (UNPUBLISH_TRANSITION.equals(transition)
         || DISABLE_TRANSITION.equals(transition) && PUBLISHED_STATE.equals(transitionFrom));
   }
+
+  /**
+   * @param doc current document fired to the listener
+   * @return true is the dialect is in the process of publishing, false otherwise
+   */
+  private boolean isDialectBusyOrUnavailable(DocumentModel doc) {
+    try {
+      CoreSession session = doc.getCoreSession();
+      DocumentModel dialect = session.getDocument(DialectUtils.getDialect(doc).getRef());
+
+      if (!dialect.hasSchema("fv-maintenance")) {
+        return false;
+      }
+
+      return RequiredJobsUtils
+          .hasRequiredJobs(dialect,
+              Constants.PUBLISH_DIALECT_JOB_ID);
+    } catch (FVDocumentHierarchyException exception) {
+      // if we are not dealing with a document where a dialect can be extracted,
+      // we should not attempt to publish it
+      return true;
+    }
+  }
+
 }

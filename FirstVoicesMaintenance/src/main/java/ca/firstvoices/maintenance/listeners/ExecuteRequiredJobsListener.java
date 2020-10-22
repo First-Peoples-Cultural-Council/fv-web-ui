@@ -107,7 +107,7 @@ public class ExecuteRequiredJobsListener implements EventListener {
                       ++jobsExecuted;
                     }
 
-                    if (jobsExecuted == (REQUIRED_JOB_LIMIT - 1)) {
+                    if (jobsExecuted == REQUIRED_JOB_LIMIT) {
                       log.warning(
                           () -> "Reached required job limit for dialect " + dialect.getTitle());
                     }

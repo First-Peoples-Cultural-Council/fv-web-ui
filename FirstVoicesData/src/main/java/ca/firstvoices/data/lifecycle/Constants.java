@@ -20,6 +20,7 @@ public class Constants {
   public static final String UNPUBLISH_TRANSITION = "Unpublish";
   public static final String DISABLE_TRANSITION = "Disable";
   public static final String REPUBLISH_TRANSITION = "Republish";
+  public static final String REVERT_TO_NEW = "RevertToNew";
 
   // Visibility constants
   public static final String TEAM = "team";

@@ -88,4 +88,13 @@ public class DialectUtilsTest extends AbstractTestDataCreatorTest {
     Assert.assertTrue(DialectUtils.isCoreType(DialectTypesConstants.FV_PHRASE));
     Assert.assertTrue(DialectUtils.isCoreType(DialectTypesConstants.FV_BOOK));
   }
+
+  @Test
+  public void isDialectChild() {
+    DocumentModelList children = session.getChildren(dialect.getRef());
+
+    Assert.assertFalse(DialectUtils.isDialectChild(words.get(0)));
+    Assert.assertFalse(DialectUtils.isDialectChild(dialect));
+    Assert.assertTrue(DialectUtils.isDialectChild(children.get(0)));
+  }
 }

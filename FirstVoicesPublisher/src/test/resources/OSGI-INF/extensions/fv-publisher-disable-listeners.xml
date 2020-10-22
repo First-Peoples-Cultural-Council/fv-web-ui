@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.publisher.tests.listeners.contrib" version="1.0">
+  <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
+    <!-- disable CoreIO listener -->
+    <listener name="ancestryAssignmentListener" enabled="false"/>
+  </extension>
+</component>

@@ -84,7 +84,7 @@ public class TestSecurityPolicies extends AbstractFVTest {
   DocumentModel dialectDoc;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
     session.removeChildren(session.getRootDocument().getRef());
     session.save();
     session.createDocument(session.createDocumentModel("/", "FV", "Domain"));
@@ -121,7 +121,7 @@ public class TestSecurityPolicies extends AbstractFVTest {
   }
 
   @Test
-  @Ignore
+  @Ignore("Need to fix test")
   public void testNonRecordersSecurityPolicy() throws Exception {
     // Users who aren't at least recorders should be denied access documents with New or
     // Disabled state
@@ -168,8 +168,8 @@ public class TestSecurityPolicies extends AbstractFVTest {
       loginCtx.logout();
     }
 
-    publisherService.publish(dialectDoc);
-    publisherService.publish(wordDoc);
+    publisherService.publish(session, dialectDoc);
+    publisherService.publish(session, wordDoc);
     session.save();
     DocumentModel proxyWord = session.getProxies(wordDoc.getRef(), null).get(0);
     assertNotNull(proxyWord);

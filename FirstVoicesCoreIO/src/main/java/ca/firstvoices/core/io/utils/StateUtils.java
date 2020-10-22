@@ -14,6 +14,14 @@ public final class StateUtils {
     return PUBLISHED_STATE.equals(doc.getCurrentLifeCycleState());
   }
 
+  public static boolean followTransitionIfAllowed(DocumentModel doc, String transition) {
+    if (doc.getAllowedStateTransitions().contains(transition)) {
+      return doc.followTransition(transition);
+    }
+
+    return false;
+  }
+
   public static String visibilityToState(String visibility) {
     switch (visibility) {
       case "team":

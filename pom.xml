@@ -21,7 +21,7 @@
   <artifactId>firstvoices-modules-parent</artifactId>
   <name>First Voices Project Parent</name>
   <packaging>pom</packaging>
-  <version>3.5.1</version>
+  <version>3.5.2-SNAPSHOT</version>
 
   <modules>
     <module>FirstVoicesData</module>

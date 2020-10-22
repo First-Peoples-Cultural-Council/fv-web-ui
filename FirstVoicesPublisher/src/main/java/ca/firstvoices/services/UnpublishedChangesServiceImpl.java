@@ -95,12 +95,19 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
          service is being called from a place that does not have
          access to the workspaces document.
     */
+    @SuppressWarnings("java:S1602")
     DocumentModel workspacesDoc = CoreInstance.doPrivileged(session, s -> {
       return s.getSourceDocument(document.getRef());
     });
 
     // Get the sections document and versions
     DocumentModel sectionsDoc = service.getPublication(session, workspacesDoc.getRef());
+
+    // If the sections doc does not exist, return null
+    // This may be in case the sections Doc is pending publication
+    if (sectionsDoc == null) {
+      return null;
+    }
 
     return compareDocs(sectionsDoc, workspacesDoc);
   }

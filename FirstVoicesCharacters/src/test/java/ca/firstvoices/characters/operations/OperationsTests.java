@@ -193,7 +193,7 @@ public class OperationsTests {
     @SuppressWarnings("unchecked")
     Map<String, Object> jsonMap = mapper.readValue(response.getStream(), Map.class);
 
-    assertEquals("Words/Phrases: 1", jsonMap.get(chars.get(0)));
-    assertEquals("Words/Phrases: 0", jsonMap.get(chars.get(1)));
+    assertEquals(1, ((LinkedHashMap<?,?>) jsonMap.get(chars.get(0))).get("Words/Phrases"));
+    assertEquals(0, ((LinkedHashMap<?,?>) jsonMap.get(chars.get(1))).get("Words/Phrases"));
   }
 }

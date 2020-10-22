@@ -1,12 +1,12 @@
 package ca.firstvoices.characters.workers;
 
-import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 
 import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.services.CleanupCharactersService;
+import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
-import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.UnpublishedChangesService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.nuxeo.ecm.core.api.CoreInstance;
@@ -114,8 +114,7 @@ public class CleanConfusablesWorker extends AbstractWork {
    * confusables (i.e. convert to the correct character), then publish, If no changes exist on the
    * document
    *
-   * @param session
-   * @param confusableChar
+   * @param confusableChar to search for
    */
   private void processWordsForConfusable(CoreSession session, String dictionaryId,
       String confusableChar) {
@@ -124,9 +123,6 @@ public class CleanConfusablesWorker extends AbstractWork {
         .getAllWordsPhrasesForConfusable(session, dictionaryId, confusableChar, batchSize)) {
 
       // Check for unpublished changes (before we clean)
-      FirstVoicesPublisherService firstVoicesPublisherService = Framework
-          .getService(FirstVoicesPublisherService.class);
-
       UnpublishedChangesService unpublishedChangesService = Framework
           .getService(UnpublishedChangesService.class);
 
@@ -136,9 +132,8 @@ public class CleanConfusablesWorker extends AbstractWork {
       // Clean confusables for document
       cleanupCharactersService.cleanConfusables(session, dictionaryItem, true);
 
-      if (!unpublishedChangesExist && dictionaryItem.getCurrentLifeCycleState()
-          .equals(PUBLISHED_STATE)) {
-        firstVoicesPublisherService.queueRepublish(dictionaryItem);
+      if (!unpublishedChangesExist && StateUtils.isPublished(dictionaryItem)) {
+        dictionaryItem.followTransition(REPUBLISH_TRANSITION);
       }
     }
   }

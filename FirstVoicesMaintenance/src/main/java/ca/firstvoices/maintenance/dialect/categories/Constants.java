@@ -36,4 +36,10 @@ public class Constants {
 
   // Migrate categories status ACTION ID
   public static final String MIGRATE_CATEGORIES_STATUS_ACTION_ID = GROUP_NAME + ".MigrateStatus";
+
+  // Clean category/phrasebook references JOB ID
+  public static final String CLEAN_CATEGORY_REFERENCES_JOB_ID = GROUP_NAME + ".CleanReferences";
+
+  // Clean category/phrasebook references ACTION ID
+  public static final String CLEAN_CATEGORY_REFERENCES_ACTION_ID = CLEAN_CATEGORY_REFERENCES_JOB_ID;
 }

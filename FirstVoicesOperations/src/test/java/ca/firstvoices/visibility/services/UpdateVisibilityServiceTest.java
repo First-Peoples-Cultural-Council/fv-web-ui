@@ -4,14 +4,14 @@ import static ca.firstvoices.data.lifecycle.Constants.DISABLED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.DISABLE_TRANSITION;
 import static ca.firstvoices.data.lifecycle.Constants.ENABLED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.ENABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.MEMBERS;
 import static ca.firstvoices.data.lifecycle.Constants.NEW_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLIC;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
-import static ca.firstvoices.data.lifecycle.Constants.MEMBERS;
-import static ca.firstvoices.data.lifecycle.Constants.PUBLIC;
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.TEAM;
 
-import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,9 +23,6 @@ import testUtil.AbstractFirstVoicesOperationsTest;
  * @author david
  */
 public class UpdateVisibilityServiceTest extends AbstractFirstVoicesOperationsTest {
-
-  @Inject
-  FirstVoicesPublisherService firstVoicesPublisherService;
 
   @Inject
   UpdateVisibilityService updateVisibilityService;
@@ -97,8 +94,8 @@ public class UpdateVisibilityServiceTest extends AbstractFirstVoicesOperationsTe
 
   @Test
   public void testPublicToTeam() {
-    firstVoicesPublisherService.publishDialect(dialect);
-    firstVoicesPublisherService.publish(word);
+    dialect.followTransition(PUBLISH_TRANSITION);
+    word.followTransition(PUBLISH_TRANSITION);
     Assert.assertEquals(PUBLISHED_STATE, word.getCurrentLifeCycleState());
     DocumentModel returnDoc = updateVisibilityService.updateVisibility(word, TEAM);
     Assert.assertEquals(DISABLED_STATE, returnDoc.getCurrentLifeCycleState());
@@ -106,8 +103,8 @@ public class UpdateVisibilityServiceTest extends AbstractFirstVoicesOperationsTe
 
   @Test
   public void testPublicToMembers() {
-    firstVoicesPublisherService.publishDialect(dialect);
-    firstVoicesPublisherService.publish(word);
+    dialect.followTransition(PUBLISH_TRANSITION);
+    word.followTransition(PUBLISH_TRANSITION);
     Assert.assertEquals(PUBLISHED_STATE, word.getCurrentLifeCycleState());
     DocumentModel returnDoc = updateVisibilityService.updateVisibility(word, MEMBERS);
     Assert.assertEquals(ENABLED_STATE, returnDoc.getCurrentLifeCycleState());
@@ -131,10 +128,10 @@ public class UpdateVisibilityServiceTest extends AbstractFirstVoicesOperationsTe
   @Test
   public void testPublicToPublic() {
     dialect.followTransition(PUBLISH_TRANSITION);
-    firstVoicesPublisherService.publish(word);
+    word.followTransition(PUBLISH_TRANSITION);
     Assert.assertEquals(PUBLISHED_STATE, word.getCurrentLifeCycleState());
     DocumentModel returnDoc = updateVisibilityService.updateVisibility(word, PUBLIC);
-    Assert.assertEquals(PUBLISHED_STATE, returnDoc.getCurrentLifeCycleState());
+    Assert.assertEquals(REPUBLISH_STATE, returnDoc.getCurrentLifeCycleState());
   }
 
   @Test(expected = NuxeoException.class)

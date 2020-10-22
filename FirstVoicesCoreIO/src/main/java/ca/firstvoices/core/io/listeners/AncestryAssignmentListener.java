@@ -75,7 +75,8 @@ public class AncestryAssignmentListener implements EventListener {
       assignAncestorsService.assignAncestors(doc);
     } catch (Exception e) {
       // Fail silently so that we can still capture the asset being created
-      log.severe("Failed during listener; document with Path " + doc.getPathAsString()
+      log.severe("Failed during AncestryAssignmentListener listener;"
+          + "document with Path " + doc.getPathAsString()
           + "| Exception:" + e.toString());
     } finally {
       // Renable default events for future runs

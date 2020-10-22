@@ -20,13 +20,13 @@
 
 package ca.firstvoices.characters.services;
 
-import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 
 import ca.firstvoices.characters.listeners.AssetListener;
 import ca.firstvoices.core.io.utils.DialectUtils;
 import ca.firstvoices.core.io.utils.SessionUtils;
+import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
-import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.services.UnpublishedChangesService;
 import java.util.Arrays;
 import java.util.Collections;
@@ -145,17 +145,14 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
   private void updateProxyIfPublished(CoreSession session, DocumentModel element) {
     // If document is published, update the field on the proxy but only if no other changes
     // exist in order to avoid publishing an archive's other changes prematurely.
-    FirstVoicesPublisherService firstVoicesPublisherService = Framework
-        .getService(FirstVoicesPublisherService.class);
-
     UnpublishedChangesService unpublishedChangesService = Framework
         .getService(UnpublishedChangesService.class);
 
     boolean unpublishedChangesExist = unpublishedChangesService
         .checkUnpublishedChanges(session, element);
 
-    if (!unpublishedChangesExist && element.getCurrentLifeCycleState().equals(PUBLISHED_STATE)) {
-      firstVoicesPublisherService.queueRepublish(element);
+    if (!unpublishedChangesExist && StateUtils.isPublished(element)) {
+      element.followTransition(REPUBLISH_TRANSITION);
     }
   }
 

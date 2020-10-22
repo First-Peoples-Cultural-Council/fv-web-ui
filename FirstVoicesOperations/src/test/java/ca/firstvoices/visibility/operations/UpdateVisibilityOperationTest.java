@@ -5,14 +5,14 @@ import static ca.firstvoices.data.lifecycle.Constants.DISABLED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.DISABLE_TRANSITION;
 import static ca.firstvoices.data.lifecycle.Constants.ENABLED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.ENABLE_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.MEMBERS;
 import static ca.firstvoices.data.lifecycle.Constants.NEW_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLIC;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
-import static ca.firstvoices.data.lifecycle.Constants.MEMBERS;
-import static ca.firstvoices.data.lifecycle.Constants.PUBLIC;
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.TEAM;
 
-import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
@@ -34,9 +34,6 @@ public class UpdateVisibilityOperationTest extends AbstractFirstVoicesOperations
 
   @Inject
   AutomationService service;
-
-  @Inject
-  FirstVoicesPublisherService firstVoicesPublisherService;
 
   private OperationContext ctx;
 
@@ -135,9 +132,7 @@ public class UpdateVisibilityOperationTest extends AbstractFirstVoicesOperations
 
   @Test
   public void testPublicToTeam() throws OperationException {
-    firstVoicesPublisherService.publishDialect(dialect);
-    firstVoicesPublisherService.publish(word);
-    Assert.assertEquals(PUBLISHED_STATE, word.getCurrentLifeCycleState());
+    word.followTransition(PUBLISH_TRANSITION);
     ctx = new OperationContext(session);
     ctx.setInput(word);
     Map<String, String> params = new HashMap<>();
@@ -150,9 +145,7 @@ public class UpdateVisibilityOperationTest extends AbstractFirstVoicesOperations
 
   @Test
   public void testPublicToMembers() throws OperationException {
-    firstVoicesPublisherService.publishDialect(dialect);
-    firstVoicesPublisherService.publish(word);
-    Assert.assertEquals(PUBLISHED_STATE, word.getCurrentLifeCycleState());
+    word.followTransition(PUBLISH_TRANSITION);
     ctx = new OperationContext(session);
     ctx.setInput(word);
     Map<String, String> params = new HashMap<>();
@@ -193,8 +186,7 @@ public class UpdateVisibilityOperationTest extends AbstractFirstVoicesOperations
   @Test
   public void testPublicToPublic() throws OperationException {
     dialect.followTransition(PUBLISH_TRANSITION);
-    firstVoicesPublisherService.publish(word);
-    Assert.assertEquals(PUBLISHED_STATE, word.getCurrentLifeCycleState());
+    word.followTransition(PUBLISH_TRANSITION);
     ctx = new OperationContext(session);
     ctx.setInput(word);
     Map<String, String> params = new HashMap<>();
@@ -202,7 +194,8 @@ public class UpdateVisibilityOperationTest extends AbstractFirstVoicesOperations
     DocumentModel returnDoc = (DocumentModel) service
         .run(ctx, UpdateVisibilityOperation.ID, params);
 
-    Assert.assertEquals(PUBLISHED_STATE, returnDoc.getCurrentLifeCycleState());
+    // Republish state (to be picked up by listener)
+    Assert.assertEquals(REPUBLISH_STATE, returnDoc.getCurrentLifeCycleState());
   }
 
   @Test

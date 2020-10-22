@@ -53,11 +53,17 @@ public final class DialectUtils {
   }
 
   /**
-   * Core
    * @return true if the type is a core type
    */
   public static boolean isCoreType(String type) {
     return DialectTypesConstants.getCoreTypes().contains(type);
+  }
+
+  /**
+   * @return true if document is a direct child of dialect
+   */
+  public static boolean isDialectChild(DocumentModel doc) {
+    return doc.getParentRef().equals(getDialect(doc).getRef());
   }
 
 }

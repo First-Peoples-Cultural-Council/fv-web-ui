@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.core.io.services.transitionChildrenState.contrib" version="1.0">
+    <implementation class="ca.firstvoices.core.io.services.TransitionChildrenStateServiceImpl"/>
+    <service>
+        <provide interface="ca.firstvoices.core.io.services.TransitionChildrenStateService"/>
+    </service>
+</component>

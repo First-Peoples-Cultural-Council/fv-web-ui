@@ -24,94 +24,51 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
 
-/**
- * @author loopingz
- */
 public interface FirstVoicesPublisherService {
 
   /**
-   * Publish a dialect, publishing its parents if needed and its direct publishable children
+   * Will transition the life cycle state on the dialect, dialect children and grand-children
+   **
+   * For types that have `Publish` defined in `noRecursionForTransitions` (e.g. `FVDictionary`):
+   * Documents in the `Enabled` state will transition; `New` and `Disabled` will not.
+   * This is handled by the FVCore -> `transitionChildren` service
+   **
+   * For other types (e.g. `FVCategories`):
+   * `BulkLifeCycleChangeListener` will attempt to transition all the child docs to `Published`
+   **
+   * Important Note: proxies are not created as part of this method.
+   * That is done via the `publish` method.
    *
-   * @param dialect
+   * @param session session to act within
+   * @param dialect the dialect to transition life cycle state on
    */
-  DocumentModel publishDialect(DocumentModel dialect);
+  void transitionDialectToPublished(CoreSession session, DocumentModel dialect);
 
   /**
-   * Publish a dialect, optionally publishing children
-   *
-   * @param dialect
-   */
-  DocumentModel publishDialect(DocumentModel dialect, boolean publishChildren);
-
-
-  /**
-   * Publish or republish a portal's assets (arrays or strings)
-   *
-   * @param portal
-   */
-  DocumentModel publishPortalAssets(DocumentModel portal);
-
-  /**
-   * Unpublish a dialect, cleaning its parent if they have no more child
-   *
-   * @param dialect
-   */
-  void unpublishDialect(DocumentModel dialect);
-
-  /**
-   * Publish an asset, publishing its related assets and adding proxies information
-   *
-   * @param asset
-   */
-  DocumentModel publishAsset(DocumentModel asset);
-
-  /**
-   * Unpublish an asset, it wont clean the related assets
-   *
-   * @param asset
-   */
-  void unpublishAsset(DocumentModel asset);
-
-  /**
-   * Will split depending on the document between unpublishAsset and unpublishDialect
-   *
-   * @param doc to unpublish
+   * Will route a document to the correct method for removing proxies.
+   * See implementation for details
    */
   void unpublish(DocumentModel doc);
 
   /**
-   * Will split depending on the document between publishAsset and publishDialect
-   *
-   * @param doc to publish
+   * Will create proxies for the relevant document
+   * See implementation for details
    */
-  DocumentModel publish(DocumentModel doc);
+  DocumentModel publish(CoreSession session, DocumentModel doc);
 
   /**
-   * Method to queue a republish
-   * Transitions lifecycle state to Republish, to be picked up by listener
-   * @param doc document to republish
+   * Overwrites proxies for existing published documents.
+   * Will transition doc back to the Published if allowed
+   * Invoked via a listener after a republish transition
+   * @param doc the document to republish
    */
-  void queueRepublish(DocumentModel doc);
+  void republish(DocumentModel doc);
 
   /**
-   * Performs the republishing operation. Called via a listener.
-   * It is preferred to not call this directly to give documents an opportunity
-   * to save properly. Call queueRepublish instead.
-   * @param doc
-   * @return
+   * Gets a proxy for the provided workspace document ref
+   * @param session to act within
+   * @param docRef reference of the document to get proxy for
+   * @return proxy (i.e. document in sections) or null if not proxy exists
    */
-  DocumentModel doRepublish(DocumentModel doc);
-
   DocumentModel getPublication(CoreSession session, DocumentRef docRef);
-
-  DocumentModel publishDocument(CoreSession session, DocumentModel doc, DocumentModel section);
-
-  DocumentModel setDialectProxies(DocumentModel dialectProxy);
-
-  void removeTrashedCategoriesOrPhrasebooksFromWordsOrPhrases(CoreSession session,
-      DocumentModel doc);
-
-  DocumentModel publishDocumentIfDialectPublished(CoreSession session,
-      DocumentModel documentModel);
-
 }

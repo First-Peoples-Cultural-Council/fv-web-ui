@@ -15,11 +15,13 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.automation.client.jaxrs.impl.HttpAutomationClient;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
@@ -46,7 +48,7 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
 @Deploy("org.nuxeo.ecm.platform.types.core")
 @Deploy("org.nuxeo.ecm.platform.webapp.types")
 @Deploy("org.nuxeo.ecm.platform.publisher.core")
-@Deploy({"FirstVoicesREST", "FirstVoicesRESTPageProviders", "FirstVoicesNuxeoPublisher"})
+@Deploy({"FirstVoicesCoreIO", "FirstVoicesREST", "FirstVoicesRESTPageProviders", "FirstVoicesNuxeoPublisher"})
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 public class CategoriesObjectTest extends BaseTest {
 
@@ -96,24 +98,37 @@ public class CategoriesObjectTest extends BaseTest {
             "/FV/Workspaces/Data/Family/Language/Dialect/Categories/Test Category",
             "Subcategory",
             "FVCategory"));
-    session.saveDocument(testSubCategory);
+    testSubCategory = session.saveDocument(testSubCategory);
 
-    DocumentModel wsd = publisherService.publish(workspaceDialect);
-    session.saveDocument(wsd);
+    publisherService.transitionDialectToPublished(session, workspaceDialect);
+    DocumentModel wsd = publisherService.publish(session, workspaceDialect);
 
-    DocumentModel cat = publisherService.publish(testCategory);
-    publisherService.publish(testSubCategory);
-    categoryID = cat.getId();
+    // Publish sub category (should publish parents)
+    publisherService.publish(session, testSubCategory);
+
+    categoryID = testCategory.getId();
 
     session.save();
 
-    TransactionHelper.commitOrRollbackTransaction();
     Framework.getService(WorkManager.class).awaitCompletion(10L, TimeUnit.SECONDS);
+  }
+
+  @BeforeClass
+  public static void unregisterEvents() {
+    // Remove ancestry and publish listeners; not needed here
+    EventService eventService = Framework.getService(EventService.class);
+    eventService.removeEventListener(eventService.getEventListener("ancestryAssignmentListener"));
+    eventService.removeEventListener(eventService.getEventListener("ProxyPublishedListener"));
   }
 
   @Before
   public void setUp() throws InterruptedException {
     createDialectTree(session);
+
+    // Always commit and start a transaction so that session.query
+    // picks up the latest changes
+    TransactionHelper.commitOrRollbackTransaction();
+    TransactionHelper.startTransaction();
   }
 
   @Test

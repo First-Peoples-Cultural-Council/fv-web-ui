@@ -322,7 +322,7 @@ public class MockDialectServiceImpl implements MockDialectService {
     return fvWords;
   }
 
-  private DocumentModelList generateFVPhrases(CoreSession session, String path, int phraseEntries,
+  public DocumentModelList generateFVPhrases(CoreSession session, String path, int phraseEntries,
       String[] wordsToUse, DocumentModelList phraseBooks) {
     //Generate phrase documents
     DocumentModelList fvPhrases = new DocumentModelListImpl();
@@ -332,10 +332,13 @@ public class MockDialectServiceImpl implements MockDialectService {
           wordsToUse);
       DocumentModel phraseDoc = session
           .createDocumentModel(path + "/Dictionary", newPhrase, FV_PHRASE);
-      String randomPhraseBook = phraseBooks
-          .get(ThreadLocalRandom.current().nextInt(0, phraseBooks.size())).getId();
-      String[] phraseBookArr = {randomPhraseBook};
-      phraseDoc.setPropertyValue("fv-phrase:phrase_books", phraseBookArr);
+
+      if (phraseBooks != null) {
+        String randomPhraseBook = phraseBooks
+            .get(ThreadLocalRandom.current().nextInt(0, phraseBooks.size())).getId();
+        String[] phraseBookArr = {randomPhraseBook};
+        phraseDoc.setPropertyValue("fv-phrase:phrase_books", phraseBookArr);
+      }
 
       fvPhrases.add(createDocument(session, phraseDoc));
     }

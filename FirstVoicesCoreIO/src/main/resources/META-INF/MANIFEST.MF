@@ -8,5 +8,6 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: FirstVoicesCoreIO;singleton=true
 Nuxeo-Component: OSGI-INF/ca.firstvoices.listeners.xml,
  OSGI-INF/services/assignAncestors-contrib.xml,
+ OSGI-INF/services/transitionChildrenState-contrib.xml,
  OSGI-INF/ca.firstvoices.io.xml,
  OSGI-INF/ca.firstvoices.notifications.xml

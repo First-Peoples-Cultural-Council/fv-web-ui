@@ -1,7 +1,10 @@
 package ca.firstvoices.dialect.categories.services;
 
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
 
+import ca.firstvoices.core.io.utils.DialectUtils;
 import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.dialect.categories.exceptions.InvalidCategoryException;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
@@ -44,9 +47,19 @@ public class CategoryServiceImpl implements CategoryService {
       }
     }
 
-    session.saveDocument(doc);
+    doc = session.saveDocument(doc);
 
-    return publisherService.publishDocumentIfDialectPublished(session, doc);
+    if (StateUtils.isPublished(DialectUtils.getDialect(doc))) {
+      // If the dialect is published, we want to auto-publish changes for a category
+      if (StateUtils.followTransitionIfAllowed(doc, PUBLISH_TRANSITION)) {
+        return doc;
+      }
+
+      // Try to republish if we could not publish
+      StateUtils.followTransitionIfAllowed(doc, REPUBLISH_TRANSITION);
+    }
+
+    return doc;
   }
 
   private DocumentModel updateParent(DocumentModel categoryDoc, CoreSession session,
@@ -85,13 +98,14 @@ public class CategoryServiceImpl implements CategoryService {
           "A parent category cannot be a child of another parent category.");
     }
 
-    // If the document is published, move the sections doc
+    // If the category is published (which means the dialect is too)
+    // move the sections doc
     if (StateUtils.isPublished(categoryDoc)) {
       DocumentModel categorySectionDoc = publisherService
           .getPublication(session, categoryDoc.getRef());
 
       if (!StateUtils.isPublished(newParentDoc)) {
-        publisherService.publishDocumentIfDialectPublished(session, newParentDoc);
+        publisherService.publish(session, newParentDoc);
       }
 
       DocumentModel newParentSectionDoc = publisherService
