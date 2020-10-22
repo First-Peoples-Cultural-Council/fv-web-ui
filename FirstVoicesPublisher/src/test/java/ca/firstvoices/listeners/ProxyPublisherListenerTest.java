@@ -120,7 +120,10 @@ public class ProxyPublisherListenerTest extends AbstractTestDataCreatorTest {
 
   @Test
   public void shouldHandleRepublishTransitionEvent() {
+    // Follow transition (won't affect children)
     dialect.followTransition(PUBLISH_TRANSITION);
+    // Create proxy for dialect so that children can be acted on
+    fvPublisherService.publish(session, dialect);
 
     DocumentModel dialectChild =
         session.getChild(dialect.getRef(), DialectTypesConstants.FV_DICTIONARY_NAME);

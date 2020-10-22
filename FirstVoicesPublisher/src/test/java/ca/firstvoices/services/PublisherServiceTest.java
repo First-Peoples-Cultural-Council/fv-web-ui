@@ -6,6 +6,7 @@ import static ca.firstvoices.data.lifecycle.Constants.ENABLED_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.ENABLE_TRANSITION;
 import static ca.firstvoices.data.lifecycle.Constants.NEW_STATE;
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
 import static ca.firstvoices.data.lifecycle.Constants.REVERT_TO_NEW;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_AUDIO;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
@@ -232,7 +233,7 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
 
   @Test
   public void shouldCreateProxyForPortal() {
-    shouldTransitionDialectToPublish();
+    shouldCreateProxiesForDialect();
 
     // Set some fields on portal
     // Other fields should follow similar logic: fv-portal:background_top_image, fv-portal:featured_audio
@@ -282,8 +283,8 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
     DocumentModel word = words.get(0);
     DocumentModel phrase = phrases.get(0);
 
-    // Must transition dialect first so that assets within can be published
-    shouldTransitionDialectToPublish();
+    // Must transition dialect first + create proxy so that assets within can be published
+    shouldCreateProxiesForDialect();
 
     // Create related assets. This is a subset of fields set on an asset proxy.
     // Other fields should follow similar logic
@@ -418,7 +419,21 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
   }
 
   @Test
+  public void shouldNotPublishInDialectWithNoProxy() {
+    dialect.followTransition(PUBLISH_TRANSITION);
+    DocumentModel publishedDoc = fvPublisherService.publish(session, words.get(0));
+    assertNull(publishedDoc);
+  }
+
+  @Test
   public void shouldNotRepublishInNewDialect() {
+    fvPublisherService.republish(words.get(0));
+    assertNull(fvPublisherService.getPublication(session, words.get(0).getRef()));
+  }
+
+  @Test
+  public void shouldNotRepublishInDialectWithNoProxy() {
+    dialect.followTransition(PUBLISH_TRANSITION);
     fvPublisherService.republish(words.get(0));
     assertNull(fvPublisherService.getPublication(session, words.get(0).getRef()));
   }
