@@ -30,7 +30,7 @@ import selectn from 'selectn'
 
 import AnalyticsHelpers from 'common/AnalyticsHelpers'
 import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
-import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
+import DataListView from 'views/pages/LearnBase/data-list-view'
 import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
 import Link from 'components/Link'

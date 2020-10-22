@@ -7,7 +7,7 @@ import Tab from '@material-ui/core/Tab'
 import Tabs from '@material-ui/core/Tabs'
 
 //FPCC
-import MediaPanel from 'views/pages/explore/dialect/learn/base/media-panel'
+import MediaPanel from 'views/pages/LearnBase/media-panel'
 import { MediaPanelsStyles } from './MediaPanelsStyles'
 
 /**

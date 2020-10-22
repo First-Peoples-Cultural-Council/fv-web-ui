@@ -19,7 +19,7 @@ import useWindowPath from 'dataSources/useWindowPath'
 import useWord from 'dataSources/useWord'
 
 // Helpers
-import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
+import { getDialectClassname } from 'common/Helpers'
 import NavigationHelpers, {
   appendPathArrayAfterLandmark,
   getSearchObject,

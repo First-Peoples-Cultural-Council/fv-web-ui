@@ -203,7 +203,7 @@ For any new languages you are creating in the setup script please ensure they ar
 
 ##### Writing the Cypress tests:
 
-Cypress tests should be placed in the frontend directory beside the thing that is being tested, in its own directory named "\_\_cypress\_\_". An example test can be seen [at this link](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/app/assets/javascripts/views/pages/explore/dialect/learn/phrases/__cypress__/MemberView-Phrase.js).
+Cypress tests should be placed in the frontend directory beside the thing that is being tested, in its own directory named "\_\_cypress\_\_". An example test can be seen [at this link](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/app/assets/javascripts/views/pages/Phrases/__cypress__/MemberView-Phrase.js).
 On startup tests will be copied from the project and placed in the [/frontend/cypress/integration/\_\_cypress\_\_](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/cypress/integration__cypress__) where they will be run from.
 
 A list of Cypress commands can be found on their website [at this link](https://docs.cypress.io/api/api/table-of-contents.html).

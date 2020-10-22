@@ -4,8 +4,8 @@
 import '@testing-library/cypress/add-commands'
 
 // TODO: ENABLE WEBPACK ALIASES IN CYPRESS TESTS!
-// import copy from '/views/pages/explore/dialect/Recorder/internationalization'
-import copy from '../../../app/assets/javascripts/views/pages/explore/dialect/Recorder/internationalization.js'
+// import copy from '/views/pages/Recorder/internationalization'
+import copy from '../../../app/assets/javascripts/views/pages/Recorder/internationalization.js'
 
 describe('RecorderCreate.js > RecorderCreate', () => {
   it('Create', () => {

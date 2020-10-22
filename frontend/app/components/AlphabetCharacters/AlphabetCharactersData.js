@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import ProviderHelpers from 'common/ProviderHelpers'
 import selectn from 'selectn'
-import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
+import { getDialectClassname } from 'common/Helpers'
 // REDUX: actions/dispatch/func
 import { fetchDocument } from 'reducers/document'
 import { fetchCharacters } from 'reducers/fvCharacter'

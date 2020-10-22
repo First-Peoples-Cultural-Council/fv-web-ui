@@ -58,7 +58,7 @@ import Login from 'components/Login'
 import AppLeftNav from 'components/AppLeftNav/index.v2'
 import Link from 'components/Link'
 
-import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
+import { getDialectClassname } from 'common/Helpers'
 
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 import FVLabel from 'components/FVLabel'

@@ -5,7 +5,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import IntlService from 'common/services/intl'
 
-import * as Pages from 'views/pages'
+import * as Pages from 'common/conf/pagesIndex'
 import { ServiceShortURL } from 'common/services'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 const intl = IntlService.instance

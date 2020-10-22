@@ -113,7 +113,6 @@ module.exports = (env) => ({
    */
   entry: {
     app: path.resolve(sourceDirectory, 'app.js'),
-    // createWord: path.resolve(sourceScriptsDirectory, 'views/pages/explore/dialect/learn/words/Create'),
     game_libs: ['pixi', 'p2', 'phaser'],
   },
 

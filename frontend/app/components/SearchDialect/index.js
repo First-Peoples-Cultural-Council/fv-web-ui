@@ -27,7 +27,7 @@ import useSearchDialect from 'dataSources/useSearchDialect'
 import selectn from 'selectn'
 import classNames from 'classnames'
 import FVButton from 'components/FVButton'
-import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
+import { getDialectClassname } from 'common/Helpers'
 
 /*
 SearchDialect
@@ -501,12 +501,12 @@ export const SearchDialect = (props) => {
           const optionItems =
             options.length > 0
               ? options.map((option, key2) => {
-                return (
-                  <option key={key2} value={option.value}>
-                    {option.text}
-                  </option>
-                )
-              })
+                  return (
+                    <option key={key2} value={option.value}>
+                      {option.text}
+                    </option>
+                  )
+                })
               : partsOfSpeechOptions
           element = (
             <span key={key1} className={_classes.SearchDialectFormSecondaryGroup}>

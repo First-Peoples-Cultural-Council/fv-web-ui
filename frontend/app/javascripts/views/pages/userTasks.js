@@ -39,7 +39,7 @@ import StringHelpers from 'common/StringHelpers'
 import FVButton from 'components/FVButton'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
-import GroupAssignmentDialog from 'views/pages/users/group-assignment-dialog'
+import GroupAssignmentDialog from 'views/pages/Users/group-assignment-dialog'
 
 import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 import FVLabel from 'components/FVLabel'

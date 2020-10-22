@@ -31,7 +31,7 @@ import KidsNavigation from 'components/Kids/navigation'
 import Footer from 'components/Footer'
 import Breadcrumb from 'components/Breadcrumb'
 
-import { PageError } from 'views/pages'
+import { PageError } from 'common/conf/pagesIndex'
 
 import '!style-loader!css-loader!./AppFrontController.css'
 import FVLabel from 'components/FVLabel'

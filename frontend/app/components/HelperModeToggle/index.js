@@ -11,7 +11,7 @@ import { toggleHelpMode, setEditingLabel } from 'reducers/locale'
 import { fetchDirectory } from 'reducers/directory'
 import DocumentOperations from 'operations/DocumentOperations'
 
-import LabelModal from 'views/pages/explore/dialect/immersion/Modal'
+import LabelModal from 'views/pages/immersion/Modal'
 import FVButton from 'components/FVButton/index'
 import '!style-loader!css-loader!./HelperModeToggle.css'
 
@@ -51,8 +51,8 @@ const HelperModeToggle = ({
       })
       const category = mappedLabel
         ? allCategories.find((c) => {
-          return c.id === mappedLabel.category
-        })
+            return c.id === mappedLabel.category
+          })
         : null
       const templateStrings = mappedLabel ? mappedLabel.template_strings.split(',') : []
       const _label = {

@@ -14,7 +14,7 @@ import usePhrase from 'dataSources/usePhrase'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
-import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
+import { getDialectClassname } from 'common/Helpers'
 
 /**
  * @summary PhraseData

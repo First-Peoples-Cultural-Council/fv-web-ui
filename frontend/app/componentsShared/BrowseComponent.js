@@ -36,11 +36,11 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 
-import CategoriesListView from 'views/pages/explore/dialect/learn/words/categories-list-view'
-import ContributorsListView from 'views/pages/explore/dialect/learn/base/contributors-list-view'
-import LinksListView from 'views/pages/explore/dialect/learn/base/links-list-view'
-import PhraseListView from 'views/pages/explore/dialect/learn/phrases/list-view'
-import WordsListView from 'views/pages/explore/dialect/learn/words/list-view'
+import CategoriesListView from 'components/Categories/CategoriesListView'
+import ContributorsListView from 'views/pages/LearnBase/contributors-list-view'
+import LinksListView from 'views/pages/LearnBase/links-list-view'
+import PhraseListView from 'views/pages/Phrases/list-view'
+import WordsListView from 'views/pages/WordsCreateEdit/list-view'
 import FVLabel from 'components/FVLabel'
 const DefaultFetcherParams = {
   currentPageIndex: 1,
@@ -80,8 +80,8 @@ export class BrowseComponent extends Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-      })
+          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+        })
       : DefaultFetcherParams
 
     this.state = {

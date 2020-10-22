@@ -4,7 +4,7 @@ import selectn from 'selectn'
 
 import Preview from 'componentsShared/Preview'
 import FVLabel from 'components/FVLabel'
-import MetadataPanel from 'views/pages/explore/dialect/learn/base/metadata-panel'
+import MetadataPanel from 'views/pages/LearnBase/metadata-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
 import FVButton from 'components/FVButton'
 import DOMPurify from 'dompurify'
