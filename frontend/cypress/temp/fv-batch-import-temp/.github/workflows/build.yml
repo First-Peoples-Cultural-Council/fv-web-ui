@@ -1,0 +1,39 @@
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+
+  build_linux:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the current working code base
+      - name: Checkout working branch
+        uses: actions/checkout@v2
+
+      # Installs the correct version of java for the project
+      - name: Set up JDK 1.8
+        if: steps.changed-backend.outputs.backend_files
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      # Setup the maven build caching (~/.m2/repository directory) to restore from or save to
+      - name: Cache project build
+        if: steps.changed-backend.outputs.backend_files
+        id: cache-build
+        uses: actions/cache@v1.1.2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # Build only the backend if changes are made to the backend and not frontend
+      - name: Build backend with Maven
+        run: mvn clean install

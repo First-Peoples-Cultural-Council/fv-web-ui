@@ -196,10 +196,10 @@ When you create a new test please update this table.
 
 ##### Creating new data:
 
-To create new data for use in tests you will have to add to the script located at [/frontend/app/QA/scripts/TestDatabaseSetup.sh](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/app/QA/scripts/TestDatabaseSetup.sh) using the batch import tool, utils tool, and API endpoints, as needed.
-The script contains examples of how to do each of these, which can be copied with slight name changes. CSV files can be placed in the [/frontend/app/QA/scripts/files directory](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/app/QA/scripts/files).
+To create new data for use in tests you will have to add to the script located at [/frontend/cypress/scripts/TestDatabaseSetup.sh](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/cypress/scripts/TestDatabaseSetup.sh) using the batch import tool, utils tool, and API endpoints, as needed.
+The script contains examples of how to do each of these, which can be copied with slight name changes. CSV files can be placed in the [/frontend/cypress/scripts/files directory](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/cypress/scripts/files).
 
-For any new languages you are creating in the setup script please ensure they are removed in the corresponding [/frontend/app/QA/scripts/TestDatabaseTeardown.sh](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/app/QA/scripts/TestDatabaseTeardown.sh) script.
+For any new languages you are creating in the setup script please ensure they are removed in the corresponding [/frontend/cypress/scripts/TestDatabaseTeardown.sh](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/cypress/scripts/TestDatabaseTeardown.sh) script.
 
 ##### Writing the Cypress tests:
 
