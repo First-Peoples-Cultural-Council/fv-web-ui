@@ -3,7 +3,7 @@
 
 describe('RecorderPublishUnpublish-Word.js > RecorderPublishUnpublish-Word', () => {
   it('Test to check the word publish/unpublish functionality for a recorder.', () => {
-    cy.exec('bash ./cypress/scripts/ResetWordLangFive.sh enabled-true', { env: { TARGET: Cypress.env('TARGET') } })
+    cy.exec('bash ./app/QA/scripts/ResetWordLangFive.sh enabled-true', { env: { TARGET: Cypress.env('TARGET') } })
       .its('stdout')
       .should('contain', 'Reset TestLanguageFive dictionary successfully.')
 

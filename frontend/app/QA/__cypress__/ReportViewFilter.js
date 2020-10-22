@@ -5,7 +5,7 @@ import '@testing-library/cypress/add-commands'
 
 describe('ReportViewFilter.js > ReportViewFilter', () => {
   it('Test to check that reports are generated properly.', () => {
-    cy.exec('bash ./cypress/scripts/ResetWordLangFive.sh enabled-true', { env: { TARGET: Cypress.env('TARGET') } })
+    cy.exec('bash ./app/QA/scripts/ResetWordLangFive.sh enabled-true', { env: { TARGET: Cypress.env('TARGET') } })
       .its('stdout')
       .should('contain', 'Reset TestLanguageFive dictionary successfully.')
 
