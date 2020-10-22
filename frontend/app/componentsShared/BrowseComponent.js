@@ -37,10 +37,10 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 
 import CategoriesListView from 'components/Categories/CategoriesListView'
-import ContributorsListView from 'views/pages/LearnBase/contributors-list-view'
-import LinksListView from 'views/pages/LearnBase/links-list-view'
-import PhraseListView from 'views/pages/Phrases/list-view'
-import WordsListView from 'views/pages/WordsCreateEdit/list-view'
+import ContributorsListView from 'components/LearnBase/contributors-list-view'
+import LinksListView from 'components/LearnBase/links-list-view'
+import PhraseListView from 'components/Phrases/list-view'
+import WordsListView from 'components/WordsCreateEdit/list-view'
 import FVLabel from 'components/FVLabel'
 const DefaultFetcherParams = {
   currentPageIndex: 1,

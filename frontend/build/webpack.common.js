@@ -119,7 +119,6 @@ module.exports = (env) => ({
   // These options change how modules are resolved
   resolve: {
     alias: {
-      views: path.resolve(sourceScriptsDirectory, 'views'),
       components: path.resolve(sourceDirectory, 'components'),
       componentsShared: path.resolve(sourceDirectory, 'componentsShared'),
       common: path.resolve(sourceDirectory, 'common'),

@@ -29,7 +29,7 @@ import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import DocumentListView from 'componentsShared/DocumentListView'
-import DataListView from 'views/pages/LearnBase/data-list-view'
+import DataListView from 'components/LearnBase/data-list-view'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'componentsShared/DictionaryList/DictionaryListSmallScreen'
 import CategoriesData from 'components/Categories/CategoriesData'
 /**

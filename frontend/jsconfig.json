@@ -3,15 +3,14 @@
     "target": "es6",
     "baseUrl": "./",
     "paths": {
-      "styles": ["./app/assets/stylesheets"],
-      "views": ["./app/javascripts/views"],
+      "common": ["./app/common"],
       "components": ["./app/components"],
       "componentsShared": ["./app/componentsShared"],
-      "common": ["./app/common"],
       "operations": ["./app/state/operations"],
       "reducers": ["./app/state/reducers"],
       "games": ["./app/assets/games"],
-      "images": ["./app/assets/images"]
+      "images": ["./app/assets/images"],
+      "styles": ["./app/assets/stylesheets"]
     }
   }
 }

@@ -4,8 +4,7 @@
 import '@testing-library/cypress/add-commands'
 
 // TODO: ENABLE WEBPACK ALIASES IN CYPRESS TESTS!
-// import copy from '/views/pages/Phrasebook/internationalization'
-import copy from '../../../app/assets/javascripts/views/pages/Phrasebook/internationalization.js'
+import copy from '../../../app/assets/javascripts/components/Phrasebook/internationalization.js'
 describe('PhrasebookCreate.js > Phrasebook', () => {
   it('Create', () => {
     // Login

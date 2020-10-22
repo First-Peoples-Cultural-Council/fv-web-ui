@@ -1,7 +1,7 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import copy from '../../../app/assets/javascripts/views/pages/Category/internationalization.js'
+import copy from '../../../app/assets/javascripts/components/Category/internationalization.js'
 
 const createCategories = (start, max) => {
   if (start >= max) {

@@ -16,8 +16,8 @@ import selectn from 'selectn'
 
 import withPagination from 'componentsShared/withPagination'
 
-const GridView = React.lazy(() => import('views/pages/LearnBase/grid-view'))
-const DictionaryList = React.lazy(() => import('componentsShared/DictionaryList'))
+const GridView = React.lazy(() => import('components/LearnBase/grid-view'))
+const DictionaryList = React.lazy(() => import('componentsShared/DictionaryList/DictionaryList'))
 
 const DocumentListView = (props) => {
   const defaultProps = {

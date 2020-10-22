@@ -39,7 +39,7 @@ import { dictionaryListSmallScreenColumnDataTemplate } from 'componentsShared/Di
 
 import '!style-loader!css-loader!./styles.css'
 
-const DictionaryList = React.lazy(() => import('componentsShared/DictionaryList'))
+const DictionaryList = React.lazy(() => import('componentsShared/DictionaryList/DictionaryList'))
 
 const categoryType = {
   title: { plural: 'Categories', singular: 'Category' },
@@ -68,7 +68,7 @@ export const Categories = (props) => {
 
   const copy = useGetCopy(async () => {
     const success = await import(
-      /* webpackChunkName: "CategoryInternationalization" */ 'views/pages/Category/internationalization.js'
+      /* webpackChunkName: "CategoryInternationalization" */ 'components/Category/internationalization.js'
     )
     return success.default
   })

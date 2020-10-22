@@ -5,16 +5,16 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 
-import PageDialectPhrasesCreate from 'views/pages/Phrases/Create'
+import PageDialectPhrasesCreate from 'components/Phrases/Create'
 
-import PageDialectLinksCreate from 'views/pages/Links/create'
-import PageDialectCategoryCreate from 'views/pages/Category/createV1'
-import PageDialectContributorsCreate from 'views/pages/Contributor/createV1'
-import PageDialectPhraseBooksCreate from 'views/pages/Phrasebook/createV1'
+import PageDialectLinksCreate from 'components/Links/create'
+import PageDialectCategoryCreate from 'components/Category/createV1'
+import PageDialectContributorsCreate from 'components/Contributor/createV1'
+import PageDialectPhraseBooksCreate from 'components/Phrasebook/createV1'
 
-import PageDialectLinksEdit from 'views/pages/Links/edit'
-import PageDialectContributorEdit from 'views/pages/Contributor/editV1'
-import PageDialectPhraseBooksEdit from 'views/pages/Phrasebook/editV1'
+import PageDialectLinksEdit from 'components/Links/edit'
+import PageDialectContributorEdit from 'components/Contributor/editV1'
+import PageDialectPhraseBooksEdit from 'components/Phrasebook/editV1'
 import FVLabel from 'components/FVLabel'
 
 export default class DialogCreateForm extends React.Component {

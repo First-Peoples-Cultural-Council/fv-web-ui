@@ -12,7 +12,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Toolbar from '@material-ui/core/Toolbar/Toolbar'
 
-import PageToolbar from 'views/pages/PageToolbar'
+import PageToolbar from 'components/PageToolbar'
 import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 import { WORKSPACES } from 'common/Constants'
 import '!style-loader!css-loader!./withActions.css'

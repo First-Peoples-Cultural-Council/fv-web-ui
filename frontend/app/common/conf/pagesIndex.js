@@ -14,61 +14,61 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import PageExploreDialects from 'views/pages/ExploreDialects'
-import PageExploreFamily from 'views/pages/ExploreFamily'
-import PageExploreLanguage from 'views/pages/ExploreLanguage'
-import PageExploreDialect from 'views/pages/ExploreDialect'
+import PageExploreDialects from 'components/ExploreDialects'
+import PageExploreFamily from 'components/ExploreFamily'
+import PageExploreLanguage from 'components/ExploreLanguage'
+import PageExploreDialect from 'components/ExploreDialect'
 
-import PageDialectLearn from 'views/pages/DialectLearn'
-import PageDialectMedia from 'views/pages/Media'
-import PageDialectPlay from 'views/pages/Games'
+import PageDialectLearn from 'components/DialectLearn'
+import PageDialectMedia from 'components/Media'
+import PageDialectPlay from 'components/Games'
 
-import PageJigsawGame from 'views/pages/Games/jigsaw'
-import PageWordSearch from 'views/pages/Games/wordsearch'
-import PageColouringBook from 'views/pages/Games/colouringbook'
-import PagePictureThis from 'views/pages/Games/picturethis'
-import PageHangman from 'views/pages/Games/hangman'
-import PageWordscramble from 'views/pages/Games/wordscramble'
-import PageQuiz from 'views/pages/Games/quiz'
-import PageConcentration from 'views/pages/Games/concentration'
+import PageJigsawGame from 'components/Games/jigsaw'
+import PageWordSearch from 'components/Games/wordsearch'
+import PageColouringBook from 'components/Games/colouringbook'
+import PagePictureThis from 'components/Games/picturethis'
+import PageHangman from 'components/Games/hangman'
+import PageWordscramble from 'components/Games/wordscramble'
+import PageQuiz from 'components/Games/quiz'
+import PageConcentration from 'components/Games/concentration'
 
-import PageDialectGalleries from 'views/pages/Gallery'
-import PageDialectGalleryView from 'views/pages/Gallery/view'
-import PageDialectReports from 'views/pages/Reports'
-import PageDialectReportsView from 'views/pages/Reports/view'
-import PageDialectUsers from 'views/pages/Users'
+import PageDialectGalleries from 'components/Gallery'
+import PageDialectGalleryView from 'components/Gallery/view'
+import PageDialectReports from 'components/Reports'
+import PageDialectReportsView from 'components/Reports/view'
+import PageDialectUsers from 'components/Users'
 
 import PageDialectLearnWords from 'components/Words/WordsContainer'
-import PageDialectLearnPhrases from 'views/pages/Phrases'
-import PageDialectLearnStoriesAndSongs from 'views/pages/SongsStories'
+import PageDialectLearnPhrases from 'components/Phrases'
+import PageDialectLearnStoriesAndSongs from 'components/SongsStories'
 
-import PageDialectViewMedia from 'views/pages/Media/view'
+import PageDialectViewMedia from 'components/Media/view'
 import PageDialectViewWord from 'components/Word/WordContainer'
 import PageDialectViewPhrase from 'components/Phrase/PhraseContainer'
 import PageDialectViewBook from 'components/SongStory/SongStoryContainer'
-import PageDialectViewAlphabet from 'views/pages/Alphabet/'
-import PageDialectViewCharacter from 'views/pages/Alphabet/view'
+import PageDialectViewAlphabet from 'components/Alphabet/'
+import PageDialectViewCharacter from 'components/Alphabet/view'
 import PageDialectLearnWordsCategories from 'components/Categories/WordCategories'
 
 import PhraseBooksGrid from 'components/PhraseBooksGrid'
 import WordsCategoriesGrid from 'components/WordsCategoriesGrid'
-import PageDialectLearnPhrasesByPhrasebook from 'views/pages/Phrases/phrasesFilteredByPhrasebook'
+import PageDialectLearnPhrasesByPhrasebook from 'components/Phrases/phrasesFilteredByPhrasebook'
 
-import PageDialectImmersionList from 'views/pages/immersion'
+import PageDialectImmersionList from 'components/Immersion'
 
-import PageTest from 'views/pages/Test'
-import PageDebugAPI from 'views/pages/PageDebugAPI'
-import PageDebugTypography from 'views/pages/DebugTypography'
-import PageError from 'views/pages/PageError'
-import PageHome from 'views/pages/HomeLayout'
-import PageContent from 'views/pages/PageContent'
-import PagePlay from 'views/pages/Games'
-import PageSearch from 'views/pages/Search'
+import PageTest from 'components/Test'
+import PageDebugAPI from 'components/PageDebugAPI'
+import PageDebugTypography from 'components/DebugTypography'
+import PageError from 'components/PageError'
+import PageHome from 'components/HomeLayout'
+import PageContent from 'components/PageContent'
+import PagePlay from 'components/Games'
+import PageSearch from 'components/Search'
 import PageTasks from 'components/Tasks/TasksContainer'
-import PageUserTasks from 'views/pages/UserTasks'
-import PageUsersRegister from 'views/pages/Register'
-import PageUsersForgotPassword from 'views/pages/Users/forgotpassword'
-import PageUsersProfile from 'views/pages/Users/profile'
+import PageUserTasks from 'components/UserTasks'
+import PageUsersRegister from 'components/Register'
+import PageUsersForgotPassword from 'components/Users/forgotpassword'
+import PageUsersProfile from 'components/Users/profile'
 
 // KIDS
 import KidsHome from 'components/KidsHome'
@@ -76,54 +76,54 @@ import KidsPhrasesByPhrasebook from 'components/KidsPhrasesByPhrasebook/KidsPhra
 import KidsWordsByCategory from 'components/KidsWordsByCategory/KidsWordsByCategoryContainer'
 
 // EDIT
-import PageExploreDialectEdit from 'views/pages/ExploreDialectEdit'
-import PageDialectGalleryEdit from 'views/pages/Gallery/edit'
-import PageDialectEditMedia from 'views/pages/Media/edit'
-import PageDialectWordEdit from 'views/pages/WordsCreateEdit/Edit'
-import PageDialectPhraseEdit from 'views/pages/Phrases/Edit'
-import PageDialectBookEdit from 'views/pages/SongsStories/edit'
-import PageDialectBookEntryEdit from 'views/pages/SongsStories/entry/edit'
-import PageDialectAlphabetCharacterEdit from 'views/pages/Alphabet/edit'
+import PageExploreDialectEdit from 'components/ExploreDialectEdit'
+import PageDialectGalleryEdit from 'components/Gallery/edit'
+import PageDialectEditMedia from 'components/Media/edit'
+import PageDialectWordEdit from 'components/WordsCreateEdit/Edit'
+import PageDialectPhraseEdit from 'components/Phrases/Edit'
+import PageDialectBookEdit from 'components/SongsStories/edit'
+import PageDialectBookEntryEdit from 'components/SongsStories/entry/edit'
+import PageDialectAlphabetCharacterEdit from 'components/Alphabet/edit'
 
 // CREATE
-import { default as PageDialectWordsCreate } from 'views/pages/WordsCreateEdit/Create'
-import { default as CreateV2 } from 'views/pages/WordsCreateEdit/CreateV2'
-import { default as CreateAudio } from 'views/pages/Audio'
-import { default as PageDialectPhrasesCreate } from 'views/pages/Phrases/Create'
-import { default as PageDialectStoriesAndSongsCreate } from 'views/pages/SongsStories/create'
-import { default as PageDialectStoriesAndSongsBookEntryCreate } from 'views/pages/SongsStories/entry/create'
-import { default as PageDialectGalleryCreate } from 'views/pages/Gallery/create'
+import { default as PageDialectWordsCreate } from 'components/WordsCreateEdit/Create'
+import { default as CreateV2 } from 'components/WordsCreateEdit/CreateV2'
+import { default as CreateAudio } from 'components/Audio'
+import { default as PageDialectPhrasesCreate } from 'components/Phrases/Create'
+import { default as PageDialectStoriesAndSongsCreate } from 'components/SongsStories/create'
+import { default as PageDialectStoriesAndSongsBookEntryCreate } from 'components/SongsStories/entry/create'
+import { default as PageDialectGalleryCreate } from 'components/Gallery/create'
 
 // CATEGORY
 // ----------------------
 import CategoryBrowse from 'components/Categories' // Browse
-import { default as CategoryDetail } from 'views/pages/Category/detail' // Detail
-import { default as PageDialectCategoryCreate } from 'views/pages/Category/createV1' // Create V1 for modal
-import { default as CategoryCreate } from 'views/pages/Category/create' // Create
-import { default as CategoryEdit } from 'views/pages/Category/edit' // Edit
+import { default as CategoryDetail } from 'components/Category/detail' // Detail
+import { default as PageDialectCategoryCreate } from 'components/Category/createV1' // Create V1 for modal
+import { default as CategoryCreate } from 'components/Category/create' // Create
+import { default as CategoryEdit } from 'components/Category/edit' // Edit
 
 // CONTRIBUTOR
 // ----------------------
-import ContributorBrowse from 'views/pages/Contributors' // Browse
-import { default as ContributorDetail } from 'views/pages/Contributor/detail' // Detail
-import { default as ContributorCreateV1 } from 'views/pages/Contributor/createV1' // Create V1
-import { default as ContributorCreate } from 'views/pages/Contributor/create' // Create V2
-import { default as ContributorEdit } from 'views/pages/Contributor/edit' // Edit
+import ContributorBrowse from 'components/Contributors' // Browse
+import { default as ContributorDetail } from 'components/Contributor/detail' // Detail
+import { default as ContributorCreateV1 } from 'components/Contributor/createV1' // Create V1
+import { default as ContributorCreate } from 'components/Contributor/create' // Create V2
+import { default as ContributorEdit } from 'components/Contributor/edit' // Edit
 
 // PHRASEBOOK
 // ----------------------
-import PhrasebookBrowse from 'views/pages/Phrasebooks' // Browse
-import { default as PhrasebookDetail } from 'views/pages/Phrasebook/detail' // Detail
-import { default as PageDialectPhraseBooksCreate } from 'views/pages/Phrasebook/createV1' // Create V1
-import { default as PhrasebookCreate } from 'views/pages/Phrasebook/create' // Create V2
-import { default as PhrasebookEdit } from 'views/pages/Phrasebook/edit' // Edit
+import PhrasebookBrowse from 'components/Phrasebooks' // Browse
+import { default as PhrasebookDetail } from 'components/Phrasebook/detail' // Detail
+import { default as PageDialectPhraseBooksCreate } from 'components/Phrasebook/createV1' // Create V1
+import { default as PhrasebookCreate } from 'components/Phrasebook/create' // Create V2
+import { default as PhrasebookEdit } from 'components/Phrasebook/edit' // Edit
 
 // RECORDER
 // ----------------------
-import RecorderBrowse from 'views/pages/Recorders' // Browse
-import { default as RecorderDetail } from 'views/pages/Recorder/detail' // Detail
-import { default as RecorderCreate } from 'views/pages/Recorder/create' // Create
-import { default as RecorderEdit } from 'views/pages/Recorder/edit' // Edit
+import RecorderBrowse from 'components/Recorders' // Browse
+import { default as RecorderDetail } from 'components/Recorder/detail' // Detail
+import { default as RecorderCreate } from 'components/Recorder/create' // Create
+import { default as RecorderEdit } from 'components/Recorder/edit' // Edit
 
 // DASHBOARD
 // ----------------------
@@ -132,7 +132,7 @@ import DashboardDetailTasks from 'components/DashboardDetailTasks'
 
 // MENTOR-APPRENTICE PHOTO PROJECT
 // ----------------------
-import PageMAPPhotoProject from 'views/pages/PhotoProject'
+import PageMAPPhotoProject from 'components/PhotoProject'
 
 export {
   PageTest,

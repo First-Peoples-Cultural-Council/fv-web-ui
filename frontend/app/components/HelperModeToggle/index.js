@@ -11,7 +11,7 @@ import { toggleHelpMode, setEditingLabel } from 'reducers/locale'
 import { fetchDirectory } from 'reducers/directory'
 import DocumentOperations from 'operations/DocumentOperations'
 
-import LabelModal from 'views/pages/immersion/Modal'
+import LabelModal from 'components/Immersion/Modal'
 import FVButton from 'components/FVButton/index'
 import '!style-loader!css-loader!./HelperModeToggle.css'
 
