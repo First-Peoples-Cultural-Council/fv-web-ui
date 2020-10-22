@@ -1,9 +1,0 @@
-dependency-reduced-pom.xml
-target/
-bin/
-.settings/
-.classpath
-.idea/
-.DS_Store
-**/.project
-fv-nuxeo-utils.iml
