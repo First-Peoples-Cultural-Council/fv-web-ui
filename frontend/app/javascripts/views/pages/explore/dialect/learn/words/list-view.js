@@ -46,7 +46,7 @@ import {
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
   dictionaryListSmallScreenTemplateWords,
-} from 'components/Browsing/DictionaryListSmallScreen'
+} from 'componentsShared/DictionaryList/DictionaryListSmallScreen'
 
 /**
  * List view for words

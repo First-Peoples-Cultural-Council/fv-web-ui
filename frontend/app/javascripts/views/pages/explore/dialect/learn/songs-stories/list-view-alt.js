@@ -34,7 +34,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import DocumentListView from 'componentsShared/DocumentListView'
 
 import DataListView from 'views/pages/explore/dialect/learn/base/data-list-view'
-import { dictionaryListSmallScreenColumnDataTemplate } from 'components/Browsing/DictionaryListSmallScreen'
+import { dictionaryListSmallScreenColumnDataTemplate } from 'componentsShared/DictionaryList/DictionaryListSmallScreen'
 
 /**
  * List view for words

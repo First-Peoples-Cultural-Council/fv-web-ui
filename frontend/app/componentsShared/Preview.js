@@ -34,8 +34,8 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
 
-import MetadataList from 'components/Browsing/metadata-list'
-import AudioOptimal from 'components/Browsing/audio-optimal'
+import MetadataList from 'componentsShared/MetadataList'
+import AudioOptimal from 'componentsShared/AudioOptimal'
 
 import { withTheme } from '@material-ui/core/styles'
 import Avatar from '@material-ui/core/Avatar'

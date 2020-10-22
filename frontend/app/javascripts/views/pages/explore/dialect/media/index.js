@@ -32,7 +32,7 @@ import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
-import MediaList from 'components/Browsing/media-list'
+import MediaList from 'componentsShared/MediaList'
 import withPagination from 'componentsShared/withPagination'
 import withFilter from 'componentsShared/withFilter'
 import FVLabel from 'components/FVLabel'

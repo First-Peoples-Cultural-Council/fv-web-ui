@@ -41,12 +41,12 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers, { CLEAN_FULLTEXT } from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
 import URLHelpers from 'common/URLHelpers'
-import { getListSmallScreen } from 'components/Browsing/DictionaryList'
+import { getListSmallScreen } from 'componentsShared/DictionaryList'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
-} from 'components/Browsing/DictionaryListSmallScreen'
+} from 'componentsShared/DictionaryList/DictionaryListSmallScreen'
 import { SECTIONS, WORKSPACES } from 'common/Constants'
 
 import '!style-loader!css-loader!./Search.css'

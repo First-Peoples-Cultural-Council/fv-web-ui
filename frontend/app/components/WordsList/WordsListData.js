@@ -41,7 +41,7 @@ import {
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenTemplateWords,
   dictionaryListSmallScreenColumnDataTemplateCustomState,
-} from 'components/Browsing/DictionaryListSmallScreen'
+} from 'componentsShared/DictionaryList/DictionaryListSmallScreen'
 
 /**
  * @summary WordsListData

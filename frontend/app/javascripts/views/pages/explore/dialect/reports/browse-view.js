@@ -22,7 +22,7 @@ import { connect } from 'react-redux'
 import { pushWindowPath } from 'reducers/windowPath'
 
 import ReportsJson from './reports.json'
-import GeneralList from 'components/Browsing/general-list'
+import GeneralList from 'componentsShared/GeneralList'
 import { ReportsCardView } from './list-view'
 
 import withFilter from 'componentsShared/withFilter'

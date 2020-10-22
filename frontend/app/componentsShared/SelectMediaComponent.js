@@ -45,7 +45,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import ActionInfo from '@material-ui/icons/Info'
 import ActionInfoOutline from '@material-ui/icons/InfoOutlined'
 
-import MediaList from 'components/Browsing/media-list'
+import MediaList from 'componentsShared/MediaList'
 import withPagination from 'componentsShared/withPagination'
 import withFilter from 'componentsShared/withFilter'
 import FVLabel from 'components/FVLabel'
@@ -90,8 +90,8 @@ class SharedResourceGridTile extends Component {
     if (isDialectShared || isFVShared) {
       const tooltip = isDialectShared
         ? this.props.intl.trans('shared_from_x', 'Shared from ' + selectn('dc:title', resourceParentDialect), null, [
-          selectn('dc:title', resourceParentDialect),
-        ])
+            selectn('dc:title', resourceParentDialect),
+          ])
         : this.props.intl.trans('shared_from_x_collection', 'Shared from FirstVoices Collection', null, ['FirstVoices'])
       actionIcon = (
         <Tooltip title={tooltip}>
@@ -163,8 +163,8 @@ class SelectMediaComponent extends Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-      })
+          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+        })
       : DefaultFetcherParams
 
     this.state = {

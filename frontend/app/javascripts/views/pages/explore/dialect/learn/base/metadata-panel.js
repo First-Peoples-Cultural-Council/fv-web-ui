@@ -21,7 +21,7 @@ import selectn from 'selectn'
 import StringHelpers from 'common/StringHelpers'
 
 import Preview from 'componentsShared/Preview'
-import MetadataList from 'components/Browsing/metadata-list'
+import MetadataList from 'componentsShared/MetadataList'
 import FVLabel from 'components/FVLabel'
 
 import { withTheme } from '@material-ui/core/styles'

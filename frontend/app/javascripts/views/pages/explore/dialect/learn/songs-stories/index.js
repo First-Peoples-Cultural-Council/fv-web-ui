@@ -40,7 +40,7 @@ import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import FVLabel from 'components/FVLabel'
 
-import GeneralList from 'components/Browsing/general-list'
+import GeneralList from 'componentsShared/GeneralList'
 import { SongsStoriesCardView } from './list-view'
 import { getDialectClassname } from 'views/pages/explore/dialect/helpers'
 import withFilter from 'componentsShared/withFilter'

@@ -29,13 +29,13 @@ import FVLabel from 'components/FVLabel'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenTemplateWords,
-} from 'components/Browsing/DictionaryListSmallScreen'
+} from 'componentsShared/DictionaryList/DictionaryListSmallScreen'
 import { getSearchObject } from 'common/NavigationHelpers'
 import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 const SearchDialect = React.lazy(() => import('components/SearchDialect'))
-const FlashcardList = React.lazy(() => import('components/Browsing/flashcard-list'))
-const DictionaryListSmallScreen = React.lazy(() => import('components/Browsing/DictionaryListSmallScreen'))
-const DictionaryListLargeScreen = React.lazy(() => import('components/Browsing/DictionaryListLargeScreen'))
+const FlashcardList = React.lazy(() => import('componentsShared/FlashcardList'))
+const DictionaryListSmallScreen = React.lazy(() => import('componentsShared/DictionaryList/DictionaryListSmallScreen'))
+const DictionaryListLargeScreen = React.lazy(() => import('componentsShared/DictionaryList/DictionaryListLargeScreen'))
 const ExportDialect = React.lazy(() => import('components/ExportDialect'))
 import '!style-loader!css-loader!./WordsList.css'
 

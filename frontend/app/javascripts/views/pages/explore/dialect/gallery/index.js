@@ -34,7 +34,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 import FVButton from 'components/FVButton'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
-import GeneralList from 'components/Browsing/general-list'
+import GeneralList from 'componentsShared/GeneralList'
 import withFilter from 'componentsShared/withFilter'
 import FVLabel from 'components/FVLabel'
 

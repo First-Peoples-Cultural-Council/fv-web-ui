@@ -49,7 +49,7 @@ import {
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
   dictionaryListSmallScreenTemplatePhrases,
   dictionaryListSmallScreenColumnDataTemplateCustomState,
-} from 'components/Browsing/DictionaryListSmallScreen'
+} from 'componentsShared/DictionaryList/DictionaryListSmallScreen'
 /**
  * List view for phrases
  */

@@ -63,7 +63,7 @@ import {
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
   dictionaryListSmallScreenTemplatePhrases,
-} from 'components/Browsing/DictionaryListSmallScreen'
+} from 'componentsShared/DictionaryList/DictionaryListSmallScreen'
 import {
   onNavigateRequest,
   sortHandler,
@@ -73,7 +73,7 @@ import {
 } from 'views/pages/explore/dialect/learn/base'
 import { WORKSPACES } from 'common/Constants'
 
-const DictionaryList = React.lazy(() => import('components/Browsing/DictionaryList'))
+const DictionaryList = React.lazy(() => import('componentsShared/DictionaryList'))
 const intl = IntlService.instance
 
 // phrasesFilteredByPhrasebook

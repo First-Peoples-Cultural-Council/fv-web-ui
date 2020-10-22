@@ -17,7 +17,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { List, Map } from 'immutable'
 import selectn from 'selectn'
-import BrowsingCardView from './card-view'
+import BrowsingCardView from 'componentsShared/CardView'
 import FVLabel from 'components/FVLabel'
 
 export default class GeneralList extends Component {

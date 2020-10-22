@@ -28,7 +28,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
-import PortalList from 'components/Browsing/portal-list'
+import PortalList from 'componentsShared/PortalList'
 import FVLabel from 'components/FVLabel'
 
 import withFilter from 'componentsShared/withFilter'

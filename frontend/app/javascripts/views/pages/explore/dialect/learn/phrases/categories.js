@@ -29,7 +29,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import CategoryList from 'components/Browsing/category-list'
+import CategoryList from 'componentsShared/CategoryList'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 /**
