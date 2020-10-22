@@ -211,8 +211,15 @@ To build the entire project and deploy it to your local container, run:
 ./docker/UpdatePackage.sh -minimal
 ```
 
-You can skip tests by using the `-skip-tests` flag.
-The `minimal` flag will skip building modules that are more relevant to server deployments (e.g. API, Cognito). You can remove this property if you wish to include these locally.
+You can skip tests by using the `-skip-tests` flag. If using both flags for a quicker deploy, the order of the arguments matter:
+```
+./docker/UpdatePackage.sh -skip-tests -minimal
+```
+
+Flags:
+
+* The `minimal` flag will skip building modules that are more relevant to server deployments (e.g. API, Cognito). You can remove this property if you wish to include these locally. The packages to exlcude are defined in the Maven `full-marketplace` profile. 
+* The `skip-tests` flag will skip tests for all packages.
 
 #### Method 2 (deploy a single module):
 
