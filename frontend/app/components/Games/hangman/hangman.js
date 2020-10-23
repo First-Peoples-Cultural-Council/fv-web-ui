@@ -194,7 +194,7 @@ export default class HangmanGame extends Component {
         succeeded = true
 
         puzzle.map((word) => {
-          word.map((part) => {
+          word.forEach((part) => {
             if (part.letter === letter) {
               letterFound = true
               part.found = true

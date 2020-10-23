@@ -19,12 +19,12 @@ import selectn from 'selectn'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 export default {
-  renderComplexArrayRow(dataItems = [], render) {
+  renderComplexArrayRow(render, dataItems = []) {
     const rows = []
-
-    dataItems.map(function dataItemsMap(entry, i) {
-      rows.push(render(entry, i))
-    })
+    dataItems.forEach(dataItemsMap)
+    function dataItemsMap(item, index) {
+      return rows.push(render(item, index))
+    }
 
     return (
       <ol className={`renderComplexArrayRow ${rows.length === 1 ? 'renderComplexArrayRow--rowSingle' : ''}`}>{rows}</ol>

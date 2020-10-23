@@ -106,9 +106,10 @@ export class AlphabetListView extends DataListView {
           name: 'related_words',
           title: props.intl.trans('related_words', 'Related Words', 'words'),
           render: (v, data, cellProps) =>
-            UIHelpers.renderComplexArrayRow(selectn('contextParameters.character.' + cellProps.name, data), (entry) => (
-              <li key={selectn('uid', entry)}>{selectn('dc:title', entry)}</li>
-            )),
+            UIHelpers.renderComplexArrayRow(
+              (entry) => <li key={selectn('uid', entry)}>{selectn('dc:title', entry)}</li>,
+              selectn('contextParameters.character.' + cellProps.name, data)
+            ),
           sortName: 'fv:literal_translation/0/translation',
         },
         {
