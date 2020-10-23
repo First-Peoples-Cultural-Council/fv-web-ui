@@ -1,5 +1,7 @@
 package ca.firstvoices.core.io.utils;
 
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
+
 import ca.firstvoices.data.lifecycle.Constants;
 import ca.firstvoices.testUtil.AbstractTestDataCreatorTest;
 import ca.firstvoices.testUtil.annotations.TestDataConfiguration;
@@ -59,6 +61,10 @@ public class StateUtilsTest extends AbstractTestDataCreatorTest {
   @Test
   public void isPublished() {
     Assert.assertFalse(StateUtils.isPublished(words.get(0)));
+    Assert.assertTrue(StateUtils.isPublished(dialect));
+
+    // Republish should be considered published too
+    dialect.followTransition(REPUBLISH_TRANSITION);
     Assert.assertTrue(StateUtils.isPublished(dialect));
   }
 
