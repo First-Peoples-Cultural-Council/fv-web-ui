@@ -33,10 +33,10 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 import UserListView from 'components/Users/list-view'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 /**
  * Browse users

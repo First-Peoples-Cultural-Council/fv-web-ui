@@ -23,7 +23,7 @@ import GridListTile from '@material-ui/core/GridListTile'
 import GridListTileBar from '@material-ui/core/GridListTileBar'
 
 import UIHelpers from 'common/UIHelpers'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 import { connect } from 'react-redux'
 
 const defaultStyle = { width: '100%', overflowY: 'auto', marginBottom: 24 }

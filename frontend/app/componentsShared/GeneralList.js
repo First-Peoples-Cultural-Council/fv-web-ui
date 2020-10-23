@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 import { List, Map } from 'immutable'
 import selectn from 'selectn'
 import BrowsingCardView from 'componentsShared/CardView'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 export default class GeneralList extends Component {
   static propTypes = {
@@ -61,7 +61,7 @@ export default class GeneralList extends Component {
     return (
       <div className="row" style={this.props.wrapperStyle}>
         {(items || []).map(
-          function(item, i) {
+          function (item, i) {
             return React.cloneElement(card, { key: i, item: item, ...this.props })
           }.bind(this)
         )}

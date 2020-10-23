@@ -33,7 +33,7 @@ import { WORKSPACES } from 'common/Constants'
 import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 import DataListView from 'components/LearnBase/data-list-view'
 import DocumentListView from 'componentsShared/DocumentListView'
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
 import Preview from 'componentsShared/Preview'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
@@ -234,7 +234,7 @@ export class PhrasesListView extends DataListView {
     }
 
     // Bind methods to 'this'
-    ;['_onEntryNavigateRequest', '_handleRefetch', '_handleSortChange', '_handleColumnOrderChange'].forEach(
+    ['_onEntryNavigateRequest', '_handleRefetch', '_handleSortChange', '_handleColumnOrderChange'].forEach(
       (method) => (this[method] = this[method].bind(this))
     )
   }

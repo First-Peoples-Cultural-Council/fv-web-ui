@@ -20,8 +20,8 @@ import classNames from 'classnames'
 
 import BookEntry from 'components/SongsStories/entry/view'
 
-import FVButton from 'components/FVButton'
-import FVLabel from 'components/FVLabel'
+import FVButton from 'componentsShared/FVButton'
+import FVLabel from 'componentsShared/FVLabel'
 
 export default class SongsStoriesEntryListView extends Component {
   static propTypes = {
@@ -108,7 +108,7 @@ export default class SongsStoriesEntryListView extends Component {
           ''
         )}
         {this.state.items.map(
-          function(entry, i) {
+          function (entry, i) {
             const entryControls = []
 
             if (this.props.reorder) {

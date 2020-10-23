@@ -40,9 +40,9 @@ import PageDialectLearnBase from 'components/LearnBase'
 
 import AlphabetListView from 'components/Alphabet/list-view'
 
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import GridListTile from '@material-ui/core/GridListTile'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 

@@ -43,7 +43,7 @@ import DialectFilterListData from 'components/DialectFilterList/DialectFilterLis
 import CategoriesData from 'components/Categories/CategoriesData'
 
 import Edit from '@material-ui/icons/Edit'
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import IntlService from 'common/services/intl'
 import Link from 'components/Link'
 import NavigationHelpers, {

@@ -33,13 +33,13 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import UIHelpers from 'common/UIHelpers'
 import StringHelpers, { CLEAN_NXQL } from 'common/StringHelpers'
 
-import FVTab from 'components/FVTab'
+import FVTab from 'componentsShared/FVTab'
 import Preview from 'componentsShared/Preview'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import MediaPanel from 'components/LearnBase/media-panel'
 import PageToolbar from 'components/PageToolbar'
 import SubViewTranslation from 'components/LearnBase/subview-translation'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
@@ -228,11 +228,11 @@ export class AlphabetView extends Component {
                       label: UIHelpers.isViewSize('xs')
                         ? this.props.intl.trans('words', 'Words', 'first')
                         : this.props.intl.trans(
-                            'views.pages.explore.dialect.learn.alphabet.words_starting_with_x',
-                            'Words Starting with ' + character,
-                            'words',
-                            [character]
-                          ),
+                          'views.pages.explore.dialect.learn.alphabet.words_starting_with_x',
+                          'Words Starting with ' + character,
+                          'words',
+                          [character]
+                        ),
                       id: 'find_words',
                       className: 'fontBCSans',
                     },
@@ -240,11 +240,11 @@ export class AlphabetView extends Component {
                       label: UIHelpers.isViewSize('xs')
                         ? this.props.intl.trans('phrases', 'Phrases', 'first')
                         : this.props.intl.trans(
-                            'views.pages.explore.dialect.learn.alphabet.phrases_starting_with_x',
-                            'Phrases Starting with ' + character,
-                            'words',
-                            [character]
-                          ),
+                          'views.pages.explore.dialect.learn.alphabet.phrases_starting_with_x',
+                          'Phrases Starting with ' + character,
+                          'words',
+                          [character]
+                        ),
                       id: 'find_phrases',
                       className: 'fontBCSans',
                     },

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 
 import File from 'components/Form/Common/File'
 import Text from 'components/Form/Common/Text'

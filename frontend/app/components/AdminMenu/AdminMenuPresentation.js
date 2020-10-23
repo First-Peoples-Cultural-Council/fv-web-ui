@@ -8,7 +8,7 @@ import NavigationExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Tooltip from '@material-ui/core/Tooltip'
 
 // FPCC
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 import '!style-loader!css-loader!./AdminMenu.css'
 /**

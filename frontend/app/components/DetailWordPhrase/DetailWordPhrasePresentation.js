@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 import Preview from 'componentsShared/Preview'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 import MetadataPanel from 'components/LearnBase/metadata-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import DOMPurify from 'dompurify'
 
 import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'

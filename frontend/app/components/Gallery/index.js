@@ -32,11 +32,11 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import GeneralList from 'componentsShared/GeneralList'
 import withFilter from 'componentsShared/withFilter'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 const DEFAULT_LANGUAGE = 'english'
 

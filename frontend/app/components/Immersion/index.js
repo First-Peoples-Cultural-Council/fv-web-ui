@@ -31,7 +31,7 @@ import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 import { getDialectClassname } from 'common/Helpers'
 import PageDialectLearnBase from 'components/LearnBase'
 import { FormControl, RadioGroup, FormControlLabel, Radio } from '@material-ui/core'

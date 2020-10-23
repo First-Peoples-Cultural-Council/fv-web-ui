@@ -26,7 +26,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import ChevronLeft from '@material-ui/icons/ChevronLeft'
 import ChevronRight from '@material-ui/icons/ChevronRight'
 
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -38,7 +38,7 @@ import { connect } from 'react-redux'
 import { fetchWords } from 'reducers/fvWord'
 
 import selectn from 'selectn'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 const containerStyle = {
   background: 'url(/assets/games/fv-games-wordscramble/images/background.png)',

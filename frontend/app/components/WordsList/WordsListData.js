@@ -32,7 +32,7 @@ import { WORKSPACES } from 'common/Constants'
 
 // Components
 import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import Link from 'components/Link'
 import Preview from 'componentsShared/Preview'
 import {

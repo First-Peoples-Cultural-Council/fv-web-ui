@@ -29,8 +29,8 @@ import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 
-import FVButton from 'components/FVButton'
-import FVLabel from 'components/FVLabel'
+import FVButton from 'componentsShared/FVButton'
+import FVLabel from 'componentsShared/FVLabel'
 import ProviderHelpers from 'common/ProviderHelpers'
 
 import AdminMenu from 'components/AdminMenu'

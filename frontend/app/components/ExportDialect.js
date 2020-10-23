@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography'
 import PropTypes from 'prop-types'
 import ProviderHelpers from 'common/ProviderHelpers'
 import selectn from 'selectn'
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 
 const { any, string, func, object } = PropTypes
 export class ExportDialect extends Component {
@@ -127,7 +127,7 @@ export class ExportDialect extends Component {
   //     await this.props.exportDialectGetFormattedDocument(dialectId, { format: 'CSV' })
   //   }
   // }
-  exportDialectProgress = async() => {
+  exportDialectProgress = async () => {
     const { exportLast = {} } = this.getData()
     if (exportLast.exportId) {
       await this.props.exportDialectProgress(exportLast.exportId)
@@ -139,7 +139,7 @@ export class ExportDialect extends Component {
       {
         exportClicked: true,
       },
-      async() => {
+      async () => {
         const { dialectId } = this.state
         const { exportDialectColumns, exportDialectExportElement, exportDialectQuery } = this.props
         await this.props.exportDialectFVGenerateDocumentWithFormat(dialectId, {
@@ -214,7 +214,7 @@ export class ExportDialect extends Component {
     const timeout = this.pollingLimit
     const interval = this.pollingInterval
     const endTime = Number(new Date()) + timeout
-    const checkCondition = async(resolve, reject) => {
+    const checkCondition = async (resolve, reject) => {
       const result = await _pollServerRegulator()
 
       if (Number(new Date()) < endTime && result === 0) {
@@ -243,7 +243,7 @@ export class ExportDialect extends Component {
 
     return new Promise(checkCondition)
   }
-  pollServerRegulator = async() => {
+  pollServerRegulator = async () => {
     // Make request
     await this.exportDialectProgress()
 

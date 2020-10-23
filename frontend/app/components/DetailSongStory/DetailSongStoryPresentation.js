@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import DOMPurify from 'dompurify'
 import MediaPanels from 'components/MediaPanels'
 import Divider from '@material-ui/core/Divider'
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 
 /**
  * @summary DetailSongStoryPresentation

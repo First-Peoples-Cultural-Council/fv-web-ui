@@ -20,7 +20,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import Info from '@material-ui/icons/Info'
 import Close from '@material-ui/icons/Close'
 import IconButton from '@material-ui/core/IconButton'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 export default class AudioOptimal extends Component {
   static propTypes = {

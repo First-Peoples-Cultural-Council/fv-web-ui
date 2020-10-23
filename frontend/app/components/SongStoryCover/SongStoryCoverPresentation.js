@@ -9,9 +9,9 @@ import Paper from '@material-ui/core/Paper'
 
 import { SongStoryCoverStyles } from './SongStoryCoverStyles'
 import MediaPanels from 'components/MediaPanels'
-import FVButton from 'components/FVButton'
-import FVLabel from 'components/FVLabel'
-import FVTab from 'components/FVTab'
+import FVButton from 'componentsShared/FVButton'
+import FVLabel from 'componentsShared/FVLabel'
+import FVTab from 'componentsShared/FVTab'
 import Preview from 'componentsShared/Preview'
 /**
  * @summary SongStoryCoverPresentation

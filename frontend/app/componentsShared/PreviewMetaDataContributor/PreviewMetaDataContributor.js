@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 
 import selectn from 'selectn'
 import '!style-loader!css-loader!./PreviewMetaDataContributor.css'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 const { object } = PropTypes
 

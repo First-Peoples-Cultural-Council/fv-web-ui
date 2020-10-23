@@ -36,7 +36,7 @@ import { Document } from 'nuxeo'
 
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 const { array, func, object } = PropTypes
 export class PageDialectBookEdit extends Component {

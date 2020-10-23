@@ -20,7 +20,7 @@ import Immutable, { List } from 'immutable'
 import { green, red } from '@material-ui/core/colors'
 import AVPlayArrow from '@material-ui/icons/PlayArrow'
 import AVStop from '@material-ui/icons/Stop'
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import CheckBoxIcon from '@material-ui/icons/CheckBox'
 import IconButton from '@material-ui/core/IconButton'
 import IndeterminateCheckBoxIcon from '@material-ui/icons/IndeterminateCheckBox'
@@ -39,7 +39,7 @@ import { connect } from 'react-redux'
 import { fetchPhrases } from 'reducers/fvPhrase'
 
 import selectn from 'selectn'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 const containerStyle = {
   background: 'url(/assets/games/fv-games-wordscramble/images/background.png)',

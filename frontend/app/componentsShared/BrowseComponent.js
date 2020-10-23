@@ -30,7 +30,7 @@ import selectn from 'selectn'
 
 import { WORKSPACES } from 'common/Constants'
 
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -41,7 +41,7 @@ import ContributorsListView from 'components/LearnBase/contributors-list-view'
 import LinksListView from 'components/LearnBase/links-list-view'
 import PhraseListView from 'components/Phrases/list-view'
 import WordsListView from 'components/WordsCreateEdit/list-view'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 const DefaultFetcherParams = {
   currentPageIndex: 1,
   pageSize: 10,
@@ -80,8 +80,8 @@ export class BrowseComponent extends Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-        })
+        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+      })
       : DefaultFetcherParams
 
     this.state = {

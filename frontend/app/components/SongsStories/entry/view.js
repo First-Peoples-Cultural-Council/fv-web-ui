@@ -19,9 +19,9 @@ import classNames from 'classnames'
 import DOMPurify from 'dompurify'
 import selectn from 'selectn'
 
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import Paper from '@material-ui/core/Paper'
-import FVTab from 'components/FVTab'
+import FVTab from 'componentsShared/FVTab'
 import Typography from '@material-ui/core/Typography'
 
 import ActionLaunch from '@material-ui/icons/Launch'
@@ -30,7 +30,7 @@ import { Introduction } from 'components/SongsStories/list-view'
 import MediaPanel from 'components/LearnBase/media-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
 import Preview from 'componentsShared/Preview'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 const defaultInnerStyle = { padding: '15px', margin: '15px 0', minHeight: '420px', overflowX: 'auto' }
 const defaultCoverStyle = { padding: '15px', margin: '15px 0' }
@@ -77,7 +77,7 @@ class Cover extends Component {
 
     const dominant_language_title_translation = (
       selectn('properties.fvbook:title_literal_translation', this.props.entry) || []
-    ).filter(function(translation) {
+    ).filter(function (translation) {
       return translation.language == DEFAULT_LANGUAGE
     })
 
@@ -105,7 +105,7 @@ class Cover extends Component {
                 />
               </Typography>
               <div className="subheader">
-                {(selectn('contextParameters.book.authors', this.props.entry) || []).map(function(author, i) {
+                {(selectn('contextParameters.book.authors', this.props.entry) || []).map(function (author, i) {
                   return (
                     <span className={classNames('label', 'label-default')} key={i}>
                       {selectn('dc:title', author)}
@@ -180,7 +180,7 @@ class Page extends Component {
               {audios}
             </div>
             <div className={classNames('col-xs-6')} style={{ borderLeft: '1px solid #e1e1e1' }}>
-              {(selectn('properties.fvbookentry:dominant_language_text', this.props.entry) || []).map(function(
+              {(selectn('properties.fvbookentry:dominant_language_text', this.props.entry) || []).map(function (
                 translation,
                 i
               ) {
@@ -192,7 +192,7 @@ class Page extends Component {
               })}
             </div>
             <div className={classNames('col-xs-12')} style={{ marginTop: '15px' }}>
-              {(selectn('properties.fv:literal_translation', this.props.entry) || []).map(function(translation, i) {
+              {(selectn('properties.fv:literal_translation', this.props.entry) || []).map(function (translation, i) {
                 if (translation.language == DEFAULT_LANGUAGE) {
                   return (
                     <span key={i}>

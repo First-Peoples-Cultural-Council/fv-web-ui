@@ -14,7 +14,7 @@ import withToggle from 'componentsShared/withToggle'
 import ProviderHelpers from 'common/ProviderHelpers'
 import FormHelpers from 'common/FormHelpers'
 import '!style-loader!css-loader!./withFilter.css'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 const FiltersWithToggle = withToggle()
 

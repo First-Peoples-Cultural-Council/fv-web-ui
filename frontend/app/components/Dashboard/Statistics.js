@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 
 import Doughnut from 'react-chartjs/lib/doughnut'
 import { connect } from 'react-redux'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 export class Statistics extends Component {
   constructor(props, context) {

@@ -51,7 +51,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 
 import PreviewMetaDataContributor from 'componentsShared/PreviewMetaDataContributor'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 const { bool, func, object, string } = PropTypes
 

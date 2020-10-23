@@ -45,7 +45,7 @@ import DialectFilterListPresentation from 'components/DialectFilterList/DialectF
 import DialectFilterListData from 'components/DialectFilterList/DialectFilterListData'
 import CategoriesData from 'components/Categories/CategoriesData'
 
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 import { getDialectClassname } from 'common/Helpers'
 import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
@@ -211,12 +211,12 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
       const cloneWordListView = phraseListView
         ? React.cloneElement(phraseListView, {
-            DEFAULT_PAGE_SIZE: 8,
-            disablePageSize: true,
-            filter: kidsFilter,
-            gridCols: 2,
-            gridListView: true,
-          })
+          DEFAULT_PAGE_SIZE: 8,
+          disablePageSize: true,
+          filter: kidsFilter,
+          gridCols: 2,
+          gridListView: true,
+        })
         : null
       return (
         <PromiseWrapper renderOnError computeEntities={computeEntities}>

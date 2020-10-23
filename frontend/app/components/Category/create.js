@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ProviderHelpers from 'common/ProviderHelpers'
-import StateLoading from 'components/Loading'
+import StateLoading from 'componentsShared/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import StateSuccessDefault from './states/successCreate'
 import StateCreate from './states/create'
@@ -88,14 +88,14 @@ export class Category extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "CategoryInternationalization" */ './internationalization').then((_copy) => {
-          return _copy.default
-        })
+        return _copy.default
+      })
 
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "CategoryValidator" */ './validator').then((_validator) => {
-          return _validator.default
-        })
+        return _validator.default
+      })
     await this._getData({ copy, validator })
   }
 

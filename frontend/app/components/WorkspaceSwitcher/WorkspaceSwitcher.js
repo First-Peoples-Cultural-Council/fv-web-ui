@@ -30,7 +30,7 @@ import StringHelpers from 'common/StringHelpers'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 
 import '!style-loader!css-loader!./WorkspaceSwitcher.css'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 const { array, func, object, string } = PropTypes
 
@@ -59,7 +59,7 @@ export class WorkspaceSwitcher extends Component {
     return this.props.splitWindowPath[this.props.splitWindowPath.length - 1]
   }
 
-  _getSourceDocument = async() => {
+  _getSourceDocument = async () => {
     const potentialUUID = this._getPotentialUUID()
     if (StringHelpers.isUUID(potentialUUID)) {
       await this.props.fetchSourceDocument(potentialUUID)
@@ -68,7 +68,7 @@ export class WorkspaceSwitcher extends Component {
     }
   }
 
-  _getPublishedDocument = async() => {
+  _getPublishedDocument = async () => {
     const potentialUUID = this._getPotentialUUID()
     if (StringHelpers.isUUID(potentialUUID)) {
       await this.props.fetchResultSet('published_for_' + potentialUUID, {

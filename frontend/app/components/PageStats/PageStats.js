@@ -27,7 +27,7 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Close from '@material-ui/icons/Close'
 
-import FVTab from 'components/FVTab'
+import FVTab from 'componentsShared/FVTab'
 import Statistics from 'components/Dashboard/Statistics'
 import '!style-loader!css-loader!./PageStats.css'
 

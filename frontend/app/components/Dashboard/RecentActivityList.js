@@ -17,7 +17,7 @@ import React, { Component } from 'react'
 import selectn from 'selectn'
 
 import NavigationHelpers from 'common/NavigationHelpers'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 import Link from 'components/Link'
 
 export default class RecentActivityList extends Component {

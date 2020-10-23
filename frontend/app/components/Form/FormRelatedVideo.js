@@ -19,7 +19,7 @@ import selectn from 'selectn'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { createVideo } from 'reducers/fvVideo'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 const { array, func, object, number, string, element } = PropTypes
 export class FormRelatedVideo extends React.Component {

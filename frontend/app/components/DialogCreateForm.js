@@ -1,6 +1,6 @@
 import React from 'react'
 
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -15,7 +15,7 @@ import PageDialectPhraseBooksCreate from 'components/Phrasebook/createV1'
 import PageDialectLinksEdit from 'components/Links/edit'
 import PageDialectContributorEdit from 'components/Contributor/editV1'
 import PageDialectPhraseBooksEdit from 'components/Phrasebook/editV1'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 export default class DialogCreateForm extends React.Component {
   constructor(props) {

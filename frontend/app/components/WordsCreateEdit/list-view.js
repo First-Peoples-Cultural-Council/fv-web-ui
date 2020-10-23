@@ -33,7 +33,7 @@ import { WORKSPACES } from 'common/Constants'
 import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 import DataListView from 'components/LearnBase/data-list-view'
 import DocumentListView from 'componentsShared/DocumentListView'
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
 import Preview from 'componentsShared/Preview'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
@@ -228,7 +228,7 @@ class WordsListView extends DataListView {
     }
 
     // Bind methods to 'this'
-    ;[
+    [
       '_onNavigateRequest', // no references in file
       '_handleRefetch', // Note: comes from DataListView
       '_handleSortChange', // Note: comes from DataListView

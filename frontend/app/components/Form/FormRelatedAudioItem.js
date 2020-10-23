@@ -20,7 +20,7 @@ import selectn from 'selectn'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { createAudio } from 'reducers/fvAudio'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 const { array, func, object, number, string, element } = PropTypes
 export class FormRelatedAudioItem extends React.Component {

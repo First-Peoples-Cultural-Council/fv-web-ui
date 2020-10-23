@@ -11,7 +11,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
 
-import StateLoading from 'components/Loading'
+import StateLoading from 'componentsShared/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import StateDetail from './states/detail'
 
@@ -78,7 +78,7 @@ export class Contributor extends React.Component {
     }
     return content
   }
-  _getData = async(addToState = {}) => {
+  _getData = async (addToState = {}) => {
     // Do any loading here...
     const { routeParams } = this.props
     const { itemId } = routeParams
@@ -128,7 +128,7 @@ export class Contributor extends React.Component {
       />
     )
   }
-  _getContributor = async() => {
+  _getContributor = async () => {
     const { computeContributor, routeParams } = this.props
     const { itemId } = routeParams
     // Extract data from immutable:

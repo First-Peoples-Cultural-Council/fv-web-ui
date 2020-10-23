@@ -44,14 +44,14 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 
 import BookEntry from 'components/SongsStories/entry/view'
 import BookEntryList from 'components/SongsStories/entry/list-view'
 
 import withActions from 'componentsShared/withActions'
 import withPagination from 'componentsShared/withPagination'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 

@@ -32,7 +32,7 @@ import classNames from 'classnames'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogTitle from '@material-ui/core/DialogTitle'
@@ -48,7 +48,7 @@ import ActionInfoOutline from '@material-ui/icons/InfoOutlined'
 import MediaList from 'componentsShared/MediaList'
 import withPagination from 'componentsShared/withPagination'
 import withFilter from 'componentsShared/withFilter'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 // const gridListStyle = { width: '100%', height: '100vh', overflowY: 'auto', marginBottom: 10 }
 
@@ -90,8 +90,8 @@ class SharedResourceGridTile extends Component {
     if (isDialectShared || isFVShared) {
       const tooltip = isDialectShared
         ? this.props.intl.trans('shared_from_x', 'Shared from ' + selectn('dc:title', resourceParentDialect), null, [
-            selectn('dc:title', resourceParentDialect),
-          ])
+          selectn('dc:title', resourceParentDialect),
+        ])
         : this.props.intl.trans('shared_from_x_collection', 'Shared from FirstVoices Collection', null, ['FirstVoices'])
       actionIcon = (
         <Tooltip title={tooltip}>
@@ -163,8 +163,8 @@ class SelectMediaComponent extends Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-        })
+        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+      })
       : DefaultFetcherParams
 
     this.state = {

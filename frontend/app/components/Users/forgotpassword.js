@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
 import NavigationHelpers from 'common/NavigationHelpers'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 /**
  * Reset your password page

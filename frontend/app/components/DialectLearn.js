@@ -55,7 +55,7 @@ import TextHeader from 'componentsShared/Typography/text-header'
 
 import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
 import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 import ToolbarNavigation from 'components/LearnBase/toolbar-navigation'
 import LearningSidebar from 'components/LearnBase/learning-sidebar'

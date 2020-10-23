@@ -23,7 +23,7 @@ import { connect } from 'react-redux'
 import { pushWindowPath } from 'reducers/windowPath'
 
 import NavigationHelpers from 'common/NavigationHelpers'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 /**
  * Play games

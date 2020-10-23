@@ -33,9 +33,9 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
-import StateLoading from 'components/Loading'
+import StateLoading from 'componentsShared/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'

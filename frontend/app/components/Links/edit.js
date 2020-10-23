@@ -37,7 +37,7 @@ import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
 
 import withForm from 'componentsShared/withForm'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 const EditViewWithForm = withForm(PromiseWrapper, true)
 

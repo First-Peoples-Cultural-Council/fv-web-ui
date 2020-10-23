@@ -31,7 +31,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import NavigationHelpers from 'common/NavigationHelpers'
 import PortalListDialects from 'componentsShared/PortalListDialects'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 /**
  * Explore Archive page shows all the families in the archive

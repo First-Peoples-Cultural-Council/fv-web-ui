@@ -36,7 +36,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 /**
  * Create links

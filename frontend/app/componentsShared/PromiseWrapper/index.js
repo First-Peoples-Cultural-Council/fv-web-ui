@@ -23,7 +23,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import Error403 from 'components/Error403'
 
 import '!style-loader!css-loader!./PromiseWrapper.css'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 /**
  * Simple component to handle loading of promises.

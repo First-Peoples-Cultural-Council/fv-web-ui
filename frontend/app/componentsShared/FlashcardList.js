@@ -17,7 +17,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import selectn from 'selectn'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 export default class FlashcardList extends Component {
   static propTypes = {

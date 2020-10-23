@@ -30,7 +30,7 @@ import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 const { bool, func, object, string } = PropTypes
 export class DialectList extends Component {

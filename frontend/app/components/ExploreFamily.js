@@ -29,7 +29,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import PortalList from 'componentsShared/PortalList'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 import withFilter from 'componentsShared/withFilter'
 

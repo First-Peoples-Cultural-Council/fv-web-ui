@@ -216,7 +216,7 @@ import {
 } from 'common/ListView'
 import withPagination from 'componentsShared/withPagination'
 import IntlService from 'common/services/intl'
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'componentsShared/DictionaryList/DictionaryListSmallScreen'
 import { getSearchObject } from 'common/NavigationHelpers'
 import AuthorizationFilter from 'componentsShared/AuthorizationFilter'

@@ -23,7 +23,7 @@ import selectn from 'selectn'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { createAudio } from 'reducers/fvAudio'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 const { func, object, number, string } = PropTypes
 export class FormRelatedPhraseCreateNew extends React.Component {

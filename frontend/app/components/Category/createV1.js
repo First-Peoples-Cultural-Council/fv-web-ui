@@ -31,7 +31,7 @@ import Paper from '@material-ui/core/Paper'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import StatusBar from 'components/StatusBar'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 

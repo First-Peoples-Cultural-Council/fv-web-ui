@@ -15,7 +15,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Clear from '@material-ui/icons/Clear'
 import ArrowForward from '@material-ui/icons/ArrowForward'
 import ArrowBack from '@material-ui/icons/ArrowBack'
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import IntlService from 'common/services/intl'
 import ProviderHelpers from 'common/ProviderHelpers'
 
@@ -59,7 +59,7 @@ const FVPortalTemplate = function template(locals) {
 const FVUserRegistrationTemplate = function template(locals) {
   let selectedCommunityLanguageLabel = null
 
-  locals.onChange = new (function() {
+  locals.onChange = new (function () {
     const requestedSpaceElement = document.getElementById('registration-requested-space')
 
     if (requestedSpaceElement !== null) {

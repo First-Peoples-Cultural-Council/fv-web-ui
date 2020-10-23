@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import { withStyles } from '@material-ui/core/styles'
 import Fade from '@material-ui/core/Fade'
 import Snackbar from '@material-ui/core/Snackbar'

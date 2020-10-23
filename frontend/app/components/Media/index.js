@@ -35,7 +35,7 @@ import PromiseWrapper from 'componentsShared/PromiseWrapper'
 import MediaList from 'componentsShared/MediaList'
 import withPagination from 'componentsShared/withPagination'
 import withFilter from 'componentsShared/withFilter'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 20, filters: { 'properties.dc:title': '', dialect: '' } }
 

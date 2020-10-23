@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 import ProviderHelpers from 'common/ProviderHelpers'
-import StateLoading from 'components/Loading'
+import StateLoading from 'componentsShared/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import StateSuccessEdit from './states/successEdit'
 import StateSuccessDelete from './states/successDelete'
@@ -111,16 +111,16 @@ export class EditContributor extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "ContributorInternationalization" */ './internationalization').then(
-          (_copy) => {
-            return _copy.default
-          }
-        )
+        (_copy) => {
+          return _copy.default
+        }
+      )
 
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "ContributorValidator" */ './validator').then((_validator) => {
-          return _validator.default
-        })
+        return _validator.default
+      })
     await this._getData({ copy, validator })
   }
   render() {

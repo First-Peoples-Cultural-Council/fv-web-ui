@@ -24,8 +24,8 @@ import Media from 'react-media'
 import { getIcon, getSortState, sortCol } from 'common/ListView'
 import withPagination from 'componentsShared/withPagination'
 import IntlService from 'common/services/intl'
-import FVButton from 'components/FVButton'
-import FVLabel from 'components/FVLabel'
+import FVButton from 'componentsShared/FVButton'
+import FVLabel from 'componentsShared/FVLabel'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenTemplateWords,

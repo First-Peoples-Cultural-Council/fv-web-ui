@@ -31,7 +31,7 @@ import { withStyles } from '@material-ui/core/styles'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import AppBar from '@material-ui/core/AppBar'
 import Avatar from '@material-ui/core/Avatar'
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Grow from '@material-ui/core/Grow'
@@ -61,7 +61,7 @@ import Link from 'components/Link'
 import { getDialectClassname } from 'common/Helpers'
 
 import { WORKSPACES, SECTIONS } from 'common/Constants'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 import '!style-loader!css-loader!./Navigation.css'
 

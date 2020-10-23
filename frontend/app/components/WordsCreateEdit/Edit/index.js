@@ -34,9 +34,9 @@ import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
-import StateLoading from 'components/Loading'
+import StateLoading from 'componentsShared/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 import '!style-loader!css-loader!./WordsEdit.css'
 
 // Models
@@ -104,9 +104,9 @@ export class WordsEdit extends Component {
       case typeof nextWord.equals === 'function' && nextWord.equals(previousWord) === false:
         return true
 
-      // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
-      //   console.log(4)
-      //   return true
+        // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
+        //   console.log(4)
+        //   return true
 
       case this.state.componentState != newState.componentState:
         return true
@@ -114,9 +114,9 @@ export class WordsEdit extends Component {
       case newProps.windowPath != this.props.windowPath:
         return true
 
-      // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
-      //   console.log(7)
-      //   return true
+        // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
+        //   console.log(7)
+        //   return true
 
       case is(newProps.computeWord, this.props.computeWord) === false:
         return true

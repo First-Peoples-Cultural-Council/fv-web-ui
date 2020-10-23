@@ -38,9 +38,9 @@ import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
 
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
-import StateLoading from 'components/Loading'
+import StateLoading from 'componentsShared/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 import '!style-loader!css-loader!./PhrasesCreate.css'
 
 /**

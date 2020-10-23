@@ -24,7 +24,7 @@ import { fetchLabels } from 'reducers/fvLabel'
 import { fetchDialect2 } from 'reducers/fvDialect'
 
 import selectn from 'selectn'
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 
 import Edit from '@material-ui/icons/Edit'
 

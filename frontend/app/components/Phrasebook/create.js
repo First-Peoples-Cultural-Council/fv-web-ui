@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 // import ProviderHelpers from 'common/ProviderHelpers'
-import StateLoading from 'components/Loading'
+import StateLoading from 'componentsShared/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import StateSuccessDefault from './states/successCreate'
 import StateCreate from './states/create'
@@ -100,10 +100,10 @@ export class Phrasebook extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "PhrasebookInternationalization" */ './internationalization').then(
-          (_copy) => {
-            return _copy.default
-          }
-        )
+        (_copy) => {
+          return _copy.default
+        }
+      )
 
     categoriesPath = `${routeParams.dialect_path}/Phrase Books/`
 
@@ -136,8 +136,8 @@ export class Phrasebook extends React.Component {
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "PhrasebookValidator" */ './validator').then((_validator) => {
-          return _validator.default
-        })
+        return _validator.default
+      })
 
     // Flip to ready state...
     this.setState({

@@ -25,7 +25,7 @@ import { createLabel, fetchLabel, updateLabel, publishLabel, unpublishLabel } fr
 import { fetchDialect, fetchDialect2 } from 'reducers/fvDialect'
 import { addNewLabelToIntl } from 'reducers/locale'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 import { Document } from 'nuxeo'
 import ProviderHelpers from 'common/ProviderHelpers'
 
@@ -232,15 +232,15 @@ class LabelModal extends Component {
     const { loading } = this.state
     const computeEntities = label
       ? Immutable.fromJS([
-          {
-            id: label.uid,
-            entity: computeLabel,
-          },
-          {
-            id: dialectPath,
-            entity: computeDialect2,
-          },
-        ])
+        {
+          id: label.uid,
+          entity: computeLabel,
+        },
+        {
+          id: dialectPath,
+          entity: computeDialect2,
+        },
+      ])
       : null
     return (
       <div>

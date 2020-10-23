@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 import Select from 'components/Form/Common/Select'
 import Text from 'components/Form/Common/Text'
 import Textarea from 'components/Form/Common/Textarea'

@@ -31,11 +31,11 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import Link from 'components/Link'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
-import FVButton from 'components/FVButton'
+import FVButton from 'componentsShared/FVButton'
 
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 /**
  * Create user entry

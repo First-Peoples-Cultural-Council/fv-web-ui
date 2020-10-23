@@ -29,7 +29,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
-import FVLabel from 'components/FVLabel'
+import FVLabel from 'componentsShared/FVLabel'
 
 // Models
 import { Document } from 'nuxeo'
