@@ -202,6 +202,7 @@ export default class HangmanGame extends Component {
             if (part.found === false) {
               succeeded = false
             }
+            return
           })
         })
 

@@ -76,7 +76,6 @@ export default {
 
     switch (view) {
       case 'Thumbnail':
-        i = 0
         break
 
       case 'Small':
@@ -100,9 +99,7 @@ export default {
         ? selectn('properties.picture:views[' + i + ']', imgObj)
         : selectn('properties.picture:views[' + i + '].content.data', imgObj)
     } else if (selectn('properties.file:content.data', imgObj)) {
-      return returnObj
-        ? selectn('properties.file:content.data', imgObj)
-        : selectn('properties.file:content.data', imgObj)
+      return selectn('properties.file:content.data', imgObj)
     } else if (selectn('path', imgObj)) {
       return (
         NavigationHelpers.getBaseURL() +
@@ -161,10 +158,8 @@ export default {
     return false
   },
   isViewSize(size) {
-    switch (size) {
-      case 'xs':
-        return window.innerWidth <= 420
-      default: // Note: do nothing
+    if (size === 'xs') {
+      return window.innerWidth <= 420
     }
 
     return false

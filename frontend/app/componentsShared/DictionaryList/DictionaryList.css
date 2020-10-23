@@ -88,7 +88,6 @@
   padding: 10px;
   display: inline-block;
   font-size: 2rem;
-  line-height: 1.3;
 }
 .DictionaryList__data--title .DictionaryList__link:hover,
 .DictionaryList__link.DictionaryList__link--indigenous:hover {

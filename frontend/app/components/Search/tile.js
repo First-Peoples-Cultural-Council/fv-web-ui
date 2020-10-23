@@ -14,6 +14,7 @@ import { connect } from 'react-redux'
 class SearchResultTile extends Component {
   static defaultProps = {}
   static propTypes = {
+    intl: PropTypes.any.isRequired, // TODO: set appropriate propType
     tile: PropTypes.any.isRequired, // TODO: set appropriate propType
     searchTerm: PropTypes.any, // TODO: set appropriate propType
   }
@@ -26,11 +27,11 @@ class SearchResultTile extends Component {
   }
 
   render() {
-    const tile = this.props.tile
+    const { intl, tile } = this.props
 
     let type = selectn('type', tile) || ''
-    let desc = this.props.intl.searchAndReplace(selectn('properties.dc:description', tile))
-    let title = this.props.intl.searchAndReplace(selectn('properties.dc:title', tile))
+    let desc = intl.searchAndReplace(selectn('properties.dc:description', tile))
+    let title = intl.searchAndReplace(selectn('properties.dc:title', tile))
     let subtitle = ''
     const path = [
       selectn('contextParameters.ancestry.family.dc:title', tile),
@@ -44,52 +45,50 @@ class SearchResultTile extends Component {
       case 'FVWord': {
         imgObj = selectn('contextParameters.word.related_pictures[0]', tile)
 
-        const literal_translations = selectn('properties.fv:literal_translation', tile) || []
-        const lt_s =
-          selectn('length', literal_translations) > 0
-            ? this.props.intl.trans('views.pages.search.translation_s', 'Translation(s)', 'first') + ': '
+        const literalTranslations = selectn('properties.fv:literal_translation', tile) || []
+        const lts =
+          selectn('length', literalTranslations) > 0
+            ? intl.trans('views.pages.search.translation_s', 'Translation(s)', 'first') + ': '
             : ''
 
-        subtitle = lt_s + literal_translations.map((v) => v.translation).join(', ')
+        subtitle = lts + literalTranslations.map((v) => v.translation).join(', ')
 
         const output = []
 
         const definitions = selectn('properties.fv:definitions', tile) || []
-        definitions.length > 0
-          ? output.push(
-              '<em>' +
-                this.props.intl.trans('views.pages.search.definition_s', 'Definition(s)', 'first') +
-                '</em>: ' +
-                definitions.map((v) => v.translation).join(', ')
-            )
-          : null
+        if (definitions.length > 0) {
+          output.push(
+            '<em>' +
+              intl.trans('views.pages.search.definition_s', 'Definition(s)', 'first') +
+              '</em>: ' +
+              definitions.map((v) => v.translation).join(', ')
+          )
+        }
 
-        const part_of_speech = selectn('properties.fv-word:part_of_speech', tile)
-        part_of_speech
-          ? output.push(
-              '<em>' +
-                this.props.intl.trans('views.pages.search.part_of_speech', 'Part of Speech', 'first') +
-                '</em>: ' +
-                part_of_speech
-            )
-          : null
+        const partOfSpeech = selectn('properties.fv-word:part_of_speech', tile)
+        if (partOfSpeech) {
+          output.push(
+            '<em>' +
+              intl.trans('views.pages.search.part_of_speech', 'Part of Speech', 'first') +
+              '</em>: ' +
+              partOfSpeech
+          )
+        }
 
         const pronunciation = selectn('properties.fv-word:pronunciation', tile)
-        pronunciation
-          ? output.push(
-              '<em>' + this.props.intl.trans('pronunciation', 'Pronunciation', 'first') + '</em>: ' + pronunciation
-            )
-          : null
+        if (pronunciation) {
+          output.push('<em>' + intl.trans('pronunciation', 'Pronunciation', 'first') + '</em>: ' + pronunciation)
+        }
 
         const categories = selectn('contextParameters.word.categories', tile) || []
-        categories.length > 0
-          ? output.push(
-              '<em>' +
-                this.props.intl.trans('categories', 'Categories', 'first') +
-                '</em>: ' +
-                categories.map((v) => selectn('dc:title', v)).join(', ')
-            )
-          : null
+        if (categories.length > 0) {
+          output.push(
+            '<em>' +
+              intl.trans('categories', 'Categories', 'first') +
+              '</em>: ' +
+              categories.map((v) => selectn('dc:title', v)).join(', ')
+          )
+        }
 
         desc = output.join(', ')
         targetPath = NavigationHelpers.navigate(NavigationHelpers.generateUIDPath('explore', tile, 'words'), null, true)
@@ -99,37 +98,37 @@ class SearchResultTile extends Component {
       case 'FVPhrase': {
         imgObj = selectn('contextParameters.phrase.related_pictures[0]', tile)
 
-        const p_literal_translations = selectn('properties.fv:literal_translation', tile) || []
-        const p_lt_s =
-          selectn('length', p_literal_translations) > 0
-            ? this.props.intl.trans('views.pages.search.translation_s', 'Translation(s)', 'first') + ': '
+        const pLiteralTranslations = selectn('properties.fv:literal_translation', tile) || []
+        const plts =
+          selectn('length', pLiteralTranslations) > 0
+            ? intl.trans('views.pages.search.translation_s', 'Translation(s)', 'first') + ': '
             : ''
 
-        subtitle = p_lt_s + p_literal_translations.map((v) => v.translation).join(', ')
+        subtitle = plts + pLiteralTranslations.map((v) => v.translation).join(', ')
 
-        const p_output = []
+        const pOutput = []
 
-        const p_definitions = selectn('properties.fv:definitions', tile) || []
-        p_definitions.length > 0
-          ? p_output.push(
-              '<em>' +
-                this.props.intl.trans('views.pages.search.definition_s', 'Definition(s)', 'first') +
-                '</em>: ' +
-                p_definitions.map((v) => v.translation).join(', ')
-            )
-          : null
+        const pDefinitions = selectn('properties.fv:definitions', tile) || []
+        if (pDefinitions.length > 0) {
+          pOutput.push(
+            '<em>' +
+              intl.trans('views.pages.search.definition_s', 'Definition(s)', 'first') +
+              '</em>: ' +
+              pDefinitions.map((v) => v.translation).join(', ')
+          )
+        }
 
-        const p_categories = selectn('contextParameters.phrase.phrase_books', tile) || []
-        p_categories.length > 0
-          ? p_output.push(
-              '<em>' +
-                this.props.intl.trans('phrase_bookes', 'Phrase Books', 'words') +
-                '</em>: ' +
-                p_categories.map((v) => selectn('dc:title', v)).join(', ')
-            )
-          : null
+        const pCategories = selectn('contextParameters.phrase.phrase_books', tile) || []
+        if (pCategories.length > 0) {
+          pOutput.push(
+            '<em>' +
+              intl.trans('phrase_bookes', 'Phrase Books', 'words') +
+              '</em>: ' +
+              pCategories.map((v) => selectn('dc:title', v)).join(', ')
+          )
+        }
 
-        desc = p_output.join(', ')
+        desc = pOutput.join(', ')
 
         targetPath = NavigationHelpers.navigate(
           NavigationHelpers.generateUIDPath('explore', tile, 'phrases'),

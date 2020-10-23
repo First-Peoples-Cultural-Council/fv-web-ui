@@ -220,7 +220,7 @@ function Contributors(props) {
             NavigationHelpers.navigate(sortData.urlWithQuery, props.pushWindowPath, false)
           }}
           // ==================================================
-          columns={getColumns(copy)}
+          columns={getColumns()}
           cssModifier="DictionaryList--contributors"
           items={selectn('response.entries', computedData)}
           // Pagination

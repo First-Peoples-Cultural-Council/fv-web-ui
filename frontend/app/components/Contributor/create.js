@@ -94,10 +94,10 @@ export class Contributor extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "ContributorInternationalization" */ './internationalization').then(
-        (_copy) => {
-          return _copy.default
-        }
-      )
+          (_copy) => {
+            return _copy.default
+          }
+        )
 
     // USING this.DIALECT_PATH instead of setting state
     // this.setState({ dialectPath: dialectPath })
@@ -121,8 +121,8 @@ export class Contributor extends React.Component {
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "ContributorValidator" */ './validator').then((_validator) => {
-        return _validator.default
-      })
+          return _validator.default
+        })
 
     // Flip to ready state...
     this.setState({
@@ -235,22 +235,9 @@ export class Contributor extends React.Component {
     // Submit here
     const now = Date.now()
     const name = formData['dc:title']
-    const file = formData['fvcontributor:profile_picture'] || null
-    /*
-    const results = await this.props.createContributor({
-      parentDoc: `${this.DIALECT_PATH}/Contributors`,
-      docParams: {
-        type: 'FVContributor',
-        name,
-        properties: {
-          'dc:description': formData['dc:description'],
-          'dc:title': formData['dc:title'],
-        },
-      },
-      file: file[0],
-      timestamp: now,
-      xpath: 'fvcontributor:profile_picture',
-    })*/
+    const profilePicArray = formData['fvcontributor:profile_picture']
+    const profilePic = profilePicArray[0] || null
+
     const results = await this.props.createContributor(
       `${this.DIALECT_PATH}/Contributors`,
       {
@@ -261,7 +248,7 @@ export class Contributor extends React.Component {
           'dc:title': formData['dc:title'],
         },
       },
-      file[0],
+      profilePic,
       now,
       'fvcontributor:profile_picture'
     )

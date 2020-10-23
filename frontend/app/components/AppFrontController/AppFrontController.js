@@ -131,20 +131,18 @@ export class AppFrontController extends Component {
     //
     // Most components make network requests on componentDidMount so we end up
     // with duplicate & unneccessary network requests being fired
-    const matchedPageUpdated = is(this.props.matchedPage, prevProps.matchedPage) === false
-    const siteThemeUpdated =
-      selectn('siteTheme', this.props.routeParams) !== selectn('siteTheme', prevProps.routeParams)
+    const { matchedPage, routeParams } = this.props
+    const matchedPageUpdated = is(matchedPage, prevProps.matchedPage) === false
+    const siteThemeUpdated = selectn('siteTheme', routeParams) !== selectn('siteTheme', prevProps.routeParams)
+    // View during user checking, pre routing
+    let isLoading = false
+    if (matchedPage === undefined || this.props.localeLoading) {
+      isLoading = true
+    }
+    const isFrontPage = !matchedPage ? false : matchedPage.get('frontpage')
 
-    if (this.props.matchedPage && (matchedPageUpdated || siteThemeUpdated)) {
-      const { matchedPage, routeParams, localeLoading } = this.props
-      // View during user checking, pre routing
-      let isLoading = false
-      if (matchedPage === undefined || localeLoading) {
-        isLoading = true
-      }
-
-      const isFrontPage = !matchedPage ? false : matchedPage.get('frontpage')
-      const hideNavigation = matchedPage && matchedPage.has('navigation') && matchedPage.get('navigation') === false
+    if (matchedPage && (matchedPageUpdated || siteThemeUpdated)) {
+      const hideNavigation = matchedPage.has('navigation') && matchedPage.get('navigation') === false
 
       let page
 
@@ -188,7 +186,7 @@ export class AppFrontController extends Component {
       }
 
       let warning = null
-      if (matchedPage && matchedPage.hasOwnProperty('warnings')) {
+      if (matchedPage.hasOwnProperty('warnings')) {
         warning = matchedPage.get('warnings').map((warningItem) => {
           if (this.props.warnings.hasOwnProperty(warningItem) && !this.state.warningsDismissed) {
             return (

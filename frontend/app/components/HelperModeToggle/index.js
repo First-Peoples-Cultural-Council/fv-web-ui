@@ -51,8 +51,8 @@ const HelperModeToggle = ({
       })
       const category = mappedLabel
         ? allCategories.find((c) => {
-          return c.id === mappedLabel.category
-        })
+            return c.id === mappedLabel.category
+          })
         : null
       const templateStrings = mappedLabel ? mappedLabel.template_strings.split(',') : []
       const _label = {
@@ -131,7 +131,7 @@ const HelperModeToggle = ({
             isNew={isNew}
             dialectPath={routeParams.dialect_path}
             open={isOpen}
-            handleClose={(save) => closeModal(save)}
+            handleClose={() => closeModal()}
             label={label}
           />
           <Snackbar
