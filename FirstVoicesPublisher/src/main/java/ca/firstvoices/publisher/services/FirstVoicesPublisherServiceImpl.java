@@ -140,9 +140,11 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
     boolean isDialect = DialectUtils.isDialect(doc);
 
     // Skip if dialect is not published, and trying to publish within
-    if (!isDialect && !StateUtils.isPublished(DialectUtils.getDialect(doc))) {
+    if (!isDialect && (!StateUtils.isPublished(DialectUtils.getDialect(doc))
+        || getPublication(session, DialectUtils.getDialect(doc).getRef()) == null)) {
       log.warn(String
-          .format("Tried to publish a `%s` type in a non-published dialect, doc id: %s",
+          .format("Tried to publish a `%s` type in a non-published dialect, "
+                  + "or one without a proxy, doc id: %s",
               doc.getType(),
               doc.getId()));
       return null;
@@ -173,9 +175,11 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
     boolean isDialect = DialectUtils.isDialect(doc);
 
     // Skip if dialect is not published, and trying to republish within
-    if (!isDialect && !StateUtils.isPublished(DialectUtils.getDialect(doc))) {
+    if (!isDialect && (!StateUtils.isPublished(DialectUtils.getDialect(doc))
+        || getPublication(session, DialectUtils.getDialect(doc).getRef()) == null)) {
       log.warn(String
-          .format("Tried to republish a `%s` type in a non-published dialect, doc id: %s",
+          .format("Tried to republish a `%s` type in a non-published dialect, "
+                  + "or one without a proxy, doc id: %s",
               doc.getType(),
               doc.getId()));
       return;

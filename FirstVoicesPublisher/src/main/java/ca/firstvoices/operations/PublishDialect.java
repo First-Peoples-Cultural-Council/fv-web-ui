@@ -20,7 +20,6 @@
 
 package ca.firstvoices.operations;
 
-import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.maintenance.common.AbstractMaintenanceOperation;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import ca.firstvoices.publisher.Constants;
@@ -75,10 +74,10 @@ public class PublishDialect extends AbstractMaintenanceOperation {
 
   @Override
   protected void executeWorkPhase(DocumentModel dialect) {
-    // Transition dialect to publish if it is not already
-    if (!StateUtils.isPublished(dialect)) {
-      fvPublisherService.transitionDialectToPublished(session, dialect);
-    }
+    // Transition dialect and children to publish
+    fvPublisherService.transitionDialectToPublished(session, dialect);
+    // Create proxy for dialect
+    fvPublisherService.publish(session, dialect);
 
     // Initiate worker to create proxies for everything relevant inside a dialect
     CreateProxiesWorker proxyWorker = new CreateProxiesWorker(dialect.getRef(), batchSize);

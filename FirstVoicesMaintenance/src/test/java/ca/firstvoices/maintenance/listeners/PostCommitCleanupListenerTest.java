@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -183,7 +182,6 @@ public class PostCommitCleanupListenerTest extends AbstractTestDataCreatorTest {
   //================================================================================
 
   @Test
-  @Ignore("May not need this functionality.")
   public void shouldUnpublishTrashedDocs() {
     // Confirm proxy exists for document
     assertNotEquals(0, session.getProxies(word.getRef(), null).size());
