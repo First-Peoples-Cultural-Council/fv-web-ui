@@ -15,7 +15,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.LifeCycleConstants;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.api.trash.TrashService;
@@ -31,14 +33,16 @@ import org.nuxeo.runtime.api.Framework;
 
 
 /**
- * This is a general listener for post commit, async cleanup operations Currently handled clearing
- * tasks, but could be expanded to other uses or made abstract
+ * This is a general listener for post commit, async cleanup operations. Handles clearing
+ * tasks, cleaning references on deleted items, and removing published proxies of deleted items
  */
 public class PostCommitCleanupListener implements PostCommitEventListener {
 
   public static final String GET_ALL_OPEN_TASKS_FOR_DOCUMENT = "GET_ALL_OPEN_TASKS_FOR_DOCUMENT";
 
   private ArrayList<String> endTaskEvents = new ArrayList<>();
+
+  private ArrayList<String> unpublishEvents = new ArrayList<>();
 
   private ArrayList<String> cleanReferencesEvents = new ArrayList<>();
 
@@ -66,6 +70,7 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
         DocumentModel doc = docCtx.getSourceDocument();
 
         endRelatedTask(event, doc);
+        unpublishTrashedDocs(event, doc);
         cleanReferences(event, doc);
       }
     }
@@ -85,12 +90,16 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
     endTaskEvents.add(LifeCycleConstants.TRANSITION_EVENT);
     endTaskEvents.add(TrashService.DOCUMENT_TRASHED);
 
+    // Events that trigger un-publishing
+    unpublishEvents = new ArrayList<>();
+    unpublishEvents.add(TrashService.DOCUMENT_TRASHED);
+
     // Events that trigger cleaning references
     cleanReferencesEvents = new ArrayList<>();
     cleanReferencesEvents.add(TrashService.DOCUMENT_TRASHED);
 
     // Return combined set of all events
-    return Stream.of(endTaskEvents, cleanReferencesEvents)
+    return Stream.of(endTaskEvents, unpublishEvents, cleanReferencesEvents)
         .flatMap(Collection::stream)
         .collect(Collectors.toSet());
   }
@@ -116,6 +125,26 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
         && FV_CATEGORY.equals(doc.getType())) {
       RequiredJobsUtils
           .addToRequiredJobs(DialectUtils.getDialect(doc), CLEAN_CATEGORY_REFERENCES_JOB_ID);
+    }
+  }
+
+  /**
+   * Will remove the proxies for documents that are trashed. Only applies to non system admin
+   * operations, and mutable core documents. Note: This is needed although the trash service
+   * (org.nuxeo.ecm.core.api.trash.TrashService#trashDocument) is supposed to handle proxies,
+   * it does not seem to be doing so in the implementation. May not be needed in 11.10 or future HF
+   *
+   * @param event the current event handled in the bundle
+   * @param doc   the document to remove proxies for
+   */
+  private void unpublishTrashedDocs(Event event, DocumentModel doc) {
+    if (unpublishEvents.contains(event.getName()) && DocumentUtils.isMutable(doc)) {
+      CoreSession session = event.getContext().getCoreSession();
+      DocumentModelList proxies = session.getProxies(doc.getRef(), null);
+
+      for (DocumentModel proxy : proxies) {
+        session.removeDocument(proxy.getRef());
+      }
     }
   }
 
