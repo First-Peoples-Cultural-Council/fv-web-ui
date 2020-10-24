@@ -19,7 +19,7 @@ import Nuxeo from 'nuxeo'
 
 import StringHelpers from 'common/StringHelpers'
 import BaseOperations from 'operations/BaseOperations'
-import IntlService from 'common/services/intl'
+import IntlService from 'common/services/IntlService'
 
 export default class DocumentOperations {
   /*

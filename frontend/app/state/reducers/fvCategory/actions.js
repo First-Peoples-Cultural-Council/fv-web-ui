@@ -1,7 +1,7 @@
 import { FV_CATEGORY_UPDATE_START, FV_CATEGORY_UPDATE_SUCCESS, FV_CATEGORY_UPDATE_ERROR } from './actionTypes'
 import { _delete, fetch, query, create } from 'reducers/rest'
 import CategoryOperations from 'operations/CategoryOperations'
-import IntlService from 'common/services/intl'
+import IntlService from 'common/services/IntlService'
 
 /*
  * fetch

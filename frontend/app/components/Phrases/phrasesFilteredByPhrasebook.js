@@ -44,7 +44,7 @@ import CategoriesData from 'components/Categories/CategoriesData'
 
 import Edit from '@material-ui/icons/Edit'
 import FVButton from 'componentsShared/FVButton'
-import IntlService from 'common/services/intl'
+import IntlService from 'common/services/IntlService'
 import Link from 'components/Link'
 import NavigationHelpers, {
   appendPathArrayAfterLandmark,

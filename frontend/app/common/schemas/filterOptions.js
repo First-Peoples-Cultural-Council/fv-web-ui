@@ -1,12 +1,11 @@
 import t from 'tcomb-form'
-import ValuedCheckboxFactory from 'common/schemas/customFields/valued-checkbox'
+import ValuedCheckboxFactory from 'common/schemas/customFields/ValuedCheckboxFactory'
 import SearchDocumentTypesTemplate from 'components/SearchDocumentTypesTemplate'
 
-import RangeSelector from 'common/schemas/customFields/range'
-// import SelectFactory from 'common/schemas/customFields/select'
-import dataTestId from 'common/schemas/customFields/dataTestId'
+import RangeSelector from 'common/schemas/customFields/RangeSelectorFactory'
+import dataTestId from 'common/schemas/customFields/DataTestId'
 import ProviderHelpers from 'common/ProviderHelpers'
-import IntlService from 'common/services/intl'
+import IntlService from 'common/services/IntlServiceService'
 
 const intl = IntlService.instance
 
@@ -106,7 +105,7 @@ const ResourcesFields = {
   },
 }
 
-const options = {
+const filterOptions = {
   Default: {
     fields: {
       'properties.dc:title': {
@@ -138,13 +137,13 @@ const options = {
         filterFunc: (propertyToSearch, filterValue) => {
           if (!propertyToSearch) return true
 
-          return !(
+          return (
             propertyToSearch.findIndex((value) => {
               if (filterValue == 'Anything') {
                 return ProviderHelpers.isActiveRole(value)
               }
               return value.search(new RegExp(filterValue, 'i')) === -1 ? false : true
-            }) === -1
+            }) !== -1
           )
         },
       },
@@ -258,4 +257,4 @@ const options = {
   },
 }
 
-export default options
+export default filterOptions

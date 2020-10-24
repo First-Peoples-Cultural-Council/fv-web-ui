@@ -38,7 +38,7 @@ import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
 
 import withForm from 'componentsShared/withForm'
-import IntlService from 'common/services/intl'
+import IntlService from 'common/services/IntlService'
 
 const intl = IntlService.instance
 const EditViewWithForm = withForm(PromiseWrapper, true)

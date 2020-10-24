@@ -23,7 +23,7 @@ import Media from 'react-media'
 // Components
 import { getIcon, getSortState, sortCol } from 'common/ListView'
 import withPagination from 'componentsShared/withPagination'
-import IntlService from 'common/services/intl'
+import IntlService from 'common/services/IntlService'
 import FVButton from 'componentsShared/FVButton'
 import FVLabel from 'componentsShared/FVLabel'
 import {

@@ -1,10 +1,9 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import t from 'tcomb-form'
 
 function renderInput(locals) {
-  const onChange = function(e) {
-    locals.onChange(e.target.value)
+  const onChange = (event) => {
+    locals.onChange(event.target.value)
   }
 
   return (

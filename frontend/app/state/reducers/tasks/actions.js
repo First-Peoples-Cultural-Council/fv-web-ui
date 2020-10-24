@@ -1,6 +1,6 @@
 import { execute } from 'reducers/rest'
 import DirectoryOperations from 'operations/DirectoryOperations'
-import IntlService from 'common/services/intl'
+import IntlService from 'common/services/IntlService'
 import URLHelpers from 'common/URLHelpers'
 import { getSearchObjectAsUrlQuery } from 'common/NavigationHelpers'
 import {

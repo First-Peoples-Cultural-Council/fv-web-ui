@@ -3,7 +3,7 @@ import selectn from 'selectn'
 import Immutable from 'immutable'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import IntlService from 'common/services/intl'
+import IntlService from 'common/services/IntlService'
 
 import * as Pages from 'common/conf/pagesIndex'
 import { ServiceShortURL } from 'common/services'

@@ -1,6 +1,6 @@
 import { execute } from 'reducers/rest'
 import UserOperations from 'operations/UserOperations'
-import IntlService from 'common/services/intl'
+import IntlService from 'common/services/IntlService'
 
 const key = 'FV_USER'
 const intl = IntlService.instance

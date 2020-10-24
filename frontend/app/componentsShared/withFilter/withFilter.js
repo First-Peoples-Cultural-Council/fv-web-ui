@@ -6,8 +6,8 @@ import selectn from 'selectn'
 
 import t from 'tcomb-form'
 
-import fields from 'common/schemas/filter-fields'
-import options from 'common/schemas/filter-options'
+import filterFields from 'common/schemas/filterFields'
+import filterOptions from 'common/schemas/filterOptions'
 
 import withToggle from 'componentsShared/withToggle'
 
@@ -59,7 +59,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
       this.filter_form = React.createRef()
 
       this.state = {
-        options: options,
+        filterOptions: filterOptions,
         formValue: props.initialFormValue || props.formValues,
         defaultFormValue: props.formValues,
         initialFormValue: props.initialFormValue,
@@ -88,8 +88,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
     }
 
     render() {
-      // TODO: options already declared by import, see about fixing this
-      let options = Map(selectn(this.props.filterOptionsKey, this.state.options)) // eslint-disable-line
+      let options = Map(selectn(this.props.filterOptionsKey, this.state.filterOptions))
 
       // Replace proxied properties where necessary
       if (this.props.area) {
@@ -126,7 +125,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
                 >
                   <t.form.Form
                     ref={this.filter_form}
-                    type={t.struct(selectn(this.props.filterOptionsKey, fields))}
+                    type={t.struct(selectn(this.props.filterOptionsKey, filterFields))}
                     context={this.props.initialValues}
                     value={this.state.formValue}
                     options={options.toJS()}
@@ -172,9 +171,8 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
         const filteredList = new List(props.items).filter(function filteredListFilterer(item) {
           // Test each of the filters against item
           for (const filterKey in filters) {
-            const filterOptions = selectn([props.filterOptionsKey, 'fields', filterKey], options)
-            const filterFunc =
-              filterOptions && filterOptions.hasOwnProperty('filterFunc') ? filterOptions.filterFunc : defaultFilterFunc
+            const filter = selectn([props.filterOptionsKey, 'fields', filterKey], filterOptions)
+            const filterFunc = filter && filter.hasOwnProperty('filterFunc') ? filter.filterFunc : defaultFilterFunc
 
             const filterValue = filters[filterKey]
             const propertyToSearch = selectn(filterKey, item)
@@ -190,7 +188,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
         props.fixedListFetcher(filteredList)
       } else {
         // Filter a remote list (i.e. partial list sent to component)
-        const preparedFilters = FormHelpers.prepareFilters(filters, options, this.props.filterOptionsKey)
+        const preparedFilters = FormHelpers.prepareFilters(filters, filterOptions, this.props.filterOptionsKey)
 
         this.props.fetcher(
           Object.assign({}, this.props.fetcherParams, {
@@ -207,8 +205,6 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
 
       // Reset all controlled inputs
       const inputs = Object.assign({}, selectn('refs.input.refs', form), selectn('inputRef.childRefs', form))
-
-      const properties = FormHelpers.getProperties(form) // eslint-disable-line
 
       for (const inputKey in inputs) {
         if (typeof inputs[inputKey].forceReset === 'function') {

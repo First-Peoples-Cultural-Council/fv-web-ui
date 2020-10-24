@@ -5,7 +5,7 @@ import FVCore from 'common/schemas/FVCore'
 import FVMedia from 'common/schemas/FVMedia'
 
 import ConfGlobal from 'common/conf/local.js'
-import IntlService from 'common/services/intl'
+import IntlService from 'common/services/IntlService'
 
 const intl = IntlService.instance
 

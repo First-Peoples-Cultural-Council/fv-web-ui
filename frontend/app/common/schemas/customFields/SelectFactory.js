@@ -4,7 +4,7 @@ import t from 'tcomb-form'
 import DirectoryList from 'componentsShared/DirectoryList'
 import QueryList from 'componentsShared/QueryList'
 import DialectList from 'componentsShared/DialectList'
-// import IntlService from 'common/services/intl'
+// import IntlService from 'common/services/IntlService'
 // const intl = IntlService.instance
 
 function renderInput(locals) {

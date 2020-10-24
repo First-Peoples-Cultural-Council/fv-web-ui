@@ -3,20 +3,20 @@ import t from 'tcomb-form'
 
 import classNames from 'classnames'
 
-import VirtualKeyboardFactory from 'common/schemas/customFields/virtualKeyboard'
-import dataTestId from 'common/schemas/customFields/dataTestId'
+import VirtualKeyboardFactory from 'common/schemas/customFields/VirtualKeyboardFactory'
+import dataTestId from 'common/schemas/customFields/DataTestId'
 
-import WysiwygFactory from 'common/schemas/customFields/wysiwyg'
-import SelectSuggestFactory from 'common/schemas/customFields/selectSuggest'
-import SelectFactory from 'common/schemas/customFields/select'
-import MediaFactory from 'common/schemas/customFields/media'
+import WysiwygFactory from 'common/schemas/customFields/WysiwygFactory'
+import SelectSuggestFactory from 'common/schemas/customFields/SelectSuggestFactory'
+import SelectFactory from 'common/schemas/customFields/SelectFactory'
+import MediaFactory from 'common/schemas/customFields/MediaFactory'
 
 import IconButton from '@material-ui/core/IconButton'
 import Clear from '@material-ui/icons/Clear'
 import ArrowForward from '@material-ui/icons/ArrowForward'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import FVButton from 'componentsShared/FVButton'
-import IntlService from 'common/services/intl'
+import IntlService from 'common/services/IntlService'
 import ProviderHelpers from 'common/ProviderHelpers'
 
 const intl = IntlService.instance
@@ -59,7 +59,7 @@ const FVPortalTemplate = function template(locals) {
 const FVUserRegistrationTemplate = function template(locals) {
   let selectedCommunityLanguageLabel = null
 
-  locals.onChange = new (function () {
+  locals.onChange = new (function() {
     const requestedSpaceElement = document.getElementById('registration-requested-space')
 
     if (requestedSpaceElement !== null) {

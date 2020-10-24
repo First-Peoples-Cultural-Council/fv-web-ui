@@ -120,7 +120,7 @@ export default {
       default: // Note: do nothing
     }
 
-    return (path = URLHelpers.getContextPath() + path.substring(0, path.lastIndexOf('/') + 1) + selectn('uid', item))
+    return URLHelpers.getContextPath() + path.substring(0, path.lastIndexOf('/') + 1) + selectn('uid', item)
   },
   // Generate an edit href from a Nuxeo document path
   // Differs from generateUIDPath in that it:

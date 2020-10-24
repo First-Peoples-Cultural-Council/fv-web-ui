@@ -1,5 +1,5 @@
 import t from 'tcomb-form'
-import IntlService from 'common/services/intl'
+import IntlService from 'common/services/IntlServiceService'
 
 const intl = IntlService.instance
 
@@ -49,7 +49,7 @@ const ResourcesFields = {
   'fvm:shared': t.Boolean,
 }
 
-let ResourcesSelectorFields = Object.assign({}, ResourcesFields, {
+const ResourcesSelectorFields = Object.assign({}, ResourcesFields, {
   shared_fv: t.Boolean,
   shared_dialects: t.Boolean,
 })
@@ -58,7 +58,7 @@ delete ResourcesSelectorFields['properties.type']
 delete ResourcesSelectorFields['fvm:shared']
 delete ResourcesSelectorFields['fvm:origin']
 
-const fields = {
+const filterFields = {
   Default: {
     'properties.dc:title': t.String,
   },
@@ -95,4 +95,4 @@ const fields = {
   },
 }
 
-export default fields
+export default filterFields
