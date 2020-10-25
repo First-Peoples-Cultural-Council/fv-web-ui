@@ -62,7 +62,7 @@ public class CharacterListenerTest extends AbstractTestDataCreatorTest {
     assertNotNull("Character listener registered", eventService.getEventListener("character_listener"));
 
     // Children containers will be created in FVDialectFactory
-    dialect = session.getDocument(new IdRef(this.dataCreator.getReference("testDialect")));
+    dialect = dataCreator.getReference(session, "testDialect");
     alphabet = session.getChild(dialect.getRef(), "Alphabet");
 
     // Create one character (but don't trigger listener)

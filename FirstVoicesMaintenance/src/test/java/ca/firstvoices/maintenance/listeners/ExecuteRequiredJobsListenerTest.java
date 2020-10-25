@@ -81,7 +81,7 @@ public class ExecuteRequiredJobsListenerTest extends AbstractTestDataCreatorTest
   @Before
   public void setUp() {
     assertNotNull("Required job listener registered", eventService.getEventListener("executeRequiredJobsListener"));
-    dialect = session.getDocument(new IdRef(this.dataCreator.getReference("testDialect")));
+    dialect = dataCreator.getReference(session, "testDialect");
     dialect.setPropertyValue(CommonConstants.REQUIRED_JOBS_FULL_FIELD, requiredJobsList);
 
     SessionUtils.saveDocumentWithoutEvents(session, dialect, true, null);

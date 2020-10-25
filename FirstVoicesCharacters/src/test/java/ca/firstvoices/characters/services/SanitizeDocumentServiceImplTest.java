@@ -38,43 +38,24 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 @RunWith(FeaturesRunner.class)
 @Features({FirstVoicesDataFeature.class})
-@Deploy({
-    "FirstVoicesCharacters:OSGI-INF/services/sanitizeDocument-contrib.xml"
-})
+@Deploy({"FirstVoicesCharacters:OSGI-INF/services/sanitizeDocument-contrib.xml"})
 public class SanitizeDocumentServiceImplTest extends AbstractFirstVoicesDataTest {
 
-  @Inject
-  protected SanitizeDocumentService sanitizeDocumentService;
+  @Inject protected SanitizeDocumentService sanitizeDocumentService;
 
   @Test
   public void trimWhitespaceTest() {
-    // Get the DocumentModels for each of the parent documents
-    DocumentModel languageFamily = session.getDocument(new PathRef("/FV/Family"));
-    assertNotNull("Language family cannot be null", languageFamily);
-    DocumentModel language = session.getDocument(new PathRef("/FV/Family/Language"));
-    assertNotNull("Language cannot be null", language);
-    assertNotNull("Dialect cannot be null", dialect);
-    assertNotNull("Dictionary cannot be null", dictionary);
 
-    // Create a new word & phrase document
-    DocumentModel TestWord = createDocument(session, session
-        .createDocumentModel("/FV/Family/Language/Dialect/Dictionary", " Test Word ", FV_WORD));
-    DocumentModel TestPhrase = createDocument(session, session
-        .createDocumentModel("/FV/Family/Language/Dialect/Dictionary", "  Test Phrase  ",
-            FV_PHRASE));
+    DocumentModel testWord = createDocument(session,
+        session.createDocumentModel(dictionary.getPathAsString(), " Test Word  ", FV_WORD));
+    DocumentModel testPhrase = createDocument(session,
+        session.createDocumentModel(dictionary.getPathAsString(), " Test Phrase  ", FV_PHRASE));
 
-    assertNotNull(TestWord);
-    assertNotNull(TestPhrase);
+    sanitizeDocumentService.sanitizeDocument(session, testWord);
+    sanitizeDocumentService.sanitizeDocument(session, testPhrase);
 
-    assertEquals(" Test Word ", TestWord.getTitle());
-    assertEquals("  Test Phrase  ", TestPhrase.getTitle());
-
-    // Run the service against the word & phrase documents
-    sanitizeDocumentService.sanitizeDocument(session, TestWord);
-    sanitizeDocumentService.sanitizeDocument(session, TestPhrase);
-
-    assertEquals("Test Word", TestWord.getTitle());
-    assertEquals("Test Phrase", TestPhrase.getTitle());
+    assertEquals(testWord.getTitle(), "Test Word");
+    assertEquals(testPhrase.getTitle(), "Test Phrase");
 
   }
 

@@ -26,6 +26,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import ca.firstvoices.runner.FirstVoicesCoreTestsFeature;
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import ca.firstvoices.testUtil.FirstVoicesDataFeature;
 import ca.firstvoices.tests.mocks.operations.InitialDatabaseSetup;
@@ -45,7 +46,7 @@ import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 @RunWith(FeaturesRunner.class)
-@Features({FirstVoicesDataFeature.class})
+@Features({FirstVoicesCoreTestsFeature.class, FirstVoicesDataFeature.class})
 @Deploy("FirstVoicesCoreTests:OSGI-INF/dbinit/dbinit-operations.xml")
 public class InitialDatabaseSetupTest extends AbstractFirstVoicesDataTest {
 
@@ -53,30 +54,7 @@ public class InitialDatabaseSetupTest extends AbstractFirstVoicesDataTest {
   private static final String username = System.getenv("CYPRESS_FV_USERNAME");
   private static final String password = System.getenv("CYPRESS_FV_PASSWORD");
 
-  @Inject
-  protected CoreSession session;
-
-  @Before
-  public void setUp() throws Exception {
-    assertNotNull("Should have a valid session", session);
-
-    createSetup(session);
-
-    assertNotNull("Should have a valid Workspaces Directory",
-        createDocument(session, session.createDocumentModel("/FV", "Workspaces", "WorkspaceRoot")));
-    assertNotNull("Should have a valid SharedData directory", createDocument(session,
-        session.createDocumentModel("/FV/Workspaces", "SharedData", "Workspace")));
-
-    assertNotNull("Should have a valid Workspaces/Data directory", createDocument(session,
-        session.createDocumentModel("/FV/Workspaces", "Data", "Workspace")));
-    assertNotNull("Should have a valid sections/Data directory",
-        createDocument(session, session.createDocumentModel("/FV/sections", "Data", "Section")));
-
-    assertNotNull("Should have a valid Workspaces/SharedData directory", createDocument(session,
-        session.createDocumentModel("/FV/Workspaces", "SharedData", "Workspace")));
-    assertNotNull("Should have a valid sections/SharedData directory", createDocument(session,
-        session.createDocumentModel("/FV/sections", "SharedData", "Section")));
-  }
+  @Inject protected CoreSession session;
 
   @Test
   public void initialDatabaseSetup() throws OperationException {
@@ -104,10 +82,10 @@ public class InitialDatabaseSetupTest extends AbstractFirstVoicesDataTest {
         /*
             Check that the publication targets don't exist yet
          */
-    DocumentModel sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/Data"));
-    assertNull(sourceDoc.getPropertyValue("publish:sections"));
-    sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/SharedData"));
-    assertNull(sourceDoc.getPropertyValue("publish:sections"));
+//    DocumentModel sourceDoc = dataCreator.getReference(session, "workspaceData");
+//    assertNull(sourceDoc.getPropertyValue("publish:sections"));
+//    sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/SharedData"));
+//    assertNull(sourceDoc.getPropertyValue("publish:sections"));
 
         /*
             Check that no admin user exists
@@ -142,8 +120,9 @@ public class InitialDatabaseSetupTest extends AbstractFirstVoicesDataTest {
         /*
             Check that the members group now has the subgroups added
          */
-    expected = new ArrayList<>(
-        Arrays.asList("language_administrators", "recorders", "recorders_with_approval"));
+    expected = new ArrayList<>(Arrays.asList("language_administrators",
+        "recorders",
+        "recorders_with_approval"));
     assertEquals(expected, userManager.getGroupModel("members").getProperty("group", "subGroups"));
 
         /*
@@ -157,10 +136,10 @@ public class InitialDatabaseSetupTest extends AbstractFirstVoicesDataTest {
         /*
             Check that the publication targets exist
          */
-    sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/Data"));
+    DocumentModel sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/Data"));
     assertNotNull(sourceDoc.getPropertyValue("publish:sections"));
-    sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/SharedData"));
-    assertNotNull(sourceDoc.getPropertyValue("publish:sections"));
+//    sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/SharedData"));
+//    assertNotNull(sourceDoc.getPropertyValue("publish:sections"));
     sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/Site"));
     assertNotNull(sourceDoc.getPropertyValue("publish:sections"));
 

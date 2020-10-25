@@ -69,8 +69,6 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
   @Before
   public void setUp() {
     assertNotNull("Should have a valid session", session);
-    createSetup(session);
-
     setupCharacters();
   }
 
