@@ -20,7 +20,7 @@ import PromiseHelpers from 'common/PromiseHelpers'
 /**
  * Test game wrapper
  */
-export default class Game extends Component {
+export default class GameWrapper extends Component {
   static propTypes = {
     cards: PropTypes.array.isRequired,
   }

@@ -77,11 +77,7 @@ the 'Move Cultural Note up' and 'Move Cultural Note down' buttons`}
               name="" // Note: intentionally generating invalid name so won't be picked up by `new FormData(this.form)`
               value=""
               handleChange={(value) => {
-                const { itemData } = this.state
-                itemData[id] = value
-                this.setState({
-                  itemData,
-                })
+                this.handleTextChange(value, id)
               }}
               setRef={(element) => {
                 this[`${id}.text`] = element
@@ -117,6 +113,13 @@ the 'Move Cultural Note up' and 'Move Cultural Note down' buttons`}
         this[`${id}.text`].focus()
       }
     )
+  }
+  handleTextChange = (value, id) => {
+    const { itemData } = this.state
+    itemData[id] = value
+    this.setState({
+      itemData,
+    })
   }
   handleClickRemoveItem = (id) => {
     this.setState({

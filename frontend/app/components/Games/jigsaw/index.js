@@ -31,7 +31,7 @@ import FVLabel from 'componentsShared/FVLabel'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import Game from './wrapper'
+import GameWrapper from './GameWrapper'
 
 /**
  * Play games
@@ -160,7 +160,7 @@ export class Jigsaw extends Component {
         ]
       }
 
-      game = <Game words={words} />
+      game = <GameWrapper words={words} />
     }
 
     return (

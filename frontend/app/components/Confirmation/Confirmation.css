@@ -32,7 +32,11 @@
   border: 2px solid #06588c;
   border-left-width: 1px;
   color: #06588c;
+  display: flex;
+  align-content: center;
+  justify-content: center;
 }
+
 .Confirmation__btnConfirm:active,
 .Confirmation__btnConfirm:hover {
   color: #06588c;
@@ -65,7 +69,6 @@
   border-color: #fff;
   color: #333333;
 }
-
 .Confirmation--isConfirmOrDeny .Confirmation__confirmOrDeny {
   display: flex;
   flex-direction: column;
@@ -93,12 +96,6 @@
   border-right-width: 1px;
   border-left-width: 2px;
 }
-.Confirmation__btnConfirm {
-  display: flex;
-  align-content: center;
-  justify-content: center;
-}
-
 .Confirmation--reverse .Confirmation__confirmOrDenyTitle {
   text-align: right;
   color: #000;

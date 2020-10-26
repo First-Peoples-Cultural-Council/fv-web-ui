@@ -1,8 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import '!style-loader!css-loader!./Textarea.css'
-
 const { bool, string, func, object } = PropTypes
 
 export default class Textarea extends React.Component {
