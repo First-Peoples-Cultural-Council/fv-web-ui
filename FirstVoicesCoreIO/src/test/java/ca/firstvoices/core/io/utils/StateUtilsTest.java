@@ -1,5 +1,8 @@
 package ca.firstvoices.core.io.utils;
 
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import ca.firstvoices.data.lifecycle.Constants;
 import ca.firstvoices.testUtil.AbstractTestDataCreatorTest;
 import ca.firstvoices.testUtil.annotations.TestDataConfiguration;
@@ -27,11 +30,9 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 @TestDataConfiguration(yaml = {"test-data/basic-structure.yaml", "test-data/test-language.yaml"})
 public class StateUtilsTest extends AbstractTestDataCreatorTest {
 
-  @Inject
-  CoreSession session;
+  @Inject CoreSession session;
 
-  @Inject
-  MockDialectService mockDialectService;
+  @Inject MockDialectService mockDialectService;
 
   DocumentModel dialect = null;
 
@@ -41,13 +42,16 @@ public class StateUtilsTest extends AbstractTestDataCreatorTest {
   public void setUp() {
     dialect = session.getDocument(new IdRef(this.dataCreator.getReference("testArchive")));
 
-    words = mockDialectService.generateFVWords(
-        session, dialect.getPathAsString(), new String[]{ "NewWord1" }, null);
+    words = mockDialectService.generateFVWords(session,
+        dialect.getPathAsString(),
+        new String[]{"NewWord1"},
+        null);
   }
 
   @After
   public void tearDown() {
-    DocumentModelList docs = session.query("SELECT * FROM Document WHERE ecm:isProxy = 0 AND ecm:isVersion = 0");
+    DocumentModelList docs =
+        session.query("SELECT * FROM Document WHERE ecm:isProxy = 0 AND ecm:isVersion = 0");
 
     for (DocumentModel doc : docs) {
       if (session.exists(doc.getRef())) {
@@ -63,7 +67,7 @@ public class StateUtilsTest extends AbstractTestDataCreatorTest {
 
     // Republish should be considered published too
     dialect.followTransition(REPUBLISH_TRANSITION);
-    Assert.assertTrue(StateUtils.isPublished(dialect));
+    assertTrue(StateUtils.isPublished(dialect));
   }
 
   @Test
