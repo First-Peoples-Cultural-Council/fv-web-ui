@@ -36,7 +36,6 @@ import PageDialectGalleries from 'components/Gallery'
 import PageDialectGalleryView from 'components/Gallery/view'
 import PageDialectReports from 'components/Reports'
 import PageDialectReportsView from 'components/Reports/view'
-import PageDialectUsers from 'components/Users'
 
 import PageDialectLearnWords from 'components/Words/WordsContainer'
 import PageDialectLearnPhrases from 'components/Phrases'
@@ -165,7 +164,6 @@ export {
   PageDialectGalleryView,
   PageDialectReports,
   PageDialectReportsView,
-  PageDialectUsers,
   PagePlay,
   PageSearch,
   PageTasks,

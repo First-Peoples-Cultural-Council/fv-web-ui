@@ -1219,27 +1219,6 @@ const routes = [
   },
   REPORT_VIEW,
   addPagination(REPORT_VIEW),
-  {
-    path: [
-      KIDS_OR_DEFAULT,
-      'FV',
-      WORKSPACES,
-      'Data',
-      ANYTHING_BUT_SLASH,
-      ANYTHING_BUT_SLASH,
-      ANYTHING_BUT_SLASH,
-      'users',
-    ],
-    title:
-      intl.translate({
-        key: 'users',
-        default: 'Users',
-        case: 'words',
-      }) + ' | {$dialect_name}',
-    page: <Pages.PageDialectUsers />,
-    redirects: [WORKSPACE_TO_SECTION_REDIRECT],
-    extractPaths: true,
-  },
   DIALECT_LEARN_WORDS,
   addPagination(DIALECT_LEARN_WORDS),
   {
