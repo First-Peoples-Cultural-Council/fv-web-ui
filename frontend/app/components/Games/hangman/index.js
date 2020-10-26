@@ -30,7 +30,6 @@ import selectn from 'selectn'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import StringHelpers from 'common/StringHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 const PUZZLES = 25
@@ -62,6 +61,10 @@ export class Hangman extends Component {
     this.fetchData(this.props)
   }
 
+  randomIntBetween(min, max) {
+    return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min)
+  }
+
   //TO DO: Improve the fetch data such that the PageIndex can no longer be the same twice in a row if there are multiple possiblities
   async fetchData(props /*, pageIndex, pageSize, sortOrder, sortBy*/) {
     await props.fetchCharacters(
@@ -79,7 +82,7 @@ export class Hangman extends Component {
         //' AND fv-word:available_in_games = 1' +
         '&currentPageIndex=' +
         //currentPageIndex +
-        StringHelpers.randomIntBetween(0, Math.ceil(this.state.resultCount / PUZZLES) || 10) +
+        this.randomIntBetween(0, Math.ceil(this.state.resultCount / PUZZLES) || 10) +
         '&pageSize=' +
         PUZZLES
     )
@@ -91,7 +94,7 @@ export class Hangman extends Component {
 
     const resultCount = selectn(['response', 'resultsCount'], queryResult)
 
-    if (resultCount / PUZZLES < 10 && this.state.resultCount == undefined) {
+    if (resultCount / PUZZLES < 10 && this.state.resultCount === undefined) {
       //We refine our intial query/guess based on the first one
       //This should only happen once
       this.setState({ resultCount: resultCount })
@@ -105,7 +108,7 @@ export class Hangman extends Component {
           //' AND fv-word:available_in_games = 1' +
           '&currentPageIndex=' +
           //currentPageIndex +
-          StringHelpers.randomIntBetween(0, Math.ceil(resultCount / PUZZLES)) +
+          this.randomIntBetween(0, Math.ceil(resultCount / PUZZLES)) +
           '&pageSize=' +
           PUZZLES
       )
@@ -185,7 +188,7 @@ export class Hangman extends Component {
           return selectn('properties.dc:title', char);
         });*/
 
-    const word_array = (selectn('response.entries', computeWords) || []).map((word) => {
+    const words = (selectn('response.entries', computeWords) || []).map((word) => {
       return {
         puzzle: selectn('properties.dc:title', word),
         translation:
@@ -209,13 +212,13 @@ export class Hangman extends Component {
       }
     }
 
-    if (word_array.length > 0) {
+    if (words.length > 0) {
       //Since the alphabet isn't complete, we need fill in the rest
-      const character_string = word_array.map((word) => word.puzzle).join('')
-      const unique_characters = Array.from(new Set(character_string.split(/(?!$)/u))).filter((v) => v != ' ')
-      shuffle(unique_characters)
-      word_array[this.state.currentPuzzleIndex].alphabet = unique_characters // (alphabet_array.length > 0) ? alphabet_array :
-      game = <HangManGame newPuzzle={this.newPuzzle} {...word_array[this.state.currentPuzzleIndex]} />
+      const character = words.map((word) => word.puzzle).join('')
+      const uniqueCharacters = Array.from(new Set(character.split(/(?!$)/u))).filter((v) => v !== ' ')
+      shuffle(uniqueCharacters)
+      words[this.state.currentPuzzleIndex].alphabet = uniqueCharacters // (alphabet_array.length > 0) ? alphabet_array :
+      game = <HangManGame newPuzzle={this.newPuzzle} {...words[this.state.currentPuzzleIndex]} />
     }
 
     return (

@@ -84,9 +84,6 @@ export default {
   toTitleCase: (string) => {
     return string[0].toUpperCase() + string.substring(1)
   },
-  randomIntBetween: (min, max) => {
-    return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min)
-  },
   formatUTCDateString: (dateString) => {
     let dayDesc
     const d = new Date(dateString)
