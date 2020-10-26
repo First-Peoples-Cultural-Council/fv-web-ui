@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 
 import ContributorEdit from 'components/Contributor/edit'
 import validator from './validator'
-import internationalization from './internationalization'
+import copy from './copy'
 const { object, string } = PropTypes
 
 export class RecorderEdit extends React.Component {
@@ -23,14 +23,7 @@ export class RecorderEdit extends React.Component {
     const { routeParams } = this.props
     const { siteTheme, dialect_path } = routeParams
     const createUrl = `/${siteTheme}${dialect_path}/create/recorder`
-    return (
-      <ContributorEdit
-        createUrl={createUrl}
-        className={this.props.className}
-        validator={validator}
-        copy={internationalization}
-      />
-    )
+    return <ContributorEdit createUrl={createUrl} className={this.props.className} validator={validator} copy={copy} />
   }
 }
 

@@ -2,8 +2,7 @@
 // so imports paths will be based on that location!
 
 // TODO: ENABLE WEBPACK ALIASES IN CYPRESS TESTS!
-// import copy from '/components/Contributor/internationalization'
-import copy from '../../../app/components/Contributor/internationalization.js'
+import copy from '../../../app/components/Contributor/copy.js'
 
 describe('ContributorCreateDelete.js > Contributor', () => {
   it('Create', () => {

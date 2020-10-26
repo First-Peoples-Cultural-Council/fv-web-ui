@@ -1,8 +1,8 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import copy from '../../../app/components/Phrasebook/internationalization.js'
-import browseCopy from '../../../app/components/Phrasebooks/internationalization.js'
+import copy from '../../../app/components/Phrasebook/copy.js'
+import browseCopy from '../../../app/components/Phrasebooks/copy.js'
 
 const createPhraseBooks = (start, max) => {
   if (start >= max) {

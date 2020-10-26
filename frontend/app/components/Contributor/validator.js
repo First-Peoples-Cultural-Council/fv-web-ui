@@ -8,7 +8,7 @@ import * as yup from 'yup'
   'dc:title': t.String,
   'dc:description': t.maybe(t.String),
 */
-import copy from './internationalization'
+import copy from './copy'
 
 const validForm = yup.object().shape({
   'dc:title': yup

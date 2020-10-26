@@ -60,7 +60,7 @@ function Contributors(props) {
   usePaginationRequest({ pushWindowPath: props.pushWindowPath, paginationRequest })
 
   const copy = useGetCopy(async () => {
-    const success = await import(/* webpackChunkName: "ContributorsInternationalization" */ './internationalization')
+    const success = await import(/* webpackChunkName: "Contributorscopy" */ './copy')
     return success.default
   })
 

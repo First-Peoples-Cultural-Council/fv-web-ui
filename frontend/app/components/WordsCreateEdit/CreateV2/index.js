@@ -28,11 +28,7 @@ import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-// import NavigationHelpers from 'common/NavigationHelpers'
 import PromiseWrapper from 'componentsShared/PromiseWrapper'
-// import fields from 'common/schemas/fields'
-// import options from 'common/schemas/options'
-// import IntlService from 'common/services/IntlService'
 
 import Select from 'components/Form/Common/Select'
 import Text from 'components/Form/Common/Text'
@@ -50,7 +46,7 @@ import StringHelpers from 'common/StringHelpers'
 
 import { getError, getErrorFeedback, getFormData, handleSubmit } from 'common/FormHelpers'
 import validator, { toParse } from './validation'
-import copy from './internationalization'
+import copy from './copy'
 
 // const intl = IntlService.instance
 

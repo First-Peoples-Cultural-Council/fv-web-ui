@@ -99,11 +99,9 @@ export class Phrasebook extends React.Component {
 
     const copy = this.props.copy
       ? this.props.copy
-      : await import(/* webpackChunkName: "PhrasebookInternationalization" */ './internationalization').then(
-        (_copy) => {
+      : await import(/* webpackChunkName: "Phrasebookcopy" */ './copy').then((_copy) => {
           return _copy.default
-        }
-      )
+        })
 
     categoriesPath = `${routeParams.dialect_path}/Phrase Books/`
 
@@ -136,8 +134,8 @@ export class Phrasebook extends React.Component {
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "PhrasebookValidator" */ './validator').then((_validator) => {
-        return _validator.default
-      })
+          return _validator.default
+        })
 
     // Flip to ready state...
     this.setState({

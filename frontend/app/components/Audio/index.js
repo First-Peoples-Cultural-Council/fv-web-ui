@@ -22,7 +22,7 @@ import { connect } from 'react-redux'
 
 import { getError, getErrorFeedback, getFormData, handleSubmit } from 'common/FormHelpers'
 import validator, { toParse } from './validation'
-import copy from './internationalization'
+import copy from './copy'
 import StringHelpers from 'common/StringHelpers'
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR, STATE_SUCCESS } from 'common/Constants'
 const { number, string } = PropTypes

@@ -110,17 +110,15 @@ export class EditContributor extends React.Component {
   async componentDidMount() {
     const copy = this.props.copy
       ? this.props.copy
-      : await import(/* webpackChunkName: "ContributorInternationalization" */ './internationalization').then(
-        (_copy) => {
+      : await import(/* webpackChunkName: "Contributorcopy" */ './copy').then((_copy) => {
           return _copy.default
-        }
-      )
+        })
 
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "ContributorValidator" */ './validator').then((_validator) => {
-        return _validator.default
-      })
+          return _validator.default
+        })
     await this._getData({ copy, validator })
   }
   render() {

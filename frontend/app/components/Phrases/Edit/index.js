@@ -79,11 +79,9 @@ export class PhrasesEdit extends Component {
 
   // Fetch data on initial render
   async componentDidMount() {
-    const copy = await import(/* webpackChunkName: "PhrasesEditInternationalization" */ './internationalization').then(
-      (_module) => {
-        return _module.default
-      }
-    )
+    const copy = await import(/* webpackChunkName: "PhrasesEditcopy" */ './copy').then((_module) => {
+      return _module.default
+    })
     const { redirect } = getSearchObject()
     this.fetchData({ copy, redirect: redirect ? decodeURIComponent(redirect) : undefined })
   }

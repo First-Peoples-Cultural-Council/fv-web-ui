@@ -24,11 +24,9 @@ export class ErrorBoundary extends React.Component {
   async componentDidMount() {
     const copy =
       this.props.copy ||
-      (await import(/* webpackChunkName: "ErrorBoundaryInternationalization" */ './internationalization').then(
-        (_module) => {
-          return _module.default
-        }
-      ))
+      (await import(/* webpackChunkName: "ErrorBoundarycopy" */ './copy').then((_module) => {
+        return _module.default
+      }))
     this.setState({
       copy,
     })

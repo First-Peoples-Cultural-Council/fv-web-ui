@@ -49,11 +49,9 @@ export class PhrasebookDetail extends React.Component {
   async componentDidMount() {
     const copy = this.props.copy
       ? this.props.copy
-      : await import(/* webpackChunkName: "PhrasebookDetailInternationalization" */ './internationalization').then(
-        (_copy) => {
+      : await import(/* webpackChunkName: "PhrasebookDetailcopy" */ './copy').then((_copy) => {
           return _copy.default
-        }
-      )
+        })
 
     await this._getData({ copy })
   }

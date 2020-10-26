@@ -71,7 +71,7 @@ function Recorders(props) {
   usePaginationRequest({ pushWindowPath: props.pushWindowPath, paginationRequest })
 
   const copy = useGetCopy(async () => {
-    const success = await import(/* webpackChunkName: "RecordersInternationalization" */ './internationalization')
+    const success = await import(/* webpackChunkName: "Recorderscopy" */ './copy')
     return success.default
   })
 

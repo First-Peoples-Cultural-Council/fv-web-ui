@@ -67,9 +67,7 @@ export const Categories = (props) => {
   usePaginationRequest({ pushWindowPath: props.pushWindowPath, paginationRequest })
 
   const copy = useGetCopy(async () => {
-    const success = await import(
-      /* webpackChunkName: "CategoryInternationalization" */ 'components/Category/internationalization.js'
-    )
+    const success = await import(/* webpackChunkName: "Categorycopy" */ 'components/Category/copy.js')
     return success.default
   })
 

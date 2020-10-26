@@ -79,11 +79,9 @@ export class WordsEdit extends Component {
   }
 
   async componentDidMount() {
-    const copy = await import(/* webpackChunkName: "WordsEditInternationalization" */ './internationalization').then(
-      (_module) => {
-        return _module.default
-      }
-    )
+    const copy = await import(/* webpackChunkName: "WordsEditcopy" */ './copy').then((_module) => {
+      return _module.default
+    })
     const { redirect } = getSearchObject()
     this.fetchData({ copy, redirect: redirect ? decodeURIComponent(redirect) : undefined })
   }
@@ -104,9 +102,9 @@ export class WordsEdit extends Component {
       case typeof nextWord.equals === 'function' && nextWord.equals(previousWord) === false:
         return true
 
-        // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
-        //   console.log(4)
-        //   return true
+      // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
+      //   console.log(4)
+      //   return true
 
       case this.state.componentState != newState.componentState:
         return true
@@ -114,9 +112,9 @@ export class WordsEdit extends Component {
       case newProps.windowPath != this.props.windowPath:
         return true
 
-        // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
-        //   console.log(7)
-        //   return true
+      // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
+      //   console.log(7)
+      //   return true
 
       case is(newProps.computeWord, this.props.computeWord) === false:
         return true

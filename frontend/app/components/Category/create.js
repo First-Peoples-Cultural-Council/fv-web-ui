@@ -87,15 +87,15 @@ export class Category extends React.Component {
   async componentDidMount() {
     const copy = this.props.copy
       ? this.props.copy
-      : await import(/* webpackChunkName: "CategoryInternationalization" */ './internationalization').then((_copy) => {
-        return _copy.default
-      })
+      : await import(/* webpackChunkName: "Categorycopy" */ './copy').then((_copy) => {
+          return _copy.default
+        })
 
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "CategoryValidator" */ './validator').then((_validator) => {
-        return _validator.default
-      })
+          return _validator.default
+        })
     await this._getData({ copy, validator })
   }
 

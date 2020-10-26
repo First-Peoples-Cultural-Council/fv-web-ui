@@ -1,7 +1,7 @@
 // TODO: IMPORT ONLY WHAT IS USED
 import * as yup from 'yup'
 
-import copy from './internationalization'
+import copy from './copy'
 
 const validForm = yup.object().shape({
   'dc:title': yup

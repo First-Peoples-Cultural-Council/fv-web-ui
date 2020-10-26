@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 
 import ContributorCreate from 'components/Contributor/create'
 import validator from './validator'
-import internationalization from './internationalization'
+import copy from './copy'
 const { object, string } = PropTypes
 
 export class RecorderCreate extends React.Component {
@@ -30,7 +30,7 @@ export class RecorderCreate extends React.Component {
         generateUrlDetail={generateUrlDetail}
         generateUrlEdit={generateUrlEdit}
         validator={validator}
-        copy={internationalization}
+        copy={copy}
       />
     )
   }

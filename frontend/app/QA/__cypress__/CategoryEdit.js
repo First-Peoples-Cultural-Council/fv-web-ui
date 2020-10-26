@@ -1,7 +1,7 @@
 // NOTE: this file will be copied to `cypress/integration` and run from there,
 // so imports paths will be based on that location!
 
-import copy from '../../../app/components/Category/internationalization.js'
+import copy from '../../../app/components/Category/copy.js'
 
 const editCategory = () => {
   // Assert that description titles exist

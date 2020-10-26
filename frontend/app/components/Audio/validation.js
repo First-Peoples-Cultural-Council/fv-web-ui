@@ -14,7 +14,7 @@ import * as yup from 'yup'
   'fvm:recorder': t.list(t.String),
   'fvm:source': t.list(t.String),
 */
-import copy from './internationalization'
+import copy from './copy'
 
 const validForm = yup.object().shape({
   'dc:title': yup

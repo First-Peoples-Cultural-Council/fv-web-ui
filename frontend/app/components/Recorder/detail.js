@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import ContributorDetail from 'components/Contributor/detail'
 import validator from './validator'
-import internationalization from './internationalization'
+import copy from './copy'
 const { string } = PropTypes
 
 export default class RecorderDetail extends React.Component {
@@ -15,6 +15,6 @@ export default class RecorderDetail extends React.Component {
   }
 
   render() {
-    return <ContributorDetail className={this.props.className} validator={validator} copy={internationalization} />
+    return <ContributorDetail className={this.props.className} validator={validator} copy={copy} />
   }
 }

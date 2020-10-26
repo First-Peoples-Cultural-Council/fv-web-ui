@@ -93,11 +93,9 @@ export class Contributor extends React.Component {
   async componentDidMount() {
     const copy = this.props.copy
       ? this.props.copy
-      : await import(/* webpackChunkName: "ContributorInternationalization" */ './internationalization').then(
-          (_copy) => {
-            return _copy.default
-          }
-        )
+      : await import(/* webpackChunkName: "Contributorcopy" */ './copy').then((_copy) => {
+          return _copy.default
+        })
 
     // USING this.DIALECT_PATH instead of setting state
     // this.setState({ dialectPath: dialectPath })
