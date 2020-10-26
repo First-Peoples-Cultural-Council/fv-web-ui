@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCategories, fetchSharedCategories } from 'reducers/fvCategory'
+import { fetchCategories } from 'reducers/fvCategory'
 import { fetchCharacters } from 'reducers/fvCharacter'
 import { fetchDocument } from 'reducers/document'
 import { fetchPortal } from 'reducers/fvPortal'
@@ -35,7 +35,6 @@ class CategoriesData extends Component {
     super(props)
 
     this.catPath = ''
-    this.sharedCatPath = ''
     this.categoryType = props.fetchPhraseBooks ? 'Phrase Books' : 'Categories'
     this.state = {
       categoriesData: [],
@@ -44,8 +43,7 @@ class CategoriesData extends Component {
   }
   componentDidMount() {
     this.catPath = `/api/v1/path/${this.props.routeParams.dialect_path}/${this.categoryType}/@children`
-    this.sharedCatPath = `/api/v1/path/FV/${this.props.routeParams.area}/SharedData/Shared Categories/@children`
-    const { categories, sharedCategories } = this.getDataSet()
+    const { categories } = this.getDataSet()
 
     // Fetch dialect specific categories
     if (selectn('action', categories) !== 'FV_CATEGORIES_QUERY_START') {
@@ -55,18 +53,11 @@ class CategoriesData extends Component {
         ProviderHelpers.fetchIfMissing(this.catPath, this.props.fetchCategories, this.props.computeCategories)
       }
     }
-    if (selectn('action', sharedCategories) !== 'FV_CATEGORIES_SHARED_QUERY_START') {
-      ProviderHelpers.fetchIfMissing(
-        this.sharedCatPath,
-        this.props.fetchSharedCategories,
-        this.props.computeSharedCategories
-      )
-    }
   }
 
   render() {
-    const { categories, sharedCategories } = this.getDataSet()
-    const { categoriesData, categoriesRawData } = this.getCategories(this.categoryType, categories, sharedCategories)
+    const { categories } = this.getDataSet()
+    const { categoriesData, categoriesRawData } = this.getCategories(this.categoryType, categories)
     return this.props.children({
       categoriesData,
       categoriesRawData,
@@ -76,13 +67,11 @@ class CategoriesData extends Component {
   /*
   Returns: {
     categories,
-    sharedCategories,
   }
   */
   getDataSet() {
     return {
       categories: ProviderHelpers.getEntry(this.props.computeCategories, this.catPath),
-      sharedCategories: ProviderHelpers.getEntry(this.props.computeSharedCategories, this.sharedCatPath),
     }
   }
   /*
@@ -91,33 +80,28 @@ class CategoriesData extends Component {
     categoriesRawData: [],
   }
   */
-  getCategories = (categoryType, categories, sharedCategories) => {
+  getCategories = (categoryType, categories) => {
     const categoriesEntries = selectn('response.entries', categories)
-    switch (categoryType) {
-      case 'Categories':
-        // Wait for a response from local categories before returning data
-        if (selectn('action', categories) === 'FV_CATEGORIES_QUERY_START') {
-          return {
-            categoriesData: undefined,
-            categoriesRawData: undefined,
-          }
-        }
-        // Update state
-        // Fallback to shared categories if no local categories
-        return {
-          categoriesData:
-            categoriesEntries && categoriesEntries.length > 0
-              ? categoriesEntries
-              : selectn('response.entries', sharedCategories),
-          categoriesRawData: categoriesEntries && categoriesEntries.length > 0 ? categories : sharedCategories,
-        }
 
-      default:
-        // Update state with no fallback (for Phrase Books)
+    if (categoryType === 'Categories') {
+      // Wait for a response from categories before returning data
+      if (selectn('action', categories) === 'FV_CATEGORIES_QUERY_START') {
         return {
-          categoriesData: categoriesEntries && categoriesEntries.length > 0 ? categoriesEntries : [],
-          categoriesRawData: categoriesEntries && categoriesEntries.length > 0 ? categories : [],
+          categoriesData: undefined,
+          categoriesRawData: undefined,
         }
+      }
+      // Update state
+      return {
+        categoriesData: categoriesEntries && categoriesEntries.length > 0 ? categoriesEntries : [],
+        categoriesRawData: categoriesEntries && categoriesEntries.length > 0 ? categories : [],
+      }
+    }
+
+    // Update state with no fallback (for Phrase Books)
+    return {
+      categoriesData: categoriesEntries && categoriesEntries.length > 0 ? categoriesEntries : [],
+      categoriesRawData: categoriesEntries && categoriesEntries.length > 0 ? categories : [],
     }
   }
 }
@@ -129,7 +113,6 @@ CategoriesData.propTypes = {
   fetchPhraseBooks: bool,
   // REDUX: reducers/state
   computeCategories: object.isRequired,
-  computeSharedCategories: object.isRequired,
   computeCharacters: object.isRequired,
   computeDocument: object.isRequired,
   computeLogin: object.isRequired,
@@ -140,7 +123,6 @@ CategoriesData.propTypes = {
   // REDUX: actions/dispatch/func
   fetchCategories: func.isRequired,
   fetchLatest: bool,
-  fetchSharedCategories: func.isRequired,
   fetchDocument: func.isRequired,
   fetchPortal: func.isRequired,
   overrideBreadcrumbs: func.isRequired,
@@ -162,7 +144,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
     locale,
   } = state
 
-  const { computeCategories, computeSharedCategories } = fvCategory
+  const { computeCategories } = fvCategory
   const { computeCharacters } = fvCharacter
   const { computeDocument } = document
   const { computeLogin } = nuxeo
@@ -174,7 +156,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
   return {
     computeCategories,
-    computeSharedCategories,
     computeCharacters,
     computeDocument,
     computeLogin,
@@ -192,7 +173,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   fetchCategories,
-  fetchSharedCategories,
   fetchCharacters,
   fetchDocument,
   fetchPortal,
