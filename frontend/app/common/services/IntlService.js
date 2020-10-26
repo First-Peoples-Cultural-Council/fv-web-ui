@@ -1,11 +1,7 @@
 // TODO: remove eslint-disable
 /* eslint-disable */
 import selectn from 'selectn'
-import en from 'common/locale/locale.en.json'
-import fr from 'common/locale/locale.fr.json'
-import sp from 'common/locale/locale.sp.json'
-import { sprintf, vsprintf } from 'sprintf-js'
-import DirectoryOperations from 'operations/DirectoryOperations'
+import { vsprintf } from 'sprintf-js'
 
 String.prototype.toUpperCaseWords = function() {
   return this.replace(/\w+/g, function(a) {
@@ -131,25 +127,10 @@ export default class IntlService {
   }
 
   translate(translateData, returnTranslationInfo) {
-    if (typeof translateData === 'string') {
-      translateData = { key: translateData, default: translateData }
-    }
-
-    let key = translateData.key || null
-
-    if (Array.isArray(key)) {
-      key = key.join('.')
-    }
-
-    let usedFallback = false
-    let actualUsedKey = key
-
-    const self = this
-
-    const postProcessResult = function(result, translateData) {
+    const postProcessResult = function(result, _translateData) {
       if (result !== null) {
-        const charCase = translateData.case || null
-        const params = translateData.params || []
+        const charCase = _translateData.case || null
+        const params = _translateData.params || []
 
         // lets handle any string replacements
         // if theres something to put in
@@ -172,8 +153,8 @@ export default class IntlService {
         result = (result + '').replace('&amp;', '&')
         result = (result + '').replace('&AMP;', '&')
 
-        const postProcessSwaps = function(result) {
-          const swapMatches = (result + '').match(/\$\{([a-zA-Z0-9\.\_]+)\}/g)
+        const postProcessSwaps = function(_result) {
+          const swapMatches = (_result + '').match(/\$\{([a-zA-Z0-9\.\_]+)\}/g)
           if (swapMatches !== null && swapMatches.length > 0) {
             for (const idx in swapMatches) {
               const match = swapMatches[idx]
@@ -181,22 +162,22 @@ export default class IntlService {
               const matchTranslated = self.translate({
                 key: matchKey.toLowerCase(),
                 default: null,
-                case: translateData.case || null,
+                case: _translateData.case || null,
               })
 
               if (matchTranslated !== null && matchTranslated !== undefined && (match + '').length > 0) {
-                result = result.replace(match, matchTranslated)
+                _result = _result.replace(match, matchTranslated)
               }
             }
           }
 
-          return result
+          return _result
         }
 
-        translateData.prepend = translateData.prepend || ''
-        translateData.append = translateData.append || ''
+        _translateData.prepend = _translateData.prepend || ''
+        _translateData.append = _translateData.append || ''
 
-        result = translateData.prepend + postProcessSwaps(result) + translateData.append
+        result = _translateData.prepend + postProcessSwaps(result) + _translateData.append
       }
 
       return result
@@ -210,17 +191,32 @@ export default class IntlService {
       }
     }
 
-    if (key !== null) {
+    if (typeof translateData === 'string') {
+      translateData = { key: translateData, default: translateData }
+    }
+
+    let translateDataKey = translateData.key || null
+
+    if (Array.isArray(translateDataKey)) {
+      translateDataKey = translateDataKey.join('.')
+    }
+
+    let usedFallback = false
+    let actualUsedKey = translateDataKey
+
+    const self = this
+
+    if (translateDataKey !== null) {
       let res = null
       // if it's a simple string, lets first check general
-      if (((key + '').match(/\./g) || []).length === 0) {
+      if (((translateDataKey + '').match(/\./g) || []).length === 0) {
         // single entry, let's check general first
-        res = selectn((translateData.locale || this.localeString) + '.general.' + key, this._localeLists)
-        actualUsedKey = 'general.' + key
+        res = selectn((translateData.locale || this.localeString) + '.general.' + translateDataKey, this._localeLists)
+        actualUsedKey = 'general.' + translateDataKey
       }
 
       if (res === null || res === undefined) {
-        res = selectn((translateData.locale || this.localeString) + '.' + key, this._localeLists)
+        res = selectn((translateData.locale || this.localeString) + '.' + translateDataKey, this._localeLists)
       }
 
       if (res !== undefined) {
@@ -234,7 +230,6 @@ export default class IntlService {
       return processReturn(this.fallbackPrefix + this.translate(translateData) + this.fallbackSuffix)
     }
 
-    //console.warn('INTL>>Translation not found', translateData);
     return processReturn(postProcessResult(translateData.default || null, translateData))
   }
 
@@ -293,7 +288,6 @@ export default class IntlService {
       }
     }
 
-    //console.debug('Not found', originalString);
     return this.notFoundPrefix + originalString + this.notFoundSuffix
   }
 
@@ -346,7 +340,6 @@ export default class IntlService {
       }
     }
 
-    //console.debug('Not found', originalString);
     return this.notFoundPrefix + originalString + this.notFoundSuffix
   }
 
@@ -354,21 +347,19 @@ export default class IntlService {
     return this.searchAndReplace(string, translateData)
   }
 
-  locateEnglishKey(string, baseKey, regex) {
+  locateEnglishKey(string, baseKey, searchRegex) {
     baseKey = baseKey || 'en'
-    regex = regex === true
-    // regex = false;
     const searchData = selectn(baseKey, this._localeLists)
     if (searchData !== null && typeof searchData === 'object') {
       for (const key in searchData) {
-        const res = this.locateEnglishKey(string, baseKey + '.' + key, regex)
+        const res = this.locateEnglishKey(string, baseKey + '.' + key, searchRegex)
         if (res !== null && res !== undefined) {
           return res
         }
       }
     } else if (searchData !== null) {
       const hasRegex = (searchData + '').search('%s') >= 0
-      if (!regex && !hasRegex) {
+      if (!searchRegex && !hasRegex) {
         // normal string comparison
         if (this.normalizeString(string) == this.normalizeString(searchData)) {
           return {
@@ -376,9 +367,9 @@ export default class IntlService {
             params: [],
           }
         }
-      } else if (regex && hasRegex) {
+      } else if (searchRegex && hasRegex) {
         // search the regular expression
-        var regex = new RegExp((searchData + '').replace(/%s/g, '(.*)'), 'i')
+        const regex = new RegExp((searchData + '').replace(/%s/g, '(.*)'), 'i')
         if (regex.test(string + '')) {
           const pieces = regex.exec(string + '')
           const params = []
@@ -396,7 +387,7 @@ export default class IntlService {
     }
 
     // try regex IF on base
-    if (!regex && baseKey === 'en') {
+    if (!searchRegex && baseKey === 'en') {
       // nothing found in regular strings, lets try regex
       return this.locateEnglishKey(string, 'en', true)
     }
@@ -410,16 +401,16 @@ export default class IntlService {
     if (searchData !== null && typeof searchData === 'object') {
       if (searchData.general !== null && typeof searchData.general === 'object') {
         // lets loop through general first
-        for (var key in searchData.general) {
-          var res = this.locateEnglishKey(string, baseKey + '.general')
+        for (const key in searchData.general) {
+          const res = this.locateEnglishKey(string, baseKey + '.general.' + key)
           if (res !== null && res !== undefined) {
             return res
           }
         }
       }
       // we still have more to look through
-      for (var key in searchData) {
-        var res = this.locateEnglishKey(string, baseKey + '.' + key)
+      for (const key in searchData) {
+        const res = this.locateEnglishKey(string, baseKey + '.' + key)
         if (res !== null && res !== undefined) {
           return res
         }

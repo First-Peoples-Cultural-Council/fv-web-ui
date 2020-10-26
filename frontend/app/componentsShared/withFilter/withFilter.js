@@ -25,9 +25,9 @@ const defaultFilterFunc = function defaultFilterFunc(propertyToSearch, filterVal
   if (!propertyToSearch) return true
 
   if (Array.isArray(propertyToSearch)) {
-    return !(propertyToSearch.indexOf(filterValue) === -1)
+    return propertyToSearch.indexOf(filterValue) !== -1
   }
-  return !(propertyToSearch.search(new RegExp(filterValue, 'i')) === -1)
+  return propertyToSearch.search(new RegExp(filterValue, 'i')) !== -1
 }
 
 const { any, bool, func, object, string } = PropTypes
@@ -165,7 +165,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
       )
     }
 
-    _doFilter = (filters, props = this.props, isReset) => {
+    _doFilter = (filters, isReset, props = this.props) => {
       // Filter a fixed list (i.e. all items sent to component)
       if (this.props.fixedList) {
         const filteredList = new List(props.items).filter(function filteredListFilterer(item) {
@@ -218,12 +218,12 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
 
       if (props.fixedList) {
         if (this.state.defaultFormValue) {
-          this._doFilter(this.state.defaultFormValue, props, true)
+          this._doFilter(this.state.defaultFormValue, true, props)
         } else {
           props.fixedListFetcher(props.items)
         }
       } else {
-        this._doFilter(DefaultFetcherParams.filters, props, true)
+        this._doFilter(DefaultFetcherParams.filters, true, props)
       }
     }
 
@@ -236,7 +236,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
       const form = this.filter_form.current
       const properties = FormHelpers.getProperties(form)
 
-      if (Object.keys(properties).length != 0) {
+      if (Object.keys(properties).length !== 0) {
         this.setState({
           formValue: properties,
         })

@@ -5,7 +5,7 @@ import SearchDocumentTypesTemplate from 'components/SearchDocumentTypesTemplate'
 import RangeSelector from 'common/schemas/customFields/RangeSelectorFactory'
 import dataTestId from 'common/schemas/customFields/DataTestId'
 import ProviderHelpers from 'common/ProviderHelpers'
-import IntlService from 'common/services/IntlServiceService'
+import IntlService from 'common/services/IntlService'
 
 const intl = IntlService.instance
 

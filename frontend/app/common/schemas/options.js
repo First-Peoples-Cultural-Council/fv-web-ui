@@ -59,7 +59,7 @@ const FVPortalTemplate = function template(locals) {
 const FVUserRegistrationTemplate = function template(locals) {
   let selectedCommunityLanguageLabel = null
 
-  locals.onChange = new (function() {
+  locals.onChange = new (function setSelectedCommunityLanguageLabel() {
     const requestedSpaceElement = document.getElementById('registration-requested-space')
 
     if (requestedSpaceElement !== null) {

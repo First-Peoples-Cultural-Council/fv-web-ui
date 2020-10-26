@@ -1,5 +1,5 @@
 import t from 'tcomb-form'
-import IntlService from 'common/services/IntlServiceService'
+import IntlService from 'common/services/IntlService'
 
 const intl = IntlService.instance
 
