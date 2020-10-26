@@ -86,7 +86,7 @@ public class EnricherUtilsTest extends AbstractFirstVoicesDataTest {
   }
 
   @Test
-  @Ignore
+  @Ignore("Fix test. Need to adjust TestDataCreator to be able to load a subcategory for FVWord")
   public void wordHasCategory() {
     String[] categories = (String[]) word.getPropertyValue("fv-word:categories");
     assertTrue("At least one category exists for this word", categories.length > 0);

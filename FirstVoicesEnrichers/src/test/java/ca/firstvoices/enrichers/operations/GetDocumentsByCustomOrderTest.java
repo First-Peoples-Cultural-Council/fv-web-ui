@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.automation.OperationContext;
@@ -55,6 +54,7 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 @Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.enrichers.operations.xml")
 @Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.pageproviders.xml")
 @Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.nuxeo.enrichers.xml")
+@Deploy("FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml")
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesDataTest {
 
@@ -89,7 +89,6 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesDataTest {
     session.save();
   }
 
-  @Ignore
   @Test
   public void getDocumentsByCustomOrderOperationTest() throws OperationException {
 

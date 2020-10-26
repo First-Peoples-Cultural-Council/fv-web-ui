@@ -23,15 +23,12 @@ package ca.firstvoices.characters.services;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PHRASE;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import ca.firstvoices.testUtil.FirstVoicesDataFeature;
 import javax.inject.Inject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -54,8 +51,8 @@ public class SanitizeDocumentServiceImplTest extends AbstractFirstVoicesDataTest
     sanitizeDocumentService.sanitizeDocument(session, testWord);
     sanitizeDocumentService.sanitizeDocument(session, testPhrase);
 
-    assertEquals(testWord.getTitle(), "Test Word");
-    assertEquals(testPhrase.getTitle(), "Test Phrase");
+    assertEquals("Test Word", testWord.getTitle());
+    assertEquals("Test Phrase", testPhrase.getTitle());
 
   }
 
