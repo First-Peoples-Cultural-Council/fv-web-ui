@@ -65,7 +65,7 @@ jobs:
 
         # Run Sonar Analysis on Frontend
       - name: Sonar Analysis on Frontend
-        run: cd frontend && npm run test:nofail && sonar-scanner
+        run: cd frontend && sonar-scanner
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_LOGIN }}
