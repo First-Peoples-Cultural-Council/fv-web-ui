@@ -105,7 +105,7 @@ export class PhrasebookEdit extends React.Component {
   async componentDidMount() {
     const copy = this.props.copy
       ? this.props.copy
-      : await import(/* webpackChunkName: "Phrasebookcopy" */ './copy').then((_copy) => {
+      : await import(/* webpackChunkName: "PhrasebookCopy" */ './copy').then((_copy) => {
           return _copy.default
         })
 

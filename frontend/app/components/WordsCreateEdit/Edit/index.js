@@ -79,7 +79,7 @@ export class WordsEdit extends Component {
   }
 
   async componentDidMount() {
-    const copy = await import(/* webpackChunkName: "WordsEditcopy" */ './copy').then((_module) => {
+    const copy = await import(/* webpackChunkName: "WordsEditCopy" */ './copy').then((_module) => {
       return _module.default
     })
     const { redirect } = getSearchObject()

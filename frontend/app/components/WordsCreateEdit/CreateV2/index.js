@@ -45,7 +45,7 @@ import FormRelatedPhrases from 'components/Form/FormRelatedPhrases'
 import StringHelpers from 'common/StringHelpers'
 
 import { getError, getErrorFeedback, getFormData, handleSubmit } from 'common/FormHelpers'
-import validator, { toParse } from './validation'
+import validator, { toParse } from './validator'
 import copy from './copy'
 
 // const intl = IntlService.instance

@@ -59,7 +59,7 @@ export const Phrasebooks = (props) => {
   usePaginationRequest({ pushWindowPath: props.pushWindowPath, paginationRequest })
 
   const copy = useGetCopy(async () => {
-    const success = await import(/* webpackChunkName: "Phrasebookscopy" */ './copy')
+    const success = await import(/* webpackChunkName: "PhrasebooksCopy" */ './copy')
     return success.default
   })
 

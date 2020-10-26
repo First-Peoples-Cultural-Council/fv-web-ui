@@ -73,7 +73,7 @@ export class PageDialectWordsCreate extends Component {
 
   // Fetch data on initial render
   async componentDidMount() {
-    const copy = await import(/* webpackChunkName: "WordsCreatecopy" */ './copy').then((_module) => {
+    const copy = await import(/* webpackChunkName: "WordsCreateCopy" */ './copy').then((_module) => {
       return _module.default
     })
     this.fetchData({ copy })

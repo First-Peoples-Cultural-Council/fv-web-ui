@@ -83,7 +83,7 @@ export class PhrasesCreate extends Component {
   formPhraseCreate = React.createRef()
 
   async componentDidMount() {
-    const copy = await import(/* webpackChunkName: "PhrasesCreatecopy" */ './copy').then((_module) => {
+    const copy = await import(/* webpackChunkName: "PhrasesCreateCopy" */ './copy').then((_module) => {
       return _module.default
     })
     // const ErrorBoundary = await import(/* webpackChunkName: "ErrorBoundary" */ 'components/ErrorBoundary').then(

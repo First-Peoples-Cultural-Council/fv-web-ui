@@ -55,7 +55,7 @@ export class CategoryDetail extends React.Component {
   async componentDidMount() {
     const copy = this.props.copy
       ? this.props.copy
-      : await import(/* webpackChunkName: "CategoryDetailcopy" */ './copy').then((_copy) => {
+      : await import(/* webpackChunkName: "CategoryDetailCopy" */ './copy').then((_copy) => {
           return _copy.default
         })
 

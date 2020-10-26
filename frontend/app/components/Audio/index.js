@@ -2,26 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Text from 'components/Form/Common/Text'
 import Textarea from 'components/Form/Common/Textarea'
-// import Select from 'components/Form/Common/Select`'
 import File from 'components/Form/Common/File'
 import Checkbox from 'components/Form/Common/Checkbox'
 import FormContributors from 'components/Form/FormContributors'
 import FormRecorders from 'components/Form/FormRecorders'
-// import FormMoveButtons from 'components/Form/FormMoveButtons'
-// import FormRemoveButton from 'components/Form/FormRemoveButton'
-
-// import ProviderHelpers from 'common/ProviderHelpers'
-// import Preview from 'componentsShared/Preview'
-
-// import selectn from 'selectn'
 
 // REDUX
 import { connect } from 'react-redux'
-// REDUX: actions/dispatch/func
-// import {} from "providers/redux/reducers/fv";
 
 import { getError, getErrorFeedback, getFormData, handleSubmit } from 'common/FormHelpers'
-import validator, { toParse } from './validation'
+import validator, { toParse } from './validator'
 import copy from './copy'
 import StringHelpers from 'common/StringHelpers'
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR, STATE_SUCCESS } from 'common/Constants'
@@ -32,8 +22,6 @@ export class CreateAudio extends React.Component {
     className: string,
     id: number,
     groupName: string,
-    // REDUX: reducers/state
-    // REDUX: actions/dispatch/func
   }
   static defaultProps = {
     className: 'FormRelatedAudioItem',
@@ -47,17 +35,6 @@ export class CreateAudio extends React.Component {
   form = React.createRef()
 
   componentDidMount() {
-    // Do any loading here...
-
-    // Flip to ready state...
-
-    // To fake loading:
-    // setTimeout(() => {
-    //   this.setState({
-    //     componentState: STATE_DEFAULT,
-    //   })
-    // }, 2000)
-
     this.setState({
       componentState: STATE_DEFAULT,
     })
@@ -96,13 +73,10 @@ export class CreateAudio extends React.Component {
 
   _stateGetDefault = () => {
     const { className } = this.props
-    // const { index } = this.props
 
     const { errors } = this.state
 
-    //   isFetching || isSuccess
     const isInProgress = false
-    // const isFetching = selectn('isFetching', computeCreate)
     const isFetching = false
     const formStatus = isFetching ? <div className="alert alert-info">{'Uploading... Please be patient...'}</div> : null
     return (
@@ -198,20 +172,6 @@ export class CreateAudio extends React.Component {
         <button disabled={isInProgress} type="submit">
           {copy.submit}
         </button>
-
-        {/* BTN: Cancel, go back ------------- */}
-        <button
-          disabled={isInProgress}
-          type="button"
-          onClick={() => {
-            // console.log('Cancel pressed')
-            // this.setState({
-            //   componentState: this.STATE_DEFAULT,
-            // })
-          }}
-        >
-          {copy.cancel}
-        </button>
       </form>
     )
   }
@@ -226,86 +186,19 @@ export class CreateAudio extends React.Component {
   _clean = (name) => {
     return StringHelpers.clean(name, 'CLEAN_ID')
   }
-  _handleClickCreateItem = () => {
-    // console.log('!', '_handleClickCreateItem')
-    // const { handleClickCreateItem } = this.props
-    // this.setState(
-    //   {
-    //     componentState: this.STATE_CREATE,
-    //   },
-    //   () => {
-    //     handleClickCreateItem()
-    //   }
-    // )
-  }
-  // eslint-disable-next-line
-  _handleSubmitExistingItem = (createItemUid) => {
-    // console.log('!', '_handleSubmitExistingItem')
-    // this.setState(
-    //   {
-    //     componentState: this.STATE_CREATED,
-    //     contributorUid: createItemUid,
-    //   },
-    //   () => {}
-    // )
-  }
 
-  async _handleCreateItemSubmit() {
-    // console.log('!', '_handleCreateItemSubmit')
-    // validationForm
-    // const {
-    //   createItemName,
-    //   createItemDescription,
-    //   createItemFile,
-    //   createItemIsShared,
-    //   createItemIsChildFocused,
-    //   createItemContributors,
-    //   createItemRecorders,
-    // } = this.state
-    // const docParams = {
-    //   type: 'FVAudio',
-    //   name: createItemName,
-    //   properties: {
-    //     'dc:title': createItemName,
-    //     'dc:description': createItemDescription,
-    //     'fvm:shared': createItemIsShared,
-    //     'fvm:child_focused': createItemIsChildFocused,
-    //     'fvm:recorder': createItemRecorders['fvm:recorder'],
-    //     'fvm:source': createItemContributors['fvm:source'],
-    //   },
-    // }
-    // const timestamp = Date.now()
-    // const { DIALECT_PATH } = this.props
-    // this.props.createAudio(`${DIALECT_PATH}/Resources`, docParams, createItemFile, timestamp)
-    // const pathOrId = `${DIALECT_PATH}/Resources/${createItemName}.${timestamp}`
-    // this.setState({ pathOrId })
-  }
   _onRequestSaveForm = async () => {
     const formData = getFormData({
       formReference: this.form,
       toParse,
     })
-    // console.log('!? formData', formData)
     const valid = () => {
-      // const now = Date.now()
-      // this.props.createWord(
-      //   this.props.routeParams.dialect_path + '/Dictionary',
-      //   {
-      //     type: 'FVWord',
-      //     name: now.toString(),
-      //     properties: formData,
-      //   },
-      //   null,
-      //   now
-      // )
-      // console.log('Would have submitted!', formData)
       this.setState({
         errors: [],
       })
     }
 
     const invalid = (response) => {
-      // console.log('Errored with!', formData)
       this.setState({
         errors: response.errors,
       })
@@ -319,29 +212,6 @@ export class CreateAudio extends React.Component {
     })
   }
 }
-
-// // REDUX: reducers/state
-// const mapStateToProps = (state /*, ownProps*/) => {
-//   const { fvDialect, navigation, nuxeo, windowPath } = state;
-
-//   const { properties } = navigation;
-//   const { computeLogin } = nuxeo;
-//   const { computeDialect2 } = fvDialect;
-//   const { splitWindowPath, _windowPath } = windowPath;
-
-//   return {
-//     computeDialect2,
-//     computeLogin,
-//     properties,
-//     splitWindowPath,
-//     windowPath: _windowPath
-//   };
-// };
-
-// // REDUX: actions/dispatch/func
-// const mapDispatchToProps = {
-//   changeSiteTheme
-// };
 
 export default connect(
   null, // mapStateToProps,

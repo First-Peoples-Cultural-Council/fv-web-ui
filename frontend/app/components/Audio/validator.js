@@ -16,7 +16,7 @@ import * as yup from 'yup'
 */
 import copy from './copy'
 
-const validForm = yup.object().shape({
+const validator = yup.object().shape({
   'dc:title': yup
     .string()
     .label(copy.name)
@@ -31,4 +31,4 @@ const validForm = yup.object().shape({
 })
 
 export const toParse = [/^fvm:source/, /^fvm:recorder/]
-export default validForm
+export default validator

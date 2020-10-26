@@ -70,7 +70,7 @@ export class ExploreDialectEdit extends Component {
   }
   // Fetch data on initial render
   async componentDidMount() {
-    const copy = await import(/* webpackChunkName: "ExploreDialectEditcopy" */ './copy').then((_module) => {
+    const copy = await import(/* webpackChunkName: "ExploreDialectEditCopy" */ './copy').then((_module) => {
       return _module.default
     })
     this.fetchData({ copy })

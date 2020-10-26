@@ -10,11 +10,11 @@ import * as yup from 'yup'
 */
 import copy from './copy'
 
-const validForm = yup.object().shape({
+const validator = yup.object().shape({
   'dc:title': yup
     .string()
     .label(copy.create.name)
     .required(copy.validation.name),
   'dc:description': yup.string(),
 })
-export default validForm
+export default validator

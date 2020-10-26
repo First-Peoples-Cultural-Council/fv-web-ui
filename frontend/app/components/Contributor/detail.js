@@ -49,7 +49,7 @@ export class Contributor extends React.Component {
   async componentDidMount() {
     const copy = this.props.copy
       ? this.props.copy
-      : await import(/* webpackChunkName: "ContributorDetailscopy" */ './copy').then((_copy) => {
+      : await import(/* webpackChunkName: "ContributorDetailsCopy" */ './copy').then((_copy) => {
           return _copy.default
         })
 

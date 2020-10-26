@@ -18,7 +18,7 @@ export class Error403 extends React.Component {
   async componentDidMount() {
     const copy =
       this.props.copy ||
-      (await import(/* webpackChunkName: "Error403copy" */ './copy').then((_module) => {
+      (await import(/* webpackChunkName: "Error403Copy" */ './copy').then((_module) => {
         return _module.default
       }))
     this.setState({

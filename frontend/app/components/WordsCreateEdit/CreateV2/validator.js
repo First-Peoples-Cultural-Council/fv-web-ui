@@ -3,7 +3,7 @@ import * as yup from 'yup'
 
 import copy from './copy'
 
-const validForm = yup.object().shape({
+const validator = yup.object().shape({
   'dc:title': yup.string().required(copy.validation.title),
   'fv-word:part_of_speech': yup.string(),
   'fv-word:pronunciation': yup.string(),
@@ -28,4 +28,4 @@ export const toParse = [
   /^fvm:source/,
   /^fv-word:related_phrases/,
 ]
-export default validForm
+export default validator
