@@ -14,8 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React, { Component } from 'react'
-// import PropTypes from 'prop-types'
-// import ReactDOM from 'react-dom'
+import PropTypes from 'prop-types'
 import FVButton from 'componentsShared/FVButton'
 import FVLabel from 'componentsShared/FVLabel'
 
@@ -35,45 +34,6 @@ const spotStyle = {
   position: 'relative',
   overflow: 'hidden',
 }
-
-// const lineStyle = {
-//   border: '2px solid #000',
-//   width: '40px',
-//   position: 'absolute',
-//   bottom: '5px',
-//   left: '10px',
-// }
-
-// const inputStyle = {
-//   outline: 'none',
-//   border: '1px solid #CCC',
-//   fontSize: '24px',
-//   width: '80px',
-//   textAlign: 'center',
-//   verticalAlign: 'middle',
-//   marginRight: '10px',
-// }
-
-// const buttonStyle = {
-//   background: '#22e376',
-//   backgroundImage: 'linear-gradient(to bottom, #22e376, #2bb8ac)',
-//   WebkitBorderRadius: '28',
-//   MozBorderRadius: '28',
-//   borderRadius: '28px',
-//   // borderRadius: '6px',
-//   fontFamily: 'Arial',
-//   color: '#ffffff',
-//   fontSize: '20px',
-//   padding: '10px 20px 10px 20px',
-//   textDecoration: 'none',
-//   display: 'inline-block',
-//   verticalAlign: 'top',
-//   height: '90px',
-//   lineHeight: '70px',
-//   marginLeft: '5px',
-//   width: '190px',
-//   cursor: 'pointer',
-// }
 
 /**
  * Play games
@@ -117,7 +77,7 @@ export default class HangmanGame extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.puzzle != this.props.puzzle) {
+    if (nextProps.puzzle !== this.props.puzzle) {
       this.setState(this.getDefaultState(nextProps))
     }
   }
@@ -126,8 +86,8 @@ export default class HangmanGame extends Component {
    * Prepare puzzle
    * breaks up puzzle into letters
    */
-  escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
+  escapeRegExp(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
   }
   preparePuzzle(props) {
     const puzzle = props.puzzle
@@ -176,7 +136,7 @@ export default class HangmanGame extends Component {
   /**
    * Guess letter
    */
-  guessLetter(letter) {
+  guessLetter = (letter) => {
     let guessesLeft = this.state.guessesLeft
 
     const guessedLetters = this.state.guessedLetters
@@ -193,7 +153,7 @@ export default class HangmanGame extends Component {
 
         succeeded = true
 
-        puzzle.map((word) => {
+        puzzle.forEach((word) => {
           word.forEach((part) => {
             if (part.letter === letter) {
               letterFound = true
@@ -202,7 +162,6 @@ export default class HangmanGame extends Component {
             if (part.found === false) {
               succeeded = false
             }
-            return
           })
         })
 
@@ -236,7 +195,16 @@ export default class HangmanGame extends Component {
             guessed = true
           }
 
-          return <Letter key={index} guessed={guessed} letter={letter} onClick={this.guessLetter.bind(this, letter)} />
+          return (
+            <Letter
+              key={index}
+              guessed={guessed}
+              letter={letter}
+              onClick={() => {
+                this.guessLetter(letter)
+              }}
+            />
+          )
         })}
       </div>
     )
@@ -433,10 +401,10 @@ const seconds2time = (seconds) => {
   const _seconds = seconds - hours * 3600 - minutes * 60
   let time = ''
 
-  if (hours != 0) {
+  if (hours !== 0) {
     time = hours + ':'
   }
-  if (minutes != 0 || time !== '') {
+  if (minutes !== 0 || time !== '') {
     minutes = minutes < 10 && time !== '' ? '0' + minutes : String(minutes)
     time += minutes + ':'
   }
@@ -446,4 +414,19 @@ const seconds2time = (seconds) => {
     time += _seconds < 10 ? '0' + _seconds : String(_seconds)
   }
   return time
+}
+
+// PROPTYPES
+const { any, bool, func, string } = PropTypes
+HangmanGame.propTypes = {
+  puzzle: string,
+  translation: any,
+  audio: string,
+  newPuzzle: func,
+}
+
+Letter.propTypes = {
+  onClick: func,
+  guessed: bool,
+  letter: string,
 }

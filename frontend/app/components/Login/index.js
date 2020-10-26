@@ -42,12 +42,6 @@ export class Login extends Component {
     pushWindowPath: func.isRequired,
   }
 
-  componentDidUpdate(/* prevProps */) {
-    //if (prevProps.userStore.currentUser !== this.props.userStore.currentUser) {
-    //  this._handleClose();
-    //}
-  }
-
   constructor(props, context) {
     super(props, context)
 
@@ -94,10 +88,6 @@ export class Login extends Component {
   render() {
     const { className } = this.props
 
-    // TODO: `loginFeedbackMessage` is not being used
-    // eslint-disable-next-line
-    let loginFeedbackMessage = ''
-
     if (this.props.computeLogin.isFetching) {
       return (
         <div className={`Login Login--busy ${className}`}>
@@ -120,19 +110,6 @@ export class Login extends Component {
         </div>
       )
     }
-    // if (this.state.loginAttempted) {
-    //   loginFeedbackMessage = this.intl.translate({
-    //     key: 'pages.users.login.incorrect_username_password',
-    //     default: 'Username or password incorrect',
-    //     case: 'first',
-    //   })
-    //   if (this.props.computeLogin.isError) {
-    //     loginFeedbackMessage = this.props.computeLogin.error
-    //   }
-    // }
-
-    // console.log('NOTE: no-unused-vars', loginFeedbackMessage)
-
     return (
       <div className="Login Login--signIn">
         <a className={`nav_link ${className}`} href={NavigationHelpers.getBaseURL() + 'logout?requestedUrl=login.jsp'}>

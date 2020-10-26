@@ -12,7 +12,7 @@ limitations under the License.
 */
 import React, { Component } from 'react' // eslint-disable-line
 import PropTypes from 'prop-types'
-import Immutable, { Map, Set } from 'immutable' // eslint-disable-line
+import { Map, Set } from 'immutable' // eslint-disable-line
 import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { hasPagination, routeHasChanged } from 'common/NavigationHelpers'
@@ -574,7 +574,7 @@ export const updateUrlIfPageOrPageSizeIsDifferent = ({
 }
 
 // sortHandler
-export const sortHandler = async({
+export const sortHandler = async ({
   page,
   pageSize,
   sortBy,

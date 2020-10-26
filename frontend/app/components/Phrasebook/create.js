@@ -7,7 +7,7 @@ import StateSuccessDefault from './states/successCreate'
 import StateCreate from './states/create'
 
 // Immutable
-import Immutable, { Map } from 'immutable' // eslint-disable-line
+import Immutable from 'immutable'
 
 // REDUX
 import { connect } from 'react-redux'
