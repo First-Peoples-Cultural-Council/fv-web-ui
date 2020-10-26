@@ -179,13 +179,10 @@ export class PhrasesCreate extends Component {
 
   _getContent = () => {
     let content = null
-    switch (this.state.componentState) {
-      case STATE_DEFAULT: {
-        content = this._stateGetDefault()
-        break
-      }
-      default:
-        content = this._stateGetLoading()
+    if (this.state.componentState === STATE_DEFAULT) {
+      content = this._stateGetDefault()
+    } else {
+      content = this._stateGetLoading()
     }
     return content
   }

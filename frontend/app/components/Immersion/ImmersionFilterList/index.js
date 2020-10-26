@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-// eslint-disable-next-line
-import selectn from 'selectn'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -115,7 +113,7 @@ export class ImmersionFilterList extends Component {
   }
 
   _sortChildren(filter) {
-    var children = [...filter.children]
+    let children = [...filter.children]
     if (children.length > 0) {
       children.sort(this._sortByTitle)
       children = children.map((child) => {
@@ -138,7 +136,7 @@ export class ImmersionFilterList extends Component {
     _filters.sort(this._sortByTitle)
     const _filtersSorted = _filters.map((filter) => {
       // Sort children
-      var children = [...filter.children]
+      let children = [...filter.children]
       if (children.length > 0) {
         children.sort(this._sortByTitle)
         children = children.map((child) => {

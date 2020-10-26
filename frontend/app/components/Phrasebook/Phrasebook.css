@@ -14,7 +14,6 @@
 .Phrasebook .Textarea {
   margin-bottom: 3.5rem;
 }
-
 .Phrasebook__btn-container {
   display: flex;
 }
@@ -28,9 +27,6 @@
 }
 .Phrasebook__btnHeader .delete {
   margin-left: auto;
-}
-.Phrasebook__btn-container {
-  display: flex;
 }
 .Phrasebook__delete {
   margin-left: auto;
