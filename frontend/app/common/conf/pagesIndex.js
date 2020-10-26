@@ -68,7 +68,6 @@ import PageTasks from 'components/Tasks/TasksContainer'
 import PageUserTasks from 'components/UserTasks'
 import PageUsersRegister from 'components/Register'
 import PageUsersForgotPassword from 'components/Users/forgotpassword'
-import PageUsersProfile from 'components/Users/profile'
 
 // KIDS
 import KidsHome from 'components/KidsHome'
@@ -173,7 +172,6 @@ export {
   PageUserTasks,
   PageUsersRegister,
   PageUsersForgotPassword,
-  PageUsersProfile,
   PageDialectImmersionList,
   //GAMES
   PageJigsawGame,

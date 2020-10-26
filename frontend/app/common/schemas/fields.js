@@ -4,37 +4,11 @@ import Dublincore from 'common/schemas/Dublincore'
 import FVCore from 'common/schemas/FVCore'
 import FVMedia from 'common/schemas/FVMedia'
 
-import ConfGlobal from 'common/conf/local.js'
-import IntlService from 'common/services/IntlService'
-
-const intl = IntlService.instance
-
 // Very basic email validation
 const Email = t.subtype(t.String, (email) => {
   const reg = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
   return reg.test(email)
 })
-
-const confGlobalPreferences = intl.translateObject(ConfGlobal.preferences)
-const UserPreferences = t.maybe(
-  t.struct({
-    General: t.maybe(
-      t.struct({
-        primary_dialect: t.String,
-      })
-    ),
-    Navigation: t.maybe(
-      t.struct({
-        start_page: t.enums(confGlobalPreferences.fields.start_page),
-      })
-    ),
-    Theme: t.maybe(
-      t.struct({
-        font_size: t.enums(confGlobalPreferences.fields.font_size),
-      })
-    ),
-  })
-)
 
 const AgeRanges = t.enums.of(
   '6-10 11-15 16-20 21-25 26-30 31-35 36-40 41-45 46-50 51-55 56-60 61-65 66-70 71-75 76-80 81-85 86-90 91-95 96-100 100+'
@@ -161,12 +135,6 @@ const fields = {
     'fvuserinfo:comment': t.maybe(t.String),
     'fvuserinfo:community_member': t.maybe(t.Boolean),
     'fvuserinfo:language_team_member': t.maybe(t.Boolean),
-  },
-  FVUserProfile: {
-    firstName: t.String,
-    lastName: t.String,
-    email: Email,
-    preferences: UserPreferences,
   },
   FVLink: Object.assign({}, Dublincore, {
     'dc:description': t.maybe(t.String),

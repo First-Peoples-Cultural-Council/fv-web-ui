@@ -127,15 +127,6 @@ const WORKSPACE_TO_SECTION_REDIRECT = {
   },
 }
 
-const NOT_CONNECTED_REDIRECT = {
-  condition: (params) => {
-    return selectn('isConnected', params.props.computeLogin) === false
-  },
-  target: () => {
-    return '/'
-  },
-}
-
 // Common Paths
 const DIALECT_PATH_KIDS_OR_DEFAULT = [
   KIDS_OR_DEFAULT,
@@ -491,13 +482,6 @@ const routes = [
     path: ['register'],
     title: intl.translate({ key: 'register', default: 'Register', case: 'first' }),
     page: <Pages.PageUsersRegister />,
-  },
-  {
-    path: ['profile'],
-    title: intl.translate({ key: 'user_profile', default: 'User Profile', case: 'words' }),
-    page: <Pages.PageUsersProfile />,
-    redirects: [NOT_CONNECTED_REDIRECT],
-    breadcrumbs: false,
   },
   {
     path: ['forgotpassword'],

@@ -1364,59 +1364,6 @@ const options = {
     },
     template: FVUserRegistrationTemplate,
   },
-  FVUserProfile: {
-    fields: {
-      firstName: {
-        label: intl.trans('first_name', 'First Name', 'first'),
-      },
-      lastName: {
-        label: intl.trans('last_name', 'Last Name', 'first'),
-      },
-      email: {
-        label: intl.trans('views.pages.explore.dialect.users.email_address', 'Email Address', 'first'),
-      },
-      preferences: {
-        label: intl.trans('preferences', 'Preferences', 'first'),
-        fields: {
-          General: {
-            label: intl.trans('models.general_options', 'General Options', 'first'),
-            fields: {
-              primary_dialect: {
-                label: intl.trans('models.my_primary_dialect', 'My Primary Dialect', 'first'),
-                factory: SelectFactory,
-                attrs: {
-                  query: "SELECT ecm:uuid, dc:title FROM FVDialect WHERE ecm:path STARTSWITH '/FV/Workspaces'",
-                  queryId: 'dialect_titles_uids',
-                  label: intl.trans('models.primary_dialect', 'Primary Dialect', 'first'),
-                  help: intl.trans(
-                    'models.note_if_member_of_only_one_dialect',
-                    'Note: If you are a member of only one dialect, that will be your primary dialect automatically.',
-                    'first'
-                  ),
-                },
-              },
-            },
-          },
-          Navigation: {
-            label: intl.trans('navigation', 'Navigation', 'first') + ' ' + i18nExt.optional,
-            fields: {
-              start_page: {
-                label: intl.trans('start_page', 'Start Page', 'words'),
-              },
-            },
-          },
-          Theme: {
-            label: intl.trans('models.theme', 'Theme', 'first') + ' ' + i18nExt.optional,
-            fields: {
-              font_size: {
-                label: intl.trans('font_size', 'Font Size', 'words'),
-              },
-            },
-          },
-        },
-      },
-    },
-  },
   FVLink: {
     fields: {
       'dc:title': {
