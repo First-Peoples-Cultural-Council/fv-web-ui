@@ -120,27 +120,6 @@ export class PageDialectGalleryEdit extends Component {
     }
   }
 
-  // shouldComponentUpdate(newProps /*, newState*/) {
-  //   switch (true) {
-  //     case newProps.routeParams.gallery != this.props.routeParams.gallery:
-  //       return true
-
-  //     case newProps.routeParams.dialect_path != this.props.routeParams.dialect_path:
-  //       return true
-
-  //     case ProviderHelpers.getEntry(newProps.computeGallery, this._getGalleryPath()) !=
-  //       ProviderHelpers.getEntry(this.props.computeGallery, this._getGalleryPath()):
-  //       return true
-
-  //     case ProviderHelpers.getEntry(newProps.computeDialect2, this.props.routeParams.dialect_path) !=
-  //       ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path):
-  //       return true
-
-  //     default:
-  //       return false
-  //   }
-  // }
-
   render() {
     const content = this._getContent()
     return content
@@ -168,13 +147,10 @@ export class PageDialectGalleryEdit extends Component {
   }
   _getContent = () => {
     let content = null
-    switch (this.state.componentState) {
-      case STATE_DEFAULT: {
-        content = this._stateGetDefault()
-        break
-      }
-      default:
-        content = this._stateGetLoading()
+    if (this.state.componentState === STATE_DEFAULT) {
+      content = this._stateGetDefault()
+    } else {
+      content = this._stateGetLoading()
     }
     return content
   }

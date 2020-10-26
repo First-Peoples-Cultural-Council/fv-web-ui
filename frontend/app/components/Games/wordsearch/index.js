@@ -31,7 +31,7 @@ import FVLabel from 'componentsShared/FVLabel'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import Game from './wrapper'
+import GameWrapper from './GameWrapper'
 
 /**
  * Play games
@@ -158,7 +158,7 @@ export class Wordsearch extends Component {
     const unique_characters = Array.from(new Set(character_string.split(/(?!$)/u)))
 
     if (word_array.length > 0) {
-      game = <Game characters={[...alphabet_array, ...unique_characters]} words={word_array} />
+      game = <GameWrapper characters={[...alphabet_array, ...unique_characters]} words={word_array} />
     }
 
     return (

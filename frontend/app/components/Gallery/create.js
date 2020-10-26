@@ -101,22 +101,6 @@ export class PageDialectGalleryCreate extends Component {
     }
   }
 
-  // shouldComponentUpdate(newProps) {
-  //   switch (true) {
-  //     case newProps.windowPath != this.props.windowPath:
-  //       return true
-
-  //     case newProps.computeDialect2 != this.props.computeDialect2:
-  //       return true
-
-  //     case newProps.computeGallery != this.props.computeGallery:
-  //       return true
-  //     default: // Note: do nothing
-  //   }
-
-  //   return false
-  // }
-
   render() {
     const content = this._getContent()
     return content
@@ -144,13 +128,10 @@ export class PageDialectGalleryCreate extends Component {
   }
   _getContent = () => {
     let content = null
-    switch (this.state.componentState) {
-      case STATE_DEFAULT: {
-        content = this._stateGetDefault()
-        break
-      }
-      default:
-        content = this._stateGetLoading()
+    if (this.state.componentState === STATE_DEFAULT) {
+      content = this._stateGetDefault()
+    } else {
+      content = this._stateGetLoading()
     }
     return content
   }

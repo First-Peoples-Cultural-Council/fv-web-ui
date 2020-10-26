@@ -15,14 +15,14 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import ReactDOM from 'react-dom'
 import PromiseHelpers from 'common/PromiseHelpers'
 
 /**
  * Test game wrapper
  */
-export default class Game extends Component {
+export default class GameWrapper extends Component {
   static propTypes = {
+    characters: PropTypes.array.isRequired,
     words: PropTypes.array.isRequired,
   }
 
@@ -38,9 +38,9 @@ export default class Game extends Component {
     return PromiseHelpers.makeCancelablePromise(
       (() => {
         return new Promise((resolve, reject) => {
-          import(/* webpackChunkName: "jigsaw" */ '@fpcc/fv-game-jigsaw')
-            .then(({ default: jigsaw }) => {
-              resolve(jigsaw)
+          import(/* webpackChunkName: "wordsearch" */ '@fpcc/fv-game-wordsearch')
+            .then(({ default: wordsearch }) => {
+              resolve(wordsearch)
             })
             .catch(reject)
         })
@@ -52,7 +52,36 @@ export default class Game extends Component {
    * componentDidMount
    */
   componentDidMount() {
-    this.initJigsawGame()
+    //Setup default asset paths
+    const defaultAssetsPath = 'assets/games/fv-games-wordsearch'
+    const defaultImagesPath = `${defaultAssetsPath}/images`
+
+    //Default game config
+    /**
+     * @todo Setup image paths based on dialect
+     */
+
+    const gameConfig = {
+      images: {
+        preloaderLoading: `${defaultImagesPath}/loading.png`,
+        preloaderLogo: `${defaultImagesPath}/logo.png`,
+        tile: `${defaultImagesPath}/tile.png`,
+        title: `${defaultImagesPath}/title.png`,
+        playAudio: `${defaultImagesPath}/play_audio.png`,
+        background: `${defaultImagesPath}/background.png`,
+      },
+
+      letters: this.props.characters,
+
+      words: this.props.words,
+    }
+
+    this.loadScriptTask = this.loadGameScript()
+    this.loadScriptTask.promise.then((wordsearch) => {
+      const gameContainerNode = this.gameContainer.current
+      wordsearch.init(gameContainerNode, gameConfig)
+      this.wordsearch = wordsearch
+    })
   }
 
   /**
@@ -60,60 +89,14 @@ export default class Game extends Component {
    * Cleanup the game / assets for memory management
    */
   componentWillUnmount() {
-    //TODO Audit this, It seems to be firing before the component is mounted
-    //This means there is probably something going on with the parent component
-    this.destroyJigawGame()
-  }
-
-  componentWillReceiveProps() {
-    this.initJigsawGame()
-  }
-
-  initJigsawGame() {
-    //Setup default asset paths
-    const defaultAssetsPath = 'assets/games/fv-games-jigsaw'
-    const defaultImagesPath = `${defaultAssetsPath}/images`
-
-    //Default game config
-    /**
-     * @todo Setup image paths based on dialect
-     */
-    const gameConfig = {
-      images: Object.assign({
-        preloaderLoading: `${defaultImagesPath}/loading.png`,
-        preloaderLogo: `${defaultImagesPath}/logo.png`,
-        backgroundImage: `${defaultImagesPath}/background.png`,
-        youWin: `${defaultImagesPath}/well-done.png`,
-        easy: `${defaultImagesPath}/easy.png`,
-        medium: `${defaultImagesPath}/medium.png`,
-        hard: `${defaultImagesPath}/hard.png`,
-        cornerTopLeft: `${defaultImagesPath}/corner1a.png`,
-        cornerTopRight: `${defaultImagesPath}/corner1b.png`,
-        cornerBottomLeft: `${defaultImagesPath}/corner1c.png`,
-        cornerBottomRight: `${defaultImagesPath}/corner1d.png`,
-        arrow: `${defaultImagesPath}/blue_arrow.png`,
-      }),
-      words: this.props.words,
-    }
-
-    /**
-     * Create the game, with container and game config
-     */
-    this.loadScriptTask = this.loadGameScript()
-    this.loadScriptTask.promise.then((jigsaw) => {
-      this.jigsaw = jigsaw
-      const gameContainerNode = this.gameContainer.current
-      jigsaw.init(gameContainerNode, gameConfig)
-    })
-  }
-
-  destroyJigawGame() {
-    if (this.jigsaw) {
-      this.jigsaw.destroy()
-    } else if (this.loadScriptTask) {
+    if (this.loadScriptTask) {
       this.loadScriptTask.cancel()
     }
+    if (this.wordsearch) {
+      this.wordsearch.destroy()
+    }
   }
+
   /**
    * Render
    */

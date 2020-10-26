@@ -31,7 +31,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import Game from './wrapper'
+import GameWrapper from './GameWrapper'
 import FVLabel from 'componentsShared/FVLabel'
 
 /**
@@ -132,7 +132,7 @@ export class Concentration extends Component {
     })
 
     if (wordArray.length > 0) {
-      game = <Game cards={wordArray} />
+      game = <GameWrapper cards={wordArray} />
     }
 
     return (
