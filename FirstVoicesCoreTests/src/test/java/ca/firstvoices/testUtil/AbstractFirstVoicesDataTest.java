@@ -44,7 +44,7 @@ public abstract class AbstractFirstVoicesDataTest extends AbstractTestDataCreato
   @Inject protected CoreSession session;
 
   @Before
-  public void getReferences() {
+  public void resolveReferences() {
     languageFamily = dataCreator.getReference(session, "testLanguageFamily");
     language = dataCreator.getReference(session, "testLanguage");
     dialect = dataCreator.getReference(session, "testArchive");
@@ -52,14 +52,5 @@ public abstract class AbstractFirstVoicesDataTest extends AbstractTestDataCreato
     alphabet = dataCreator.getReference(session, "testAlphabet");
   }
 
-
-  //@todo this belongs elsewhere
-  public DocumentModel createDocument(CoreSession session, DocumentModel model) {
-    model.setPropertyValue("dc:title", model.getName());
-    DocumentModel newDoc = session.createDocument(model);
-    session.save();
-
-    return newDoc;
-  }
 
 }

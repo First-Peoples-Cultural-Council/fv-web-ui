@@ -98,8 +98,9 @@ public class TestSecurityPolicies extends AbstractFVTest {
 
   @Before
   public void setUp() throws Exception {
-    // @todo move this to TestDataCreator (but doing so creates a cyclic dep so refactoring to
-    // yet another module is required
+    /*@todo move this to TestDataCreator (but doing so creates a cyclic dep so refactoring to yet
+         another module is required [ FW-1963 ]
+     */
     session.removeChildren(session.getRootDocument().getRef());
 
     domain = session.createDocument(session.createDocumentModel("/", "FV", "Domain"));

@@ -21,6 +21,7 @@
 package ca.firstvoices.enrichers;
 
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.testUtil.helpers.DocumentTestHelpers.createDocument;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import ca.firstvoices.characters.services.CustomOrderComputeService;

@@ -22,6 +22,7 @@ package ca.firstvoices.characters.services;
 
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PHRASE;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.testUtil.helpers.DocumentTestHelpers.createDocument;
 import static org.junit.Assert.assertEquals;
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import ca.firstvoices.testUtil.FirstVoicesDataFeature;

@@ -25,7 +25,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
 import ca.firstvoices.runner.FirstVoicesCoreTestsFeature;
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import ca.firstvoices.testUtil.FirstVoicesDataFeature;
@@ -33,7 +32,6 @@ import ca.firstvoices.tests.mocks.operations.InitialDatabaseSetup;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.inject.Inject;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.automation.OperationContext;
@@ -79,13 +77,6 @@ public class InitialDatabaseSetupTest extends AbstractFirstVoicesDataTest {
     ArrayList<String> expected = new ArrayList<>();
     assertEquals(expected, userManager.getGroupModel("members").getProperty("group", "subGroups"));
 
-        /*
-            Check that the publication targets don't exist yet
-         */
-//    DocumentModel sourceDoc = dataCreator.getReference(session, "workspaceData");
-//    assertNull(sourceDoc.getPropertyValue("publish:sections"));
-//    sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/SharedData"));
-//    assertNull(sourceDoc.getPropertyValue("publish:sections"));
 
         /*
             Check that no admin user exists
@@ -138,8 +129,6 @@ public class InitialDatabaseSetupTest extends AbstractFirstVoicesDataTest {
          */
     DocumentModel sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/Data"));
     assertNotNull(sourceDoc.getPropertyValue("publish:sections"));
-//    sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/SharedData"));
-//    assertNotNull(sourceDoc.getPropertyValue("publish:sections"));
     sourceDoc = session.getDocument(new PathRef("/FV/Workspaces/Site"));
     assertNotNull(sourceDoc.getPropertyValue("publish:sections"));
 
