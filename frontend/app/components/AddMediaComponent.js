@@ -131,7 +131,6 @@ export class AddMediaComponent extends Component {
         for (const key in formValue) {
           if (formValue.hasOwnProperty(key) && key && key != 'file') {
             if (formValue[key] && formValue[key] != '') {
-              //properties += key + '=' + ((formValue[key] instanceof Array) ? JSON.stringify(formValue[key]) : formValue[key]) + '\n';
               properties[key] = formValue[key]
             }
           }
