@@ -1,6 +1,7 @@
 package ca.firstvoices.tests.mocks.services;
 
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORIES;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
@@ -166,6 +167,7 @@ public class MockDialectServiceImpl implements MockDialectService {
     DocumentModelList phraseBooks = generateFVPhraseBooks(session, dialect.getPathAsString());
     generateFVWords(session, dialect.getPathAsString(), words, categories);
     generateFVPhrases(session, dialect.getPathAsString(), maxEntries / 2, words, phraseBooks);
+    generateFVSongs(session, dialect.getPathAsString(), 5, words);
 
     return dialect;
 
@@ -268,6 +270,8 @@ public class MockDialectServiceImpl implements MockDialectService {
         session.createDocumentModel(dialect.getPathAsString(), "Categories", FV_CATEGORIES));
     createDocument(session,
         session.createDocumentModel(dialect.getPathAsString(), "Phrase Books", FV_CATEGORIES));
+    createDocument(session,
+        session.createDocumentModel(dialect.getPathAsString(), "Stories & Songs", FV_BOOK));
 
     return dialect;
   }
@@ -385,6 +389,22 @@ public class MockDialectServiceImpl implements MockDialectService {
     }
 
     return fvPhraseBooks;
+  }
+
+  private DocumentModelList generateFVSongs(CoreSession session, String path, int songEntries,
+      String[] wordsToUse) {
+    //Generate song
+    DocumentModelList fvSongs = new DocumentModelListImpl();
+
+    for (int i = 0; i < songEntries; i++) {
+      String newPhrase = generateRandomPhrase(ThreadLocalRandom.current().nextInt(3, 10),
+          wordsToUse);
+      DocumentModel songDoc = session
+          .createDocumentModel(path + "/Songs & Stories", newPhrase, FV_BOOK);
+      fvSongs.add(createDocument(session, songDoc));
+    }
+
+    return fvSongs;
   }
 
 }
