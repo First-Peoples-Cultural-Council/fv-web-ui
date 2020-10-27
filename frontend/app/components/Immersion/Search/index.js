@@ -2,7 +2,7 @@ import * as React from 'react'
 import PropTypes from 'prop-types'
 import Fuse from 'fuse.js'
 
-import FVButton from 'componentsShared/FVButton'
+import FVButton from 'components/FVButton'
 
 const { array, func } = PropTypes
 

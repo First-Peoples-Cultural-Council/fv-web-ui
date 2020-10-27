@@ -25,14 +25,14 @@ import { fetchWords } from 'reducers/fvWord'
 
 import selectn from 'selectn'
 
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
 import GameWrapper from './GameWrapper'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 /**
  * Play games

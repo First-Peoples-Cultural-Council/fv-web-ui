@@ -4,8 +4,8 @@ import React from 'react'
 import SongStoryPresentation from 'components/SongStory/SongStoryPresentation'
 import SongStoryData from 'components/SongStory/SongStoryData'
 
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
-import withActions from 'componentsShared/withActions'
+import PromiseWrapper from 'components/PromiseWrapper'
+import withActions from 'components/withActions'
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 
 /**

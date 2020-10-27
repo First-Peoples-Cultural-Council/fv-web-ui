@@ -36,13 +36,13 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 
-import FVButton from 'componentsShared/FVButton'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import FVButton from 'components/FVButton'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 import GroupAssignmentDialog from 'components/Users/group-assignment-dialog'
 
-import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
-import FVLabel from 'componentsShared/FVLabel'
+import AuthorizationFilter from 'components/AuthorizationFilter'
+import FVLabel from 'components/FVLabel'
 
 const { func, object } = PropTypes
 export class UserTasks extends React.Component {

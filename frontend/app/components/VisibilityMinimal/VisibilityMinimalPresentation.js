@@ -9,10 +9,10 @@ import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 
 // FPCC
-import FVButton from 'componentsShared/FVButton'
-import FVLabel from 'componentsShared/FVLabel'
-import FVSnackbar from 'componentsShared/FVSnackbar'
-import VisibilitySelect from 'componentsShared/VisibilitySelect'
+import FVButton from 'components/FVButton'
+import FVLabel from 'components/FVLabel'
+import FVSnackbar from 'components/FVSnackbar'
+import VisibilitySelect from 'components/VisibilitySelect'
 import { VisibilityMinimalStyles } from './VisibilityMinimalStyles'
 
 /**

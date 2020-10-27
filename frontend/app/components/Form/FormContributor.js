@@ -5,7 +5,7 @@ import Textarea from 'components/Form/Common/Textarea'
 import Select from 'components/Form/Common/Select'
 import FormMoveButtons from 'components/Form/FormMoveButtons'
 import FormRemoveButton from 'components/Form/FormRemoveButton'
-import Preview from 'componentsShared/Preview'
+import Preview from 'components/Preview'
 
 // REDUX
 import { connect } from 'react-redux'

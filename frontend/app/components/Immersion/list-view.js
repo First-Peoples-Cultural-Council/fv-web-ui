@@ -24,11 +24,11 @@ import { fetchLabels } from 'reducers/fvLabel'
 import { fetchDialect2 } from 'reducers/fvDialect'
 
 import selectn from 'selectn'
-import FVButton from 'componentsShared/FVButton'
+import FVButton from 'components/FVButton'
 
 import Edit from '@material-ui/icons/Edit'
 
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import PromiseWrapper from 'components/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 
 import ImmersionTable from './ImmersionTable'

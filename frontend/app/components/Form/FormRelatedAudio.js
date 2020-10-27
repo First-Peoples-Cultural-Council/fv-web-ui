@@ -121,7 +121,7 @@ export class FormRelatedAudio extends React.Component {
       }/Resources/')&currentPageIndex=${0}&pageSize=${1000}`
     )
 
-    const _SelectMediaComponent = await import('componentsShared/SelectMediaComponent')
+    const _SelectMediaComponent = await import('components/SelectMediaComponent')
     SelectMediaComponent = _SelectMediaComponent.default
 
     this.setState({ loading: false })

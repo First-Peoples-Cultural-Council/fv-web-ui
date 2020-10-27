@@ -28,18 +28,18 @@ import t from 'tcomb-form'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 
-import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import AuthenticationFilter from 'components/AuthenticationFilter'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
-import StateLoading from 'componentsShared/Loading'
+import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import '!style-loader!css-loader!./WordsCreate.css'
 
 // Views
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 /**
  * Create word entry

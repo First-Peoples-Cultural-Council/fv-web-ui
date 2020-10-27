@@ -32,7 +32,7 @@ import { searchDialectReset } from 'reducers/searchDialect'
 
 // FPCC
 // -------------------------------------------
-import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
+import AuthorizationFilter from 'components/AuthorizationFilter'
 
 import AlphabetCharactersPresentation from 'components/AlphabetCharacters/AlphabetCharactersPresentation'
 import AlphabetCharactersData from 'components/AlphabetCharacters/AlphabetCharactersData'
@@ -43,7 +43,7 @@ import DialectFilterListData from 'components/DialectFilterList/DialectFilterLis
 import CategoriesData from 'components/Categories/CategoriesData'
 
 import Edit from '@material-ui/icons/Edit'
-import FVButton from 'componentsShared/FVButton'
+import FVButton from 'components/FVButton'
 import IntlService from 'common/services/IntlService'
 import Link from 'components/Link'
 import NavigationHelpers, {
@@ -51,8 +51,8 @@ import NavigationHelpers, {
   getSearchObject,
   updateUrlIfPageOrPageSizeIsDifferent,
 } from 'common/NavigationHelpers'
-import Preview from 'componentsShared/Preview'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import Preview from 'components/Preview'
+import PromiseWrapper from 'components/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 import { getDialectClassname } from 'common/Helpers'
@@ -63,7 +63,7 @@ import {
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
   dictionaryListSmallScreenTemplatePhrases,
-} from 'componentsShared/DictionaryList/DictionaryListSmallScreen'
+} from 'components/DictionaryList/DictionaryListSmallScreen'
 import {
   onNavigateRequest,
   sortHandler,
@@ -73,7 +73,7 @@ import {
 } from 'components/LearnBase'
 import { WORKSPACES } from 'common/Constants'
 
-const DictionaryList = React.lazy(() => import('componentsShared/DictionaryList/DictionaryList'))
+const DictionaryList = React.lazy(() => import('components/DictionaryList/DictionaryList'))
 const intl = IntlService.instance
 
 // phrasesFilteredByPhrasebook

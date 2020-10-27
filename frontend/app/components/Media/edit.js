@@ -30,7 +30,7 @@ import selectn from 'selectn'
 import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 // Models
 import { Document } from 'nuxeo'
@@ -39,7 +39,7 @@ import { Document } from 'nuxeo'
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
 
-import withForm from 'componentsShared/withForm'
+import withForm from 'components/withForm'
 
 const EditViewWithForm = withForm(PromiseWrapper, true)
 

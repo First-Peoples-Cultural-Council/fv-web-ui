@@ -12,7 +12,7 @@ import { fetchDirectory } from 'reducers/directory'
 import DocumentOperations from 'operations/DocumentOperations'
 
 import LabelModal from 'components/Immersion/Modal'
-import FVButton from 'componentsShared/FVButton/index'
+import FVButton from 'components/FVButton/index'
 import '!style-loader!css-loader!./HelperModeToggle.css'
 
 const HelperModeToggle = ({
@@ -51,8 +51,8 @@ const HelperModeToggle = ({
       })
       const category = mappedLabel
         ? allCategories.find((c) => {
-            return c.id === mappedLabel.category
-          })
+          return c.id === mappedLabel.category
+        })
         : null
       const templateStrings = mappedLabel ? mappedLabel.template_strings.split(',') : []
       const _label = {

@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 import NavigationHelpers from 'common/NavigationHelpers'
 import selectn from 'selectn'
 import PageStats from 'components/PageStats'
-import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
+import AuthenticationFilter from 'components/AuthenticationFilter'
 // import { SECTIONS } from 'common/Constants'
 
 /**

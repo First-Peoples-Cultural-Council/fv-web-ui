@@ -25,8 +25,8 @@ import { pushWindowPath } from 'reducers/windowPath'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import CategoryList from 'componentsShared/CategoryList'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import CategoryList from 'components/CategoryList'
+import PromiseWrapper from 'components/PromiseWrapper'
 import CategoriesData from 'components/Categories/CategoriesData'
 
 /**

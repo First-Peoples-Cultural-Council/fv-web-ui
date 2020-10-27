@@ -22,20 +22,20 @@ import { List } from 'immutable'
 import Media from 'react-media'
 // Components
 import { getIcon, getSortState, sortCol } from 'common/ListView'
-import withPagination from 'componentsShared/withPagination'
+import withPagination from 'components/withPagination'
 import IntlService from 'common/services/IntlService'
-import FVButton from 'componentsShared/FVButton'
-import FVLabel from 'componentsShared/FVLabel'
+import FVButton from 'components/FVButton'
+import FVLabel from 'components/FVLabel'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenTemplateWords,
-} from 'componentsShared/DictionaryList/DictionaryListSmallScreen'
+} from 'components/DictionaryList/DictionaryListSmallScreen'
 import { getSearchObject } from 'common/NavigationHelpers'
-import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
+import AuthorizationFilter from 'components/AuthorizationFilter'
 const SearchDialect = React.lazy(() => import('components/SearchDialect'))
-const FlashcardList = React.lazy(() => import('componentsShared/FlashcardList'))
-const DictionaryListSmallScreen = React.lazy(() => import('componentsShared/DictionaryList/DictionaryListSmallScreen'))
-const DictionaryListLargeScreen = React.lazy(() => import('componentsShared/DictionaryList/DictionaryListLargeScreen'))
+const FlashcardList = React.lazy(() => import('components/FlashcardList'))
+const DictionaryListSmallScreen = React.lazy(() => import('components/DictionaryList/DictionaryListSmallScreen'))
+const DictionaryListLargeScreen = React.lazy(() => import('components/DictionaryList/DictionaryListLargeScreen'))
 const ExportDialect = React.lazy(() => import('components/ExportDialect'))
 import '!style-loader!css-loader!./WordsList.css'
 

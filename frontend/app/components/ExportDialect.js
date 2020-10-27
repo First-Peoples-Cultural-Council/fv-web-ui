@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography'
 import PropTypes from 'prop-types'
 import ProviderHelpers from 'common/ProviderHelpers'
 import selectn from 'selectn'
-import FVButton from 'componentsShared/FVButton'
+import FVButton from 'components/FVButton'
 
 const { any, string, func, object } = PropTypes
 export class ExportDialect extends Component {

@@ -30,13 +30,13 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
-import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import AuthenticationFilter from 'components/AuthenticationFilter'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
-import StateLoading from 'componentsShared/Loading'
+import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 import '!style-loader!css-loader!./WordsEdit.css'
 
 // Models
@@ -46,7 +46,7 @@ import { Document } from 'nuxeo'
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
 
-import withForm from 'componentsShared/withForm'
+import withForm from 'components/withForm'
 
 const EditViewWithForm = withForm(PromiseWrapper, true)
 
@@ -102,9 +102,9 @@ export class WordsEdit extends Component {
       case typeof nextWord.equals === 'function' && nextWord.equals(previousWord) === false:
         return true
 
-      // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
-      //   console.log(4)
-      //   return true
+        // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
+        //   console.log(4)
+        //   return true
 
       case this.state.componentState != newState.componentState:
         return true
@@ -112,9 +112,9 @@ export class WordsEdit extends Component {
       case newProps.windowPath != this.props.windowPath:
         return true
 
-      // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
-      //   console.log(7)
-      //   return true
+        // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
+        //   console.log(7)
+        //   return true
 
       case is(newProps.computeWord, this.props.computeWord) === false:
         return true

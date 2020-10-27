@@ -20,7 +20,7 @@ import classNames from 'classnames'
 import NavigationHelpers from 'common/NavigationHelpers'
 import '!style-loader!css-loader!./Footer.css'
 import Link from 'components/Link'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 export default class Footer extends React.Component {
   static propTypes = {
     className: PropTypes.string,

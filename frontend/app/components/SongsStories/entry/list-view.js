@@ -20,8 +20,8 @@ import classNames from 'classnames'
 
 import BookEntry from 'components/SongsStories/entry/view'
 
-import FVButton from 'componentsShared/FVButton'
-import FVLabel from 'componentsShared/FVLabel'
+import FVButton from 'components/FVButton'
+import FVLabel from 'components/FVLabel'
 
 export default class SongsStoriesEntryListView extends Component {
   static propTypes = {

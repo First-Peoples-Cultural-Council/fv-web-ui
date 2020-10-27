@@ -29,24 +29,24 @@ import Edit from '@material-ui/icons/Edit'
 import selectn from 'selectn'
 
 import AnalyticsHelpers from 'common/AnalyticsHelpers'
-import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
+import AuthorizationFilter from 'components/AuthorizationFilter'
 import DataListView from 'components/LearnBase/data-list-view'
-import FVButton from 'componentsShared/FVButton'
-import FVLabel from 'componentsShared/FVLabel'
+import FVButton from 'components/FVButton'
+import FVLabel from 'components/FVLabel'
 import Link from 'components/Link'
 import NavigationHelpers from 'common/NavigationHelpers'
-import Preview from 'componentsShared/Preview'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import Preview from 'components/Preview'
+import PromiseWrapper from 'components/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers, { CLEAN_FULLTEXT } from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
 import URLHelpers from 'common/URLHelpers'
-import { getListSmallScreen } from 'componentsShared/DictionaryList/DictionaryList'
+import { getListSmallScreen } from 'components/DictionaryList/DictionaryList'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
-} from 'componentsShared/DictionaryList/DictionaryListSmallScreen'
+} from 'components/DictionaryList/DictionaryListSmallScreen'
 import { SECTIONS, WORKSPACES } from 'common/Constants'
 
 import '!style-loader!css-loader!./Search.css'

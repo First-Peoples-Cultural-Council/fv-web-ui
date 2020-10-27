@@ -28,8 +28,8 @@ import { updateContributor } from 'reducers/fvContributor'
 import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
-import FVLabel from 'componentsShared/FVLabel'
+import PromiseWrapper from 'components/PromiseWrapper'
+import FVLabel from 'components/FVLabel'
 
 // Models
 import { Document } from 'nuxeo'
@@ -38,7 +38,7 @@ import { Document } from 'nuxeo'
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
 
-import withForm from 'componentsShared/withForm'
+import withForm from 'components/withForm'
 
 const EditViewWithForm = withForm(PromiseWrapper, true)
 

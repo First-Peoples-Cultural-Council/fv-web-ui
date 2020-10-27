@@ -12,7 +12,7 @@ import FormRemoveButton from 'components/Form/FormRemoveButton'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
-import Preview from 'componentsShared/Preview'
+import Preview from 'components/Preview'
 // see about dropping:
 import selectn from 'selectn'
 
@@ -20,7 +20,7 @@ import selectn from 'selectn'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { createAudio } from 'reducers/fvAudio'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 const { array, func, object, number, string, element } = PropTypes
 export class FormRelatedAudioItem extends React.Component {

@@ -31,17 +31,17 @@ import UIHelpers from 'common/UIHelpers'
 import { WORKSPACES } from 'common/Constants'
 
 // Components
-import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
-import FVButton from 'componentsShared/FVButton'
+import AuthorizationFilter from 'components/AuthorizationFilter'
+import FVButton from 'components/FVButton'
 import Link from 'components/Link'
-import Preview from 'componentsShared/Preview'
+import Preview from 'components/Preview'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenTemplateWords,
   dictionaryListSmallScreenColumnDataTemplateCustomState,
-} from 'componentsShared/DictionaryList/DictionaryListSmallScreen'
+} from 'components/DictionaryList/DictionaryListSmallScreen'
 
 /**
  * @summary WordsListData

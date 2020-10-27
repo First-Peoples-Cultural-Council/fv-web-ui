@@ -28,7 +28,7 @@ import selectn from 'selectn'
 
 import ReportsJson from './reports.json'
 
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'

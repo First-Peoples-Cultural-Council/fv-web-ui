@@ -30,9 +30,9 @@ import { pushWindowPath } from 'reducers/windowPath'
 import NavigationHelpers from 'common/NavigationHelpers'
 import Link from 'components/Link'
 import EditorInsertChart from '@material-ui/icons/InsertChart'
-import FVButton from 'componentsShared/FVButton'
-import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
-import FVLabel from 'componentsShared/FVLabel'
+import FVButton from 'components/FVButton'
+import AuthenticationFilter from 'components/AuthenticationFilter'
+import FVLabel from 'components/FVLabel'
 
 /**
  * Navigation for learning page

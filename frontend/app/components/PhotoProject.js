@@ -28,7 +28,7 @@ import { fetchResources } from 'reducers/fvResources'
 import UIHelpers from 'common/UIHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 import PhotoGallery from 'react-photo-gallery'
 

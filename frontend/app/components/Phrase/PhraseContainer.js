@@ -2,8 +2,8 @@ import React from 'react'
 import PhraseData from 'components/Phrase/PhraseData'
 
 import DetailWordPhrase from 'components/DetailWordPhrase'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
-import withActions from 'componentsShared/withActions'
+import PromiseWrapper from 'components/PromiseWrapper'
+import withActions from 'components/withActions'
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 
 /**

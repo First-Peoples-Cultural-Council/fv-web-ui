@@ -26,15 +26,15 @@ import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import DocumentListView from 'componentsShared/DocumentListView'
+import DocumentListView from 'components/DocumentListView'
 
 import DataListView from 'components/LearnBase/data-list-view'
-import { dictionaryListSmallScreenColumnDataTemplate } from 'componentsShared/DictionaryList/DictionaryListSmallScreen'
+import { dictionaryListSmallScreenColumnDataTemplate } from 'components/DictionaryList/DictionaryListSmallScreen'
 
 /**
  * List view for words
@@ -106,9 +106,9 @@ export class SongsStoriesListViewAlt extends DataListView {
             const clickHandler = props.disableClickItem
               ? NavigationHelpers.disable
               : (/*e*/) => {
-                  // e.preventDefault()
-                  // NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
-                }
+                // e.preventDefault()
+                // NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
+              }
             return (
               <a className="DictionaryList__link DictionaryList__link--indigenous" onClick={clickHandler} href={href}>
                 {v}

@@ -31,15 +31,15 @@ import { setRouteParams } from 'reducers/navigation'
 import { useGetCopy } from 'common/useGetCopy'
 import { useGetData, usePaginationRequest } from 'common/ListView'
 import ConfirmationDelete from 'components/Confirmation'
-import FVButton from 'componentsShared/FVButton'
+import FVButton from 'components/FVButton'
 import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
-import withPagination from 'componentsShared/withPagination'
-import { dictionaryListSmallScreenColumnDataTemplate } from 'componentsShared/DictionaryList/DictionaryListSmallScreen'
+import withPagination from 'components/withPagination'
+import { dictionaryListSmallScreenColumnDataTemplate } from 'components/DictionaryList/DictionaryListSmallScreen'
 
 import '!style-loader!css-loader!./styles.css'
 
-const DictionaryList = React.lazy(() => import('componentsShared/DictionaryList/DictionaryList'))
+const DictionaryList = React.lazy(() => import('components/DictionaryList/DictionaryList'))
 
 const categoryType = {
   title: { plural: 'Categories', singular: 'Category' },

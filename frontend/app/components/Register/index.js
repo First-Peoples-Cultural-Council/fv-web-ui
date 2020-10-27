@@ -29,13 +29,13 @@ import t from 'tcomb-form'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import Link from 'components/Link'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import PromiseWrapper from 'components/PromiseWrapper'
 
-import FVButton from 'componentsShared/FVButton'
+import FVButton from 'components/FVButton'
 
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 /**
  * Create user entry

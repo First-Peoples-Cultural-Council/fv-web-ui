@@ -28,7 +28,7 @@ import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 // Models
 import { Document } from 'nuxeo'
@@ -37,7 +37,7 @@ import { Document } from 'nuxeo'
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
 
-import withForm from 'componentsShared/withForm'
+import withForm from 'components/withForm'
 import IntlService from 'common/services/IntlService'
 
 const intl = IntlService.instance

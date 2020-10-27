@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import Widget from 'components/Widget'
 import Link from 'components/Link'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 import Typography from '@material-ui/core/Typography'
 import '!style-loader!css-loader!./WidgetLinks.css'
 /**

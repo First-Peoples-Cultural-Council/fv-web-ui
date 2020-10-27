@@ -19,9 +19,9 @@ import classNames from 'classnames'
 import DOMPurify from 'dompurify'
 import selectn from 'selectn'
 
-import FVButton from 'componentsShared/FVButton'
+import FVButton from 'components/FVButton'
 import Paper from '@material-ui/core/Paper'
-import FVTab from 'componentsShared/FVTab'
+import FVTab from 'components/FVTab'
 import Typography from '@material-ui/core/Typography'
 
 import ActionLaunch from '@material-ui/icons/Launch'
@@ -29,8 +29,8 @@ import ActionLaunch from '@material-ui/icons/Launch'
 import { Introduction } from 'components/SongsStories/list-view'
 import MediaPanel from 'components/LearnBase/media-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
-import Preview from 'componentsShared/Preview'
-import FVLabel from 'componentsShared/FVLabel'
+import Preview from 'components/Preview'
+import FVLabel from 'components/FVLabel'
 
 const defaultInnerStyle = { padding: '15px', margin: '15px 0', minHeight: '420px', overflowX: 'auto' }
 const defaultCoverStyle = { padding: '15px', margin: '15px 0' }

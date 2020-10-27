@@ -4,7 +4,7 @@ import FormMoveButtons from 'components/Form/FormMoveButtons'
 import FormRemoveButton from 'components/Form/FormRemoveButton'
 
 // import ProviderHelpers from 'common/ProviderHelpers'
-import Preview from 'componentsShared/Preview'
+import Preview from 'components/Preview'
 
 // REDUX
 import { connect } from 'react-redux'

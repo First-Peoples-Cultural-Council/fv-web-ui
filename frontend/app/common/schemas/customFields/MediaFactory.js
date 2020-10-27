@@ -3,12 +3,12 @@ import t from 'tcomb-form'
 import selectn from 'selectn'
 
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
-import FVButton from 'componentsShared/FVButton'
+import FVButton from 'components/FVButton'
 
-import AddMediaComponent from 'componentsShared/AddMediaComponent'
-import SelectMediaComponent from 'componentsShared/SelectMediaComponent'
-import Preview from 'componentsShared/Preview'
-import FVLabel from 'componentsShared/FVLabel'
+import AddMediaComponent from 'components/AddMediaComponent'
+import SelectMediaComponent from 'components/SelectMediaComponent'
+import Preview from 'components/Preview'
+import FVLabel from 'components/FVLabel'
 
 const expandedValues = []
 

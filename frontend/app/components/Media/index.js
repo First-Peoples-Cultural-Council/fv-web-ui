@@ -30,12 +30,12 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import PromiseWrapper from 'components/PromiseWrapper'
 
-import MediaList from 'componentsShared/MediaList'
-import withPagination from 'componentsShared/withPagination'
-import withFilter from 'componentsShared/withFilter'
-import FVLabel from 'componentsShared/FVLabel'
+import MediaList from 'components/MediaList'
+import withPagination from 'components/withPagination'
+import withFilter from 'components/withFilter'
+import FVLabel from 'components/FVLabel'
 
 const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 20, filters: { 'properties.dc:title': '', dialect: '' } }
 

@@ -1,6 +1,6 @@
 import React /*, { Component, PropTypes }*/ from 'react'
 import t from 'tcomb-form'
-import Editor from 'componentsShared/Editor'
+import Editor from 'components/Editor'
 import selectn from 'selectn'
 /**
  * Custom textarea field for tcomb-form that uses Quill

@@ -27,11 +27,11 @@ import { pushWindowPath } from 'reducers/windowPath'
 import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
-import PortalList from 'componentsShared/PortalList'
-import FVLabel from 'componentsShared/FVLabel'
+import PromiseWrapper from 'components/PromiseWrapper'
+import PortalList from 'components/PortalList'
+import FVLabel from 'components/FVLabel'
 
-import withFilter from 'componentsShared/withFilter'
+import withFilter from 'components/withFilter'
 
 const FilteredPortalList = withFilter(PortalList)
 

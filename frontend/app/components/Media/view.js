@@ -42,11 +42,11 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
 
-import Preview from 'componentsShared/Preview'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import Preview from 'components/Preview'
+import PromiseWrapper from 'components/PromiseWrapper'
 import PageToolbar from 'components/PageToolbar'
 
-import FVButton from 'componentsShared/FVButton'
+import FVButton from 'components/FVButton'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Dialog from '@material-ui/core/Dialog'
@@ -58,10 +58,10 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import Typography from '@material-ui/core/Typography'
 
-import FVTab from 'componentsShared/FVTab'
+import FVTab from 'components/FVTab'
 import WordsListView from 'components/WordsCreateEdit/list-view'
 import PhraseListView from 'components/Phrases/list-view'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 import { WORKSPACES } from 'common/Constants'
 

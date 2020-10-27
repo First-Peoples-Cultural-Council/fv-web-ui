@@ -26,7 +26,7 @@ import DialectFilterListPresentation from 'components/DialectFilterList/DialectF
 import WordsList from 'components/WordsList'
 import WordsData from './WordsData'
 
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 function WordsContainer() {
   return (

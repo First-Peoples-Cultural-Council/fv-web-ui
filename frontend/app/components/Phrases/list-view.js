@@ -30,13 +30,13 @@ import selectn from 'selectn'
 import Edit from '@material-ui/icons/Edit'
 
 import { WORKSPACES } from 'common/Constants'
-import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
+import AuthorizationFilter from 'components/AuthorizationFilter'
 import DataListView from 'components/LearnBase/data-list-view'
-import DocumentListView from 'componentsShared/DocumentListView'
-import FVButton from 'componentsShared/FVButton'
+import DocumentListView from 'components/DocumentListView'
+import FVButton from 'components/FVButton'
 import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
-import Preview from 'componentsShared/Preview'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import Preview from 'components/Preview'
+import PromiseWrapper from 'components/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
@@ -49,7 +49,7 @@ import {
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
   dictionaryListSmallScreenTemplatePhrases,
   dictionaryListSmallScreenColumnDataTemplateCustomState,
-} from 'componentsShared/DictionaryList/DictionaryListSmallScreen'
+} from 'components/DictionaryList/DictionaryListSmallScreen'
 /**
  * List view for phrases
  */

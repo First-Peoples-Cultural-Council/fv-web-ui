@@ -32,12 +32,12 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
-import StateLoading from 'componentsShared/Loading'
+import AuthenticationFilter from 'components/AuthenticationFilter'
+import PromiseWrapper from 'components/PromiseWrapper'
+import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 // Models
 import { Document } from 'nuxeo'
@@ -45,7 +45,7 @@ import { Document } from 'nuxeo'
 // Views
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
-import withForm from 'componentsShared/withForm'
+import withForm from 'components/withForm'
 
 const EditViewWithForm = withForm(PromiseWrapper, true)
 

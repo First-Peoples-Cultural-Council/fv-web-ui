@@ -11,7 +11,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
 
-import StateLoading from 'componentsShared/Loading'
+import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import StateDetail from './states/detail'
 
@@ -50,8 +50,8 @@ export class PhrasebookDetail extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "PhrasebookDetailCopy" */ './copy').then((_copy) => {
-          return _copy.default
-        })
+        return _copy.default
+      })
 
     await this._getData({ copy })
   }

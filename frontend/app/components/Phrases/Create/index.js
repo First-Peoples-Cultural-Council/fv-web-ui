@@ -17,8 +17,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Immutable, { is } from 'immutable'
 import classNames from 'classnames'
-import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import AuthenticationFilter from 'components/AuthenticationFilter'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -38,9 +38,9 @@ import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
 
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
-import StateLoading from 'componentsShared/Loading'
+import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 import '!style-loader!css-loader!./PhrasesCreate.css'
 
 /**

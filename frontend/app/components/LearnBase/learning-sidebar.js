@@ -21,9 +21,9 @@ import { connect } from 'react-redux'
 
 import classNames from 'classnames'
 import selectn from 'selectn'
-import TextHeader from 'componentsShared/Typography/text-header'
-import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
-import EditableComponentHelper from 'componentsShared/EditableComponentHelper'
+import TextHeader from 'components/Typography/text-header'
+import AuthorizationFilter from 'components/AuthorizationFilter'
+import EditableComponentHelper from 'components/EditableComponentHelper'
 
 /**
  * Sidebar for learning page

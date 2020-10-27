@@ -30,8 +30,8 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { getSearchObject } from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
 
-import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import AuthenticationFilter from 'components/AuthenticationFilter'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 // Models
 import { Document } from 'nuxeo'
@@ -40,12 +40,12 @@ import { Document } from 'nuxeo'
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
 
-import withForm from 'componentsShared/withForm'
+import withForm from 'components/withForm'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
-import StateLoading from 'componentsShared/Loading'
+import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 import '!style-loader!css-loader!./PhrasesEdit.css'
 
 const EditViewWithForm = withForm(PromiseWrapper, true)

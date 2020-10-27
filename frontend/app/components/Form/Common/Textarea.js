@@ -36,7 +36,7 @@ export default class Textarea extends React.Component {
     const { ariaDescribedby, className, disabled, id, name, setRef } = this.props
 
     const textComponent = this.props.wysiwyg ? (
-      await import(/* webpackChunkName: "Editor" */ 'componentsShared/Editor').then((_module) => {
+      await import(/* webpackChunkName: "Editor" */ 'components/Editor').then((_module) => {
         const Editor = _module.default
         return (
           <Editor
@@ -78,10 +78,10 @@ export default class Textarea extends React.Component {
 
     const labelClickHandler = wysiwyg
       ? () => {
-          if (this.state.wysiwygRef) {
-            this.state.wysiwygRef.focus()
-          }
+        if (this.state.wysiwygRef) {
+          this.state.wysiwygRef.focus()
         }
+      }
       : () => {}
 
     return (

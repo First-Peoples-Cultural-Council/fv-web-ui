@@ -30,11 +30,11 @@ import { searchDialectReset } from 'reducers/searchDialect'
 
 import selectn from 'selectn'
 
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
-import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
+import AuthorizationFilter from 'components/AuthorizationFilter'
 import PageDialectLearnBase from 'components/LearnBase'
 import PhraseListView from 'components/Phrases/list-view'
 
@@ -45,7 +45,7 @@ import DialectFilterListPresentation from 'components/DialectFilterList/DialectF
 import DialectFilterListData from 'components/DialectFilterList/DialectFilterListData'
 import CategoriesData from 'components/Categories/CategoriesData'
 
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 import { getDialectClassname } from 'common/Helpers'
 import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'

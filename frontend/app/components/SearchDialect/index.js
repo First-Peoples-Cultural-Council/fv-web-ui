@@ -26,7 +26,7 @@ import useSearchDialect from 'dataSources/useSearchDialect'
 
 import selectn from 'selectn'
 import classNames from 'classnames'
-import FVButton from 'componentsShared/FVButton'
+import FVButton from 'components/FVButton'
 import { getDialectClassname } from 'common/Helpers'
 
 /*

@@ -126,7 +126,7 @@ export class FormRelatedPhrases extends React.Component {
       }/Resources/')&currentPageIndex=${0}&pageSize=${1000}`
     )
 
-    const _BrowseComponent = await import('componentsShared/BrowseComponent')
+    const _BrowseComponent = await import('components/BrowseComponent')
     BrowseComponent = _BrowseComponent.default
 
     this.setState({ componentState: this.STATE_DEFAULT })

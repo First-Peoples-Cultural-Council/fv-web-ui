@@ -3,7 +3,7 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 
 import DocumentView from 'components/DocumentView'
-import FVButton from 'componentsShared/FVButton'
+import FVButton from 'components/FVButton'
 import Link from 'components/Link'
 import TablePresentation from 'components/Table/TablePresentation'
 import TableTasksData from 'components/TableTasks/TableTasksData'

@@ -37,17 +37,17 @@ import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
-import EditableComponentHelper from 'componentsShared/EditableComponentHelper'
+import PromiseWrapper from 'components/PromiseWrapper'
+import EditableComponentHelper from 'components/EditableComponentHelper'
 import Header from 'components/Header'
 import { getDialectClassname } from 'common/Helpers'
 import PageToolbar from 'components/PageToolbar'
 import GridView from 'components/LearnBase/grid-view'
-import TextHeader from 'componentsShared/Typography/text-header'
-import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
+import TextHeader from 'components/Typography/text-header'
+import AuthorizationFilter from 'components/AuthorizationFilter'
 import { routeHasChanged } from 'common/NavigationHelpers'
 import Kids from 'components/Kids'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 /**
  * Dialect portal page showing all the various components of this dialect.

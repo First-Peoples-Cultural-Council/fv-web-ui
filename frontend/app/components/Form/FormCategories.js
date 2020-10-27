@@ -15,7 +15,7 @@ import { fetchDialect } from 'reducers/fvDialect'
 import { fetchResources } from 'reducers/fvResources'
 
 import selectn from 'selectn'
-import BrowseComponent from 'componentsShared/BrowseComponent'
+import BrowseComponent from 'components/BrowseComponent'
 const { string, array, object, func, number } = PropTypes
 
 export class FormCategories extends React.Component {

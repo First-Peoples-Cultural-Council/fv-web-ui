@@ -31,7 +31,7 @@ import Close from '@material-ui/icons/Close'
 import { withTheme } from '@material-ui/core/styles'
 
 import '!style-loader!css-loader!./AppLeftNav.css'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 const { func, object } = PropTypes
 export class AppLeftNav extends Component {

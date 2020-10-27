@@ -22,10 +22,10 @@ import { connect } from 'react-redux'
 import { pushWindowPath } from 'reducers/windowPath'
 
 import ReportsJson from './reports.json'
-import GeneralList from 'componentsShared/GeneralList'
+import GeneralList from 'components/GeneralList'
 import { ReportsCardView } from './list-view'
 
-import withFilter from 'componentsShared/withFilter'
+import withFilter from 'components/withFilter'
 const FilteredCardList = withFilter(GeneralList)
 
 /**

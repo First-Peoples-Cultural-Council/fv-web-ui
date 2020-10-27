@@ -32,7 +32,7 @@ import { pushWindowPath } from 'reducers/windowPath'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 
-import DocumentListView from 'componentsShared/DocumentListView'
+import DocumentListView from 'components/DocumentListView'
 
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Doughnut from 'react-chartjs/lib/doughnut'

@@ -28,7 +28,7 @@ import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 import selectn from 'selectn'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 import Select from 'components/Form/Common/Select'
 import Text from 'components/Form/Common/Text'

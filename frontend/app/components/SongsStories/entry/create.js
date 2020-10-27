@@ -31,10 +31,10 @@ import t from 'tcomb-form'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
-import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
+import PromiseWrapper from 'components/PromiseWrapper'
+import AuthenticationFilter from 'components/AuthenticationFilter'
 import StateErrorBoundary from 'components/ErrorBoundary'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 import Paper from '@material-ui/core/Paper'
 import fields from 'common/schemas/fields'

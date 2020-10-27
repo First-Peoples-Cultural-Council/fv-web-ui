@@ -37,7 +37,7 @@ import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace'
 import Toolbar from '@material-ui/core/Toolbar'
 import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 const { array, func, object, bool } = PropTypes
 export class KidsNavigation extends Component {

@@ -120,7 +120,6 @@ module.exports = (env) => ({
     alias: {
       assets: sourceAssetsDirectory,
       components: path.resolve(sourceDirectory, 'components'),
-      componentsShared: path.resolve(sourceDirectory, 'componentsShared'),
       common: path.resolve(sourceDirectory, 'common'),
       qa: path.resolve(sourceDirectory, 'qa'),
       state: sourceStateDirectory,

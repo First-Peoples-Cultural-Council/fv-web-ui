@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import FormPhraseBook from 'components/Form/FormPhraseBook'
 import { getIndexOfElementById, removeItem, moveItemDown, moveItemUp } from 'components/Form/FormInteractions'
-import BrowseComponent from 'componentsShared/BrowseComponent'
+import BrowseComponent from 'components/BrowseComponent'
 import ProviderHelpers from 'common/ProviderHelpers'
 import selectn from 'selectn'
 

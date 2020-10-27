@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 //FPCC
 import SongStoryCover from 'components/SongStoryCover'
 import SongStoryPages from 'components/SongStoryPages'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 /**
  * @summary SongStoryPresentation

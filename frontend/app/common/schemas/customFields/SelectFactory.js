@@ -1,9 +1,9 @@
 import React from 'react'
 import t from 'tcomb-form'
 
-import DirectoryList from 'componentsShared/DirectoryList'
-import QueryList from 'componentsShared/QueryList'
-import DialectList from 'componentsShared/DialectList'
+import DirectoryList from 'components/DirectoryList'
+import QueryList from 'components/QueryList'
+import DialectList from 'components/DialectList'
 // import IntlService from 'common/services/IntlService'
 // const intl = IntlService.instance
 

@@ -5,7 +5,6 @@
     "paths": {
       "common": ["./app/common"],
       "components": ["./app/components"],
-      "componentsShared": ["./app/componentsShared"],
       "operations": ["./app/state/operations"],
       "reducers": ["./app/state/reducers"],
       "games": ["./app/assets/games"],

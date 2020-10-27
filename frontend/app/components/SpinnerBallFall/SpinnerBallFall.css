@@ -3,6 +3,7 @@
  * Copyright 2015 Daniel Cardoso <@DanielCardoso>
  * Licensed under MIT
  */
+.la-ball-fall,
 .la-ball-fall > div {
   position: relative;
   -webkit-box-sizing: border-box;

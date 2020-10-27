@@ -25,7 +25,7 @@ import { fetchSharedPictures } from 'reducers/fvPicture'
 import { fetchWord } from 'reducers/fvWord'
 import { pushWindowPath } from 'reducers/windowPath'
 
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 const DefaultFetcherParams = { filters: { 'properties.dc:title': '', dialect: '78086057-9c34-48f7-995f-9dc3b313231b' } }
 

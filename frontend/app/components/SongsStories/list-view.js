@@ -34,11 +34,11 @@ import CardContent from '@material-ui/core/CardContent'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import Link from 'components/Link'
-import FVTab from 'componentsShared/FVTab'
+import FVTab from 'components/FVTab'
 import UIHelpers from 'common/UIHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import { Cover } from 'components/SongsStories/cover'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 import { connect } from 'react-redux'
 
 class _Introduction extends Component {

@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ProviderHelpers from 'common/ProviderHelpers'
-import StateLoading from 'componentsShared/Loading'
+import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import StateSuccessDefault from './states/successCreate'
 import StateCreate from './states/create'
-import AuthenticationFilter from 'componentsShared/AuthenticationFilter'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
+import AuthenticationFilter from 'components/AuthenticationFilter'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 // Immutable
 import Immutable from 'immutable'
@@ -88,14 +88,14 @@ export class Category extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "CategoryCopy" */ './copy').then((_copy) => {
-          return _copy.default
-        })
+        return _copy.default
+      })
 
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "CategoryValidator" */ './validator').then((_validator) => {
-          return _validator.default
-        })
+        return _validator.default
+      })
     await this._getData({ copy, validator })
   }
 

@@ -22,12 +22,12 @@ import StringHelpers from 'common/StringHelpers'
 
 import t from 'tcomb-form'
 
-import FVButton from 'componentsShared/FVButton'
+import FVButton from 'components/FVButton'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 import { connect } from 'react-redux'
 
 /**

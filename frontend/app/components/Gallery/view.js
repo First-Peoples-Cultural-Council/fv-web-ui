@@ -42,8 +42,8 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
-import PromiseWrapper from 'componentsShared/PromiseWrapper'
-import withActions from 'componentsShared/withActions'
+import PromiseWrapper from 'components/PromiseWrapper'
+import withActions from 'components/withActions'
 
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 

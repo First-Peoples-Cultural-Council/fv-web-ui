@@ -29,15 +29,15 @@ import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 
-import FVButton from 'componentsShared/FVButton'
-import FVLabel from 'componentsShared/FVLabel'
+import FVButton from 'components/FVButton'
+import FVLabel from 'components/FVLabel'
 import ProviderHelpers from 'common/ProviderHelpers'
 
 import AdminMenu from 'components/AdminMenu'
 import RequestReview from 'components/RequestReview'
 import VisibilityMinimal from 'components/VisibilityMinimal'
 
-import AuthorizationFilter from 'componentsShared/AuthorizationFilter'
+import AuthorizationFilter from 'components/AuthorizationFilter'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 
 import '!style-loader!css-loader!./PageToolbar.css'

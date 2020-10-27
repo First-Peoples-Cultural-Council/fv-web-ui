@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Preview from 'componentsShared/Preview'
+import Preview from 'components/Preview'
 import { DetailSongStoryStyles } from './DetailSongStoryStyles'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import DOMPurify from 'dompurify'
 import MediaPanels from 'components/MediaPanels'
 import Divider from '@material-ui/core/Divider'
-import FVButton from 'componentsShared/FVButton'
+import FVButton from 'components/FVButton'
 
 /**
  * @summary DetailSongStoryPresentation

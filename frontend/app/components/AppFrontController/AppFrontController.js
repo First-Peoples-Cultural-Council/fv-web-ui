@@ -24,7 +24,7 @@ import { routeHasChanged /*, getSearchObject*/ } from 'common/NavigationHelpers'
 import { Redirector } from 'common/Redirector'
 // import UIHelpers from 'common/UIHelpers'
 import StringHelpers from 'common/StringHelpers'
-import FVButton from 'componentsShared/FVButton'
+import FVButton from 'components/FVButton'
 import Navigation from 'components/Navigation'
 import WorkspaceSwitcher from 'components/WorkspaceSwitcher'
 import KidsNavigation from 'components/Kids/navigation'
@@ -34,7 +34,7 @@ import Breadcrumb from 'components/Breadcrumb'
 import { PageError } from 'common/conf/pagesIndex'
 
 import '!style-loader!css-loader!./AppFrontController.css'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 import HelperModeToggle from 'components/HelperModeToggle/index'
 
 export class AppFrontController extends Component {

@@ -28,11 +28,11 @@ import { pushWindowPath } from 'reducers/windowPath'
 import selectn from 'selectn'
 import t from 'tcomb-form'
 
-import FVButton from 'componentsShared/FVButton'
+import FVButton from 'components/FVButton'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import StatusBar from 'components/StatusBar'
-import FVLabel from 'componentsShared/FVLabel'
+import FVLabel from 'components/FVLabel'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
