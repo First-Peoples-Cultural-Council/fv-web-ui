@@ -46,7 +46,7 @@ public class AssetListenerTest extends AbstractTestDataCreatorTest {
     assertNotNull("Asset listener registered", eventService.getEventListener("asset_listener"));
 
     // Children containers will be created in FVDialectFactory
-    dialect = session.getDocument(new IdRef(this.dataCreator.getReference("testDialect")));
+    dialect = dataCreator.getReference(session, "testDialect");
     alphabet = session.getChild(dialect.getRef(), "Alphabet");
     dictionary = session.getChild(dialect.getRef(), "Dictionary");
 
