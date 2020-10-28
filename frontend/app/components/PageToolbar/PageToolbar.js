@@ -91,7 +91,9 @@ export class PageToolbar extends Component {
 
   render() {
     const { actions, classes, computeEntity, computePermissionEntity } = this.props
-    const documentPublished = selectn('response.state', computeEntity) === 'Published'
+    const documentPublished =
+      selectn('response.state', computeEntity) === 'Published' ||
+      selectn('response.state', computeEntity) === 'Republish'
     const permissionEntity = selectn('response', computePermissionEntity) ? computePermissionEntity : computeEntity
     const computeEntities = Immutable.fromJS([{ id: selectn('response.uid', computeEntity), entity: computeEntity }])
     const isRecorderWithApproval = ProviderHelpers.isRecorderWithApproval(this.props.computeLogin)
@@ -106,6 +108,13 @@ export class PageToolbar extends Component {
         This site is <strong>private</strong>. Contact hello@firstvoices.com to make it public.
       </div>
     )
+    const getDocState = (_computeEntity) => {
+      const state = selectn('response.state', _computeEntity)
+      if (state === 'Republished') {
+        return 'Published'
+      }
+      return state
+    }
 
     return (
       <AppBar color="primary" position="static" classes={classes} className="PageToolbar">
@@ -125,7 +134,7 @@ export class PageToolbar extends Component {
               <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>
                 <VisibilityMinimal.Container
                   docId={selectn('response.uid', computeEntity)}
-                  docState={selectn('response.state', computeEntity)}
+                  docState={getDocState(computeEntity)}
                   computeEntities={computeEntities || Immutable.List()}
                 />
               </AuthorizationFilter>
