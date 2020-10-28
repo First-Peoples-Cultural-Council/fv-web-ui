@@ -26,7 +26,7 @@ import { updatePageProperties } from 'reducers/navigation'
 
 import selectn from 'selectn'
 
-import ReportsJson from './reports.json'
+import ReportsJson from 'components/Reports/ReportsQueries.json'
 
 import PromiseWrapper from 'components/PromiseWrapper'
 
@@ -38,12 +38,12 @@ import WordsListView from 'components/WordsCreateEdit/list-view'
 import PhraseListView from 'components/Phrases/list-view'
 import SongsStoriesListViewAlt from 'components/SongsStories/list-view-alt'
 
-import ReportBrowser from './browse-view'
+import ReportsBrowser from 'components/Reports/ReportsBrowser'
 
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 
 const { func, object, string } = PropTypes
-export class PageDialectReportsView extends PageDialectLearnBase {
+export class ReportsView extends PageDialectLearnBase {
   static propTypes = {
     // REDUX: reducers/state
     routeParams: object.isRequired,
@@ -90,10 +90,6 @@ export class PageDialectReportsView extends PageDialectLearnBase {
       },
     ])
 
-    // const computeDocument = ProviderHelpers.getEntry(
-    //   this.props.computeDocument,
-    //   routeParams.dialect_path + '/Dictionary'
-    // )
     const computePortal = ProviderHelpers.getEntry(this.props.computePortal, routeParams.dialect_path + '/Portal')
     const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps()
 
@@ -101,7 +97,6 @@ export class PageDialectReportsView extends PageDialectLearnBase {
     let exportDialectExportElement = undefined
     const extricateReportData = this.state.currentReport.toJS()
     const exportDialectQuery = extricateReportData.query
-    // // const exportDialectColumns = extricateReportData.cols || ['*']
     let exportDialectLabel = undefined
 
     switch (this.state.currentReport.get('type')) {
@@ -113,8 +108,8 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             controlViaURL
             DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
             DEFAULT_PAGE={DEFAULT_PAGE}
-            DEFAULT_SORT_COL={this.state.currentReport.get('sortCol')}
-            DEFAULT_SORT_TYPE={this.state.currentReport.get('sortOrder')}
+            customSortBy={this.state.currentReport.get('sortBy')}
+            customSortOrder={this.state.currentReport.get('sortOrder')}
             disableClickItem={false}
             ENABLED_COLS={this.state.currentReport.has('cols') ? this.state.currentReport.get('cols') : []}
             filter={this.state.filterInfo}
@@ -140,8 +135,8 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             controlViaURL
             DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
             DEFAULT_PAGE={DEFAULT_PAGE}
-            DEFAULT_SORT_COL={this.state.currentReport.get('sortCol')}
-            DEFAULT_SORT_TYPE={this.state.currentReport.get('sortOrder')}
+            customSortBy={this.state.currentReport.get('sortBy')}
+            customSortOrder={this.state.currentReport.get('sortOrder')}
             disableClickItem={false}
             ENABLED_COLS={this.state.currentReport.has('cols') ? this.state.currentReport.get('cols') : []}
             filter={this.state.filterInfo}
@@ -160,39 +155,14 @@ export class PageDialectReportsView extends PageDialectLearnBase {
         break
 
       case 'songs':
-        exportDialectExportElement = 'FVBook'
-        exportDialectLabel = 'Song Report'
-        listView = (
-          <SongsStoriesListViewAlt
-            controlViaURL
-            DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
-            DEFAULT_PAGE={DEFAULT_PAGE}
-            disableClickItem={false}
-            filter={this.state.filterInfo}
-            hasSorting={false}
-            hasViewModeButtons={false}
-            onPagePropertiesChange={this._handlePagePropertiesChange}
-            onPaginationReset={this._resetURLPagination}
-            routeParams={routeParams}
-            // Export Dialect
-            // TODO: endpdoint doesn't support FVBook exports
-            hasExportDialect={false}
-            // exportDialectExportElement={exportDialectExportElement}
-            // exportDialectLabel={exportDialectLabel}
-            // exportDialectQuery={`SELECT * FROM ${exportDialectExportElement} WHERE ecm:path STARTSWITH '${routeParams.dialect_path}/Dictionary' ${exportDialectQuery}`}
-            // exportDialectColumns={'*'}
-          />
-        )
-        break
-
       case 'stories':
-        exportDialectExportElement = 'FVBook'
-        exportDialectLabel = 'Story Report'
         listView = (
           <SongsStoriesListViewAlt
             controlViaURL
             DEFAULT_PAGE_SIZE={DEFAULT_PAGE_SIZE}
             DEFAULT_PAGE={DEFAULT_PAGE}
+            DEFAULT_SORT_COL={this.state.currentReport.get('sortBy')}
+            DEFAULT_SORT_TYPE={this.state.currentReport.get('sortOrder')}
             disableClickItem={false}
             filter={this.state.filterInfo}
             hasSorting={false}
@@ -200,13 +170,8 @@ export class PageDialectReportsView extends PageDialectLearnBase {
             onPagePropertiesChange={this._handlePagePropertiesChange}
             onPaginationReset={this._resetURLPagination}
             routeParams={routeParams}
-            // Export Dialect
             // TODO: endpdoint doesn't support FVBook exports
             hasExportDialect={false}
-            // exportDialectExportElement={exportDialectExportElement}
-            // exportDialectLabel={exportDialectLabel}
-            // exportDialectQuery={`SELECT * FROM ${exportDialectExportElement} WHERE ecm:path STARTSWITH '${routeParams.dialect_path}/Dictionary' ${exportDialectQuery}`}
-            // exportDialectColumns={'*'}
           />
         )
         break
@@ -224,7 +189,7 @@ export class PageDialectReportsView extends PageDialectLearnBase {
 
             <div className="row">
               <div className={classNames('col-xs-12', 'col-md-3')}>
-                <ReportBrowser
+                <ReportsBrowser
                   style={{ maxHeight: '400px', overflowY: 'scroll' }}
                   routeParams={routeParams}
                   fullWidth
@@ -323,4 +288,4 @@ const mapDispatchToProps = {
   updatePageProperties,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PageDialectReportsView)
+export default connect(mapStateToProps, mapDispatchToProps)(ReportsView)
