@@ -91,7 +91,9 @@ export class PageToolbar extends Component {
 
   render() {
     const { actions, classes, computeEntity, computePermissionEntity } = this.props
-    const documentPublished = selectn('response.state', computeEntity) === 'Published'
+    const documentPublished =
+      selectn('response.state', computeEntity) === 'Published' ||
+      selectn('response.state', computeEntity) === 'Republish'
     const permissionEntity = selectn('response', computePermissionEntity) ? computePermissionEntity : computeEntity
     const computeEntities = Immutable.fromJS([{ id: selectn('response.uid', computeEntity), entity: computeEntity }])
     const isRecorderWithApproval = ProviderHelpers.isRecorderWithApproval(this.props.computeLogin)
