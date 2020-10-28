@@ -155,12 +155,21 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
     } else if (FV_PORTAL.equals(doc.getType())) {
       return createProxyForPortal(doc);
     } else if (isPublishableAsset(doc.getType())) {
-      return createProxyForAsset(doc);
+      DocumentModel proxyForAsset = createProxyForAsset(doc);
+
+      if (FV_BOOK.equals(doc.getType())) {
+        // For books, transition all direct children to publish
+        // These events will be picked up by the listener
+        // Better to do this here, then rely on BulkLifeCycleChangeListener
+        // that may introduce the bug FW-1967
+        transitionChildrenService.transitionChildren(PUBLISH_TRANSITION, null, doc);
+      }
+
+      return proxyForAsset;
     } else {
       return createProxy(doc);
     }
   }
-
 
   @Override
   public void republish(DocumentModel doc) {

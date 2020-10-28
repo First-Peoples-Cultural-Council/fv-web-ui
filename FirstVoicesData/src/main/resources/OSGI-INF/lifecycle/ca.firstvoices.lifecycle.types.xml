@@ -5,7 +5,7 @@
       <type name="Domain">default</type>
       <type name="FVAlphabet" noRecursionForTransitions="Publish">fv-lifecycle</type>
       <type name="FVAudio">fv-lifecycle</type>
-      <type name="FVBook">fv-lifecycle</type>
+      <type name="FVBook" noRecursionForTransitions="Publish">fv-lifecycle</type>
       <type name="FVBookEntry">fv-lifecycle</type>
       <type name="FVBooks" noRecursionForTransitions="Enable,Disable,Publish,Republish,RevertToNew,Unpublish">fv-lifecycle</type>
       <type name="FVCategories" noRecursionForTransitions="Publish">fv-lifecycle</type>

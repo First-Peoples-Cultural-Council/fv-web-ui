@@ -19,13 +19,13 @@ nashorn_code_cache
 /frontend/qa/Documentation/
 /frontend/fv-utils/
 /frontend/fv-batch-import/
-/frontend/scripts/files/import.log
-/frontend/scripts/files/*_errors.csv
 *.iml
-/frontend/cypress/videos/
-/frontend/cypress/screenshots/
 *.log
-/frontend/temp/*
+/frontend/cypress/screenshots/
+/frontend/cypress/scripts/files/import.log
+/frontend/cypress/scripts/files/*_errors.csv
+/frontend/cypress/temp/
+/frontend/cypress/videos/
 */test-report.xml
 *.scannerwork
 

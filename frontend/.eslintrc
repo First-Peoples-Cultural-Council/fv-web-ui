@@ -143,7 +143,11 @@
     "semi": [2, "never"], // http://eslint.org/docs/rules/semi
     "semi-spacing": 0,
     "space-before-blocks": 2, // http://eslint.org/docs/rules/space-before-blocks
-    "space-before-function-paren": [2, "never"], // http://eslint.org/docs/rules/space-before-function-paren
+    "space-before-function-paren": [2, {
+        "anonymous": "always",
+        "named": "never",
+        "asyncArrow": "always"
+    }], // http://eslint.org/docs/rules/space-before-function-paren
     "space-infix-ops": 2, // http://eslint.org/docs/rules/space-infix-ops
     "space-unary-ops": 0,
     "strict": 1,

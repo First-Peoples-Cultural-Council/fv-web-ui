@@ -25,4 +25,4 @@ app/assets/libraries
 app/assets/stylesheets
 app/assets/vendor
 
-app/assets/javascripts/models/data
+app/common/mapData
