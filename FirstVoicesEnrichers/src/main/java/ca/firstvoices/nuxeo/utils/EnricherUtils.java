@@ -60,6 +60,16 @@ public class EnricherUtils {
 
   private static ObjectMapper mapper = new ObjectMapper();
 
+  private static String getTranscodeURL(DocumentModel doc, String xpath, String filename) {
+    String blobUrl = Framework.getProperty("nuxeo.url");
+    blobUrl += "/nxfile/";
+    blobUrl += doc.getRepositoryName() + "/";
+    blobUrl += doc.getId() + "/";
+    blobUrl += xpath + "/";
+    blobUrl += filename;
+    return blobUrl;
+  }
+
   private static String getThumbnailURL(DocumentModel doc, String xpath, String filename) {
     String blobUrl = Framework.getProperty("nuxeo.url");
     blobUrl += "/nxfile/";
@@ -114,8 +124,8 @@ public class EnricherUtils {
       if (binaryDoc.hasSchema("picture")) {
         ArrayNode thumbnailsJsonArray = mapper.createArrayNode();
 
-        List<HashMap<String, Object>> views = (List<HashMap<String, Object>>) binaryDoc
-            .getPropertyValue("picture:views");
+        List<HashMap<String, Object>> views =
+            (List<HashMap<String, Object>>) binaryDoc.getPropertyValue("picture:views");
 
         int i = 0;
 
@@ -136,6 +146,29 @@ public class EnricherUtils {
 
         binaryJsonObj.set("views", thumbnailsJsonArray);
       }
+
+      if (binaryDoc.hasSchema("video")) {
+        ArrayNode transcodesArray = mapper.createArrayNode();
+
+        List<HashMap<String, Object>> views =
+            (List<HashMap<String, Object>>) binaryDoc.getPropertyValue("vid:transcodedVideos");
+
+        for (int i = 0, size = views.size(); i < size; i++) {
+          final HashMap<String, Object> v = views.get(i);
+          ObjectNode transcode = mapper.createObjectNode();
+          BinaryBlob content = (BinaryBlob) v.get("content");
+          transcode.put("name", (String) v.get("name"));
+          transcode.put("mime-type", content.getMimeType());
+          transcode.put("url",
+              getTranscodeURL(binaryDoc,
+                  "vid:transcodedVideos/" + i + "/content",
+                  content.getFilename()));
+          transcodesArray.add(transcode);
+        }
+
+        binaryJsonObj.set("transcodedVideos", transcodesArray);
+      }
+
     } catch (DocumentNotFoundException | DocumentSecurityException de) {
       log.warn("Could not retrieve binary document.", de);
       return null;
@@ -196,7 +229,7 @@ public class EnricherUtils {
    * Retrieve the document title for a given id, and return a JSON object containing it.
    */
   public static ObjectNode getDocumentIdAndTitleAndPathJsonObject(String documentId,
-      CoreSession session) {
+                                                                  CoreSession session) {
 
     IdRef ref = new IdRef(documentId);
     DocumentModel doc;
@@ -237,8 +270,8 @@ public class EnricherUtils {
         if (!queryResult.isEmpty()) {
           DocumentModel partOfSpeechDoc = queryResult.get(0);
           if (partOfSpeechDoc != null) {
-            partOfSpeechLabel = partOfSpeechDoc.getProperty("xvocabulary:label")
-                .getValue(String.class);
+            partOfSpeechLabel =
+                partOfSpeechDoc.getProperty("xvocabulary:label").getValue(String.class);
           }
         }
       }
@@ -272,8 +305,8 @@ public class EnricherUtils {
     NuxeoPrincipal principal = session.getPrincipal();
 
     for (ACE ace : dialect.getACP().getACL("local").getACEs()) {
-      if (SecurityConstants.READ.equals(ace.getPermission()) && principal
-          .isMemberOf(ace.getUsername())) {
+      if (SecurityConstants.READ.equals(ace.getPermission())
+          && principal.isMemberOf(ace.getUsername())) {
         roles.add("Member");
         break;
       }
@@ -313,13 +346,13 @@ public class EnricherUtils {
     return query;
   }
 
-  public static String convertLetterToCustomOrder(CoreSession session, String dialect,
-      String letter) {
+  public static String convertLetterToCustomOrder(CoreSession session,
+                                                  String dialect,
+                                                  String letter) {
 
     String testQuery =
         "SELECT * FROM FVCharacter WHERE dc:title = \"" + letter + "\" AND fva:dialect = \""
-            + dialect + "\"" + " AND ecm:isVersion = 0 "
-            + "AND ecm:isTrashed = 0";
+            + dialect + "\"" + " AND ecm:isVersion = 0 " + "AND ecm:isTrashed = 0";
 
     DocumentModelList result = session.query(testQuery);
 

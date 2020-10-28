@@ -55,31 +55,22 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
 @RunWith(FeaturesRunner.class)
 @Features({CoreFeature.class, AutomationFeature.class, MockitoFeature.class})
 @RepositoryConfig(cleanup = Granularity.METHOD)
-@Deploy({
-    "FirstVoicesMaintenance",
-    "FirstVoicesCoreTests:OSGI-INF/nuxeo.conf.override.xml"
-})
+@Deploy({"FirstVoicesMaintenance", "FirstVoicesCoreTests:OSGI-INF/nuxeo.conf.override.xml"})
 @TestDataConfiguration(yaml = {"test-data/basic-structure.yaml", "test-data/test-language.yaml"})
 public class PostCommitCleanupListenerTest extends AbstractTestDataCreatorTest {
 
   private static final String eventName = "postCommitCleanupListener";
   // This is a fake task that would be returned by the page provider
   MockDocumentModel fakeTask;
-  @Mock
-  @RuntimeService
-  PageProviderService pageProviderService;
+  @Mock @RuntimeService PageProviderService pageProviderService;
 
-  @Inject
-  CoreSession session;
+  @Inject CoreSession session;
 
-  @Inject
-  EventService eventService;
+  @Inject EventService eventService;
 
-  @Inject
-  protected TrashService trashService;
+  @Inject protected TrashService trashService;
 
-  @Inject
-  UserManager userManager;
+  @Inject UserManager userManager;
 
   DocumentModel word = null;
 
@@ -98,14 +89,15 @@ public class PostCommitCleanupListenerTest extends AbstractTestDataCreatorTest {
   public void setUp() {
     assertNotNull("Post commit cleanup listener registered",
         eventService.getEventListener(eventName));
-    word = session.getDocument(new IdRef(this.dataCreator.getReference("testWord1")));
+    word = dataCreator.getReference(session, "testWord1");
 
     // Get dialect
-    dialect = session.getDocument(new IdRef(this.dataCreator.getReference("testArchive")));
+    dialect = dataCreator.getReference(session, "testArchive");
 
     // Create a category (can live inside a dialect for test)
-    category = session.createDocument(
-        session.createDocumentModel(dialect.getPathAsString(), "testCategory", FV_CATEGORY));
+    category = session.createDocument(session.createDocumentModel(dialect.getPathAsString(),
+        "testCategory",
+        FV_CATEGORY));
 
     // Create a regular user
     DocumentModel userModel = userManager.getBareUserModel();
@@ -117,9 +109,14 @@ public class PostCommitCleanupListenerTest extends AbstractTestDataCreatorTest {
     // Return a fake page provider defined above instead of the actual page provider
     // Note: Need to use DoReturn for generics
     // See: https://dzone.com/articles/mocking-method-with-wildcard-generic-return-type
-    doReturn(new FakePageProvider<DocumentModelList>()).when(pageProviderService)
-        .getPageProvider(eq(PostCommitCleanupListener.GET_ALL_OPEN_TASKS_FOR_DOCUMENT), eq(null),
-            eq(null), anyLong(), any(), eq(word.getId()));
+    doReturn(new FakePageProvider<DocumentModelList>())
+        .when(pageProviderService)
+        .getPageProvider(eq(PostCommitCleanupListener.GET_ALL_OPEN_TASKS_FOR_DOCUMENT),
+            eq(null),
+            eq(null),
+            anyLong(),
+            any(),
+            eq(word.getId()));
 
     fakeTask = new MockDocumentModel("TaskDoc");
   }
@@ -135,7 +132,8 @@ public class PostCommitCleanupListenerTest extends AbstractTestDataCreatorTest {
 
     // Fire event as non-system admin user
     EventContext ctx = new DocumentEventContext(getNonAdminCoreSession(),
-        getNonAdminCoreSession().getPrincipal(), word);
+        getNonAdminCoreSession().getPrincipal(),
+        word);
     eventService.fireEvent(ctx.newEvent(DocumentEventTypes.DOCUMENT_UPDATED));
 
     commitTransactionAndWait();
@@ -150,8 +148,7 @@ public class PostCommitCleanupListenerTest extends AbstractTestDataCreatorTest {
     assertFalse(fakeTask.transitionRan);
 
     // Fire event as non-system admin user on dialect
-    DocumentModel dialect = session
-        .getDocument(new IdRef(this.dataCreator.getReference("testArchive")));
+    DocumentModel dialect = dataCreator.getReference(session, "testArchive");
 
     EventContext ctx = new DocumentEventContext(session, session.getPrincipal(), dialect);
     eventService.fireEvent(ctx.newEvent(DocumentEventTypes.DOCUMENT_UPDATED));
@@ -192,7 +189,7 @@ public class PostCommitCleanupListenerTest extends AbstractTestDataCreatorTest {
     commitTransactionAndWait();
 
     // Confirm proxies DO NOT exists for document
-    assertEquals( 0, session.getProxies(word.getRef(), null).size());
+    assertEquals(0, session.getProxies(word.getRef(), null).size());
   }
 
   //================================================================================
@@ -212,7 +209,8 @@ public class PostCommitCleanupListenerTest extends AbstractTestDataCreatorTest {
     commitTransactionAndWait();
 
     // Ensure required job was added
-    assertTrue(RequiredJobsUtils.hasRequiredJobs(dialect, Constants.CLEAN_CATEGORY_REFERENCES_JOB_ID));
+    assertTrue(RequiredJobsUtils.hasRequiredJobs(dialect,
+        Constants.CLEAN_CATEGORY_REFERENCES_JOB_ID));
   }
 
   //================================================================================

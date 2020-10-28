@@ -32,6 +32,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
+import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import ca.firstvoices.testUtil.FirstVoicesDataFeature;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,6 +48,9 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.ecm.core.api.trash.TrashService;
+import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
+import org.nuxeo.ecm.core.test.annotations.Granularity;
+import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.test.PlatformFeature;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
@@ -57,10 +61,10 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
  */
 @RunWith(FeaturesRunner.class)
 @Features({PlatformFeature.class, FirstVoicesDataFeature.class})
-@Deploy({"FirstVoicesCoreIO", "FirstVoicesData", "org.nuxeo.ecm.platform", "org.nuxeo.ecm.platform.commandline.executor",
-    "org.nuxeo.ecm.platform.picture.core", "org.nuxeo.ecm.platform.rendition.core",
-    "org.nuxeo.ecm.platform.video.core", "org.nuxeo.ecm.platform.audio.core",
-    "org.nuxeo.ecm.automation.scripting",
+@Deploy({"FirstVoicesCoreIO", "FirstVoicesData", "org.nuxeo.ecm.platform",
+    "org.nuxeo.ecm.platform.commandline.executor", "org.nuxeo.ecm.platform.picture.core",
+    "org.nuxeo.ecm.platform.rendition.core", "org.nuxeo.ecm.platform.video.core",
+    "org.nuxeo.ecm.platform.audio.core", "org.nuxeo.ecm.automation.scripting",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
@@ -68,73 +72,30 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml",
     "FirstVoicesCoreTests:OSGI-INF/nuxeo.conf.override.xml",
     "org.nuxeo.ecm.platform.publisher.core",})
-public class ComputeCustomOrderServiceImplTest {
+@RepositoryConfig(cleanup = Granularity.METHOD, init = DefaultRepositoryInit.class)
+public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTest {
 
-  @Inject
-  private CoreSession session;
+  @Inject private CustomOrderComputeService nativeOrderComputeService;
 
-  @Inject
-  private CustomOrderComputeService nativeOrderComputeService;
+  @Inject private FirstVoicesPublisherService firstVoicesPublisherService;
 
-  @Inject
-  private FirstVoicesPublisherService firstVoicesPublisherService;
-
-  @Inject
-  private TrashService trashService;
-
-  private DocumentModel domain;
-  private DocumentModel workspaceRoot;
-  private DocumentModel workspace;
-  private DocumentModel languageFamily;
-  private DocumentModel language;
-  private DocumentModel dialect;
-  private DocumentModel alphabet;
-  private DocumentModel dictionary;
+  @Inject private TrashService trashService;
 
   @Before
-  public void setUp() {
-    domain = createDocument(session.createDocumentModel("/", "FV", "Domain"));
-    workspaceRoot = session.createDocument(
-        session.createDocumentModel(domain.getPathAsString(), "Workspaces", "WorkspaceRoot"));
-    workspace = session.createDocument(
-        session.createDocumentModel(workspaceRoot.getPathAsString(), "Data", "Workspace"));
-    languageFamily = createDocument(
-        session.createDocumentModel(workspace.getPathAsString(), "Family", FV_LANGUAGE_FAMILY));
-    assertNotNull("Should have a valid FVLanguageFamily", languageFamily);
-    language = createDocument(
-        session.createDocumentModel(languageFamily.getPathAsString(), "Language", FV_LANGUAGE));
-    assertNotNull("Should have a valid FVLanguage", language);
-    dialect = createDocument(
-        session.createDocumentModel(language.getPathAsString(), "Dialect", FV_DIALECT));
-    assertNotNull("Should have a valid FVDialect", dialect);
-
-    // Dictionary is created automatically
-    dictionary = session.getChildren(dialect.getRef(), FV_DICTIONARY).get(0);
-    assertNotNull("Should have a valid FVDictionary", dictionary);
-
-    // Alphabet is created automatically
-    alphabet = session.getChildren(dialect.getRef(), FV_ALPHABET).get(0);
-    assertNotNull("Should have a valid FVAlphabet", alphabet);
-    session.save();
-  }
-
-  @After
-  public void tearDown() {
-    if (domain != null) {
-      session.removeDocument(domain.getRef());
-      session.save();
-    }
+  public void setDialectReference() {
+    //we must use one with an empty dictionary
+    dialect = dataCreator.getReference(session, "testArchive2");
   }
 
   @Test
   public void testDialectOrderingNisgaa() {
-    String[] orderedWords = {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱",
-        "la'oo'a'a",};
+    String[] orderedWords =
+        {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱", "la'oo'a'a",};
 
-    String[] orderedAlphabet = {"aa", "a", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl", "i",
-        "ii", "j", "k", "k'", "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo",
-        "p", "p'", "s", "t", "t'", "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y",
-        "y̓", "'"};
+    String[] orderedAlphabet =
+        {"aa", "a", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl", "i", "ii", "j", "k", "k'", "ḵ",
+            "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo", "p", "p'", "s", "t", "t'",
+            "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y", "y̓", "'"};
 
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
     DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
@@ -158,19 +119,20 @@ public class ComputeCustomOrderServiceImplTest {
 
   @Test
   public void testDialectOrderingNuuChahNulth() {
-    String[] orderedWords = {"animal", "ʔaʔapp̕iqa", "ʔaḥʔaaʔaaƛ", "ʕaʕac̕ikn̕uk", "aai",
-        "ʔaaʔaƛkʷin", "ʕaanus", "ʔeʔiič’im", "cakaašt", "caqiic ʔiš suč’ačiłał", "cawaak", "caapin",
-        "ciciḥʔaƛmapt", "cuwit", "cux" + "ʷaašt", "c̓iixaat̓akƛinƛ", "čuup", "č’iʔii",
-        "hachaapsim", "hayu ʔiš muučiiłał", "hayuxsyuučiƛ", "k" + "̕uʔihta", "ƛułčakup", "ƛ̕uu-čiƛ",
-        "ma", "mułaa", "m̓am̓iiqsu", "naʔaataḥ", "naw̕ahi", "nunuukma", "piišpiš", "qacc̕a",
-        "qiicqiica", "qiišʔaqƛi", "sasin", "saasin", "suč’a", "šuuwis", "t̓iqʷas", "uksuukł",
-        "ʔukłaa", "ʕuupqšiƛ", "weʔičʔin", "wiwiiquk", "xʷakak", "yaciicʔił", "yeeł", "y̕eʔisi"};
+    String[] orderedWords =
+        {"animal", "ʔaʔapp̕iqa", "ʔaḥʔaaʔaaƛ", "ʕaʕac̕ikn̕uk", "aai", "ʔaaʔaƛkʷin", "ʕaanus",
+            "ʔeʔiič’im", "cakaašt", "caqiic ʔiš suč’ačiłał", "cawaak", "caapin", "ciciḥʔaƛmapt",
+            "cuwit", "cux" + "ʷaašt", "c̓iixaat̓akƛinƛ", "čuup", "č’iʔii", "hachaapsim",
+            "hayu ʔiš muučiiłał", "hayuxsyuučiƛ", "k" + "̕uʔihta", "ƛułčakup", "ƛ̕uu-čiƛ", "ma",
+            "mułaa", "m̓am̓iiqsu", "naʔaataḥ", "naw̕ahi", "nunuukma", "piišpiš", "qacc̕a",
+            "qiicqiica", "qiišʔaqƛi", "sasin", "saasin", "suč’a", "šuuwis", "t̓iqʷas", "uksuukł",
+            "ʔukłaa", "ʕuupqšiƛ", "weʔičʔin", "wiwiiquk", "xʷakak", "yaciicʔił", "yeeł", "y̕eʔisi"};
 
-    String[] orderedAlphabet = {"a", "ʔa", "ʕa", "aa", "ʔaa", "ʕaa", "e", "ʔe", "ʕe", "ee", "ʔee",
-        "ʕee", "c", "c" + "̕", "č", "č’", "h", "ḥ", "i", "ʔi", "ʕi", "ii", "ʔii", "ʕii", "k", "k̕",
-        "kʷ", "k̕ʷ", "ł", "ƛ", "ƛ̕", "m", "m̕", "n", "n̕", "p", "p̕", "q", "qʷ", "s", "š", "t",
-        "t̕", "u", "ʔu", "ʕu", "uu", "ʔuu", "ʕuu", "w", "w̕", "x", "x̣", "xʷ", "x̣ʷ", "y", "y̕",
-        "ʕ", "ʔ"};
+    String[] orderedAlphabet =
+        {"a", "ʔa", "ʕa", "aa", "ʔaa", "ʕaa", "e", "ʔe", "ʕe", "ee", "ʔee", "ʕee", "c", "c" + "̕",
+            "č", "č’", "h", "ḥ", "i", "ʔi", "ʕi", "ii", "ʔii", "ʕii", "k", "k̕", "kʷ", "k̕ʷ", "ł",
+            "ƛ", "ƛ̕", "m", "m̕", "n", "n̕", "p", "p̕", "q", "qʷ", "s", "š", "t", "t̕", "u", "ʔu",
+            "ʕu", "uu", "ʔuu", "ʕuu", "w", "w̕", "x", "x̣", "xʷ", "x̣ʷ", "y", "y̕", "ʕ", "ʔ"};
 
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
     DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
@@ -191,36 +153,39 @@ public class ComputeCustomOrderServiceImplTest {
 
   @Test
   public void testDialectOrderingSpacesAndNonAlphabetGraphemesAtEndByLatinOrder() {
-    String[] orderedWords = {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í",
-        "Î", "Ï", "Ð", "Ñ", "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß",
-        "à", "á", "â", "ã", "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ",
-        "ò", "ó", "ô", "õ", "ö", "÷", "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ", "a", "able", "about",
-        "account", "across", "act", "addition", "adjustment", "advertisement", "after", "again",
-        "against", "agreement", "air", "all", "almost", "among", "amount", "baby", "back", "bad",
-        "bag", "balance", "ball", "band", "cake", "camera", "canvas", "card", "care", "carriage",
-        "damage", "danger", "dark", "daughter", "day", "dead", "dear", "death", "disgust",
-        "distance", "distribution", "ear", "early", "earth", "east", "edge", "education", "effect",
-        "egg", "elastic", "electric", "end", "face", "fact", "fall", "false", "family", "far",
-        "farm", "fat", "father", "fear", "feather", "glass", "glove", "go", "goat", "gold", "good",
-        "government", "grain", "grass", "great", "green", "grey", "grip", "group", "growth",
-        "guide", "gun", "hair", "hammer", "hand", "hanging", "happy", "harbor", "ink", "insect",
-        "instrument", "insurance", "interest", "invention", "iron", "island", "jelly", "jewel",
-        "join", "journey", "judge", "jump", "keep", "kettle", "key", "kick", "kind", "kiss", "knee",
-        "knife", "knot", "knowledge, land", "language", "last", "late", "map", "money", "note",
-        "now", "number", "nut", "observation", "of", "off", "offer", "office", "oil", "old", "on",
-        "only", "open", "paste", "payment", "peace", "pen", "pencil", "person", "physical",
-        "picture", "quality", "question", "quick", "quiet", "quite, rail", "rain", "range", "rat",
-        "rate", "ray", "run, sad", "safe", "sail", "salt", "same", "sand", "say", "scale", "school",
-        "science", "scissors", "strange", "street", "strong", "structure", "substance", "such",
-        "theory", "there", "thick", "thin", "tight", "till", "time", "tin", "tired", "to", "toe",
-        "together", "unit", "up", "use, value", "verse", "very", "vessel", "view", "violent",
-        "voice, waiting", "walk", "wall", "war", "warm", "wash", "worm", "wound", "writing",
-        "wrong", "year", "yellow", "yes", "yesterday", "you", "young"};
+    String[] orderedWords =
+        {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï", "Ð", "Ñ",
+            "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß", "à", "á", "â",
+            "ã", "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó",
+            "ô", "õ", "ö", "÷", "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ", "a", "able", "about",
+            "account", "across", "act", "addition", "adjustment", "advertisement", "after", "again",
+            "against", "agreement", "air", "all", "almost", "among", "amount", "baby", "back",
+            "bad", "bag", "balance", "ball", "band", "cake", "camera", "canvas", "card", "care",
+            "carriage", "damage", "danger", "dark", "daughter", "day", "dead", "dear", "death",
+            "disgust", "distance", "distribution", "ear", "early", "earth", "east", "edge",
+            "education", "effect", "egg", "elastic", "electric", "end", "face", "fact", "fall",
+            "false", "family", "far", "farm", "fat", "father", "fear", "feather", "glass", "glove",
+            "go", "goat", "gold", "good", "government", "grain", "grass", "great", "green", "grey",
+            "grip", "group", "growth", "guide", "gun", "hair", "hammer", "hand", "hanging", "happy",
+            "harbor", "ink", "insect", "instrument", "insurance", "interest", "invention", "iron",
+            "island", "jelly", "jewel", "join", "journey", "judge", "jump", "keep", "kettle", "key",
+            "kick", "kind", "kiss", "knee", "knife", "knot", "knowledge, land", "language", "last",
+            "late", "map", "money", "note", "now", "number", "nut", "observation", "of", "off",
+            "offer", "office", "oil", "old", "on", "only", "open", "paste", "payment", "peace",
+            "pen", "pencil", "person", "physical", "picture", "quality", "question", "quick",
+            "quiet", "quite, rail", "rain", "range", "rat", "rate", "ray", "run, sad", "safe",
+            "sail", "salt", "same", "sand", "say", "scale", "school", "science", "scissors",
+            "strange", "street", "strong", "structure", "substance", "such", "theory", "there",
+            "thick", "thin", "tight", "till", "time", "tin", "tired", "to", "toe", "together",
+            "unit", "up", "use, value", "verse", "very", "vessel", "view", "violent",
+            "voice, waiting", "walk", "wall", "war", "warm", "wash", "worm", "wound", "writing",
+            "wrong", "year", "yellow", "yes", "yesterday", "you", "young"};
 
-    String[] orderedAlphabet = {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì",
-        "Í", "Î", "Ï", "Ð", "Ñ", "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ",
-        "ß", "à", "á", "â", "ã", "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð",
-        "ñ", "ò", "ó", "ô", "õ", "ö", "÷", "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ"};
+    String[] orderedAlphabet =
+        {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï", "Ð", "Ñ",
+            "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß", "à", "á", "â",
+            "ã", "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó",
+            "ô", "õ", "ö", "÷", "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ"};
 
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
     DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
@@ -241,29 +206,31 @@ public class ComputeCustomOrderServiceImplTest {
 
   @Test
   public void testDialectOrderingPhrases() {
-    String[] orderedPhrases = {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í",
-        "Î", "Ï", "Ð", "Ñ", "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß",
-        "à", "á", "â", "ã", "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ",
-        "ò", "ó", "ô", "õ", "ö", "÷", "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ",
-        "A bad excuse is better than none", "A bit", "A bit " + "more", "A bit of a...",
-        "A couple of sth", "Ability Something", "Able bodied", "Better safe than " + "sorry",
-        "Curiosity killed the cat", "Do not make a mountain out of a mole " + "hill",
-        "Easy come, " + "easy go", "Fine feathers make fine birds",
-        "Give credit where credit is due", "Home is where the " + "heart is",
-        "If you play with fire, you will get burned", "Judge not, that ye be not judged",
-        "Kill " + "two birds with one stone.", "Learn a language, and you will avoid a war",
-        "Memory is the treasure of" + " the mind", "No man is an island",
-        "Oil and water do not mix", "Penny, Penny. Makes many.",
-        "Respect" + " is not given, it is earned.",
-        "Sticks and stones may break my bones, but words will never hurt me.",
-        "There is no smoke without fire.", "Use it or lose it", "Virtue is its own reward",
-        "When it rains " + "it pours.", "You cannot teach an old dog new tricks",
-        "Zeal without knowledge is fire without light."};
+    String[] orderedPhrases =
+        {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï", "Ð", "Ñ",
+            "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß", "à", "á", "â",
+            "ã", "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó",
+            "ô", "õ", "ö", "÷", "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ",
+            "A bad excuse is better than none", "A bit", "A bit " + "more", "A bit of a...",
+            "A couple of sth", "Ability Something", "Able bodied", "Better safe than " + "sorry",
+            "Curiosity killed the cat", "Do not make a mountain out of a mole " + "hill",
+            "Easy come, " + "easy go", "Fine feathers make fine birds",
+            "Give credit where credit is due", "Home is where the " + "heart is",
+            "If you play with fire, you will get burned", "Judge not, that ye be not judged",
+            "Kill " + "two birds with one stone.", "Learn a language, and you will avoid a war",
+            "Memory is the treasure of" + " the mind", "No man is an island",
+            "Oil and water do not mix", "Penny, Penny. Makes many.",
+            "Respect" + " is not given, it is earned.",
+            "Sticks and stones may break my bones, but words will never hurt me.",
+            "There is no smoke without fire.", "Use it or lose it", "Virtue is its own reward",
+            "When it rains " + "it pours.", "You cannot teach an old dog new tricks",
+            "Zeal without knowledge is fire without light."};
 
-    String[] orderedAlphabet = {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì",
-        "Í", "Î", "Ï", "Ð", "Ñ", "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ",
-        "ß", "à", "á", "â", "ã", "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð",
-        "ñ", "ò", "ó", "ô", "õ", "ö", "÷", "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ"};
+    String[] orderedAlphabet =
+        {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È", "É", "Ê", "Ë", "Ì", "Í", "Î", "Ï", "Ð", "Ñ",
+            "Ò", "Ó", "Ô", "Õ", "Ö", "×", "Ø", "Ù", "Ú", "Û", "Ü", "Ý", "Þ", "ß", "à", "á", "â",
+            "ã", "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó",
+            "ô", "õ", "ö", "÷", "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ"};
 
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
     DocumentModelList createdPhrases = createWordsorPhrases(orderedPhrases, FV_PHRASE);
@@ -284,13 +251,13 @@ public class ComputeCustomOrderServiceImplTest {
 
   @Test
   public void testTrashedCharacterNotIncludedInOrdering() {
-    String[] orderedWords = {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱",
-        "la'oo'a'a", "zaa"};
+    String[] orderedWords =
+        {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱", "la'oo'a'a", "zaa"};
 
-    String[] orderedAlphabet = {"z", "aa", "a", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl",
-        "i", "ii", "j", "k", "k'", "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o",
-        "oo", "p", "p'", "s", "t", "t'", "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw",
-        "y", "y̓", "'"};
+    String[] orderedAlphabet =
+        {"z", "aa", "a", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl", "i", "ii", "j", "k", "k'",
+            "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo", "p", "p'", "s", "t",
+            "t'", "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y", "y̓", "'"};
 
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
     DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
@@ -370,10 +337,10 @@ public class ComputeCustomOrderServiceImplTest {
 
   @Test
   public void updateCustomOrderCharacters() {
-    String[] orderedAlphabet = {"z", "aa", "a", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl",
-        "i", "ii", "j", "k", "k'", "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o",
-        "oo", "p", "p'", "s", "t", "t'", "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw",
-        "y", "y̓", "'"};
+    String[] orderedAlphabet =
+        {"z", "aa", "a", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl", "i", "ii", "j", "k", "k'",
+            "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo", "p", "p'", "s", "t",
+            "t'", "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y", "y̓", "'"};
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
     nativeOrderComputeService.updateCustomOrderCharacters(session,
         session.getChildren(new PathRef(alphabet.getPathAsString())));
@@ -388,10 +355,10 @@ public class ComputeCustomOrderServiceImplTest {
 
   @Test
   public void updateCustomOrderCharactersWithoutOrderSet() {
-    String[] unorderedAlphabet = {"z", "aa", "a", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl",
-        "i", "ii", "j", "k", "k'", "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o",
-        "oo", "p", "p'", "s", "t", "t'", "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw",
-        "y", "y̓", "'"};
+    String[] unorderedAlphabet =
+        {"z", "aa", "a", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl", "i", "ii", "j", "k", "k'",
+            "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo", "p", "p'", "s", "t",
+            "t'", "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y", "y̓", "'"};
     createUnorderedAlphabet(unorderedAlphabet, alphabet.getPathAsString());
     nativeOrderComputeService.updateCustomOrderCharacters(session,
         session.getChildren(new PathRef(alphabet.getPathAsString())));
@@ -432,13 +399,13 @@ public class ComputeCustomOrderServiceImplTest {
 
   @Test
   public void ComputingCustomOrderComputesOnProxyDocs() {
-    String[] orderedWords = {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱",
-        "la'oo'a'a",};
+    String[] orderedWords =
+        {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱", "la'oo'a'a",};
 
-    String[] orderedAlphabet = {"aa", "a", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl", "i",
-        "ii", "j", "k", "k'", "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo",
-        "p", "p'", "s", "t", "t'", "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y",
-        "y̓", "'"};
+    String[] orderedAlphabet =
+        {"aa", "a", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl", "i", "ii", "j", "k", "k'", "ḵ",
+            "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo", "p", "p'", "s", "t", "t'",
+            "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y", "y̓", "'"};
 
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
     createWordsorPhrases(orderedWords, FV_WORD);
@@ -542,8 +509,8 @@ public class ComputeCustomOrderServiceImplTest {
   private DocumentModelList createWordsorPhrases(String[] docs, String typeName) {
     DocumentModelList createdDocs = new DocumentModelListImpl();
     for (int i = 0; i < docs.length; i++) {
-      DocumentModel document = session
-          .createDocumentModel(dictionary.getPathAsString(), docs[i], typeName);
+      DocumentModel document =
+          session.createDocumentModel(dictionary.getPathAsString(), docs[i], typeName);
       document.setPropertyValue("fv:reference", "" + i);
       document.setPropertyValue("fv:update_confusables_required", true);
       document = createDocument(document);

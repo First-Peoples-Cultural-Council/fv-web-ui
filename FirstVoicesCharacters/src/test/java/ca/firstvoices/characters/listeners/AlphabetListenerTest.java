@@ -41,29 +41,30 @@ public class AlphabetListenerTest extends AbstractTestDataCreatorTest {
 
   DocumentModel alphabet = null;
 
-  @Inject
-  CoreSession session;
+  @Inject CoreSession session;
 
-  @Inject
-  EventService eventService;
+  @Inject EventService eventService;
 
   @BeforeClass
   public static void setupCapturingListener() {
     // Setup capturing listener for subsequent add to required jobs events
-    capturingEvents = new CapturingEventListener(
-        CommonConstants.ADD_TO_REQUIRED_JOBS_EVENT_ID);
+    capturingEvents = new CapturingEventListener(CommonConstants.ADD_TO_REQUIRED_JOBS_EVENT_ID);
   }
 
   @Before
   public void initAlphabetTests() {
-    assertNotNull("Alphabet listener registered", eventService.getEventListener("alphabet_listener"));
+    assertNotNull("Alphabet listener registered",
+        eventService.getEventListener("alphabet_listener"));
 
     // Children containers will be created in FVDialectFactory
-    dialect = session.getDocument(new IdRef(this.dataCreator.getReference("testDialect")));
+
+    dialect = dataCreator.getReference(session, "testDialect");
+
     alphabet = session.getChild(dialect.getRef(), "Alphabet");
 
     // Create one character (but don't trigger listener)
-    DocumentModel char1 = session.createDocumentModel(alphabet.getPathAsString(), "Char 1",
+    DocumentModel char1 = session.createDocumentModel(alphabet.getPathAsString(),
+        "Char 1",
         DialectTypesConstants.FV_CHARACTER);
     char1.putContextData(CharacterListener.DISABLE_CHARACTER_LISTENER, true);
     session.createDocument(char1);

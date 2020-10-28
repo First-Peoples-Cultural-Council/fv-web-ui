@@ -69,6 +69,9 @@ public class TestUserPreferences extends AbstractFVTest {
 
   @Before
   public void setUp() throws Exception {
+    // @todo move this to TestDataCreator (but doing so creates a cyclic dep so refactoring to
+    // yet another module is required
+
     session.createDocument(session.createDocumentModel("/", "FV", "Domain"));
     session.createDocument(session.createDocumentModel("/", "Family", FV_LANGUAGE_FAMILY));
     session.createDocument(session.createDocumentModel("/Family", "Language", FV_LANGUAGE));
