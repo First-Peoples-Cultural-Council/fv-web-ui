@@ -1,0 +1,12 @@
+.MetadataList {
+  overflow: auto;
+  list-style-type: none;
+  padding: 0;
+  max-height: 200px;
+}
+
+.MetadataList__entry {
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  margin-bottom: 15px;
+}

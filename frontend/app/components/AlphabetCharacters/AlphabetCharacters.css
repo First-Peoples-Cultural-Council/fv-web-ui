@@ -1,0 +1,57 @@
+.AlphabetCharactersTiles {
+  display: flex;
+  flex-wrap: wrap;
+}
+a.AlphabetCharactersTile {
+  text-decoration: none;
+}
+.AlphabetCharactersTile {
+  padding: 8px;
+  color: #3c3434;
+  margin: 4px;
+  font-size: 1.8rem;
+  font-weight: 100;
+  cursor: pointer;
+  min-width: 35px;
+  text-align: center;
+  line-height: 1.2;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.AlphabetCharactersTile:hover {
+  background-color: #fbe8e8;
+  color: #820000;
+  border-color: #820000;
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 5px 5px rgba(0, 0, 0, 0.04);
+}
+
+.AlphabetCharactersTile--active {
+  background-color: #f1cac9;
+  color: #820000;
+  border-color: #820000;
+}
+
+.AlphabetCharacters__loading {
+  display: flex;
+  align-items: center;
+}
+.AlphabetCharacters__loadingSpinner {
+  opacity: 0.07;
+  margin: 5px;
+}
+.AlphabetCharacters__loadingText {
+  opacity: 0.5;
+}
+.AlphabetCharacters__noCharacters {
+  opacity: 0.5;
+}
+
+@media (max-width: 991px) {
+  .AlphabetCharactersTiles {
+    max-height: 120px;
+    overflow: auto;
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.12);
+  }
+}

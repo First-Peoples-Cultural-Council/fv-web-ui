@@ -1,0 +1,77 @@
+/* FROM main.less*/
+.EditableComponent__form fieldset {
+  margin-right: 5px;
+  display: inline;
+}
+
+.EditableComponent__form fieldset div.form-group {
+  margin: 0;
+}
+
+.EditableComponent__form fieldset label {
+  display: none;
+}
+
+.EditableComponent__form fieldset input {
+  padding: 2px 4px;
+  height: inherit;
+}
+
+.EditableComponent__form fieldset select {
+  width: 100%;
+}
+
+.fieldset-fv-portal\:related_links,
+.fieldset-fvdialect\:keyboards {
+  width: 100%;
+}
+/* END FROM main.less*/
+
+/* Elements */
+.EditableComponent__edit {
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 3px 8px 3px 3px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border-radius: 4px;
+  font-size: 2rem;
+  font-weight: 500;
+  font-family: arial, sans-serif;
+  line-height: 1.2;
+}
+.EditableComponent__edit:hover {
+  background-color: rgba(0, 0, 0, 1);
+}
+.EditableComponent__edit:hover .EditableComponent__iconEdit {
+  fill: #fff !important;
+}
+.EditableComponent__edit:hover .EditableComponent__editLabel {
+  color: #fff;
+}
+
+.EditableComponent__iconEdit {
+  fill: #000 !important;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.EditableComponent__editLabel {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  color: #000;
+}
+.EditableComponent__iconEdit + .EditableComponent__editLabel {
+  margin-left: 3px;
+}
+
+/*
+Modifiers
+*/
+.EditableComponent--inline .EditableComponent__btnEdit {
+  display: inline-flex;
+}
+.EditableComponent--inline .EditableComponent__btnSave {
+  display: inline-flex;
+}

@@ -1,0 +1,112 @@
+/* -------------------- */
+/* ELEMENT */
+/* -------------------- */
+.DictionaryList__colSort {
+  background-color: transparent;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+}
+.DictionaryList__actions {
+  list-style-type: none;
+  display: flex;
+  flex-direction: row-reverse;
+  margin: 0;
+  padding: 0;
+}
+.DictionaryList__actionContainer {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+}
+.DictionaryList__actionDelete {
+  margin-left: 2rem;
+}
+
+.DictionaryList__confirmationDelete {
+  margin-left: auto;
+}
+.DictionaryList__data,
+.data-table td.DictionaryList__data {
+  font-size: 1.6rem;
+  padding: 0 10px;
+}
+.DictionaryList__row {
+  border-bottom: 1px dotted #a8a8a8;
+  background: #fff;
+}
+.DictionaryList__footer,
+.DictionaryList .DictionaryList__data.DictionaryList__footer {
+  background: linear-gradient(to bottom, #e6e6e6 100%, #efefef 13%, #f7f7f7 0%);
+  border-top: 1px solid #a8a8a8;
+  padding: 10px;
+  font-weight: 700;
+}
+
+.DictionaryList__ListButtonsGroup {
+  /* margin: 10px 0; */
+  text-align: right;
+}
+.DictionaryList__ListButtonsGroup .DictionaryList__viewModeButton {
+  margin: 5px;
+}
+
+.DictionaryList__definitionList {
+  padding-left: 25px;
+}
+/* -------------------- */
+/* MODIFIER */
+/* -------------------- */
+.DictionaryList--noData {
+  margin: 20px 0;
+}
+.DictionaryList__row--a {
+  background: #fff;
+}
+.DictionaryList__row--b {
+  background: #f2f7ff;
+}
+.DictionaryList__data--title,
+.DictionaryList__data.DictionaryList__data--title,
+.data-table td.DictionaryList__data--title {
+  text-align: center;
+  padding: 10px;
+}
+
+/* Note: text-decoration 'underline' will obscure some indigenous fonts that have a diacritic under a letter */
+.DictionaryList__data--title .DictionaryList__link,
+.DictionaryList__link.DictionaryList__link--indigenous {
+  border-bottom: none;
+  text-align: center;
+  text-decoration: none;
+  line-height: 1.2;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0), 0 1px 2px rgba(0, 0, 0, 0);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  padding: 10px;
+  display: inline-block;
+  font-size: 2rem;
+}
+.DictionaryList__data--title .DictionaryList__link:hover,
+.DictionaryList__link.DictionaryList__link--indigenous:hover {
+  background-color: #fbe8e8;
+  color: #820000;
+  border-color: #820000;
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 5px 5px rgba(0, 0, 0, 0.04);
+}
+
+.DictionaryList__data--definitions {
+  font-size: 1.6rem;
+}
+
+.DictionaryList--contributors .DictionaryList__data--title,
+.DictionaryList--contributors .DictionaryList__data.DictionaryList__data--title,
+.DictionaryList--contributors .data-table td.DictionaryList__data--title {
+  text-align: left;
+}
+.DictionaryList__definitionList--single {
+  list-style-type: none;
+  padding-left: 0;
+}

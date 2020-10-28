@@ -196,14 +196,14 @@ When you create a new test please update this table.
 
 ##### Creating new data:
 
-To create new data for use in tests you will have to add to the script located at [/frontend/scripts/TestDatabaseSetup.sh](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/scripts/TestDatabaseSetup.sh) using the batch import tool, utils tool, and API endpoints, as needed.
-The script contains examples of how to do each of these, which can be copied with slight name changes. CSV files can be placed in the [/frontend/scripts/files directory](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/scripts/files).
+To create new data for use in tests you will have to add to the script located at [/frontend/cypress/scripts/TestDatabaseSetup.sh](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/cypress/scripts/TestDatabaseSetup.sh) using the batch import tool, utils tool, and API endpoints, as needed.
+The script contains examples of how to do each of these, which can be copied with slight name changes. CSV files can be placed in the [/frontend/cypress/scripts/files directory](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/cypress/scripts/files).
 
-For any new languages you are creating in the setup script please ensure they are removed in the corresponding [/frontend/scripts/TestDatabaseTeardown.sh](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/scripts/TestDatabaseTeardown.sh) script.
+For any new languages you are creating in the setup script please ensure they are removed in the corresponding [/frontend/cypress/scripts/TestDatabaseTeardown.sh](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/cypress/scripts/TestDatabaseTeardown.sh) script.
 
 ##### Writing the Cypress tests:
 
-Cypress tests should be placed in the frontend directory beside the thing that is being tested, in its own directory named "\_\_cypress\_\_". An example test can be seen [at this link](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/app/assets/javascripts/views/pages/explore/dialect/learn/phrases/__cypress__/MemberView-Phrase.js).
+Cypress tests should be placed in the frontend directory beside the thing that is being tested, in its own directory named "\_\_cypress\_\_". An example test can be seen [at this link](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/app/assets/javascripts/components/FVPhrases/__cypress__/MemberView-Phrase.js).
 On startup tests will be copied from the project and placed in the [/frontend/cypress/integration/\_\_cypress\_\_](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/cypress/integration__cypress__) where they will be run from.
 
 A list of Cypress commands can be found on their website [at this link](https://docs.cypress.io/api/api/table-of-contents.html).
@@ -305,7 +305,7 @@ import React, { Component, PropTypes } from 'react'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { someActionForRedux } from 'providers/redux/reducers/someExample'
+import { someActionForRedux } from 'reducers/someExample'
 
 // 2) Then extract anything from imports
 

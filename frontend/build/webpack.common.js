@@ -11,7 +11,7 @@ const rootDirectory = path.resolve(frontEndRootDirectory, '..')
 // Source Directories
 const sourceDirectory = path.resolve(frontEndRootDirectory, 'app')
 const sourceAssetsDirectory = path.resolve(sourceDirectory, 'assets')
-const sourceScriptsDirectory = path.resolve(sourceAssetsDirectory, 'javascripts')
+const sourceStateDirectory = path.resolve(sourceDirectory, 'state')
 const sourceStylesDirectory = path.resolve(sourceAssetsDirectory, 'stylesheets')
 const sourceImagesDirectory = path.resolve(sourceAssetsDirectory, 'images')
 const sourceFontsDirectory = path.resolve(sourceAssetsDirectory, 'fonts')
@@ -84,13 +84,13 @@ module.exports = (env) => ({
           // #context-path-issue
           // Ensure relative paths from CSS files are rewritten in local dev server
           from: /\/assets\/styles\/(.*)$/,
-          to: function(context) {
+          to: function (context) {
             return '/' + context.match[1]
           },
         },
         {
           from: /\/assets\/(.*)$/,
-          to: function(context) {
+          to: function (context) {
             return '/assets/' + context.match[1]
           },
         },
@@ -111,25 +111,24 @@ module.exports = (env) => ({
    * Entry
    */
   entry: {
-    app: path.resolve(sourceScriptsDirectory, 'app.js'),
-    // createWord: path.resolve(sourceScriptsDirectory, 'views/pages/explore/dialect/learn/words/Create'),
+    app: path.resolve(sourceDirectory, 'app.js'),
     game_libs: ['pixi', 'p2', 'phaser'],
   },
 
   // These options change how modules are resolved
   resolve: {
     alias: {
+      assets: sourceAssetsDirectory,
+      components: path.resolve(sourceDirectory, 'components'),
+      common: path.resolve(sourceDirectory, 'common'),
+      qa: path.resolve(sourceDirectory, 'qa'),
+      state: sourceStateDirectory,
+      dataSources: path.resolve(sourceStateDirectory, 'dataSources'),
+      operations: path.resolve(sourceStateDirectory, 'operations'),
+      reducers: path.resolve(sourceStateDirectory, 'reducers'),
+      games: sourceGamesDirectory,
+      images: sourceImagesDirectory,
       styles: sourceStylesDirectory,
-      models: path.resolve(sourceScriptsDirectory, 'models'),
-      views: path.resolve(sourceScriptsDirectory, 'views'),
-      conf: path.resolve(sourceScriptsDirectory, 'configuration'),
-      operations: path.resolve(sourceScriptsDirectory, 'operations'),
-      providers: path.resolve(sourceScriptsDirectory, 'providers'),
-      components: path.resolve(sourceScriptsDirectory, 'components'),
-      common: path.resolve(sourceScriptsDirectory, 'common'),
-      DataSource: path.resolve(sourceScriptsDirectory, 'common', 'DataSource'),
-      games: path.resolve(sourceAssetsDirectory, 'games'),
-      images: path.resolve(sourceAssetsDirectory, 'images'),
       phaser: phaser,
       pixi: pixi,
       p2: p2,
