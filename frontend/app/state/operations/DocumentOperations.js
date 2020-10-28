@@ -53,12 +53,8 @@ export default class DocumentOperations {
     const properties = BaseOperations.getProperties()
 
     // Remove slashes from 'name' before sending to server
-    const sanitizedName = docParams.name.replace(/\\|\//g, '_')
-    const sanitizedParams = {
-      type: docParams.type,
-      name: sanitizedName,
-      properties: docParams.properties,
-    }
+    const sanitizedParams = Object.assign({ name: '' }, docParams)
+    sanitizedParams.name = sanitizedParams.name.replace(/\\|\//g, '_')
 
     return new Promise((resolve, reject) => {
       // If file not empty, process blob and upload
