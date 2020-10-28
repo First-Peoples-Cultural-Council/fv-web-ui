@@ -315,7 +315,6 @@ public class MockDialectServiceImpl implements MockDialectService {
         String[] categoryArr = {randomCategory};
         wordDoc.setPropertyValue("fv-word:categories", categoryArr);
       }
-
       fvWords.add(createDocument(session, wordDoc));
     }
 

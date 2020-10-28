@@ -24,7 +24,7 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 @RunWith(FeaturesRunner.class)
 @Features({PlatformFeature.class})
-@RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
+@RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.CLASS)
 @TestDataConfiguration(yaml = {"test-data/basic-structure.yaml", "test-data/test-workspace.yaml"})
 @Deploy({
     "FirstVoicesCoreIO:OSGI-INF/services/assignAncestors-contrib.xml",
@@ -48,7 +48,7 @@ public class DialectUtilsTest extends AbstractTestDataCreatorTest {
 
   @Before
   public void setUp() {
-    dialect = session.getDocument(new IdRef(this.dataCreator.getReference("testDialect")));
+    dialect = dataCreator.getReference(session, "testDialect");
 
     words = mockDialectService.generateFVWords(
         session, dialect.getPathAsString(), new String[]{"NewWord1"}, null);

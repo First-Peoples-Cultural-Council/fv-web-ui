@@ -30,7 +30,6 @@ import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMIL
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
 import ca.firstvoices.utils.CustomSecurityConstants;
 import javax.inject.Inject;
 import javax.security.auth.login.LoginException;
@@ -72,17 +71,13 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
 public class TestSecurityPolicies extends AbstractFVTest {
 
-  @Inject
-  protected CoreSession session;
+  @Inject protected CoreSession session;
 
-  @Inject
-  protected CoreFeature coreFeature;
+  @Inject protected CoreFeature coreFeature;
 
-  @Inject
-  protected UserManager userManager;
+  @Inject protected UserManager userManager;
 
-  @Inject
-  protected AutomationService automationService;
+  @Inject protected AutomationService automationService;
 
   DocumentModel domain;
   DocumentModel sectionsRoot;
@@ -103,23 +98,27 @@ public class TestSecurityPolicies extends AbstractFVTest {
 
   @Before
   public void setUp() throws Exception {
-
+    /*@todo move this to TestDataCreator (but doing so creates a cyclic dep so refactoring to yet
+         another module is required [ FW-1963 ]
+     */
     session.removeChildren(session.getRootDocument().getRef());
 
     domain = session.createDocument(session.createDocumentModel("/", "FV", "Domain"));
 
     session.createDocument(session.createDocumentModel("/FV/", "Workspaces", "WorkspaceRoot"));
     session.createDocument(session.createDocumentModel("/FV/Workspaces", "Data", "Workspace"));
-    session.createDocument(
-        session.createDocumentModel("/FV/Workspaces/Data", "Family", FV_LANGUAGE_FAMILY));
-    session.createDocument(
-        session.createDocumentModel("/FV/Workspaces/Data/Family", "Language", FV_LANGUAGE));
+    session.createDocument(session.createDocumentModel("/FV/Workspaces/Data",
+        "Family",
+        FV_LANGUAGE_FAMILY));
+    session.createDocument(session.createDocumentModel("/FV/Workspaces/Data/Family",
+        "Language",
+        FV_LANGUAGE));
 
     session.save();
 
     // Get sections document (automatically created)
-    DocumentModelList docs = session
-        .query("SELECT * FROM Document WHERE ecm:path = '/FV/sections'");
+    DocumentModelList docs =
+        session.query("SELECT * FROM Document WHERE ecm:path = '/FV/sections'");
     sectionsRoot = docs.get(0);
 
     // Set default permissions
@@ -137,24 +136,30 @@ public class TestSecurityPolicies extends AbstractFVTest {
     setACL(sectionsRoot, "Guest", SecurityConstants.READ);
     setACL(sectionsRoot, "members", SecurityConstants.READ);
 
-    dialectSencoten = session.createDocument(session
-        .createDocumentModel("/FV/Workspaces/Data/Family/Language", "Senćoŧen", FV_DIALECT));
+    dialectSencoten = session.createDocument(session.createDocumentModel(
+        "/FV/Workspaces/Data/Family/Language",
+        "Senćoŧen",
+        FV_DIALECT));
     dialectSencoten = session.saveDocument(dialectSencoten);
 
-    dialectSencotenDictionary = session.createDocument(session
-        .createDocumentModel("/FV/Workspaces/Data/Family/Language/Senćoŧen", "Dictionary",
-            FV_DICTIONARY));
+    dialectSencotenDictionary = session.createDocument(session.createDocumentModel(
+        "/FV/Workspaces/Data/Family/Language/Senćoŧen",
+        "Dictionary",
+        FV_DICTIONARY));
     dialectSencotenDictionary = session.saveDocument(dialectSencotenDictionary);
 
     assertNotNull(dialectSencoten);
 
-    dialectDene = session.createDocument(
-        session.createDocumentModel("/FV/Workspaces/Data/Family/Language", "Dene", FV_DIALECT));
+    dialectDene = session.createDocument(session.createDocumentModel(
+        "/FV/Workspaces/Data/Family/Language",
+        "Dene",
+        FV_DIALECT));
     dialectDene = session.saveDocument(dialectDene);
 
-    dialectDeneDictionary = session.createDocument(session
-        .createDocumentModel("/FV/Workspaces/Data/Family/Language/Dene", "Dictionary",
-            FV_DICTIONARY));
+    dialectDeneDictionary = session.createDocument(session.createDocumentModel(
+        "/FV/Workspaces/Data/Family/Language/Dene",
+        "Dictionary",
+        FV_DICTIONARY));
     dialectDeneDictionary = session.saveDocument(dialectDeneDictionary);
 
     assertNotNull(dialectDene);
@@ -168,18 +173,18 @@ public class TestSecurityPolicies extends AbstractFVTest {
     automationService.run(ctx, "FVDialectRegularDocumentPermissions");
 
     // Create users
-    DocumentModel DENE_ADMIN = createUserWithPassword("DENE_ADMIN@.", "", "",
-        "dene_language_administrators");
-    DocumentModel DENE_RECORDER = createUserWithPassword("DENE_RECORDER@.", "", "",
-        "dene_recorders");
+    DocumentModel DENE_ADMIN =
+        createUserWithPassword("DENE_ADMIN@.", "", "", "dene_language_administrators");
+    DocumentModel DENE_RECORDER =
+        createUserWithPassword("DENE_RECORDER@.", "", "", "dene_recorders");
     DocumentModel DENE_MEMBER = createUserWithPassword("DENE_MEMBER@.", "", "", "dene_members");
 
-    DocumentModel SENCOTEN_ADMIN = createUserWithPassword("SENCOTEN_ADMIN@.", "", "",
-        "senćoŧen_language_administrators");
-    DocumentModel SENCOTEN_RECORDER = createUserWithPassword("SENCOTEN_RECORDER@.", "", "",
-        "senćoŧen_recorders");
-    DocumentModel SENCOTEN_MEMBER = createUserWithPassword("SENCOTEN_MEMBER@.", "", "",
-        "senćoŧen_members");
+    DocumentModel SENCOTEN_ADMIN =
+        createUserWithPassword("SENCOTEN_ADMIN@.", "", "", "senćoŧen_language_administrators");
+    DocumentModel SENCOTEN_RECORDER =
+        createUserWithPassword("SENCOTEN_RECORDER@.", "", "", "senćoŧen_recorders");
+    DocumentModel SENCOTEN_MEMBER =
+        createUserWithPassword("SENCOTEN_MEMBER@.", "", "", "senćoŧen_members");
 
     DENE_ADMIN_USER = userManager.getPrincipal("DENE_ADMIN@.");
     DENE_RECORDER_USER = userManager.getPrincipal("DENE_RECORDER@.");
@@ -237,31 +242,39 @@ public class TestSecurityPolicies extends AbstractFVTest {
     assertNotNull(FPCC_ADMIN);
 
     // test EVERYTHING access on dialect 1 and 2
-    assertTrue(
-        session.hasPermission(FPCC_ADMIN, dialectSencoten.getRef(), SecurityConstants.EVERYTHING));
-    assertTrue(
-        session.hasPermission(FPCC_ADMIN, dialectDene.getRef(), SecurityConstants.EVERYTHING));
+    assertTrue(session.hasPermission(FPCC_ADMIN,
+        dialectSencoten.getRef(),
+        SecurityConstants.EVERYTHING));
+    assertTrue(session.hasPermission(FPCC_ADMIN,
+        dialectDene.getRef(),
+        SecurityConstants.EVERYTHING));
   }
 
   @Test
   public void testLanguageAdminAccess() {
     // test language admins for access to their own dialects - should have EVERYTHING access
-    assertTrue(
-        session.hasPermission(DENE_ADMIN_USER, dialectDene.getRef(), SecurityConstants.EVERYTHING));
-    assertTrue(session.hasPermission(SENCOTEN_ADMIN_USER, dialectSencoten.getRef(),
+    assertTrue(session.hasPermission(DENE_ADMIN_USER,
+        dialectDene.getRef(),
+        SecurityConstants.EVERYTHING));
+    assertTrue(session.hasPermission(SENCOTEN_ADMIN_USER,
+        dialectSencoten.getRef(),
         SecurityConstants.EVERYTHING));
 
     // test language admins for access on each others dialect (should not have EVERYTHING access)
-    assertFalse(session
-        .hasPermission(DENE_ADMIN_USER, dialectSencoten.getRef(), SecurityConstants.EVERYTHING));
-    assertFalse(session
-        .hasPermission(SENCOTEN_ADMIN_USER, dialectDene.getRef(), SecurityConstants.EVERYTHING));
+    assertFalse(session.hasPermission(DENE_ADMIN_USER,
+        dialectSencoten.getRef(),
+        SecurityConstants.EVERYTHING));
+    assertFalse(session.hasPermission(SENCOTEN_ADMIN_USER,
+        dialectDene.getRef(),
+        SecurityConstants.EVERYTHING));
 
     // test language admins for READ access on each others dialect (should not have READ access)
-    assertFalse(
-        session.hasPermission(DENE_ADMIN_USER, dialectSencoten.getRef(), SecurityConstants.READ));
-    assertFalse(
-        session.hasPermission(SENCOTEN_ADMIN_USER, dialectDene.getRef(), SecurityConstants.READ));
+    assertFalse(session.hasPermission(DENE_ADMIN_USER,
+        dialectSencoten.getRef(),
+        SecurityConstants.READ));
+    assertFalse(session.hasPermission(SENCOTEN_ADMIN_USER,
+        dialectDene.getRef(),
+        SecurityConstants.READ));
 
     // Delete users
     userManager.deleteUser("DENE_ADMIN@.");
@@ -271,42 +284,46 @@ public class TestSecurityPolicies extends AbstractFVTest {
   @Test
   public void testRecorderAccess() throws LoginException {
     // Recorders SHOULD NOT have EVERYTHING access
-    assertFalse(session
-        .hasPermission(DENE_RECORDER_USER, dialectDene.getRef(), SecurityConstants.EVERYTHING));
-    assertFalse(session
-        .hasPermission(userManager.getPrincipal("SENCOTEN_RECORDER@."), dialectSencoten.getRef(),
-            SecurityConstants.EVERYTHING));
+    assertFalse(session.hasPermission(DENE_RECORDER_USER,
+        dialectDene.getRef(),
+        SecurityConstants.EVERYTHING));
+    assertFalse(session.hasPermission(userManager.getPrincipal("SENCOTEN_RECORDER@."),
+        dialectSencoten.getRef(),
+        SecurityConstants.EVERYTHING));
 
     // Recorders SHOULD have Record access on their own dialects
-    assertTrue(session
-        .hasPermission(DENE_RECORDER_USER, dialectDene.getRef(), CustomSecurityConstants.RECORD));
-    assertTrue(session
-        .hasPermission(userManager.getPrincipal("SENCOTEN_RECORDER@."), dialectSencoten.getRef(),
-            CustomSecurityConstants.RECORD));
+    assertTrue(session.hasPermission(DENE_RECORDER_USER,
+        dialectDene.getRef(),
+        CustomSecurityConstants.RECORD));
+    assertTrue(session.hasPermission(userManager.getPrincipal("SENCOTEN_RECORDER@."),
+        dialectSencoten.getRef(),
+        CustomSecurityConstants.RECORD));
 
     // Recorders SHOULD NOT have Record or Read access on other dialect
-    assertFalse(session
-        .hasPermission(DENE_RECORDER_USER, dialectSencoten.getRef(), SecurityConstants.WRITE));
-    assertFalse(session
-        .hasPermission(userManager.getPrincipal("SENCOTEN_RECORDER@."), dialectDene.getRef(),
-            SecurityConstants.READ));
+    assertFalse(session.hasPermission(DENE_RECORDER_USER,
+        dialectSencoten.getRef(),
+        SecurityConstants.WRITE));
+    assertFalse(session.hasPermission(userManager.getPrincipal("SENCOTEN_RECORDER@."),
+        dialectDene.getRef(),
+        SecurityConstants.READ));
 
     // Actions
 
     // Recorders SHOULD be able to create children under a dictionary
-    assertTrue(session
-        .hasPermission(userManager.getPrincipal("DENE_RECORDER@."), dialectDeneDictionary.getRef(),
-            SecurityConstants.ADD_CHILDREN));
-    assertFalse(session
-        .hasPermission(userManager.getPrincipal("SENCOTEN_RECORDER@."), dialectDene.getRef(),
-            SecurityConstants.READ));
+    assertTrue(session.hasPermission(userManager.getPrincipal("DENE_RECORDER@."),
+        dialectDeneDictionary.getRef(),
+        SecurityConstants.ADD_CHILDREN));
+    assertFalse(session.hasPermission(userManager.getPrincipal("SENCOTEN_RECORDER@."),
+        dialectDene.getRef(),
+        SecurityConstants.READ));
 
     // Recorders SHOULD NOT be able to create children under someone else's dictionary
     assertFalse(session.hasPermission(userManager.getPrincipal("DENE_RECORDER@."),
-        dialectSencotenDictionary.getRef(), SecurityConstants.ADD_CHILDREN));
-    assertFalse(session
-        .hasPermission(userManager.getPrincipal("SENCOTEN_RECORDER@."), dialectDene.getRef(),
-            SecurityConstants.READ));
+        dialectSencotenDictionary.getRef(),
+        SecurityConstants.ADD_CHILDREN));
+    assertFalse(session.hasPermission(userManager.getPrincipal("SENCOTEN_RECORDER@."),
+        dialectDene.getRef(),
+        SecurityConstants.READ));
 
     // Delete users
     userManager.deleteUser("DENE_RECORDER@.");
@@ -319,47 +336,47 @@ public class TestSecurityPolicies extends AbstractFVTest {
     // Create two dialect members
 
     // Members SHOULD NOT have EVERYTHING access
-    assertFalse(session
-        .hasPermission(userManager.getPrincipal("DENE_MEMBER@."), dialectDene.getRef(),
-            SecurityConstants.EVERYTHING));
-    assertFalse(session
-        .hasPermission(userManager.getPrincipal("SENCOTEN_MEMBER@."), dialectSencoten.getRef(),
-            SecurityConstants.EVERYTHING));
+    assertFalse(session.hasPermission(userManager.getPrincipal("DENE_MEMBER@."),
+        dialectDene.getRef(),
+        SecurityConstants.EVERYTHING));
+    assertFalse(session.hasPermission(userManager.getPrincipal("SENCOTEN_MEMBER@."),
+        dialectSencoten.getRef(),
+        SecurityConstants.EVERYTHING));
 
     // Test Members READ access based on dialect state
 
     // Members SHOULD NOT have READ access in the NEW state
-    assertFalse(session
-        .hasPermission(userManager.getPrincipal("DENE_MEMBER@."), dialectDene.getRef(),
-            SecurityConstants.READ));
+    assertFalse(session.hasPermission(userManager.getPrincipal("DENE_MEMBER@."),
+        dialectDene.getRef(),
+        SecurityConstants.READ));
 
     // Members SHOULD NOT have READ access in the DISABLED state
     dialectDene.followTransition(DISABLE_TRANSITION);
-    assertFalse(session
-        .hasPermission(userManager.getPrincipal("DENE_MEMBER@."), dialectDene.getRef(),
-            SecurityConstants.READ));
+    assertFalse(session.hasPermission(userManager.getPrincipal("DENE_MEMBER@."),
+        dialectDene.getRef(),
+        SecurityConstants.READ));
 
     // Members SHOULD have READ access in the ENABLED state
     dialectDene.followTransition(ENABLE_TRANSITION);
-    assertTrue(session
-        .hasPermission(userManager.getPrincipal("DENE_MEMBER@."), dialectDene.getRef(),
-            SecurityConstants.READ));
+    assertTrue(session.hasPermission(userManager.getPrincipal("DENE_MEMBER@."),
+        dialectDene.getRef(),
+        SecurityConstants.READ));
 
     // But not members of a different group
-    assertFalse(session
-        .hasPermission(userManager.getPrincipal("SENCOTEN_MEMBER@."), dialectDene.getRef(),
-            SecurityConstants.READ));
+    assertFalse(session.hasPermission(userManager.getPrincipal("SENCOTEN_MEMBER@."),
+        dialectDene.getRef(),
+        SecurityConstants.READ));
 
     // Members SHOULD have READ access in the PUBLISHED state
     dialectDene.followTransition(PUBLISH_TRANSITION);
-    assertTrue(session
-        .hasPermission(userManager.getPrincipal("DENE_MEMBER@."), dialectDene.getRef(),
-            SecurityConstants.READ));
+    assertTrue(session.hasPermission(userManager.getPrincipal("DENE_MEMBER@."),
+        dialectDene.getRef(),
+        SecurityConstants.READ));
 
     // But not members of a different group
-    assertFalse(session
-        .hasPermission(userManager.getPrincipal("SENCOTEN_MEMBER@."), dialectDene.getRef(),
-            SecurityConstants.READ));
+    assertFalse(session.hasPermission(userManager.getPrincipal("SENCOTEN_MEMBER@."),
+        dialectDene.getRef(),
+        SecurityConstants.READ));
 
     // Delete users
     userManager.deleteUser("DENE_MEMBER@.");

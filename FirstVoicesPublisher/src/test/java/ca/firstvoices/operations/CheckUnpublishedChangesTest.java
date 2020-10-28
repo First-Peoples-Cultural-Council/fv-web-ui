@@ -22,14 +22,13 @@ package ca.firstvoices.operations;
 
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
-import ca.firstvoices.testUtil.MockStructureTestUtil;
+import ca.firstvoices.runner.FirstVoicesCoreTestsFeature;
+import ca.firstvoices.testUtil.AbstractTestDataCreatorTest;
+import ca.firstvoices.testUtil.annotations.TestDataConfiguration;
 import javax.inject.Inject;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,10 +51,10 @@ import org.nuxeo.runtime.test.runner.RuntimeFeature;
 import org.nuxeo.runtime.test.runner.TargetExtensions;
 
 @RunWith(FeaturesRunner.class)
-@Features({AutomationFeature.class, PlatformFeature.class, RuntimeFeature.class, MockitoFeature.class})
+@Features({AutomationFeature.class, PlatformFeature.class, RuntimeFeature.class,
+    MockitoFeature.class, FirstVoicesCoreTestsFeature.class})
 
-@Deploy({"FirstVoicesData",
-    "FirstVoicesCoreIO",
+@Deploy({"FirstVoicesData", "FirstVoicesCoreIO",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.operations.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml",
     "org.nuxeo.ecm.platform", "org.nuxeo.ecm.platform.types.core",
@@ -67,18 +66,15 @@ import org.nuxeo.runtime.test.runner.TargetExtensions;
     "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/ca.firstvoices.fakestudio.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",})
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
+@TestDataConfiguration(yaml = {"test-data/basic-structure.yaml",
+    "test-data/test-language-unpublished.yaml"})
+public class CheckUnpublishedChangesTest extends AbstractTestDataCreatorTest {
 
-public class CheckUnpublishedChangesTest extends MockStructureTestUtil {
+  @Inject protected CoreSession session;
 
-  @Inject
-  protected CoreSession session;
+  @Inject protected AutomationService automationService;
 
-  @Inject
-  protected AutomationService automationService;
-
-  @Mock
-  @RuntimeService
-  protected FirstVoicesPublisherService fvPublisherService;
+  @Mock @RuntimeService protected FirstVoicesPublisherService fvPublisherService;
 
   private DocumentModel dialect;
 
@@ -88,23 +84,14 @@ public class CheckUnpublishedChangesTest extends MockStructureTestUtil {
 
   @Before
   public void setUp() {
-    assertNotNull("Should have a valid session", session);
-    session.removeChildren(session.getRootDocument().getRef());
-    session.save();
-
-    dialect = createDialectTree(session);
-    session.saveDocument(dialect);
+    dialect = dataCreator.getReference(session, "testUnpublishedArchive");
 
     // We can use any section for this test
     section = session.query("SELECT * FROM Section").get(0);
 
-    Mockito.when(fvPublisherService.getPublication(any(), any())).thenAnswer(I -> getDialectProxy() );
-  }
-
-  @After
-  public void cleanup() {
-    session.removeChildren(session.getRootDocument().getRef());
-    session.save();
+    Mockito
+        .when(fvPublisherService.getPublication(any(), any()))
+        .thenAnswer(I -> getDialectProxy());
   }
 
   @Test
