@@ -72,14 +72,9 @@ public class AssignAncestorsTest extends AbstractTestDataCreatorTest {
   public void initTest() {
     session.save();
 
-    dialect = session.getDocument(new IdRef(this.dataCreator.getReference("testDialect")));
-    language = session.getDocument(new IdRef(this.dataCreator.getReference("testLanguage")));
-    languageFamily = session.getDocument(new IdRef(this.dataCreator.getReference("testLanguageFamily")));
-
-    // Get the DocumentModels for each of the parent documents
-    assertNotNull("Language family cannot be null", languageFamily);
-    assertNotNull("Language cannot be null", language);
-    assertNotNull("Dialect cannot be null", dialect);
+    dialect = dataCreator.getReference(session, "testDialect");
+    language = dataCreator.getReference(session, "testLanguage");
+    languageFamily = dataCreator.getReference(session, "testLanguageFamily");
 
     words = mockDialectService.generateFVWords(
         session, dialect.getPathAsString(), new String[]{"NewWord1"}, null);

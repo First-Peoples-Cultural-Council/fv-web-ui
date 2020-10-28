@@ -21,14 +21,14 @@
 package ca.firstvoices.characters.services;
 
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
+import static ca.firstvoices.testUtil.helpers.DocumentTestHelpers.createDocument;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-
+import ca.firstvoices.runner.FirstVoicesCoreTestsFeature;
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
-import ca.firstvoices.testUtil.FirstVoicesDataFeature;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -38,15 +38,14 @@ import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 @RunWith(FeaturesRunner.class)
-@Features({FirstVoicesDataFeature.class})
-@Deploy({
-    "FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml",
+@Features({FirstVoicesCoreTestsFeature.class})
+@Deploy({"FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml",
     "FirstVoicesCharacters:OSGI-INF/services/addConfusables-contrib.xml",
-    "FirstVoicesCharacters:OSGI-INF/services/cleanupCharacters-contrib.xml"
-})
+    "FirstVoicesCharacters:OSGI-INF/services/cleanupCharacters-contrib.xml"})
 public class AddConfusablesServiceImplTest extends AbstractFirstVoicesDataTest {
 
-  AddConfusablesService addConfusablesService = Framework.getService(AddConfusablesService.class);
+  private final AddConfusablesService addConfusablesService =
+      Framework.getService(AddConfusablesService.class);
 
   @Test
   public void addConfusablesTest() {
@@ -55,31 +54,37 @@ public class AddConfusablesServiceImplTest extends AbstractFirstVoicesDataTest {
     assertNotNull("Dialect cannot be null", dialect);
     String path = dialect.getPathAsString();
 
-    DocumentModel testConfusable = createDocument(session,
-        session.createDocumentModel(path, "TestChar", FV_CHARACTER));
+    DocumentModel testConfusable =
+        createDocument(session, session.createDocumentModel(path, "TestChar", FV_CHARACTER));
     testConfusable.setPropertyValue("dc:title", "¢");
     session.saveDocument(testConfusable);
 
-    DocumentModel updated = session.saveDocument(addConfusablesService
-        .updateConfusableCharacters(session, testConfusable, dialect, "¢", confusablesToAdd));
+    DocumentModel updated = session.saveDocument(addConfusablesService.updateConfusableCharacters(
+        session,
+        testConfusable,
+        dialect,
+        "¢",
+        confusablesToAdd));
 
     String[] property = (String[]) updated.getPropertyValue("fvcharacter:confusable_characters");
 
     assertEquals(confusablesToAdd[0], property[0]);
     assertEquals(confusablesToAdd[1], property[1]);
 
-    DocumentModel testConfusableUppercase = createDocument(session,
-        session.createDocumentModel(path, "TestChar", FV_CHARACTER));
+    DocumentModel testConfusableUppercase =
+        createDocument(session, session.createDocumentModel(path, "TestChar", FV_CHARACTER));
     testConfusableUppercase.setPropertyValue("fvcharacter:upper_case_character", "¢");
 
     session.saveDocument(testConfusableUppercase);
 
-    updated = session.saveDocument(addConfusablesService
-        .updateConfusableCharacters(session, testConfusableUppercase, dialect, "¢",
-            confusablesToAdd));
+    updated = session.saveDocument(addConfusablesService.updateConfusableCharacters(session,
+        testConfusableUppercase,
+        dialect,
+        "¢",
+        confusablesToAdd));
 
-    String[] uProperty = (String[]) updated
-        .getPropertyValue("fvcharacter:upper_case_confusable_characters");
+    String[] uProperty =
+        (String[]) updated.getPropertyValue("fvcharacter:upper_case_confusable_characters");
 
     assertEquals(confusablesToAdd[0], uProperty[0]);
     assertEquals(confusablesToAdd[1], uProperty[1]);
@@ -89,25 +94,26 @@ public class AddConfusablesServiceImplTest extends AbstractFirstVoicesDataTest {
   public void ignoreConfusablesAlreadyUsed() {
     String[] confusablesToAdd = {"ā", "a̅", "ā", "ā", "a¯", "a‾"};
 
-    assertNotNull("Dialect cannot be null", dialect);
     String path = alphabet.getPathAsString();
 
-    DocumentModel confusableWithUppercase = createDocument(session,
-        session.createDocumentModel(path, "ā", FV_CHARACTER));
+    DocumentModel confusableWithUppercase =
+        createDocument(session, session.createDocumentModel(path, "ā", FV_CHARACTER));
     confusableWithUppercase.setPropertyValue("dc:title", "ā");
     confusableWithUppercase.setPropertyValue("fvcharacter:upper_case_character", "a‾");
     session.saveDocument(confusableWithUppercase);
 
-    DocumentModel addedConfusables = session.saveDocument(addConfusablesService
-        .updateConfusableCharacters(session, confusableWithUppercase, dialect, "ā",
+    DocumentModel addedConfusables =
+        session.saveDocument(addConfusablesService.updateConfusableCharacters(session,
+            confusableWithUppercase,
+            dialect,
+            "ā",
             confusablesToAdd));
 
-    List<String> confusableList = Arrays
-        .asList((String[]) addedConfusables.getPropertyValue("fvcharacter:confusable_characters"));
+    List<String> confusableList = Arrays.asList((String[]) addedConfusables.getPropertyValue(
+        "fvcharacter:confusable_characters"));
 
-    //Assert.assertEquals(5, confusableList.size());
-    Assert.assertFalse(confusableList.contains("ā"));
-    Assert.assertFalse(confusableList.contains("a‾"));
+    assertFalse(confusableList.contains("ā"));
+    assertFalse(confusableList.contains("a‾"));
 
   }
 

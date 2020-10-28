@@ -1,18 +1,15 @@
 # The structure of this file is defined by the TestDataYAML type
 type: FVLanguageFamily
 path: /FV/Workspaces/Data
-name: "Test Language Family"
-publish: true
-publishPath: /FV/sections/Data
-key: testLanguageFamily
+name: "Test Language Family 2"
 children:
   - type: FVLanguage
-    name: "Test Language"
+    name: "Test Language 2"
     key: testLanguage
     children:
       - type: FVDialect
         name: "Test Dialect 1"
-        key: testArchive              # will be saved for reference in tests
+        key: testUnpublishedArchive              # will be saved for reference in tests
         properties:
           "greeting": "Welcome to the test language"
           "region": "Javaland"
@@ -26,13 +23,11 @@ children:
                 name: "Word"
                 properties:
                   part_of_speech: "noun"
-                key: testWord1
               - type: FVWord
                 name: "Another Word"
                 properties:
                   part_of_speech: "noun"
               - type: FVPhrase
-                key: testPhrase1
                 name: "A phrase in dialect 1"
           - type: FVSong
             name: "A test song"
@@ -42,7 +37,6 @@ children:
             name: "Picture!"
           - type: FVAlphabet
             name: "Alphabet"
-            key: testAlphabet
           - type: FVLinks
             name: "Links"
             children:
@@ -52,7 +46,6 @@ children:
                   url: https://firstvoices.io
           - type: FVPortal
             name: "Portal"
-            key: testPortal
           - type: FVResources
             name: "Resources"
           - type: FVContributors
@@ -61,17 +54,14 @@ children:
             children:
               - type: FVCategory
                 name: "Category 1"
-                key: "testCategory"
                 children:
                   - type: FVCategory
                     name: "Subcategory 1"
                     key: "testSubcategory"
       - type: FVDialect
         name: "Test Dialect 2"
-        key: testArchive2
         children:
           - type: FVDictionary
             name: "Dictionary"
-            key: emptyDictionary
       - type: FVDialect
         name: "Test Dialect 3"
