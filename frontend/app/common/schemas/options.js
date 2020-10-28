@@ -1196,6 +1196,14 @@ const options = {
           dataTestId: 'wysiwyg-dc_description',
         },
       },
+      'fvdialect:about_our_language': {
+        label: intl.trans('models.about_dialect', 'About Dialect', 'first'),
+        type: 'textarea',
+        factory: WysiwygFactory,
+        attrs: {
+          dataTestId: 'wysiwyg-dc_description',
+        },
+      },
       'fvdialect:country': {
         label: intl.trans('country', 'Country', 'first'),
         factory: SelectFactory,

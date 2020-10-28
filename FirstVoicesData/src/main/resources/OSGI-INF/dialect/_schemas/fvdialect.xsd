@@ -54,6 +54,7 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="about_us" type="xs:string"/>
+  <xs:element name="about_our_language" type="xs:string"/>
   <xs:element name="background_top_image" type="xs:string"/>
   <xs:element name="communities" type="xs:string"/>
   <xs:element name="contact_information" type="xs:string"/>

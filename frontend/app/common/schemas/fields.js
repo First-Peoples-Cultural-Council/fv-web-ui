@@ -107,6 +107,7 @@ const fields = {
   }),
   FVContributor: Object.assign({}, Dublincore),
   FVDialect: Object.assign({}, Dublincore, {
+    'fvdialect:about_our_language': t.String,
     'fvdialect:country': t.String,
     'fvdialect:dominant_language': t.String,
     'fvdialect:region': t.String,
