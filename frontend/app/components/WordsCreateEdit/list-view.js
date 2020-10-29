@@ -189,7 +189,7 @@ class WordsListView extends DataListView {
           width: 210,
           title: props.intl.trans('date_modified', 'Date Modified'),
           render: (v, data) => {
-            return StringHelpers.formatUTCDateString(selectn('lastModified', data))
+            return StringHelpers.formatLocalDateString(selectn('lastModified', data))
           },
         },
         {
@@ -197,7 +197,7 @@ class WordsListView extends DataListView {
           width: 210,
           title: props.intl.trans('date_created', 'Date Added to FirstVoices'),
           render: (v, data) => {
-            return StringHelpers.formatUTCDateString(selectn('properties.dc:created', data))
+            return StringHelpers.formatLocalDateString(selectn('properties.dc:created', data))
           },
         },
         {

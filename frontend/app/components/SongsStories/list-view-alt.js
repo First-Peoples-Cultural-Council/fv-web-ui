@@ -103,12 +103,7 @@ export class SongsStoriesListViewAlt extends DataListView {
               data,
               selectn('properties.fvbook:type', data) === 'story' ? 'stories' : 'songs'
             )
-            const clickHandler = props.disableClickItem
-              ? NavigationHelpers.disable
-              : (/*e*/) => {
-                // e.preventDefault()
-                // NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
-              }
+            const clickHandler = props.disableClickItem ? NavigationHelpers.disable : () => {}
             return (
               <a className="DictionaryList__link DictionaryList__link--indigenous" onClick={clickHandler} href={href}>
                 {v}
@@ -121,7 +116,7 @@ export class SongsStoriesListViewAlt extends DataListView {
           width: 250,
           title: props.intl.trans('date_modified', 'Date Modified'),
           render: (v, data /*, cellProps*/) => {
-            return StringHelpers.formatUTCDateString(selectn('lastModified', data))
+            return StringHelpers.formatLocalDateString(selectn('lastModified', data))
           },
         },
         {
@@ -129,7 +124,7 @@ export class SongsStoriesListViewAlt extends DataListView {
           width: 210,
           title: props.intl.trans('date_created', 'Date Added to FirstVoices'),
           render: (v, data /*, cellProps*/) => {
-            return StringHelpers.formatUTCDateString(selectn('properties.dc:created', data))
+            return StringHelpers.formatLocalDateString(selectn('properties.dc:created', data))
           },
         },
       ],
