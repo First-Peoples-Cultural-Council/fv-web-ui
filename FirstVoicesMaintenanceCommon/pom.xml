@@ -6,7 +6,7 @@
   <parent>
     <artifactId>firstvoices-modules-parent</artifactId>
     <groupId>ca.firstvoices</groupId>
-    <version>3.5.2-SNAPSHOT</version>
+    <version>3.5.3</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
