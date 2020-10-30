@@ -42,7 +42,7 @@ import { WORKSPACES, SECTIONS } from 'common/Constants'
 
 import '!style-loader!css-loader!./PageToolbar.css'
 
-const { array, bool, func, node, object, string } = PropTypes
+const { array, func, node, object, string } = PropTypes
 
 export class PageToolbar extends Component {
   static propTypes = {
@@ -56,7 +56,6 @@ export class PageToolbar extends Component {
     intl: object.isRequired,
     label: string,
     publishChangesAction: func,
-    showPublish: bool,
     // REDUX: reducers/state
     properties: object.isRequired,
     windowPath: string.isRequired,
@@ -64,7 +63,6 @@ export class PageToolbar extends Component {
   static defaultProps = {
     publishChangesAction: null,
     handleNavigateRequest: null,
-    showPublish: true,
     actions: [],
   }
 
@@ -72,12 +70,15 @@ export class PageToolbar extends Component {
     super(props, context)
 
     this.state = {
-      showActionsMobile: false,
       anchorEl: null,
+      isPublished:
+        selectn('response.state', this.props.computeEntity) === 'Published' ||
+        selectn('response.state', this.props.computeEntity) === 'Republish',
+      showActionsMobile: false,
     }
 
     // Bind methods to 'this'
-    ;['_publishChanges'].forEach((method) => (this[method] = this[method].bind(this)))
+    ;['_publishChanges', '_unpublishCallback'].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   /**
@@ -89,17 +90,19 @@ export class PageToolbar extends Component {
     }
   }
 
+  _unpublishCallback() {
+    this.setState({ isPublished: false })
+  }
+
   render() {
     const { actions, classes, computeEntity, computePermissionEntity } = this.props
-    const documentPublished =
-      selectn('response.state', computeEntity) === 'Published' ||
-      selectn('response.state', computeEntity) === 'Republish'
+
     const permissionEntity = selectn('response', computePermissionEntity) ? computePermissionEntity : computeEntity
     const computeEntities = Immutable.fromJS([{ id: selectn('response.uid', computeEntity), entity: computeEntity }])
     const isRecorderWithApproval = ProviderHelpers.isRecorderWithApproval(this.props.computeLogin)
     const isAdmin = ProviderHelpers.isAdmin(this.props.computeLogin)
     const hasWritePriveleges = isRecorderWithApproval || isAdmin
-    const dialectPublishedMessage = documentPublished ? (
+    const dialectPublishedMessage = this.state.isPublished ? (
       <div>
         This site is <strong>public</strong>. Contact hello@firstvoices.com to make it private.
       </div>
@@ -136,6 +139,7 @@ export class PageToolbar extends Component {
                   docId={selectn('response.uid', computeEntity)}
                   docState={getDocState(computeEntity)}
                   computeEntities={computeEntities || Immutable.List()}
+                  unpublishCallback={this._unpublishCallback}
                 />
               </AuthorizationFilter>
             ) : null}
@@ -161,13 +165,13 @@ export class PageToolbar extends Component {
                 </AuthorizationFilter>
               ) : null}
               {/* Button: Publish Changes */}
-              {actions.includes('publish') && documentPublished ? (
+              {actions.includes('publish') && this.state.isPublished ? (
                 <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', permissionEntity) }}>
                   <FVButton
                     className="PageToolbar__button"
                     color="secondary"
                     data-guide-role="publish-changes"
-                    disabled={!documentPublished}
+                    disabled={!this.state.isPublished}
                     onClick={this._publishChanges}
                     variant="contained"
                   >
