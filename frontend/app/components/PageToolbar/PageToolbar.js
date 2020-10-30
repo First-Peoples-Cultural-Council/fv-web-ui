@@ -110,7 +110,7 @@ export class PageToolbar extends Component {
     )
     const getDocState = (_computeEntity) => {
       const state = selectn('response.state', _computeEntity)
-      if (state === 'Republished') {
+      if (state === 'Republish') {
         return 'Published'
       }
       return state

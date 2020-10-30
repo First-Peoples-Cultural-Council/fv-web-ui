@@ -196,7 +196,7 @@ export class PhrasesListView extends DataListView {
           width: 210,
           title: props.intl.trans('date_modified', 'Date Modified'),
           render: (v, data) => {
-            return StringHelpers.formatUTCDateString(selectn('lastModified', data))
+            return StringHelpers.formatLocalDateString(selectn('lastModified', data))
           },
         },
         {
@@ -204,14 +204,14 @@ export class PhrasesListView extends DataListView {
           width: 210,
           title: props.intl.trans('date_created', 'Date Added to FirstVoices'),
           render: (v, data) => {
-            return StringHelpers.formatUTCDateString(selectn('properties.dc:created', data))
+            return StringHelpers.formatLocalDateString(selectn('properties.dc:created', data))
           },
         },
       ],
       sortInfo: {
         uiSortOrder: [],
-        currentSortCols: searchObj.sortBy || this.props.DEFAULT_SORT_COL,
-        currentSortType: searchObj.sortOrder || this.props.DEFAULT_SORT_TYPE,
+        currentSortCols: this.props.customSortBy || searchObj.sortBy || this.props.DEFAULT_SORT_COL,
+        currentSortType: this.props.customSortOrder || searchObj.sortOrder || this.props.DEFAULT_SORT_TYPE,
       },
       pageInfo: {
         page: this.props.DEFAULT_PAGE,
@@ -234,7 +234,7 @@ export class PhrasesListView extends DataListView {
     }
 
     // Bind methods to 'this'
-    ['_onEntryNavigateRequest', '_handleRefetch', '_handleSortChange', '_handleColumnOrderChange'].forEach(
+    ;['_onEntryNavigateRequest', '_handleRefetch', '_handleSortChange', '_handleColumnOrderChange'].forEach(
       (method) => (this[method] = this[method].bind(this))
     )
   }
@@ -318,9 +318,17 @@ export class PhrasesListView extends DataListView {
                 page,
                 pageSize,
                 preserveSearch: true,
-                // 1st: redux values, 2nd: url search query, 3rd: defaults
-                sortOrder: navigationRouteSearch.sortOrder || searchObj.sortOrder || this.props.DEFAULT_SORT_TYPE,
-                sortBy: navigationRouteSearch.sortBy || searchObj.sortBy || this.props.DEFAULT_SORT_COL,
+                // 1st: custom values, 2nd: redux values, 3rd: url search query, 4th: defaults
+                sortOrder:
+                  this.props.customSortOrder ||
+                  navigationRouteSearch.sortOrder ||
+                  searchObj.sortOrder ||
+                  this.props.DEFAULT_SORT_TYPE,
+                sortBy:
+                  this.props.customSortBy ||
+                  navigationRouteSearch.sortBy ||
+                  searchObj.sortBy ||
+                  this.props.DEFAULT_SORT_COL,
               })
             }}
             sortHandler={({ page, pageSize, sortBy, sortOrder } = {}) => {
@@ -374,9 +382,16 @@ export class PhrasesListView extends DataListView {
       newProps,
       newProps.DEFAULT_PAGE,
       newProps.DEFAULT_PAGE_SIZE,
-      // 1st: redux values, 2nd: url search query, 3rd: defaults
-      this.props.navigationRouteSearch.sortOrder || searchObj.sortOrder || newProps.DEFAULT_SORT_TYPE,
-      this.props.navigationRouteSearch.sortBy || searchObj.sortBy || newProps.DEFAULT_SORT_COL
+      // sortOrder - 1st: custom values, 2nd: redux values, 3rd: url search query, 4th: defaults
+      this.props.customSortOrder ||
+        this.props.navigationRouteSearch.sortOrder ||
+        searchObj.sortOrder ||
+        newProps.DEFAULT_SORT_TYPE,
+      // sortBy - 1st: custom values, 2nd: redux values, 3rd: url search query, 4th: defaults
+      this.props.customSortBy ||
+        this.props.navigationRouteSearch.sortBy ||
+        searchObj.sortBy ||
+        newProps.DEFAULT_SORT_COL
     )
   }
 
@@ -439,6 +454,8 @@ PhrasesListView.propTypes = {
   action: func,
   data: string,
   controlViaURL: bool,
+  customSortBy: string,
+  customSortOrder: string,
   DEFAULT_PAGE: number,
   DEFAULT_PAGE_SIZE: number,
   DEFAULT_SORT_COL: string,
