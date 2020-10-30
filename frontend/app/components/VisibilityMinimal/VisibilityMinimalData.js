@@ -18,7 +18,7 @@ import { WORKSPACES } from 'common/Constants'
  * @param {string} docState The nuxeo 'state' of the document: 'New', 'Enabled', 'Disabled', or 'Published'.
  *
  */
-function VisibilityMinimalData({ children, docId, docState }) {
+function VisibilityMinimalData({ children, docId, docState, unpublishCallback }) {
   const { computeLogin } = useLogin()
   const { routeParams } = useRoute()
   const { updateVisibilityToTeam, updateVisibilityToMembers, updateVisibilityToPublic } = useVisibility()
@@ -60,6 +60,9 @@ function VisibilityMinimalData({ children, docId, docState }) {
     setIsDialogOpen(false)
     updateVisibility(docVisibility)
     setSnackbarOpen(true)
+    if (docVisibility !== 'public') {
+      unpublishCallback()
+    }
   }
 
   const handleSnackbarClose = (event, reason) => {
@@ -118,6 +121,7 @@ VisibilityMinimalData.propTypes = {
   children: func,
   docId: string,
   docState: string,
+  unpublishCallback: func,
 }
 
 export default VisibilityMinimalData
