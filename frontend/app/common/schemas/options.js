@@ -919,6 +919,7 @@ const options = {
             translation: {
               label: intl.trans('translation', 'Translation', 'first'),
               type: 'textarea',
+              factory: WysiwygFactory,
             },
             language: {
               label: intl.trans('language', 'Language', 'first'),
@@ -940,6 +941,7 @@ const options = {
             translation: {
               label: intl.trans('translation', 'Translation', 'first'),
               type: 'textarea',
+              factory: WysiwygFactory,
             },
             language: {
               label: intl.trans('language', 'Language', 'first'),

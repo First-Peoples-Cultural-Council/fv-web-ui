@@ -59,7 +59,7 @@ function SongStoryPagesPresentation({ bookPages, closeBookAction }) {
         <em>
           <FVLabel transKey="literal_translation" defaultStr="Literal Translation" transform="first" />
         </em>{' '}
-        : <span>{page.literalTranslation}</span>
+        : <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.literalTranslation) }} />
       </div>
     ) : null
 
@@ -67,7 +67,7 @@ function SongStoryPagesPresentation({ bookPages, closeBookAction }) {
       page.literalTranslation || page.dominantLanguageText ? (
         <Grid key={page.uid + 3} item xs={4} className={classes.translation}>
           <div className={classes.dominantTranslation}>
-            <div>{page.dominantLanguageText}</div>
+            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.dominantLanguageText) }} />
             {literalTranslation}
           </div>
         </Grid>
