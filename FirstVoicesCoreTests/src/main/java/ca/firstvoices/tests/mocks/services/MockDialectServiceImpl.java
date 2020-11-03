@@ -397,10 +397,10 @@ public class MockDialectServiceImpl implements MockDialectService {
     DocumentModelList fvSongs = new DocumentModelListImpl();
 
     for (int i = 0; i < songEntries; i++) {
-      String newPhrase = generateRandomPhrase(ThreadLocalRandom.current().nextInt(3, 10),
+      String title = generateRandomPhrase(ThreadLocalRandom.current().nextInt(3, 10),
           wordsToUse);
       DocumentModel songDoc = session
-          .createDocumentModel(path + "/Songs & Stories", newPhrase, FV_BOOK);
+          .createDocumentModel(path + "/Stories & Songs", title, FV_BOOK);
       fvSongs.add(createDocument(session, songDoc));
     }
 
