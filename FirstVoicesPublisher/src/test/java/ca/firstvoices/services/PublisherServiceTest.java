@@ -17,6 +17,7 @@ import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_LINKS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import ca.firstvoices.core.io.utils.PropertyUtils;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
@@ -220,10 +221,10 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
     assertNotNull(linksProxy);
 
     // Test proxy fields for dialect
-    assertEquals(link1Proxy.getId(),
-        PropertyUtils.getValuesAsList(dialectProxy, "fvproxy:proxied_keyboards").get(0));
-    assertEquals(link2Proxy.getId(),
-        PropertyUtils.getValuesAsList(dialectProxy, "fvproxy:proxied_language_resources").get(0));
+    assertTrue(PropertyUtils.getValuesAsList(dialectProxy, "fvproxy:proxied_keyboards")
+        .contains(link1Proxy.getId()));
+    assertTrue(PropertyUtils.getValuesAsList(dialectProxy, "fvproxy:proxied_language_resources")
+        .contains(link2Proxy.getId()));
   }
 
   @Test
@@ -364,7 +365,7 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
     DocumentModel dialectProxy = fvPublisherService.getPublication(session, dialect.getRef());
     assertNotNull(dialectProxy);
 
-    assertEquals(1,
+    assertEquals(2,
         PropertyUtils.getValuesAsList(dialectProxy, "fvproxy:proxied_keyboards").size());
 
     // Add 1 more link
