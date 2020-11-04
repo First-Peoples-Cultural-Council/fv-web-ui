@@ -116,7 +116,7 @@ public class ExecuteRequiredJobsListener implements EventListener {
                     event.markBubbleException();
                     log.severe(
                         () -> "Failed when trying to execute required jobs with message: " + e
-                            .getMessage());
+                            .getMessage() + " on dialect " + dialect.getId());
                   }
                 }
               }
