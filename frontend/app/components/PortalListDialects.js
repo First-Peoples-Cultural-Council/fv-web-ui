@@ -18,11 +18,7 @@ import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import selectn from 'selectn'
 import DialectTile from 'components/DialectTile'
-import FormGroup from '@material-ui/core/FormGroup'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Switch from '@material-ui/core/Switch'
 
-// import { amber } from '@material-ui/core/colors'
 import Grade from '@material-ui/icons/Grade'
 
 // REDUX
@@ -35,14 +31,6 @@ import UIHelpers from 'common/UIHelpers'
 const { oneOfType, instanceOf, array, func, object, string, bool } = PropTypes
 
 export class PortalListDialects extends Component {
-  state = {
-    isLanguageSwitchToggled: false,
-  }
-
-  handleChange = (name) => (event) => {
-    this.setState({ [name]: event.target.checked })
-  }
-
   static propTypes = {
     items: oneOfType([array, instanceOf(List)]),
     filteredItems: oneOfType([array, instanceOf(List)]),
@@ -61,13 +49,6 @@ export class PortalListDialects extends Component {
     },
   }
 
-  componentDidMount() {
-    const link = decodeURI(window.location.hash.substring(1))
-    if (link) {
-      this.setState({ isLanguageSwitchToggled: true })
-    }
-  }
-
   componentDidUpdate() {
     const link = decodeURI(window.location.hash.substring(1))
     if (link) {
@@ -80,36 +61,12 @@ export class PortalListDialects extends Component {
     }
   }
 
-  organizeByLanguageSwitch = () => {
-    return this.props.isWorkspaces ? (
-      ''
-    ) : (
-      <FormGroup
-        row
-        style={{
-          justifyContent: 'flex-end',
-        }}
-      >
-        <FormControlLabel
-          control={
-            <Switch
-              checked={this.state.isLanguageSwitchToggled}
-              onChange={this.handleChange('isLanguageSwitchToggled')}
-              value="isLanguageSwitchToggled"
-            />
-          }
-          label={this.props.intl.searchAndReplace('Organize by language')}
-        />
-      </FormGroup>
-    )
-  }
-
   _createTile = (tile) => {
     // Switch roles
     const dialectRoles = selectn('contextParameters.lightportal.roles', tile)
     const actionIcon = ProviderHelpers.isActiveRole(dialectRoles) ? (
       <span>
-        <Grade /*style={{ margin: '0 15px' }} color={amber[200]}*/ />
+        <Grade />
       </span>
     ) : null
 
@@ -146,7 +103,7 @@ export class PortalListDialects extends Component {
   }
 
   _getContent = () => {
-    if (this.props.isWorkspaces || !this.state.isLanguageSwitchToggled) {
+    if (this.props.isWorkspaces) {
       return this._oldView()
     }
 
@@ -160,7 +117,7 @@ export class PortalListDialects extends Component {
     const languageColors = {}
 
     // If the language doesn't have a parent language set, it will be put in the 'Other FirstVoices Archives'.
-    const defaultArchiveName = this.props.intl.searchAndReplace('Other FirstVoices Archives')
+    const defaultArchiveName = this.props.intl.searchAndReplace('Other FirstVoices Language Sites')
 
     // Perform mapping of above objects
     this.props.languages.forEach((lang) => {
@@ -201,25 +158,20 @@ export class PortalListDialects extends Component {
         key={key}
         style={{ borderLeft: `4px ${color} solid` }}
       >
-        <span className="DialectTitle" id={key.replace(' / ', ' ')}>
+        <span className="LanguageTitle" id={key.replace(' / ', ' ')}>
           {key}
         </span>
         <div style={{ display: 'flex', flexFlow: 'row wrap' }}>
           {archives.length > 0
             ? archives.map((tile) => this._createTile(tile))
-            : this.props.intl.searchAndReplace('No public language archive.')}
+            : this.props.intl.searchAndReplace('No public language site.')}
         </div>
       </div>
     )
   }
 
   render() {
-    return (
-      <>
-        {this.organizeByLanguageSwitch()}
-        <div className="DialectList">{this._getContent()}</div>
-      </>
-    )
+    return <div className="DialectList">{this._getContent()}</div>
   }
 }
 
