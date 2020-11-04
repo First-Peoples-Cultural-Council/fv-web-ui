@@ -13,6 +13,7 @@ import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CONTRIBUTOR;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_LINK;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_LINKS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -33,7 +34,6 @@ import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.impl.EventListenerDescriptor;
@@ -187,9 +187,17 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
     shouldTransitionDialectToPublish();
 
     // Create links
-    DocumentModelList links = createLinks(2);
+    DocumentModelList links = createLinks(2, false);
 
-    dialect.setPropertyValue("fvdialect:keyboards", new String[]{links.get(0).getId()});
+    // Create one shared link, and publish
+    DocumentModelList sharedLinks = createLinks(1, true);
+    DocumentModel sharedLink = sharedLinks.get(0);
+
+    // Publish shared link (doesn't have to be in SharedLinks for test)
+    sharedLink.followTransition(PUBLISH_TRANSITION);
+    session.publishDocument(sharedLink, dataCreator.getReference(session, "sectionsData"), true);
+
+    dialect.setPropertyValue("fvdialect:keyboards", new String[]{links.get(0).getId(), sharedLink.getId()});
     dialect.setPropertyValue("fvdialect:language_resources", new String[]{links.get(1).getId()});
 
     session.saveDocument(dialect);
@@ -235,7 +243,7 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
     // Other fields should follow similar logic: fv-portal:background_top_image,
     //fv-portal:featured_audio
     // fv-portal:logo,
-    DocumentModelList links = createLinks(1);
+    DocumentModelList links = createLinks(1, false);
 
     portal.setPropertyValue("fv-portal:featured_words",
         new String[]{words.get(0).getId(), words.get(2).getId()});
@@ -360,7 +368,7 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
         PropertyUtils.getValuesAsList(dialectProxy, "fvproxy:proxied_keyboards").size());
 
     // Add 1 more link
-    DocumentModelList links = createLinks(2);
+    DocumentModelList links = createLinks(2, false);
     dialect.setPropertyValue("fvdialect:keyboards",
         new String[]{links.get(0).getId(), links.get(1).getId()});
 
@@ -519,12 +527,22 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
         state));
   }
 
-  private DocumentModelList createLinks(int max) {
+  private DocumentModelList createLinks(int max, boolean shared) {
     DocumentModelList links = new DocumentModelListImpl();
+
+    String parentLinksPath = dialect.getPathAsString() + "/Links";
+
+    if (shared) {
+      DocumentModel sharedLinksParent =
+          session.createDocumentModel("/FV/Workspaces/SharedData/", "Shared Links", FV_LINKS);
+      sharedLinksParent = session.createDocument(sharedLinksParent);
+
+      parentLinksPath = sharedLinksParent.getPathAsString();
+    }
 
     for (int i = 0; i <= max; ++i) {
       DocumentModel link =
-          session.createDocumentModel(dialect.getPathAsString() + "/Links", "Link" + i, FV_LINK);
+          session.createDocumentModel(parentLinksPath, "Link" + i, FV_LINK);
       links.add(session.createDocument(link));
     }
 

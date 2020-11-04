@@ -439,14 +439,18 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
               continue;
             }
 
-            if (dependenciesToSkipPublishing.contains(workspaceFieldName)) {
-              // Origin field should be grabbed if it is published
-              // Should not be automatically published
+            DocumentModel dependencyDoc = session.getDocument(dependencyRef);
+
+            if (dependenciesToSkipPublishing.contains(workspaceFieldName)
+                || dependencyDoc.getPathAsString().contains("SharedData")) {
+              // Origin field: should be grabbed if it is published
+              // SharedData dependencies (e.g. Shared Links): should get publication
+              // Both should NOT be automatically published
               newProxy = getPublication(session, dependencyRef);
             } else {
               // Publish dependency (overwriting if needed)
               newProxy =
-                  transitionAndCreateProxy(session, session.getDocument(dependencyRef));
+                  transitionAndCreateProxy(session, dependencyDoc);
             }
 
             if (newProxy != null && !newProxyValues.contains(newProxy.getId())) {
