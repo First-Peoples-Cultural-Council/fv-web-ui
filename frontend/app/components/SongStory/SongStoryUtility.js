@@ -1,4 +1,4 @@
-import DOMPurify from 'dompurify'
+import sanitize from 'common/Sanitize'
 import selectn from 'selectn'
 
 // Data for Cover
@@ -22,8 +22,8 @@ export const getBookData = ({ computeBookData, defaultLanguage = 'english', intl
   return {
     uid: selectn('uid', computeBookData),
     type: selectn('properties.fvbook:type', computeBookData) || '',
-    title: DOMPurify.sanitize(selectn('title', computeBookData)),
-    titleTranslation: DOMPurify.sanitize(
+    title: sanitize(selectn('title', computeBookData)),
+    titleTranslation: sanitize(
       selectn('[0].translation', dominantLanguageTitleTranslation({ serverResponse: computeBookData, defaultLanguage }))
     ),
     authors: (selectn('contextParameters.book.authors', computeBookData) || []).map((author) => {
