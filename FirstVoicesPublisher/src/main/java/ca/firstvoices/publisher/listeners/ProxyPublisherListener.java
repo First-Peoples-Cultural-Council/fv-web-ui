@@ -82,8 +82,8 @@ public class ProxyPublisherListener implements PostCommitEventListener {
     String transition = (String) ctx.getProperties().get(TRANSTION_EVENT_OPTION_TRANSITION);
     String transitionFrom = (String) ctx.getProperties().get(TRANSTION_EVENT_OPTION_FROM);
 
-    if (DocumentUtils.isMutable(doc) && isDialectBusyOrUnavailable(doc)) {
-      // Do not trigger listener for immutable documents and while dialect publishing
+    if (!DocumentUtils.isMutable(doc) || isDialectBusyOrUnavailable(doc)) {
+      // Do not trigger listener for immutable documents or while dialect publishing
       // is pending since the creation of proxies is done via `CreateProxiesWorker`
       return;
     }
