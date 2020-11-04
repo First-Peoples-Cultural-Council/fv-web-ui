@@ -83,7 +83,7 @@ const SongStoryPage = ({ page, pageNumber, pageLinkId }) => {
       <em>
         <FVLabel transKey="literal_translation" defaultStr="Literal Translation" transform="first" />
       </em>{' '}
-      : <span>{page.literalTranslation}</span>
+      : <span dangerouslySetInnerHTML={{ __html: sanitize(page.literalTranslation) }} />
     </div>
   ) : null
 
@@ -91,7 +91,7 @@ const SongStoryPage = ({ page, pageNumber, pageLinkId }) => {
     page.literalTranslation || page.dominantLanguageText ? (
       <Grid key={page.uid + 3} item xs={4} className={classes.translation}>
         <div className={classes.dominantTranslation}>
-          <div>{page.dominantLanguageText}</div>
+          <div dangerouslySetInnerHTML={{ __html: sanitize(page.dominantLanguageText) }} />
           {literalTranslation}
         </div>
       </Grid>
