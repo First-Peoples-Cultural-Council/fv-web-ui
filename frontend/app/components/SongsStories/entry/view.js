@@ -16,7 +16,7 @@ limitations under the License.
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import sanitize from 'common/DomPurifier'
+import sanitize from 'common/Sanitize'
 import selectn from 'selectn'
 
 import FVButton from 'components/FVButton'

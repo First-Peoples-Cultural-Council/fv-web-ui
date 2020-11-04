@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import selectn from 'selectn'
 
-import sanitize from 'common/DomPurifier'
+import sanitize from 'common/Sanitize'
 
 import AVPlayArrow from '@material-ui/icons/PlayArrow'
 import AVStop from '@material-ui/icons/Stop'

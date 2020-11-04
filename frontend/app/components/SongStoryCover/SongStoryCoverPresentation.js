@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import sanitize from 'common/DomPurifier'
+import sanitize from 'common/Sanitize'
 
 import Typography from '@material-ui/core/Typography'
 import ActionLaunch from '@material-ui/icons/Launch'

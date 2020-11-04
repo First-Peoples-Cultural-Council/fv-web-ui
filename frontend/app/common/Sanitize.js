@@ -8,10 +8,10 @@ DOMPurify.addHook('uponSanitizeElement', (node, data) => {
     }
   }
 })
-const sanitize = (content) => {
+const Sanitize = (content) => {
   return DOMPurify.sanitize(content, {
     ADD_TAGS: ['iframe'],
     ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
   })
 }
-export default sanitize
+export default Sanitize

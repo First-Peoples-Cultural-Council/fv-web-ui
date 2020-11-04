@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import sanitize from 'common/DomPurifier'
+import sanitize from 'common/Sanitize'
 
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'

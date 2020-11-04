@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
-import sanitize from 'common/DomPurifier'
+import sanitize from 'common/Sanitize'
 
 import useNavigationHelpers from 'common/useNavigationHelpers'
 import useDashboard from 'dataSources/useDashboard'

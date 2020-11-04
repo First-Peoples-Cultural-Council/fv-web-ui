@@ -1,4 +1,4 @@
-import sanitize from 'common/DomPurifier'
+import sanitize from 'common/Sanitize'
 import selectn from 'selectn'
 
 // Data for Cover

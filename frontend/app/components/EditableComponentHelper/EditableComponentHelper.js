@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import selectn from 'selectn'
 import t from 'tcomb-form'
-import sanitize from 'common/DomPurifier'
+import sanitize from 'common/Sanitize'
 
 import Preview from 'components/Preview'
 import StatusBar from 'components/StatusBar'
