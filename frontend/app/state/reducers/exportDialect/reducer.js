@@ -1,6 +1,6 @@
 import selectn from 'selectn'
 
-import { EXPORT_DEFAULT, EXPORT_ERROR, EXPORT_IN_PROGRESS, EXPORT_INITIALIZING, EXPORT_SUCCESS } from './constants'
+import { EXPORT_DEFAULT, EXPORT_ERROR, EXPORT_IN_PROGRESS, EXPORT_INITIALIZING, EXPORT_SUCCESS } from 'common/Constants'
 
 const getIndexFromExportData = ({ exportId, exportData = [] }) => {
   return exportData.findIndex((element) => {
