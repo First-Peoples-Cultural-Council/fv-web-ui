@@ -184,9 +184,8 @@ export const SearchDialect = (props) => {
   // Generates 'Stop browsing ...' button
   // ------------------------------------------------------------
   const getBrowsing = () => {
-    const { searchByMode } = csd
     let resetButtonText = ''
-    switch (searchByMode) {
+    switch (csd.searchByMode) {
       case SEARCH_BY_ALPHABET:
         resetButtonText = 'Stop browsing Alphabetically'
         break
@@ -286,7 +285,7 @@ export const SearchDialect = (props) => {
   // ------------------------------------------------------------
   const getSearchMessage = ({
     searchByAlphabet,
-    searchByMode,
+    searchByMode: _searchByMode,
     searchBySettings: _searchBySettings = {},
     searchTerm: _searchTerm,
     searchType: _searchType,
@@ -441,7 +440,7 @@ export const SearchDialect = (props) => {
       return <div className={classNames('SearchDialectSearchFeedback', 'alert', 'alert-info')}>{msg}</div>
     }
 
-    switch (searchByMode) {
+    switch (_searchByMode) {
       case SEARCH_BY_ALPHABET: {
         msg = messages.startWith
         break
@@ -494,58 +493,55 @@ export const SearchDialect = (props) => {
       const { type, idName, labelText, classes = {} } = searchUiData
       const _classes = Object.assign({}, classesDefault, classes)
       let element = null
-      switch (type) {
-        case 'select': {
-          const { options = [] } = searchUiData
+      if (type === 'select') {
+        const { options = [] } = searchUiData
 
-          const optionItems =
-            options.length > 0
-              ? options.map((option, key2) => {
-                  return (
-                    <option key={key2} value={option.value}>
-                      {option.text}
-                    </option>
-                  )
-                })
-              : partsOfSpeechOptions
-          element = (
-            <span key={key1} className={_classes.SearchDialectFormSecondaryGroup}>
-              <label className={_classes.SearchDialectLabel} htmlFor={idName}>
-                {labelText}
-              </label>
-              <select
-                className={_classes.SearchDialectOption}
-                id={idName}
-                name={idName}
-                onChange={handleChangeSearchBySettings}
-                value={searchBySettings[idName]}
-              >
-                <option key="SEARCH_PART_OF_SPEECH_ANY" value={SEARCH_PART_OF_SPEECH_ANY}>
-                  Any
-                </option>
+        const optionItems =
+          options.length > 0
+            ? options.map((option, key2) => {
+                return (
+                  <option key={key2} value={option.value}>
+                    {option.text}
+                  </option>
+                )
+              })
+            : partsOfSpeechOptions
+        element = (
+          <span key={key1} className={_classes.SearchDialectFormSecondaryGroup}>
+            <label className={_classes.SearchDialectLabel} htmlFor={idName}>
+              {labelText}
+            </label>
+            <select
+              className={_classes.SearchDialectOption}
+              id={idName}
+              name={idName}
+              onChange={handleChangeSearchBySettings}
+              value={searchBySettings[idName]}
+            >
+              <option key="SEARCH_PART_OF_SPEECH_ANY" value={SEARCH_PART_OF_SPEECH_ANY}>
+                Any
+              </option>
 
-                {optionItems}
-              </select>
-            </span>
-          )
-          break
-        }
-        default:
-          element = (
-            <span key={key1} className={_classes.SearchDialectFormSecondaryGroup}>
-              <input
-                checked={searchBySettings[idName] || false}
-                className={_classes.SearchDialectOption}
-                id={idName}
-                name={idName}
-                onChange={handleChangeSearchBySettings}
-                type="checkbox"
-              />
-              <label className={_classes.SearchDialectLabel} htmlFor={idName}>
-                {labelText}
-              </label>
-            </span>
-          )
+              {optionItems}
+            </select>
+          </span>
+        )
+      } else {
+        element = (
+          <span key={key1} className={_classes.SearchDialectFormSecondaryGroup}>
+            <input
+              checked={searchBySettings[idName] || false}
+              className={_classes.SearchDialectOption}
+              id={idName}
+              name={idName}
+              onChange={handleChangeSearchBySettings}
+              type="checkbox"
+            />
+            <label className={_classes.SearchDialectLabel} htmlFor={idName}>
+              {labelText}
+            </label>
+          </span>
+        )
       }
       return element
     })
@@ -579,13 +575,10 @@ export const SearchDialect = (props) => {
     const updateState = {}
 
     // Gather up the form state
-    switch (type) {
-      case 'checkbox': {
-        updateState[id] = checked
-        break
-      }
-      default:
-        updateState[id] = value
+    if (type === 'checkbox') {
+      updateState[id] = checked
+    } else {
+      updateState[id] = value
     }
 
     // Save it
