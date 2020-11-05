@@ -85,13 +85,7 @@ export class Search extends DataListView {
           },
         },
         () => {
-          this._fetchListViewData(
-            this.props,
-            this.state.pageInfo.page,
-            this.state.pageInfo.pageSize,
-            this.props.DEFAULT_SORT_TYPE,
-            this.props.DEFAULT_SORT_COL
-          )
+          this._fetchListViewData(this.state.pageInfo.page, this.state.pageInfo.pageSize, this.props)
         }
       )
     }
@@ -134,27 +128,17 @@ export class Search extends DataListView {
 
   // NOTE: DataListView calls `fetchData`
   fetchData(newProps = this.props) {
-    this._fetchListViewData(
-      newProps,
-      newProps.DEFAULT_PAGE,
-      newProps.DEFAULT_PAGE_SIZE,
-      newProps.DEFAULT_SORT_TYPE,
-      newProps.DEFAULT_SORT_COL
-    )
+    this._fetchListViewData(newProps.DEFAULT_PAGE, newProps.DEFAULT_PAGE_SIZE, newProps)
   }
 
-  async _fetchListViewData(props = this.props, pageIndex, pageSize) {
+  async _fetchListViewData(pageIndex, pageSize, props = this.props) {
     if (props.routeParams.searchTerm && props.routeParams.searchTerm !== '') {
+      const searchTerm = StringHelpers.clean(props.routeParams.searchTerm, CLEAN_FULLTEXT)
+      const latestVersion = props.routeParams.area === SECTIONS ? ' AND ecm:isLatestVersion = 1' : ' '
       await props.searchDocuments(
         this._getQueryPath(props),
-        `${
-          props.routeParams.area === SECTIONS ? ' AND ecm:isLatestVersion = 1' : ' '
-        } AND ecm:primaryType IN ('FVWord','FVPhrase','FVBook','FVPortal') AND ecm:fulltext LIKE '${StringHelpers.clean(
-          props.routeParams.searchTerm,
-          CLEAN_FULLTEXT
-          // More specific:
-          // ` AND (ecm:fulltext_description = '${props.routeParams.searchTerm}' OR ecm:fulltext_title = '${props.routeParams.searchTerm}'`
-        )}'&currentPageIndex=${pageIndex - 1}&pageSize=${pageSize}&sortBy=ecm:fulltextScore`
+        `${latestVersion} AND ecm:primaryType IN ('FVWord','FVPhrase','FVBook','FVPortal') AND ( ecm:fulltext_dictionary_all_field = '${searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ fv:definitions/*/translation ILIKE '${searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ dc:title ILIKE '${searchTerm}' )&currentPageIndex=${pageIndex -
+          1}&pageSize=${pageSize}&sortBy=ecm:fulltextScore`
       )
 
       // Update url
@@ -182,13 +166,7 @@ export class Search extends DataListView {
               },
             },
             () => {
-              this._fetchListViewData(
-                this.props,
-                currentPageIndex,
-                pageSize,
-                this.props.DEFAULT_SORT_TYPE,
-                this.props.DEFAULT_SORT_COL
-              )
+              this._fetchListViewData(currentPageIndex, pageSize, this.props)
             }
           )
         },
