@@ -2,6 +2,7 @@ package ca.firstvoices.tests.mocks.services;
 
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_ALPHABET;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOKS;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORIES;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
@@ -168,6 +169,7 @@ public class MockDialectServiceImpl implements MockDialectService {
     generateFVWords(session, dialect.getPathAsString(), words, categories);
     generateFVPhrases(session, dialect.getPathAsString(), maxEntries / 2, words, phraseBooks);
     generateFVSongs(session, dialect.getPathAsString(), 5, words);
+    //    generateFVStories(session, dialect.getPathAsString(), 5, words);
 
     return dialect;
 
@@ -197,6 +199,8 @@ public class MockDialectServiceImpl implements MockDialectService {
     DocumentModelList phraseBooks = generateFVPhraseBooks(session, dialect.getPathAsString());
     generateFVPhrases(session, dialect.getPathAsString(), phraseEntries, currentWords, phraseBooks);
     generateFVWords(session, dialect.getPathAsString(), currentWords, categories);
+    generateFVSongs(session, dialect.getPathAsString(), 5, currentWords);
+    //    generateFVStories(session, dialect.getPathAsString(), 5, currentWords);
 
     return dialect;
 
@@ -271,7 +275,8 @@ public class MockDialectServiceImpl implements MockDialectService {
     createDocument(session,
         session.createDocumentModel(dialect.getPathAsString(), "Phrase Books", FV_CATEGORIES));
     createDocument(session,
-        session.createDocumentModel(dialect.getPathAsString(), "Stories & Songs", FV_BOOK));
+        session.createDocumentModel(dialect.getPathAsString(), "Stories & Songs", FV_BOOKS));
+
 
     return dialect;
   }
@@ -399,12 +404,38 @@ public class MockDialectServiceImpl implements MockDialectService {
     for (int i = 0; i < songEntries; i++) {
       String title = generateRandomPhrase(ThreadLocalRandom.current().nextInt(3, 10),
           wordsToUse);
+      String introduction = generateRandomPhrase(ThreadLocalRandom.current().nextInt(3, 10),
+          wordsToUse);
       DocumentModel songDoc = session
           .createDocumentModel(path + "/Stories & Songs", title, FV_BOOK);
+      songDoc.setPropertyValue("fvbook:introduction", introduction);
+      songDoc.setPropertyValue("fvbook:type", "song");
       fvSongs.add(createDocument(session, songDoc));
     }
 
     return fvSongs;
   }
+
+  //  private DocumentModelList generateFVStories(CoreSession session, String path,
+  //  int storyEntries,
+  //      String[] wordsToUse) {
+  //    //Generate song
+  //    DocumentModelList fvStories = new DocumentModelListImpl();
+  //
+  //    for (int i = 0; i < storyEntries; i++) {
+  //      String title = generateRandomPhrase(ThreadLocalRandom.current().nextInt(3, 10),
+  //          wordsToUse);
+  //      DocumentModel storyDoc = session
+  //          .createDocumentModel(path + "/Stories & Songs", title, FV_BOOK);
+  //
+  //      storyDoc.setPropertyValue("fvbook:introduction", "introduction here");
+  //      storyDoc.setPropertyValue("fvbook:type", "story");
+  //      fvStories.add(createDocument(session, storyDoc));
+  //    }
+  //
+  //    return fvStories;
+  //  }
+
+
 
 }
