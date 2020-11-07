@@ -420,13 +420,16 @@ public class MockDialectServiceImpl implements MockDialectService {
       songDoc.setPropertyValue("fv:cultural_note", culturalNoteArr);
       fvSongs.add(createDocument(session, songDoc));
 
-      String songPath = songDoc.getPathAsString();
       // generate pages
-      DocumentModelList fvPage = new DocumentModelListImpl();
-      DocumentModel pageDoc = session
-          .createDocumentModel(songPath, "page1", FV_BOOK_ENTRY);
-      fvPage.add(createDocument(session, pageDoc));
+      String songPath = songDoc.getPathAsString();
+      int numPages = ThreadLocalRandom.current().nextInt(0, 10);
+      for (int k = 0; k < numPages; k++) {
+        DocumentModelList fvPage = new DocumentModelListImpl();
+        DocumentModel pageDoc = session
+            .createDocumentModel(songPath, "Page " + k, FV_BOOK_ENTRY);
+        fvPage.add(createDocument(session, pageDoc));
 
+      }
 
     }
 
