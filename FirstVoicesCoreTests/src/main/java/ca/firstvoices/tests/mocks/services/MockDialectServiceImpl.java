@@ -3,6 +3,7 @@ package ca.firstvoices.tests.mocks.services;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_ALPHABET;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOKS;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORIES;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
@@ -406,11 +407,27 @@ public class MockDialectServiceImpl implements MockDialectService {
           wordsToUse);
       String introduction = generateRandomPhrase(ThreadLocalRandom.current().nextInt(3, 10),
           wordsToUse);
+      String[][] translation = {
+          {"Translation", "english"}
+      };
+      String[] culturalNoteArr = {"cultural note"};
+
       DocumentModel songDoc = session
           .createDocumentModel(path + "/Stories & Songs", title, FV_BOOK);
       songDoc.setPropertyValue("fvbook:introduction", introduction);
+      songDoc.setPropertyValue("fvbook:acknowledgement", "ack");
       songDoc.setPropertyValue("fvbook:type", "song");
+      songDoc.setPropertyValue("fv:cultural_note", culturalNoteArr);
       fvSongs.add(createDocument(session, songDoc));
+
+      String songPath = songDoc.getPathAsString();
+      // generate pages
+      DocumentModelList fvPage = new DocumentModelListImpl();
+      DocumentModel pageDoc = session
+          .createDocumentModel(songPath, "page1", FV_BOOK_ENTRY);
+      fvPage.add(createDocument(session, pageDoc));
+
+
     }
 
     return fvSongs;
