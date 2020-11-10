@@ -32,7 +32,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
   const { intl } = useIntl()
   const [selectedItemData, setSelectedItemData] = useState({})
   const [selectedTaskData, setSelectedTaskData] = useState({})
-  const { getSearchObject, navigate, navigateReplace, getBaseURL } = useNavigationHelpers()
+  const { getSearchAsObject, navigate, navigateReplace, getBaseURL } = useNavigationHelpers()
   const baseUrl = getBaseURL()
 
   const { computeDocument, fetchDocumentSingleArg } = useDocument()
@@ -53,7 +53,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
     sortBy: querySortBy = 'date',
     sortOrder: querySortOrder = 'desc',
     task: queryTask,
-  } = getSearchObject()
+  } = getSearchAsObject()
 
   // Escape key binding
   const onKeyPressed = (event) => {

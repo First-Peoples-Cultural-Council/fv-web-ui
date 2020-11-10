@@ -20,7 +20,7 @@ import { WORKSPACES } from 'common/Constants'
 import { withTheme } from '@material-ui/core/styles'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import { routeHasChanged /*, getSearchObject*/ } from 'common/NavigationHelpers'
+import { routeHasChanged } from 'common/NavigationHelpers'
 import { Redirector } from 'common/Redirector'
 // import UIHelpers from 'common/UIHelpers'
 import StringHelpers from 'common/StringHelpers'
@@ -147,7 +147,10 @@ export class AppFrontController extends Component {
       let page
 
       let navigation = <Navigation frontpage={isFrontPage} routeParams={routeParams} />
-      const siteTheme = routeParams.hasOwnProperty('siteTheme') ? routeParams.siteTheme : 'default'
+      // Note: https://eslint.org/docs/rules/no-prototype-builtins
+      const siteTheme = Object.prototype.hasOwnProperty.call(routeParams, 'siteTheme')
+        ? routeParams.siteTheme
+        : 'default'
       // prettier-ignore
       const isPrintView = matchedPage
         ? matchedPage
@@ -186,9 +189,11 @@ export class AppFrontController extends Component {
       }
 
       let warning = null
-      if (matchedPage.hasOwnProperty('warnings')) {
+      // Note: https://eslint.org/docs/rules/no-prototype-builtins
+      if (Object.prototype.hasOwnProperty.call(matchedPage, 'warnings')) {
         warning = matchedPage.get('warnings').map((warningItem) => {
-          if (this.props.warnings.hasOwnProperty(warningItem) && !this.state.warningsDismissed) {
+          // Note: https://eslint.org/docs/rules/no-prototype-builtins
+          if (Object.prototype.hasOwnProperty.call(this.props.warnings, warningItem) && !this.state.warningsDismissed) {
             return (
               <div
                 style={{ position: 'fixed', bottom: 0, zIndex: 99999 }}
@@ -425,7 +430,8 @@ export class AppFrontController extends Component {
       }
 
       // Switch siteThemes based on route params
-      const _siteTheme = _routeParams.hasOwnProperty('siteTheme') || matchedPage.get('siteTheme')
+      // Note: https://eslint.org/docs/rules/no-prototype-builtins
+      const _siteTheme = Object.prototype.hasOwnProperty.call(_routeParams, 'siteTheme') || matchedPage.get('siteTheme')
       if (_siteTheme) {
         let newTheme = _siteTheme
 
@@ -444,8 +450,9 @@ export class AppFrontController extends Component {
 
           TODO: investigate if statecharts would simplify matters
         */
+        // Note: https://eslint.org/docs/rules/no-prototype-builtins
         if (
-          ((_routeParams.hasOwnProperty('area') && _routeParams.area === WORKSPACES) ||
+          ((Object.prototype.hasOwnProperty.call(_routeParams, 'area') && _routeParams.area === WORKSPACES) ||
             matchedPage.get('path').indexOf(WORKSPACES) !== -1 ||
             matchedPage.get('siteTheme') === WORKSPACES) &&
           _routeParams.siteTheme !== 'workspace'
@@ -543,6 +550,8 @@ AppFrontController.propTypes = {
   replaceWindowPath: func.isRequired,
   setRouteParams: func.isRequired,
   updateWindowPath: func.isRequired,
+  intl: object,
+  setIntlWorkspace: func,
 }
 AppFrontController.defaultProps = {
   matchedPage: undefined,

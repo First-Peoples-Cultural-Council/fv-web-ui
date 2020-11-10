@@ -24,9 +24,12 @@ import useSearch from 'dataSources/useSearch'
 import useRoute from 'dataSources/useRoute'
 
 import useWindowPath from 'dataSources/useWindowPath'
-import useNavigationHelpers from 'common/useNavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
-import NavigationHelpers, { getSearchObject, appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
+import NavigationHelpers, {
+  getNewPaginationUrl,
+  getSearchObject,
+  appendPathArrayAfterLandmark,
+} from 'common/NavigationHelpers'
 
 /**
  * @summary KidsWordsByCategoryData
@@ -43,9 +46,8 @@ function KidsWordsByCategoryData({ children }) {
   const { computePortal, fetchPortal } = usePortal()
   const { computeDocument, fetchDocument } = useDocument()
   const { computeWords, fetchWords } = useWord()
-  const { splitWindowPath } = useWindowPath()
+  const { splitWindowPath, pushWindowPath } = useWindowPath()
   const { searchParams } = useSearch()
-  const { changePagination } = useNavigationHelpers()
   const documentPath = `${routeParams.dialect_path}/Dictionary`
   // on load
   useEffect(() => {
@@ -121,7 +123,9 @@ function KidsWordsByCategoryData({ children }) {
     ]),
     items,
     hasItems: items && items.length !== 0,
-    onPaginationUpdate: changePagination,
+    onPaginationUpdate: ({ page, pageSize }) => {
+      NavigationHelpers.navigate(getNewPaginationUrl({ splitWindowPath, page, pageSize }), pushWindowPath, false)
+    },
     page: Number(routeParams.page),
     pageSize: Number(routeParams.pageSize),
     resultsCount: selectn('response.resultsCount', computedWords),

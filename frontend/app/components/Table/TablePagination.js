@@ -16,7 +16,7 @@ import { TABLEPAGINATION_DIV } from 'common/Constants'
 import { TableContextCount } from 'components/Table/TableContext'
 
 function TablePagination({ localization, rowsPerPageOptions, showFirstLastPageButtons, style, variant }) {
-  const { getSearchObject, navigate } = useNavigationHelpers()
+  const { getSearchAsObject, navigate } = useNavigationHelpers()
   const {
     item: queryItem,
     page: queryPage = 1,
@@ -24,7 +24,7 @@ function TablePagination({ localization, rowsPerPageOptions, showFirstLastPageBu
     sortBy: querySortBy = 'date',
     sortOrder: querySortOrder = 'desc',
     task: queryTask,
-  } = getSearchObject()
+  } = getSearchAsObject()
   const queryPageNum = Number(queryPage)
   const queryPageSizeNum = Number(queryPageSize)
   const getUrlWithQuery = ({

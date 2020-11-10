@@ -17,12 +17,12 @@ import usePortal from 'dataSources/usePortal'
 import useSearchDialect from 'dataSources/useSearchDialect'
 import useWindowPath from 'dataSources/useWindowPath'
 import useWord from 'dataSources/useWord'
+import useNavigationHelpers from 'common/useNavigationHelpers'
 
 // Helpers
 import { getDialectClassname } from 'common/Helpers'
 import NavigationHelpers, {
   appendPathArrayAfterLandmark,
-  getSearchObject,
   hasPagination,
   updateUrlIfPageOrPageSizeIsDifferent,
 } from 'common/NavigationHelpers'
@@ -64,6 +64,7 @@ function WordsListData({ children }) {
   const { computeSearchDialect } = useSearchDialect()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
   const { computeWords, fetchWords } = useWord()
+  const { getSearchAsObject, navigate } = useNavigationHelpers()
 
   const { searchNxqlQuery = '' } = computeSearchDialect
   //
@@ -152,7 +153,7 @@ function WordsListData({ children }) {
     }
     // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
     const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
-    const searchObj = getSearchObject()
+    const searchObj = getSearchAsObject()
     // 1st: redux values, 2nd: url search query, 3rd: defaults
     const sortOrder = navigationRouteSearch.sortOrder || searchObj.sortOrder || DEFAULT_SORT_TYPE
     const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || DEFAULT_SORT_COL
@@ -179,7 +180,7 @@ function WordsListData({ children }) {
       splitWindowPath: splitWindowPath,
     })
     if (url) {
-      NavigationHelpers.navigate(`/${url}`, pushWindowPath, false)
+      navigate(`/${url}`)
     } else {
       onNavigateRequest({
         hasPagination,
@@ -230,7 +231,7 @@ function WordsListData({ children }) {
                   href={hrefEditRedirect}
                   onClick={(e) => {
                     e.preventDefault()
-                    NavigationHelpers.navigate(hrefEditRedirect, pushWindowPath, false)
+                    navigate(hrefEditRedirect)
                   }}
                 >
                   <Edit title={intl.trans('edit', 'Edit', 'first')} />
@@ -363,7 +364,7 @@ function WordsListData({ children }) {
       })
     }
     if (newUrl) {
-      NavigationHelpers.navigate(`/${newUrl}`, pushWindowPath)
+      navigate(`/${newUrl}`)
     }
   }
 
@@ -398,7 +399,7 @@ function WordsListData({ children }) {
         _splitWindowPath.splice(learnIndex + 2)
         resetUrl = `/${_splitWindowPath.join('/')}`
       }
-      NavigationHelpers.navigate(`${resetUrl}/${routeParams.pageSize}/1`, pushWindowPath, false)
+      navigate(`${resetUrl}/${routeParams.pageSize}/1`)
     } else {
       // When facets change, pagination should be reset.
       // In these pages (words/phrase), list views are controlled via URL
@@ -426,7 +427,7 @@ function WordsListData({ children }) {
 
   const handleSearch = async ({ href, updateUrl = true } = {}) => {
     if (href && updateUrl) {
-      NavigationHelpers.navigate(href, pushWindowPath, false)
+      navigate(href)
     } else {
       resetURLPagination({ preserveSearch: true })
     }
