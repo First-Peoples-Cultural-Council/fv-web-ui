@@ -50,7 +50,7 @@ import FVLabel from 'components/FVLabel'
 import { getDialectClassname } from 'common/Helpers'
 import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
 
-import { SEARCH_BY_ALPHABET, SEARCH_BY_PHRASE_BOOK } from 'components/SearchDialect/constants'
+import { SEARCH_BY_ALPHABET, SEARCH_BY_PHRASE_BOOK } from 'common/Constants'
 
 const { array, bool, func, object, string } = PropTypes
 /**
@@ -211,12 +211,12 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
       const cloneWordListView = phraseListView
         ? React.cloneElement(phraseListView, {
-          DEFAULT_PAGE_SIZE: 8,
-          disablePageSize: true,
-          filter: kidsFilter,
-          gridCols: 2,
-          gridListView: true,
-        })
+            DEFAULT_PAGE_SIZE: 8,
+            disablePageSize: true,
+            filter: kidsFilter,
+            gridCols: 2,
+            gridListView: true,
+          })
         : null
       return (
         <PromiseWrapper renderOnError computeEntities={computeEntities}>

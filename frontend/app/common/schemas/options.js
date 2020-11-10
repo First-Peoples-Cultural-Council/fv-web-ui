@@ -919,6 +919,7 @@ const options = {
             translation: {
               label: intl.trans('translation', 'Translation', 'first'),
               type: 'textarea',
+              factory: WysiwygFactory,
             },
             language: {
               label: intl.trans('language', 'Language', 'first'),
@@ -940,6 +941,7 @@ const options = {
             translation: {
               label: intl.trans('translation', 'Translation', 'first'),
               type: 'textarea',
+              factory: WysiwygFactory,
             },
             language: {
               label: intl.trans('language', 'Language', 'first'),
@@ -1189,6 +1191,14 @@ const options = {
         type: 'text',
       },
       'dc:description': {
+        label: intl.trans('models.about_dialect', 'About Dialect', 'first'),
+        type: 'textarea',
+        factory: WysiwygFactory,
+        attrs: {
+          dataTestId: 'wysiwyg-dc_description',
+        },
+      },
+      'fvdialect:about_our_language': {
         label: intl.trans('models.about_dialect', 'About Dialect', 'first'),
         type: 'textarea',
         factory: WysiwygFactory,

@@ -10,7 +10,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-
 import ca.firstvoices.data.schemas.DialectTypesConstants;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.testUtil.AbstractTestDataCreatorTest;
@@ -27,7 +26,6 @@ import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.LifeCycleConstants;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventBundle;
@@ -46,23 +44,18 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 @RunWith(FeaturesRunner.class)
 @Features({CoreFeature.class})
 @RepositoryConfig(cleanup = Granularity.METHOD)
-@Deploy({
-    "org.nuxeo.ecm.platform.publisher.core",
-    "FirstVoicesCoreIO",
+@Deploy({"org.nuxeo.ecm.platform.publisher.core", "FirstVoicesCoreIO",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.listeners.xml",
-    "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/fv-publisher-disable-listeners.xml"
-})
+    "FirstVoicesNuxeoPublisher.tests:OSGI-INF/extensions/fv-publisher-disable-listeners.xml"})
 @TestDataConfiguration(yaml = {"test-data/basic-structure.yaml", "test-data/test-workspace.yaml"})
 public class ProxyPublisherListenerTest extends AbstractTestDataCreatorTest {
 
   private static final String EVENT_NAME = "lifecycle_transition_event";
 
-  @Inject
-  CoreSession session;
+  @Inject CoreSession session;
 
-  @Inject
-  EventService eventService;
+  @Inject EventService eventService;
 
   /*
      Note: You should be able to mock publisher service as per
@@ -73,11 +66,9 @@ public class ProxyPublisherListenerTest extends AbstractTestDataCreatorTest {
   //@Mock
   //@RuntimeService
   */
-  @Inject
-  protected FirstVoicesPublisherService fvPublisherService;
+  @Inject protected FirstVoicesPublisherService fvPublisherService;
 
-  @Inject
-  protected MockDialectService mockDialectService;
+  @Inject protected MockDialectService mockDialectService;
 
   DocumentModel dialect = null;
 
@@ -91,7 +82,7 @@ public class ProxyPublisherListenerTest extends AbstractTestDataCreatorTest {
     // Testing for a dialect is enough as we are only focusing on ensuring the listener
     // fires and makes it to the right service method. Service methods are tested in the
     // PublisherServiceTest class. Ideally this would be done with a mock (see note above)
-    dialect = session.getDocument(new IdRef(this.dataCreator.getReference("testDialect")));
+    dialect = dataCreator.getReference(session, "testDialect");
   }
 
   @After
@@ -129,15 +120,21 @@ public class ProxyPublisherListenerTest extends AbstractTestDataCreatorTest {
         session.getChild(dialect.getRef(), DialectTypesConstants.FV_DICTIONARY_NAME);
 
     // Should start off as not published
-    assertNotEquals(PUBLISHED_STATE, session.getDocument(dialectChild.getRef()).getCurrentLifeCycleState());
+    assertNotEquals(PUBLISHED_STATE,
+        session.getDocument(dialectChild.getRef()).getCurrentLifeCycleState());
 
     fireEvent(session, REPUBLISH_TRANSITION, PUBLISHED_STATE, REPUBLISH_STATE, dialectChild);
 
     // After republishing, state should be set to publish
-    assertEquals(PUBLISHED_STATE, session.getDocument(dialectChild.getRef()).getCurrentLifeCycleState());
+    assertEquals(PUBLISHED_STATE,
+        session.getDocument(dialectChild.getRef()).getCurrentLifeCycleState());
   }
 
-  private void fireEvent(CoreSession session, String transition, String from, String to, DocumentModel doc) {
+  private void fireEvent(CoreSession session,
+                         String transition,
+                         String from,
+                         String to,
+                         DocumentModel doc) {
     Map<String, Serializable> eventOptions = new HashMap<>();
     eventOptions.put(LifeCycleConstants.TRANSTION_EVENT_OPTION_FROM, from);
     eventOptions.put(LifeCycleConstants.TRANSTION_EVENT_OPTION_TO, to);

@@ -51,7 +51,7 @@ echo 'Copying build package into shared docker volume.'
 cp FirstVoices-marketplace/target/FirstVoices-marketplace-package-latest.zip docker/nuxeo_dev_docker
 
 echo 'Installing new package and restarting server.'
-docker exec nuxeo-dev /bin/bash -c "nuxeoctl stop && nuxeoctl mp-install --accept=yes /opt/nuxeo/server/nxserver/tmp/FirstVoices-marketplace-package-latest.zip && nuxeoctl start"
+docker exec nuxeo-dev /bin/bash -c "nuxeoctl stop && nuxeoctl mp-remove first-voices-package && nuxeoctl mp-install --accept=yes /opt/nuxeo/server/nxserver/tmp/FirstVoices-marketplace-package-latest.zip && nuxeoctl start"
 
 echo ''
 echo -e "---------------------------------------------------------------"

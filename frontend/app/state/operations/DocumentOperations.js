@@ -52,6 +52,10 @@ export default class DocumentOperations {
   static createDocumentWithBlob(parentDoc, docParams, file, xpath = 'file:content') {
     const properties = BaseOperations.getProperties()
 
+    // Remove slashes from 'name' before sending to server
+    const sanitizedParams = Object.assign({ name: '' }, docParams)
+    sanitizedParams.name = sanitizedParams.name.replace(/\\|\//g, '_')
+
     return new Promise((resolve, reject) => {
       // If file not empty, process blob and upload
       if (file) {
@@ -70,7 +74,7 @@ export default class DocumentOperations {
               // Create document
               properties.client
                 .operation('Document.Create')
-                .params(docParams)
+                .params(sanitizedParams)
                 .input(parentDoc)
                 .execute()
                 .then((newDoc) => {

@@ -15,7 +15,6 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -145,7 +144,7 @@ export class PageDialectBookEdit extends Component {
         </h1>
 
         <div className="row" style={{ marginTop: '15px' }}>
-          <div className={classNames('col-xs-8', 'col-md-10')}>
+          <div>
             <form onSubmit={this._onRequestSaveForm}>
               <t.form.Form
                 ref={this.formBookEntry}

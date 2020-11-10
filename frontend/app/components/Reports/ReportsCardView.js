@@ -53,4 +53,4 @@ class ReportsCardView extends Component {
   }
 }
 
-export { ReportsCardView }
+export default ReportsCardView

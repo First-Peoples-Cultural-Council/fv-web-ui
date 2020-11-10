@@ -17,7 +17,7 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { hasPagination, routeHasChanged } from 'common/NavigationHelpers'
 
-import { SEARCH_BY_ALPHABET, SEARCH_BY_CATEGORY, SEARCH_BY_PHRASE_BOOK } from 'components/SearchDialect/constants'
+import { SEARCH_BY_ALPHABET, SEARCH_BY_CATEGORY, SEARCH_BY_PHRASE_BOOK } from 'common/Constants'
 
 /**
  * Learn Base Page

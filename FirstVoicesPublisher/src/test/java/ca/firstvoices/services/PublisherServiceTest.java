@@ -13,9 +13,11 @@ import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CONTRIBUTOR;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_LINK;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_LINKS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import ca.firstvoices.core.io.utils.PropertyUtils;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
@@ -33,7 +35,6 @@ import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.impl.EventListenerDescriptor;
@@ -50,25 +51,19 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
 @RunWith(FeaturesRunner.class)
 @Features({CoreFeature.class, MockitoFeature.class})
 @RepositoryConfig(cleanup = Granularity.METHOD)
-@Deploy({
-    "org.nuxeo.ecm.platform.publisher.core",
-    "FirstVoicesCoreIO",
+@Deploy({"org.nuxeo.ecm.platform.publisher.core", "FirstVoicesCoreIO",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.schemas.ProxySchema.xml",
-    "FirstVoicesCoreTests:OSGI-INF/nuxeo.conf.override.xml"
-})
+    "FirstVoicesCoreTests:OSGI-INF/nuxeo.conf.override.xml"})
 @TestDataConfiguration(yaml = {"test-data/basic-structure.yaml", "test-data/test-workspace.yaml"})
 public class PublisherServiceTest extends AbstractTestDataCreatorTest {
 
-  @Inject
-  protected FirstVoicesPublisherService fvPublisherService;
+  @Inject protected FirstVoicesPublisherService fvPublisherService;
 
-  @Inject
-  protected MockDialectService mockDialectService;
+  @Inject protected MockDialectService mockDialectService;
 
-  @Inject
-  CoreSession session;
+  @Inject CoreSession session;
 
   DocumentModel dialect = null;
 
@@ -87,7 +82,8 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
     // Remove ancestry, publish, and bulk life cycle listeners
     // To help isolate testing to the service
     EventService eventService = Framework.getService(EventService.class);
-    String[] listeners = new String[] { "ancestryAssignmentListener", "ProxyPublishedListener", "bulkLifeCycleChangeListener" };
+    String[] listeners = new String[]{"ancestryAssignmentListener", "ProxyPublishedListener",
+        "bulkLifeCycleChangeListener"};
 
     for (String listener : listeners) {
       EventListenerDescriptor listenerDescriptor = eventService.getEventListener(listener);
@@ -100,34 +96,35 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
 
   @Before
   public void setUp() {
-    dialect = session.getDocument(new IdRef(this.dataCreator.getReference("testDialect")));
-    dictionary = session.getDocument(new IdRef(this.dataCreator.getReference("testDictionary")));
-    alphabet = session.getDocument(new IdRef(this.dataCreator.getReference("testAlphabet")));
-    portal = session.getDocument(new IdRef(this.dataCreator.getReference("testPortal")));
+    dialect = dataCreator.getReference(session, "testDialect");
+    dictionary = dataCreator.getReference(session, "testDictionary");
+    alphabet = dataCreator.getReference(session, "testAlphabet");
+    portal = dataCreator.getReference(session, "testPortal");
 
-    DocumentModel workspacesData = session
-        .getDocument(new IdRef(this.dataCreator.getReference("workspaceData")));
-    DocumentModel sectionsData = session
-        .getDocument(new IdRef(this.dataCreator.getReference("sectionsData")));
+    DocumentModel workspacesData = dataCreator.getReference(session, "workspaceData");
+    DocumentModel sectionsData = dataCreator.getReference(session, "sectionsData");
 
     // Create an alphabet character
-    session.createDocument(
-        session.createDocumentModel(alphabet.getPathAsString(), "Character1", FV_CHARACTER));
+    session.createDocument(session.createDocumentModel(alphabet.getPathAsString(),
+        "Character1",
+        FV_CHARACTER));
 
     // Create some words for the tests
     String[] wordsArray = new String[]{"NewWord1", "NewWord2", "NewWord3", "NewWord4", "NewWord5"};
 
-    words = mockDialectService.generateFVWords(
-        session, dialect.getPathAsString(), wordsArray, null);
+    words =
+        mockDialectService.generateFVWords(session, dialect.getPathAsString(), wordsArray, null);
 
     // Transition 2 words to states other than new
     words.get(0).followTransition(ENABLE_TRANSITION);
     words.get(1).followTransition(DISABLE_TRANSITION);
 
     // Create some phrases for the tests
-    phrases = mockDialectService.generateFVPhrases(
-        session, dialect.getPathAsString(), 2,
-        wordsArray, null);
+    phrases = mockDialectService.generateFVPhrases(session,
+        dialect.getPathAsString(),
+        2,
+        wordsArray,
+        null);
 
     // Set publication target
     workspacesData.setPropertyValue("publish:sections", new String[]{sectionsData.getId()});
@@ -191,9 +188,17 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
     shouldTransitionDialectToPublish();
 
     // Create links
-    DocumentModelList links = createLinks(2);
+    DocumentModelList links = createLinks(2, false);
 
-    dialect.setPropertyValue("fvdialect:keyboards", new String[]{links.get(0).getId()});
+    // Create one shared link, and publish
+    DocumentModelList sharedLinks = createLinks(1, true);
+    DocumentModel sharedLink = sharedLinks.get(0);
+
+    // Publish shared link (doesn't have to be in SharedLinks for test)
+    sharedLink.followTransition(PUBLISH_TRANSITION);
+    session.publishDocument(sharedLink, dataCreator.getReference(session, "sectionsData"), true);
+
+    dialect.setPropertyValue("fvdialect:keyboards", new String[]{links.get(0).getId(), sharedLink.getId()});
     dialect.setPropertyValue("fvdialect:language_resources", new String[]{links.get(1).getId()});
 
     session.saveDocument(dialect);
@@ -208,18 +213,18 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
     // Ensure links, and links parent have proxies
     DocumentModel link1Proxy = fvPublisherService.getPublication(session, links.get(0).getRef());
     DocumentModel link2Proxy = fvPublisherService.getPublication(session, links.get(1).getRef());
-    DocumentModel linksProxy = fvPublisherService
-        .getPublication(session, links.get(1).getParentRef());
+    DocumentModel linksProxy =
+        fvPublisherService.getPublication(session, links.get(1).getParentRef());
 
     assertNotNull(link1Proxy);
     assertNotNull(link2Proxy);
     assertNotNull(linksProxy);
 
     // Test proxy fields for dialect
-    assertEquals(link1Proxy.getId(),
-        PropertyUtils.getValuesAsList(dialectProxy, "fvproxy:proxied_keyboards").get(0));
-    assertEquals(link2Proxy.getId(),
-        PropertyUtils.getValuesAsList(dialectProxy, "fvproxy:proxied_language_resources").get(0));
+    assertTrue(PropertyUtils.getValuesAsList(dialectProxy, "fvproxy:proxied_keyboards")
+        .contains(link1Proxy.getId()));
+    assertTrue(PropertyUtils.getValuesAsList(dialectProxy, "fvproxy:proxied_language_resources")
+        .contains(link2Proxy.getId()));
   }
 
   @Test
@@ -236,9 +241,10 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
     shouldCreateProxiesForDialect();
 
     // Set some fields on portal
-    // Other fields should follow similar logic: fv-portal:background_top_image, fv-portal:featured_audio
+    // Other fields should follow similar logic: fv-portal:background_top_image,
+    //fv-portal:featured_audio
     // fv-portal:logo,
-    DocumentModelList links = createLinks(1);
+    DocumentModelList links = createLinks(1, false);
 
     portal.setPropertyValue("fv-portal:featured_words",
         new String[]{words.get(0).getId(), words.get(2).getId()});
@@ -288,12 +294,14 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
 
     // Create related assets. This is a subset of fields set on an asset proxy.
     // Other fields should follow similar logic
-    DocumentModel audio = session
-        .createDocumentModel(dialect.getPathAsString() + "/Resources", "AudioFile1", FV_AUDIO);
+    DocumentModel audio = session.createDocumentModel(dialect.getPathAsString() + "/Resources",
+        "AudioFile1",
+        FV_AUDIO);
     audio = session.createDocument(audio);
 
-    DocumentModel recorder = session
-        .createDocumentModel(dialect.getPathAsString() + "/Contributors", "Recorder",
+    DocumentModel recorder =
+        session.createDocumentModel(dialect.getPathAsString() + "/Contributors",
+            "Recorder",
             FV_CONTRIBUTOR);
     recorder = session.createDocument(recorder);
     session.saveDocument(recorder);
@@ -303,8 +311,9 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
     session.saveDocument(audio);
 
     // Category
-    DocumentModel category = session
-        .createDocumentModel(dialect.getPathAsString() + "/Categories", "Category1", FV_CATEGORY);
+    DocumentModel category = session.createDocumentModel(dialect.getPathAsString() + "/Categories",
+        "Category1",
+        FV_CATEGORY);
     category = session.createDocument(category);
     session.saveDocument(category);
 
@@ -356,11 +365,11 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
     DocumentModel dialectProxy = fvPublisherService.getPublication(session, dialect.getRef());
     assertNotNull(dialectProxy);
 
-    assertEquals(1,
+    assertEquals(2,
         PropertyUtils.getValuesAsList(dialectProxy, "fvproxy:proxied_keyboards").size());
 
     // Add 1 more link
-    DocumentModelList links = createLinks(2);
+    DocumentModelList links = createLinks(2, false);
     dialect.setPropertyValue("fvdialect:keyboards",
         new String[]{links.get(0).getId(), links.get(1).getId()});
 
@@ -476,7 +485,8 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
 
     session.save();
 
-    // 1 word + 1 character (handled via subsequent listener than fires after Dictionary transitions)
+    // 1 word + 1 character (handled via subsequent listener than fires after Dictionary
+    //transitions)
     assertEquals(2, getDocsInStateInDialect(dialect.getId(), PUBLISHED_STATE).totalSize());
     assertEquals(session.getChildren(dialect.getRef()).size(),
         getDocsInStateInDialect(dialect.getId(), ENABLED_STATE).totalSize());
@@ -514,15 +524,26 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
 
     return session.query(String.format(
         "SELECT * FROM Document WHERE ecm:ancestorId = '%s' AND ecm:currentLifeCycleState = '%s'",
-        dialectId, state));
+        dialectId,
+        state));
   }
 
-  private DocumentModelList createLinks(int max) {
+  private DocumentModelList createLinks(int max, boolean shared) {
     DocumentModelList links = new DocumentModelListImpl();
 
+    String parentLinksPath = dialect.getPathAsString() + "/Links";
+
+    if (shared) {
+      DocumentModel sharedLinksParent =
+          session.createDocumentModel("/FV/Workspaces/SharedData/", "Shared Links", FV_LINKS);
+      sharedLinksParent = session.createDocument(sharedLinksParent);
+
+      parentLinksPath = sharedLinksParent.getPathAsString();
+    }
+
     for (int i = 0; i <= max; ++i) {
-      DocumentModel link = session
-          .createDocumentModel(dialect.getPathAsString() + "/Links", "Link" + i, FV_LINK);
+      DocumentModel link =
+          session.createDocumentModel(parentLinksPath, "Link" + i, FV_LINK);
       links.add(session.createDocument(link));
     }
 

@@ -75,7 +75,7 @@ public class CleanCategoryReferencesTest extends AbstractTestDataCreatorTest {
 
   @Before
   public void setUp() {
-    dialect = session.getDocument(new IdRef(this.dataCreator.getReference("testDialect")));
+    dialect = dataCreator.getReference(session, "testDialect");
 
     DocumentModel categoriesFolder = session.getChild(dialect.getRef(), DialectTypesConstants.FV_CATEGORIES_NAME);
     DocumentModel phraseBooksFolder = session.getChild(dialect.getRef(), DialectTypesConstants.FV_PHRASE_BOOKS_NAME);

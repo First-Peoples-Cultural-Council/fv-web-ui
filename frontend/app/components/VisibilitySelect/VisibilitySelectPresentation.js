@@ -55,8 +55,7 @@ function VisibilitySelectPresentation({
           className="VisibilitySelect__select"
           labelId="select-outlined-label"
           id={selectNameAndId}
-          // NOTE: prevents a mat-ui warning about setting a list without a related value
-          value={publicDialect ? docVisibility : 'team'}
+          value={docVisibility}
           onChange={handleVisibilityChange}
           inputProps={{ name: selectNameAndId }}
         >

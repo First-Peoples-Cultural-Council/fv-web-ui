@@ -21,9 +21,9 @@ import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { pushWindowPath } from 'reducers/windowPath'
 
-import ReportsJson from './reports.json'
+import ReportsJson from 'components/Reports/ReportsQueries.json'
 import GeneralList from 'components/GeneralList'
-import { ReportsCardView } from './list-view'
+import ReportsCardView from 'components/Reports/ReportsCardView'
 
 import withFilter from 'components/withFilter'
 const FilteredCardList = withFilter(GeneralList)
@@ -33,7 +33,7 @@ const FilteredCardList = withFilter(GeneralList)
  */
 
 const { array, bool, func, object, string } = PropTypes
-export class ReportBrowser extends Component {
+export class ReportsBrowser extends Component {
   static propTypes = {
     fullWidth: bool,
     routeParams: object.isRequired,
@@ -109,4 +109,4 @@ const mapDispatchToProps = {
   pushWindowPath,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReportBrowser)
+export default connect(mapStateToProps, mapDispatchToProps)(ReportsBrowser)

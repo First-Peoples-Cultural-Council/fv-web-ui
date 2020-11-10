@@ -40,6 +40,7 @@ import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PORTAL_NAME;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_VIDEO;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
+import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_SHARED_DATA_NAME;
 
 import ca.firstvoices.core.io.services.TransitionChildrenStateService;
 import ca.firstvoices.core.io.utils.DialectUtils;
@@ -57,6 +58,7 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.core.api.AbstractSession;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -67,6 +69,7 @@ import org.nuxeo.ecm.core.api.PropertyException;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.lifecycle.LifeCycleService;
+import org.nuxeo.ecm.core.model.Document;
 import org.nuxeo.ecm.platform.publisher.api.PublisherService;
 import org.nuxeo.runtime.api.Framework;
 
@@ -155,12 +158,21 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
     } else if (FV_PORTAL.equals(doc.getType())) {
       return createProxyForPortal(doc);
     } else if (isPublishableAsset(doc.getType())) {
-      return createProxyForAsset(doc);
+      DocumentModel proxyForAsset = createProxyForAsset(doc);
+
+      if (FV_BOOK.equals(doc.getType())) {
+        // For books, transition all direct children to publish
+        // These events will be picked up by the listener
+        // Better to do this here, then rely on BulkLifeCycleChangeListener
+        // that may introduce the bug FW-1967
+        transitionChildrenService.transitionChildren(PUBLISH_TRANSITION, null, doc);
+      }
+
+      return proxyForAsset;
     } else {
       return createProxy(doc);
     }
   }
-
 
   @Override
   public void republish(DocumentModel doc) {
@@ -187,6 +199,13 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
 
     DocumentModelList publishedDocs = new DocumentModelListImpl();
 
+    // Update state from REPUBLISH->PUBLISH directly on a low-level doc
+    // Will avoid going through life-cycle service and triggering
+    // additional listener event. Proxy will have PUBLISH state too
+    Document lowLevelDoc =
+        ((AbstractSession) session).getSession().getDocumentByUUID(doc.getId());
+    lowLevelDoc.setCurrentLifeCycleState(PUBLISHED_STATE);
+
     if (isPublishableAsset(doc.getType())) {
       publishedDocs.add(createProxyForAsset(doc));
     } else if (isDialect) {
@@ -197,19 +216,10 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
       publishedDocs.add(createProxyForDialect(doc));
     }
 
-    // After republish move back to publish state if applicable
-    // If doRepublish is called directly, no transition is required
-    StateUtils.followTransitionIfAllowed(doc, PUBLISH_TRANSITION);
-
     if (publishedDocs.isEmpty() || publishedDocs.contains(null)) {
       log.error(String.format(
           "Republishing (overwriting proxy) not successful on doc %s (%s)",
           doc.getTitle(), doc.getId()));
-    } else {
-      for (DocumentModel publishedDoc : publishedDocs) {
-        // Also follow transition for each proxy so the state is set back to PUBLISH
-        StateUtils.followTransitionIfAllowed(publishedDoc, PUBLISH_TRANSITION);
-      }
     }
   }
 
@@ -430,14 +440,17 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
               continue;
             }
 
-            if (dependenciesToSkipPublishing.contains(workspaceFieldName)) {
-              // Origin field should be grabbed if it is published
-              // Should not be automatically published
+            DocumentModel dependencyDoc = session.getDocument(dependencyRef);
+
+            if (dependenciesToSkipPublishing.contains(workspaceFieldName)
+                || dependencyDoc.getPathAsString().contains(FV_SHARED_DATA_NAME)) {
+              // Do not attempt to publish origin field or SharedData dependencies
+              // (e.g. Shared Links): both should get publication if available
               newProxy = getPublication(session, dependencyRef);
             } else {
               // Publish dependency (overwriting if needed)
               newProxy =
-                  transitionAndCreateProxy(session, session.getDocument(dependencyRef));
+                  transitionAndCreateProxy(session, dependencyDoc);
             }
 
             if (newProxy != null && !newProxyValues.contains(newProxy.getId())) {
@@ -455,9 +468,6 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
               // Set as single value
               proxyProperty.setValue(newProxyValues.get(0));
             }
-          } else {
-            log.warn(String.format("Tried to create or retrieve proxy "
-                + "for field %s on document %s but could not", workspaceFieldName, proxy.getId()));
           }
         }
       } catch (PropertyException e) {
@@ -478,7 +488,15 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
       transitionAndCreateProxy(session, parent);
     }
 
-    return publish(session, doc);
+    DocumentModel publishedDoc = publish(session, doc);
+
+    if (publishedDoc == null) {
+      // Warn if we could not create the proxy
+      log.warn(String.format("transitionAndCreateProxy failed "
+          + "for document %s of type %s", doc.getId(), doc.getType()));
+    }
+
+    return publishedDoc;
   }
 
   private DocumentModel getOrCreateParentProxy(DocumentModel doc) {

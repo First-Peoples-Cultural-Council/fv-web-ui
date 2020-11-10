@@ -189,7 +189,7 @@ class WordsListView extends DataListView {
           width: 210,
           title: props.intl.trans('date_modified', 'Date Modified'),
           render: (v, data) => {
-            return StringHelpers.formatUTCDateString(selectn('lastModified', data))
+            return StringHelpers.formatLocalDateString(selectn('lastModified', data))
           },
         },
         {
@@ -197,7 +197,7 @@ class WordsListView extends DataListView {
           width: 210,
           title: props.intl.trans('date_created', 'Date Added to FirstVoices'),
           render: (v, data) => {
-            return StringHelpers.formatUTCDateString(selectn('properties.dc:created', data))
+            return StringHelpers.formatLocalDateString(selectn('properties.dc:created', data))
           },
         },
         {
@@ -213,8 +213,8 @@ class WordsListView extends DataListView {
       ],
       sortInfo: {
         uiSortOrder: [],
-        currentSortCols: searchObj.sortBy || this.props.DEFAULT_SORT_COL,
-        currentSortType: searchObj.sortOrder || this.props.DEFAULT_SORT_TYPE,
+        currentSortCols: this.props.customSortBy || searchObj.sortBy || this.props.DEFAULT_SORT_COL,
+        currentSortType: this.props.customSortOrder || searchObj.sortOrder || this.props.DEFAULT_SORT_TYPE,
       },
       pageInfo: {
         page: this.props.DEFAULT_PAGE,
@@ -228,13 +228,12 @@ class WordsListView extends DataListView {
     }
 
     // Bind methods to 'this'
-    [
+    ;[
       '_onNavigateRequest', // no references in file
       '_handleRefetch', // Note: comes from DataListView
       '_handleSortChange', // Note: comes from DataListView
       '_handleColumnOrderChange', // Note: comes from DataListView
       '_resetColumns', // Note: comes from DataListView
-      // '_fetchData2', // now an arrow fn, no need for binding, looks like it's not being used though
     ].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
@@ -248,13 +247,21 @@ class WordsListView extends DataListView {
       newProps.fetchDialect2(newProps.routeParams.dialect_path)
     }
     const searchObj = getSearchObject()
+
     this._fetchListViewData(
       newProps,
       newProps.DEFAULT_PAGE,
       newProps.DEFAULT_PAGE_SIZE,
-      // 1st: redux values, 2nd: url search query, 3rd: defaults
-      this.props.navigationRouteSearch.sortOrder || searchObj.sortOrder || newProps.DEFAULT_SORT_TYPE,
-      this.props.navigationRouteSearch.sortBy || searchObj.sortBy || newProps.DEFAULT_SORT_COL
+      // sortOrder - 1st: custom values, 2nd: redux values, 3rd: url search query, 4th: defaults
+      this.props.customSortOrder ||
+        this.props.navigationRouteSearch.sortOrder ||
+        searchObj.sortOrder ||
+        newProps.DEFAULT_SORT_TYPE,
+      // sortBy - 1st: custom values, 2nd: redux values, 3rd: url search query, 4th: defaults
+      this.props.customSortBy ||
+        this.props.navigationRouteSearch.sortBy ||
+        searchObj.sortBy ||
+        newProps.DEFAULT_SORT_COL
     )
   }
 
@@ -344,10 +351,6 @@ class WordsListView extends DataListView {
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         {selectn('response.entries', computeWords) && (
           <DocumentListView
-            // objectDescriptions="words"
-            // onSelectionChange={this._onEntryNavigateRequest} // NOTE: may call this.props.action
-            // sortInfo={this.state.sortInfo.uiSortOrder}
-
             // Export
             hasExportDialect
             exportDialectExportElement={this.props.exportDialectExportElement || 'FVWord'}
@@ -372,10 +375,17 @@ class WordsListView extends DataListView {
                 page,
                 pageSize,
                 preserveSearch: true,
-                // 1st: redux values, 2nd: url search query, 3rd: defaults
+                // 1st: custom values, 2nd: redux values, 3rd: url search query, 4th: defaults
                 sortOrder:
-                  this.props.navigationRouteSearch.sortOrder || searchObj.sortOrder || this.props.DEFAULT_SORT_TYPE,
-                sortBy: this.props.navigationRouteSearch.sortBy || searchObj.sortBy || this.props.DEFAULT_SORT_COL,
+                  this.props.customSortOrder ||
+                  this.props.navigationRouteSearch.sortOrder ||
+                  searchObj.sortOrder ||
+                  this.props.DEFAULT_SORT_TYPE,
+                sortBy:
+                  this.props.customSortBy ||
+                  this.props.navigationRouteSearch.sortBy ||
+                  searchObj.sortBy ||
+                  this.props.DEFAULT_SORT_COL,
               })
             }}
             sortHandler={({ page, pageSize, sortBy, sortOrder } = {}) => {
@@ -423,6 +433,8 @@ const { array, bool, func, number, object, string } = PropTypes
 WordsListView.propTypes = {
   action: func,
   controlViaURL: bool,
+  customSortBy: string,
+  customSortOrder: string,
   data: string,
   DEFAULT_PAGE_SIZE: number,
   DEFAULT_PAGE: number,
