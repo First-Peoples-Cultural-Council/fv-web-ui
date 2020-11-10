@@ -426,40 +426,41 @@ public class MockDialectServiceImpl implements MockDialectService {
       songDoc.setPropertyValue("fvbook:type", "song");
 
       ArrayList<Map<String, String>> titleTranslation = new ArrayList<>();
-      Map<String, String> titlePair = new HashMap<String, String>();
-      titlePair.put("translation", "Title Translation to English");
-      titlePair.put("language", "english");
-      titleTranslation.add(titlePair);
+      Map<String, String> titleTranslationEntry = new HashMap<String, String>();
+      titleTranslationEntry.put("translation", "Title Translation to English");
+      titleTranslationEntry.put("language", "english");
+      titleTranslation.add(titleTranslationEntry);
       songDoc.setPropertyValue("fvbook:title_literal_translation", titleTranslation);
 
       String introduction = generateRandomPhrase(ThreadLocalRandom.current().nextInt(10, 50),
           wordsToUse);
       songDoc.setPropertyValue("fvbook:introduction", introduction);
-      String[] culturalNoteArr = {"Cultural note"};
-      songDoc.setPropertyValue("fv:cultural_note", culturalNoteArr);
 
       ArrayList<Map<String, String>> introductionTranslation = new ArrayList<>();
-      Map<String, String> translationPair = new HashMap<String, String>();
-      translationPair.put("translation", "Introduction translation to English");
-      translationPair.put("language", "english");
-      introductionTranslation.add(translationPair);
+      Map<String, String> introductionTranslationEntry = new HashMap<String, String>();
+      introductionTranslationEntry.put("translation", "Introduction translation to English");
+      introductionTranslationEntry.put("language", "english");
+      introductionTranslation.add(introductionTranslationEntry);
       songDoc.setPropertyValue("fvbook:introduction_literal_translation", introductionTranslation);
-      songDoc.setPropertyValue("fvbook:acknowledgement", "ack");
+
+      songDoc.setPropertyValue("fvbook:acknowledgement", "Acknowledgement");
+      String[] culturalNoteArr = {"Cultural note"};
+      songDoc.setPropertyValue("fv:cultural_note", culturalNoteArr);
       String[] contributorsArray = {"Contributor"};
-      songDoc.setPropertyValue("fvbook:author", contributorsArray);
+      songDoc.setPropertyValue("dc:contributors", contributorsArray);
 
       fvSongs.add(createDocument(session, songDoc));
 
-      // generate pages
+      // generate pages within song
       String songPath = songDoc.getPathAsString();
       int numPages = ThreadLocalRandom.current().nextInt(0, 5);
       for (int k = 0; k < numPages; k++) {
 
         ArrayList<Map<String, String>> pageTranslation = new ArrayList<>();
-        Map<String, String> pageTranslationPair = new HashMap<String, String>();
-        pageTranslationPair.put("language", "english");
-        pageTranslationPair.put("translation", "Page translation to English");
-        pageTranslation.add(pageTranslationPair);
+        Map<String, String> pageTranslationEntry = new HashMap<String, String>();
+        pageTranslationEntry.put("language", "english");
+        pageTranslationEntry.put("translation", "Page translation to English");
+        pageTranslation.add(pageTranslationEntry);
 
         DocumentModelList fvPage = new DocumentModelListImpl();
         String pageTitle = generateRandomPhrase(ThreadLocalRandom.current().nextInt(20, 150),
@@ -470,7 +471,6 @@ public class MockDialectServiceImpl implements MockDialectService {
         fvPage.add(createDocument(session, pageDoc));
       }
     }
-
     return fvSongs;
   }
 
@@ -487,42 +487,41 @@ public class MockDialectServiceImpl implements MockDialectService {
       storyDoc.setPropertyValue("fvbook:type", "story");
 
       ArrayList<Map<String, String>> titleTranslation = new ArrayList<>();
-      Map<String, String> titlePair = new HashMap<String, String>();
-      titlePair.put("translation", "Title Translation to English");
-      titlePair.put("language", "english");
-      titleTranslation.add(titlePair);
+      Map<String, String> titleTranslationEntry = new HashMap<String, String>();
+      titleTranslationEntry.put("translation", "Title Translation to English");
+      titleTranslationEntry.put("language", "english");
+      titleTranslation.add(titleTranslationEntry);
       storyDoc.setPropertyValue("fvbook:title_literal_translation", titleTranslation);
 
       String introduction = generateRandomPhrase(ThreadLocalRandom.current().nextInt(10, 50),
           wordsToUse);
       storyDoc.setPropertyValue("fvbook:introduction", introduction);
-      String[] culturalNoteArr = {"cultural note"};
-      storyDoc.setPropertyValue("fv:cultural_note", culturalNoteArr);
 
       ArrayList<Map<String, String>> introductionTranslation = new ArrayList<>();
-      Map<String, String> translationPair = new HashMap<String, String>();
-      translationPair.put("translation", "Introduction translation to English");
-      translationPair.put("language", "english");
-      introductionTranslation.add(translationPair);
+      Map<String, String> introductionTranslationEntry = new HashMap<String, String>();
+      introductionTranslationEntry.put("translation", "Introduction translation to English");
+      introductionTranslationEntry.put("language", "english");
+      introductionTranslation.add(introductionTranslationEntry);
       storyDoc.setPropertyValue("fvbook:introduction_literal_translation", introductionTranslation);
 
-
-      storyDoc.setPropertyValue("fvbook:acknowledgement", "ack");
-
-
+      storyDoc.setPropertyValue("fvbook:acknowledgement", "Acknowledgement");
+      String[] culturalNoteArr = {"cultural note"};
+      storyDoc.setPropertyValue("fv:cultural_note", culturalNoteArr);
+      String[] contributorsArray = {"Contributor"};
+      storyDoc.setPropertyValue("dc:contributors", contributorsArray);
 
       fvStories.add(createDocument(session, storyDoc));
 
-      // generate pages
+      // generate pages within story
       String storyPath = storyDoc.getPathAsString();
       int numPages = ThreadLocalRandom.current().nextInt(0, 10);
       for (int k = 0; k < numPages; k++) {
 
         ArrayList<Map<String, String>> pageTranslation = new ArrayList<>();
-        Map<String, String> pageTranslationPair = new HashMap<String, String>();
-        pageTranslationPair.put("language", "english");
-        pageTranslationPair.put("translation", "Page translation to English");
-        pageTranslation.add(pageTranslationPair);
+        Map<String, String> pageTranslationEntry = new HashMap<String, String>();
+        pageTranslationEntry.put("language", "english");
+        pageTranslationEntry.put("translation", "Page translation to English");
+        pageTranslation.add(pageTranslationEntry);
 
         DocumentModelList fvPage = new DocumentModelListImpl();
         String pageTitle = generateRandomPhrase(ThreadLocalRandom.current().nextInt(20, 150),
@@ -531,14 +530,8 @@ public class MockDialectServiceImpl implements MockDialectService {
             .createDocumentModel(storyPath, pageTitle, FV_BOOK_ENTRY);
         pageDoc.setPropertyValue("fvbookentry:dominant_language_text", pageTranslation);
         fvPage.add(createDocument(session, pageDoc));
-
       }
-
     }
-
     return fvStories;
   }
-
-
-
 }
