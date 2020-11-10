@@ -2,7 +2,6 @@ import { combineReducers } from 'redux'
 import ConfGlobal from 'common/conf/local.js'
 import { SECTIONS } from 'common/Constants'
 import {
-  TOGGLE_MENU,
   NAVIGATE_PAGE,
   CHANGE_SITE_THEME,
   CHANGE_TITLE_PARAMS,
@@ -11,9 +10,6 @@ import {
   LOAD_GUIDE_STARTED,
   LOAD_GUIDE_SUCCESS,
   LOAD_GUIDE_ERROR,
-  LOAD_NAVIGATION_STARTED,
-  LOAD_NAVIGATION_SUCCESS,
-  LOAD_NAVIGATION_ERROR,
   SET_ROUTE_PARAMS,
 } from './actionTypes'
 
@@ -106,37 +102,6 @@ export const navigationReducer = combineReducers({
 
       default:
         return { ...state, isFetching: false, page: action.page }
-    }
-  },
-
-  computeLoadNavigation(state = { isFetching: false, response: null, success: false }, action = {}) {
-    switch (action.type) {
-      case LOAD_NAVIGATION_STARTED:
-        return { ...state, isFetching: true }
-
-      // Send modified document to UI without access REST end-point
-      case LOAD_NAVIGATION_SUCCESS:
-        return { ...state, response: action.document, isFetching: false, success: true }
-
-      // Send modified document to UI without access REST end-point
-      case LOAD_NAVIGATION_ERROR:
-        return { ...state, isFetching: false, isError: true, error: action.error }
-
-      default:
-        return { ...state, isFetching: false }
-    }
-  },
-
-  computeToggleMenuAction(state = { menuVisible: false }, action = {}) {
-    switch (action.type) {
-      case TOGGLE_MENU:
-        return {
-          ...state,
-          menuVisible: !state.menuVisible,
-        }
-
-      default:
-        return state
     }
   },
 

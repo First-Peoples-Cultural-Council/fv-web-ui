@@ -21,8 +21,6 @@ import selectn from 'selectn'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
-import { toggleMenuAction } from 'reducers/navigation'
-// import { fetchUserTasks } from 'reducers/tasks'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -54,7 +52,6 @@ export class KidsNavigation extends Component {
     // fetchUserTasks: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
-    toggleMenuAction: func.isRequired,
     intl: object.isRequired,
   }
 
@@ -182,7 +179,6 @@ const mapDispatchToProps = {
   // fetchUserTasks,
   pushWindowPath,
   replaceWindowPath,
-  toggleMenuAction,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(KidsNavigation)
