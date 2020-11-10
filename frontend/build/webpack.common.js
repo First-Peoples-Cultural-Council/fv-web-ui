@@ -207,6 +207,7 @@ module.exports = (env) => ({
       },
       minify: {
         collapseWhitespace: true,
+        minifyCSS: true,
       },
     }),
     new MiniCssExtractPlugin({
