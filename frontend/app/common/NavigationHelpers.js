@@ -21,20 +21,6 @@ const arrayPopImmutable = (array, sizeToPop = 1) => {
   return array.slice(0, array.length - sizeToPop)
 }
 
-/**
- * Adds a forward slash to path if it is missing to help generate URLs
- * @param String path
- */
-const AddForwardSlash = (path) => {
-  let addForwardSlash = '/'
-
-  if (path.indexOf('/') === 0) {
-    addForwardSlash = ''
-  }
-
-  return addForwardSlash + path
-}
-
 export default {
   // Navigate to an absolute path, possibly URL encoding the last path part
   // If no NavigationFunc is provided, will return the path
@@ -89,7 +75,7 @@ export default {
   },
   // Method will append given path (/path/to/) to context path
   generateStaticURL: (path) => {
-    return URLHelpers.getContextPath() + AddForwardSlash(path)
+    return `${URLHelpers.getContextPath()}${`${path.indexOf('/') !== 0 ? '/' : ''}${path}`}`
   },
   // Generate a UID link from a Nuxeo document path
   generateUIDPath: (siteTheme, item, pluralPathId) => {
