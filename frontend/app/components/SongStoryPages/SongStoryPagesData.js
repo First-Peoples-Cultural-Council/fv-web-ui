@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 // FPCC
-import useNavigationHelpers from 'common/useNavigationHelpers'
+import NavigationHelpers from 'common/NavigationHelpers'
 
 /**
  * @summary SongStoryPagesData
@@ -17,9 +17,8 @@ import useNavigationHelpers from 'common/useNavigationHelpers'
  *
  */
 function SongStoryPagesData({ children, bookEntries, defaultLanguage }) {
-  const { getBaseURL } = useNavigationHelpers()
   const [bookPages, setBookPages] = useState([])
-
+  const baseUrl = NavigationHelpers.getBaseURL()
   const getPages = async () => {
     const bookPagesArray = []
     bookEntries.forEach(createPage)
@@ -76,7 +75,7 @@ function SongStoryPagesData({ children, bookEntries, defaultLanguage }) {
     const mediaArray = []
     data.forEach((doc, key) => {
       const extractedData = {
-        original: getBaseURL() + doc.path,
+        original: `${baseUrl}${doc.path}`,
         thumbnail: 'assets/images/cover.png',
         description: doc['dc:description'],
         key: key,

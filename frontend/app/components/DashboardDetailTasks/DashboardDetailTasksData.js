@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import sanitize from 'common/Sanitize'
+import NavigationHelpers from 'common/NavigationHelpers'
 
 import useNavigationHelpers from 'common/useNavigationHelpers'
 import useDashboard from 'dataSources/useDashboard'
@@ -32,8 +33,8 @@ function DashboardDetailTasksData({ children, columnRender }) {
   const { intl } = useIntl()
   const [selectedItemData, setSelectedItemData] = useState({})
   const [selectedTaskData, setSelectedTaskData] = useState({})
-  const { getSearchAsObject, navigate, navigateReplace, getBaseURL } = useNavigationHelpers()
-  const baseUrl = getBaseURL()
+  const { getSearchAsObject, navigate, navigateReplace } = useNavigationHelpers()
+  const baseUrl = NavigationHelpers.getBaseURL()
 
   const { computeDocument, fetchDocumentSingleArg } = useDocument()
   const {

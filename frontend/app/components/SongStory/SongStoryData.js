@@ -9,11 +9,11 @@ import useDialect from 'dataSources/useDialect'
 import useIntl from 'dataSources/useIntl'
 import useLogin from 'dataSources/useLogin'
 import useNavigation from 'dataSources/useNavigation'
-import useNavigationHelpers from 'common/useNavigationHelpers'
 import useProperties from 'dataSources/useProperties'
 import useRoute from 'dataSources/useRoute'
 import useWindowPath from 'dataSources/useWindowPath'
 
+import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import { getBookData, getBookAudioVideo, getBookPictures } from 'components/SongStory/SongStoryUtility'
@@ -33,8 +33,6 @@ function SongStoryData({ children }) {
   const { intl } = useIntl()
   const { computeLogin } = useLogin()
   const { changeTitleParams, overrideBreadcrumbs } = useNavigation()
-  const { getBaseURL } = useNavigationHelpers()
-  const baseUrl = getBaseURL()
   const { properties } = useProperties()
   const { routeParams } = useRoute()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
@@ -61,6 +59,8 @@ function SongStoryData({ children }) {
   const uid = selectn('uid', bookMetadata)
 
   const book = getBookData({ computeBookData: bookMetadata, intl })
+
+  const baseUrl = NavigationHelpers.getBaseURL()
 
   // Pictures
   const picturesData = selectn('contextParameters.book.related_pictures', bookMetadata) || []

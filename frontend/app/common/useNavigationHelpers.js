@@ -45,9 +45,6 @@ function useNavigationHelpers() {
       }
       return `${urlQueryArray.join('&')}`
     },
-    getBaseURL: () => {
-      return URLHelpers.getBaseURL()
-    },
   }
 }
 

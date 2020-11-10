@@ -20,6 +20,9 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import { List } from 'immutable'
 import Media from 'react-media'
+
+import useNavigationHelpers from 'common/useNavigationHelpers'
+
 // Components
 import { getIcon, getSortState, sortCol } from 'common/ListView'
 import withPagination from 'components/withPagination'
@@ -30,7 +33,6 @@ import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenTemplateWords,
 } from 'components/DictionaryList/DictionaryListSmallScreen'
-import { getSearchObject } from 'common/NavigationHelpers'
 import AuthorizationFilter from 'components/AuthorizationFilter'
 const SearchDialect = React.lazy(() => import('components/SearchDialect'))
 const FlashcardList = React.lazy(() => import('components/FlashcardList'))
@@ -58,6 +60,7 @@ const VIEWMODE_LARGE_SCREEN = 3
  */
 
 function WordsListPresentation(props) {
+  const { getSearchAsObject } = useNavigationHelpers()
   const intl = IntlService.instance
   const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
   let columnsEnhanced = [...props.columns]
@@ -67,7 +70,7 @@ function WordsListPresentation(props) {
     // If window.location.search has sortOrder & sortBy,
     // Ensure the same values are in redux
     // before generating the sort markup
-    const windowLocationSearch = getSearchObject()
+    const windowLocationSearch = getSearchAsObject()
     const windowLocationSearchSortOrder = windowLocationSearch.sortOrder
     const windowLocationSearchSortBy = windowLocationSearch.sortBy
     if (
