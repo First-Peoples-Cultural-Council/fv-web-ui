@@ -154,11 +154,7 @@ export class Navigation extends Component {
     const portalLogo = selectn('response.contextParameters.portal.fv-portal:logo', computePortal)
     const avatarSrc = UIHelpers.getThumbnail(portalLogo, 'Thumbnail')
 
-    const computeDialect = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
-    const portalTitle =
-      selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
-      selectn('response.properties.dc:title', computeDialect)
-
+    const portalTitle = this.props.routeParams.dialect_name || ''
     const dialectLink = '/explore' + this.props.routeParams.dialect_path
     const { classes } = this.props
     const { appBarIcon = {}, appBar = {}, dialectContainer = {}, localePicker = {}, immersionSwitch = {} } = classes

@@ -49,3 +49,21 @@
   max-width: 62px;
   max-height: 45px;
 }
+
+/* Search field and search buttons */
+.SearchDictionary__form {
+  font-size: 16px;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+.SearchDictionary__formPrimary {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+.SearchDictionary__formPrimaryInput {
+  margin-right: 2px;
+  border: 1px solid #666666;
+  min-width: 230px;
+  padding: 0 5px;
+}

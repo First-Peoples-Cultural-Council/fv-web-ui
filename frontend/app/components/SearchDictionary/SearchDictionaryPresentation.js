@@ -12,6 +12,7 @@ import Paper from '@material-ui/core/Paper'
 // FPCC
 import UIHelpers from 'common/UIHelpers'
 
+import FVButton from 'components/FVButton'
 import Link from 'components/Link'
 import Preview from 'components/Preview'
 import PromiseWrapper from 'components/PromiseWrapper'
@@ -27,7 +28,15 @@ import '!style-loader!css-loader!./SearchDictionary.css'
  *
  * @returns {node} jsx markup
  */
-function SearchDictionaryPresentation({ computeEntities, searchTerm, entries, intl }) {
+function SearchDictionaryPresentation({
+  computeEntities,
+  entries,
+  handleSearchSubmit,
+  handleTextFieldChange,
+  intl,
+  searchTerm,
+  newSearchValue,
+}) {
   const DEFAULT_LANGUAGE = 'english'
 
   return (
@@ -43,6 +52,25 @@ function SearchDictionaryPresentation({ computeEntities, searchTerm, entries, in
         <div className="SearchDictionary">
           <Paper className="container">
             <h1 className="title">{searchTerm} Search Results</h1>
+            <div className="SearchDictionary__form">
+              <div className="SearchDictionary__formPrimary">
+                <input
+                  data-testid="SearchDictionary__formPrimaryInput"
+                  className="SearchDictionary__formPrimaryInput"
+                  type="text"
+                  onChange={handleTextFieldChange}
+                  onKeyDown={(e) => {
+                    if (e.keyCode === 13) {
+                      handleSearchSubmit(e)
+                    }
+                  }}
+                  value={newSearchValue}
+                />
+                <FVButton variant="contained" onClick={handleSearchSubmit} color="primary">
+                  {intl.trans('search', 'Search', 'first')}
+                </FVButton>
+              </div>
+            </div>
             <Table>
               <TableHead className="SearchDictionary__row">
                 <TableRow>
@@ -106,11 +134,14 @@ function SearchDictionaryPresentation({ computeEntities, searchTerm, entries, in
   )
 }
 // PROPTYPES
-const { array, object, string } = PropTypes
+const { array, func, object, string } = PropTypes
 SearchDictionaryPresentation.propTypes = {
   computeEntities: object,
   entries: array,
+  handleSearchSubmit: func,
+  handleTextFieldChange: func,
   intl: object,
+  newSearchValue: string,
   searchTerm: string,
 }
 

@@ -32,14 +32,15 @@ function SearchDictionaryData({ children }) {
   const { properties } = useProperties()
   const { routeParams } = useRoute()
   const { computeSearchDocuments, searchDocuments } = useSearch()
-  const { pushWindowPath } = useWindowPath()
+  const { pushWindowPath, replaceWindowPath } = useWindowPath()
 
   // Local State
-  const [searchTerm, setSearchTerm] = useState('')
+  const [newSearchValue, setNewSearchValue] = useState('')
   const [formattedData, setformattedData] = useState([])
 
   useEffect(() => {
     fetchSearchResults(routeParams.page, routeParams.pageSize)
+    setNewSearchValue(routeParams.searchTerm)
   }, [])
 
   // Parsing response
@@ -68,11 +69,11 @@ function SearchDictionaryData({ children }) {
 
   async function fetchSearchResults(pageIndex, pageSize) {
     if (routeParams.searchTerm && routeParams.searchTerm !== '') {
-      setSearchTerm(StringHelpers.clean(routeParams.searchTerm, CLEAN_FULLTEXT))
+      const _searchTerm = StringHelpers.clean(routeParams.searchTerm, CLEAN_FULLTEXT)
       const latestVersion = routeParams.area === SECTIONS ? ' AND ecm:isLatestVersion = 1' : ' '
       await searchDocuments(
         getQueryPath(),
-        `${latestVersion} AND ecm:primaryType IN ('FVWord','FVPhrase','FVBook') AND ( ecm:fulltext_dictionary_all_field = '${searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ fv:definitions/*/translation ILIKE '${searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ dc:title ILIKE '${searchTerm}' )&currentPageIndex=${pageIndex -
+        `${latestVersion} AND ecm:primaryType IN ('FVWord','FVPhrase','FVBook') AND ( ecm:fulltext_dictionary_all_field = '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ fv:definitions/*/translation ILIKE '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ dc:title ILIKE '${_searchTerm}' )&currentPageIndex=${pageIndex -
           1}&pageSize=${pageSize}&sortBy=ecm:fulltextScore`
       )
 
@@ -137,11 +138,25 @@ function SearchDictionaryData({ children }) {
     )
   }
 
+  const handleTextFieldChange = (event) => {
+    setNewSearchValue(event.target.value)
+  }
+
+  const handleSearchSubmit = () => {
+    if (newSearchValue && newSearchValue !== '') {
+      const finalPath = NavigationHelpers.generateStaticURL('explore' + getQueryPath() + '/search/' + newSearchValue)
+      replaceWindowPath(finalPath)
+    }
+  }
+
   return children({
     computeEntities,
     entries: formattedData,
+    handleSearchSubmit,
+    handleTextFieldChange,
     intl,
-    searchTerm,
+    searchTerm: routeParams.searchTerm,
+    newSearchValue,
   })
 }
 // PROPTYPES
