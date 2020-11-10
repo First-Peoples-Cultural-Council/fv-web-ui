@@ -282,8 +282,9 @@ public class MockDialectServiceImpl implements MockDialectService {
     createDocument(session,
         session.createDocumentModel(dialect.getPathAsString(), "Phrase Books", FV_CATEGORIES));
     createDocument(session,
+        session.createDocumentModel(dialect.getPathAsString(), "Contributors", FV_CONTRIBUTORS));
+    createDocument(session,
         session.createDocumentModel(dialect.getPathAsString(), "Stories & Songs", FV_BOOKS));
-
 
     return dialect;
   }
