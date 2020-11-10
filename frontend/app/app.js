@@ -43,7 +43,9 @@ const context = {
   },
 }
 
-// Possibly an issue?
+// FW-1922: While this did not show any signs of slowing the page load
+// It may be worth finding a way to avoid using render multiple times
+// https://stackoverflow.com/questions/31302803/is-it-ok-to-use-react-render-multiple-times-in-the-dom
 // https://github.com/facebook/react/issues/12700
 render(
   <Provider store={store}>
