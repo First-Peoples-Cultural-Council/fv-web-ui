@@ -87,10 +87,6 @@ export class Navigation extends Component {
     currentLocale: string.isRequired,
     currentImmersionMode: bool.isRequired,
     intl: object.isRequired,
-    // computeToggleMenuAction: object.isRequired,
-    // computeCountTotalTasks: object.isRequired,
-    // computeLoadGuide: object.isRequired,
-
     // REDUX: actions/dispatch/func
     loadNavigation: func.isRequired,
     pushWindowPath: func.isRequired,
@@ -98,8 +94,6 @@ export class Navigation extends Component {
     toggleMenuAction: func.isRequired,
     setLocale: func.isRequired,
     updateCurrentUser: func.isRequired,
-
-    // countTotalTasks: func.isRequired,
   }
 
   constructor(props, context) {
@@ -118,13 +112,6 @@ export class Navigation extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // if (this.props.computeLogin != prevProps.computeLogin && this.props.computeLogin.isConnected) {
-    //     this.props.countTotalTasks('count_total_tasks', {
-    //         'query': 'SELECT COUNT(ecm:uuid) FROM TaskDoc, FVUserRegistration WHERE (ecm:currentLifeCycleState = \'opened\' OR ecm:currentLifeCycleState = \'created\')',
-    //         'language': 'nxql',
-    //         'sortOrder': 'ASC'
-    //     });
-    // }
     const USER_LOG_IN_STATUS_CHANGED =
       this.props.computeLogin.isConnected !== prevProps.computeLogin.isConnected &&
       this.props.computeLogin.isConnected !== undefined &&
@@ -167,13 +154,10 @@ export class Navigation extends Component {
     const portalLogo = selectn('response.contextParameters.portal.fv-portal:logo', computePortal)
     const avatarSrc = UIHelpers.getThumbnail(portalLogo, 'Thumbnail')
 
-    // V1:
     const computeDialect = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
     const portalTitle =
       selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
       selectn('response.properties.dc:title', computeDialect)
-    // V2:
-    // const portalTitle = this.props.routeParams.dialect_name || ''
 
     const dialectLink = '/explore' + this.props.routeParams.dialect_path
     const { classes } = this.props
@@ -287,7 +271,6 @@ export class Navigation extends Component {
                       variant="text"
                       onClick={(e) => {
                         e.preventDefault()
-                        // this.navigationSearchButton.focus()
                         this.setState({ searchPopoverOpen: false })
                       }}
                       className={appBar}
@@ -420,7 +403,7 @@ export class Navigation extends Component {
           </Toolbar>
         </div>
 
-        {/* Dialect sub-menu */}
+        {/* Dialect Header */}
         {isDialect && (
           <div className={`row Navigation__dialectContainer ${dialectContainer}`}>
             <h2 className="Navigation__dialectHeader">
@@ -431,7 +414,6 @@ export class Navigation extends Component {
                 <Avatar src={avatarSrc} size={50} />
                 <span className="Navigation__dialectName fontBCSans">
                   {this.props.intl.searchAndReplace(portalTitle)}
-                  {/* TODO: What is this? */}
                 </span>
               </Link>
             </h2>
