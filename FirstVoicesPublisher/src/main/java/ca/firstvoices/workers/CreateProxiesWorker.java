@@ -3,6 +3,8 @@ package ca.firstvoices.workers;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import ca.firstvoices.publisher.Constants;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -15,12 +17,12 @@ import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.transaction.TransactionHelper;
 
 /**
- * Clean Confusables worker will search for words and phrases that contain confusable characters,
- * and clean them. While this worker could potentially queue a full custom order recompute on the
- * dialect, it does not since a new custom order is calculated for each entry in the clean service
+ * Will create proxies for all published documents in a dialect Could be a long operation
  */
 @SuppressWarnings("java:S2160") // Nuxeo does not override equals in workers
 public class CreateProxiesWorker extends AbstractWork {
+
+  private static final Log log = LogFactory.getLog(CreateProxiesWorker.class);
 
   private static final long serialVersionUID = 1L;
 
@@ -55,7 +57,13 @@ public class CreateProxiesWorker extends AbstractWork {
         .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
             session -> {
               DocumentModel dialect = session.getDocument(dialectRef);
-              setStatus("Starting create proxies for dialect `" + dialect.getTitle() + "`");
+              final String dialectTitle = dialect.getTitle();
+
+              String workerMessage = String
+                  .format("Starting create proxies for dialect `%s`", dialectTitle);
+
+              setStatus(workerMessage);
+              log.info(workerMessage);
 
               try {
                 // Create proxies for everything that is in the published state
@@ -78,6 +86,9 @@ public class CreateProxiesWorker extends AbstractWork {
 
                 // loop on other documents
                 long nbChildren = documents.totalSize();
+
+                logProgress(dialectTitle, nbChildren);
+
                 for (long offset = batchSize; offset < nbChildren; offset += batchSize) {
                   long i = offset;
                   // start a new transaction
@@ -85,6 +96,8 @@ public class CreateProxiesWorker extends AbstractWork {
                     DocumentModelList docs = session.query(query, null, batchSize, i, false);
                     createProxies(session, docs);
                     session.save();
+
+                    logProgress(dialectTitle, nbChildren);
                   });
 
                   setProgress(new Progress(i, documents.size()));
@@ -109,6 +122,11 @@ public class CreateProxiesWorker extends AbstractWork {
     for (DocumentModel doc : docs) {
       fvPublisherService.publish(session, doc);
     }
+  }
+
+  private void logProgress(String dialectTitle, long totalSize) {
+    log.info(String.format("Created proxies for dialect `%s`, processed 1000 / %s",
+        dialectTitle, totalSize));
   }
 
   @Override

@@ -88,20 +88,21 @@ public class ExecuteRequiredJobsListener implements EventListener {
                 if (requiredJobs != null && !requiredJobs.isEmpty()) {
                   try {
                     // Trigger Phase 2 (work) of related operation
-                    OperationContext operation = new OperationContext(session);
-                    operation.setInput(dialect);
-
-                    Map<String, Object> params = new HashMap<>();
-                    params.put("phase", "work");
-                    params.put("batchSize", 1000);
-
                     int jobsExecuted = 0;
 
                     Iterator<String> iterator = requiredJobs.iterator();
 
                     // Execute `work` phases for required jobs, up to maximum
                     while (iterator.hasNext() && jobsExecuted < REQUIRED_JOB_LIMIT) {
+                      OperationContext operation = new OperationContext(session);
+                      operation.setInput(dialect);
+
+                      Map<String, Object> params = new HashMap<>();
+                      params.put("phase", "work");
+                      params.put("batchSize", 1000);
+
                       String nextRequiredJob = iterator.next();
+
                       automation.run(operation, nextRequiredJob, params);
 
                       ++jobsExecuted;
@@ -116,7 +117,7 @@ public class ExecuteRequiredJobsListener implements EventListener {
                     event.markBubbleException();
                     log.severe(
                         () -> "Failed when trying to execute required jobs with message: " + e
-                            .getMessage());
+                            .getMessage() + " on dialect " + dialect.getId());
                   }
                 }
               }

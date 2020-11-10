@@ -22,6 +22,7 @@ package ca.firstvoices.characters.services;
 
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
+import static ca.firstvoices.testUtil.helpers.DocumentTestHelpers.createDocument;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -69,8 +70,6 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
   @Before
   public void setUp() {
     assertNotNull("Should have a valid session", session);
-    createSetup(session);
-
     setupCharacters();
   }
 

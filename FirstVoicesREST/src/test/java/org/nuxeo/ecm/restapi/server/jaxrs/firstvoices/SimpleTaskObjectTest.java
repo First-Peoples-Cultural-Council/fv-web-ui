@@ -79,6 +79,7 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
 @Deploy({"FirstVoicesCoreIO", "FirstVoicesREST", "FirstVoicesRESTPageProviders",
     "FirstVoicesNuxeoPublisher"})
 @PartialDeploy(bundle = "FirstVoicesData", extensions = {TargetExtensions.ContentModel.class})
+//@todo migrate this to YAML creation, RESTTestHelper validation [ FW-1962 ]
 public class SimpleTaskObjectTest extends BaseTest {
 
   @Inject

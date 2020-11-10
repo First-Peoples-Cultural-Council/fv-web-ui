@@ -12,7 +12,7 @@
   {
     "name": "Words Visible to the Public",
     "type": "words",
-    "query": " AND ecm:primaryType='FVWord' AND ecm:currentLifeCycleState='Published'"
+    "query": " AND ecm:primaryType='FVWord' AND (ecm:currentLifeCycleState='Published' OR ecm:currentLifeCycleState='Republished')"
   },
   {
     "name": "Words without Audio",
@@ -47,12 +47,12 @@
   {
     "name": "Words without Part of Speech",
     "type": "words",
-    "query": " AND ecm:primaryType='FVWord' AND fv-word:part_of_speech=''"
+    "query": " AND ecm:primaryType='FVWord' AND fv-word:part_of_speech IS NULL"
   },
   {
     "name": "Words without Pronunciation",
     "type": "words",
-    "query": " AND ecm:primaryType='FVWord' AND fv-word:pronunciation=''"
+    "query": " AND ecm:primaryType='FVWord' AND fv-word:pronunciation IS NULL"
   },
   {
     "name": "Words without Related Phrases",
@@ -74,7 +74,7 @@
     "type": "words",
     "query": " AND ecm:primaryType='FVWord'",
     "cols": ["title", "fv:definitions", "related_pictures", "related_audio", "fv-phrase:phrase_books", "dc:modified"],
-    "sortCol": "dc:modified",
+    "sortBy": "dc:modified",
     "sortOrder": "desc"
   },
   {
@@ -82,7 +82,7 @@
     "type": "words",
     "query": " AND ecm:primaryType='FVWord'",
     "cols": ["title", "fv:definitions", "related_pictures", "related_audio", "fv-phrase:phrase_books", "dc:created"],
-    "sortCol": "dc:created",
+    "sortBy": "dc:created",
     "sortOrder": "desc"
   },
   {
@@ -140,7 +140,7 @@
     "type": "phrases",
     "query": " AND ecm:primaryType='FVPhrase'",
     "cols": ["title", "fv:definitions", "related_pictures", "related_audio", "fv-phrase:phrase_books", "dc:modified"],
-    "sortCol": "dc:modified",
+    "sortBy": "dc:modified",
     "sortOrder": "desc"
   },
   {
@@ -148,7 +148,7 @@
     "type": "phrases",
     "query": " AND ecm:primaryType='FVPhrase'",
     "cols": ["title", "fv:definitions", "related_pictures", "related_audio", "fv-phrase:phrase_books", "dc:created"],
-    "sortCol": "dc:created",
+    "sortBy": "dc:created",
     "sortOrder": "desc"
   },
   {
@@ -196,7 +196,7 @@
     "type": "songs",
     "query": " AND ecm:primaryType='FVBook' AND fvbook:type='song'",
     "cols": ["title", "dc:modified"],
-    "sortCol": "dc:modified",
+    "sortBy": "dc:modified",
     "sortOrder": "desc"
   },
   {
@@ -204,7 +204,7 @@
     "type": "songs",
     "query": " AND ecm:primaryType='FVBook' AND fvbook:type='song'",
     "cols": ["title", "dc:created"],
-    "sortCol": "dc:created",
+    "sortBy": "dc:created",
     "sortOrder": "desc"
   },
   {
@@ -252,7 +252,7 @@
     "type": "stories",
     "query": " AND ecm:primaryType='FVBook' AND fvbook:type='story'",
     "cols": ["title", "dc:modified"],
-    "sortCol": "dc:modified",
+    "sortBy": "dc:modified",
     "sortOrder": "desc"
   },
   {
@@ -260,7 +260,7 @@
     "type": "stories",
     "query": " AND ecm:primaryType='FVBook' AND fvbook:type='story'",
     "cols": ["title", "dc:created"],
-    "sortCol": "dc:created",
+    "sortBy": "dc:created",
     "sortOrder": "desc"
   }
 ]

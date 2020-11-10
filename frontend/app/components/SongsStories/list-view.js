@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import selectn from 'selectn'
 
-import DOMPurify from 'dompurify'
+import sanitize from 'common/Sanitize'
 
 import AVPlayArrow from '@material-ui/icons/PlayArrow'
 import AVStop from '@material-ui/icons/Stop'
@@ -47,6 +47,7 @@ class _Introduction extends Component {
     style: PropTypes.any, // TODO: set correct type
     item: PropTypes.any, // TODO: set correct type
     audio: PropTypes.any, // TODO: set correct type
+    intl: PropTypes.object,
   }
   static defaultProps = {
     style: {},
@@ -61,7 +62,7 @@ class _Introduction extends Component {
     const introductionTranslations = selectn('properties.fvbook:introduction_literal_translation', item)
     const introductionDiv = (
       <div className="IntroductionContent">
-        <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(introduction) }} style={this.props.style} />
+        <div dangerouslySetInnerHTML={{ __html: sanitize(introduction) }} style={this.props.style} />
       </div>
     )
 
@@ -106,9 +107,7 @@ class _Introduction extends Component {
             <div className="IntroductionContent">
               {introductionTranslations.map(function introductionTranslationsMapper(translation, i) {
                 if (translation.language === DEFAULT_LANGUAGE) {
-                  return (
-                    <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(translation.translation) }} key={i} />
-                  )
+                  return <div dangerouslySetInnerHTML={{ __html: sanitize(translation.translation) }} key={i} />
                 }
               })}
             </div>
@@ -138,6 +137,7 @@ class _SongsStoriesCardView extends Component {
     style: PropTypes.any, // TODO: set correct type
     cols: PropTypes.any, // TODO: set correct type
     siteTheme: PropTypes.any, // TODO: set correct type
+    intl: PropTypes.object,
   }
   static defaultProps = {
     action: () => {},
@@ -203,7 +203,7 @@ class _SongsStoriesCardView extends Component {
       'first',
       [entryType ? this.props.intl.searchAndReplace(entryType) : this.props.intl.trans('entry', 'Entry', 'first')]
     )
-    const title = <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.title) }} />
+    const title = <span dangerouslySetInnerHTML={{ __html: sanitize(item.title) }} />
     const subtitle = (selectn('properties.fvbook:title_literal_translation', item) || []).map((translation, i) => {
       if (translation.language === DEFAULT_LANGUAGE) {
         return <span key={i}>{translation.translation}</span>

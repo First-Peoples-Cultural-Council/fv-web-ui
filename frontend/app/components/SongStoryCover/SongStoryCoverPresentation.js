@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import DOMPurify from 'dompurify'
+import sanitize from 'common/Sanitize'
 
 import Typography from '@material-ui/core/Typography'
 import ActionLaunch from '@material-ui/icons/Launch'
@@ -99,7 +99,7 @@ function _getIntroduction(introduction, introductionTranslation) {
   const [tabValue, setTabValue] = useState(0)
   const introductionDiv = (
     <div className={classes.introductionContent}>
-      <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(introduction.content) }} />
+      <div dangerouslySetInnerHTML={{ __html: sanitize(introduction.content) }} />
     </div>
   )
 
@@ -136,7 +136,7 @@ function _getIntroduction(introduction, introductionTranslation) {
       {tabValue === 1 && (
         <Typography variant="h5" component="div" style={{ padding: 8 * 3 }}>
           <div className={classes.introductionContent}>
-            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(introductionTranslation.content) }} />
+            <div dangerouslySetInnerHTML={{ __html: sanitize(introductionTranslation.content) }} />
           </div>
         </Typography>
       )}

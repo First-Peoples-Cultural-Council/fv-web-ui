@@ -7,7 +7,7 @@ import FVLabel from 'components/FVLabel'
 import MetadataPanel from 'components/LearnBase/metadata-panel'
 import NavigationHelpers from 'common/NavigationHelpers'
 import FVButton from 'components/FVButton'
-import DOMPurify from 'dompurify'
+import sanitize from 'common/Sanitize'
 
 import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
 
@@ -72,12 +72,13 @@ function DetailWordPhrasePresentation({
   title,
   videos,
 }) {
+  /* eslint-disable */
   // Thanks: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_groupby
   const _groupBy = (arrOfObj, property = 'language') => {
     const _arrOfObj = [...arrOfObj]
-    // eslint-disable-next-line
     return _arrOfObj.reduce((r, v, i, a, k = v[property]) => ((r[k] || (r[k] = [])).push(v), r), {})
   }
+  /* eslint-enable */
   const _getAcknowledgement = (_acknowledgement) => {
     if (_acknowledgement && _acknowledgement !== '') {
       return (
@@ -101,7 +102,7 @@ function DetailWordPhrasePresentation({
             <FVLabel transKey="generalNote" defaultStr="General Notes" transform="word" />
           </h4>
           <div className="DialectViewWordPhraseContentItemGroup">
-            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(_generalNote) }} />
+            <div dangerouslySetInnerHTML={{ __html: sanitize(_generalNote) }} />
           </div>
         </div>
       )
@@ -167,7 +168,8 @@ function DetailWordPhrasePresentation({
       const groupedDefinitions = _groupBy(defs)
 
       for (const property in groupedDefinitions) {
-        if (groupedDefinitions.hasOwnProperty(property)) {
+        // Note: https://eslint.org/docs/rules/no-prototype-builtins
+        if (Object.prototype.hasOwnProperty.call(groupedDefinitions, property)) {
           const definition = groupedDefinitions[property]
           _definitions = definition.map((entry, index) => {
             return (
@@ -193,7 +195,8 @@ function DetailWordPhrasePresentation({
       const groupedLiteralTranslations = _groupBy(litTrans)
 
       for (const property in groupedLiteralTranslations) {
-        if (groupedLiteralTranslations.hasOwnProperty(property)) {
+        // Note: https://eslint.org/docs/rules/no-prototype-builtins
+        if (Object.prototype.hasOwnProperty.call(groupedLiteralTranslations, property)) {
           const literalTranslation = groupedLiteralTranslations[property]
           _literalTranslations = literalTranslation.map((entry, index) => {
             return (

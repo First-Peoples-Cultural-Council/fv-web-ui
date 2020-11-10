@@ -24,7 +24,7 @@ import useSearchDialect from 'dataSources/useSearchDialect'
 import useWindowPath from 'dataSources/useWindowPath'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import { SEARCH_BY_ALPHABET, SEARCH_BY_CATEGORY, SEARCH_PART_OF_SPEECH_ANY } from 'components/SearchDialect/constants'
+import { SEARCH_BY_ALPHABET, SEARCH_BY_CATEGORY, SEARCH_PART_OF_SPEECH_ANY } from 'common/Constants'
 
 function WordsData(props) {
   const { computeDialect2, fetchDialect2 } = useDialect()
@@ -43,7 +43,7 @@ function WordsData(props) {
     return searchDialectReset
   }, [])
 
-  const fetchData = async() => {
+  const fetchData = async () => {
     // Dialect
     await ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect2, computeDialect2)
     // Document
@@ -63,7 +63,7 @@ function WordsData(props) {
     },
   ])
 
-  const handleCategoryClick = async({ selected }) => {
+  const handleCategoryClick = async ({ selected }) => {
     await searchDialectUpdate({
       searchByAlphabet: '',
       searchByMode: SEARCH_BY_CATEGORY,
@@ -78,7 +78,7 @@ function WordsData(props) {
     })
   }
 
-  const handleAlphabetClick = async({ letterClicked }) => {
+  const handleAlphabetClick = async ({ letterClicked }) => {
     await searchDialectUpdate({
       searchByAlphabet: letterClicked,
       searchByMode: SEARCH_BY_ALPHABET,

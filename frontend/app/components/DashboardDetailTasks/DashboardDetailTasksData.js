@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
-import DOMPurify from 'dompurify'
+import sanitize from 'common/Sanitize'
 
 import useNavigationHelpers from 'common/useNavigationHelpers'
 import useDashboard from 'dataSources/useDashboard'
@@ -127,7 +127,7 @@ function DashboardDetailTasksData({ children, columnRender }) {
     const _selectedItemData = selectn(['response'], extractComputeDocumentItem)
     const type = selectn('type', _selectedItemData)
     const uid = selectn(['uid'], _selectedItemData)
-    const title = DOMPurify.sanitize(selectn('title', _selectedItemData))
+    const title = sanitize(selectn('title', _selectedItemData))
     const commonData = {
       culturalNotes: selectn('properties.fv:cultural_note', _selectedItemData) || [],
       generalNote: selectn('properties.fv:general_note', _selectedItemData),

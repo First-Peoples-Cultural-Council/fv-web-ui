@@ -71,6 +71,10 @@ public class CleanReferences extends AbstractMaintenanceOperation {
   protected void executeWorkPhase(DocumentModel dialect) {
     processTrashedCategoryItems(dialect.getRef(), FV_CATEGORIES_NAME);
     processTrashedCategoryItems(dialect.getRef(), FV_PHRASE_BOOKS_NAME);
+
+    // Remove from required jobs
+    RequiredJobsUtils.removeFromRequiredJobs(dialect,
+        Constants.CLEAN_CATEGORY_REFERENCES_JOB_ID, true);
   }
 
   private void processTrashedCategoryItems(DocumentRef dialectRef, String folderName) {

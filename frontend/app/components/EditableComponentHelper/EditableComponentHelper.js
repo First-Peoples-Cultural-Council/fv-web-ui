@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import selectn from 'selectn'
 import t from 'tcomb-form'
-import DOMPurify from 'dompurify'
+import sanitize from 'common/Sanitize'
 
 import Preview from 'components/Preview'
 import StatusBar from 'components/StatusBar'
@@ -33,7 +33,8 @@ const RenderRegular = (currentValue, preview, previewType, returnWrapper = 'span
   }
 
   output = values.map((value, i) => {
-    const id = value && value.hasOwnProperty('uid') ? value.uid : value
+    // Note: https://eslint.org/docs/rules/no-prototype-builtins
+    const id = value && Object.prototype.hasOwnProperty.call(value, 'uid') ? value.uid : value
 
     return preview ? (
       <Preview key={i} id={id} type={previewType} />
@@ -41,10 +42,7 @@ const RenderRegular = (currentValue, preview, previewType, returnWrapper = 'span
       React.createElement(returnWrapper, {
         key: i,
         dangerouslySetInnerHTML: {
-          __html: DOMPurify.sanitize(value, {
-            ADD_TAGS: ['iframe'],
-            ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
-          }),
+          __html: sanitize(value),
         },
       })
     )
@@ -69,6 +67,7 @@ class EditableComponentUnwrapped extends Component {
     showPreview: bool,
     sectionProperty: string,
     updateEntity: func.isRequired,
+    intl: object,
   }
 
   static defaultProps = {
@@ -83,9 +82,10 @@ class EditableComponentUnwrapped extends Component {
   }
 
   shouldComponentUpdate(newProps, newState) {
+    // eslint-disable-next-line
     if (newState != this.state || newProps.computeEntity.response != this.props.computeEntity.response) return true
 
-    if (newProps.options != null) return true
+    if (newProps.options !== null) return true
 
     return false
   }

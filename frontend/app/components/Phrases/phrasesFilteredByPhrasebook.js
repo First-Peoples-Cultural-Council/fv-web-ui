@@ -56,7 +56,7 @@ import PromiseWrapper from 'components/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 import { getDialectClassname } from 'common/Helpers'
-import { SEARCH_DATA_TYPE_PHRASE } from 'components/SearchDialect/constants'
+import { SEARCH_DATA_TYPE_PHRASE } from 'common/Constants'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,

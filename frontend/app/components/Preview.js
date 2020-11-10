@@ -68,6 +68,8 @@ export class Preview extends Component {
     tagProps: object,
     tagStyles: object,
     type: string.isRequired,
+    theme: object,
+    intl: object,
     // REDUX: reducers/state
     computeAudio: object.isRequired,
     computeCategory: object.isRequired,
@@ -363,7 +365,7 @@ export class Preview extends Component {
               <Card style={{ boxShadow: 'none' }}>
                 <CardContent style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
                   {selectn('properties.file:content.data', pictureResponse) ||
-                  (selectn('path', pictureResponse) && selectn('path', pictureResponse).indexOf('nxfile') != -1)
+                  (selectn('path', pictureResponse) && selectn('path', pictureResponse).indexOf('nxfile') !== -1)
                     ? pictureTag
                     : null}
                 </CardContent>
@@ -375,7 +377,7 @@ export class Preview extends Component {
                     </Typography>
                   }
                   subheader={
-                    description && description != 'undefined'
+                    description && description !== 'undefined'
                       ? this.props.intl.trans('description', 'Description', 'first') + ': ' + description
                       : ''
                   }
@@ -504,12 +506,12 @@ export class Preview extends Component {
                       {selectn('title', audioResponse) || selectn('dc:title', audioResponse)}
                     </Typography>
                   }
-                  subheader={description && description != 'undefined' ? 'Description: ' + description : ''}
+                  subheader={description && description !== 'undefined' ? 'Description: ' + description : ''}
                   style={{ height: 'initial', padding: 0, lineHeight: 'initial', fontSize: '18px' }}
                 />
                 <div style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
                   {selectn('properties.file:content.data', audioResponse) ||
-                  (selectn('path', audioResponse) && selectn('path', audioResponse).indexOf('nxfile') != -1)
+                  (selectn('path', audioResponse) && selectn('path', audioResponse).indexOf('nxfile') !== -1)
                     ? audioTag
                     : null}
                 </div>
@@ -597,7 +599,10 @@ export class Preview extends Component {
             <video
               width="100%"
               height="auto"
+              // TODO: Need to refactor. Invert control & complexity to the calling components.
               src={
+                selectn('properties.vid:transcodedVideos[0].content.data', videoResponse) ||
+                selectn('transcodedVideos[0].url', videoResponse) ||
                 selectn('properties.file:content.data', videoResponse) ||
                 NavigationHelpers.getBaseURL() + selectn('path', videoResponse)
               }
@@ -616,7 +621,7 @@ export class Preview extends Component {
               <Card style={{ boxShadow: 'none' }}>
                 <div style={{ backgroundColor: themePalette.primary2Color, margin: '5px 0', padding: '8px' }}>
                   {selectn('properties.file:content.data', videoResponse) ||
-                  (selectn('path', videoResponse) && selectn('path', videoResponse).indexOf('nxfile') != -1)
+                  (selectn('path', videoResponse) && selectn('path', videoResponse).indexOf('nxfile') !== -1)
                     ? videoTag
                     : null}
                 </div>

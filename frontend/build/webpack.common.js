@@ -70,7 +70,7 @@ module.exports = (env) => ({
    * enhance debugging by adding meta info for the browser devtools
    * source-map most detailed at the expense of build speed.
    **/
-  devtool: '#source-map',
+  devtool: false,
 
   /**
    * Development Server

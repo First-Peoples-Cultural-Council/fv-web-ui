@@ -433,14 +433,33 @@ export class DialectLearn extends Component {
                 filter={{ permission: 'Write', entity: selectn('response', computeDialect2) }}
                 renderPartial
               >
-                <EditableComponentHelper
-                  dataTestid="EditableComponent__dc-description"
-                  isSection={isSection}
-                  computeEntity={computeDialect2}
-                  updateEntity={this.props.updateDialect2}
-                  property="dc:description"
-                  entity={selectn('response', computeDialect2)}
-                />
+                {(() => {
+                  // FW-786/FW-1312: We want to start migrating away from dc:description due to character limit
+                  // and for better semantic placement of the about_our_language data
+                  const description = selectn('response.properties.dc:description', computeDialect2)
+
+                  const about_our_language = selectn(
+                    'response.properties.fvdialect:about_our_language',
+                    computeDialect2
+                  )
+
+                  if (description && !about_our_language) {
+                    // If description is available, and about our language is empty or null
+                    // assign it to about_our_language field
+                    computeDialect2.response.properties['fvdialect:about_our_language'] = description
+                  }
+
+                  return (
+                    <EditableComponentHelper
+                      dataTestid="EditableComponent__dc-description"
+                      isSection={isSection}
+                      computeEntity={computeDialect2}
+                      updateEntity={this.props.updateDialect2}
+                      property={about_our_language ? 'fvdialect:about_our_language' : 'dc:description'}
+                      entity={selectn('response', computeDialect2)}
+                    />
+                  )
+                })()}
               </AuthorizationFilter>
             </div>
 

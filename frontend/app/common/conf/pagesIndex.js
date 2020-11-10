@@ -35,7 +35,7 @@ import PageConcentration from 'components/Games/concentration'
 import PageDialectGalleries from 'components/Gallery'
 import PageDialectGalleryView from 'components/Gallery/view'
 import PageDialectReports from 'components/Reports'
-import PageDialectReportsView from 'components/Reports/view'
+import PageDialectReportsView from 'components/Reports/ReportsView'
 
 import PageDialectLearnWords from 'components/Words/WordsContainer'
 import PageDialectLearnPhrases from 'components/Phrases'

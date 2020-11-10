@@ -17,9 +17,9 @@ import VisibilityMinimalData from 'components/VisibilityMinimal/VisibilityMinima
  *
  * @returns {node} jsx markup
  */
-function VisibilityMinimalContainer({ docId, docState, computeEntities }) {
+function VisibilityMinimalContainer({ docId, docState, computeEntities, unpublishCallback }) {
   return (
-    <VisibilityMinimalData docId={docId} docState={docState}>
+    <VisibilityMinimalData docId={docId} docState={docState} unpublishCallback={unpublishCallback}>
       {({
         workspaces,
         dialectName,
@@ -53,16 +53,18 @@ function VisibilityMinimalContainer({ docId, docState, computeEntities }) {
   )
 }
 // PROPTYPES
-const { string, object } = PropTypes
+const { func, string, object } = PropTypes
 VisibilityMinimalContainer.propTypes = {
   docId: string,
   docState: string,
   computeEntities: object,
+  unpublishCallback: func,
 }
 
 VisibilityMinimalContainer.defaultProps = {
   docId: '',
   docState: '',
+  unpublishCallback: () => {},
 }
 
 export default VisibilityMinimalContainer

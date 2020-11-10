@@ -4,7 +4,7 @@ import Preview from 'components/Preview'
 import { DetailSongStoryStyles } from './DetailSongStoryStyles'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import DOMPurify from 'dompurify'
+import sanitize from 'common/Sanitize'
 import MediaPanels from 'components/MediaPanels'
 import Divider from '@material-ui/core/Divider'
 import FVButton from 'components/FVButton'
@@ -122,7 +122,7 @@ function _getIntroduction(introduction) {
       </Typography>
       <div
         dangerouslySetInnerHTML={{
-          __html: DOMPurify.sanitize(introduction.content),
+          __html: sanitize(introduction.content),
         }}
       />
     </div>
@@ -142,7 +142,7 @@ function _getIntroductionTranslation(introductionTranslation) {
         </Typography>
         <div
           dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(introductionTranslation.content),
+            __html: sanitize(introductionTranslation.content),
           }}
         />
       </div>
