@@ -19,12 +19,17 @@ function TablePagination({ localization, rowsPerPageOptions, showFirstLastPageBu
   const { getSearchAsObject, navigate } = useNavigationHelpers()
   const {
     item: queryItem,
-    page: queryPage = 1,
-    pageSize: queryPageSize = 10,
-    sortBy: querySortBy = 'date',
-    sortOrder: querySortOrder = 'desc',
+    page: queryPage,
+    pageSize: queryPageSize,
+    sortBy: querySortBy,
+    sortOrder: querySortOrder,
     task: queryTask,
-  } = getSearchAsObject()
+  } = getSearchAsObject({
+    page: 1,
+    pageSize: 10,
+    sortBy: 'date',
+    sortOrder: 'desc',
+  })
   const queryPageNum = Number(queryPage)
   const queryPageSizeNum = Number(queryPageSize)
   const getUrlWithQuery = ({

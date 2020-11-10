@@ -24,19 +24,19 @@ function useNavigationHelpers() {
       const ctxPath = URLHelpers.getContextPath()
       replaceWindowPath(url.indexOf(ctxPath) === 0 ? url : `${ctxPath}${url}`)
     },
-    getSearchAsObject: () => {
-      if (window.location.search === '') {
-        return {}
-      }
+    getSearchAsObject: (defaultSearch = {}) => {
       const search = {}
-      const searchParams = (window.location.search || '?').replace(/^\?/, '')
-      searchParams.split('&').forEach((item) => {
-        if (item !== '' && /=/.test(item)) {
-          const propValue = item.split('=')
-          search[propValue[0]] = propValue[1]
-        }
-      })
-      return search
+      if (window.location.search !== '') {
+        const searchParams = (window.location.search || '?').replace(/^\?/, '')
+        searchParams.split('&').forEach((item) => {
+          if (item !== '' && /=/.test(item)) {
+            const propValue = item.split('=')
+            search[propValue[0]] = propValue[1]
+          }
+        })
+      }
+
+      return Object.assign({}, defaultSearch, search)
     },
     convertObjToUrlQuery: (obj) => {
       const urlQueryArray = []

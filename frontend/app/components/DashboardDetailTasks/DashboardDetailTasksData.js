@@ -49,12 +49,17 @@ function DashboardDetailTasksData({ children, columnRender }) {
 
   const {
     item: queryItem,
-    page: queryPage = 1,
-    pageSize: queryPageSize = 10,
-    sortBy: querySortBy = 'date',
-    sortOrder: querySortOrder = 'desc',
+    page: queryPage,
+    pageSize: queryPageSize,
+    sortBy: querySortBy,
+    sortOrder: querySortOrder,
     task: queryTask,
-  } = getSearchAsObject()
+  } = getSearchAsObject({
+    page: 1,
+    pageSize: 10,
+    sortBy: 'date',
+    sortOrder: 'desc',
+  })
 
   // Escape key binding
   const onKeyPressed = (event) => {
