@@ -44,3 +44,8 @@
   border-bottom: 1px dotted #a8a8a8;
   background: #fff;
 }
+
+.SearchDictionary__itemThumbnail {
+  max-width: 62px;
+  max-height: 45px;
+}

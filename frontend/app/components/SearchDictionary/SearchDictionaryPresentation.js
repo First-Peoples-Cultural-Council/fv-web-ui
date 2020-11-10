@@ -34,24 +34,27 @@ function SearchDictionaryPresentation({ computeEntities, searchTerm, entries, in
     <PromiseWrapper renderOnError computeEntities={computeEntities}>
       {entries.length === 0 ? (
         <div className="SearchDictionary">
-          <h1 className="title">Search results for &quot;{searchTerm}&quot;</h1>
-          <div className={'WordsList WordsList--noData'}>Sorry, no results were found for this search.</div>
+          <Paper className="container">
+            <h1 className="title">{searchTerm} Search Results</h1>
+            <div className={'WordsList WordsList--noData'}>Sorry, no results were found for this search.</div>
+          </Paper>
         </div>
       ) : (
         <div className="SearchDictionary">
-          <h1 className="title">Search results for &quot;{searchTerm}&quot;</h1>
           <Paper className="container">
+            <h1 className="title">{searchTerm} Search Results</h1>
             <Table>
               <TableHead className="SearchDictionary__row">
                 <TableRow>
                   <TableCell>{intl.trans('title', 'Title', 'first')}</TableCell>
                   <TableCell>{intl.trans('translation', 'Translation', 'first')}</TableCell>
                   <TableCell>{intl.trans('audio', 'Audio', 'first')}</TableCell>
+                  <TableCell>{intl.trans('picture', 'Picture', 'first')}</TableCell>
                   <TableCell>{intl.trans('type', 'Type', 'first')}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {entries.map(({ uid, title, href, translations, audio, type }) => (
+                {entries.map(({ uid, title, href, translations, audio, picture, type }) => (
                   <TableRow key={uid}>
                     <TableCell component="th" scope="row">
                       <Link className="SearchDictionary__link SearchDictionary__link--indigenous" href={href}>
@@ -79,6 +82,15 @@ function SearchDictionaryPresentation({ computeEntities, searchTerm, entries, in
                           tagStyles={{ width: '100%', minWidth: '230px' }}
                           expandedValue={audio}
                           type="FVAudio"
+                        />
+                      ) : null}
+                    </TableCell>
+                    <TableCell>
+                      {picture ? (
+                        <img
+                          className="SearchDictionary__itemThumbnail PrintHide"
+                          src={UIHelpers.getThumbnail(picture, 'Thumbnail')}
+                          alt={title}
                         />
                       ) : null}
                     </TableCell>

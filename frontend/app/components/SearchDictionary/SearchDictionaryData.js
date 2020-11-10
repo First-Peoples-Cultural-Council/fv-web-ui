@@ -100,6 +100,7 @@ function SearchDictionaryData({ children }) {
           formattedEntry.href = NavigationHelpers.generateUIDPath(routeParams.siteTheme, entry, 'words')
           formattedEntry.translations = selectn('properties.fv:definitions', entry)
           formattedEntry.audio = selectn('contextParameters.word.related_audio[0]', entry)
+          formattedEntry.picture = selectn('contextParameters.word.related_pictures[0]', entry)
           _formattedData.push(formattedEntry)
           break
         case 'FVPhrase':
@@ -107,6 +108,7 @@ function SearchDictionaryData({ children }) {
           formattedEntry.href = NavigationHelpers.generateUIDPath(routeParams.siteTheme, entry, 'phrases')
           formattedEntry.translations = selectn('properties.fv:definitions', entry)
           formattedEntry.audio = selectn('contextParameters.phrase.related_audio[0]', entry)
+          formattedEntry.picture = selectn('contextParameters.phrase.related_pictures[0]', entry)
           _formattedData.push(formattedEntry)
           break
         case 'FVBook':
