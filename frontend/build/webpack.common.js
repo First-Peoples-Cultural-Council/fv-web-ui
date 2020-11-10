@@ -205,6 +205,9 @@ module.exports = (env) => ({
         DATE: new Date().toLocaleString('en-CA', { timeZone: 'America/Vancouver' }),
         IS_LEGACY: env && env.legacy ? true : false,
       },
+      minify: {
+        collapseWhitespace: true,
+      },
     }),
     new MiniCssExtractPlugin({
       filename: path.join(outputStylesDirectory, '[name].[hash].css'),

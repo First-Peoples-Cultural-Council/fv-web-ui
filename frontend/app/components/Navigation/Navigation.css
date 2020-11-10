@@ -28,7 +28,7 @@
   min-height: 64px;
   margin: 0;
 }
-.Navigation__logo {
+/* .Navigation__logo {
   margin-right: 15px;
 }
 .Navigation__link {
@@ -37,15 +37,8 @@
 .Navigation__link,
 .Navigation__link:visited {
   color: #fff;
-}
-.Navigation__localeContainer {
-  display: none;
-}
-.Navigation__localeInner {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-}
+} */
+
 .Navigation .Navigation__localeTitle {
   margin-right: 15px;
 }
@@ -138,11 +131,6 @@
 .Navigation__localeContainer--open {
   display: flex;
   flex-direction: row-reverse;
-}
-.Navigation__searchContainerInner {
-  display: flex;
-  align-items: center;
-  padding: 10px 0;
 }
 .Navigation__immersionSwitch {
   display: none;

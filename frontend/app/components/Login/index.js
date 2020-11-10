@@ -24,9 +24,6 @@ import { pushWindowPath } from 'reducers/windowPath'
 import selectn from 'selectn'
 import { isMobile } from 'react-device-detect'
 
-import NavigationHelpers from 'common/NavigationHelpers'
-
-import '!style-loader!css-loader!./Login.css'
 import FVLabel from 'components/FVLabel'
 
 const { func, object, string } = PropTypes
@@ -88,34 +85,25 @@ export class Login extends Component {
   render() {
     const { className } = this.props
 
-    if (this.props.computeLogin.isFetching) {
-      return (
-        <div className={`Login Login--busy ${className}`}>
-          <FVLabel
-            transKey="views.components.navigation.processing_request"
-            defaultStr="Processing request"
-            transform="first"
-          />
-          ...
-        </div>
-      )
-    }
-
     // Handle success (anonymous or actual)
     if (this.props.computeLogin.success && this.props.computeLogin.isConnected) {
       return (
-        <div className={`Login Login--welcome hidden-xs ${className}`}>
+        <span className={`Login Login--welcome hidden-xs ${className}`}>
           <FVLabel transKey="general.welcome" defaultStr="WELCOME" transform="upper" />,{' '}
           {selectn('response.properties.firstName', this.props.computeLogin)}
-        </div>
+          <a href={'/dashboard'} className={'Navigation__link'}>
+            Dashboard
+          </a>
+        </span>
       )
     }
     return (
-      <div className="Login Login--signIn">
-        <a className={`nav_link ${className}`} href={NavigationHelpers.getBaseURL() + 'logout?requestedUrl=login.jsp'}>
+      <span className={'Login Login--welcome hidden-xs'}>
+        <span className={'fv-label'}>WELCOME</span>, Guest
+        <a className={'Navigation__link'} href="/nuxeo/logout?requestedUrl=login.jsp">
           SIGN IN
         </a>
-      </div>
+      </span>
     )
   }
 }

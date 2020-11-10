@@ -27,6 +27,7 @@ import store from 'state/store'
 
 // Views
 import AppWrapper from 'components/AppWrapper'
+import Login from 'components/Login'
 
 require('!style-loader!css-loader!normalize.css')
 require('bootstrap/less/bootstrap')
@@ -41,6 +42,15 @@ const context = {
     },
   },
 }
+
+// Possibly an issue?
+// https://github.com/facebook/react/issues/12700
+render(
+  <Provider store={store}>
+    <Login />
+  </Provider>,
+  document.getElementById('login')
+)
 
 render(
   <Provider store={store}>

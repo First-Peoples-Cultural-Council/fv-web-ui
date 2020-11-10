@@ -48,7 +48,7 @@ export const matchPath = (pathMatchArray, urlPath) => {
     if (value instanceof RegExp) {
       return value.test(currentPathArray.get(key))
     } else if (value instanceof paramMatch) {
-      if (value.hasOwnProperty('matcher')) {
+      if (Object.prototype.hasOwnProperty.call(value, 'matcher')) {
         const testMatch = value.matcher.test(currentPathArray.get(key))
 
         if (testMatch) {
@@ -456,6 +456,7 @@ const routes = [
     frontpage: true,
     title: intl.translate({ key: 'kids_home', default: 'Kids Home', case: 'words' }),
     page: <Pages.KidsHome />,
+    breadcrumbs: false,
   },
   {
     path: ['play'],
