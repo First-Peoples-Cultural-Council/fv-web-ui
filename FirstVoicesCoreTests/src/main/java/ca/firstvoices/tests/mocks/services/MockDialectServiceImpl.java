@@ -515,7 +515,7 @@ public class MockDialectServiceImpl implements MockDialectService {
 
       // generate pages within story
       String storyPath = storyDoc.getPathAsString();
-      int numPages = ThreadLocalRandom.current().nextInt(0, 10);
+      int numPages = ThreadLocalRandom.current().nextInt(4, 15);
       for (int k = 0; k < numPages; k++) {
 
         ArrayList<Map<String, String>> pageTranslation = new ArrayList<>();
