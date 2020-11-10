@@ -2,6 +2,7 @@ package ca.firstvoices.operations;
 
 import ca.firstvoices.testUtil.AbstractFirstVoicesCoreTestsTest;
 import ca.firstvoices.tests.mocks.operations.GenerateDialect;
+import java.util.ArrayList;
 import java.util.HashMap;
 import org.apache.commons.lang.ArrayUtils;
 import org.junit.Assert;
@@ -72,6 +73,34 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
       String[] phraseBooks = (String[]) phrase.getPropertyValue("fv-phrase:phrase_books");
       Assert.assertFalse(ArrayUtils.isEmpty(phraseBooks));
     }
+
+    //Check for contributors
+    DocumentModelList contributors = session
+        .query("SELECT * FROM FVContributor WHERE ecm:ancestorId='" + dialect.getId() + "'");
+    Assert.assertEquals(1, contributors.size());
+
+    //Check for songs and stories and their properties
+    DocumentModelList books = session
+        .query("SELECT * FROM FVBook WHERE ecm:ancestorId='" + dialect.getId() + "'");
+    Assert.assertEquals(10, books.size());
+    for (DocumentModel book : books) {
+      String type = (String) book.getPropertyValue("fvbook:type");
+      String introduction = (String) book.getPropertyValue("fvbook:introduction");
+      String acknowledgement = (String) book.getPropertyValue("fvbook:acknowledgement");
+      ArrayList<Object> titleTranslation = (ArrayList<Object>) book.getPropertyValue("fvbook:title_literal_translation");
+      ArrayList<Object> introductionTranslation = (ArrayList<Object>) book.getPropertyValue
+          ("fvbook:introduction_literal_translation");
+      String[] culturalNote = (String[]) book.getPropertyValue("fv:cultural_note");
+      String[] bookContributors = (String[]) book.getPropertyValue("dc:contributors");
+
+      Assert.assertNotNull(type);
+      Assert.assertNotNull(introduction);
+      Assert.assertNotNull(acknowledgement);
+      Assert.assertFalse(titleTranslation.isEmpty());
+      Assert.assertFalse(introductionTranslation.isEmpty());
+      Assert.assertFalse(ArrayUtils.isEmpty(culturalNote));
+      Assert.assertFalse(ArrayUtils.isEmpty(bookContributors));
+    }
   }
 
 
@@ -126,6 +155,34 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
     for (DocumentModel phrase : phrases) {
       String[] phraseBooks = (String[]) phrase.getPropertyValue("fv-phrase:phrase_books");
       Assert.assertFalse(ArrayUtils.isEmpty(phraseBooks));
+    }
+
+    //Check for contributors
+    DocumentModelList contributors = session
+        .query("SELECT * FROM FVContributor WHERE ecm:ancestorId='" + dialect.getId() + "'");
+    Assert.assertEquals(1, contributors.size());
+
+    //Check for songs and stories and their properties
+    DocumentModelList books = session
+        .query("SELECT * FROM FVBook WHERE ecm:ancestorId='" + dialect.getId() + "'");
+    Assert.assertEquals(10, books.size());
+    for (DocumentModel book : books) {
+      String type = (String) book.getPropertyValue("fvbook:type");
+      String introduction = (String) book.getPropertyValue("fvbook:introduction");
+      String acknowledgement = (String) book.getPropertyValue("fvbook:acknowledgement");
+      ArrayList<Object> titleTranslation = (ArrayList<Object>) book.getPropertyValue("fvbook:title_literal_translation");
+      ArrayList<Object> introductionTranslation = (ArrayList<Object>) book.getPropertyValue
+          ("fvbook:introduction_literal_translation");
+      String[] culturalNote = (String[]) book.getPropertyValue("fv:cultural_note");
+      String[] bookContributors = (String[]) book.getPropertyValue("dc:contributors");
+
+      Assert.assertNotNull(type);
+      Assert.assertNotNull(introduction);
+      Assert.assertNotNull(acknowledgement);
+      Assert.assertFalse(titleTranslation.isEmpty());
+      Assert.assertFalse(introductionTranslation.isEmpty());
+      Assert.assertFalse(ArrayUtils.isEmpty(culturalNote));
+      Assert.assertFalse(ArrayUtils.isEmpty(bookContributors));
     }
   }
 
