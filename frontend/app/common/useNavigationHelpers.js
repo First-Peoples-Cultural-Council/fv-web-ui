@@ -26,12 +26,13 @@ function useNavigationHelpers() {
     },
     getSearchAsObject: (defaultSearch = {}) => {
       const search = {}
+      const decode = ['letter']
       if (window.location.search !== '') {
         const searchParams = (window.location.search || '?').replace(/^\?/, '')
         searchParams.split('&').forEach((item) => {
           if (item !== '' && /=/.test(item)) {
             const propValue = item.split('=')
-            search[propValue[0]] = propValue[1]
+            search[propValue[0]] = decode.includes(propValue[0]) ? decodeURI(propValue[1]) : propValue[1]
           }
         })
       }
