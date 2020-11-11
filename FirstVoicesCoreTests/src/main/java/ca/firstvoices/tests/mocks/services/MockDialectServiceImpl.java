@@ -476,6 +476,7 @@ public class MockDialectServiceImpl implements MockDialectService {
         fvPage.add(createDocument(session, pageDoc));
       }
     }
+
     return fvSongs;
   }
 
@@ -537,6 +538,7 @@ public class MockDialectServiceImpl implements MockDialectService {
         fvPage.add(createDocument(session, pageDoc));
       }
     }
+    
     return fvStories;
   }
 }
