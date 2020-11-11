@@ -23,8 +23,8 @@ function WordsListContainer() {
         fetcher,
         fetcherParams,
         filter,
-        handleCreateClick,
         handleSearch,
+        hrefCreate,
         items,
         listViewMode,
         metadata,
@@ -43,7 +43,7 @@ function WordsListContainer() {
             <WordsListPresentation
               dialectClassName={dialectClassName}
               filter={filter}
-              handleCreateClick={handleCreateClick}
+              hrefCreate={hrefCreate}
               wordsListClickHandlerViewMode={setListViewMode}
               dictionaryListViewMode={listViewMode}
               smallScreenTemplate={smallScreenTemplate}

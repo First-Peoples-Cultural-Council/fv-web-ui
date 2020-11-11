@@ -34,6 +34,7 @@ import {
   dictionaryListSmallScreenTemplateWords,
 } from 'components/DictionaryList/DictionaryListSmallScreen'
 import AuthorizationFilter from 'components/AuthorizationFilter'
+import Link from 'components/Link'
 const SearchDialect = React.lazy(() => import('components/SearchDialect'))
 const FlashcardList = React.lazy(() => import('components/FlashcardList'))
 const DictionaryListSmallScreen = React.lazy(() => import('components/DictionaryList/DictionaryListSmallScreen'))
@@ -55,18 +56,49 @@ const VIEWMODE_LARGE_SCREEN = 3
  * @component
  *
  * @param {object} props
- * @param {function} props.children
  *
  */
 
 function WordsListPresentation(props) {
+  const {
+    // hasExportDialect,
+    columns,
+    dialect,
+    dialectClassName,
+    dictionaryListViewMode,
+    exportDialectColumns,
+    exportDialectExportElement,
+    exportDialectLabel,
+    exportDialectQuery,
+    fetcher,
+    fetcherParams,
+    filter,
+    handleSearch,
+    hasPagination,
+    hasSorting,
+    hasViewModeButtons,
+    hrefCreate,
+    items,
+    metadata,
+    navigationRouteSearch,
+    pageTitle,
+    pushWindowPath,
+    resetSearch,
+    routeParams,
+    rowClickHandler,
+    searchDialectDataType,
+    searchUi,
+    setRouteParams,
+    sortHandler,
+    wordsListClickHandlerViewMode,
+  } = props
   const { getSearchAsObject } = useNavigationHelpers()
   const intl = IntlService.instance
   const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
-  let columnsEnhanced = [...props.columns]
+  let columnsEnhanced = [...columns]
 
   // ============= SORT
-  if (props.hasSorting) {
+  if (hasSorting) {
     // If window.location.search has sortOrder & sortBy,
     // Ensure the same values are in redux
     // before generating the sort markup
@@ -76,13 +108,13 @@ function WordsListPresentation(props) {
     if (
       windowLocationSearchSortOrder &&
       windowLocationSearchSortBy &&
-      (props.navigationRouteSearch.sortOrder !== windowLocationSearchSortOrder ||
-        props.navigationRouteSearch.sortBy !== windowLocationSearchSortBy)
+      (navigationRouteSearch.sortOrder !== windowLocationSearchSortOrder ||
+        navigationRouteSearch.sortBy !== windowLocationSearchSortBy)
     ) {
-      props.setRouteParams({
+      setRouteParams({
         search: {
-          page: props.routeParams.page,
-          pageSize: props.routeParams.pageSize,
+          page: routeParams.page,
+          pageSize: routeParams.pageSize,
           sortOrder: windowLocationSearchSortOrder,
           sortBy: windowLocationSearchSortBy,
         },
@@ -91,19 +123,19 @@ function WordsListPresentation(props) {
 
     columnsEnhanced = generateSortTitleLargeSmall({
       columns: columnsEnhanced,
-      pageSize: props.routeParams.pageSize,
-      sortOrder: props.navigationRouteSearch.sortOrder,
-      sortBy: props.navigationRouteSearch.sortBy,
-      navigationFunc: props.pushWindowPath,
-      sortHandler: props.sortHandler,
+      pageSize: routeParams.pageSize,
+      sortOrder: navigationRouteSearch.sortOrder,
+      sortBy: navigationRouteSearch.sortBy,
+      navigationFunc: pushWindowPath,
+      sortHandler: sortHandler,
     })
   }
   // ============= SORT
 
   // ============= ROWCLICK
-  if (props.rowClickHandler) {
+  if (rowClickHandler) {
     columnsEnhanced = generateRowClick({
-      rowClickHandler: props.rowClickHandler,
+      rowClickHandler: rowClickHandler,
       columns: columnsEnhanced,
     })
   }
@@ -112,7 +144,7 @@ function WordsListPresentation(props) {
   // ============= BATCH
 
   const noResults =
-    selectn('length', props.items) === 0 ? (
+    selectn('length', items) === 0 ? (
       <div
         className={'WordsList WordsList--noData'}
         dangerouslySetInnerHTML={{
@@ -127,86 +159,81 @@ function WordsListPresentation(props) {
 
   const listButtonArg = {
     // Export
-    dialect: props.dialect,
-    exportDialectColumns: props.exportDialectColumns,
-    exportDialectExportElement: props.exportDialectExportElement,
-    exportDialectLabel: props.exportDialectLabel,
-    exportDialectQuery: props.exportDialectQuery,
+    dialect: dialect,
+    exportDialectColumns: exportDialectColumns,
+    exportDialectExportElement: exportDialectExportElement,
+    exportDialectLabel: exportDialectLabel,
+    exportDialectQuery: exportDialectQuery,
     /*
           // Commented out until export is fixed
-          hasExportDialect: props.hasExportDialect,
+          hasExportDialect: hasExportDialect,
            */
     // View mode
-    clickHandlerViewMode: props.wordsListClickHandlerViewMode,
-    dictionaryListViewMode: props.dictionaryListViewMode,
-    hasViewModeButtons: props.hasViewModeButtons,
+    clickHandlerViewMode: wordsListClickHandlerViewMode,
+    dictionaryListViewMode: dictionaryListViewMode,
+    hasViewModeButtons: hasViewModeButtons,
   }
 
   const getListSmallScreenArg = {
     dictionaryListSmallScreenProps: {
-      rowClickHandler: props.rowClickHandler,
-      hasSorting: props.hasSorting,
+      rowClickHandler: rowClickHandler,
+      hasSorting: hasSorting,
       // withPagination
       // --------------------
-      fetcher: props.fetcher,
-      fetcherParams: props.fetcherParams,
-      metadata: props.metadata,
+      fetcher: fetcher,
+      fetcherParams: fetcherParams,
+      metadata: metadata,
       // List: small screen
       // --------------------
       columns: columnsEnhanced,
-      items: props.items,
+      items: items,
       dictionaryListSmallScreenTemplate: dictionaryListSmallScreenTemplateWords,
     },
-    hasPagination: props.hasPagination,
+    hasPagination: hasPagination,
     pageSize: DefaultFetcherParams.pageSize,
   }
 
   const getListLargeScreenArg = {
     dictionaryListLargeScreenProps: {
-      rowClickHandler: props.rowClickHandler,
-      hasSorting: props.hasSorting,
+      rowClickHandler: rowClickHandler,
+      hasSorting: hasSorting,
       // withPagination
       // --------------------
-      fetcher: props.fetcher,
-      fetcherParams: props.fetcherParams,
-      metadata: props.metadata,
+      fetcher: fetcher,
+      fetcherParams: fetcherParams,
+      metadata: metadata,
       // List: large screen
       // --------------------
       columns: columnsEnhanced,
-      items: props.items,
+      items: items,
     },
 
-    hasPagination: props.hasPagination,
+    hasPagination: hasPagination,
     pageSize: DefaultFetcherParams.pageSize,
   }
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div>
-        <h1 className="DialectPageTitle">{props.pageTitle}</h1>
-        <div id="CreateNewWord" className="text-right">
-          <AuthorizationFilter filter={props.filter} hideFromSections routeParams={props.routeParams}>
-            <button
-              type="button"
-              onClick={(event) => {
-                props.handleCreateClick(event)
-              }}
-              className="PrintHide buttonRaised"
-            >
+        <h1 className="DialectPageTitle">{pageTitle}</h1>
+
+        <AuthorizationFilter filter={filter} hideFromSections routeParams={routeParams}>
+          <div id="CreateNewWord" className="text-right">
+            <Link className="PrintHide" href={hrefCreate}>
               <FVLabel
                 transKey="views.pages.explore.dialect.learn.words.create_new_word"
                 defaultStr="Create New Word"
                 transform="words"
               />
-            </button>
-          </AuthorizationFilter>
-        </div>
-        <div className={props.dialectClassName}>
+            </Link>
+          </div>
+        </AuthorizationFilter>
+        <div className={dialectClassName}>
           <SearchDialect
-            handleSearch={props.handleSearch}
-            resetSearch={props.resetSearch}
-            searchUi={props.searchUi}
-            searchDialectDataType={props.searchDialectDataType}
+            handleSearch={handleSearch}
+            resetSearch={resetSearch}
+            searchUi={searchUi}
+            searchDialectDataType={searchDialectDataType}
           />
           {generateListButtons(listButtonArg)}
           <Media
@@ -229,10 +256,10 @@ function WordsListPresentation(props) {
 
               //  Flashcard Specified: by view mode button or prop
               // -----------------------------------------
-              if (props.dictionaryListViewMode === VIEWMODE_FLASHCARD) {
+              if (dictionaryListViewMode === VIEWMODE_FLASHCARD) {
                 // TODO: SPECIFY FlashcardList PROPS
                 let flashCards = <FlashcardList {...props} />
-                if (props.hasPagination) {
+                if (hasPagination) {
                   const FlashcardsWithPagination = withPagination(FlashcardList, DefaultFetcherParams.pageSize)
                   flashCards = <FlashcardsWithPagination {...props} />
                 }
@@ -240,12 +267,12 @@ function WordsListPresentation(props) {
               }
               //  Small Screen Specified: by view mode button or prop
               // -----------------------------------------
-              if (props.dictionaryListViewMode === VIEWMODE_SMALL_SCREEN) {
+              if (dictionaryListViewMode === VIEWMODE_SMALL_SCREEN) {
                 return getListSmallScreen(getListSmallScreenArg)
               }
               //  Large Screen Specified: by prop
               // -----------------------------------------
-              if (props.dictionaryListViewMode === VIEWMODE_LARGE_SCREEN) {
+              if (dictionaryListViewMode === VIEWMODE_LARGE_SCREEN) {
                 return getListLargeScreen(getListLargeScreenArg)
               }
               // =========================================
@@ -502,6 +529,7 @@ WordsListPresentation.propTypes = {
   navigationRouteSearch: object, // NOTE: redux saved search settings, using sortOrder & sortBy. TODO: is this a logical spot for sort?
   pushWindowPath: func,
   setRouteParams: func,
+  hrefCreate: string,
 }
 
 WordsListPresentation.defaultProps = {
