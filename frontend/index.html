@@ -243,26 +243,19 @@
       }
 
       .Navigation__searchContainer {
+        position: fixed;
+        display: flex;
+        flex-direction: column-reverse;
+        left: 0;
+        width: 100%;
+        z-index: 99999;
         padding-left: 5px;
         background-color: #a71212;
+        bottom: 0;
       }
 
       .Navigation__searchContainerInner>input[type=search] {
         width: 100%;
-      }
-
-      .Navigation__searchContainer {
-        position: fixed;
-        display: flex;
-        flex-direction: column-reverse;
-        bottom: -171px;
-        left: 0;
-        width: 100%;
-        z-index: 99999;
-      }
-
-      .Navigation__searchContainer--active {
-        bottom: 0;
       }
     }
   </style>
@@ -302,7 +295,7 @@
                   </div>
                   <!-- search -->
                   <form name="searchForm" id="searchForm" onSubmit="handleSearch()">
-                    <div class="Navigation__searchContainer Navigation__searchContainer--active jss1">
+                    <div class="Navigation__searchContainer Navigation__searchContainer--active">
                       <div class="Navigation__searchContainerInner">
                         <input aria-invalid="false" aria-label="Search FirstVoices" name="searchbox" placeholder="Search:" type="search" value="">
                         <input value="&#x1F50E;" type="submit" tabindex="0" />
