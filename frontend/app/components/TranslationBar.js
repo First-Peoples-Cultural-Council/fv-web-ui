@@ -24,6 +24,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Select from '@material-ui/core/Select'
 import Switch from '@material-ui/core/Switch'
 import { setLocale } from 'reducers/locale'
+import { updateCurrentUser } from 'reducers/nuxeo/index'
 
 import FVLabel from 'components/FVLabel'
 
@@ -32,6 +33,7 @@ class TranslationBar extends Component {
   static propTypes = {
     // REDUX: actions/dispatch/func
     setLocale: func.isRequired,
+    updateCurrentUser: func.isRequired,
     // REDUX: reducers/state
     currentLocale: string.isRequired,
   }
@@ -42,6 +44,10 @@ class TranslationBar extends Component {
 
   _handleChangeLocale = (value) => {
     this.props.setLocale(value)
+  }
+
+  _handleChangeImmersion = () => {
+    this.props.updateCurrentUser(!this.props.currentImmersionMode)
   }
 
   render() {
@@ -56,27 +62,6 @@ class TranslationBar extends Component {
               label="Immersion Mode"
             />
           </div>
-          {/* <FormControl>
-          <InputLabel>
-            Immersion Mode
-          </InputLabel>
-          <Switch checked={this.props.currentImmersionMode === 1} onChange={() => this._handleChangeImmersion()} /> */}
-          {/* <Select
-            value={this.props.currentImmersionMode}
-            onChange={(event) => {
-              this._handleChangeImmersion(event.target.value)
-            }}
-            className={localePicker}
-            inputProps={{
-              name: 'locale',
-              id: 'locale-select',
-            }}
-          >
-            <MenuItem value={0}>None</MenuItem>
-            <MenuItem value={1}>Immersive</MenuItem>
-            <MenuItem value={2}>Both Languages</MenuItem>
-          </Select> */}
-          {/* </FormControl> */}
 
           <FVLabel transKey="choose_lang" defaultStr="Translate FirstVoices To" transform="first" />
 
@@ -112,6 +97,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   setLocale,
+  updateCurrentUser,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TranslationBar)

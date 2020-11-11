@@ -56,15 +56,30 @@ function AdminMenuPresentation({ handleItemClick, tooltipTitle }) {
     >
       <FVLabel transKey="views.pages.explore.dialect.nav_categories" defaultStr="Categories" transform="words" />
     </MenuItem>,
-    // <MenuItem key="contributors" onClick={() => { handleItemClick('/contributors') }}>
-    //   <FVLabel transKey="views.pages.explore.dialect.nav_contributors" defaultStr="Contributors" transform="words" />
-    // </MenuItem>,
-    // <MenuItem key="recorders" onClick={() => { handleItemClick('/recorders') }}>
-    //   <FVLabel transKey="views.pages.explore.dialect.nav_recorders" defaultStr="Recorders" transform="words" />
-    // </MenuItem>,
-    // <MenuItem key="immersionPortal" onClick={() => { handleItemClick('/immersion') }}>
-    //   <FVLabel transKey="views.pages.explore.dialect.immersion" defaultStr="Immersion Portal" transform="words" />
-    // </MenuItem>,
+    <MenuItem
+      key="contributors"
+      onClick={() => {
+        handleItemClick('/contributors')
+      }}
+    >
+      <FVLabel transKey="views.pages.explore.dialect.nav_contributors" defaultStr="Contributors" transform="words" />
+    </MenuItem>,
+    <MenuItem
+      key="recorders"
+      onClick={() => {
+        handleItemClick('/recorders')
+      }}
+    >
+      <FVLabel transKey="views.pages.explore.dialect.nav_recorders" defaultStr="Recorders" transform="words" />
+    </MenuItem>,
+    <MenuItem
+      key="immersionPortal"
+      onClick={() => {
+        handleItemClick('/immersion')
+      }}
+    >
+      <FVLabel transKey="views.pages.explore.dialect.immersion" defaultStr="Immersion Portal" transform="words" />
+    </MenuItem>,
   ]
   return (
     <div className="AdminMenu">
