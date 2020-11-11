@@ -239,7 +239,7 @@ This is only applicable to the `Full Setup` where the front-end is deployed with
 You can deploy changes to the running docker container like so:
 ```
 cd frontend
-npm ci && npm build:production
+npm ci && npm run build:production
 docker exec fv-web-ui sh -c "rm -rf /opt/fv/www/*" && docker cp public/. fv-web-ui:/opt/fv/www
 ```
 
