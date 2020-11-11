@@ -162,7 +162,7 @@ export class Navigation extends Component {
     const isDialect = this.props.routeParams.hasOwnProperty('dialect_path')
     const computePortal = ProviderHelpers.getEntry(
       this.props.computePortal,
-      this.props.routeParams.dialect_path + '/Portal'
+      this.props.routeParams.dialect_path + '/Portal',
     )
     const portalLogo = selectn('response.contextParameters.portal.fv-portal:logo', computePortal)
     const avatarSrc = UIHelpers.getThumbnail(portalLogo, 'Thumbnail')
@@ -305,7 +305,7 @@ export class Navigation extends Component {
                       {
                         searchPopoverOpen: true,
                       },
-                      () => {}
+                      () => {},
                     )
                   }}
                   onBlur={() => {
@@ -449,7 +449,7 @@ export class Navigation extends Component {
       },
       () => {
         this.navigationSearchField.focus()
-      }
+      },
     )
   }
   _handleNavigationSearchSubmit = (e) => {

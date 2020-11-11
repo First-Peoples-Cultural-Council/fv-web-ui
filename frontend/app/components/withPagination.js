@@ -46,7 +46,7 @@ export default function withPagination(ComposedFilter, pageSize = 10, pageRange 
         currentPageIndex: 1,
       }
       ;['_onPageChange', '_onPageSizeChange', '_onGoToPage', '_getPageSizeControls'].forEach(
-        (method) => (this[method] = this[method].bind(this))
+        (method) => (this[method] = this[method].bind(this)),
       )
     }
 
@@ -57,7 +57,7 @@ export default function withPagination(ComposedFilter, pageSize = 10, pageRange 
         Object.assign({}, this.props.fetcherParams, {
           currentPageIndex: this.state.currentPageIndex,
           pageSize: currentPageSize,
-        })
+        }),
       )
 
       this.setState({ currentPageSize: currentPageSize })
@@ -68,7 +68,7 @@ export default function withPagination(ComposedFilter, pageSize = 10, pageRange 
         Object.assign({}, this.props.fetcherParams, {
           currentPageIndex: newPageIndex,
           pageSize: this.state.currentPageSize,
-        })
+        }),
       )
 
       this.setState({ currentPageIndex: newPageIndex })
