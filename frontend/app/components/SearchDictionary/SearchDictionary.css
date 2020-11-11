@@ -10,18 +10,11 @@
   padding-left: 0;
 }
 
-.SearchDictionary__data--title,
-.SearchDictionary__data.SearchDictionary__data--title,
-.data-table td.SearchDictionary__data--title {
-  text-align: center;
-  padding: 10px;
-}
-
 /* Note: text-decoration 'underline' will obscure some indigenous fonts that have a diacritic under a letter */
 .SearchDictionary__data--title .SearchDictionary__link,
 .SearchDictionary__link.SearchDictionary__link--indigenous {
   border-bottom: none;
-  text-align: center;
+  text-align: left;
   text-decoration: none;
   line-height: 1.2;
   border: 1px solid transparent;

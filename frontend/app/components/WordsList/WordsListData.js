@@ -453,8 +453,6 @@ function WordsListData({ children }) {
     listViewMode: listView.mode,
     metadata,
     navigationRouteSearch,
-    page: parseInt(routeParams.page, 10),
-    pageSize: parseInt(routeParams.pageSize, 10),
     pageTitle,
     dictionaryId,
     pushWindowPath,

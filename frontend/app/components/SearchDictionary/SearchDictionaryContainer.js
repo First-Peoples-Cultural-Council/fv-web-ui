@@ -15,16 +15,30 @@ import SearchDictionaryData from 'components/SearchDictionary/SearchDictionaryDa
 function SearchDictionaryContainer() {
   return (
     <SearchDictionaryData>
-      {({ computeEntities, entries, handleSearchSubmit, handleTextFieldChange, intl, searchTerm, newSearchValue }) => {
+      {({
+        computeEntities,
+        entries,
+        fetcher,
+        fetcherParams,
+        handleSearchSubmit,
+        handleTextFieldChange,
+        intl,
+        metadata,
+        newSearchValue,
+        searchTerm,
+      }) => {
         return (
           <SearchDictionaryPresentation
             computeEntities={computeEntities}
             entries={entries}
+            fetcher={fetcher}
+            fetcherParams={fetcherParams}
             handleSearchSubmit={handleSearchSubmit}
             handleTextFieldChange={handleTextFieldChange}
             intl={intl}
-            searchTerm={searchTerm}
+            metadata={metadata}
             newSearchValue={newSearchValue}
+            searchTerm={searchTerm}
           />
         )
       }}

@@ -12,9 +12,8 @@ import useWindowPath from 'dataSources/useWindowPath'
 
 // Common
 import ProviderHelpers from 'common/ProviderHelpers'
-import NavigationHelpers from 'common/NavigationHelpers'
+import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
 import StringHelpers, { CLEAN_FULLTEXT } from 'common/StringHelpers'
-import URLHelpers from 'common/URLHelpers'
 import { SECTIONS } from 'common/Constants'
 
 /**
@@ -32,20 +31,20 @@ function SearchDictionaryData({ children }) {
   const { properties } = useProperties()
   const { routeParams } = useRoute()
   const { computeSearchDocuments, searchDocuments } = useSearch()
-  const { pushWindowPath, replaceWindowPath } = useWindowPath()
+  const { pushWindowPath, replaceWindowPath, splitWindowPath } = useWindowPath()
 
   // Local State
-  const [newSearchValue, setNewSearchValue] = useState('')
+  const [newSearchValue, setNewSearchValue] = useState(routeParams.searchTerm)
   const [formattedData, setformattedData] = useState([])
 
   useEffect(() => {
-    fetchSearchResults(routeParams.page, routeParams.pageSize)
-    setNewSearchValue(routeParams.searchTerm)
+    fetchSearchResults()
   }, [])
 
   // Parsing response
   const extractComputeSearchDocuments = ProviderHelpers.getEntry(computeSearchDocuments, getQueryPath())
   const currentQueryAction = selectn('action', extractComputeSearchDocuments)
+  const metadata = selectn('response', extractComputeSearchDocuments)
   const entries = selectn('response.entries', extractComputeSearchDocuments)
   const computeEntities = Immutable.fromJS([
     {
@@ -54,35 +53,32 @@ function SearchDictionaryData({ children }) {
     },
   ])
 
+  // Format data when it is returned
   useEffect(() => {
     if (currentQueryAction === 'FV_SEARCH_DOCUMENTS_QUERY_SUCCESS') {
       formatData(entries)
     }
   }, [currentQueryAction])
 
-  useEffect(() => {
-    if (currentQueryAction === 'FV_SEARCH_DOCUMENTS_QUERY_SUCCESS') {
-      formatData(entries)
-      fetchSearchResults(routeParams.page, routeParams.pageSize)
-    }
-  }, [routeParams.area, routeParams.searchTerm, routeParams.page, routeParams.pageSize])
-
-  async function fetchSearchResults(pageIndex, pageSize) {
+  function fetchSearchResults({ pageIndex = 1, pageSize = 10 } = {}) {
     if (routeParams.searchTerm && routeParams.searchTerm !== '') {
       const _searchTerm = StringHelpers.clean(routeParams.searchTerm, CLEAN_FULLTEXT)
       const latestVersion = routeParams.area === SECTIONS ? ' AND ecm:isLatestVersion = 1' : ' '
-      await searchDocuments(
+      searchDocuments(
         getQueryPath(),
         `${latestVersion} AND ecm:primaryType IN ('FVWord','FVPhrase','FVBook') AND ( ecm:fulltext_dictionary_all_field = '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ fv:definitions/*/translation ILIKE '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ dc:title ILIKE '${_searchTerm}' )&currentPageIndex=${pageIndex -
           1}&pageSize=${pageSize}&sortBy=ecm:fulltextScore`
       )
-
-      // Update url
-      const href = `${URLHelpers.getContextPath()}/explore${getQueryPath()}/search/${
-        routeParams.searchTerm
-      }/${pageSize}/${pageIndex}`
-      NavigationHelpers.navigate(href, pushWindowPath, false)
     }
+  }
+
+  function getQueryPath() {
+    return (
+      routeParams.dialect_path ||
+      routeParams.language_path ||
+      routeParams.language_family_path ||
+      `/${properties.domain}/${routeParams.area || SECTIONS}/Data`
+    )
   }
 
   function formatData(data) {
@@ -129,15 +125,6 @@ function SearchDictionaryData({ children }) {
     setformattedData(_formattedData)
   }
 
-  function getQueryPath() {
-    return (
-      routeParams.dialect_path ||
-      routeParams.language_path ||
-      routeParams.language_family_path ||
-      `/${properties.domain}/${routeParams.area || SECTIONS}/Data`
-    )
-  }
-
   const handleTextFieldChange = (event) => {
     setNewSearchValue(event.target.value)
   }
@@ -149,6 +136,15 @@ function SearchDictionaryData({ children }) {
     }
   }
 
+  function fetcher({ currentPageIndex, pageSize }) {
+    const newUrl = appendPathArrayAfterLandmark({
+      pathArray: [pageSize, currentPageIndex],
+      splitWindowPath: splitWindowPath,
+      landmarkArray: [routeParams.searchTerm],
+    })
+    NavigationHelpers.navigate(`/${newUrl}`, pushWindowPath)
+  }
+
   return children({
     computeEntities,
     entries: formattedData,
@@ -157,6 +153,13 @@ function SearchDictionaryData({ children }) {
     intl,
     searchTerm: routeParams.searchTerm,
     newSearchValue,
+    // Props for withPagination
+    fetcher,
+    fetcherParams: {
+      currentPageIndex: routeParams.page,
+      pageSize: routeParams.pageSize,
+    },
+    metadata,
   })
 }
 // PROPTYPES
