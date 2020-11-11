@@ -41,7 +41,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
 import Link from 'components/Link'
-import { SEARCH_DATA_TYPE_PHRASE } from 'components/SearchDialect/constants'
+import { SEARCH_DATA_TYPE_PHRASE } from 'common/Constants'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,

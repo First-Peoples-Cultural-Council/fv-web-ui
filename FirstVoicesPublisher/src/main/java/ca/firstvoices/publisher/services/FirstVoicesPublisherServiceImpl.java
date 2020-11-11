@@ -468,9 +468,6 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
               // Set as single value
               proxyProperty.setValue(newProxyValues.get(0));
             }
-          } else {
-            log.warn(String.format("Tried to create or retrieve proxy "
-                + "for field %s on document %s but could not", workspaceFieldName, proxy.getId()));
           }
         }
       } catch (PropertyException e) {
@@ -491,7 +488,15 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
       transitionAndCreateProxy(session, parent);
     }
 
-    return publish(session, doc);
+    DocumentModel publishedDoc = publish(session, doc);
+
+    if (publishedDoc == null) {
+      // Warn if we could not create the proxy
+      log.warn(String.format("transitionAndCreateProxy failed "
+          + "for document %s of type %s", doc.getId(), doc.getType()));
+    }
+
+    return publishedDoc;
   }
 
   private DocumentModel getOrCreateParentProxy(DocumentModel doc) {
