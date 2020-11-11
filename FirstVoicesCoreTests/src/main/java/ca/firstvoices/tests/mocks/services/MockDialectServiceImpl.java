@@ -67,6 +67,10 @@ public class MockDialectServiceImpl implements MockDialectService {
   private static int maskCount = ThreadLocalRandom.current().nextInt(0, maskChars.length);
   private static int uniCount = ThreadLocalRandom.current().nextInt(0, uniChars.length);
 
+  private static final String TRANSLATION = "translation";
+  private static final String LANGUAGE = "language";
+  private static final String ENGLISH = "english";
+
   private static void generateRandomAlphabet() {
 
     Set<String> alphabetSet = new HashSet<>();
@@ -427,9 +431,9 @@ public class MockDialectServiceImpl implements MockDialectService {
       songDoc.setPropertyValue("fvbook:type", "song");
 
       ArrayList<Map<String, String>> titleTranslation = new ArrayList<>();
-      Map<String, String> titleTranslationEntry = new HashMap<String, String>();
-      titleTranslationEntry.put("translation", "Title Translation to English");
-      titleTranslationEntry.put("language", "english");
+      Map<String, String> titleTranslationEntry = new HashMap<>();
+      titleTranslationEntry.put(TRANSLATION, "Title Translation to English");
+      titleTranslationEntry.put(LANGUAGE, ENGLISH);
       titleTranslation.add(titleTranslationEntry);
       songDoc.setPropertyValue("fvbook:title_literal_translation", titleTranslation);
 
@@ -438,9 +442,9 @@ public class MockDialectServiceImpl implements MockDialectService {
       songDoc.setPropertyValue("fvbook:introduction", introduction);
 
       ArrayList<Map<String, String>> introductionTranslation = new ArrayList<>();
-      Map<String, String> introductionTranslationEntry = new HashMap<String, String>();
-      introductionTranslationEntry.put("translation", "Introduction translation to English");
-      introductionTranslationEntry.put("language", "english");
+      Map<String, String> introductionTranslationEntry = new HashMap<>();
+      introductionTranslationEntry.put(TRANSLATION, "Introduction translation to English");
+      introductionTranslationEntry.put(LANGUAGE, ENGLISH);
       introductionTranslation.add(introductionTranslationEntry);
       songDoc.setPropertyValue("fvbook:introduction_literal_translation", introductionTranslation);
 
@@ -458,9 +462,9 @@ public class MockDialectServiceImpl implements MockDialectService {
       for (int k = 0; k < numPages; k++) {
 
         ArrayList<Map<String, String>> pageTranslation = new ArrayList<>();
-        Map<String, String> pageTranslationEntry = new HashMap<String, String>();
-        pageTranslationEntry.put("language", "english");
-        pageTranslationEntry.put("translation", "Page translation to English");
+        Map<String, String> pageTranslationEntry = new HashMap<>();
+        pageTranslationEntry.put(LANGUAGE, ENGLISH);
+        pageTranslationEntry.put(TRANSLATION, "Page translation to English");
         pageTranslation.add(pageTranslationEntry);
 
         DocumentModelList fvPage = new DocumentModelListImpl();
@@ -488,9 +492,9 @@ public class MockDialectServiceImpl implements MockDialectService {
       storyDoc.setPropertyValue("fvbook:type", "story");
 
       ArrayList<Map<String, String>> titleTranslation = new ArrayList<>();
-      Map<String, String> titleTranslationEntry = new HashMap<String, String>();
-      titleTranslationEntry.put("translation", "Title Translation to English");
-      titleTranslationEntry.put("language", "english");
+      Map<String, String> titleTranslationEntry = new HashMap<>();
+      titleTranslationEntry.put(TRANSLATION, "Title Translation to English");
+      titleTranslationEntry.put(LANGUAGE, ENGLISH);
       titleTranslation.add(titleTranslationEntry);
       storyDoc.setPropertyValue("fvbook:title_literal_translation", titleTranslation);
 
@@ -499,9 +503,9 @@ public class MockDialectServiceImpl implements MockDialectService {
       storyDoc.setPropertyValue("fvbook:introduction", introduction);
 
       ArrayList<Map<String, String>> introductionTranslation = new ArrayList<>();
-      Map<String, String> introductionTranslationEntry = new HashMap<String, String>();
-      introductionTranslationEntry.put("translation", "Introduction translation to English");
-      introductionTranslationEntry.put("language", "english");
+      Map<String, String> introductionTranslationEntry = new HashMap<>();
+      introductionTranslationEntry.put(TRANSLATION, "Introduction translation to English");
+      introductionTranslationEntry.put(LANGUAGE, ENGLISH);
       introductionTranslation.add(introductionTranslationEntry);
       storyDoc.setPropertyValue("fvbook:introduction_literal_translation", introductionTranslation);
 
@@ -519,9 +523,9 @@ public class MockDialectServiceImpl implements MockDialectService {
       for (int k = 0; k < numPages; k++) {
 
         ArrayList<Map<String, String>> pageTranslation = new ArrayList<>();
-        Map<String, String> pageTranslationEntry = new HashMap<String, String>();
-        pageTranslationEntry.put("language", "english");
-        pageTranslationEntry.put("translation", "Page translation to English");
+        Map<String, String> pageTranslationEntry = new HashMap<>();
+        pageTranslationEntry.put(LANGUAGE, ENGLISH);
+        pageTranslationEntry.put(TRANSLATION, "Page translation to English");
         pageTranslation.add(pageTranslationEntry);
 
         DocumentModelList fvPage = new DocumentModelListImpl();
