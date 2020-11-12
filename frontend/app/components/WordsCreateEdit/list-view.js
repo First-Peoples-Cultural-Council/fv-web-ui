@@ -416,11 +416,6 @@ class WordsListView extends DataListView {
             hasViewModeButtons={this.props.hasViewModeButtons}
             rowClickHandler={this.props.rowClickHandler}
             hasSorting={this.props.hasSorting}
-            // SEARCH:
-            handleSearch={this.props.handleSearch}
-            hasSearch={this.props.hasSearch}
-            resetSearch={this.props.resetSearch}
-            searchUi={this.props.searchUi}
           />
         )}
       </PromiseWrapper>
