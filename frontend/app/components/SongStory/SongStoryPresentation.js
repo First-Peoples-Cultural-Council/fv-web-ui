@@ -71,7 +71,7 @@ SongStoryPresentation.propTypes = {
   bookEntries: array,
   bookOpen: bool,
   closeBookAction: func,
-  computeEntities: object,
+  computeEntities: object.isRequired,
   defaultLanguage: string,
   fetchListViewData: func,
   intl: object,
