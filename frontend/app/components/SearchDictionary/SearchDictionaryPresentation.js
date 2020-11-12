@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper'
 import FVButton from 'components/FVButton'
 import PromiseWrapper from 'components/PromiseWrapper'
 import SearchDictionaryListLargeScreen from 'components/SearchDictionary/SearchDictionaryListLargeScreen'
-import withPagination from 'components/withPagination'
+import Pagination from 'components/Pagination'
 
 import '!style-loader!css-loader!./SearchDictionary.css'
 
@@ -23,18 +23,19 @@ import '!style-loader!css-loader!./SearchDictionary.css'
  */
 function SearchDictionaryPresentation({
   computeEntities,
-  entries,
   handleSearchSubmit,
   handleTextFieldChange,
+  hasItems,
   intl,
+  items,
   newSearchValue,
   searchTerm,
   // Props for withPagination
-  fetcher,
-  fetcherParams,
-  metadata,
+  changePagination,
+  page,
+  pageSize,
+  resultsCount,
 }) {
-  const SearchDictionaryListLargeScreenWithPagination = withPagination(SearchDictionaryListLargeScreen, 10)
   return (
     <div className="SearchDictionary">
       <Paper className="container">
@@ -61,37 +62,40 @@ function SearchDictionaryPresentation({
           </div>
         </div>
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
-          {entries.length === 0 ? (
-            <div className={'WordsList WordsList--noData'}>Sorry, no results were found for this search.</div>
-          ) : (
-            <SearchDictionaryListLargeScreenWithPagination
-              entries={entries}
-              intl={intl}
-              // withPagination params
-              fetcher={fetcher}
-              fetcherParams={fetcherParams}
-              metadata={metadata}
-            />
-          )}
+          <Pagination.Container
+            pageSize={pageSize}
+            page={page}
+            resultsCount={resultsCount}
+            onPaginationUpdate={(pagePageSize) => {
+              changePagination(pagePageSize)
+            }}
+          >
+            {hasItems === true && <SearchDictionaryListLargeScreen intl={intl} items={items} />}
+            {hasItems === false && (
+              <div className={'WordsList WordsList--noData'}>Sorry, no results were found for this search.</div>
+            )}
+          </Pagination.Container>
         </PromiseWrapper>
       </Paper>
     </div>
   )
 }
 // PROPTYPES
-const { array, func, object, string } = PropTypes
+const { array, bool, func, number, object, string } = PropTypes
 SearchDictionaryPresentation.propTypes = {
   computeEntities: object,
-  entries: array,
   handleSearchSubmit: func,
   handleTextFieldChange: func,
+  hasItems: bool,
   intl: object,
+  items: array,
   newSearchValue: string,
   searchTerm: string,
   // Props for withPagination
-  fetcher: func,
-  fetcherParams: object,
-  metadata: object,
+  changePagination: func,
+  page: number,
+  pageSize: number,
+  resultsCount: number,
 }
 
 export default SearchDictionaryPresentation

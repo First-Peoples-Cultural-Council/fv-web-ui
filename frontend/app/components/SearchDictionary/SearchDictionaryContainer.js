@@ -16,28 +16,32 @@ function SearchDictionaryContainer() {
   return (
     <SearchDictionaryData>
       {({
+        changePagination,
         computeEntities,
-        entries,
-        fetcher,
-        fetcherParams,
         handleSearchSubmit,
         handleTextFieldChange,
+        hasItems,
         intl,
-        metadata,
+        items,
         newSearchValue,
+        page,
+        pageSize,
+        resultsCount,
         searchTerm,
       }) => {
         return (
           <SearchDictionaryPresentation
+            changePagination={changePagination}
             computeEntities={computeEntities}
-            entries={entries}
-            fetcher={fetcher}
-            fetcherParams={fetcherParams}
             handleSearchSubmit={handleSearchSubmit}
             handleTextFieldChange={handleTextFieldChange}
+            hasItems={hasItems}
             intl={intl}
-            metadata={metadata}
+            items={items}
             newSearchValue={newSearchValue}
+            page={page}
+            pageSize={pageSize}
+            resultsCount={resultsCount}
             searchTerm={searchTerm}
           />
         )

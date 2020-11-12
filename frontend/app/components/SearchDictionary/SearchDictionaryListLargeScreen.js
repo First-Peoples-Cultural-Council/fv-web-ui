@@ -25,7 +25,7 @@ import '!style-loader!css-loader!./SearchDictionary.css'
  *
  * @returns {node} jsx markup
  */
-function SearchDictionaryListLargeScreen({ entries, intl }) {
+function SearchDictionaryListLargeScreen({ intl, items }) {
   const DEFAULT_LANGUAGE = 'english'
   return (
     <div className="SearchDictionaryListLargeScreen">
@@ -40,7 +40,7 @@ function SearchDictionaryListLargeScreen({ entries, intl }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {entries.map(({ uid, title, href, translations, audio, picture, type }) => (
+          {items.map(({ uid, title, href, translations, audio, picture, type }) => (
             <TableRow key={uid}>
               <TableCell component="th" scope="row">
                 <Link className="SearchDictionary__link SearchDictionary__link--indigenous" href={href}>
@@ -91,8 +91,8 @@ function SearchDictionaryListLargeScreen({ entries, intl }) {
 // PROPTYPES
 const { array, object } = PropTypes
 SearchDictionaryListLargeScreen.propTypes = {
-  entries: array,
   intl: object,
+  items: array,
 }
 
 export default SearchDictionaryListLargeScreen

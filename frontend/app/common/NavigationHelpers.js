@@ -94,7 +94,6 @@ export default {
   // Generate a UID link from a Nuxeo document path
   generateUIDPath: (siteTheme, item, pluralPathId) => {
     let path = '/' + siteTheme + selectn('path', item)
-    // const type = selectn('type', item)
 
     switch (pluralPathId) {
       case 'words':
