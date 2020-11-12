@@ -20,7 +20,7 @@ const GridView = React.lazy(() => import('components/LearnBase/grid-view'))
 const DictionaryList = React.lazy(() => import('components/DictionaryList/DictionaryList'))
 
 const DocumentListView = (props) => {
-  const defaultProps = {
+  const commonProps = {
     exportDialectColumns: props.exportDialectColumns,
     exportDialectExportElement: props.exportDialectExportElement,
     exportDialectLabel: props.exportDialectLabel,
@@ -54,6 +54,7 @@ const DocumentListView = (props) => {
     // Listview: computed data
     computedData: props.computedData,
     // Search
+    childrenSearch: props.childrenSearch,
     handleSearch: props.handleSearch,
     resetSearch: props.resetSearch,
     searchUi: props.searchUi,
@@ -79,7 +80,7 @@ const DocumentListView = (props) => {
 
   let toRender = null
   if (props.gridListView) {
-    const gridViewProps = Object.assign(defaultProps, props.gridViewProps)
+    const gridViewProps = Object.assign(commonProps, props.gridViewProps)
 
     if (props.pagination) {
       const GridViewWithPagination = withPagination(GridView, 8)
@@ -98,7 +99,7 @@ const DocumentListView = (props) => {
   } else {
     toRender = (
       <Suspense fallback={<div>Loading...</div>}>
-        <DictionaryList {...defaultProps} />
+        <DictionaryList {...commonProps} />
       </Suspense>
     )
   }
@@ -106,7 +107,6 @@ const DocumentListView = (props) => {
 }
 
 const { any, array, bool, func, number, object, string } = PropTypes
-
 DocumentListView.propTypes = {
   // Export
   hasExportDialect: bool,
