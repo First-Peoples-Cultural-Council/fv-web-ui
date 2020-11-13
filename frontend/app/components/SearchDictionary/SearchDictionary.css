@@ -25,6 +25,7 @@
   display: inline-block;
   font-size: 2rem;
 }
+
 .SearchDictionary__data--title .SearchDictionary__link:hover,
 .SearchDictionary__link.SearchDictionary__link--indigenous:hover {
   background-color: #fbe8e8;
@@ -33,9 +34,19 @@
   box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 5px 5px rgba(0, 0, 0, 0.04);
 }
 
+.SearchDictionary__rowHeader {
+  border-bottom: 1px solid rgba(168, 168, 168);
+  background-image: linear-gradient(rgb(247, 247, 247) 0%, rgb(239, 239, 239) 13%, rgb(230, 230, 230) 100%);
+}
+
 .SearchDictionary__row {
   border-bottom: 1px dotted #a8a8a8;
+}
+.SearchDictionary__row--a {
   background: #fff;
+}
+.SearchDictionary__row--b {
+  background: #f2f7ff;
 }
 
 .SearchDictionary__itemThumbnail {

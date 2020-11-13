@@ -30,8 +30,8 @@ function SearchDictionaryListLargeScreen({ intl, items }) {
   return (
     <div className="SearchDictionaryListLargeScreen">
       <Table>
-        <TableHead className="SearchDictionary__row">
-          <TableRow>
+        <TableHead>
+          <TableRow className="SearchDictionary__rowHeader">
             <TableCell>{intl.trans('entry', 'Entry', 'first')}</TableCell>
             <TableCell>{intl.trans('translation', 'Translation', 'first')}</TableCell>
             <TableCell>{intl.trans('audio', 'Audio', 'first')}</TableCell>
@@ -40,8 +40,11 @@ function SearchDictionaryListLargeScreen({ intl, items }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {items.map(({ uid, title, href, translations, audio, picture, type }) => (
-            <TableRow key={uid}>
+          {items.map(({ uid, title, href, translations, audio, picture, type }, index) => (
+            <TableRow
+              key={uid}
+              className={`SearchDictionary__row ${index % 2 ? 'SearchDictionary__row--b' : 'SearchDictionary__row--a'}`}
+            >
               <TableCell component="th" scope="row">
                 <Link className="SearchDictionary__link SearchDictionary__link--indigenous" href={href}>
                   {title}
