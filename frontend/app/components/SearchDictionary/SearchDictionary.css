@@ -1,17 +1,27 @@
 .SearchDictionary--noData {
   margin: 20px 0;
 }
-.SearchDictionary__definitionList {
-  padding-left: 25px;
+
+.SearchDictionary__rowHeader {
+  border-bottom: 1px solid rgba(168, 168, 168);
+  background-image: linear-gradient(rgb(247, 247, 247) 0%, rgb(239, 239, 239) 13%, rgb(230, 230, 230) 100%);
 }
 
-.SearchDictionary__definitionList--single {
-  list-style-type: none;
-  padding-left: 0;
+.SearchDictionary__rowHeaderCell {
+  font-size: 1.6rem;
+}
+
+.SearchDictionary__row {
+  border-bottom: 1px dotted #a8a8a8;
+}
+.SearchDictionary__row--a {
+  background: #fff;
+}
+.SearchDictionary__row--b {
+  background: #f2f7ff;
 }
 
 /* Note: text-decoration 'underline' will obscure some indigenous fonts that have a diacritic under a letter */
-.SearchDictionary__data--title .SearchDictionary__link,
 .SearchDictionary__link.SearchDictionary__link--indigenous {
   border-bottom: none;
   text-align: left;
@@ -26,7 +36,6 @@
   font-size: 2rem;
 }
 
-.SearchDictionary__data--title .SearchDictionary__link:hover,
 .SearchDictionary__link.SearchDictionary__link--indigenous:hover {
   background-color: #fbe8e8;
   color: #820000;
@@ -34,26 +43,26 @@
   box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 5px 5px rgba(0, 0, 0, 0.04);
 }
 
-.SearchDictionary__rowHeader {
-  border-bottom: 1px solid rgba(168, 168, 168);
-  background-image: linear-gradient(rgb(247, 247, 247) 0%, rgb(239, 239, 239) 13%, rgb(230, 230, 230) 100%);
+.SearchDictionary__definitionList {
+  padding-left: 25px;
+  font-size: 1.6rem;
 }
 
-.SearchDictionary__row {
-  border-bottom: 1px dotted #a8a8a8;
-}
-.SearchDictionary__row--a {
-  background: #fff;
-}
-.SearchDictionary__row--b {
-  background: #f2f7ff;
+.SearchDictionary__definitionList--single {
+  list-style-type: none;
+  padding-left: 0;
+  font-size: 1.6rem;
 }
 
-.SearchDictionary__itemThumbnail {
+.SearchDictionary__pictureThumbnail {
   max-width: 62px;
   max-height: 45px;
 }
 
+.SearchDictionary__type {
+  font-size: 1.6rem;
+}
+/* Filter List */
 .SearchDictionary__filters {
   font-size: 16px;
   line-height: 1.2;

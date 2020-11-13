@@ -32,11 +32,21 @@ function SearchDictionaryListLargeScreen({ intl, items }) {
       <Table>
         <TableHead>
           <TableRow className="SearchDictionary__rowHeader">
-            <TableCell>{intl.trans('entry', 'Entry', 'first')}</TableCell>
-            <TableCell>{intl.trans('translation', 'Translation', 'first')}</TableCell>
-            <TableCell>{intl.trans('audio', 'Audio', 'first')}</TableCell>
-            <TableCell>{intl.trans('picture', 'Picture', 'first')}</TableCell>
-            <TableCell>{intl.trans('type', 'Type', 'first')}</TableCell>
+            <TableCell>
+              <div className="SearchDictionary__rowHeaderCell">{intl.trans('entry', 'Entry', 'first')}</div>
+            </TableCell>
+            <TableCell>
+              <div className="SearchDictionary__rowHeaderCell">{intl.trans('translation', 'Translation', 'first')}</div>
+            </TableCell>
+            <TableCell>
+              <div className="SearchDictionary__rowHeaderCell">{intl.trans('audio', 'Audio', 'first')}</div>
+            </TableCell>
+            <TableCell>
+              <div className="SearchDictionary__rowHeaderCell">{intl.trans('picture', 'Picture', 'first')}</div>
+            </TableCell>
+            <TableCell>
+              <div className="SearchDictionary__rowHeaderCell">{intl.trans('type', 'Type', 'first')}</div>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -77,13 +87,15 @@ function SearchDictionaryListLargeScreen({ intl, items }) {
               <TableCell>
                 {picture ? (
                   <img
-                    className="SearchDictionary__itemThumbnail PrintHide"
+                    className="SearchDictionary__pictureThumbnail PrintHide"
                     src={UIHelpers.getThumbnail(picture, 'Thumbnail')}
                     alt={title}
                   />
                 ) : null}
               </TableCell>
-              <TableCell>{type}</TableCell>
+              <TableCell>
+                <div className="SearchDictionary__type">{type}</div>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
