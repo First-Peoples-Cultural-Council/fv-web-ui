@@ -91,6 +91,21 @@ public class CharacterEnricher extends AbstractJsonEnricher<DocumentModel> {
         jsonObj.set("related_audio", audioJsonArray);
       }
 
+      // Process "fv:related_videos" values
+      String[] videoIds = 
+          (!doc.isProxy()) ? (String[]) doc.getProperty("fvcore", "related_videos")
+              : (String[]) doc.getProperty("fvproxy", "proxied_videos");
+      if (videoIds != null) {
+        ArrayNode videoJsonArray = mapper.createArrayNode();
+        for (String videoId : videoIds) {
+          ObjectNode binaryJsonObj = EnricherUtils.getBinaryPropertiesJsonObject(videoId, session);
+          if (binaryJsonObj != null) {
+            videoJsonArray.add(binaryJsonObj);
+          }
+        }
+        jsonObj.set("related_videos", videoJsonArray);
+      }
+
       // Process "fvcharacter:related_words" values
       String[] wordIds =
           (!doc.isProxy()) ? (String[]) doc.getProperty("fvcharacter", "related_words")
