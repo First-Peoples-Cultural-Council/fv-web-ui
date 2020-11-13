@@ -23,6 +23,9 @@ import '!style-loader!css-loader!./SearchDictionary.css'
  */
 function SearchDictionaryPresentation({
   computeEntities,
+  currentFilter,
+  filters,
+  handleFilter,
   handleSearchSubmit,
   handleTextFieldChange,
   hasItems,
@@ -36,9 +39,28 @@ function SearchDictionaryPresentation({
   pageSize,
   resultsCount,
 }) {
+  const filterListItems = filters.map((filter) => {
+    const filterIsActiveClass = currentFilter == filter.type ? 'SearchDictionary__filterListItem--active' : ''
+    return (
+      <li
+        key={filter.type}
+        id={'SearchDictionary__filterListItem' + filter.label}
+        className={`SearchDictionary__filterListItem ${filterIsActiveClass}`}
+        onClick={() => {
+          handleFilter(filter.type)
+        }}
+      >
+        {filter.label}
+      </li>
+    )
+  })
   return (
     <div className="SearchDictionary">
-      <Paper className="container">
+      <div className="SearchDictionary__filters col-xs-12 col-md-2">
+        <h2>{intl.trans('filters', 'Filters', 'first')}</h2>
+        <ul className="SearchDictionary__filterList">{filterListItems}</ul>
+      </div>
+      <Paper className="container col-xs-12 col-md-10">
         <h1 className="title">
           <em>{searchTerm}</em> Search Results
         </h1>
@@ -61,6 +83,7 @@ function SearchDictionaryPresentation({
             </FVButton>
           </div>
         </div>
+
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
           <Pagination.Container
             pageSize={pageSize}
@@ -84,6 +107,9 @@ function SearchDictionaryPresentation({
 const { array, bool, func, number, object, string } = PropTypes
 SearchDictionaryPresentation.propTypes = {
   computeEntities: object,
+  currentFilter: string,
+  filters: array,
+  handleFilter: func,
   handleSearchSubmit: func,
   handleTextFieldChange: func,
   hasItems: bool,

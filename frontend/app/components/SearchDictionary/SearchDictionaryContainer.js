@@ -18,6 +18,9 @@ function SearchDictionaryContainer() {
       {({
         changePagination,
         computeEntities,
+        currentFilter,
+        filters,
+        handleFilter,
         handleSearchSubmit,
         handleTextFieldChange,
         hasItems,
@@ -33,6 +36,9 @@ function SearchDictionaryContainer() {
           <SearchDictionaryPresentation
             changePagination={changePagination}
             computeEntities={computeEntities}
+            currentFilter={currentFilter}
+            filters={filters}
+            handleFilter={handleFilter}
             handleSearchSubmit={handleSearchSubmit}
             handleTextFieldChange={handleTextFieldChange}
             hasItems={hasItems}

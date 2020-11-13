@@ -37,6 +37,7 @@ function SearchDictionaryData({ children }) {
 
   // Local State
   const [newSearchValue, setNewSearchValue] = useState(routeParams.searchTerm)
+  const [currentFilter, setCurrentFilter] = useState("FVWord','FVPhrase','FVBook")
 
   const computedSearchDocuments = ProviderHelpers.getEntry(computeSearchDocuments, getQueryPath())
   const entries = selectn('response.entries', computedSearchDocuments)
@@ -48,9 +49,17 @@ function SearchDictionaryData({ children }) {
     },
   ])
 
+  // Filters
+  const filters = [
+    { type: "FVWord','FVPhrase','FVBook", label: 'All' },
+    { type: 'FVWord', label: 'Words' },
+    { type: 'FVPhrase', label: 'Phrases' },
+    { type: 'FVBook', label: 'Songs/Stories' },
+  ]
+
   useEffect(() => {
     fetchSearchResults()
-  }, [routeParams.page, routeParams.pageSize])
+  }, [currentFilter, routeParams.page, routeParams.pageSize])
 
   function fetchSearchResults() {
     if (routeParams.searchTerm && routeParams.searchTerm !== '') {
@@ -58,7 +67,7 @@ function SearchDictionaryData({ children }) {
       const latestVersion = routeParams.area === SECTIONS ? ' AND ecm:isLatestVersion = 1' : ' '
       searchDocuments(
         getQueryPath(),
-        `${latestVersion} AND ecm:primaryType IN ('FVWord','FVPhrase','FVBook') AND ( ecm:fulltext_dictionary_all_field = '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ fv:definitions/*/translation ILIKE '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ dc:title ILIKE '${_searchTerm}' )&currentPageIndex=${routeParams.page -
+        `${latestVersion} AND ecm:primaryType IN ('${currentFilter}') AND ( ecm:fulltext_dictionary_all_field = '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ fv:definitions/*/translation ILIKE '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ dc:title ILIKE '${_searchTerm}' )&currentPageIndex=${routeParams.page -
           1}&pageSize=${routeParams.pageSize}&sortBy=ecm:fulltextScore`
       )
     }
@@ -129,13 +138,20 @@ function SearchDictionaryData({ children }) {
     }
   }
 
+  const handleFilter = (type) => {
+    setCurrentFilter(type)
+  }
+
   return children({
     computeEntities,
-    items: formattedData,
-    hasItems: formattedData && formattedData.length !== 0,
+    currentFilter,
+    filters,
+    handleFilter,
     handleSearchSubmit,
     handleTextFieldChange,
+    hasItems: formattedData && formattedData.length !== 0,
     intl,
+    items: formattedData,
     searchTerm: routeParams.searchTerm,
     newSearchValue,
     // Props for Pagination
