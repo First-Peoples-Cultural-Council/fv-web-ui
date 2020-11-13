@@ -1,18 +1,18 @@
 /*
-Copyright 2016 First People's Cultural Council
+ Copyright 2016 First People's Cultural Council
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+ http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ConfGlobal from 'common/conf/local.js'
@@ -20,7 +20,7 @@ import ConfGlobal from 'common/conf/local.js'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchPortals } from 'reducers/fvPortal'
+import { fetchPortalsFromCustomAPI } from 'reducers/fvPortal'
 import { fetchDirectory } from 'reducers/directory'
 import { pushWindowPath } from 'reducers/windowPath'
 
@@ -47,7 +47,7 @@ export class ExploreDialects extends Component {
     computeLogin: object.isRequired,
     properties: object.isRequired,
     // REDUX: actions/dispatch/func
-    fetchPortals: func.isRequired,
+    fetchPortalsFromCustomAPI: func.isRequired,
     pushWindowPath: func.isRequired,
     fetchDirectory: func.isRequired,
   }
@@ -115,7 +115,8 @@ export class ExploreDialects extends Component {
 
     let content = (
       <div>
-        <CircularProgress variant="indeterminate" style={{ verticalAlign: 'middle' }} /> Loading
+        <CircularProgress variant="indeterminate" style={{ verticalAlign: 'middle' }} />
+        Loading
       </div>
     )
     if (this.props.computePortals && this.props.computePortals.success) {
@@ -140,11 +141,7 @@ export class ExploreDialects extends Component {
   }
 
   _fetchData = (newProps) => {
-    newProps.fetchPortals(
-      'get_dialects',
-      { 'enrichers.document': 'lightancestry,lightportal', properties: '' },
-      { queryParams: newProps.routeParams.area }
-    )
+    newProps.fetchPortalsFromCustomAPI({ area: newProps.routeParams.area })
     newProps.fetchDirectory('parent_languages', 2000, true)
   }
 
@@ -191,7 +188,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  fetchPortals,
+  fetchPortalsFromCustomAPI,
   fetchDirectory,
   pushWindowPath,
 }
