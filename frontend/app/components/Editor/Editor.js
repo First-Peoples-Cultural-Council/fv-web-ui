@@ -37,6 +37,7 @@ export class Editor extends Component {
       [{ list: 'ordered' }, { list: 'bullet' }],
       ['link', 'video'],
       ['clean'],
+      [{ 'color': [] }],
     ],
   }
 
