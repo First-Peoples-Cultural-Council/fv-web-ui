@@ -8,11 +8,10 @@ import useIntl from 'dataSources/useIntl'
 import useProperties from 'dataSources/useProperties'
 import useRoute from 'dataSources/useRoute'
 import useSearch from 'dataSources/useSearch'
-import useWindowPath from 'dataSources/useWindowPath'
 
 // Common
 import ProviderHelpers from 'common/ProviderHelpers'
-import NavigationHelpers from 'common/NavigationHelpers'
+import NavigationHelpers, { getSearchObjectAsUrlQuery } from 'common/NavigationHelpers'
 import useNavigationHelpers from 'common/useNavigationHelpers'
 import StringHelpers, { CLEAN_FULLTEXT } from 'common/StringHelpers'
 import { SECTIONS } from 'common/Constants'
@@ -29,14 +28,14 @@ import { SECTIONS } from 'common/Constants'
 function SearchDictionaryData({ children }) {
   //DataSources
   const { intl } = useIntl()
-  const { changePagination } = useNavigationHelpers()
+  const { getSearchObject, navigate } = useNavigationHelpers()
   const { properties } = useProperties()
   const { routeParams } = useRoute()
   const { computeSearchDocuments, searchDocuments } = useSearch()
-  const { replaceWindowPath } = useWindowPath()
+  const { page = 1, pageSize = 10, query } = getSearchObject()
 
   // Local State
-  const [newSearchValue, setNewSearchValue] = useState(routeParams.searchTerm)
+  const [newSearchValue, setNewSearchValue] = useState(query)
   const [currentFilter, setCurrentFilter] = useState("FVWord','FVPhrase','FVBook")
 
   const computedSearchDocuments = ProviderHelpers.getEntry(computeSearchDocuments, getQueryPath())
@@ -59,16 +58,17 @@ function SearchDictionaryData({ children }) {
 
   useEffect(() => {
     fetchSearchResults()
-  }, [currentFilter, routeParams.page, routeParams.pageSize])
+  }, [currentFilter, page, pageSize, query])
 
   function fetchSearchResults() {
-    if (routeParams.searchTerm && routeParams.searchTerm !== '') {
-      const _searchTerm = StringHelpers.clean(routeParams.searchTerm, CLEAN_FULLTEXT)
+    if (query && query !== '') {
+      const _searchTerm = StringHelpers.clean(query, CLEAN_FULLTEXT)
       const latestVersion = routeParams.area === SECTIONS ? ' AND ecm:isLatestVersion = 1' : ' '
       searchDocuments(
         getQueryPath(),
-        `${latestVersion} AND ecm:primaryType IN ('${currentFilter}') AND ( ecm:fulltext_dictionary_all_field = '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ fv:definitions/*/translation ILIKE '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ dc:title ILIKE '${_searchTerm}' )&currentPageIndex=${routeParams.page -
-          1}&pageSize=${routeParams.pageSize}&sortBy=ecm:fulltextScore`
+        `${latestVersion} AND ecm:primaryType IN ('${currentFilter}') AND ( ecm:fulltext_dictionary_all_field = '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ fv:definitions/*/translation ILIKE '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ dc:title ILIKE '${_searchTerm}' )&currentPageIndex=${Number(
+          page
+        ) - 1}&pageSize=${pageSize}&sortBy=ecm:fulltextScore`
       )
     }
   }
@@ -133,13 +133,22 @@ function SearchDictionaryData({ children }) {
 
   const handleSearchSubmit = () => {
     if (newSearchValue && newSearchValue !== '') {
-      const finalPath = NavigationHelpers.generateStaticURL('explore' + getQueryPath() + '/search/' + newSearchValue)
-      replaceWindowPath(finalPath)
+      navigate(
+        `${window.location.pathname}?${getSearchObjectAsUrlQuery(
+          Object.assign({}, getSearchObject(), { query: newSearchValue })
+        )}`
+      )
     }
   }
 
   const handleFilter = (type) => {
     setCurrentFilter(type)
+  }
+
+  const changePagination = (pagePageSize) => {
+    navigate(
+      `${window.location.pathname}?${getSearchObjectAsUrlQuery(Object.assign({}, getSearchObject(), pagePageSize))}`
+    )
   }
 
   return children({
@@ -156,8 +165,8 @@ function SearchDictionaryData({ children }) {
     newSearchValue,
     // Props for Pagination
     changePagination,
-    page: Number(routeParams.page),
-    pageSize: Number(routeParams.pageSize),
+    page: Number(page),
+    pageSize: Number(pageSize),
     resultsCount: selectn('response.resultsCount', computedSearchDocuments),
   })
 }

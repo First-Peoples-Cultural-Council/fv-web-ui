@@ -60,10 +60,12 @@ function SearchDictionaryPresentation({
         <h2>{intl.trans('filters', 'Filters', 'first')}</h2>
         <ul className="SearchDictionary__filterList">{filterListItems}</ul>
       </div>
+
       <Paper className="container col-xs-12 col-md-10">
         <h1 className="title">
           <em>{searchTerm}</em> Search Results
         </h1>
+
         <div className="SearchDictionary__form">
           <div className="SearchDictionary__formPrimary">
             <input
@@ -85,19 +87,21 @@ function SearchDictionaryPresentation({
         </div>
 
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
-          <Pagination.Container
-            pageSize={pageSize}
-            page={page}
-            resultsCount={resultsCount}
-            onPaginationUpdate={(pagePageSize) => {
-              changePagination(pagePageSize)
-            }}
-          >
-            {hasItems === true && <SearchDictionaryListLargeScreen intl={intl} items={items} />}
-            {hasItems === false && (
-              <div className={'WordsList WordsList--noData'}>Sorry, no results were found for this search.</div>
-            )}
-          </Pagination.Container>
+          {hasItems === true && (
+            <Pagination.Container
+              pageSize={pageSize}
+              page={page}
+              resultsCount={resultsCount}
+              onPaginationUpdate={(pagePageSize) => {
+                changePagination(pagePageSize)
+              }}
+            >
+              <SearchDictionaryListLargeScreen intl={intl} items={items} />
+            </Pagination.Container>
+          )}
+          {hasItems === false && (
+            <div className={'WordsList WordsList--noData'}>Sorry, no results were found for this search.</div>
+          )}
         </PromiseWrapper>
       </Paper>
     </div>
