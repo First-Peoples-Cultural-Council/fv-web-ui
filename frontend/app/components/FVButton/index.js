@@ -74,6 +74,7 @@ FVButton.propTypes = {
 }
 FVButton.defaultProps = {
   isFab: false,
+  classes: {},
 }
 
 export default withStyles(styles)(FVButton)
