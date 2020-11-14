@@ -17,7 +17,8 @@
     "es6": true,
     "browser": true,
     "node": true,
-    "cypress/globals": true
+    "cypress/globals": true,
+    "jest": true
   },
   "rules": {
     "block-scoped-var": 0, // http://eslint.org/docs/rules/block-scoped-var

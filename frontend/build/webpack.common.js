@@ -1,32 +1,30 @@
 // Webpack
 const webpack = require('webpack')
+const paths = require('./webpack.paths')
+const alias = require('./webpack.alias')
 
 // Path
 const path = require('path')
 
 // Root Directories
-const frontEndRootDirectory = path.resolve(__dirname, '..')
-const rootDirectory = path.resolve(frontEndRootDirectory, '..')
+const frontEndRootDirectory = paths.frontEndRootDirectory
+const rootDirectory = paths.rootDirectory
 
 // Source Directories
-const sourceDirectory = path.resolve(frontEndRootDirectory, 'app')
-const sourceAssetsDirectory = path.resolve(sourceDirectory, 'assets')
-const sourceStateDirectory = path.resolve(sourceDirectory, 'state')
-const sourceStylesDirectory = path.resolve(sourceAssetsDirectory, 'stylesheets')
-const sourceImagesDirectory = path.resolve(sourceAssetsDirectory, 'images')
-const sourceFontsDirectory = path.resolve(sourceAssetsDirectory, 'fonts')
-const sourceFaviconsDirectory = path.resolve(sourceAssetsDirectory, 'favicons')
-const sourceGamesDirectory = path.resolve(sourceAssetsDirectory, 'games')
+const sourceDirectory = paths.sourceDirectory
+const sourceImagesDirectory = paths.sourceImagesDirectory
+const sourceFontsDirectory = paths.sourceFontsDirectory
+const sourceFaviconsDirectory = paths.sourceFaviconsDirectory
+const sourceGamesDirectory = paths.sourceGamesDirectory
 
 // Output Directories
-const outputAssetsDirectory = 'assets'
-const outputDirectory = path.resolve(frontEndRootDirectory, 'public', 'evergreen')
-const outputDirectoryLegacy = path.resolve(frontEndRootDirectory, 'public', 'legacy')
-const outputScriptsDirectory = path.join(outputAssetsDirectory, 'javascripts')
-const outputFontsDirectory = path.join(outputAssetsDirectory, 'fonts')
-const outputImagesDirectory = path.join(outputAssetsDirectory, 'images')
-const outputStylesDirectory = path.join(outputAssetsDirectory, 'styles')
-const outputGamesDirectory = path.join(outputAssetsDirectory, 'games')
+const outputDirectory = paths.outputDirectory
+const outputDirectoryLegacy = paths.outputDirectoryLegacy
+const outputScriptsDirectory = paths.outputScriptsDirectory
+const outputFontsDirectory = paths.outputFontsDirectory
+const outputImagesDirectory = paths.outputImagesDirectory
+const outputStylesDirectory = paths.outputStylesDirectory
+const outputGamesDirectory = paths.outputGamesDirectory
 
 // Plugins
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
@@ -41,13 +39,6 @@ const gitRevisionPlugin = new GitRevisionPlugin({
   lightweightTags: true,
   branch: true,
 })
-
-// Phaser webpack config , requried by fv-games
-// TODO : Move this as a peer dependency of games and have games to import them
-const phaserModule = path.resolve('./node_modules/phaser-ce/')
-const phaser = path.join(phaserModule, 'build/custom/phaser-split.js')
-const pixi = path.join(phaserModule, 'build/custom/pixi.js')
-const p2 = path.join(phaserModule, 'build/custom/p2.js')
 
 const CircularDependencyPlugin = require('circular-dependency-plugin')
 
@@ -117,23 +108,7 @@ module.exports = (env) => ({
 
   // These options change how modules are resolved
   resolve: {
-    alias: {
-      assets: sourceAssetsDirectory,
-      components: path.resolve(sourceDirectory, 'components'),
-      common: path.resolve(sourceDirectory, 'common'),
-      qa: path.resolve(sourceDirectory, 'qa'),
-      state: sourceStateDirectory,
-      dataSources: path.resolve(sourceStateDirectory, 'dataSources'),
-      operations: path.resolve(sourceStateDirectory, 'operations'),
-      reducers: path.resolve(sourceStateDirectory, 'reducers'),
-      games: sourceGamesDirectory,
-      images: sourceImagesDirectory,
-      styles: sourceStylesDirectory,
-      phaser: phaser,
-      pixi: pixi,
-      p2: p2,
-    },
-
+    alias: alias,
     // Automatically resolve certain extensions.
     extensions: ['.js', '.less'],
   },
