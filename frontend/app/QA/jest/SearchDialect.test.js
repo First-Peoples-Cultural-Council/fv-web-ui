@@ -26,28 +26,30 @@ Category:
     - no search ui
     - message displayed
 */
-// Link.react.test.js
-import React from 'react'
-import renderer from 'react-test-renderer'
+
+// Mock: react-redux
+// --------------------------------------------------
 jest.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
   useSelector: jest.fn(),
   useDispatch: jest.fn(),
 }))
 
-// jest.mock('dataSources/useSearchDialect', () => ({
-//   ...jest.requireActual('dataSources/useSearchDialect'),
-//   computeSearchDialect: jest.fn(),
-//   searchDialectUpdate: jest.fn(),
-//   searchDialectReset: jest.fn(),
-// }))
+// Mock: @material-ui/core/styles
+// --------------------------------------------------
+jest.mock('@material-ui/core/styles', () => ({
+  /* eslint-disable-next-line */
+  withStyles: (styles) => (component) => component,
+}))
 
-// import * as useCustomHook from 'dataSources/useSearchDialect'
+// Mock: useSearchDialect
+// --------------------------------------------------
+import { SEARCH_BY_DEFAULT, SEARCH_DATA_TYPE_WORD } from 'common/Constants'
 import * as useSearchDialect from 'dataSources/useSearchDialect'
 const spyUseSearchDialect = jest.spyOn(useSearchDialect, 'default')
 spyUseSearchDialect.mockReturnValue({
   computeSearchDialect: {
-    searchByMode: 1,
+    searchByMode: SEARCH_BY_DEFAULT,
     searchBySettings: {},
     searchMessage: '',
     searchNxqlSort: '',
@@ -59,6 +61,8 @@ spyUseSearchDialect.mockReturnValue({
   searchDialectReset: () => {},
 })
 
+// Mock: useRoute
+// --------------------------------------------------
 import * as useRoute from 'dataSources/useRoute'
 const spyUseRoute = jest.spyOn(useRoute, 'default')
 spyUseRoute.mockReturnValue({
@@ -68,41 +72,135 @@ spyUseRoute.mockReturnValue({
     phraseBook: '',
   },
 })
-jest.mock('@material-ui/core/styles', () => ({
-  /* eslint-disable-next-line */
-  withStyles: (styles) => (component) => component,
-}))
 
+// Mock: useIntl
+// --------------------------------------------------
+import * as useIntl from 'dataSources/useIntl'
+const spyUseIntl = jest.spyOn(useIntl, 'default')
+spyUseIntl.mockReturnValue({
+  intl: {
+    trans: () => {},
+  },
+})
+
+// Mock: useDirectory
+// --------------------------------------------------
+import * as useDirectory from 'dataSources/useDirectory'
+const spyUseDirectory = jest.spyOn(useDirectory, 'default')
+spyUseDirectory.mockReturnValue({
+  computeDirectory: {},
+  fetchDirectory: () => {},
+})
+
+// Let us begin!
+// ==================================================
+import React from 'react'
+import renderer from 'react-test-renderer'
 import SearchDialectContainer from 'components/SearchDialect2/SearchDialectContainer'
+import SearchDialectData from 'components/SearchDialect2/SearchDialectData'
+const searchDialectDataType = SEARCH_DATA_TYPE_WORD
+const searchUi = [
+  {
+    defaultChecked: true,
+    idName: 'searchByTitle',
+    labelText: 'Word',
+    urlParam: 'sTitle',
+  },
+  {
+    defaultChecked: true,
+    idName: 'searchByDefinitions',
+    labelText: 'Definitions',
+    urlParam: 'sDefinitions',
+  },
+  {
+    idName: 'searchByTranslations',
+    labelText: 'Literal translations',
+    urlParam: 'sTranslations',
+  },
+  {
+    type: 'select',
+    idName: 'searchPartOfSpeech',
+    labelText: 'Parts of speech:',
+    urlParam: 'sPartSpeech',
+  },
+]
 
-test('SearchDialect renders', () => {
-  //   const fakeComputeSearchDialect = {
-  //     searchByMode: 1,
-  //     searchBySettings: {},
-  //     searchMessage: '',
-  //     searchNxqlSort: '',
-  //     searchNxqlQuery: '',
-  //     searchTerm: '',
-  //     searchType: 1,
-  //   }
-  //   computeSearchDialect.mockResolvedValue(fakeComputeSearchDialect)
-  const component = renderer.create(<SearchDialectContainer />)
+// Container
+test('Container layer renders everything', () => {
+  const component = renderer.create(
+    <SearchDialectContainer
+      handleSearch={() => {}}
+      resetSearch={() => {}}
+      searchDialectDataType={searchDialectDataType}
+      searchUi={searchUi}
+    />
+  )
   const tree = component.toJSON()
   expect(tree).toMatchSnapshot()
-  /*
-  let tree = component.toJSON()
-  expect(tree).toMatchSnapshot()
+})
 
-  // manually trigger the callback
-  tree.props.onMouseEnter()
-  // re-rendering
-  tree = component.toJSON()
-  expect(tree).toMatchSnapshot()
+// Data
+test('Data layer outputs the same data', () => {
+  // Updated in SearchDialectData.children
+  let output = {}
 
-  // manually trigger the callback
-  tree.props.onMouseLeave()
-  // re-rendering
-  tree = component.toJSON()
-  expect(tree).toMatchSnapshot()
-  */
+  renderer.create(
+    <SearchDialectData
+      handleSearch={() => {}}
+      resetSearch={() => {}}
+      searchDialectDataType={searchDialectDataType}
+      searchUi={searchUi}
+    >
+      {(dataLayerOutput) => {
+        output = dataLayerOutput
+        return null
+      }}
+    </SearchDialectData>
+  )
+  expect(output).toMatchInlineSnapshot(`
+    Object {
+      "dialectClassName": "fontBCSans",
+      "handleChangeSearchBySettings": [Function],
+      "handleEnterSearch": [Function],
+      "handleSearch": [Function],
+      "intl": Object {
+        "trans": [Function],
+      },
+      "partsOfSpeechOptions": null,
+      "resetSearch": [Function],
+      "searchByMode": 0,
+      "searchBySettings": Object {},
+      "searchDialectDataType": 6,
+      "searchDialectUpdate": [Function],
+      "searchMessage": "",
+      "searchNxqlQuery": "",
+      "searchTerm": "",
+      "searchType": 1,
+      "searchUi": Array [
+        Object {
+          "defaultChecked": true,
+          "idName": "searchByTitle",
+          "labelText": "Word",
+          "urlParam": "sTitle",
+        },
+        Object {
+          "defaultChecked": true,
+          "idName": "searchByDefinitions",
+          "labelText": "Definitions",
+          "urlParam": "sDefinitions",
+        },
+        Object {
+          "idName": "searchByTranslations",
+          "labelText": "Literal translations",
+          "urlParam": "sTranslations",
+        },
+        Object {
+          "idName": "searchPartOfSpeech",
+          "labelText": "Parts of speech:",
+          "type": "select",
+          "urlParam": "sPartSpeech",
+        },
+      ],
+    }
+  `)
 })
