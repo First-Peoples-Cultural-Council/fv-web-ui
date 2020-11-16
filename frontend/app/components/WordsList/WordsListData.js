@@ -21,11 +21,11 @@ import useNavigationHelpers from 'common/useNavigationHelpers'
 
 // Helpers
 import { getDialectClassname } from 'common/Helpers'
-import NavigationHelpers, {
-  appendPathArrayAfterLandmark,
-  hasPagination,
+import NavigationHelpers /* {
+  // appendPathArrayAfterLandmark,
+  // hasPagination,
   updateUrlIfPageOrPageSizeIsDifferent,
-} from 'common/NavigationHelpers'
+}*/ from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 import { WORKSPACES } from 'common/Constants'
@@ -64,7 +64,7 @@ function WordsListData({ children }) {
   const { computeSearchDialect } = useSearchDialect()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
   const { computeWords, fetchWords } = useWord()
-  const { getSearchAsObject, navigate } = useNavigationHelpers()
+  const { getSearchAsObject, convertObjToUrlQuery, navigate } = useNavigationHelpers()
   const { siteTheme, dialect_path: dialectPath, area } = routeParams
   // const { searchNxqlQuery = '' } = computeSearchDialect
   const {
@@ -72,6 +72,7 @@ function WordsListData({ children }) {
     letter: queryLetter,
     page: queryPage,
     pageSize: queryPageSize,
+    query: queryQuery,
     sortBy: querySortBy,
     sortOrder: querySortOrder,
   } = getSearchAsObject({
@@ -113,6 +114,36 @@ function WordsListData({ children }) {
   const items = selectn('response.entries', computedWords)
   const metadata = selectn('response', computedWords)
 
+  /*
+  function fetchListViewData({ category, letter, pageIndex, pageSize, sortOrder, sortBy, resetSearch}) {
+    let currentAppliedFilter = ''
+
+    if (searchNxqlQuery && resetSearch !== true) {
+      currentAppliedFilter = ` AND ${searchNxqlQuery}`
+    }
+
+    if (category && resetSearch !== true) {
+      // Private
+      if (area === 'Workspaces') {
+        currentAppliedFilter = ` AND fv-word:categories/* IN ("${category}") &enrichment=category_children`
+      }
+      // Public
+      if (area === 'sections') {
+        currentAppliedFilter = ` AND fvproxy:proxied_categories/* IN ("${category}") &enrichment=category_children`
+      }
+    }
+    // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
+    const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
+
+    const nql = `${currentAppliedFilter}&currentPageIndex=${
+      pageIndex - 1
+    }&dialectId=${dialectUid}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}${
+      letter ? `&letter=${letter}&starts_with_query=Document.CustomOrderQuery` : startsWithQuery
+    }`
+
+    fetchWords(dictionaryKey, nql)
+  }
+  */
   useEffect(() => {
     if (curFetchDocumentAction === 'FV_DOCUMENT_FETCH_SUCCESS') {
       let currentAppliedFilter = ''
@@ -149,36 +180,6 @@ function WordsListData({ children }) {
       entity: computeWords,
     },
   ])
-  /*
-  function fetchListViewData({ category, letter, pageIndex, pageSize, sortOrder, sortBy, resetSearch}) {
-    let currentAppliedFilter = ''
-
-    if (searchNxqlQuery && resetSearch !== true) {
-      currentAppliedFilter = ` AND ${searchNxqlQuery}`
-    }
-
-    if (category && resetSearch !== true) {
-      // Private
-      if (area === 'Workspaces') {
-        currentAppliedFilter = ` AND fv-word:categories/* IN ("${category}") &enrichment=category_children`
-      }
-      // Public
-      if (area === 'sections') {
-        currentAppliedFilter = ` AND fvproxy:proxied_categories/* IN ("${category}") &enrichment=category_children`
-      }
-    }
-    // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
-    const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
-
-    const nql = `${currentAppliedFilter}&currentPageIndex=${
-      pageIndex - 1
-    }&dialectId=${dialectUid}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}${
-      letter ? `&letter=${letter}&starts_with_query=Document.CustomOrderQuery` : startsWithQuery
-    }`
-
-    fetchWords(dictionaryKey, nql)
-  }
-  */
 
   // Filter for AuthorizationFilter
   const filter = {
@@ -331,89 +332,45 @@ function WordsListData({ children }) {
     return columnsArray
   }
 
-  function fetcher({ currentPageIndex, pageSize }) {
-    let newUrl = ''
-    if (queryLetter) {
-      newUrl = appendPathArrayAfterLandmark({
-        pathArray: [pageSize, currentPageIndex],
-        splitWindowPath: splitWindowPath,
-        landmarkArray: [queryLetter],
-      })
-    } else if (queryCategory) {
-      newUrl = appendPathArrayAfterLandmark({
-        pathArray: [pageSize, currentPageIndex],
-        splitWindowPath: splitWindowPath,
-        landmarkArray: [queryCategory],
-      })
-    } else {
-      newUrl = appendPathArrayAfterLandmark({
-        pathArray: [pageSize, currentPageIndex],
-        splitWindowPath: splitWindowPath,
-        landmarkArray: ['words'],
-      })
-    }
-    if (newUrl) {
-      navigate(`/${newUrl}`)
-    }
+  function onPagination({ currentPageIndex: page, pageSize }) {
+    navigate(
+      `${window.location.pathname}?${convertObjToUrlQuery(Object.assign({}, getSearchAsObject(), { page, pageSize }))}`
+    )
   }
 
   const sortHandler = ({ page, pageSize, sortBy, sortOrder } = {}) => {
-    setRouteParams({
-      search: {
-        pageSize,
-        page,
-        sortBy,
-        sortOrder,
-      },
-    })
-    // Conditionally update the url after a sort event
-    updateUrlIfPageOrPageSizeIsDifferent({
-      page,
-      pageSize,
-      pushWindowPath: pushWindowPath,
-      routeParamsPage: queryPage,
-      routeParamsPageSize: queryPageSize,
-      splitWindowPath: splitWindowPath,
-      windowLocationSearch: window.location.search, // Set only if you want to append the search
-    })
+    navigate(
+      `${window.location.pathname}?${convertObjToUrlQuery(
+        Object.assign({}, getSearchAsObject(), { page, pageSize, sortBy, sortOrder })
+      )}`
+    )
   }
 
   const _resetSearch = () => {
     // console.log('_resetSearch')
-    // Remove alphabet/category filter urls
-    if (queryCategory || queryLetter) {
-      let resetUrl = `/${splitWindowPath.join('/')}`
-      const _splitWindowPath = [...splitWindowPath]
-      const learnIndex = _splitWindowPath.indexOf('learn')
-      if (learnIndex !== -1) {
-        _splitWindowPath.splice(learnIndex + 2)
-        resetUrl = `/${_splitWindowPath.join('/')}`
-      }
-      navigate(`${resetUrl}/${queryPageSize}/1`)
+    if (queryQuery) {
+      navigate(`/${splitWindowPath.join('/')}?pageSize=${queryPageSize}&page=1`)
     } else {
-      // When facets change, pagination should be reset.
-      // In these pages (words/phrase), list views are controlled via URL
-      // fetchListViewData({ pageIndex: queryPage, pageSize: queryPageSize, resetSearch: true })
-      resetURLPagination()
+      // console.log('if have text in input clear it out')
     }
   }
 
-  const resetURLPagination = ({ pageSize = null, preserveSearch = false } = {}) => {
-    const urlPage = 1
-    const urlPageSize = pageSize || queryPageSize || 10
+  // const resetURLPagination = ({ pageSize = null, preserveSearch = false } = {}) => {
+  //   const urlPage = 1
+  //   const urlPageSize = pageSize || queryPageSize || 10
 
-    const navHelperCallback = (url) => {
-      pushWindowPath(`${url}${preserveSearch ? window.location.search : ''}`)
-    }
-    const hasPaginationUrl = hasPagination(splitWindowPath)
-    if (hasPaginationUrl) {
-      // Replace them
-      NavigationHelpers.navigateForwardReplaceMultiple(splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
-    } else {
-      // No pagination in url (eg: .../learn/words), append `urlPage` & `urlPageSize`
-      NavigationHelpers.navigateForward(splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
-    }
-  }
+  //   const navHelperCallback = (url) => {
+  //     pushWindowPath(`${url}${preserveSearch ? window.location.search : ''}`)
+  //   }
+  //   const hasPaginationUrl = hasPagination(splitWindowPath)
+  //   if (hasPaginationUrl) {
+  //     // Replace them
+  //     NavigationHelpers.navigateForwardReplaceMultiple(splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
+  //   } else {
+  //     // No pagination in url (eg: .../learn/words), append `urlPage` & `urlPageSize`
+  //     NavigationHelpers.navigateForward(splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
+  //   }
+  // }
 
   const handleSearch = (/*{ href, updateUrl = true } = {}*/) => {
     // console.log('handleSearch', {href, updateUrl})
@@ -431,7 +388,7 @@ function WordsListData({ children }) {
     dialect,
     dialectClassName,
     dialectUid,
-    fetcher: fetcher,
+    fetcher: onPagination,
     fetcherParams: {
       currentPageIndex: queryPage,
       pageSize: queryPageSize,

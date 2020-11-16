@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 // import PropTypes from 'prop-types'
 import WordsListPresentation from './WordsListPresentation'
 import WordsListData from './WordsListData'
 import PromiseWrapper from 'components/PromiseWrapper'
 
+import { SEARCH_DATA_TYPE_WORD } from 'common/Constants'
+const SearchDialect = React.lazy(() => import('components/SearchDialect'))
 /**
  * @summary WordsListContainer
  * @version 1.0.1
@@ -56,29 +58,40 @@ function WordsListContainer() {
               // ==================================================
               // Search
               // --------------------------------------------------
-              handleSearch={handleSearch}
-              resetSearch={resetSearch}
-              searchUi={[
-                {
-                  defaultChecked: true,
-                  idName: 'searchByTitle',
-                  labelText: 'Word',
-                },
-                {
-                  defaultChecked: true,
-                  idName: 'searchByDefinitions',
-                  labelText: 'Definitions',
-                },
-                {
-                  idName: 'searchByTranslations',
-                  labelText: 'Literal translations',
-                },
-                {
-                  type: 'select',
-                  idName: 'searchPartOfSpeech',
-                  labelText: 'Parts of speech:',
-                },
-              ]}
+              childrenSearch={
+                <Suspense fallback={<div>loading...</div>}>
+                  <SearchDialect
+                    handleSearch={handleSearch}
+                    resetSearch={resetSearch}
+                    searchUi={[
+                      {
+                        defaultChecked: true,
+                        idName: 'searchByTitle',
+                        labelText: 'Word',
+                        urlParam: 'sTitle',
+                      },
+                      {
+                        defaultChecked: true,
+                        idName: 'searchByDefinitions',
+                        labelText: 'Definitions',
+                        urlParam: 'sDefinitions',
+                      },
+                      {
+                        idName: 'searchByTranslations',
+                        labelText: 'Literal translations',
+                        urlParam: 'sTranslations',
+                      },
+                      {
+                        type: 'select',
+                        idName: 'searchPartOfSpeech',
+                        labelText: 'Parts of speech:',
+                        urlParam: 'sPartSpeech',
+                      },
+                    ]}
+                    searchDialectDataType={SEARCH_DATA_TYPE_WORD}
+                  />
+                </Suspense>
+              }
               // ==================================================
               // Table data
               // --------------------------------------------------

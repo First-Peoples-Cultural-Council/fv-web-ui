@@ -72,7 +72,7 @@ import {
   useIdOrPathFallback,
 } from 'components/LearnBase'
 import { WORKSPACES } from 'common/Constants'
-
+const SearchDialect = React.lazy(() => import('components/SearchDialect'))
 const DictionaryList = React.lazy(() => import('components/DictionaryList/DictionaryList'))
 const intl = IntlService.instance
 
@@ -187,26 +187,31 @@ export class phrasesFilteredByPhrasebook extends Component {
           // ==================================================
           // Search
           // --------------------------------------------------
-          handleSearch={this.changeFilter}
-          resetSearch={this.resetSearch}
-          hasSearch
-          searchUi={[
-            {
-              defaultChecked: true,
-              idName: 'searchByTitle',
-              labelText: 'Phrase',
-            },
-            {
-              defaultChecked: true,
-              idName: 'searchByDefinitions',
-              labelText: 'Definitions',
-            },
-            {
-              idName: 'searchByCulturalNotes',
-              labelText: 'Cultural notes',
-            },
-          ]}
-          searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
+          childrenSearch={
+            <Suspense fallback={<div>Loading...</div>}>
+              <SearchDialect
+                handleSearch={this.changeFilter}
+                resetSearch={this.resetSearch}
+                searchUi={[
+                  {
+                    defaultChecked: true,
+                    idName: 'searchByTitle',
+                    labelText: 'Phrase',
+                  },
+                  {
+                    defaultChecked: true,
+                    idName: 'searchByDefinitions',
+                    labelText: 'Definitions',
+                  },
+                  {
+                    idName: 'searchByCulturalNotes',
+                    labelText: 'Cultural notes',
+                  },
+                ]}
+                searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
+              />
+            </Suspense>
+          }
           // ==================================================
           // Table data
           // --------------------------------------------------

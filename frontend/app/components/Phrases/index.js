@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React from 'react'
+import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
 import Immutable, { is, Set, Map } from 'immutable'
 import classNames from 'classnames'
@@ -49,10 +49,9 @@ import FVLabel from 'components/FVLabel'
 
 import { getDialectClassname } from 'common/Helpers'
 import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
-
-import { SEARCH_BY_ALPHABET, SEARCH_BY_PHRASE_BOOK } from 'common/Constants'
-
+import { SEARCH_DATA_TYPE_PHRASE, SEARCH_BY_ALPHABET, SEARCH_BY_PHRASE_BOOK } from 'common/Constants'
 const { array, bool, func, object, string } = PropTypes
+const SearchDialectContainer = React.lazy(() => import('components/SearchDialect2/SearchDialectContainer'))
 /**
  * Learn phrases
  */
@@ -175,25 +174,34 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
           dialectID={this.state.dialectId}
           routeParams={this.props.routeParams}
           // Search:
-          handleSearch={this.changeFilter}
-          resetSearch={this.resetSearch}
-          hasSearch
-          searchUi={[
-            {
-              defaultChecked: true,
-              idName: 'searchByTitle',
-              labelText: 'Phrase',
-            },
-            {
-              defaultChecked: true,
-              idName: 'searchByDefinitions',
-              labelText: 'Definitions',
-            },
-            {
-              idName: 'searchByCulturalNotes',
-              labelText: 'Cultural notes',
-            },
-          ]}
+          childrenSearch={
+            <Suspense fallback={<div>Loading...</div>}>
+              <SearchDialectContainer
+                handleSearch={this.changeFilter}
+                resetSearch={this.resetSearch}
+                searchUi={[
+                  {
+                    defaultChecked: true,
+                    idName: 'searchByTitle',
+                    labelText: 'Phrase',
+                    urlParam: 'sTitle',
+                  },
+                  {
+                    defaultChecked: true,
+                    idName: 'searchByDefinitions',
+                    labelText: 'Definitions',
+                    urlParam: 'sDefinitions',
+                  },
+                  {
+                    idName: 'searchByCulturalNotes',
+                    labelText: 'Cultural notes',
+                    urlParam: 'sCulturalNotes',
+                  },
+                ]}
+                searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
+              />
+            </Suspense>
+          }
           searchByMode={searchByMode}
           rowClickHandler={this.props.rowClickHandler}
           hasSorting={this.props.hasSorting}
