@@ -1,6 +1,5 @@
 import React from 'react'
 import selectn from 'selectn'
-import Immutable from 'immutable'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import IntlService from 'common/services/IntlService'
@@ -27,18 +26,16 @@ const intl = IntlService.instance
  *  { matched: matched, routeParams: matchedRouteParams }
  */
 export const matchPath = (pathMatchArray, urlPath) => {
-  // Remove empties from path array, return Immutable list
-  const currentPathArray = Immutable.fromJS(
-    urlPath.filter((e) => {
-      return e
-    })
-  )
+  // Remove empties from path array
+  const currentPathArray = urlPath.filter((e) => {
+    return e
+  })
   // NOTE: should this `return { matched: false, routeParams: {} }` for consistency?
   if (!pathMatchArray) {
     return false
   }
 
-  if (pathMatchArray.size !== currentPathArray.size) {
+  if (pathMatchArray.size !== currentPathArray.length) {
     return { matched: false, routeParams: {} }
   }
 
@@ -46,20 +43,20 @@ export const matchPath = (pathMatchArray, urlPath) => {
 
   const matched = pathMatchArray.every((value, key) => {
     if (value instanceof RegExp) {
-      return value.test(currentPathArray.get(key))
+      return value.test(currentPathArray[key])
     } else if (value instanceof paramMatch) {
-      if (value.hasOwnProperty('matcher')) {
-        const testMatch = value.matcher.test(currentPathArray.get(key))
+      if (Object.prototype.hasOwnProperty.call(value, 'matcher')) {
+        const testMatch = value.matcher.test(currentPathArray[key])
 
         if (testMatch) {
-          matchedRouteParams[value.id] = decodeURI(currentPathArray.get(key))
+          matchedRouteParams[value.id] = decodeURI(currentPathArray[key])
           return true
         }
       }
 
       return false
     }
-    return value === currentPathArray.get(key)
+    return value === currentPathArray[key]
   })
 
   return { matched: matched, routeParams: matchedRouteParams }
@@ -456,6 +453,7 @@ const routes = [
     frontpage: true,
     title: intl.translate({ key: 'kids_home', default: 'Kids Home', case: 'words' }),
     page: <Pages.KidsHome />,
+    breadcrumbs: false,
   },
   {
     path: ['play'],

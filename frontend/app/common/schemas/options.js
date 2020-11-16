@@ -1304,6 +1304,18 @@ const options = {
           add: `+ ${intl.trans('add_words', 'Add Words', 'first')}`,
         },
       },
+      'fv:related_videos': {
+        label: intl.trans('related_video', 'Related Video', 'first'),
+        item: {
+          factory: MediaFactory,
+          type: 'FVVideo',
+        },
+        i18n: {
+          ...i18nExt,
+          add: `+ ${intl.trans('add_video', 'Add Video', 'first')}`,
+          remove: <span data-testid="removeVideo">X</span>,
+        },
+      },
     },
     i18n: i18nExt,
   },

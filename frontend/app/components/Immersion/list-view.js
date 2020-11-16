@@ -33,7 +33,6 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import ImmersionTable from './ImmersionTable'
 import LabelModal from './Modal'
-import SearchFields from './Search'
 
 /**
  * List view for words in immersion
@@ -181,10 +180,6 @@ class ImmersionListView extends Component {
     return
   }
 
-  setMappedTranslations = (mappedTranslations) => {
-    this.setState({ mappedTranslations })
-  }
-
   render() {
     const { computeLabels, computeDialect2, routeParams, dialect, selectedCategory, selectedFilter } = this.props
     const { mappedTranslations, allTranslations, isEditingOpen, editingLabel, isNew } = this.state
@@ -211,7 +206,6 @@ class ImmersionListView extends Component {
           'Loading...'
         ) : (
           <div>
-            <SearchFields items={allTranslations} setResults={this.setMappedTranslations} />
             <ImmersionTable
               mappedTranslations={mappedTranslations || []}
               routeParams={routeParams}

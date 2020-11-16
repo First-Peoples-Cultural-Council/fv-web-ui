@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 // import PropTypes from 'prop-types'
 
-import Doughnut from 'react-chartjs/lib/doughnut'
 import { connect } from 'react-redux'
 import FVLabel from 'components/FVLabel'
 
@@ -61,10 +60,7 @@ export class Statistics extends Component {
     return (
       <div>
         <div className={'row'} style={{ margin: '0' }}>
-          <div className={'col-sm-4'} style={{ paddingLeft: '0' }}>
-            <Doughnut data={lifecycleStateDoughnutData} width="200" height="170" options={{ responsive: true }} />
-          </div>
-          <div className={'col-sm-3'} style={{ paddingTop: '35px', paddingLeft: '35px' }}>
+          <div className={'col-sm-4'} style={{ paddingTop: '35px', paddingLeft: '35px' }}>
             <div style={{ paddingBottom: '10px' }}>
               <strong>{this.props.headerText}</strong>: {dataResponse[docType].total}
             </div>

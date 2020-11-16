@@ -46,7 +46,7 @@ import PageDialectViewWord from 'components/Word/WordContainer'
 import PageDialectViewPhrase from 'components/Phrase/PhraseContainer'
 import PageDialectViewBook from 'components/SongStory/SongStoryContainer'
 import PageDialectViewAlphabet from 'components/Alphabet/'
-import PageDialectViewCharacter from 'components/Alphabet/view'
+import PageDialectViewCharacter from 'components/AlphabetDetail/AlphabetDetailContainer'
 import PageDialectLearnWordsCategories from 'components/Categories/WordCategories'
 
 import PhraseBooksGrid from 'components/PhraseBooksGrid'
