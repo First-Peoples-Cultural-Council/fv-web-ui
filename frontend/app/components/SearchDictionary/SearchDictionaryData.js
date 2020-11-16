@@ -33,6 +33,7 @@ function SearchDictionaryData({ children }) {
   const { routeParams } = useRoute()
   const { computeSearchDocuments, searchDocuments } = useSearch()
   const { page = 1, pageSize = 10, query } = getSearchObject()
+  const isDialect = routeParams.hasOwnProperty('dialect_path')
 
   // Local State
   const [newSearchValue, setNewSearchValue] = useState(query)
@@ -160,6 +161,7 @@ function SearchDictionaryData({ children }) {
     handleTextFieldChange,
     hasItems: formattedData && formattedData.length !== 0,
     intl,
+    isDialect,
     items: formattedData,
     searchTerm: routeParams.searchTerm,
     newSearchValue,

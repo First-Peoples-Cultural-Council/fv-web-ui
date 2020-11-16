@@ -25,7 +25,7 @@ import '!style-loader!css-loader!./SearchDictionary.css'
  *
  * @returns {node} jsx markup
  */
-function SearchDictionaryListLargeScreen({ intl, items }) {
+function SearchDictionaryListLargeScreen({ intl, isDialect, items }) {
   const DEFAULT_LANGUAGE = 'english'
   return (
     <div className="SearchDictionaryListLargeScreen">
@@ -47,10 +47,17 @@ function SearchDictionaryListLargeScreen({ intl, items }) {
             <TableCell>
               <div className="SearchDictionary__rowHeaderCell">{intl.trans('type', 'Type', 'first')}</div>
             </TableCell>
+            {!isDialect ? (
+              <TableCell>
+                <div className="SearchDictionary__rowHeaderCell">
+                  {intl.trans('language site', 'Language Site', 'first')}
+                </div>
+              </TableCell>
+            ) : null}
           </TableRow>
         </TableHead>
         <TableBody>
-          {items.map(({ uid, title, href, translations, audio, picture, type }, index) => (
+          {items.map(({ uid, title, href, translations, audio, picture, type, dialect }, index) => (
             <TableRow
               key={uid}
               className={`SearchDictionary__row ${index % 2 ? 'SearchDictionary__row--b' : 'SearchDictionary__row--a'}`}
@@ -96,6 +103,11 @@ function SearchDictionaryListLargeScreen({ intl, items }) {
               <TableCell>
                 <div className="SearchDictionary__type">{type}</div>
               </TableCell>
+              {!isDialect ? (
+                <TableCell>
+                  <div className="SearchDictionary__languageSite">{dialect}</div>
+                </TableCell>
+              ) : null}
             </TableRow>
           ))}
         </TableBody>
@@ -104,9 +116,10 @@ function SearchDictionaryListLargeScreen({ intl, items }) {
   )
 }
 // PROPTYPES
-const { array, object } = PropTypes
+const { array, bool, object } = PropTypes
 SearchDictionaryListLargeScreen.propTypes = {
   intl: object,
+  isDialect: bool,
   items: array,
 }
 

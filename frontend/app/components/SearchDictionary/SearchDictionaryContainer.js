@@ -1,5 +1,4 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
 import SearchDictionaryPresentation from 'components/SearchDictionary/SearchDictionaryPresentation'
 import SearchDictionaryData from 'components/SearchDictionary/SearchDictionaryData'
 
@@ -25,6 +24,7 @@ function SearchDictionaryContainer() {
         handleTextFieldChange,
         hasItems,
         intl,
+        isDialect,
         items,
         newSearchValue,
         page,
@@ -43,6 +43,7 @@ function SearchDictionaryContainer() {
             handleTextFieldChange={handleTextFieldChange}
             hasItems={hasItems}
             intl={intl}
+            isDialect={isDialect}
             items={items}
             newSearchValue={newSearchValue}
             page={page}
@@ -54,11 +55,6 @@ function SearchDictionaryContainer() {
       }}
     </SearchDictionaryData>
   )
-}
-// PROPTYPES
-// const { string } = PropTypes
-SearchDictionaryContainer.propTypes = {
-  //   something: string,
 }
 
 export default SearchDictionaryContainer

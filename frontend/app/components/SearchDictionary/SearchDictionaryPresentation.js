@@ -30,10 +30,11 @@ function SearchDictionaryPresentation({
   handleTextFieldChange,
   hasItems,
   intl,
+  isDialect,
   items,
   newSearchValue,
   searchTerm,
-  // Props for withPagination
+  // Props for Pagination
   changePagination,
   page,
   pageSize,
@@ -96,7 +97,7 @@ function SearchDictionaryPresentation({
                 changePagination(pagePageSize)
               }}
             >
-              <SearchDictionaryListLargeScreen intl={intl} items={items} />
+              <SearchDictionaryListLargeScreen intl={intl} isDialect={isDialect} items={items} />
             </Pagination.Container>
           )}
           {hasItems === false && (
@@ -118,10 +119,11 @@ SearchDictionaryPresentation.propTypes = {
   handleTextFieldChange: func,
   hasItems: bool,
   intl: object,
+  isDialect: bool,
   items: array,
   newSearchValue: string,
   searchTerm: string,
-  // Props for withPagination
+  // Props for Pagination
   changePagination: func,
   page: number,
   pageSize: number,
