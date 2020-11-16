@@ -90,14 +90,6 @@ export class ToolbarNavigation extends Component {
     }
   }
 
-  _getNavigationURL = (path, appendPagination = false) => {
-    let url = `/explore${this.props.routeParams.dialect_path}/learn/${path}`
-    if (appendPagination) {
-      url = `${url}/${this.props.pageSize}/1`
-    }
-    return url
-  }
-
   render() {
     /*
     // TODO: Find out why the results sometimes in field1 and sometimes in field2?
@@ -125,25 +117,25 @@ export class ToolbarNavigation extends Component {
         ? '...'
         : selectn(COUNT_FIELD1, computeStoriesCount) + selectn(COUNT_FIELD2, computeStoriesCount)
     */
-
+    const dialectPath = this.props.routeParams.dialect_path
     return (
       <div className="dialect-navigation">
         <div className="row">
           <div className="col-xs-12 col-md-10">
             <div float="left">
-              <Link href={this._getNavigationURL('words', true)}>
+              <Link href={`/explore${dialectPath}/learn/words?page=1&pageSize=10`}>
                 <FVLabel transKey="words" defaultStr="Words" transform="first" />
               </Link>
-              <Link href={this._getNavigationURL('phrases', true)}>
+              <Link href={`/explore${dialectPath}/learn/phrases`}>
                 <FVLabel transKey="phrases" defaultStr="Phrases" transform="first" />
               </Link>
-              <Link href={this._getNavigationURL('songs')}>
+              <Link href={`/explore${dialectPath}/learn/songs`}>
                 <FVLabel transKey="songs" defaultStr="Songs" transform="first" />
               </Link>
-              <Link href={this._getNavigationURL('stories')}>
+              <Link href={`/explore${dialectPath}/learn/stories`}>
                 <FVLabel transKey="stories" defaultStr="Stories" transform="first" />
               </Link>
-              <Link href={this._getNavigationURL('alphabet')}>
+              <Link href={`/explore${dialectPath}/learn/alphabet`}>
                 <FVLabel transKey="alphabet" defaultStr="Alphabet" transform="first" />
               </Link>
             </div>
