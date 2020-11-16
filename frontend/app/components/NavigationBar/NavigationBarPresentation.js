@@ -412,4 +412,12 @@ NavigationBarPresentation.propTypes = {
   toggleDisplayLocaleOptions: func,
 }
 
+NavigationBarPresentation.defaultProps = {
+  isDialect: false,
+  localePopoverOpen: false,
+  searchLocation: 'local',
+  searchPopoverOpen: false,
+  searchValue: '',
+}
+
 export default NavigationBarPresentation
