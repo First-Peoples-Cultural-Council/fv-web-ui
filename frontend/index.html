@@ -2,111 +2,531 @@
 <!--[if lte IE 8]><html class="lt-ie9  no-js" lang="en"><![endif]-->
 <!--[if gt IE 8]><!-->
 <html lang="en" class="no-js">
-  <!--<![endif]-->
+<!--<![endif]-->
 
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>FirstVoices</title>
-    <meta
-      name="description"
-      content="FirstVoices is a suite of web-based tools and services designed to support Indigenous people engaged in language archiving, language teaching and culture revitalization."
-    />
-    <meta name="author" content="FPCC" />
-    <meta name="google-site-verification" content="EDJl0zb8mhsF1z_YbnEcdOwKF72uLcZw_3FGbSMVGSM" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#b91d47" />
-    <meta name="msapplication-TileColor" content="#b91d47" />
-    <meta name="theme-color" content="#ffffff" />
-    <style>
-      .app-loader {
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>FirstVoices</title>
+  <meta name="description" content="FirstVoices is a suite of web-based tools and services designed to support Indigenous people engaged in language archiving, language teaching and culture revitalization."
+  />
+  <meta name="author" content="FPCC" />
+  <meta name="google-site-verification" content="EDJl0zb8mhsF1z_YbnEcdOwKF72uLcZw_3FGbSMVGSM" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#b91d47" />
+  <meta name="msapplication-TileColor" content="#b91d47" />
+  <meta name="theme-color" content="#ffffff" />
+  <style>
+    .app-loader {
+      color: #000000;
+      text-align: center;
+      padding-top: 30vh;
+      font-size: 2rem;
+    }
+
+    /* NAVIGATION */
+
+    header.Navigation__header {
+      color: #fff;
+      background-color: #b40000;
+      position: static;
+      width: 100%;
+      display: flex;
+      z-index: 1100;
+      box-sizing: border-box;
+      flex-shrink: 0;
+      flex-direction: column;
+      font-size: 1.4rem;
+    }
+
+    .Navigation__logo {
+      width: 127px;
+      height: 30px;
+      margin: 15px;
+    }
+
+    .Navigation__toolbar {
+      display: flex;
+      position: relative;
+      align-items: center;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.12);
+    }
+
+    .Navigation__toolbar>button {
+      margin-left: 5px;
+      margin-top: 4px;
+      background-color: transparent;
+      border: 0;
+    }
+
+    .Navigation__toolbar>button>span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      margin-bottom: 5px;
+      position: relative;
+      background: #fff;
+      border-radius: 3px;
+      z-index: 1;
+      transform-origin: 4px 0px;
+    }
+
+    .Navigation__leftNavDrawer {
+      display: none;
+      top: 0;
+      color: rgba(0, 0, 0, 0.87);
+      background-color: #fff;
+      flex: 1 0 auto;
+      height: 100%;
+      outline: 0;
+      -webkit-box-shadow: 14px 0px 17px -5px rgba(0, 0, 0, 0.25);
+      box-shadow: 14px 0px 17px -5px rgba(0, 0, 0, 0.25);
+      z-index: 1200;
+      position: fixed;
+      overflow-y: auto;
+      flex-direction: column;
+    }
+
+    .Navigation__leftNavDrawerHeader {
+      background-color: rgb(180, 0, 0);
+    }
+
+    .Navigation__leftNavDrawerHeader>button {
+      background-color: transparent;
+      border: 0;
+      color: #fff;
+      font-size: 30px;
+      position: relative;
+      top: 5px;
+      left: 7px;
+      margin-right: 2px;
+    }
+
+    .Navigation__leftNavDrawerMenu>li {
+      margin-bottom: 5px;
+      border-bottom: 1px solid #f3f3f3;
+      padding: 10px;
+    }
+
+    .Navigation__leftNavDrawerMenu>li:hover {
+      background-color: #f9f9f9;
+    }
+
+    .Navigation__leftNavDrawerMenu>li>a {
+      color: rgba(0, 0, 0, 0.87);
+      display: flex;
+      width: 100%;
+      text-decoration: none;
+    }
+
+    .Navigation__leftNavDrawerMenu {
+      padding: 0;
+      margin: 10px;
+      min-width: 200px;
+    }
+
+    .Login--signIn,
+    .Login--welcome {
+      display: inline-block;
+      padding-right: 10px;
+    }
+
+    /* ELEMENT */
+
+    .Navigation__link,
+    .Navigation__link:visited {
+      margin: 0 6px;
+      border-right: 1px solid rgba(0, 0, 0, 0.175);
+      padding: 10px;
+      color: #fff;
+    }
+
+    .Navigation__localeContainer {
+      display: none;
+    }
+
+    .Navigation__localeInner {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+    }
+
+    .Navigation .Navigation__localeTitle {
+      margin-right: 15px;
+    }
+
+    .Navigation__popoverInner {
+      background-color: #fff;
+      padding: 10px;
+      border-radius: 4px;
+    }
+
+    .Navigation__separator {
+      width: 1px;
+      background-color: rgba(0, 0, 0, 0.175);
+      height: 32px;
+      margin: 0 4px;
+      display: inline-block;
+    }
+
+    .Navigation__separator+.Navigation__separator {
+      display: none;
+    }
+
+    .Navigation__searchContainer {
+      flex-shrink: 0;
+    }
+
+    .Navigation .Navigation__searchInput {
+      margin-left: 30px;
+      font-size: 15px;
+      background-color: #fff;
+      padding: 10px 40px 10px 10px;
+      line-height: 1.2;
+    }
+
+    .Navigation__searchPopupContainer {
+      position: relative;
+      outline: none;
+    }
+
+    .Navigation__searchPopup {
+      max-width: 220px;
+      z-index: 8;
+      position: absolute;
+      top: 0;
+      left: 0;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.12);
+    }
+
+    .Navigation__toolbarMain {
+      display: flex;
+      position: relative;
+      align-items: center;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.12);
+    }
+
+    .Navigation__toolbarMainInner {
+      position: relative;
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+    }
+
+    .Navigation__searchContainerInner {
+      display: flex;
+      align-items: center;
+      padding: 10px 0;
+      color: #000;
+      margin-right: 5px;
+    }
+
+    .Navigation__searchContainerInner>input[type=search] {
+      padding: 10px;
+      border: 0;
+    }
+
+    .Navigation__searchContainerInner>input[type=submit] {
+      height: 39px;
+    }
+
+    /* MODIFIERS */
+
+    @media (max-width: 650px) {
+      .Navigation__link,
+      .Navigation__link:visited {
+        padding: 0;
+      }
+
+      .Navigation__searchContainer {
         position: fixed;
-        top: 0;
+        display: flex;
+        flex-direction: column-reverse;
         left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgb(170, 18, 37);
-        color: #ffffff;
-        text-align: center;
-        padding-top: 30vh;
-        font-size: 4rem;
+        width: 100%;
+        z-index: 99999;
+        padding-left: 5px;
+        background-color: #a71212;
+        bottom: 0;
       }
 
-      .material-icons {
-        font-family: "Material Icons";
-        font-weight: normal;
-        font-style: normal;
-        font-size: 24px;
-        line-height: 1;
-        letter-spacing: normal;
-        text-transform: none;
-        display: inline-block;
-        white-space: nowrap;
-        word-wrap: normal;
-        direction: ltr;
-        -webkit-font-feature-settings: "liga";
-        font-feature-settings: "liga";
-        -webkit-font-smoothing: antialiased;
-        text-rendering: optimizeLegibility;
-        -moz-osx-font-smoothing: grayscale;
+      .Navigation__searchContainerInner>input[type=search] {
+        width: 100%;
       }
-    </style>
-    <noscript>
-      <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    </noscript>
-  </head>
+    }
+  </style>
+  <noscript>
+    <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  </noscript>
+</head>
 
-  <body id="body">
-    <% if(IS_LEGACY) { %><div class='alert alert-warning legacyWarning' style="margin: 0; font-size: 1.6rem; line-height: 1.2; text-align:center;">👋 It looks like you are using an outdated browser - this makes your computer unsafe and FirstVoices may not work correctly. Please consider <a href="https://browsehappy.com/">upgrading or replacing your browser</a>.</div><% } %>
-    <div id="wrapper">
-      <div class="container-fluid" id="page-wrapper">
-        <div id="app-wrapper" class="app-wrapper">
-          <div id="app-loader" class="app-loader">
+<body id="body">
+  <% if(IS_LEGACY) { %>
+    <div class='alert alert-warning legacyWarning' style="margin: 0; font-size: 1.6rem; line-height: 1.2; text-align:center;">👋 It looks like you are using an outdated browser - this makes your computer unsafe and FirstVoices may not work correctly.
+      Please consider
+      <a href="https://browsehappy.com/">upgrading or replacing your browser</a>.</div>
+    <% } %>
+      <div id="wrapper">
+        <div class="container-fluid" id="page-wrapper">
+          <div id="pageNavigation" class="row">
+            <header id="Navigation__header" class="Navigation__header">
+              <div class="Navigation__toolbar">
+                <button onClick="javascript:openMenu();" tabindex="0" type="button" title="Open Menu">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </button>
+                <a id="Navigation__logo_a" href="/home">
+                  <img class="Navigation__logo" src="assets/images/logo.png" alt="FirstVoices">
+                </a>
+                <div id="navigation-toolbar" class="Navigation__toolbarMainInner">
+                  <div>
+                    <a class="Navigation__link" href="/explore/FV/sections/Data">EXPLORE LANGUAGES</a>
+                    <span id="login" class="Login Login--signIn">
+                      <span class="Login Login--welcome hidden-xs undefined">
+                        <span class="fv-label">WELCOME</span>, Guest
+                        <a class="Navigation__link" href="/nuxeo/logout?requestedUrl=login.jsp">SIGN IN</a>
+                      </span>
+                    </span>
+                  </div>
+                  <!-- search -->
+                  <form name="searchForm" id="searchForm" onSubmit="handleSearch()">
+                    <div class="Navigation__searchContainer Navigation__searchContainer--active">
+                      <div class="Navigation__searchContainerInner">
+                        <input aria-invalid="false" aria-label="Search FirstVoices" name="searchbox" placeholder="Search:" type="search" value="">
+                        <input value="&#x1F50E;" type="submit" tabindex="0" />
+                      </div>
+                      <div style="display:none;" class="Navigation__searchPopupContainer" tabindex="-1">
+                        <div class="Navigation__searchPopup " style="opacity: 1; transform: none; transition: opacity 235ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 157ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;">
+                          <div class="Navigation__popoverInner">
+                            <h6 class="MuiTypography-root MuiTypography-h6">
+                              <span class="fv-label">Search all languages and words at firstvoices.com</span>
+                            </h6>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <!-- e/o search-->
+                </div>
+              </div>
+            </header>
+          </div>
+          <div id="app-wrapper" class="app-wrapper" style="min-height:45vh;">
+            <div id="app-loader" class="app-loader" style="text-align:center;"></div>
+          </div>
+          <div id="pageFooter" class="AppFrontController__footer row">
+            <footer class="Footer Footer--explore-theme">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-xs-12 col-md-5 col-md-offset-1 Footer__group PrintHide">
+                    <p class="Footer__caption">An initiative of</p>
+                    <a href="http://www.fpcc.ca/" target="_blank" rel="noopener noreferrer">
+                      <img src="assets/images/logo-fpcc-white.png" alt="First Peoples' Cultural Council" class="pull-left">
+                    </a>
+                  </div>
+                  <div class="col-xs-12 col-md-5 col-md-offset-1 Footer__group">
+                    <p class="PrintHide">
+                      <a href="/content/disclaimer/">
+                        <span>Disclaimer</span>
+                      </a> |
+                      <a href="/content/conditions/">
+                        <span>Conditions of use</span>
+                      </a> |
+                      <a href="https://support.firstvoices.com/servicedesk/customer/portal/1">
+                        <span>Help</span>
+                      </a> |
+                      <a href="http://fpcf.ca/donate-now/">
+                        <span>Donate</span>
+                      </a>
+                    </p>
+                    <p>
+                      <span>Phone</span> : +1-250-882-8919 ·
+                      <span>Email</span> : support@fpcc.ca</p>
+                    <p>© 2000-2020 FirstVoices</p>
+                  </div>
+                </div>
+              </div>
+            </footer>
+            <div class="Footer__disclaimerGroup">©
+              <span>This database is protected by copyright laws and is owned by the First Peoples’ Cultural Foundation. All materials
+                on this site are protected by copyright laws and are owned by the individual Indigenous language communities
+                who created the archival content. Language and multimedia data available on this site is intended for private,
+                non-commercial use by individuals. Any commercial use of the language data or multimedia data in whole or
+                in part, directly or indirectly, is specifically forbidden except with the prior written authority of the
+                owner of the copyright.</span>
+            </div>
           </div>
         </div>
+        <div class="container-fluid" id="page-absolute-footer" style="background-color: #0d6c80;color:#fff;text-align:right;font-size:0.9em;">
+          <strong>Version:</strong>
+          <%= VERSION %> (
+            <%= DATE %>)
+              <br/>
+              <span style="color: #0d6c80;">
+                <strong>Commit</strong>:
+                <a style="color: #0d6c80;" href="https://github.com/First-Peoples-Cultural-Council/fv-web-ui/commits/<%= COMMIT %>">
+                  <%= COMMIT %>
+                </a> |
+                <strong>Branch</strong>:
+                <%= BRANCH %>
+              </span>
+        </div>
       </div>
-      <div
-        class="container-fluid"
-        id="page-absolute-footer"
-        style="background-color: #0d6c80;color:#fff;text-align:right;font-size:0.9em;"
-      >
-        <strong>Version:</strong> <%= VERSION %> (<%= DATE %>)<br/>
-        <span style="color: #0d6c80;">
-          <strong>Commit</strong>: 
-          <a style="color: #0d6c80;" href="https://github.com/First-Peoples-Cultural-Council/fv-web-ui/commits/<%= COMMIT %>"><%= COMMIT %></a> | <strong>Branch</strong>: <%= BRANCH %>
-        </span>
+
+      <div class="Navigation__leftNavDrawer" id="leftNavDrawer" tabindex="-1">
+        <div>
+          <div id="Navigation__leftNavDrawerHeader" class="Navigation__leftNavDrawerHeader">
+            <button onClick="javascript:closeMenu();" tabindex="0" type="button" title="Menu open">
+              &#x2715;
+            </button>
+            <a href="/home">
+              <img class="Navigation__logo" src="assets/images/logo.png" alt="FirstVoices">
+            </a>
+          </div>
+          <ul class="Navigation__leftNavDrawerMenu">
+            <li>
+              <a tabindex="0" aria-disabled="false" href="/home">
+                Home
+              </a>
+            </li>
+            <li>
+              <a tabindex="0" aria-disabled="false" href="/content/get-started">
+                Get Started
+              </a>
+            </li>
+            <li>
+              <a tabindex="0" aria-disabled="false" href="/explore/FV/sections/Data/">
+                Explore Languages
+              </a>
+            </li>
+            <li>
+              <a tabindex="0" aria-disabled="false" href="/kids">
+                Kids
+              </a>
+            </li>
+            <li>
+              <a tabindex="0" aria-disabled="false" href="/content/contribute">
+                Contribute
+              </a>
+            </li>
+            <li>
+              <a tabindex="0" aria-disabled="false" href="/content/apps">
+                FirstVoices Apps
+              </a>
+            </li>
+            <li>
+              <a tabindex="0" aria-disabled="false" href="/content/resources">
+                Resources
+              </a>
+            </li>
+            <li>
+              <a tabindex="0" aria-disabled="false" href="/nuxeo/logout">
+                Sign Out
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
 
-    <script type="text/javascript">
-      const linkNew = document.createElement('link');
-      linkNew.rel = 'stylesheet';
-      linkNew.href = '//fonts.googleapis.com/icon?family=Material+Icons';
-      const linkExisting = document.getElementsByTagName('link')[0];
-      linkExisting.parentNode.insertBefore(linkNew, linkExisting);
-    </script>
+      <script type=text/javascript>
 
-<!-- Matomo -->
-    <% if (process.env.NODE_ENV == 'production') { %>
-		<script type="text/javascript">
-      var _paq = _paq || [];
-      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-      (function() {
-        var u="//analytics.firstvoices.com/";
-        _paq.push(['setTrackerUrl', u+'piwik.php']);
-        _paq.push(['setSiteId', '1']);
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u + 'piwik.js'; s.parentNode.insertBefore(g,s);
-      })();
+        if (isWorkspace()) {
+          // Set top nav bar color to Workspace default
+          document.getElementById('Navigation__leftNavDrawerHeader').style.backgroundColor = '#26a69a'
+          document.getElementById('Navigation__header').style.backgroundColor = '#26a69a'
+        }
+
+        /*
+          Open the side nav menu
+        */
+        function openMenu() {
+          document.getElementById('leftNavDrawer').style.display = 'flex'
+          document.getElementById('leftNavDrawer').focus();
+        }
+
+        /*
+          Close the side nav menu
+        */
+        function closeMenu() {
+          document.getElementById('leftNavDrawer').style.display = 'none'
+          document.getElementById('Navigation__logo_a').focus();
+        }
+
+        /*
+          Get the community site URL based on the current path
+        /*/
+        function getCommunitySitePage() {
+          const communitySiteRegex = /\/explore\/FV\/(Workspaces|sections)\/Data\/([^/]+)\/([^/]+)\/([^/]+)(\/|$)/g;
+          const communitySitePath = window.location.href.match(communitySiteRegex);
+
+          if (communitySitePath && window.location.href.indexOf('/Data/search/') == -1) {
+            return communitySitePath;
+          }
+
+          return null;
+        }
+
+        /*
+          Returns true if we are in a workspace
+        */
+        function isWorkspace() {
+          return window.location.href.indexOf('/Workspaces/') != -1;
+        }
+
+        /*
+          Handle search form, forwarding to global or site search as needed
+        */
+        function handleSearch() {
+          let searchPath = '/explore/FV/sections/Data/search/';
+          const searchValue = encodeURIComponent(document.forms["searchForm"]["searchbox"].value);
+          
+          let communitySiteURL = getCommunitySitePage();
+
+          if (communitySiteURL && communitySiteURL.length == 1) {
+            // We are searching a specific site; update search path
+            communitySiteURL = (communitySiteURL[0].endsWith('/')) ? communitySiteURL[0] : communitySiteURL[0].concat('/');
+            searchPath = communitySiteURL.concat('search/');
+          } else if (isWorkspace()) {
+            // We are searching the entire site
+            // Switch between `workspaces` and `sections` for search
+            searchPath = searchPath.replace('/sections/', '/Workspaces/');
+          }
+
+          document.getElementById('searchForm').action = searchPath.concat(searchValue)
+        }
       </script>
-      <!-- End Matomo Code -->
-      <% } %>
 
-  </body>
+      <script type="text/javascript">
+        const linkNew = document.createElement('link');
+        linkNew.rel = 'stylesheet';
+        linkNew.href = '//fonts.googleapis.com/icon?family=Material+Icons';
+        const linkExisting = document.getElementsByTagName('link')[0];
+        linkExisting.parentNode.insertBefore(linkNew, linkExisting);
+      </script>
+
+      <!-- Matomo -->
+      <% if (process.env.NODE_ENV == 'production') { %>
+        <script type="text/javascript">
+          var _paq = _paq || [];
+          /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+          _paq.push(['trackPageView']);
+          _paq.push(['enableLinkTracking']);
+          (function () {
+            var u = "//analytics.firstvoices.com/";
+            _paq.push(['setTrackerUrl', u + 'piwik.php']);
+            _paq.push(['setSiteId', '1']);
+            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            g.type = 'text/javascript'; g.async = true; g.defer = true; g.src = u + 'piwik.js'; s.parentNode.insertBefore(g, s);
+          })();
+        </script>
+        <!-- End Matomo Code -->
+        <% } %>
+
+</body>
+
 </html>

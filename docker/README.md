@@ -204,16 +204,16 @@ You can access the Postgres database, run `docker exec -it <CONTAINER ID> psql -
 
 After making a change to a Nuxeo module, you can deploy your change to the docker container in two ways:
 
-#### Method 1 (deploy entire ZIP - recommended for changes in multiple modules):
+#### [BACKEND] Method 1 (deploy entire ZIP - recommended for changes in multiple modules):
 
-To build the entire project and deploy it to your local container, run:
+To build the entire project and deploy it to your local container, run in the `docker` folder:
 ```
-./docker/UpdatePackage.sh -minimal
+./UpdatePackage.sh -minimal
 ```
 
 You can skip tests by using the `-skip-tests` flag. If using both flags for a quicker deploy, the order of the arguments matter:
 ```
-./docker/UpdatePackage.sh -skip-tests -minimal
+./UpdatePackage.sh -skip-tests -minimal
 ```
 
 Flags:
@@ -221,7 +221,7 @@ Flags:
 * The `minimal` flag will skip building modules that are more relevant to server deployments (e.g. API, Cognito). You can remove this property if you wish to include these locally. The packages to exlcude are defined in the Maven `full-marketplace` profile. 
 * The `skip-tests` flag will skip tests for all packages.
 
-#### Method 2 (deploy a single module):
+#### [BACKEND] Method 2 (deploy a single module):
 
 - From the root of your module run the command `./UpdateModule.sh`. If you are creating a new module you will need to copy the UpdateModule.sh script from another module into the root of your module
   (eg: copy `/FirstVoicesData/UpdateModule.sh` into `/YourNewModule`).
@@ -231,6 +231,19 @@ Flags:
 - Alternatively navigate to `docker/` and run the command `./UpdateModuleMain.sh <ModuleName>` where `<ModuleName>` is the name of the module you have created/made changes to (eg: `./UpdateModuleMain.sh FirstVoicesData`).
 
   Both of the above will build the module, remove any old copies inside of the docker container, copy the new jarfile into the docker container, and restart the nuxeo backend to deploy the changes/module.
+
+#### [FRONTEND] Method 1:
+
+This is only applicable to the `Full Setup` where the front-end is deployed within a docker container running Apache2.
+
+You can deploy changes to the running docker container like so:
+```
+cd frontend
+npm ci && npm run build:production
+docker exec fv-web-ui sh -c "rm -rf /opt/fv/www/*" && docker cp public/. fv-web-ui:/opt/fv/www
+```
+
+(Note: follow frontend building instructions as those may change over time)
 
 ### Useful commands/common tasks/tips
 
