@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setLocale as _setLocale } from 'reducers/locale'
 
 function useLocale() {
@@ -10,6 +10,7 @@ function useLocale() {
   }
 
   return {
+    locale: useSelector((state) => state.locale),
     setLocale,
   }
 }

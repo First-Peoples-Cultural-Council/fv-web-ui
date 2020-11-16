@@ -33,17 +33,17 @@ function NavigationBarData({ children }) {
   //DataSources
   const { intl } = useIntl()
   const { computeLogin } = useLogin()
-  const { setLocale } = useLocale()
+  const { locale, setLocale } = useLocale()
   const { computeLoadNavigation, loadNavigation, toggleMenuAction } = useNavigation()
   const { getSearchObject, navigate } = useNavigationHelpers()
-  const { computePortal } = usePortal()
+  const { fetchPortal, computePortal } = usePortal()
   const { routeParams } = useRoute()
   const { windowPath, splitWindowPath } = useWindowPath()
 
   const isDialect = routeParams.hasOwnProperty('dialect_path')
   const computedPortal = ProviderHelpers.getEntry(computePortal, routeParams.dialect_path + '/Portal')
   const portalLogo = selectn('response.contextParameters.portal.fv-portal:logo', computedPortal)
-  const avatarSrc = UIHelpers.getThumbnail(portalLogo, 'Thumbnail')
+  const portalLogoSrc = UIHelpers.getThumbnail(portalLogo, 'Thumbnail')
   const portalTitle = routeParams.dialect_name || ''
   const dialectHref = NavigationHelpers.generateStaticURL('/explore' + routeParams.dialect_path)
   const dashboardHref = NavigationHelpers.generateStaticURL('/dashboard')
@@ -55,6 +55,10 @@ function NavigationBarData({ children }) {
   const [searchValue, setSearchValue] = useState('')
 
   useEffect(() => {
+    // If searching within a dialect, fetch portal (needed for portal logo src)
+    if (isDialect) {
+      ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, fetchPortal, computePortal)
+    }
     // Only load navigation once
     if (!computeLoadNavigation.success) {
       loadNavigation()
@@ -66,9 +70,8 @@ function NavigationBarData({ children }) {
   }, [windowPath, routeParams])
 
   const handleNavigationSearchSubmit = () => {
-    // If searched w/nothing focus on input and don't continue
+    // If searched w/nothing return
     if (searchValue === '') {
-      //   showSearchPopup(event)
       return
     }
     setSearchPopoverOpen(false)
@@ -129,8 +132,10 @@ function NavigationBarData({ children }) {
   }
 
   return children({
-    avatarSrc,
+    portalLogoSrc,
     computeLogin,
+    currentImmersionMode: locale.immersionMode,
+    currentLocale: locale.locale,
     dashboardHref,
     dialectHref,
     handleChangeImmersion: () => {},
@@ -147,6 +152,7 @@ function NavigationBarData({ children }) {
     portalTitle,
     routeParams,
     searchPopoverOpen,
+    searchLocation,
     searchValue,
     toggleDisplayLocaleOptions,
   })

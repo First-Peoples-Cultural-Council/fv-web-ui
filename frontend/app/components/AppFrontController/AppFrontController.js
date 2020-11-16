@@ -25,7 +25,7 @@ import { Redirector } from 'common/Redirector'
 // import UIHelpers from 'common/UIHelpers'
 import StringHelpers from 'common/StringHelpers'
 import FVButton from 'components/FVButton'
-import Navigation from 'components/Navigation'
+import NavigationBar from 'components/NavigationBar'
 import WorkspaceSwitcher from 'components/WorkspaceSwitcher'
 import KidsNavigation from 'components/Kids/navigation'
 import Footer from 'components/Footer'
@@ -146,7 +146,7 @@ export class AppFrontController extends Component {
 
       let page
 
-      let navigation = <Navigation frontpage={isFrontPage} routeParams={routeParams} />
+      let navigation = <NavigationBar.Container />
       const siteTheme = routeParams.hasOwnProperty('siteTheme') ? routeParams.siteTheme : 'default'
       // prettier-ignore
       const isPrintView = matchedPage
