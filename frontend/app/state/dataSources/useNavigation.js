@@ -3,7 +3,6 @@ import {
   changeTitleParams as _changeTitleParams,
   loadNavigation as _loadNavigation,
   overrideBreadcrumbs as _overrideBreadcrumbs,
-  toggleMenuAction as _toggleMenuAction,
 } from 'reducers/navigation'
 
 function useNavigation() {
@@ -23,16 +22,11 @@ function useNavigation() {
     const dispatchObj = _overrideBreadcrumbs(breadcrumbs)
     dispatch(dispatchObj)
   }
-  const toggleMenuAction = (breadcrumbs) => {
-    const dispatchObj = _toggleMenuAction(breadcrumbs)
-    dispatch(dispatchObj)
-  }
 
   return {
     changeTitleParams,
     loadNavigation,
     overrideBreadcrumbs,
-    toggleMenuAction,
   }
 }
 
