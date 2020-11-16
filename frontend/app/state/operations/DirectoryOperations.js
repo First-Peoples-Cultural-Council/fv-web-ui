@@ -1,23 +1,21 @@
 /*
-Copyright 2016 First People's Cultural Council
+ Copyright 2016 First People's Cultural Council
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
 
-http://www.apache.org/licenses/LICENSE-2.0
+ http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 import StringHelpers from 'common/StringHelpers'
 
 import request from 'request'
-
-// import Nuxeo from 'nuxeo'
 
 import BaseOperations from 'operations/BaseOperations'
 import IntlService from 'common/services/IntlService'
@@ -216,15 +214,15 @@ export default class DirectoryOperations {
     )
 
     /*
-      WORKAROUND: DY @ 17-04-2019:
+     WORKAROUND: DY @ 17-04-2019:
 
-      This is a workaround for elasticsearch returning no results for queries that start with
-      Instead of querying elasticsearch, do a database query in this occurence.
+     This is a workaround for elasticsearch returning no results for queries that start with
+     Instead of querying elasticsearch, do a database query in this occurence.
 
-      TODO: Figure out what elasticsearch configuration is appropriate here.
+     TODO: Figure out what elasticsearch configuration is appropriate here.
 
-      starts_with_query is set in learn/words/list-view, and learn/phrases/list-view
-    */
+     starts_with_query is set in learn/words/list-view, and learn/phrases/list-view
+     */
     let endPointToUse = 'Document.EnrichedQuery'
 
     if (Object.prototype.hasOwnProperty.call(nxqlQueryParams, 'starts_with_query')) {
@@ -262,6 +260,35 @@ export default class DirectoryOperations {
       setTimeout(() => {
         reject('Server timeout while attempting to get documents.')
       }, TIMEOUT)
+    })
+  }
+
+  static getDocumentsViaCustomAPI(path) {
+    const properties = BaseOperations.getProperties()
+
+    return new Promise((resolve, reject) => {
+      properties.client
+        .request(path)
+        .get([])
+        .then((docs) => {
+          resolve(docs)
+        })
+        .catch((error) => {
+          if (error.hasOwnProperty('response')) {
+            error.response.json().then((jsonError) => {
+              reject(StringHelpers.extractErrorMessage(jsonError))
+            })
+          } else {
+            return reject(
+              error ||
+                IntlService.instance.translate({
+                  key: 'operations.could_not_access_server',
+                  default: 'Could not access server',
+                  case: 'first',
+                })
+            )
+          }
+        })
     })
   }
 
