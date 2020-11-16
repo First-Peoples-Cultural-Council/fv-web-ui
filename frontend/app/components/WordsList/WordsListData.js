@@ -21,7 +21,7 @@ import useNavigationHelpers from 'common/useNavigationHelpers'
 
 // Helpers
 import { getDialectClassname } from 'common/Helpers'
-import NavigationHelpers, { hasPagination, updateUrlIfPageOrPageSizeIsDifferent } from 'common/NavigationHelpers'
+import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 import { WORKSPACES } from 'common/Constants'
@@ -58,7 +58,7 @@ function WordsListData({ children }) {
   const { routeParams, setRouteParams } = useRoute()
   const { computePortal, fetchPortal } = usePortal()
   const { computeSearchDialect } = useSearchDialect()
-  const { pushWindowPath, splitWindowPath } = useWindowPath()
+  const { pushWindowPath } = useWindowPath()
   const { computeWords, fetchWords } = useWord()
   const { getSearchAsObject, convertObjToUrlQuery, navigate } = useNavigationHelpers()
   const { siteTheme, dialect_path: dialectPath, area } = routeParams
@@ -112,11 +112,7 @@ function WordsListData({ children }) {
   useEffect(() => {
     if (curFetchDocumentAction === 'FV_DOCUMENT_FETCH_SUCCESS') {
       let currentAppliedFilter = ''
-      // if (searchNxqlQuery && resetSearch !== true) {
-      //   currentAppliedFilter = ` AND ${searchNxqlQuery}`
-      // }
-
-      if (queryCategory /* && resetSearch !== true*/) {
+      if (queryCategory) {
         currentAppliedFilter = ` AND ${
           area === 'Workspaces' ? 'fv-word:categories' : 'fvproxy:proxied_categories'
         }/* IN ("${queryCategory}") &enrichment=category_children`
@@ -336,63 +332,26 @@ function WordsListData({ children }) {
   }
 
   const sortHandler = ({ page, pageSize, sortBy, sortOrder } = {}) => {
-    setRouteParams({
-      search: {
-        pageSize,
-        page,
-        sortBy,
-        sortOrder,
-      },
-    })
-    // Conditionally update the url after a sort event
-    updateUrlIfPageOrPageSizeIsDifferent({
-      page,
-      pageSize,
-      pushWindowPath: pushWindowPath,
-      routeParamsPage: queryPage,
-      routeParamsPageSize: queryPageSize,
-      splitWindowPath: splitWindowPath,
-      windowLocationSearch: window.location.search, // Set only if you want to append the search
-    })
+    navigate(
+      `${window.location.pathname}?${convertObjToUrlQuery(
+        Object.assign({}, getSearchAsObject(), { page, pageSize, sortBy, sortOrder })
+      )}`
+    )
   }
 
-  // TODO: Will be updated over in FW-1188-search-dialect-url
   const _resetSearch = () => {
-    // console.log('_resetSearch')
-    // Remove alphabet/category filter urls
-    if (queryCategory || queryLetter) {
-      let resetUrl = `/${splitWindowPath.join('/')}`
-      const _splitWindowPath = [...splitWindowPath]
-      const learnIndex = _splitWindowPath.indexOf('learn')
-      if (learnIndex !== -1) {
-        _splitWindowPath.splice(learnIndex + 2)
-        resetUrl = `/${_splitWindowPath.join('/')}`
-      }
-      navigate(`${resetUrl}/${queryPageSize}/1`)
-    } else {
-      // When facets change, pagination should be reset.
-      // In these pages (words/phrase), list views are controlled via URL
-      // fetchListViewData({ pageIndex: queryPage, pageSize: queryPageSize, resetSearch: true })
-      resetURLPagination()
-    }
-  }
-
-  // TODO: Will be updated over in FW-1188-search-dialect-url
-  const resetURLPagination = ({ pageSize = null, preserveSearch = false } = {}) => {
-    const urlPage = 1
-    const urlPageSize = pageSize || queryPageSize || 10
-
-    const navHelperCallback = (url) => {
-      pushWindowPath(`${url}${preserveSearch ? window.location.search : ''}`)
-    }
-    const hasPaginationUrl = hasPagination(splitWindowPath)
-    if (hasPaginationUrl) {
-      // Replace them
-      NavigationHelpers.navigateForwardReplaceMultiple(splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
-    } else {
-      // No pagination in url (eg: .../learn/words), append `urlPage` & `urlPageSize`
-      NavigationHelpers.navigateForward(splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
-    }
+    const searchObj = getSearchAsObject()
+    const filterOut = ['category', 'letter', 'page', 'sortBy', 'sortOrder']
+    const filteredByKey = Object.fromEntries(
+      Object.entries(searchObj).filter(([key]) => {
+        return filterOut.includes(key) === false
+      })
+    )
+    navigate(
+      `${window.location.pathname}?${convertObjToUrlQuery(
+        Object.assign({}, filteredByKey, { page: 1, pageSize: searchObj.pageSize })
+      )}`
+    )
   }
 
   // TODO: Will be updated over in FW-1188-search-dialect-url
