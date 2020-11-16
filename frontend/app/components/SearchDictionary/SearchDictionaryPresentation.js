@@ -62,7 +62,7 @@ function SearchDictionaryPresentation({
         <ul className="SearchDictionary__filterList">{filterListItems}</ul>
       </div>
 
-      <Paper className="container col-xs-12 col-md-10">
+      <Paper className="SearchDictionary__container col-xs-12 col-md-10">
         <h1 className="title">
           <em>{searchTerm}</em> Search Results
         </h1>
@@ -101,7 +101,9 @@ function SearchDictionaryPresentation({
             </Pagination.Container>
           )}
           {hasItems === false && (
-            <div className={'WordsList WordsList--noData'}>Sorry, no results were found for this search.</div>
+            <div className={'SearchDictionary SearchDictionary--noData'}>
+              Sorry, no results were found for this search.
+            </div>
           )}
         </PromiseWrapper>
       </Paper>
