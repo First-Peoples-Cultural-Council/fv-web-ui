@@ -21,11 +21,7 @@ import useNavigationHelpers from 'common/useNavigationHelpers'
 
 // Helpers
 import { getDialectClassname } from 'common/Helpers'
-import NavigationHelpers, {
-  appendPathArrayAfterLandmark,
-  hasPagination,
-  updateUrlIfPageOrPageSizeIsDifferent,
-} from 'common/NavigationHelpers'
+import NavigationHelpers, { hasPagination, updateUrlIfPageOrPageSizeIsDifferent } from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 import { WORKSPACES } from 'common/Constants'
@@ -64,7 +60,7 @@ function WordsListData({ children }) {
   const { computeSearchDialect } = useSearchDialect()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
   const { computeWords, fetchWords } = useWord()
-  const { getSearchAsObject, navigate } = useNavigationHelpers()
+  const { getSearchAsObject, convertObjToUrlQuery, navigate } = useNavigationHelpers()
   const { siteTheme, dialect_path: dialectPath, area } = routeParams
   // const { searchNxqlQuery = '' } = computeSearchDialect
   const {
@@ -332,29 +328,11 @@ function WordsListData({ children }) {
   }
 
   function fetcher({ currentPageIndex, pageSize }) {
-    let newUrl = ''
-    if (queryLetter) {
-      newUrl = appendPathArrayAfterLandmark({
-        pathArray: [pageSize, currentPageIndex],
-        splitWindowPath: splitWindowPath,
-        landmarkArray: [queryLetter],
-      })
-    } else if (queryCategory) {
-      newUrl = appendPathArrayAfterLandmark({
-        pathArray: [pageSize, currentPageIndex],
-        splitWindowPath: splitWindowPath,
-        landmarkArray: [queryCategory],
-      })
-    } else {
-      newUrl = appendPathArrayAfterLandmark({
-        pathArray: [pageSize, currentPageIndex],
-        splitWindowPath: splitWindowPath,
-        landmarkArray: ['words'],
-      })
-    }
-    if (newUrl) {
-      navigate(`/${newUrl}`)
-    }
+    navigate(
+      `${window.location.pathname}?${convertObjToUrlQuery(
+        Object.assign({}, getSearchAsObject(), { page: currentPageIndex, pageSize })
+      )}`
+    )
   }
 
   const sortHandler = ({ page, pageSize, sortBy, sortOrder } = {}) => {
@@ -378,6 +356,7 @@ function WordsListData({ children }) {
     })
   }
 
+  // TODO: Will be updated over in FW-1188-search-dialect-url
   const _resetSearch = () => {
     // console.log('_resetSearch')
     // Remove alphabet/category filter urls
@@ -398,6 +377,7 @@ function WordsListData({ children }) {
     }
   }
 
+  // TODO: Will be updated over in FW-1188-search-dialect-url
   const resetURLPagination = ({ pageSize = null, preserveSearch = false } = {}) => {
     const urlPage = 1
     const urlPageSize = pageSize || queryPageSize || 10
@@ -415,6 +395,7 @@ function WordsListData({ children }) {
     }
   }
 
+  // TODO: Will be updated over in FW-1188-search-dialect-url
   const handleSearch = (/*{ href, updateUrl = true } = {}*/) => {
     // console.log('handleSearch', {href, updateUrl})
     // if (href && updateUrl) {
@@ -431,7 +412,7 @@ function WordsListData({ children }) {
     dialect,
     dialectClassName,
     dialectUid,
-    fetcher: fetcher,
+    fetcher,
     fetcherParams: {
       currentPageIndex: queryPage,
       pageSize: queryPageSize,
