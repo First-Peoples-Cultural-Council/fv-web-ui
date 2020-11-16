@@ -35,7 +35,7 @@ import {
 } from 'components/DictionaryList/DictionaryListSmallScreen'
 import AuthorizationFilter from 'components/AuthorizationFilter'
 import Link from 'components/Link'
-
+const SearchDialect = React.lazy(() => import('components/SearchDialect'))
 const FlashcardList = React.lazy(() => import('components/FlashcardList'))
 const DictionaryListSmallScreen = React.lazy(() => import('components/DictionaryList/DictionaryListSmallScreen'))
 const DictionaryListLargeScreen = React.lazy(() => import('components/DictionaryList/DictionaryListLargeScreen'))
@@ -73,6 +73,7 @@ function WordsListPresentation(props) {
     fetcher,
     fetcherParams,
     filter,
+    handleSearch,
     hasPagination,
     hasSorting,
     hasViewModeButtons,
@@ -82,12 +83,14 @@ function WordsListPresentation(props) {
     navigationRouteSearch,
     pageTitle,
     pushWindowPath,
+    resetSearch,
     routeParams,
     rowClickHandler,
+    searchDialectDataType,
+    searchUi,
     setRouteParams,
     sortHandler,
     wordsListClickHandlerViewMode,
-    childrenSearch,
   } = props
   const { getSearchAsObject } = useNavigationHelpers()
   const intl = IntlService.instance
@@ -226,8 +229,12 @@ function WordsListPresentation(props) {
           </div>
         </AuthorizationFilter>
         <div className={dialectClassName}>
-          {childrenSearch}
-          {/* {chldrenListButtons} */}
+          <SearchDialect
+            handleSearch={handleSearch}
+            resetSearch={resetSearch}
+            searchUi={searchUi}
+            searchDialectDataType={searchDialectDataType}
+          />
           {generateListButtons(listButtonArg)}
           <Media
             queries={{
@@ -484,7 +491,7 @@ function getListLargeScreen({ dictionaryListLargeScreenProps = {}, hasPagination
 
 // ===============================================================
 
-const { array, bool, func, instanceOf, node, number, object, oneOfType, string } = PropTypes
+const { array, bool, func, instanceOf, number, object, oneOfType, string } = PropTypes
 WordsListPresentation.propTypes = {
   // Pagination
   fetcher: func, // TODO
@@ -513,7 +520,10 @@ WordsListPresentation.propTypes = {
   rowClickHandler: func, // NOTE: this list view is used in the browse mode where you can select items to add to other documents (eg: add a contributor to a word). This is the event handler for that action
   sortHandler: func, // NOTE: event handler for sort actions. If not defined, the url will be updated instead.
   // <SearchDialect />
-  childrenSearch: node,
+  handleSearch: func, // NOTE: After <SearchDialect /> updates search data in redux, this callback is called. TODO: could drop if all components are subscribed to Redux > Search updates.
+  searchDialectDataType: number, // NOTE: tells SearchDialect what it's working with (eg: 6 = SEARCH_DATA_TYPE_WORD, 5 = SEARCH_DATA_TYPE_PHRASE). Used in preparing appropriate UI messages & form markup
+  resetSearch: func, // NOTE: SearchDialect handles resetting (setting form back to initial state & updating redux), this is a followup callback after that happens
+  searchUi: array, // NOTE: array of objects used to generate the search form elements (eg: inputs, selects, if they are checked, etc), this prop is used to reset to the initial state when 'Reset' search is pressed
   // REDUX: reducers/state
   routeParams: object, // NOTE: redux saved route params, using page & pageSize
   navigationRouteSearch: object, // NOTE: redux saved search settings, using sortOrder & sortBy. TODO: is this a logical spot for sort?
@@ -532,6 +542,10 @@ WordsListPresentation.defaultProps = {
   // General List
   hasSorting: true,
   hasViewModeButtons: true,
+  // Search
+  handleSearch: () => {},
+  resetSearch: () => {},
+  searchDialectDataType: 6,
 }
 
 export default WordsListPresentation
