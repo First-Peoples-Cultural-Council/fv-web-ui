@@ -21,11 +21,7 @@ import useNavigationHelpers from 'common/useNavigationHelpers'
 
 // Helpers
 import { getDialectClassname } from 'common/Helpers'
-import NavigationHelpers /* {
-  // appendPathArrayAfterLandmark,
-  // hasPagination,
-  updateUrlIfPageOrPageSizeIsDifferent,
-}*/ from 'common/NavigationHelpers'
+import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 import { WORKSPACES } from 'common/Constants'
@@ -62,7 +58,7 @@ function WordsListData({ children }) {
   const { routeParams, setRouteParams } = useRoute()
   const { computePortal, fetchPortal } = usePortal()
   const { computeSearchDialect } = useSearchDialect()
-  const { pushWindowPath, splitWindowPath } = useWindowPath()
+  const { pushWindowPath } = useWindowPath()
   const { computeWords, fetchWords } = useWord()
   const { getSearchAsObject, convertObjToUrlQuery, navigate } = useNavigationHelpers()
   const { siteTheme, dialect_path: dialectPath, area } = routeParams
@@ -72,7 +68,7 @@ function WordsListData({ children }) {
     letter: queryLetter,
     page: queryPage,
     pageSize: queryPageSize,
-    query: queryQuery,
+    // query: queryQuery,
     sortBy: querySortBy,
     sortOrder: querySortOrder,
   } = getSearchAsObject({
@@ -147,11 +143,7 @@ function WordsListData({ children }) {
   useEffect(() => {
     if (curFetchDocumentAction === 'FV_DOCUMENT_FETCH_SUCCESS') {
       let currentAppliedFilter = ''
-      // if (searchNxqlQuery && resetSearch !== true) {
-      //   currentAppliedFilter = ` AND ${searchNxqlQuery}`
-      // }
-
-      if (queryCategory /* && resetSearch !== true*/) {
+      if (queryCategory) {
         currentAppliedFilter = ` AND ${
           area === 'Workspaces' ? 'fv-word:categories' : 'fvproxy:proxied_categories'
         }/* IN ("${queryCategory}") &enrichment=category_children`
@@ -347,31 +339,21 @@ function WordsListData({ children }) {
   }
 
   const _resetSearch = () => {
-    // console.log('_resetSearch')
-    if (queryQuery) {
-      navigate(`/${splitWindowPath.join('/')}?pageSize=${queryPageSize}&page=1`)
-    } else {
-      // console.log('if have text in input clear it out')
-    }
+    const searchObj = getSearchAsObject()
+    const filterOut = ['category', 'letter', 'page', 'sortBy', 'sortOrder']
+    const filteredByKey = Object.fromEntries(
+      Object.entries(searchObj).filter(([key]) => {
+        return filterOut.includes(key) === false
+      })
+    )
+    navigate(
+      `${window.location.pathname}?${convertObjToUrlQuery(
+        Object.assign({}, filteredByKey, { page: 1, pageSize: searchObj.pageSize })
+      )}`
+    )
   }
 
-  // const resetURLPagination = ({ pageSize = null, preserveSearch = false } = {}) => {
-  //   const urlPage = 1
-  //   const urlPageSize = pageSize || queryPageSize || 10
-
-  //   const navHelperCallback = (url) => {
-  //     pushWindowPath(`${url}${preserveSearch ? window.location.search : ''}`)
-  //   }
-  //   const hasPaginationUrl = hasPagination(splitWindowPath)
-  //   if (hasPaginationUrl) {
-  //     // Replace them
-  //     NavigationHelpers.navigateForwardReplaceMultiple(splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
-  //   } else {
-  //     // No pagination in url (eg: .../learn/words), append `urlPage` & `urlPageSize`
-  //     NavigationHelpers.navigateForward(splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
-  //   }
-  // }
-
+  // TODO: Will be updated over in FW-1188-search-dialect-url
   const handleSearch = (/*{ href, updateUrl = true } = {}*/) => {
     // console.log('handleSearch', {href, updateUrl})
     // if (href && updateUrl) {

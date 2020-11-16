@@ -156,56 +156,54 @@ function WordsListPresentation(props) {
 
   const listButtonArg = {
     // Export
-    dialect: dialect,
-    exportDialectColumns: exportDialectColumns,
-    exportDialectExportElement: exportDialectExportElement,
-    exportDialectLabel: exportDialectLabel,
-    exportDialectQuery: exportDialectQuery,
-    /*
-          // Commented out until export is fixed
-          hasExportDialect: hasExportDialect,
-           */
+    dialect,
+    exportDialectColumns,
+    exportDialectExportElement,
+    exportDialectLabel,
+    exportDialectQuery,
+    // Commented out until export is fixed
+    // hasExportDialect,
     // View mode
     clickHandlerViewMode: wordsListClickHandlerViewMode,
-    dictionaryListViewMode: dictionaryListViewMode,
-    hasViewModeButtons: hasViewModeButtons,
+    dictionaryListViewMode,
+    hasViewModeButtons,
   }
 
   const getListSmallScreenArg = {
     dictionaryListSmallScreenProps: {
-      rowClickHandler: rowClickHandler,
-      hasSorting: hasSorting,
+      rowClickHandler,
+      hasSorting,
       // withPagination
       // --------------------
-      fetcher: fetcher,
-      fetcherParams: fetcherParams,
-      metadata: metadata,
+      fetcher,
+      fetcherParams,
+      metadata,
       // List: small screen
       // --------------------
       columns: columnsEnhanced,
-      items: items,
+      items,
       dictionaryListSmallScreenTemplate: dictionaryListSmallScreenTemplateWords,
     },
-    hasPagination: hasPagination,
+    hasPagination,
     pageSize: DefaultFetcherParams.pageSize,
   }
 
   const getListLargeScreenArg = {
     dictionaryListLargeScreenProps: {
-      rowClickHandler: rowClickHandler,
-      hasSorting: hasSorting,
+      rowClickHandler,
+      hasSorting,
       // withPagination
       // --------------------
-      fetcher: fetcher,
-      fetcherParams: fetcherParams,
-      metadata: metadata,
+      fetcher,
+      fetcherParams,
+      metadata,
       // List: large screen
       // --------------------
       columns: columnsEnhanced,
-      items: items,
+      items,
     },
 
-    hasPagination: hasPagination,
+    hasPagination,
     pageSize: DefaultFetcherParams.pageSize,
   }
 
