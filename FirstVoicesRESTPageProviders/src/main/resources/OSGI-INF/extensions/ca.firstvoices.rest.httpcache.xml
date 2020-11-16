@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="ca.firstvoices.rest.httpcache">
+
+  <require>org.nuxeo.ecm.platform.web.common.requestcontroller.service.RequestControllerService.defaultContrib</require>
+
+  <extension target="org.nuxeo.ecm.platform.web.common.requestcontroller.service.RequestControllerService"
+             point="filterConfig">
+
+    <filterConfig name="portal" transactional="true" synchonize="false" cached="true" private="true"
+                  cacheTime="0"> <!-- Cache time is zero and in the service we set must-revalidate and an eTag -->
+      <pattern>${org.nuxeo.ecm.contextPath}/api/v1/portal/.*</pattern>
+    </filterConfig>
+
+  </extension>
+</component>
