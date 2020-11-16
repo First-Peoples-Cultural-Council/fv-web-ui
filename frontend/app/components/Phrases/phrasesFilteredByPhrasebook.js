@@ -104,7 +104,7 @@ export class phrasesFilteredByPhrasebook extends Component {
     await ProviderHelpers.fetchIfMissing(
       `${routeParams.dialect_path}/Dictionary`,
       this.props.fetchDocument,
-      computeDocument
+      computeDocument,
     )
 
     // Phrases
@@ -128,7 +128,7 @@ export class phrasesFilteredByPhrasebook extends Component {
     if (filterInfo.get('currentCategoryFilterIds').isEmpty()) {
       const pagePropertiesFilterInfo = selectn(
         [[`${routeParams.area}_${routeParams.dialect_name}_learn_phrases`], 'filterInfo'],
-        properties.pageProperties
+        properties.pageProperties,
       )
       if (pagePropertiesFilterInfo) {
         filterInfo = pagePropertiesFilterInfo
@@ -316,7 +316,7 @@ export class phrasesFilteredByPhrasebook extends Component {
                             title={intl.trans(
                               'views.pages.explore.dialect.learn.phrases.browse_by_phrase_books',
                               'Browse Phrase Books',
-                              'words'
+                              'words',
                             )}
                             listItemData={listItemData}
                           />
@@ -419,7 +419,7 @@ export class phrasesFilteredByPhrasebook extends Component {
           const isWorkspaces = this.props.routeParams.area === WORKSPACES
           const hrefEdit = NavigationHelpers.generateUIDEditPath(this.props.routeParams.siteTheme, data, 'phrases')
           const hrefEditRedirect = `${hrefEdit}?redirect=${encodeURIComponent(
-            `${window.location.pathname}${window.location.search}`
+            `${window.location.pathname}${window.location.search}`,
           )}`
 
           const editButton =
@@ -553,7 +553,7 @@ export class phrasesFilteredByPhrasebook extends Component {
     const initialCategories = routeParamsCategory ? new Set([routeParamsCategory]) : new Set()
     const currentAppliedFilterCategoriesParam1 = ProviderHelpers.switchWorkspaceSectionKeys(
       'fv-phrase:phrase_books',
-      routeParams.area
+      routeParams.area,
     )
     const currentAppliedFilterCategories = routeParamsCategory
       ? ` AND ${currentAppliedFilterCategoriesParam1}/* IN ("${routeParamsCategory}")`
@@ -584,7 +584,7 @@ export class phrasesFilteredByPhrasebook extends Component {
           pushWindowPath: this.props.pushWindowPath,
           urlAppend: `/${this.props.routeParams.pageSize}/1`,
         })
-      }
+      },
     )
   }
   _sortHandler = async ({ page, pageSize, sortBy, sortOrder } = {}) => {

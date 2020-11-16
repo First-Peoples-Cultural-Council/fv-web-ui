@@ -86,7 +86,7 @@ export class Search extends DataListView {
         },
         () => {
           this._fetchListViewData(this.state.pageInfo.page, this.state.pageInfo.pageSize, this.props)
-        }
+        },
       )
     }
   }
@@ -138,7 +138,7 @@ export class Search extends DataListView {
       await props.searchDocuments(
         this._getQueryPath(props),
         `${latestVersion} AND ecm:primaryType IN ('FVWord','FVPhrase','FVBook','FVPortal') AND ( ecm:fulltext_dictionary_all_field = '${searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ fv:definitions/*/translation ILIKE '${searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ dc:title ILIKE '${searchTerm}' )&currentPageIndex=${pageIndex -
-          1}&pageSize=${pageSize}&sortBy=ecm:fulltextScore`
+          1}&pageSize=${pageSize}&sortBy=ecm:fulltextScore`,
       )
 
       // Update url
@@ -167,7 +167,7 @@ export class Search extends DataListView {
             },
             () => {
               this._fetchListViewData(currentPageIndex, pageSize, this.props)
-            }
+            },
           )
         },
         fetcherParams: {
@@ -246,7 +246,7 @@ export class Search extends DataListView {
                 const area = this.props.routeParams.area
                 const family = (selectn(['contextParameters', 'ancestry', 'family', 'dc:title'], data) || '').replace(
                   /\//g,
-                  '_'
+                  '_',
                 )
 
                 const language = (
@@ -255,7 +255,7 @@ export class Search extends DataListView {
 
                 const dialect = (selectn(['contextParameters', 'ancestry', 'dialect', 'dc:title'], data) || '').replace(
                   /\//g,
-                  '_'
+                  '_',
                 )
 
                 href = `/${siteTheme}/FV/${area}/Data/${family}/${language}/${dialect}`

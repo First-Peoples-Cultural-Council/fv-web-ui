@@ -13,14 +13,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import IntlService from 'common/services/IntlService'
 import StringHelpers from 'common/StringHelpers'
 
-// import Nuxeo from 'nuxeo'
-import BaseOperations from 'operations/BaseOperations'
-
 import request from 'request'
-import _ from 'underscore'
+
+import BaseOperations from 'operations/BaseOperations'
+import IntlService from 'common/services/IntlService'
 
 const TIMEOUT = 60000
 
@@ -38,7 +36,7 @@ export default class DirectoryOperations {
 
       request(options, (error, response, body) => {
         if (error || response.statusCode !== 200) {
-          if (error.hasOwnProperty('response')) {
+          if (Object.prototype.hasOwnProperty.call(error, 'response')) {
             error.response.json().then((jsonError) => {
               reject(StringHelpers.extractErrorMessage(jsonError))
             })
@@ -78,7 +76,7 @@ export default class DirectoryOperations {
     return new Promise((resolve, reject) => {
       request.get({ url: path, json: true }, function handleResponse(error, response, body) {
         if (error) {
-          if (error.hasOwnProperty('response')) {
+          if (Object.prototype.hasOwnProperty.call(error, 'response')) {
             error.response.json().then((jsonError) => {
               return reject(StringHelpers.extractErrorMessage(jsonError))
             })
@@ -105,7 +103,7 @@ export default class DirectoryOperations {
         },
         function handleResponse(error, response, body) {
           if (error) {
-            if (error.hasOwnProperty('response')) {
+            if (Object.prototype.hasOwnProperty.call(error, 'response')) {
               error.response.json().then((jsonError) => {
                 return reject(StringHelpers.extractErrorMessage(jsonError))
               })
@@ -132,7 +130,7 @@ export default class DirectoryOperations {
         },
         function handleResponse(error, response, body) {
           if (error) {
-            if (error.hasOwnProperty('response')) {
+            if (Object.prototype.hasOwnProperty.call(error, 'response')) {
               error.response.json().then((jsonError) => {
                 return reject(StringHelpers.extractErrorMessage(jsonError))
               })
@@ -178,7 +176,7 @@ export default class DirectoryOperations {
             resolve(docs)
           })
           .catch((error) => {
-            if (error.hasOwnProperty('response')) {
+            if (Object.prototype.hasOwnProperty.call(error, 'response')) {
               error.response.json().then((jsonError) => {
                 reject(StringHelpers.extractErrorMessage(jsonError))
               })
@@ -227,7 +225,7 @@ export default class DirectoryOperations {
      */
     let endPointToUse = 'Document.EnrichedQuery'
 
-    if (nxqlQueryParams && nxqlQueryParams.hasOwnProperty('starts_with_query')) {
+    if (Object.prototype.hasOwnProperty.call(nxqlQueryParams, 'starts_with_query')) {
       endPointToUse = 'Document.Query'
       if (nxqlQueryParams.starts_with_query === 'Document.CustomOrderQuery') {
         endPointToUse = 'Document.CustomOrderQuery'
@@ -243,7 +241,7 @@ export default class DirectoryOperations {
           resolve(docs)
         })
         .catch((error) => {
-          if (error.hasOwnProperty('response')) {
+          if (Object.prototype.hasOwnProperty.call(error, 'response')) {
             error.response.json().then((jsonError) => {
               reject(StringHelpers.extractErrorMessage(jsonError))
             })
@@ -352,76 +350,6 @@ export default class DirectoryOperations {
     })
   }
 
-  // Unused method. Remove.
-  getPartsOfSpeech(client) {
-    return new Promise((resolve, reject) => {
-      client.request('directory/parts_speech').get((error, data) => {
-        if (error) {
-          // something went wrong
-          throw error
-        }
-
-        if (data.entries.length > 0) {
-          //entry.properties.label
-          const partsSpeech = _.object(_.map(data.entries, (entry) => [entry.properties.id, entry.properties.id]))
-          resolve(partsSpeech)
-        } else {
-          reject(
-            IntlService.instance.translate({
-              key: 'operations.workspace_not_found',
-              default: 'Workspace not found',
-              case: 'first',
-            })
-          )
-        }
-      })
-    })
-  }
-
-  /*getWordsByLangauge (client, language) {
-   return new Promise(
-   // The resolver function is called with the ability to resolve or
-   // reject the promise
-   function(resolve, reject) {
-
-   language = StringHelpers.clean(StringHelpers);
-
-   client.operation('Document.Query')
-   .params({
-   query: "SELECT * FROM Document WHERE (dc:title = '" + language + "' AND ecm:primaryType = 'Workspace' AND ecm:isTrashed = 0))"
-   })
-   .execute(function(error, response) {
-   if (error) {
-   throw error;
-   }
-   // Create a Workspace Document based on returned data
-
-   if (response.entries.length > 0) {
-   var workspaceID = response.entries[0].uid;
-
-   client.operation('Document.Query')
-   .params({
-   query: "SELECT * FROM Document WHERE (ecm:parentId = '" + workspaceID + "' AND ecm:primaryType = 'Word' AND ecm:isTrashed = 0)"
-   })
-   .execute(function(error, response) {
-
-   // Handle error
-   if (error) {
-   throw error;
-   }
-
-   var nuxeoListDocs = new Words(response.entries);
-   resolve(nuxeoListDocs.toJSON());
-
-   });
-   } else {
-   reject('Workspace not found');
-   }
-
-   });
-   });
-   }*/
-
   /**
    * Get all documents of a certain type based on a path
    * These documents are expected to contain other entries
@@ -524,7 +452,7 @@ export default class DirectoryOperations {
           resolve(docs)
         })
         .catch((error) => {
-          if (error.hasOwnProperty('response')) {
+          if (Object.prototype.hasOwnProperty.call(error, 'response')) {
             error.response.json().then((jsonError) => {
               reject(StringHelpers.extractErrorMessage(jsonError))
             })
