@@ -79,11 +79,7 @@ function NavigationBarPresentation({
     return (
       <div className="Navigation__popoverInner">
         <Typography variant="h6">
-          <FVLabel
-            transKey="views.components.navigation.search_all"
-            defaultStr="Search all languages on FirstVoices.com"
-            transform="first"
-          />
+          <FVLabel transKey="views.components.navigation.search_all" defaultStr="Search all languages on FirstVoices" />
         </Typography>
       </div>
     )
@@ -106,7 +102,7 @@ function NavigationBarPresentation({
             label={
               <div>
                 <Typography variant="body2" gutterBottom>
-                  FirstVoices.com
+                  FirstVoices
                 </Typography>
                 <Typography variant="caption" gutterBottom>
                   <FVLabel
@@ -173,14 +169,16 @@ function NavigationBarPresentation({
         </Link>
 
         <div className="Navigation__toolbarMainInner">
+          {/* Explore Languages Link */}
           <Link href="/explore/FV/sections/Data" className={`${appBar} Navigation__link hideSmall`}>
             <FVLabel transKey="general.explore" defaultStr="Explore Languages" transform="upper" />
           </Link>
-
+          {/* Login */}
           <Login routeParams={routeParams} className={appBar} />
 
           <div className="Navigation__separator" />
 
+          {/* Dashboard Link */}
           <AuthenticationFilter
             login={computeLogin}
             anon={false}
@@ -191,6 +189,7 @@ function NavigationBarPresentation({
               Dashboard
             </Link>
           </AuthenticationFilter>
+
           <div className="Navigation__separator" />
 
           {/* Search Container */}
@@ -221,6 +220,7 @@ function NavigationBarPresentation({
                     }
                   }}
                   name="searchbox"
+                  autoComplete="off"
                 />
 
                 {/* Search Button: Submit */}
@@ -315,26 +315,24 @@ function NavigationBarPresentation({
               />
             </div>
             {/* <FormControl>
-                <InputLabel>
-                  Immersion Mode
-                </InputLabel>
-                <Switch checked={currentImmersionMode === 1} onChange={() => handleChangeImmersion()} /> */}
-            {/* <Select
-                  value={currentImmersionMode}
-                  onChange={(event) => {
-                    handleChangeImmersion(event.target.value)
-                  }}
-                  className={localePicker}
-                  inputProps={{
-                    name: 'locale',
-                    id: 'locale-select',
-                  }}
-                >
-                  <MenuItem value={0}>None</MenuItem>
-                  <MenuItem value={1}>Immersive</MenuItem>
-                  <MenuItem value={2}>Both Languages</MenuItem>
-                </Select> */}
-            {/* </FormControl> */}
+              <InputLabel>Immersion Mode</InputLabel>
+              <Switch checked={currentImmersionMode === 1} onChange={() => handleChangeImmersion()} />
+              <Select
+                value={currentImmersionMode}
+                onChange={(event) => {
+                  handleChangeImmersion(event.target.value)
+                }}
+                className={localePicker}
+                inputProps={{
+                  name: 'locale',
+                  id: 'locale-select',
+                }}
+              >
+                <MenuItem value={0}>None</MenuItem>
+                <MenuItem value={1}>Immersive</MenuItem>
+                <MenuItem value={2}>Both Languages</MenuItem>
+              </Select>
+            </FormControl> */}
             <Typography variant="body2" className={`${localePicker} Navigation__localeTitle`}>
               <FVLabel transKey="choose_lang" defaultStr="Choose a language" transform="first" />
             </Typography>

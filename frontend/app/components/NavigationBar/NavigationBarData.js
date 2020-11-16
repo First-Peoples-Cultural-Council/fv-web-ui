@@ -8,17 +8,16 @@ import useLocale from 'dataSources/useLocale'
 import useLogin from 'dataSources/useLogin'
 import useNavigation from 'dataSources/useNavigation'
 import usePortal from 'dataSources/usePortal'
-// import useProperties from 'dataSources/useProperties'
 import useRoute from 'dataSources/useRoute'
 import useWindowPath from 'dataSources/useWindowPath'
+
+import { updateCurrentUser } from 'reducers/nuxeo/index'
 
 // Common
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { getSearchObjectAsUrlQuery } from 'common/NavigationHelpers'
 import UIHelpers from 'common/UIHelpers'
 import useNavigationHelpers from 'common/useNavigationHelpers'
-// import StringHelpers, { CLEAN_FULLTEXT } from 'common/StringHelpers'
-// import { SECTIONS, WORKSPACES } from 'common/Constants'
 
 /**
  * @summary NavigationBarData
@@ -105,6 +104,10 @@ function NavigationBarData({ children }) {
     }
   }
 
+  const handleChangeImmersion = () => {
+    updateCurrentUser(!locale.immersionMode)
+  }
+
   const handleChangeLocale = (event) => {
     setLocale(event.target.value)
   }
@@ -120,7 +123,11 @@ function NavigationBarData({ children }) {
   const handleSearchPopoverClose = () => {
     setSearchPopoverOpen(false)
   }
-  const handleSearchPopoverOpen = () => {
+  const handleSearchPopoverOpen = (event) => {
+    // Prevent autoComplete from covering searchLocation popover
+    if (event.target.autoComplete) {
+      event.target.autoComplete = ''
+    }
     setSearchPopoverOpen(true)
   }
   const handleSearchTextFieldChange = (event) => {
@@ -138,7 +145,7 @@ function NavigationBarData({ children }) {
     currentLocale: locale.locale,
     dashboardHref,
     dialectHref,
-    handleChangeImmersion: () => {},
+    handleChangeImmersion,
     handleChangeLocale,
     handleChangeSearchLocation,
     handleNavigationSearchSubmit,
