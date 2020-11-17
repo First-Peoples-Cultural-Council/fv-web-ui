@@ -8,7 +8,7 @@ import LiveHelpIcon from '@material-ui/icons/LiveHelp'
 import CloseIcon from '@material-ui/icons/Close'
 
 import { toggleHelpMode, setEditingLabel } from 'reducers/locale'
-import { fetchDirectory } from 'reducers/directory'
+import { fetchLabelDirectory } from 'reducers/directory'
 import DocumentOperations from 'operations/DocumentOperations'
 
 import LabelModal from 'components/Immersion/Modal'
@@ -22,7 +22,7 @@ const HelperModeToggle = ({
   editingLabel,
   labelIds,
   computeDirectory,
-  fetchDirectory: _fetchDirectory,
+  fetchLabelDirectory: _fetchLabelDirectory,
   intl,
   locale,
   routeParams,
@@ -36,8 +36,8 @@ const HelperModeToggle = ({
 
   useEffect(() => {
     if (!fetched) {
-      _fetchDirectory('fv_labels', 2000, true)
-      _fetchDirectory('fv_label_categories', 100, true)
+      _fetchLabelDirectory('fv_labels', 'immersive_labels')
+      _fetchLabelDirectory('fv_label_categories', 'categories')
       setFetched(true)
     }
     if (editingLabel) {
@@ -176,7 +176,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   handleToggleHelpMode: toggleHelpMode,
-  fetchDirectory,
+  fetchLabelDirectory,
   setEditingLabel,
 }
 
@@ -186,7 +186,7 @@ HelperModeToggle.propTypes = {
   isInHelpMode: bool.isRequired,
   isImmersionModeOn: bool.isRequired,
   handleToggleHelpMode: func.isRequired,
-  fetchDirectory: func.isRequired,
+  fetchLabelDirectory: func.isRequired,
   setEditingLabel: func.isRequired,
   labelIds: object.isRequired,
   editingLabel: string,

@@ -1,19 +1,20 @@
 <?xml version="1.0"?>
 
 <xs:schema
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-    xmlns:ref="http://www.nuxeo.org/ecm/schemas/core/external-references/" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:ref="http://www.nuxeo.org/ecm/schemas/core/external-references/"
     xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fv_label_vocabulary"
     targetNamespace="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fv_label_vocabulary"
-    >
+>
 
-    <xs:element name="id" type="xs:string"/>
-    <xs:element name="type" type="xs:string"/>
-    <xs:element name="label" type="xs:string"/>
-    <xs:element name="category" type="xs:string"/>
-    <xs:element name="template_strings" type="xs:string"/>
-    <xs:element name="obsolete" type="xs:integer" default="0"/>
-    <xs:element name="ordering" type="xs:integer" default="10000000"/>
+  <xs:element name="id" type="xs:string"/>
+  <xs:element name="type" type="xs:string"/>
+  <xs:element name="label" type="xs:string"/>
+  <xs:element name="category" type="xs:string"/>
+  <xs:element name="template_strings" type="xs:string"/>
+  <xs:element name="obsolete" type="xs:integer" default="0"/>
+  <xs:element name="ordering" type="xs:integer" default="10000000"/>
+  <xs:element name="enableForImmersion" type="xs:boolean" default="false"/>
 
 </xs:schema>
 

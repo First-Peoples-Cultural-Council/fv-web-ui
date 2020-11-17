@@ -82,16 +82,16 @@ export class ImmersionFilterList extends Component {
 
   _generateListItems = (filters, depth = 0) => {
     const _filters = filters.map((filter) => {
-      const checked = this.props.selectedCategory ? this.props.selectedCategory.startsWith(filter.id) : false
-      const selected = filter.id === this.props.selectedCategory
+      const checked = this.props.selectedCategory ? this.props.selectedCategory.startsWith(filter.value) : false
+      const selected = filter.value === this.props.selectedCategory
       return (
-        <div key={filter.id} className={`category-parent ${selected ? 'active' : ''} ${checked ? 'checked' : ''}`}>
+        <div key={filter.value} className={`category-parent ${selected ? 'active' : ''} ${checked ? 'checked' : ''}`}>
           <a
             style={{ paddingLeft: 15 * depth + 10 }}
             className={`category-link ${selected ? 'active' : ''}`}
-            onClick={() => this.props.changeCategory(selected ? null : filter.id)}
+            onClick={() => this.props.changeCategory(selected ? null : filter.value)}
           >
-            {filter.label}
+            {filter.text}
           </a>
           {filter.children.length !== 0 && <div>{this._generateListItems(filter.children, depth + 1)}</div>}
         </div>
@@ -125,8 +125,8 @@ export class ImmersionFilterList extends Component {
   }
 
   _sortByTitle(a, b) {
-    if (a.label < b.label) return -1
-    if (a.label > b.label) return 1
+    if (a.text < b.text) return -1
+    if (a.text > b.text) return 1
     return 0
   }
 

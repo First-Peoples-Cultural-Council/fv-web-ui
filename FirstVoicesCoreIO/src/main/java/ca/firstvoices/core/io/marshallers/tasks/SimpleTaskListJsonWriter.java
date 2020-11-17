@@ -15,7 +15,7 @@ import org.nuxeo.ecm.core.io.registry.reflect.Setup;
 /**
  *
  */
-@Setup(mode = Instantiations.SINGLETON, priority = Priorities.OVERRIDE_REFERENCE)
+@Setup(mode = Instantiations.SINGLETON, priority = Priorities.REFERENCE)
 public class SimpleTaskListJsonWriter extends DefaultListJsonWriter<SimpleTaskAdapter> {
 
   public static final String ENTITY_TYPE = "simple-tasks";
