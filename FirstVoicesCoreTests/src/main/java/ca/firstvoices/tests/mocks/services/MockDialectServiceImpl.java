@@ -419,14 +419,12 @@ public class MockDialectServiceImpl implements MockDialectService {
 
   private DocumentModelList generateFVSongs(CoreSession session, String path, int songEntries,
       String[] wordsToUse) {
-    DocumentModelList fvSongs = createBook(session, path, "song", wordsToUse, songEntries);
-    return fvSongs;
+    return createBook(session, path, "song", wordsToUse, songEntries);
   }
 
   private DocumentModelList generateFVStories(CoreSession session, String path, int storyEntries,
       String[] wordsToUse) {
-    DocumentModelList fvStories = createBook(session, path, "story", wordsToUse, storyEntries);
-    return fvStories;
+    return createBook(session, path, "story", wordsToUse, storyEntries);
   }
 
   private DocumentModelList createBook(CoreSession session, String path,
