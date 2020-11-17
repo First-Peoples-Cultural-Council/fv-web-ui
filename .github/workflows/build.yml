@@ -112,7 +112,7 @@ jobs:
         # Run Sonar Analysis on Frontend (If Frontend Changes)
       - name: Setup Sonar Analysis For Frontend
         if: steps.changed-frontend.outputs.frontend_files
-        uses: warchant/setup-sonar-scanner@v1
+        uses: warchant/setup-sonar-scanner@v3
 
 
         # Run Sonar Analysis on Frontend (If Frontend Changes)
