@@ -26,56 +26,56 @@ function AdminMenuPresentation({ handleItemClick, tooltipTitle }) {
   const menuItems = [
     <MenuItem
       key="reports"
-      onClick={() => {
-        handleItemClick('/reports')
+      onClick={(e) => {
+        handleItemClick('/reports', e)
       }}
     >
       <FVLabel transKey="reports" defaultStr="Reports" transform="first" />
     </MenuItem>,
     <MenuItem
       key="media"
-      onClick={() => {
-        handleItemClick('/media')
+      onClick={(e) => {
+        handleItemClick('/media', e)
       }}
     >
       <FVLabel transKey="views.pages.explore.dialect.media_browser" defaultStr="Media Browser" transform="words" />
     </MenuItem>,
     <MenuItem
       key="phrasebooks"
-      onClick={() => {
-        handleItemClick('/phrasebooks')
+      onClick={(e) => {
+        handleItemClick('/phrasebooks', e)
       }}
     >
       <FVLabel transKey="views.pages.explore.dialect.nav_phrase_books" defaultStr="Phrase books" transform="words" />
     </MenuItem>,
     <MenuItem
       key="categories"
-      onClick={() => {
-        handleItemClick('/categories')
+      onClick={(e) => {
+        handleItemClick('/categories', e)
       }}
     >
       <FVLabel transKey="views.pages.explore.dialect.nav_categories" defaultStr="Categories" transform="words" />
     </MenuItem>,
     <MenuItem
       key="contributors"
-      onClick={() => {
-        handleItemClick('/contributors')
+      onClick={(e) => {
+        handleItemClick('/contributors', e)
       }}
     >
       <FVLabel transKey="views.pages.explore.dialect.nav_contributors" defaultStr="Contributors" transform="words" />
     </MenuItem>,
     <MenuItem
       key="recorders"
-      onClick={() => {
-        handleItemClick('/recorders')
+      onClick={(e) => {
+        handleItemClick('/recorders', e)
       }}
     >
       <FVLabel transKey="views.pages.explore.dialect.nav_recorders" defaultStr="Recorders" transform="words" />
     </MenuItem>,
     <MenuItem
       key="immersionPortal"
-      onClick={() => {
-        handleItemClick('/immersion')
+      onClick={(e) => {
+        handleItemClick('/immersion', e)
       }}
     >
       <FVLabel transKey="views.pages.explore.dialect.immersion" defaultStr="Immersion Portal" transform="words" />
