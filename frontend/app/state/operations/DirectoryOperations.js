@@ -274,7 +274,7 @@ export default class DirectoryOperations {
           resolve(docs)
         })
         .catch((error) => {
-          if (error.hasOwnProperty('response')) {
+          if (Object.prototype.hasOwnProperty.call(error, 'response')) {
             error.response.json().then((jsonError) => {
               reject(StringHelpers.extractErrorMessage(jsonError))
             })

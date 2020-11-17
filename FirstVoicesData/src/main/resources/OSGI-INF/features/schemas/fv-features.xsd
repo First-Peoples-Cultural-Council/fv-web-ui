@@ -27,7 +27,7 @@
   <!-- List of available features to set -->
   <xs:simpleType name="feature_id">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="categories" />
+      <xs:enumeration value="immersion" />
     </xs:restriction>
   </xs:simpleType>
 
