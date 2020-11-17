@@ -53,6 +53,8 @@ export const SEARCH_TYPE_WILDCARD_SEARCH = 'wildcard'
 export const SEARCH_TYPE_DEFAULT_SEARCH = 'match'
 export const SEARCH_TYPE_DEFAULT = SEARCH_TYPE_DEFAULT_SEARCH
 
+export const SEARCHDIALECT_CHECKBOX = 'SEARCHDIALECT_CHECKBOX'
+export const SEARCHDIALECT_SELECT = 'SEARCHDIALECT_SELECT'
 // --- Export ---
 // https://nuxeo.github.io/api-playground/#/commands/Document.GetExportProgress
 // https://nuxeo.github.io/api-playground/#/commands/Document.GetFormattedDocument

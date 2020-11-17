@@ -4,8 +4,28 @@ import WordsListPresentation from './WordsListPresentation'
 import WordsListData from './WordsListData'
 import PromiseWrapper from 'components/PromiseWrapper'
 
-import { SEARCH_DATA_TYPE_WORD } from 'common/Constants'
-const SearchDialect = React.lazy(() => import('components/SearchDialect'))
+const SearchDialectContainer = React.lazy(() => import('components/SearchDialect/SearchDialectContainer'))
+const SearchDialectCheckbox = React.lazy(() => import('components/SearchDialect/SearchDialectCheckbox'))
+const SearchDialectSelect = React.lazy(() => import('components/SearchDialect/SearchDialectSelect'))
+import {
+  SEARCHDIALECT_CHECKBOX,
+  SEARCHDIALECT_SELECT,
+  // SEARCH_PART_OF_SPEECH_ANY,
+  // SEARCH_BY_ALPHABET,
+  // SEARCH_BY_CATEGORY,
+  // SEARCH_BY_CUSTOM,
+  // SEARCH_BY_PHRASE_BOOK,
+  // SEARCH_DATA_TYPE_PHRASE,
+  SEARCH_DATA_TYPE_WORD,
+  // SEARCH_TYPE_DEFAULT_SEARCH,
+  // SEARCH_TYPE_APPROXIMATE_SEARCH,
+  // SEARCH_TYPE_EXACT_SEARCH,
+  // SEARCH_TYPE_CONTAINS_SEARCH,
+  // SEARCH_TYPE_STARTS_WITH_SEARCH,
+  // SEARCH_TYPE_ENDS_WITH_SEARCH,
+  // SEARCH_TYPE_WILDCARD_SEARCH,
+} from 'common/Constants'
+
 /**
  * @summary WordsListContainer
  * @version 1.0.1
@@ -25,7 +45,6 @@ function WordsListContainer() {
         fetcher,
         fetcherParams,
         filter,
-        handleSearch,
         hrefCreate,
         items,
         listViewMode,
@@ -33,12 +52,14 @@ function WordsListContainer() {
         navigationRouteSearch,
         pageTitle,
         pushWindowPath,
-        resetSearch,
         routeParams,
         setListViewMode,
         setRouteParams,
         smallScreenTemplate,
         sortHandler,
+        searchUiSecondary,
+        incrementResetCount,
+        resetCount,
       }) => {
         return (
           <PromiseWrapper renderOnError computeEntities={computeEntities}>
@@ -60,34 +81,44 @@ function WordsListContainer() {
               // --------------------------------------------------
               childrenSearch={
                 <Suspense fallback={<div>loading...</div>}>
-                  <SearchDialect
-                    handleSearch={handleSearch}
-                    resetSearch={resetSearch}
-                    searchUi={[
-                      {
-                        defaultChecked: true,
-                        idName: 'searchByTitle',
-                        labelText: 'Word',
-                        urlParam: 'sTitle',
-                      },
-                      {
-                        defaultChecked: true,
-                        idName: 'searchByDefinitions',
-                        labelText: 'Definitions',
-                        urlParam: 'sDefinitions',
-                      },
-                      {
-                        idName: 'searchByTranslations',
-                        labelText: 'Literal translations',
-                        urlParam: 'sTranslations',
-                      },
-                      {
-                        type: 'select',
-                        idName: 'searchPartOfSpeech',
-                        labelText: 'Parts of speech:',
-                        urlParam: 'sPartSpeech',
-                      },
-                    ]}
+                  <SearchDialectContainer
+                    key={`forceRender${resetCount}`}
+                    incrementResetCount={incrementResetCount}
+                    childrenUiSecondary={searchUiSecondary.map(
+                      ({ defaultChecked, defaultValue, idName, labelText, options, type }, index) => {
+                        switch (type) {
+                          case SEARCHDIALECT_CHECKBOX:
+                            return (
+                              <SearchDialectCheckbox
+                                key={index}
+                                defaultChecked={defaultChecked}
+                                idName={idName}
+                                labelText={labelText}
+                              />
+                            )
+                          case SEARCHDIALECT_SELECT: {
+                            return (
+                              <SearchDialectSelect
+                                key={`forceRenderSelect${resetCount}`}
+                                defaultValue={defaultValue}
+                                idName={idName}
+                                labelText={labelText}
+                              >
+                                {options.map(({ value, text }, key) => {
+                                  return (
+                                    <option key={key} value={value} disabled={value === null}>
+                                      {text}
+                                    </option>
+                                  )
+                                })}
+                              </SearchDialectSelect>
+                            )
+                          }
+                          default:
+                            return null
+                        }
+                      }
+                    )}
                     searchDialectDataType={SEARCH_DATA_TYPE_WORD}
                   />
                 </Suspense>

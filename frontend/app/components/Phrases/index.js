@@ -51,7 +51,7 @@ import { getDialectClassname } from 'common/Helpers'
 import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
 import { SEARCH_DATA_TYPE_PHRASE, SEARCH_BY_ALPHABET, SEARCH_BY_PHRASE_BOOK } from 'common/Constants'
 const { array, bool, func, object, string } = PropTypes
-const SearchDialectContainer = React.lazy(() => import('components/SearchDialect2/SearchDialectContainer'))
+const SearchDialectContainer = React.lazy(() => import('components/SearchDialect/SearchDialectContainer'))
 /**
  * Learn phrases
  */

@@ -96,8 +96,8 @@ spyUseDirectory.mockReturnValue({
 // ==================================================
 import React from 'react'
 import renderer from 'react-test-renderer'
-import SearchDialectContainer from 'components/SearchDialect2/SearchDialectContainer'
-import SearchDialectData from 'components/SearchDialect2/SearchDialectData'
+import SearchDialectContainer from 'components/SearchDialect/SearchDialectContainer'
+import SearchDialectData from 'components/SearchDialect/SearchDialectData'
 const searchDialectDataType = SEARCH_DATA_TYPE_WORD
 const searchUi = [
   {
