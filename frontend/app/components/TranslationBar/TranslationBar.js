@@ -35,6 +35,8 @@ import { routeHasChanged } from 'common/NavigationHelpers'
 
 import FVLabel from 'components/FVLabel'
 
+import '!style-loader!css-loader!./TranslationBar.css'
+
 const { func, string, object } = PropTypes
 class TranslationBar extends Component {
   static propTypes = {
@@ -68,12 +70,12 @@ class TranslationBar extends Component {
     )
   }
 
-  async componentDidMount() {
-    await this.fetchData(this.props)
+  componentDidMount() {
+    this.fetchData(this.props)
   }
 
   // Refetch data on URL change
-  async componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps) {
     if (
       routeHasChanged({
         prevWindowPath: prevProps.windowPath,
@@ -82,7 +84,7 @@ class TranslationBar extends Component {
         curRouteParams: this.props.routeParams,
       })
     ) {
-      await this.fetchData(this.props)
+      this.fetchData(this.props)
     }
   }
 
@@ -103,15 +105,15 @@ class TranslationBar extends Component {
     }
 
     return (
-      <div style={{ borderTop: '1px solid rgba(0, 0, 0, 0.1)', padding: '10px 0', textAlign: 'right' }}>
+      <div className="TranslationBar__container">
         <div>
-          <div className="Navigation__immersionSwitch">{immersionMode}</div>
+          <div>{immersionMode}</div>
 
           <FVLabel transKey="choose_lang" defaultStr="Translate FirstVoices To" transform="first" />
 
           <Select
+            className="TranslationBar__select"
             value={this.props.currentLocale}
-            style={{ marginLeft: '10px' }}
             onChange={(event) => {
               this._handleChangeLocale(event.target.value)
             }}

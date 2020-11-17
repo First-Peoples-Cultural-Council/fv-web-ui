@@ -1,0 +1,9 @@
+.TranslationBar__container {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 10px 0;
+  text-align: right;
+}
+
+.TranslationBar__select {
+  margin-left: 10px;
+}
