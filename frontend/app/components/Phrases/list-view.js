@@ -75,7 +75,7 @@ export class PhrasesListView extends DataListView {
             const isWorkspaces = this.props.routeParams.area === WORKSPACES
             const hrefEdit = NavigationHelpers.generateUIDEditPath(this.props.routeParams.siteTheme, data, 'phrases')
             const hrefEditRedirect = `${hrefEdit}?redirect=${encodeURIComponent(
-              `${window.location.pathname}${window.location.search}`,
+              `${window.location.pathname}${window.location.search}`
             )}`
             const computeDialect2 = this.props.dialect || this.getDialect()
 
@@ -234,8 +234,8 @@ export class PhrasesListView extends DataListView {
     }
 
     // Bind methods to 'this'
-    ['_onEntryNavigateRequest', '_handleRefetch', '_handleSortChange', '_handleColumnOrderChange'].forEach(
-      (method) => (this[method] = this[method].bind(this)),
+    ;['_onEntryNavigateRequest', '_handleRefetch', '_handleSortChange', '_handleColumnOrderChange'].forEach(
+      (method) => (this[method] = this[method].bind(this))
     )
   }
 
@@ -277,7 +277,7 @@ export class PhrasesListView extends DataListView {
         new Map({
           id: this.props.routeParams.dialect_path,
           entity: this.props.computeDialect2,
-        }),
+        })
       )
     }
 
@@ -391,7 +391,7 @@ export class PhrasesListView extends DataListView {
       this.props.customSortBy ||
         this.props.navigationRouteSearch.sortBy ||
         searchObj.sortBy ||
-        newProps.DEFAULT_SORT_COL,
+        newProps.DEFAULT_SORT_COL
     )
   }
 
@@ -430,7 +430,7 @@ export class PhrasesListView extends DataListView {
         },
         () => {
           props.fetchPhrases(this.state.phrasesPath, nql)
-        },
+        }
       )
     }
   }
@@ -442,7 +442,7 @@ export class PhrasesListView extends DataListView {
       NavigationHelpers.navigate(
         NavigationHelpers.generateUIDPath(this.props.routeParams.siteTheme, item, 'phrases'),
         this.props.pushWindowPath,
-        true,
+        true
       )
     }
   }

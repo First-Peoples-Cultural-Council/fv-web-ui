@@ -8,7 +8,8 @@
 
     <filterConfig name="portal" transactional="true" synchonize="false" cached="true" private="true"
                   cacheTime="0"> <!-- Cache time is zero and in the service we set must-revalidate and an eTag -->
-      <pattern>${org.nuxeo.ecm.contextPath}/api/v1/portal/.*</pattern>
+      <pattern>${org.nuxeo.ecm.contextPath}/api/v1/site/.*</pattern>
+      <pattern>${org.nuxeo.ecm.contextPath}/api/v1/label/.*</pattern>
     </filterConfig>
 
   </extension>

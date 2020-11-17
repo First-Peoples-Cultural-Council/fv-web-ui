@@ -67,7 +67,7 @@ export default class PageDialectLearnBase extends Component {
       NavigationHelpers.navigateForward(
         this.props.splitWindowPath.slice(0, this.props.splitWindowPath.length - 2),
         [path],
-        this.props.pushWindowPath,
+        this.props.pushWindowPath
       )
     } else {
       NavigationHelpers.navigateForward(this.props.splitWindowPath, [path], this.props.pushWindowPath)
@@ -148,7 +148,7 @@ export default class PageDialectLearnBase extends Component {
     if (newList.size > 0) {
       categoryFilter = ` AND ${ProviderHelpers.switchWorkspaceSectionKeys(
         facetField,
-        this.props.routeParams.area,
+        this.props.routeParams.area
       )}/* IN ("${newList.join('","')}")`
       /* categoryFilter =
       ' AND ' +
@@ -220,7 +220,7 @@ export default class PageDialectLearnBase extends Component {
     if (newList.size > 0) {
       dialectFilter = ` AND ${ProviderHelpers.switchWorkspaceSectionKeys(
         facetField,
-        this.props.routeParams.area,
+        this.props.routeParams.area
       )}/* IN ("${newList.join('","')}")`
     }
 
@@ -283,7 +283,7 @@ export default class PageDialectLearnBase extends Component {
       NavigationHelpers.navigateForwardReplaceMultiple(
         this.props.splitWindowPath,
         [urlPageSize, urlPage],
-        navHelperCallback,
+        navHelperCallback
       )
     } else {
       // No pagination in url (eg: .../learn/words), append `urlPage` & `urlPageSize`
@@ -382,7 +382,7 @@ export const handleFacetSelected = ({
   if (newList.size > 0) {
     categoryFilter = ` AND ${ProviderHelpers.switchWorkspaceSectionKeys(
       facetField,
-      routeParams.area,
+      routeParams.area
     )}/* IN ("${newList.join('","')}")`
   }
 
@@ -462,7 +462,7 @@ export const handleDialectFilterList = ({
   if (newList.size > 0) {
     dialectFilter = ` AND ${ProviderHelpers.switchWorkspaceSectionKeys(
       facetField,
-      routeParams.area,
+      routeParams.area
     )}/* IN ("${newList.join('","')}")`
   }
 

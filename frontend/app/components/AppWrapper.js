@@ -24,7 +24,7 @@ import { changeSiteTheme } from 'reducers/navigation'
 import selectn from 'selectn'
 
 import AppFrontController from 'components/AppFrontController'
-import TranslationBar from 'components/TranslationBar'
+import TranslationBar from 'components/TranslationBar/TranslationBar'
 
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 

@@ -1,17 +1,17 @@
 /* Copyright 2016 First People's Cultural Council
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
 
-http://www.apache.org/licenses/LICENSE-2.0
+ http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -24,7 +24,7 @@ import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { fetchDocument } from 'reducers/document'
 import { fetchPortal } from 'reducers/fvPortal'
-import { fetchDirectory } from 'reducers/directory'
+import { fetchLabelDirectory } from 'reducers/directory'
 import { pushWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
@@ -54,6 +54,7 @@ const styles = (theme) => {
 }
 
 const { array, bool, func, object } = PropTypes
+
 class PageDialectImmersionList extends PageDialectLearnBase {
   static propTypes = {
     hasPagination: bool,
@@ -68,16 +69,16 @@ class PageDialectImmersionList extends PageDialectLearnBase {
     // // REDUX: actions/dispatch/func
     fetchDocument: func.isRequired,
     fetchPortal: func.isRequired,
-    fetchDirectory: func.isRequired,
+    fetchLabelDirectory: func.isRequired,
     pushWindowPath: func.isRequired,
   }
 
   DIALECT_FILTER_TYPE = 'immersion'
 
   /*
-    TODO add shared categories for immersion specific (Shared Categories)
-    Dictionary -> Dictionary with label or some other document type?
-  */
+   TODO add shared categories for immersion specific (Shared Categories)
+   Dictionary -> Dictionary with label or some other document type?
+   */
 
   constructor(props, context) {
     super(props, context)
@@ -121,8 +122,8 @@ class PageDialectImmersionList extends PageDialectLearnBase {
     newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
     newProps.fetchDocument(newProps.routeParams.dialect_path + '/Label Dictionary')
     if (newProps.computeDirectory.isFetching !== true && newProps.computeDirectory.success !== true) {
-      newProps.fetchDirectory('fv_label_categories', 100, true)
-      newProps.fetchDirectory('fv_labels', 2000, true)
+      newProps.fetchLabelDirectory('fv_label_categories', 'categories')
+      newProps.fetchLabelDirectory('fv_labels', 'immersive_labels')
     }
   }
 
@@ -135,12 +136,12 @@ class PageDialectImmersionList extends PageDialectLearnBase {
     // First map the nodes of the array to an object -> create a hash table.
     for (let i = 0, len = arr.length; i < len; i++) {
       arrElem = arr[i]
-      mappedArr[arrElem.id] = arrElem
-      mappedArr[arrElem.id].children = []
+      mappedArr[arrElem.value] = arrElem
+      mappedArr[arrElem.value].children = []
     }
 
     for (const id in mappedArr) {
-      if (mappedArr.hasOwnProperty(id)) {
+      if (Object.prototype.hasOwnProperty.call(mappedArr, id)) {
         mappedElem = mappedArr[id]
         // If the element is not at the root level, add it to its parent array of children.
         if (mappedElem.parent !== '') {
@@ -267,6 +268,7 @@ class PageDialectImmersionList extends PageDialectLearnBase {
       </PromiseWrapper>
     )
   }
+
   // END render
 }
 
@@ -293,7 +295,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 const mapDispatchToProps = {
   fetchDocument,
   fetchPortal,
-  fetchDirectory,
+  fetchLabelDirectory,
   pushWindowPath,
 }
 

@@ -62,20 +62,20 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     await ProviderHelpers.fetchIfMissing(
       this.props.routeParams.dialect_path + '/Portal',
       this.props.fetchPortal,
-      this.props.computePortal,
+      this.props.computePortal
     )
 
     // Document
     await ProviderHelpers.fetchIfMissing(
       this.props.routeParams.dialect_path + '/Dictionary',
       this.props.fetchDocument,
-      this.props.computeDocument,
+      this.props.computeDocument
     )
 
     const newState = {
       dialectId: selectn(
         'response.contextParameters.ancestry.dialect.uid',
-        ProviderHelpers.getEntry(this.props.computeDocument, this.props.routeParams.dialect_path + '/Dictionary'),
+        ProviderHelpers.getEntry(this.props.computeDocument, this.props.routeParams.dialect_path + '/Dictionary')
       ),
     }
 
@@ -139,11 +139,11 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
 
     const computeDocument = ProviderHelpers.getEntry(
       this.props.computeDocument,
-      this.props.routeParams.dialect_path + '/Dictionary',
+      this.props.routeParams.dialect_path + '/Dictionary'
     )
     const computePortal = ProviderHelpers.getEntry(
       this.props.computePortal,
-      this.props.routeParams.dialect_path + '/Portal',
+      this.props.routeParams.dialect_path + '/Portal'
     )
 
     const { searchByMode } = this.props.computeSearchDialect
@@ -152,7 +152,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
       'views.pages.explore.dialect.phrases.x_phrases',
       `${dialect} Phrases`,
       null,
-      [dialect],
+      [dialect]
     )
     const { searchNxqlSort } = this.props.computeSearchDialect
     const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
@@ -206,17 +206,17 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     if (isKidsTheme) {
       const kidsFilter = this.state.filterInfo.setIn(
         ['currentAppliedFilter', 'kids'],
-        ' AND fv:available_in_childrens_archive=1',
+        ' AND fv:available_in_childrens_archive=1'
       )
 
       const cloneWordListView = phraseListView
         ? React.cloneElement(phraseListView, {
-          DEFAULT_PAGE_SIZE: 8,
-          disablePageSize: true,
-          filter: kidsFilter,
-          gridCols: 2,
-          gridListView: true,
-        })
+            DEFAULT_PAGE_SIZE: 8,
+            disablePageSize: true,
+            filter: kidsFilter,
+            gridCols: 2,
+            gridListView: true,
+          })
         : null
       return (
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
@@ -306,7 +306,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
                             title={this.props.intl.trans(
                               'views.pages.explore.dialect.learn.phrases.browse_by_phrase_books',
                               'Browse Phrase Books',
-                              'phrases',
+                              'phrases'
                             )}
                             listItemData={listItemData}
                           />
@@ -379,7 +379,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     const initialCategories = routeParamsCategory ? new Set([routeParamsCategory]) : new Set()
     const currentAppliedFilterCategoriesParam1 = ProviderHelpers.switchWorkspaceSectionKeys(
       'fv-phrase:phrase_books',
-      this.props.routeParams.area,
+      this.props.routeParams.area
     )
     const currentAppliedFilterCategories = routeParamsCategory
       ? ` AND ${currentAppliedFilterCategoriesParam1}/* IN ("${routeParamsCategory}")`
@@ -418,14 +418,14 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
           NavigationHelpers.navigate(
             `${resetUrl}/${this.props.routeParams.pageSize}/1`,
             this.props.pushWindowPath,
-            false,
+            false
           )
         } else {
           // When facets change, pagination should be reset.
           // In these pages (words/phrase), list views are controlled via URL
           this._resetURLPagination() // NOTE: This function is in PageDialectLearnBase
         }
-      },
+      }
     )
   }
   // NOTE: PageDialectLearnBase calls `_getPageKey`

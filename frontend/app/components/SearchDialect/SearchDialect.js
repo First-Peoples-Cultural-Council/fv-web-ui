@@ -224,7 +224,7 @@ export const SearchDialect = (props) => {
         searchButtonText = props.intl.trans(
           'views.pages.explore.dialect.learn.words.search_words',
           'Search Words',
-          'words',
+          'words'
         )
         break
       case SEARCH_DATA_TYPE_PHRASE:
@@ -499,12 +499,12 @@ export const SearchDialect = (props) => {
         const optionItems =
           options.length > 0
             ? options.map((option, key2) => {
-              return (
-                <option key={key2} value={option.value}>
-                  {option.text}
-                </option>
-              )
-            })
+                return (
+                  <option key={key2} value={option.value}>
+                    {option.text}
+                  </option>
+                )
+              })
             : partsOfSpeechOptions
         element = (
           <span key={key1} className={_classes.SearchDialectFormSecondaryGroup}>

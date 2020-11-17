@@ -214,21 +214,12 @@ const DIALECT_IMMERSION_WORDS = {
 }
 
 const SEARCH = {
-  path: [
-    KIDS_OR_DEFAULT,
-    'FV',
-    new paramMatch('area', WORKSPACE_OR_SECTION),
-    'Data',
-    'search',
-    new paramMatch('searchTerm', ANYTHING_BUT_SLASH),
-  ],
-  title:
-    "'{$searchTerm}' " +
-    intl.translate({
-      key: 'views.pages.search.search_results',
-      default: 'Search Results',
-      case: 'words',
-    }),
+  path: [KIDS_OR_DEFAULT, 'FV', new paramMatch('area', WORKSPACE_OR_SECTION), 'Data', 'search'],
+  title: intl.translate({
+    key: 'views.pages.search.search_results',
+    default: 'Search Results',
+    case: 'words',
+  }),
   page: <Pages.PageSearch />,
   redirects: [WORKSPACE_TO_SECTION_REDIRECT],
 }
@@ -242,16 +233,13 @@ const SEARCH_DIALECT = {
     ANYTHING_BUT_SLASH,
     ANYTHING_BUT_SLASH,
     'search',
-    new paramMatch('searchTerm', ANYTHING_BUT_SLASH),
   ],
   title:
-    "'{$searchTerm}' " +
     intl.translate({
       key: 'views.pages.search.search_results',
       default: 'Search Results',
       case: 'words',
-    }) +
-    ' | {$dialect_name} ',
+    }) + ' | {$dialect_name} ',
   page: <Pages.PageSearch />,
   extractPaths: true,
   redirects: [WORKSPACE_TO_SECTION_REDIRECT],
