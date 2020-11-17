@@ -26,16 +26,26 @@ import Switch from '@material-ui/core/Switch'
 import { setLocale } from 'reducers/locale'
 import { updateCurrentUser } from 'reducers/nuxeo/index'
 
+import { fetchDialect2 } from 'reducers/fvDialect'
+
+import ProviderHelpers from 'common/ProviderHelpers'
+import UIHelpers from 'common/UIHelpers'
+
+import { routeHasChanged } from 'common/NavigationHelpers'
+
 import FVLabel from 'components/FVLabel'
 
-const { func, string } = PropTypes
+const { func, string, object } = PropTypes
 class TranslationBar extends Component {
   static propTypes = {
     // REDUX: actions/dispatch/func
     setLocale: func.isRequired,
     updateCurrentUser: func.isRequired,
+    fetchDialect2: func.isRequired,
     // REDUX: reducers/state
     currentLocale: string.isRequired,
+    computeDialect2: object.isRequired,
+    routeParams: object.isRequired,
   }
 
   constructor(props, context) {
@@ -50,18 +60,52 @@ class TranslationBar extends Component {
     this.props.updateCurrentUser(!this.props.currentImmersionMode)
   }
 
+  fetchData(newProps) {
+    ProviderHelpers.fetchIfMissing(
+      newProps.routeParams.dialect_path,
+      this.props.fetchDialect2,
+      this.props.computeDialect2
+    )
+  }
+
+  async componentDidMount() {
+    await this.fetchData(this.props)
+  }
+
+  // Refetch data on URL change
+  async componentDidUpdate(prevProps) {
+    if (
+      routeHasChanged({
+        prevWindowPath: prevProps.windowPath,
+        curWindowPath: this.props.windowPath,
+        prevRouteParams: prevProps.routeParams,
+        curRouteParams: this.props.routeParams,
+      })
+    ) {
+      await this.fetchData(this.props)
+    }
+  }
+
   render() {
+    const IMMERSION_FEATURE = 'immersion'
+
+    let immersionMode = ''
+
+    const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
+
+    if (UIHelpers.isFeatureEnabled(IMMERSION_FEATURE, computeDialect2)) {
+      immersionMode = (
+        <FormControlLabel
+          control={<Switch checked={this.props.currentImmersionMode} onChange={() => this._handleChangeImmersion()} />}
+          label="Immersion Mode"
+        />
+      )
+    }
+
     return (
       <div style={{ borderTop: '1px solid rgba(0, 0, 0, 0.1)', padding: '10px 0', textAlign: 'right' }}>
         <div>
-          <div className="Navigation__immersionSwitch">
-            <FormControlLabel
-              control={
-                <Switch checked={this.props.currentImmersionMode} onChange={() => this._handleChangeImmersion()} />
-              }
-              label="Immersion Mode"
-            />
-          </div>
+          <div className="Navigation__immersionSwitch">{immersionMode}</div>
 
           <FVLabel transKey="choose_lang" defaultStr="Translate FirstVoices To" transform="first" />
 
@@ -87,16 +131,21 @@ class TranslationBar extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { locale } = state
+  const { locale, fvDialect, navigation } = state
+  const { computeDialect2 } = fvDialect
+  const { route } = navigation
 
   return {
     currentLocale: locale.locale,
+    computeDialect2,
+    routeParams: route.routeParams,
   }
 }
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   setLocale,
+  fetchDialect2,
   updateCurrentUser,
 }
 
