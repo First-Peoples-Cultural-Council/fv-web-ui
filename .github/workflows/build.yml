@@ -62,7 +62,7 @@ jobs:
       # Installs the correct Node version for the project
       - name: Setup Node.js for use with actions
         if: steps.changed-backend.outputs.backend_files || steps.changed-frontend.outputs.frontend_files || steps.changed-package.outputs.package_files
-        uses: actions/setup-node@v1.1.0
+        uses: actions/setup-node@v1
         with:
           node-version: "12.18.3"
 
