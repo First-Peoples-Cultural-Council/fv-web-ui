@@ -29,5 +29,9 @@ FlashcardButtonPresentation.propTypes = {
   onClickDisable: func,
   onClickEnable: func,
 }
+FlashcardButtonPresentation.defaultProps = {
+  onClickDisable: () => {},
+  onClickEnable: () => {},
+}
 
 export default FlashcardButtonPresentation
