@@ -299,12 +299,10 @@ export class AppFrontController extends Component {
       <div>
         <div className="breadcrumbContainer row">
           <div className="AppFrontController__waypoint clearfix" style={{ backgroundColor: themePalette.accent4Color }}>
-            <Breadcrumb
-              className="AppFrontController__breadcrumb"
+            <Breadcrumb.Container
               matchedPage={matchedPage}
               routes={routes}
               routeParams={routeParams}
-              // splitWindowPath={splitWindowPath}
               findReplace={findReplace}
             />
             {_workspaceSwitcher}

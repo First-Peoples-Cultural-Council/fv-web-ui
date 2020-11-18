@@ -13,6 +13,3 @@
   display: flex;
   flex-direction: row;
 }
-.AppFrontController__breadcrumb {
-  margin-right: auto;
-}

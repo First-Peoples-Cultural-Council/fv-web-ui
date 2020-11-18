@@ -1,9 +1,30 @@
+.Breadcrumb__container {
+  min-height: 64px;
+  margin: 0;
+  margin-right: auto;
+}
+
+.Breadcrumb__header {
+  font-weight: 500;
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.2;
+}
+
+.Breadcrumb__link {
+  min-height: 64px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 5px 0 5px 8px;
+  cursor: default;
+}
+
 .Breadcrumb {
   font-size: 1.4rem;
   padding: 1.5rem;
   margin: 0;
   background-color: transparent;
-  /* text-transform: capitalize; */
 }
 .Breadcrumb a {
   color: #353b40;
