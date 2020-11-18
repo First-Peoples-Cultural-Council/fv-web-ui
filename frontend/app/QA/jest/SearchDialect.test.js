@@ -26,6 +26,13 @@ Category:
     - no search ui
     - message displayed
 */
+import {
+  SEARCH_BY_DEFAULT,
+  SEARCH_PART_OF_SPEECH_ANY,
+  SEARCH_DATA_TYPE_WORD,
+  SEARCHDIALECT_CHECKBOX,
+  SEARCHDIALECT_SELECT,
+} from 'common/Constants'
 
 // Mock: react-redux
 // --------------------------------------------------
@@ -44,7 +51,6 @@ jest.mock('@material-ui/core/styles', () => ({
 
 // Mock: useSearchDialect
 // --------------------------------------------------
-import { SEARCH_BY_DEFAULT, SEARCH_DATA_TYPE_WORD } from 'common/Constants'
 import * as useSearchDialect from 'dataSources/useSearchDialect'
 const spyUseSearchDialect = jest.spyOn(useSearchDialect, 'default')
 spyUseSearchDialect.mockReturnValue({
@@ -97,7 +103,10 @@ spyUseDirectory.mockReturnValue({
 import React from 'react'
 import renderer from 'react-test-renderer'
 import SearchDialectContainer from 'components/SearchDialect/SearchDialectContainer'
+import SearchDialectCheckbox from 'components/SearchDialect/SearchDialectCheckbox'
+import SearchDialectSelect from 'components/SearchDialect/SearchDialectSelect'
 import SearchDialectData from 'components/SearchDialect/SearchDialectData'
+
 const searchDialectDataType = SEARCH_DATA_TYPE_WORD
 const searchUi = [
   {
@@ -124,83 +133,123 @@ const searchUi = [
     urlParam: 'sPartSpeech',
   },
 ]
+describe('SearchDialect', () => {
+  // Container
+  test('Container', () => {
+    const component = renderer.create(
+      <SearchDialectContainer
+        incrementResetCount={() => {}}
+        childrenUiSecondary={[
+          {
+            type: SEARCHDIALECT_CHECKBOX,
+            defaultChecked: true, // TODO: can set checked based on url queries
+            idName: 'searchByTitle',
+            labelText: 'Word',
+          },
+          {
+            type: SEARCHDIALECT_CHECKBOX,
+            defaultChecked: true,
+            idName: 'searchByDefinitions',
+            labelText: 'Definitions',
+          },
+          {
+            type: SEARCHDIALECT_CHECKBOX,
+            idName: 'searchByTranslations',
+            labelText: 'Literal translations',
+          },
+          {
+            type: SEARCHDIALECT_SELECT,
+            defaultValue: SEARCH_PART_OF_SPEECH_ANY,
+            idName: 'searchPartOfSpeech',
+            labelText: 'Parts of speech:',
+            options: [
+              {
+                text: 'Any',
+                value: SEARCH_PART_OF_SPEECH_ANY,
+              },
+              {
+                value: null,
+                text: '─────────────',
+              },
+              {
+                value: 'adverb',
+                text: 'Adverb',
+              },
+            ],
+          },
+        ].map(({ defaultChecked, defaultValue, idName, labelText, options, type }, index) => {
+          switch (type) {
+            case SEARCHDIALECT_CHECKBOX:
+              return (
+                <SearchDialectCheckbox
+                  key={`checkbox${index}`}
+                  defaultChecked={defaultChecked}
+                  idName={idName}
+                  labelText={labelText}
+                />
+              )
+            case SEARCHDIALECT_SELECT: {
+              return (
+                <SearchDialectSelect
+                  key={`select${index}`}
+                  defaultValue={defaultValue}
+                  idName={idName}
+                  labelText={labelText}
+                >
+                  {options.map(({ value, text }, optionKey) => {
+                    return (
+                      <option key={`option${optionKey}`} value={value} disabled={value === null}>
+                        {text}
+                      </option>
+                    )
+                  })}
+                </SearchDialectSelect>
+              )
+            }
+            default:
+              return null
+          }
+        })}
+        searchDialectDataType={searchDialectDataType}
+      />
+    )
+    const tree = component.toJSON()
+    expect(tree).toMatchSnapshot()
+  })
 
-// Container
-test('Container layer renders everything', () => {
-  const component = renderer.create(
-    <SearchDialectContainer
-      handleSearch={() => {}}
-      resetSearch={() => {}}
-      searchDialectDataType={searchDialectDataType}
-      searchUi={searchUi}
-    />
-  )
-  const tree = component.toJSON()
-  expect(tree).toMatchSnapshot()
-})
+  // Data
+  test('Data', () => {
+    // Updated in SearchDialectData.children
+    let output = {}
 
-// Data
-test('Data layer outputs the same data', () => {
-  // Updated in SearchDialectData.children
-  let output = {}
-
-  renderer.create(
-    <SearchDialectData
-      handleSearch={() => {}}
-      resetSearch={() => {}}
-      searchDialectDataType={searchDialectDataType}
-      searchUi={searchUi}
-    >
-      {(dataLayerOutput) => {
-        output = dataLayerOutput
-        return null
-      }}
-    </SearchDialectData>
-  )
-  expect(output).toMatchInlineSnapshot(`
+    renderer.create(
+      <SearchDialectData
+        handleSearch={() => {}}
+        resetSearch={() => {}}
+        searchDialectDataType={searchDialectDataType}
+        searchUi={searchUi}
+      >
+        {(dataLayerOutput) => {
+          output = dataLayerOutput
+          return null
+        }}
+      </SearchDialectData>
+    )
+    expect(output).toMatchInlineSnapshot(`
     Object {
       "dialectClassName": "fontBCSans",
-      "handleChangeSearchBySettings": [Function],
-      "handleEnterSearch": [Function],
-      "handleSearch": [Function],
+      "formRefSearch": Object {
+        "current": null,
+      },
       "intl": Object {
         "trans": [Function],
       },
-      "partsOfSpeechOptions": null,
-      "resetSearch": [Function],
-      "searchByMode": 0,
-      "searchBySettings": Object {},
-      "searchDialectDataType": 6,
-      "searchDialectUpdate": [Function],
-      "searchMessage": "",
-      "searchNxqlQuery": "",
-      "searchTerm": "",
-      "searchType": 1,
-      "searchUi": Array [
-        Object {
-          "defaultChecked": true,
-          "idName": "searchByTitle",
-          "labelText": "Word",
-          "urlParam": "sTitle",
-        },
-        Object {
-          "defaultChecked": true,
-          "idName": "searchByDefinitions",
-          "labelText": "Definitions",
-          "urlParam": "sDefinitions",
-        },
-        Object {
-          "idName": "searchByTranslations",
-          "labelText": "Literal translations",
-          "urlParam": "sTranslations",
-        },
-        Object {
-          "idName": "searchPartOfSpeech",
-          "labelText": "Parts of speech:",
-          "type": "select",
-          "urlParam": "sPartSpeech",
-        },
-      ],
+      "onPressEnter": [Function],
+      "onReset": [Function],
+      "onSearch": [Function],
+      "searchStyle": "match",
+      "searchTerm": undefined,
     }
   `)
+  })
 })

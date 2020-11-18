@@ -30,6 +30,11 @@ import {
  * @returns {node} jsx markup
  */
 function SearchDialectPresentation({
+  // searchBySettings,
+  // searchDialectUpdate,
+  // searchNxqlQuery,
+  browseMode,
+  childrenSearchMessage,
   childrenUiSecondary,
   dialectClassName,
   formRefSearch,
@@ -37,45 +42,28 @@ function SearchDialectPresentation({
   onPressEnter,
   onReset,
   onSearch,
-  searchByMode,
-  // searchBySettings,
   searchDialectDataType,
-  // searchDialectUpdate,
-  searchMessage,
-  // searchNxqlQuery,
-  searchTerm,
   searchStyle,
+  searchTerm,
 }) {
-  // Generate UI text
-  // ------------------------------------------------------------
-  let textBrowseResetButton = ''
-  switch (searchByMode) {
-    case SEARCH_BY_ALPHABET:
-      textBrowseResetButton = 'Stop browsing Alphabetically'
-      break
-    case SEARCH_BY_CATEGORY:
-      textBrowseResetButton = 'Stop browsing by Category'
-      break
-    case SEARCH_BY_PHRASE_BOOK:
-      textBrowseResetButton = 'Stop browsing by Phrase Book'
-      break
-    default:
-      textBrowseResetButton = 'Stop browsing and clear filter'
+  const getBrowseText = () => {
+    switch (browseMode) {
+      case SEARCH_BY_ALPHABET:
+        return 'Stop browsing Alphabetically'
+      case SEARCH_BY_CATEGORY:
+        return 'Stop browsing by Category'
+      case SEARCH_BY_PHRASE_BOOK:
+        return 'Stop browsing by Phrase Book'
+      default:
+        return 'Stop browsing and clear filter'
+    }
   }
-
-  const textSearchButton =
-    searchDialectDataType === SEARCH_DATA_TYPE_WORD
-      ? intl.trans('views.pages.explore.dialect.learn.words.search_words', 'Search Words', 'words')
-      : 'Search Phrases'
-
-  const isBrowsing =
-    searchByMode === SEARCH_BY_ALPHABET || searchByMode === SEARCH_BY_CATEGORY || searchByMode === SEARCH_BY_PHRASE_BOOK
-
   return (
     <div data-testid="SearchDialect" className="SearchDialect">
-      {searchMessage}
-      {/* {childrenSearchMessage} */}
-      {isBrowsing ? (
+      {/* Search Message */}
+      {childrenSearchMessage}
+      {/* In Browse Mode */}
+      {browseMode && (
         <div className="SearchDialectForm SearchDialectForm--filtering">
           <FVButton
             variant="contained"
@@ -84,10 +72,12 @@ function SearchDialectPresentation({
             }}
             color="primary"
           >
-            {textBrowseResetButton}
+            {getBrowseText()}
           </FVButton>
         </div>
-      ) : (
+      )}
+      {/* Not in Browse Mode */}
+      {!browseMode && (
         <form
           onSubmit={(event) => {
             event.preventDefault()
@@ -122,7 +112,9 @@ function SearchDialectPresentation({
             </select>
 
             <FVButton variant="contained" type="submit" color="primary">
-              {textSearchButton}
+              {searchDialectDataType === SEARCH_DATA_TYPE_WORD
+                ? intl.trans('views.pages.explore.dialect.learn.words.search_words', 'Search Words', 'words')
+                : 'Search Phrases'}
             </FVButton>
             <FVButton variant="contained" onClick={onReset} style={{ marginLeft: '20px' }}>
               Reset search
@@ -136,9 +128,20 @@ function SearchDialectPresentation({
   )
 }
 // PROPTYPES
-const { string } = PropTypes
+const { func, node, number, object, string } = PropTypes
 SearchDialectPresentation.propTypes = {
-  textSearchButton: string,
+  browseMode: string,
+  childrenSearchMessage: node,
+  childrenUiSecondary: node,
+  dialectClassName: string,
+  formRefSearch: object,
+  intl: object,
+  onPressEnter: func,
+  onReset: func,
+  onSearch: func,
+  searchDialectDataType: number,
+  searchStyle: string,
+  searchTerm: string,
 }
 
 export default SearchDialectPresentation

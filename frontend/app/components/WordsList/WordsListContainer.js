@@ -4,6 +4,7 @@ import WordsListPresentation from './WordsListPresentation'
 import WordsListData from './WordsListData'
 import PromiseWrapper from 'components/PromiseWrapper'
 
+const SearchDialectMessage = React.lazy(() => import('components/SearchDialect/SearchDialectMessage'))
 const SearchDialectContainer = React.lazy(() => import('components/SearchDialect/SearchDialectContainer'))
 const SearchDialectCheckbox = React.lazy(() => import('components/SearchDialect/SearchDialectCheckbox'))
 const SearchDialectSelect = React.lazy(() => import('components/SearchDialect/SearchDialectSelect'))
@@ -46,20 +47,29 @@ function WordsListContainer() {
         fetcherParams,
         filter,
         hrefCreate,
+        incrementResetCount,
         items,
         listViewMode,
         metadata,
         navigationRouteSearch,
         pageTitle,
         pushWindowPath,
+        resetCount,
         routeParams,
+        searchUiSecondary,
         setListViewMode,
         setRouteParams,
         smallScreenTemplate,
         sortHandler,
-        searchUiSecondary,
-        incrementResetCount,
-        resetCount,
+        queryCategory,
+        queryLetter,
+        querySearchByDefinitions,
+        querySearchByTitle,
+        querySearchByTranslations,
+        querySearchPartOfSpeech,
+        querySearchStyle,
+        querySearchTerm,
+        browseMode,
       }) => {
         return (
           <PromiseWrapper renderOnError computeEntities={computeEntities}>
@@ -84,6 +94,22 @@ function WordsListContainer() {
                   <SearchDialectContainer
                     key={`forceRender${resetCount}`}
                     incrementResetCount={incrementResetCount}
+                    browseMode={browseMode}
+                    childrenSearchMessage={
+                      <SearchDialectMessage
+                        dialectClassName={dialectClassName}
+                        letter={queryLetter}
+                        category={queryCategory}
+                        partOfSpeech={querySearchPartOfSpeech}
+                        searchStyle={querySearchStyle}
+                        searchTerm={querySearchTerm}
+                        shouldSearchCulturalNotes
+                        shouldSearchDefinitions={querySearchByDefinitions}
+                        shouldSearchLiteralTranslations={querySearchByTranslations}
+                        shouldSearchTitle={querySearchByTitle}
+                        searchDialectDataType={SEARCH_DATA_TYPE_WORD}
+                      />
+                    }
                     childrenUiSecondary={searchUiSecondary.map(
                       ({ defaultChecked, defaultValue, idName, labelText, options, type }, index) => {
                         switch (type) {

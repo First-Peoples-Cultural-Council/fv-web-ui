@@ -1,5 +1,5 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import SearchDialectPresentation from 'components/SearchDialect/SearchDialectPresentation'
 import SearchDialectData from 'components/SearchDialect/SearchDialectData'
 
@@ -12,12 +12,20 @@ import SearchDialectData from 'components/SearchDialect/SearchDialectData'
  *
  * @returns {node} jsx markup
  */
-function SearchDialectContainer({ childrenUiSecondary, incrementResetCount }) {
+function SearchDialectContainer({
+  browseMode,
+  childrenSearchMessage,
+  childrenUiSecondary,
+  incrementResetCount,
+  searchDialectDataType,
+}) {
   return (
     <SearchDialectData incrementResetCount={incrementResetCount}>
-      {({ dialectClassName, formRefSearch, intl, onPressEnter, onSearch, searchTerm, searchStyle, onReset }) => {
+      {({ dialectClassName, formRefSearch, intl, onPressEnter, onReset, onSearch, searchStyle, searchTerm }) => {
         return (
           <SearchDialectPresentation
+            browseMode={browseMode}
+            childrenSearchMessage={childrenSearchMessage}
             childrenUiSecondary={childrenUiSecondary}
             dialectClassName={dialectClassName}
             formRefSearch={formRefSearch}
@@ -25,8 +33,9 @@ function SearchDialectContainer({ childrenUiSecondary, incrementResetCount }) {
             onPressEnter={onPressEnter}
             onReset={onReset}
             onSearch={onSearch}
-            searchTerm={searchTerm}
+            searchDialectDataType={searchDialectDataType}
             searchStyle={searchStyle}
+            searchTerm={searchTerm}
           />
         )
       }}
@@ -34,9 +43,13 @@ function SearchDialectContainer({ childrenUiSecondary, incrementResetCount }) {
   )
 }
 // PROPTYPES
-// const { string } = PropTypes
+const { func, node, string, number } = PropTypes
 SearchDialectContainer.propTypes = {
-  //   something: string,
+  browseMode: string,
+  childrenSearchMessage: node,
+  childrenUiSecondary: node,
+  incrementResetCount: func,
+  searchDialectDataType: number,
 }
 
 export default SearchDialectContainer

@@ -206,14 +206,14 @@ export const SearchDialectMessage = ({
   return <div className="SearchDialectSearchFeedback alert alert-info">{msg}</div>
 }
 // PROPTYPES
-const { bool, string } = PropTypes
+const { bool, number, string } = PropTypes
 SearchDialectMessage.propTypes = {
   category: string,
   dialectClassName: string,
   letter: string,
   partOfSpeech: string,
   phraseBook: string,
-  searchDialectDataType: string,
+  searchDialectDataType: number,
   searchStyle: string,
   searchTerm: string,
   shouldSearchCulturalNotes: bool,

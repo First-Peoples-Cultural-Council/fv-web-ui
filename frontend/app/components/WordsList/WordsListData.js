@@ -43,8 +43,8 @@ import {
   SEARCHDIALECT_CHECKBOX,
   SEARCHDIALECT_SELECT,
   SEARCH_PART_OF_SPEECH_ANY,
-  // SEARCH_BY_ALPHABET,
-  // SEARCH_BY_CATEGORY,
+  SEARCH_BY_ALPHABET,
+  SEARCH_BY_CATEGORY,
   // SEARCH_BY_CUSTOM,
   // SEARCH_BY_PHRASE_BOOK,
   // SEARCH_DATA_TYPE_PHRASE,
@@ -90,10 +90,14 @@ function WordsListData({ children }) {
     letter: queryLetter,
     page: queryPage,
     pageSize: queryPageSize,
+    searchByDefinitions: querySearchByDefinitions,
+    searchByTitle: querySearchByTitle,
+    searchByTranslations: querySearchByTranslations,
+    searchPartOfSpeech: querySearchPartOfSpeech,
+    searchStyle: querySearchStyle,
+    searchTerm: querySearchTerm,
     sortBy: querySortBy,
     sortOrder: querySortOrder,
-    searchPartOfSpeech: querySearchPartOfSpeech,
-    // searchTerm: querySearchTerm,
   } = getSearchAsObject({
     searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
     category: routeParams.category,
@@ -368,6 +372,13 @@ function WordsListData({ children }) {
       )}`
     )
   }
+  let browseMode
+  if (queryLetter) {
+    browseMode = SEARCH_BY_ALPHABET
+  }
+  if (queryCategory) {
+    browseMode = SEARCH_BY_CATEGORY
+  }
   const hrefCreate = `/explore${dialectPath}/learn/words/create`
   return children({
     columns: columns,
@@ -430,6 +441,15 @@ function WordsListData({ children }) {
     incrementResetCount: () => {
       setResetCount(resetCount + 1)
     },
+    queryCategory,
+    queryLetter,
+    querySearchByDefinitions,
+    querySearchByTitle,
+    querySearchByTranslations,
+    querySearchPartOfSpeech,
+    querySearchStyle,
+    querySearchTerm,
+    browseMode,
   })
 }
 

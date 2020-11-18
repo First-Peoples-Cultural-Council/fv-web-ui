@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Container layer renders everything 1`] = `
+exports[`SearchDialect Container 1`] = `
 <div
   className="SearchDialect"
   data-testid="SearchDialect"
 >
-  
-  <div
+  <form
     className="SearchDialectForm"
+    onSubmit={[Function]}
   >
     <div
       className="SearchDialectFormPrimary"
@@ -15,16 +15,15 @@ exports[`Container layer renders everything 1`] = `
       <input
         className="SearchDialectFormPrimaryInput fontBCSans"
         data-testid="SearchDialectFormPrimaryInput"
-        onChange={[Function]}
+        name="searchTerm"
         onKeyPress={[Function]}
         type="text"
-        value=""
       />
       <select
         className="SearchDialectFormSelectSearchType fontBCSans"
         data-testid="SearchDialectFormSelectSearchType"
-        defaultValue={1}
-        onChange={[Function]}
+        defaultValue="match"
+        name="searchStyle"
       >
         <option
           value="match"
@@ -66,7 +65,6 @@ exports[`Container layer renders everything 1`] = `
         className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary"
         disabled={false}
         onBlur={[Function]}
-        onClick={[Function]}
         onDragLeave={[Function]}
         onFocus={[Function]}
         onKeyDown={[Function]}
@@ -78,13 +76,41 @@ exports[`Container layer renders everything 1`] = `
         onTouchMove={[Function]}
         onTouchStart={[Function]}
         tabIndex={0}
-        type="button"
+        type="submit"
       >
         <span
           className="MuiButton-label"
         />
       </button>
-      
+      <button
+        className="MuiButtonBase-root MuiButton-root MuiButton-contained"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onDragLeave={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "marginLeft": "20px",
+          }
+        }
+        tabIndex={0}
+        type="button"
+      >
+        <span
+          className="MuiButton-label"
+        >
+          Reset search
+        </span>
+      </button>
     </div>
     <div
       className="SearchDialectFormSecondary"
@@ -93,11 +119,10 @@ exports[`Container layer renders everything 1`] = `
         className="SearchDialectFormSecondaryGroup"
       >
         <input
-          checked={false}
           className="SearchDialectOption"
+          defaultChecked={true}
           id="searchByTitle"
           name="searchByTitle"
-          onChange={[Function]}
           type="checkbox"
         />
         <label
@@ -111,11 +136,10 @@ exports[`Container layer renders everything 1`] = `
         className="SearchDialectFormSecondaryGroup"
       >
         <input
-          checked={false}
           className="SearchDialectOption"
+          defaultChecked={true}
           id="searchByDefinitions"
           name="searchByDefinitions"
-          onChange={[Function]}
           type="checkbox"
         />
         <label
@@ -129,11 +153,9 @@ exports[`Container layer renders everything 1`] = `
         className="SearchDialectFormSecondaryGroup"
       >
         <input
-          checked={false}
           className="SearchDialectOption"
           id="searchByTranslations"
           name="searchByTranslations"
-          onChange={[Function]}
           type="checkbox"
         />
         <label
@@ -154,18 +176,31 @@ exports[`Container layer renders everything 1`] = `
         </label>
         <select
           className="SearchDialectOption"
+          defaultValue="Any"
           id="searchPartOfSpeech"
           name="searchPartOfSpeech"
-          onChange={[Function]}
         >
           <option
+            disabled={false}
             value="Any"
           >
             Any
           </option>
+          <option
+            disabled={true}
+            value={null}
+          >
+            ─────────────
+          </option>
+          <option
+            disabled={false}
+            value="adverb"
+          >
+            Adverb
+          </option>
         </select>
       </span>
     </div>
-  </div>
+  </form>
 </div>
 `;

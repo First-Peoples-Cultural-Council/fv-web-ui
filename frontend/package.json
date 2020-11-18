@@ -160,6 +160,7 @@
     "image-webpack-loader": "^4.2.0",
     "jscodeshift": "^0.6.4",
     "jsdoc": "^3.6.4",
+    "jsdom": "^16.4.0",
     "json-loader": "~0.5.2",
     "jsx-loader": "~0.13.2",
     "less": "~2.5.1",
