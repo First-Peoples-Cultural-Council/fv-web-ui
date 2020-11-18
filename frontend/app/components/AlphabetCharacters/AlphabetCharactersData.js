@@ -1,16 +1,14 @@
-import { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
+import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import ProviderHelpers from 'common/ProviderHelpers'
 import selectn from 'selectn'
+// Data Sources
+import useCharacters from 'dataSources/useCharacters'
+import usePortal from 'dataSources/usePortal'
+import useRoute from 'dataSources/useRoute'
+// Helpers
 import { getDialectClassname } from 'common/Helpers'
-// REDUX: actions/dispatch/func
-import { fetchDocument } from 'reducers/document'
-import { fetchCharacters } from 'reducers/fvCharacter'
-import { pushWindowPath } from 'reducers/windowPath'
-
-import NavigationHelpers from 'common/NavigationHelpers'
-
+import useNavigationHelpers from 'common/useNavigationHelpers'
 /**
  * @summary AlphabetCharactersData
  * @version 2.0.0
@@ -20,124 +18,56 @@ import NavigationHelpers from 'common/NavigationHelpers'
  *
  * @returns {node} jsx markup
  */
-function AlphabetCharactersData({
-  children,
-  computeCharacters,
-  computePortal,
-  letterClickedCallback,
-  routeParams,
-  splitWindowPath,
-}) {
-  const [alphabetPath, setAlphabetPath] = useState('')
-  const [portalPath, setPortalPath] = useState('')
-
+function AlphabetCharactersData({ children }) {
+  const [characters, setCharacters] = useState([])
+  const { getSearchAsObject, navigate } = useNavigationHelpers()
+  const { fetchCharacters, computeCharacters } = useCharacters()
+  const { computePortal } = usePortal()
+  const { routeParams } = useRoute()
+  const { letter: queryLetter } = getSearchAsObject()
+  const alphabetPath = `${routeParams.dialect_path}/Alphabet`
+  const portalPath = `${routeParams.dialect_path}/Portal`
   const extractComputedCharacters = ProviderHelpers.getEntry(computeCharacters, alphabetPath)
   const extractComputePortal = ProviderHelpers.getEntry(computePortal, portalPath)
 
   useEffect(() => {
-    window.addEventListener('popstate', clickLetterIfInRouteParams)
-
-    setAlphabetPath(`${routeParams.dialect_path}/Alphabet`)
-    setPortalPath(`${routeParams.dialect_path}/Portal`)
-
-    if (selectn('action', extractComputedCharacters) !== 'FV_CHARACTERS_QUERY_START') {
-      ProviderHelpers.fetchIfMissing(
-        alphabetPath,
-        fetchCharacters,
-        computeCharacters,
-        '&currentPageIndex=0&pageSize=100&sortOrder=asc&sortBy=fvcharacter:alphabet_order'
-      )
-    }
-    return () => {
-      window.removeEventListener('popstate', clickLetterIfInRouteParams)
-    }
+    ProviderHelpers.fetchIfMissing(
+      alphabetPath,
+      fetchCharacters,
+      computeCharacters,
+      '&currentPageIndex=0&pageSize=100&sortOrder=asc&sortBy=fvcharacter:alphabet_order'
+    )
   }, [])
 
-  const clickLetterIfInRouteParams = () => {
-    const letter = selectn('letter', routeParams)
-    if (letter) {
-      letterClicked({ letter })
-    }
-  }
-
-  // Used by the presentation layer to generate urls
-  const generateAlphabetCharacterHref = (letter) => {
-    let href = undefined
-    const _splitWindowPath = [...splitWindowPath]
-    const wordOrPhraseIndex = _splitWindowPath.findIndex((element) => {
-      return element === 'words' || element === 'phrases'
+  const charactersUnprocessed = selectn('response.entries', extractComputedCharacters) || []
+  useEffect(() => {
+    const charactersProcessed = charactersUnprocessed.map(({ title }) => {
+      return {
+        title,
+        href: `${window.location.pathname}?letter=${title}`,
+        isActiveCharacter: title === decodeURIComponent(queryLetter),
+      }
     })
-    if (wordOrPhraseIndex !== -1) {
-      _splitWindowPath.splice(wordOrPhraseIndex + 1)
-      href = `/${_splitWindowPath.join('/')}/alphabet/${letter}`
+    if (charactersProcessed.length > 0) {
+      setCharacters(charactersProcessed)
     }
-    return href
-  }
+  }, [charactersUnprocessed, queryLetter])
 
-  // Called from the presentation layer when a letter is clicked
-  const letterClicked = ({ href, letter, updateHistory = false }) => {
-    letterClickedCallback({
-      href,
-      letter,
-      updateHistory,
-    })
-
-    if (updateHistory === false && href) {
-      NavigationHelpers.navigate(href, pushWindowPath, false)
-    }
+  const onClick = (href) => {
+    navigate(href)
   }
 
   return children({
-    activeLetter: routeParams.letter,
-    characters: selectn('response.entries', extractComputedCharacters),
+    characters,
     dialectClassName: getDialectClassname(extractComputePortal),
-    generateAlphabetCharacterHref: generateAlphabetCharacterHref,
-    letterClicked: letterClicked,
+    onClick,
   })
 }
 
 // PROPTYPES
-const { any, array, func, object } = PropTypes
+const { func } = PropTypes
 AlphabetCharactersData.propTypes = {
-  children: any,
-  letterClickedCallback: func,
-  // REDUX: reducers/state
-  computeCharacters: object.isRequired,
-  computeLogin: object.isRequired,
-  computePortal: object.isRequired,
-  routeParams: object.isRequired,
-  splitWindowPath: array.isRequired,
-  // REDUX: actions/dispatch/func
-  fetchCharacters: func.isRequired,
-  fetchDocument: func.isRequired,
-  pushWindowPath: func.isRequired,
+  children: func,
 }
 
-AlphabetCharactersData.defaultProps = {
-  letterClickedCallback: () => {},
-}
-
-// REDUX: reducers/state
-const mapStateToProps = (state) => {
-  const { fvCharacter, fvPortal, navigation, nuxeo, windowPath } = state
-  const { computePortal } = fvPortal
-  const { route } = navigation
-  const { computeLogin } = nuxeo
-  const { computeCharacters } = fvCharacter
-  const { splitWindowPath } = windowPath
-  return {
-    computePortal,
-    computeCharacters,
-    computeLogin,
-    routeParams: route.routeParams,
-    splitWindowPath,
-  }
-}
-// REDUX: actions/dispatch/func
-const mapDispatchToProps = {
-  fetchDocument,
-  fetchCharacters,
-  pushWindowPath,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AlphabetCharactersData)
+export default AlphabetCharactersData

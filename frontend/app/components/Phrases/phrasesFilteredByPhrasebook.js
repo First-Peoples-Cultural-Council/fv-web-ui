@@ -34,8 +34,7 @@ import { searchDialectReset } from 'reducers/searchDialect'
 // -------------------------------------------
 import AuthorizationFilter from 'components/AuthorizationFilter'
 
-import AlphabetCharactersPresentation from 'components/AlphabetCharacters/AlphabetCharactersPresentation'
-import AlphabetCharactersData from 'components/AlphabetCharacters/AlphabetCharactersData'
+import AlphabetCharactersContainer from 'components/AlphabetCharacters/AlphabetCharactersContainer'
 
 import DialectFilterListPresentation from 'components/DialectFilterList/DialectFilterListPresentation'
 import DialectFilterListData from 'components/DialectFilterList/DialectFilterListData'
@@ -278,24 +277,7 @@ export class phrasesFilteredByPhrasebook extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12 col-md-3 PrintHide">
-            <AlphabetCharactersData
-              letterClickedCallback={() => {
-                this.changeFilter()
-              }}
-            >
-              {({ activeLetter, characters, generateAlphabetCharacterHref, letterClicked }) => {
-                return (
-                  <AlphabetCharactersPresentation
-                    activeLetter={activeLetter}
-                    characters={characters}
-                    dialectClassName={dialectClassName}
-                    generateAlphabetCharacterHref={generateAlphabetCharacterHref}
-                    letterClicked={letterClicked}
-                    splitWindowPath={splitWindowPath}
-                  />
-                )
-              }}
-            </AlphabetCharactersData>
+            <AlphabetCharactersContainer />
 
             <CategoriesData fetchPhraseBooks>
               {({ categoriesData }) => {

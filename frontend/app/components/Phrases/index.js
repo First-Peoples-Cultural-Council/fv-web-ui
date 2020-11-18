@@ -38,9 +38,7 @@ import AuthorizationFilter from 'components/AuthorizationFilter'
 import PageDialectLearnBase from 'components/LearnBase'
 import PhraseListView from 'components/Phrases/list-view'
 
-import AlphabetCharactersPresentation from 'components/AlphabetCharacters/AlphabetCharactersPresentation'
-import AlphabetCharactersData from 'components/AlphabetCharacters/AlphabetCharactersData'
-
+import AlphabetCharactersContainer from 'components/AlphabetCharacters/AlphabetCharactersContainer'
 import DialectFilterListPresentation from 'components/DialectFilterList/DialectFilterListPresentation'
 import DialectFilterListData from 'components/DialectFilterList/DialectFilterListData'
 import CategoriesData from 'components/Categories/CategoriesData'
@@ -268,24 +266,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
         </div>
         <div className="row">
           <div className={classNames('col-xs-12', 'col-md-3', 'PrintHide')}>
-            <AlphabetCharactersData
-              letterClickedCallback={({ href, updateHistory }) => {
-                this.changeFilter(href, updateHistory)
-              }}
-            >
-              {({ activeLetter, characters, generateAlphabetCharacterHref, letterClicked, splitWindowPath }) => {
-                return (
-                  <AlphabetCharactersPresentation
-                    activeLetter={activeLetter}
-                    characters={characters}
-                    dialectClassName={dialectClassName}
-                    generateAlphabetCharacterHref={generateAlphabetCharacterHref}
-                    letterClicked={letterClicked}
-                    splitWindowPath={splitWindowPath}
-                  />
-                )
-              }}
-            </AlphabetCharactersData>
+            <AlphabetCharactersContainer />
 
             <CategoriesData fetchPhraseBooks>
               {({ categoriesData }) => {

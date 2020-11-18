@@ -21,7 +21,6 @@ import useIntl from 'dataSources/useIntl'
 import usePortal from 'dataSources/usePortal'
 import useRoute from 'dataSources/useRoute'
 import useSearchDialect from 'dataSources/useSearchDialect'
-import useWindowPath from 'dataSources/useWindowPath'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import { SEARCH_BY_ALPHABET, SEARCH_BY_CATEGORY, SEARCH_PART_OF_SPEECH_ANY } from 'common/Constants'
@@ -32,7 +31,6 @@ function WordsData(props) {
   const { intl } = useIntl()
   const { computePortal, fetchPortal } = usePortal()
   const { routeParams } = useRoute()
-  const { splitWindowPath } = useWindowPath()
   const { searchDialectUpdate, searchDialectReset } = useSearchDialect()
 
   const dictionaryKey = `${routeParams.dialect_path}/Dictionary`
@@ -78,30 +76,14 @@ function WordsData(props) {
     })
   }
 
-  const handleAlphabetClick = async ({ letterClicked }) => {
-    await searchDialectUpdate({
-      searchByAlphabet: letterClicked,
-      searchByMode: SEARCH_BY_ALPHABET,
-      searchBySettings: {
-        searchByTitle: true,
-        searchByDefinitions: false,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchTerm: '',
-    })
-  }
-
   return props.children({
     computeEntities,
     constSearchByAlphabet: SEARCH_BY_ALPHABET,
     constSearchPartOfSpeechAny: SEARCH_PART_OF_SPEECH_ANY,
     flashcardMode: false,
     handleCategoryClick,
-    handleAlphabetClick,
     intl,
     routeParams,
-    splitWindowPath,
   })
 }
 

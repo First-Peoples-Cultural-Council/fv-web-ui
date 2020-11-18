@@ -15,23 +15,12 @@ import AlphabetCharactersData from 'components/AlphabetCharacters/AlphabetCharac
 function AlphabetCharactersContainer() {
   return (
     <AlphabetCharactersData>
-      {({
-        activeLetter,
-        characters,
-        generateAlphabetCharacterHref,
-        letterClicked,
-        dialectClassName,
-        // v2
-        // onClick,
-        // queryLetter,
-      }) => {
+      {({ characters, dialectClassName, onClick }) => {
         return (
           <AlphabetCharactersPresentation
-            activeLetter={activeLetter}
             characters={characters}
             dialectClassName={dialectClassName}
-            generateAlphabetCharacterHref={generateAlphabetCharacterHref}
-            letterClicked={letterClicked}
+            onClick={onClick}
           />
         )
       }}
