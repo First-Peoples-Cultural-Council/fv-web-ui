@@ -17,12 +17,10 @@ import '!style-loader!css-loader!./Breadcrumb.css'
 function BreadcrumbPresentation({ breadcrumbs, isDialect, portalLogoSrc }) {
   return isDialect ? (
     <div className="row Breadcrumb__container">
-      <h2 className="Breadcrumb__header">
-        <div className="Breadcrumb__link">
-          <Avatar src={portalLogoSrc} size={50} />
-          <ul className="Breadcrumb breadcrumb fontBCSans">{breadcrumbs}</ul>
-        </div>
-      </h2>
+      <div className="Breadcrumb__link">
+        <Avatar src={portalLogoSrc} size={50} />
+        <ul className="Breadcrumb breadcrumb fontBCSans">{breadcrumbs}</ul>
+      </div>
     </div>
   ) : null
 }
