@@ -51,7 +51,9 @@ import { getDialectClassname } from 'common/Helpers'
 import NavigationHelpers, { appendPathArrayAfterLandmark } from 'common/NavigationHelpers'
 import { SEARCH_DATA_TYPE_PHRASE, SEARCH_BY_ALPHABET, SEARCH_BY_PHRASE_BOOK } from 'common/Constants'
 const { array, bool, func, object, string } = PropTypes
+const SearchDialectMessage = React.lazy(() => import('components/SearchDialect/SearchDialectMessage'))
 const SearchDialectContainer = React.lazy(() => import('components/SearchDialect/SearchDialectContainer'))
+const SearchDialectCheckbox = React.lazy(() => import('components/SearchDialect/SearchDialectCheckbox'))
 /**
  * Learn phrases
  */
@@ -157,6 +159,25 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
     const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
     const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps() // NOTE: This function is in PageDialectLearnBase
 
+    /*
+      TODO:
+    */
+    let resetCount = 0
+    let browseMode
+    // if (queryLetter) {
+    //   browseMode = SEARCH_BY_ALPHABET
+    // }
+    // if (queryCategory) {
+    //   browseMode = SEARCH_BY_CATEGORY
+    // }
+    let queryLetter
+    let queryPhraseBook
+    let querySearchStyle
+    let querySearchTerm
+    let querySearchByCulturalNotes
+    let querySearchByDefinitions
+    let querySearchByTitle
+
     const phraseListView =
       selectn('response.uid', computeDocument) && this.state.dialectId ? (
         <PhraseListView
@@ -175,28 +196,45 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
           routeParams={this.props.routeParams}
           // Search:
           childrenSearch={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div>loading...</div>}>
               <SearchDialectContainer
-                handleSearch={this.changeFilter}
-                resetSearch={this.resetSearch}
-                searchUi={[
-                  {
-                    defaultChecked: true,
-                    idName: 'searchByTitle',
-                    labelText: 'Phrase',
-                    urlParam: 'sTitle',
-                  },
-                  {
-                    defaultChecked: true,
-                    idName: 'searchByDefinitions',
-                    labelText: 'Definitions',
-                    urlParam: 'sDefinitions',
-                  },
-                  {
-                    idName: 'searchByCulturalNotes',
-                    labelText: 'Cultural notes',
-                    urlParam: 'sCulturalNotes',
-                  },
+                key={`forceRender${resetCount}`}
+                incrementResetCount={() => {
+                  resetCount += 1
+                }}
+                browseMode={browseMode}
+                childrenSearchMessage={
+                  <SearchDialectMessage
+                    dialectClassName={dialectClassName}
+                    letter={queryLetter}
+                    phraseBook={queryPhraseBook}
+                    searchStyle={querySearchStyle}
+                    searchTerm={querySearchTerm}
+                    shouldSearchCulturalNotes={querySearchByCulturalNotes}
+                    shouldSearchDefinitions={querySearchByDefinitions}
+                    shouldSearchTitle={querySearchByTitle}
+                    searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
+                  />
+                }
+                childrenUiSecondary={[
+                  <SearchDialectCheckbox
+                    key="phraseSearch1"
+                    defaultChecked
+                    idName="searchByTitle"
+                    labelText="Phrase"
+                  />,
+                  <SearchDialectCheckbox
+                    key="phraseSearch2"
+                    defaultChecked
+                    idName="searchByDefinitions"
+                    labelText="Definitions"
+                  />,
+                  <SearchDialectCheckbox
+                    key="phraseSearch3"
+                    defaultChecked
+                    idName="searchByCulturalNotes"
+                    labelText="Cultural notes"
+                  />,
                 ]}
                 searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
               />

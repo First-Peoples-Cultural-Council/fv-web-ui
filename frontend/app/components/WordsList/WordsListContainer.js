@@ -103,7 +103,7 @@ function WordsListContainer() {
                         partOfSpeech={querySearchPartOfSpeech}
                         searchStyle={querySearchStyle}
                         searchTerm={querySearchTerm}
-                        shouldSearchCulturalNotes
+                        shouldSearchCulturalNotes // TODO: is this a bug?
                         shouldSearchDefinitions={querySearchByDefinitions}
                         shouldSearchLiteralTranslations={querySearchByTranslations}
                         shouldSearchTitle={querySearchByTitle}
