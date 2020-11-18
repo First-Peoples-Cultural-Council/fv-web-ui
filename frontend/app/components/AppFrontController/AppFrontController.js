@@ -278,8 +278,7 @@ export class AppFrontController extends Component {
 
   _renderWithBreadcrumb = (reactElement, matchedPage, props, siteTheme) => {
     const themePalette = props.theme.palette
-    const { routeParams } = reactElement.props
-    const { /*splitWindowPath, */ computeLogin } = props
+    const { computeLogin } = props
     const { routes } = this.state
     let _workspaceSwitcher = null
     const area = selectn('routeParams.area', reactElement.props)
@@ -291,20 +290,11 @@ export class AppFrontController extends Component {
     ) {
       _workspaceSwitcher = <WorkspaceSwitcher className="AppFrontController__workspaceSwitcher" area={area} />
     }
-    const overrideBreadcrumbs = selectn('props.properties.breadcrumbs', this)
-    const findReplace = overrideBreadcrumbs
-      ? { find: overrideBreadcrumbs.find, replace: selectn(overrideBreadcrumbs.replace, this.props.properties) }
-      : undefined
     return (
       <div>
         <div className="breadcrumbContainer row">
           <div className="AppFrontController__waypoint clearfix" style={{ backgroundColor: themePalette.accent4Color }}>
-            <Breadcrumb.Container
-              matchedPage={matchedPage}
-              routes={routes}
-              routeParams={routeParams}
-              findReplace={findReplace}
-            />
+            <Breadcrumb.Container matchedPage={matchedPage} routes={routes} />
             {_workspaceSwitcher}
           </div>
         </div>

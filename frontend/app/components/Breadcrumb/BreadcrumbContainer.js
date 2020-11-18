@@ -12,9 +12,9 @@ import BreadcrumbData from 'components/Breadcrumb/BreadcrumbData'
  *
  * @returns {node} jsx markup
  */
-function BreadcrumbContainer({ matchedPage, routes, routeParams, findReplace }) {
+function BreadcrumbContainer({ matchedPage, routes }) {
   return (
-    <BreadcrumbData matchedPage={matchedPage} routes={routes} routeParams={routeParams} findReplace={findReplace}>
+    <BreadcrumbData matchedPage={matchedPage} routes={routes}>
       {({ breadcrumbs, isDialect, portalLogoSrc }) => {
         return <BreadcrumbPresentation breadcrumbs={breadcrumbs} isDialect={isDialect} portalLogoSrc={portalLogoSrc} />
       }}
@@ -26,8 +26,6 @@ const { object } = PropTypes
 BreadcrumbContainer.propTypes = {
   matchedPage: object,
   routes: object.isRequired,
-  routeParams: object.isRequired,
-  findReplace: object,
 }
 
 export default BreadcrumbContainer

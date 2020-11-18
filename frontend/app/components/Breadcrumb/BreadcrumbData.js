@@ -14,6 +14,7 @@ import { SECTIONS } from 'common/Constants'
 import useDialect from 'dataSources/useDialect'
 import useIntl from 'dataSources/useIntl'
 import usePortal from 'dataSources/usePortal'
+import useProperties from 'dataSources/useProperties'
 import useRoute from 'dataSources/useRoute'
 import useWindowPath from 'dataSources/useWindowPath'
 
@@ -26,20 +27,28 @@ import useWindowPath from 'dataSources/useWindowPath'
  * @param {function} props.children
  *
  */
-function BreadcrumbData({ children, matchedPage, routes, findReplace }) {
+function BreadcrumbData({ children, matchedPage, routes }) {
   const { computeDialect2 } = useDialect()
   const { intl } = useIntl()
   const { fetchPortal, computePortal } = usePortal()
+  const { properties } = useProperties()
   const { routeParams } = useRoute()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
 
   const REMOVE_FROM_BREADCRUMBS = ['FV', 'sections', 'Data', 'Workspaces', 'search', 'nuxeo', 'app', 'explore']
   const isDialect = routeParams.hasOwnProperty('dialect_path')
+
   let splitPath = splitWindowPath
+
   const breadcrumbPathOverride = matchedPage.get('breadcrumbPathOverride')
   if (breadcrumbPathOverride) {
     splitPath = breadcrumbPathOverride(splitPath)
   }
+
+  const overrideBreadcrumbTitle = properties.breadcrumbs
+  const findReplace = overrideBreadcrumbTitle
+    ? { find: overrideBreadcrumbTitle.find, replace: selectn(overrideBreadcrumbTitle.replace, properties) }
+    : undefined
 
   useEffect(() => {
     // If searching within a dialect, fetch portal (needed for portal logo src)
@@ -58,7 +67,7 @@ function BreadcrumbData({ children, matchedPage, routes, findReplace }) {
     const dialectPathSplit = routeParams.dialect_path.split('/').filter((path) => {
       return path !== ''
     })
-    const indexFV = splitPath.indexOf('FV')
+    const indexFV = splitWindowPath.indexOf('FV')
     indexDialect = indexFV !== -1 ? indexFV + dialectPathSplit.length - 1 : -1
   }
 
@@ -100,7 +109,10 @@ function BreadcrumbData({ children, matchedPage, routes, findReplace }) {
           )
 
         return (
-          <li key={splitPathIndex} className={`${splitPathIndex === splitPath.length - 1 ? 'active' : ''}`}>
+          <li
+            key={splitPathIndex}
+            className={`${splitPathIndex === splitPath.length - 1 ? 'active' : ''} Breadcrumb__first`}
+          >
             {breadcrumbItem}
           </li>
         )
@@ -122,7 +134,6 @@ function BreadcrumbData({ children, matchedPage, routes, findReplace }) {
       routes.forEach((value) => {
         // PSUEDO: compare route path with breadcrumb path
         const matchTest = matchPath(value.get('path'), [splitPathItem])
-
         if (matchTest.matched) {
           /* PSUEDO: A route entry can have a `redirects` prop that will be used to update `hrefPath`
             eg:
@@ -179,13 +190,11 @@ function BreadcrumbData({ children, matchedPage, routes, findReplace }) {
 const { func, object } = PropTypes
 BreadcrumbData.propTypes = {
   children: func,
-  routeParams: object,
   matchedPage: object,
   routes: object,
 }
 
 BreadcrumbData.defaultProps = {
-  routeParams: {},
   matchedPage: Immutable.fromJS({}),
   routes: Immutable.fromJS({}),
 }

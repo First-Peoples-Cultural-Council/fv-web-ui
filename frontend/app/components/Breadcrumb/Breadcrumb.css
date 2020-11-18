@@ -1,13 +1,12 @@
 .Breadcrumb__container {
+  background: e1e1e2;
   min-height: 64px;
   margin: 0;
   margin-right: auto;
 }
 
 .Breadcrumb__header {
-  font-weight: 500;
   margin: 0;
-  font-size: 26px;
   line-height: 1.2;
 }
 
@@ -20,12 +19,17 @@
   cursor: default;
 }
 
+.Breadcrumb__first {
+  font-size: 1.8rem;
+}
+
 .Breadcrumb {
   font-size: 1.4rem;
   padding: 1.5rem;
   margin: 0;
   background-color: transparent;
 }
+
 .Breadcrumb a {
   color: #353b40;
   text-decoration: none;
@@ -34,7 +38,6 @@
 .Breadcrumb a:focus {
   text-decoration: underline;
 }
-
 .Breadcrumb > li.active {
   color: #000;
 }

@@ -28,9 +28,10 @@ function BreadcrumbPresentation({ breadcrumbs, isDialect, portalLogoSrc }) {
 }
 
 // PROPTYPES
-const { array, string } = PropTypes
+const { array, bool, string } = PropTypes
 BreadcrumbPresentation.propTypes = {
   breadcrumbs: array,
+  isDialect: bool,
   portalLogoSrc: string,
 }
 
