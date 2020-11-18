@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import Typography from '@material-ui/core/Typography'
@@ -7,35 +7,23 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import FVLabel from 'components/FVLabel'
 import '!style-loader!css-loader!./AlphabetCharacters.css'
 
-export class AlphabetCharactersPresentation extends Component {
-  render() {
-    let content = null
-    if (this.props.characters === undefined) {
-      content = this.componentIsLoading()
-    } else {
-      if (this.props.characters.length === 0) {
-        content = this.componentHasNoContent()
-      } else {
-        content = this.componentHasContent()
-      }
-    }
-    return (
-      <div className="AlphabetCharacters" data-testid="AlphabetCharacters">
-        <h2>
-          <FVLabel
-            transKey="views.pages.explore.dialect.learn.words.find_by_alphabet"
-            defaultStr="Browse Alphabetically"
-            transform="words"
-          />
-        </h2>
-        {content}
-      </div>
-    )
-  }
-
-  componentHasContent = () => {
-    const { characters = [], generateAlphabetCharacterHref } = this.props
-    const { activeLetter } = this.props
+/**
+ * @summary AlphabetCharactersPresentation
+ * @version 2.0.0
+ * @component
+ *
+ * @param {object} props
+ *
+ * @returns {node} jsx markup
+ */
+function AlphabetCharactersPresentation({
+  activeLetter,
+  characters = [],
+  dialectClassName,
+  generateAlphabetCharacterHref,
+  letterClicked,
+}) {
+  const componentHasContent = () => {
     const charactersMarkup = characters.map((value, index) => {
       const currentLetter = value.title
       const href = generateAlphabetCharacterHref(currentLetter)
@@ -45,7 +33,7 @@ export class AlphabetCharactersPresentation extends Component {
           className={`AlphabetCharactersTile ${activeLetter === currentLetter ? 'AlphabetCharactersTile--active' : ''}`}
           onClick={(e) => {
             e.preventDefault()
-            this.props.letterClicked({ letter: currentLetter, href })
+            letterClicked({ letter: currentLetter, href })
           }}
           key={index}
         >
@@ -53,14 +41,12 @@ export class AlphabetCharactersPresentation extends Component {
         </a>
       )
     })
-    let content = null
-    if (charactersMarkup.length > 0) {
-      content = <div className={`AlphabetCharactersTiles ${this.props.dialectClassName}`}>{charactersMarkup}</div>
-    }
-    return content
+    return charactersMarkup.length > 0 ? (
+      <div className={`AlphabetCharactersTiles ${dialectClassName}`}>{charactersMarkup}</div>
+    ) : null
   }
 
-  componentHasNoContent = () => {
+  const componentHasNoContent = () => {
     return (
       <Typography className="AlphabetCharacters__noCharacters" variant="caption">
         Characters are unavailable at this time
@@ -68,7 +54,7 @@ export class AlphabetCharactersPresentation extends Component {
     )
   }
 
-  componentIsLoading = () => {
+  const componentIsLoading = () => {
     return (
       <div className="AlphabetCharacters__loading">
         <CircularProgress className="AlphabetCharacters__loadingSpinner" color="secondary" mode="indeterminate" />
@@ -78,6 +64,26 @@ export class AlphabetCharactersPresentation extends Component {
       </div>
     )
   }
+  return (
+    <div className="AlphabetCharacters" data-testid="AlphabetCharacters">
+      <h2>
+        <FVLabel
+          transKey="views.pages.explore.dialect.learn.words.find_by_alphabet"
+          defaultStr="Browse Alphabetically"
+          transform="words"
+        />
+      </h2>
+      {() => {
+        if (characters === undefined) {
+          return componentIsLoading()
+        }
+        if (characters.length === 0) {
+          return componentHasNoContent()
+        }
+        return componentHasContent()
+      }}
+    </div>
+  )
 }
 
 // PropTypes

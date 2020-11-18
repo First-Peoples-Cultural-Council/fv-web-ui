@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -11,65 +11,59 @@ import { pushWindowPath } from 'reducers/windowPath'
 
 import NavigationHelpers from 'common/NavigationHelpers'
 
-class AlphabetCharactersData extends Component {
-  constructor(props) {
-    super(props)
-    this.alphabetPath = ''
-    this.portalPath = ''
-  }
+/**
+ * @summary AlphabetCharactersData
+ * @version 2.0.0
+ * @component
+ *
+ * @param {object} props
+ *
+ * @returns {node} jsx markup
+ */
+function AlphabetCharactersData({
+  children,
+  computeCharacters,
+  computePortal,
+  letterClickedCallback,
+  routeParams,
+  splitWindowPath,
+}) {
+  const [alphabetPath, setAlphabetPath] = useState('')
+  const [portalPath, setPortalPath] = useState('')
 
-  componentDidMount() {
-    window.addEventListener('popstate', this.clickLetterIfInRouteParams)
+  const extractComputedCharacters = ProviderHelpers.getEntry(computeCharacters, alphabetPath)
+  const extractComputePortal = ProviderHelpers.getEntry(computePortal, portalPath)
 
-    this.alphabetPath = `${this.props.routeParams.dialect_path}/Alphabet`
-    this.portalPath = `${this.props.routeParams.dialect_path}/Portal`
+  useEffect(() => {
+    window.addEventListener('popstate', clickLetterIfInRouteParams)
 
-    const { extractComputedCharacters } = this.returnCommonData()
+    setAlphabetPath(`${routeParams.dialect_path}/Alphabet`)
+    setPortalPath(`${routeParams.dialect_path}/Portal`)
+
     if (selectn('action', extractComputedCharacters) !== 'FV_CHARACTERS_QUERY_START') {
       ProviderHelpers.fetchIfMissing(
-        this.alphabetPath,
-        this.props.fetchCharacters,
-        this.props.computeCharacters,
+        alphabetPath,
+        fetchCharacters,
+        computeCharacters,
         '&currentPageIndex=0&pageSize=100&sortOrder=asc&sortBy=fvcharacter:alphabet_order'
       )
     }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('popstate', this.clickLetterIfInRouteParams)
-  }
-
-  render() {
-    const { extractComputedCharacters, extractComputePortal } = this.returnCommonData()
-    return this.props.children({
-      characters: selectn('response.entries', extractComputedCharacters),
-      dialectClassName: getDialectClassname(extractComputePortal),
-      generateAlphabetCharacterHref: this.generateAlphabetCharacterHref,
-      activeLetter: this.props.routeParams.letter,
-      letterClicked: this.letterClicked,
-      splitWindowPath: this.props.splitWindowPath,
-    })
-  }
-
-  clickLetterIfInRouteParams = () => {
-    const letter = selectn('letter', this.props.routeParams)
-    if (letter) {
-      this.letterClicked({ letter })
+    return () => {
+      window.removeEventListener('popstate', clickLetterIfInRouteParams)
     }
-  }
+  }, [])
 
-  returnCommonData = () => {
-    const { computePortal, computeCharacters } = this.props
-    return {
-      extractComputedCharacters: ProviderHelpers.getEntry(computeCharacters, this.alphabetPath),
-      extractComputePortal: ProviderHelpers.getEntry(computePortal, this.portalPath),
+  const clickLetterIfInRouteParams = () => {
+    const letter = selectn('letter', routeParams)
+    if (letter) {
+      letterClicked({ letter })
     }
   }
 
   // Used by the presentation layer to generate urls
-  generateAlphabetCharacterHref = (letter) => {
+  const generateAlphabetCharacterHref = (letter) => {
     let href = undefined
-    const _splitWindowPath = [...this.props.splitWindowPath]
+    const _splitWindowPath = [...splitWindowPath]
     const wordOrPhraseIndex = _splitWindowPath.findIndex((element) => {
       return element === 'words' || element === 'phrases'
     })
@@ -81,17 +75,25 @@ class AlphabetCharactersData extends Component {
   }
 
   // Called from the presentation layer when a letter is clicked
-  letterClicked = ({ href, letter, updateHistory = false }) => {
-    this.props.letterClickedCallback({
+  const letterClicked = ({ href, letter, updateHistory = false }) => {
+    letterClickedCallback({
       href,
       letter,
       updateHistory,
     })
 
     if (updateHistory === false && href) {
-      NavigationHelpers.navigate(href, this.props.pushWindowPath, false)
+      NavigationHelpers.navigate(href, pushWindowPath, false)
     }
   }
+
+  return children({
+    activeLetter: routeParams.letter,
+    characters: selectn('response.entries', extractComputedCharacters),
+    dialectClassName: getDialectClassname(extractComputePortal),
+    generateAlphabetCharacterHref: generateAlphabetCharacterHref,
+    letterClicked: letterClicked,
+  })
 }
 
 // PROPTYPES
