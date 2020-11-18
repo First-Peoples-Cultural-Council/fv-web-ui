@@ -202,6 +202,9 @@ import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { pushWindowPath } from 'reducers/windowPath'
 import { setRouteParams } from 'reducers/navigation'
+
+import useNavigationHelpers from 'common/useNavigationHelpers'
+
 // Components
 import {
   batchTitle,
@@ -214,11 +217,11 @@ import {
   getUidsFromComputedData,
   getUidsThatAreNotDeleted,
 } from 'common/ListView'
+import FlashcardButton from 'components/FlashcardButton'
 import withPagination from 'components/withPagination'
 import IntlService from 'common/services/IntlService'
 import FVButton from 'components/FVButton'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'components/DictionaryList/DictionaryListSmallScreen'
-import { getSearchObject } from 'common/NavigationHelpers'
 import AuthorizationFilter from 'components/AuthorizationFilter'
 const SearchDialect = React.lazy(() => import('components/SearchDialect'))
 const FlashcardList = React.lazy(() => import('components/FlashcardList'))
@@ -230,12 +233,12 @@ import '!style-loader!css-loader!./DictionaryList.css'
 // ===============================================================
 // DictionaryList
 // ===============================================================
-const VIEWMODE_DEFAULT = 0
-const VIEWMODE_FLASHCARD = 1
 const VIEWMODE_SMALL_SCREEN = 2
 const VIEWMODE_LARGE_SCREEN = 3
 
 const DictionaryList = (props) => {
+  const { getSearchAsObject } = useNavigationHelpers()
+  const { sortOrder: querySortOrder, sortBy: querySortBy, flashcard: queryFlashcard } = getSearchAsObject()
   const intl = IntlService.instance
   const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
   let columnsEnhanced = [...props.columns]
@@ -245,21 +248,17 @@ const DictionaryList = (props) => {
     // If window.location.search has sortOrder & sortBy,
     // Ensure the same values are in redux
     // before generating the sort markup
-    const windowLocationSearch = getSearchObject()
-    const windowLocationSearchSortOrder = windowLocationSearch.sortOrder
-    const windowLocationSearchSortBy = windowLocationSearch.sortBy
     if (
-      windowLocationSearchSortOrder &&
-      windowLocationSearchSortBy &&
-      (props.navigationRouteSearch.sortOrder !== windowLocationSearchSortOrder ||
-        props.navigationRouteSearch.sortBy !== windowLocationSearchSortBy)
+      querySortOrder &&
+      querySortBy &&
+      (props.navigationRouteSearch.sortOrder !== querySortOrder || props.navigationRouteSearch.sortBy !== querySortBy)
     ) {
       props.setRouteParams({
         search: {
           page: props.navigationRouteRouteParams.page,
           pageSize: props.navigationRouteRouteParams.pageSize,
-          sortOrder: windowLocationSearchSortOrder,
-          sortBy: windowLocationSearchSortBy,
+          sortOrder: querySortOrder,
+          sortBy: querySortBy,
         },
       })
     }
@@ -408,9 +407,9 @@ const DictionaryList = (props) => {
           // User specified view states
           // =========================================
 
-          //  Flashcard Specified: by view mode button or prop
+          //  Flashcard
           // -----------------------------------------
-          if (props.dictionaryListViewMode === VIEWMODE_FLASHCARD) {
+          if (queryFlashcard) {
             // TODO: SPECIFY FlashcardList PROPS
             let flashCards = <FlashcardList {...props} />
             if (props.hasPagination) {
@@ -478,38 +477,9 @@ function generateListButtons({
   exportDialectQuery,
   hasExportDialect,
   // View mode
-  clickHandlerViewMode = () => {},
-  dictionaryListViewMode,
   hasViewModeButtons,
 }) {
-  let buttonFlashcard = null
   let exportDialect = null
-
-  if (hasViewModeButtons) {
-    buttonFlashcard =
-      dictionaryListViewMode === VIEWMODE_FLASHCARD ? (
-        <FVButton
-          variant="contained"
-          color="primary"
-          className="DictionaryList__viewModeButton"
-          onClick={() => {
-            clickHandlerViewMode(VIEWMODE_DEFAULT)
-          }}
-        >
-          Cancel flashcard view
-        </FVButton>
-      ) : (
-        <FVButton
-          variant="contained"
-          className="DictionaryList__viewModeButton"
-          onClick={() => {
-            clickHandlerViewMode(VIEWMODE_FLASHCARD)
-          }}
-        >
-          Flashcard view
-        </FVButton>
-      )
-  }
   if (hasExportDialect) {
     exportDialect = (
       <AuthorizationFilter filter={{ permission: 'Write', entity: dialect }}>
@@ -527,7 +497,7 @@ function generateListButtons({
 
   return (
     <div className="DictionaryList__ListButtonsGroup">
-      {buttonFlashcard}
+      {hasViewModeButtons && <FlashcardButton.Container />}
       {exportDialect}
     </div>
   )
