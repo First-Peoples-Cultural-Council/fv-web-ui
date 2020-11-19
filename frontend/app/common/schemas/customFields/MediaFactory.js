@@ -2,15 +2,18 @@ import React from 'react'
 import t from 'tcomb-form'
 import selectn from 'selectn'
 
+import IntlService from 'common/services/IntlService'
+
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz'
 import FVButton from 'components/FVButton'
 
 import AddMediaComponent from 'components/AddMediaComponent'
 import SelectMediaComponent from 'components/SelectMediaComponent'
 import Preview from 'components/Preview'
-import FVLabel from 'components/FVLabel'
 
 const expandedValues = []
+
+const intl = IntlService.instance
 
 /**
  * Define auto-suggest factory
@@ -38,7 +41,7 @@ function renderInput(locals) {
         expandedValue={selectn(locals.value, expandedValues)}
         type={locals.type}
         crop
-        tagStyles={locals.type == 'FVPicture' ? { height: '200px' } : null}
+        tagStyles={locals.type === 'FVPicture' ? { height: '200px' } : null}
       />
       <FVButton
         variant="text"
@@ -57,7 +60,7 @@ function renderInput(locals) {
         onClick={_onRequestEdit}
       >
         <SwapHorizIcon style={{ verticalAlign: 'middle' }} className="material-icons" />
-        <FVLabel transKey="replace" defaultStr="Replace" transform="first" />
+        {intl.trans('replace', 'Replace', 'first')}
       </FVButton>
     </div>
   )
@@ -68,9 +71,7 @@ function renderInput(locals) {
         <AddMediaComponent
           type={locals.type}
           label={
-            locals.labelAddMediaComponent || (
-              <FVLabel transKey="views.components.editor.upload_new" defaultStr="Upload New" />
-            )
+            locals.labelAddMediaComponent || intl.trans('views.components.editor.upload_new', 'Upload New', 'words')
           }
           onComplete={onComplete}
           dialect={locals.context}
@@ -78,16 +79,15 @@ function renderInput(locals) {
         <SelectMediaComponent
           type={locals.type}
           label={
-            locals.labelSelectMediaComponent || (
-              <FVLabel transKey="views.components.editor.browse_existing" defaultStr="Browse Existing" />
-            )
+            locals.labelSelectMediaComponent ||
+            intl.trans('views.components.editor.browse_existing', 'Browse Existing', 'words')
           }
           onComplete={onComplete}
           dialect={locals.context}
         />
         {selectn('context.initialValues.' + locals.attrs.name, locals) ? (
           <FVButton variant="text" onClick={onCancel}>
-            <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
+            {intl.trans('cancel', 'Cancel', 'first')}
           </FVButton>
         ) : (
           ''
