@@ -302,14 +302,7 @@ export class phrasesFilteredByPhrasebook extends Component {
                 let CategoriesDataToRender = null
                 if (categoriesData && categoriesData.length > 0) {
                   CategoriesDataToRender = (
-                    <DialectFilterListData
-                      selectedCategoryId={routeParams.phraseBook}
-                      setDialectFilterCallback={this.changeFilter} // TODO
-                      facets={categoriesData}
-                      facetType="phraseBook"
-                      type="phrases"
-                      workspaceKey="fv-phrase:phrase_books"
-                    >
+                    <DialectFilterListData filterListData={categoriesData} queryParam="phraseBook">
                       {({ listItemData }) => {
                         return (
                           <DialectFilterListPresentation

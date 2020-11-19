@@ -2,12 +2,10 @@ import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import useNavigationHelpers from 'common/useNavigationHelpers'
-// TODO: UPDATE CALLING FUNCTIONS TO REMOVE UNUSED PROPS
-function DialectFilterListData({ children, facets, facetType }) {
+function DialectFilterListData({ children, filterListData, queryParam }) {
   const { getSearchAsObject } = useNavigationHelpers()
   const [listItemData, setListItemData] = useState([])
   const [sortedFacets, setSortedFacets] = useState()
-  const urlQueryName = facetType
   // Sort functions:
   const sortByTitle = (a, b) => {
     if (a.title < b.title) return -1
@@ -29,8 +27,8 @@ function DialectFilterListData({ children, facets, facetType }) {
     return _filtersSorted
   }
   useEffect(() => {
-    setSortedFacets(sortDialectFilters(facets))
-  }, [facets])
+    setSortedFacets(sortDialectFilters(filterListData))
+  }, [filterListData])
 
   const { category: queryCategory, phraseBook: queryPhraseBook } = getSearchAsObject()
   useEffect(() => {
@@ -67,7 +65,7 @@ function DialectFilterListData({ children, facets, facetType }) {
   // ]
   const generateListItemData = (filters) => {
     const toReturn = []
-    const selectedFilterId = urlQueryName === 'category' ? queryCategory : queryPhraseBook
+    const selectedFilterId = queryParam === 'category' ? queryCategory : queryPhraseBook
     // console.log('generateListItemData', filters)
     filters.forEach((filter) => {
       const childData = []
@@ -89,7 +87,7 @@ function DialectFilterListData({ children, facets, facetType }) {
           // Save child data
           childData.push({
             hasActiveParent: parentIsActive,
-            href: `${window.location.pathname}?${urlQueryName}=${uidChild}`,
+            href: `${window.location.pathname}?${queryParam}=${uidChild}`,
             isActive: childIsActive,
             text: filterChild.title,
             uid: uidChild,
@@ -101,7 +99,7 @@ function DialectFilterListData({ children, facets, facetType }) {
       toReturn.push({
         children: childData,
         hasActiveChild: hasActiveChild,
-        href: `${window.location.pathname}?${urlQueryName}=${uidParent}`,
+        href: `${window.location.pathname}?${queryParam}=${uidParent}`,
         isActive: parentIsActive,
         text: filter.title,
         uid: uidParent,
@@ -119,8 +117,8 @@ function DialectFilterListData({ children, facets, facetType }) {
 const { array, func, oneOf } = PropTypes
 DialectFilterListData.propTypes = {
   children: func,
-  facets: array.isRequired,
-  facetType: oneOf(['category', 'phraseBook']),
+  filterListData: array.isRequired,
+  queryParam: oneOf(['category', 'phraseBook']),
 }
 
 export default DialectFilterListData

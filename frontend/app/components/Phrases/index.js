@@ -292,14 +292,7 @@ export class PageDialectLearnPhrases extends PageDialectLearnBase {
                 return (
                   categoriesData &&
                   categoriesData.length > 0 && (
-                    <DialectFilterListData
-                      selectedCategoryId={this.props.routeParams.phraseBook}
-                      setDialectFilterCallback={this.changeFilter}
-                      facets={categoriesData}
-                      facetType="phraseBook"
-                      type="phrases"
-                      workspaceKey="fv-phrase:phrase_books"
-                    >
+                    <DialectFilterListData filterListData={categoriesData} queryParam="phraseBook">
                       {({ listItemData }) => {
                         return (
                           <DialectFilterListPresentation

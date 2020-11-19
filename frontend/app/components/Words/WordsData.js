@@ -24,7 +24,7 @@ import useSearchDialect from 'dataSources/useSearchDialect'
 import useWindowPath from 'dataSources/useWindowPath'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import { SEARCH_BY_ALPHABET, SEARCH_BY_CATEGORY, SEARCH_PART_OF_SPEECH_ANY } from 'common/Constants'
+import { SEARCH_BY_ALPHABET, SEARCH_PART_OF_SPEECH_ANY } from 'common/Constants'
 
 function WordsData(props) {
   const { computeDialect2, fetchDialect2 } = useDialect()
@@ -63,21 +63,6 @@ function WordsData(props) {
     },
   ])
 
-  const handleCategoryClick = async ({ selected }) => {
-    await searchDialectUpdate({
-      searchByAlphabet: '',
-      searchByMode: SEARCH_BY_CATEGORY,
-      searchBySettings: {
-        searchByTitle: true,
-        searchByDefinitions: false,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchingDialectFilter: selected.checkedFacetUid,
-      searchTerm: '',
-    })
-  }
-
   const handleAlphabetClick = async ({ letterClicked }) => {
     await searchDialectUpdate({
       searchByAlphabet: letterClicked,
@@ -94,13 +79,8 @@ function WordsData(props) {
 
   return props.children({
     computeEntities,
-    constSearchByAlphabet: SEARCH_BY_ALPHABET,
-    constSearchPartOfSpeechAny: SEARCH_PART_OF_SPEECH_ANY,
-    flashcardMode: false,
-    handleCategoryClick,
     handleAlphabetClick,
     intl,
-    routeParams,
     splitWindowPath,
   })
 }
