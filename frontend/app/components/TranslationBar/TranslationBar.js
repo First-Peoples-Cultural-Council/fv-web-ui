@@ -19,6 +19,8 @@ import PropTypes from 'prop-types'
 // REDUX
 import { connect } from 'react-redux'
 
+import selectn from 'selectn'
+
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 import Select from '@material-ui/core/Select'
@@ -59,7 +61,7 @@ class TranslationBar extends Component {
   }
 
   _handleChangeImmersion = () => {
-    this.props.updateCurrentUser(!this.props.currentImmersionMode)
+    this.props.updateCurrentUser(event.target.checked)
   }
 
   fetchData(newProps) {
@@ -97,18 +99,19 @@ class TranslationBar extends Component {
 
     if (UIHelpers.isFeatureEnabled(IMMERSION_FEATURE, computeDialect2)) {
       immersionMode = (
-        <FormControlLabel
-          control={<Switch checked={this.props.currentImmersionMode} onChange={() => this._handleChangeImmersion()} />}
-          label="Immersion Mode"
-        />
+        <span>
+          OR
+          <FormControlLabel
+            control={<Switch checked={this.props.immersionModeActive} onChange={this._handleChangeImmersion} />}
+            label={'Immerse in ' + selectn('response.properties.dc:title', computeDialect2)}
+          />
+        </span>
       )
     }
 
     return (
       <div className="TranslationBar__container">
         <div>
-          <div>{immersionMode}</div>
-
           <FVLabel transKey="choose_lang" defaultStr="Translate FirstVoices To" transform="first" />
 
           <Select
@@ -125,6 +128,10 @@ class TranslationBar extends Component {
             <MenuItem value="en">English</MenuItem>
             <MenuItem value="fr">Français</MenuItem>
           </Select>
+
+          <span className="TranslationBar__separator" />
+
+          {immersionMode}
         </div>
       </div>
     )
@@ -139,6 +146,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
   return {
     currentLocale: locale.locale,
+    immersionModeActive: locale.immersionMode,
     computeDialect2,
     routeParams: route.routeParams,
   }

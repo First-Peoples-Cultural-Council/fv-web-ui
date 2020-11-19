@@ -4,6 +4,14 @@
   text-align: right;
 }
 
+span.TranslationBar__separator {
+  padding-right: 15px;
+}
+
+.TranslationBar__container .MuiFormControlLabel-root {
+  padding-left: 15px;
+}
+
 .TranslationBar__select {
   margin-left: 10px;
 }
