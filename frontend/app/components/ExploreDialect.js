@@ -446,7 +446,7 @@ export class ExploreDialect extends Component {
               <div className={classNames('col-xs-12')}>
                 <TextHeader
                   tag="h2"
-                  title={this.props.intl.trans('views.pages.explore.dialect.about', 'REGION DATA', 'upper')}
+                  title={this.props.intl.trans('views.pages.explore.dialect.region_data', 'REGION DATA', 'upper')}
                   properties={this.props.properties}
                 />
 
