@@ -38,7 +38,7 @@ import PageDialectReports from 'components/Reports'
 import PageDialectReportsView from 'components/Reports/ReportsView'
 
 import PageDialectLearnWords from 'components/Words/WordsContainer'
-import PageDialectLearnPhrases from 'components/PhrasesCreateEdit'
+import PageDialectLearnPhrases from 'components/Phrases/PhrasesContainer'
 import PageDialectLearnStoriesAndSongs from 'components/SongsStories'
 
 import PageDialectViewMedia from 'components/Media/view'

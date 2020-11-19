@@ -29,7 +29,6 @@ import FVLabel from 'components/FVLabel'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenTemplatePhrases,
-  dictionaryListSmallScreenTemplateWords,
 } from 'components/DictionaryList/DictionaryListSmallScreen'
 import AuthorizationFilter from 'components/AuthorizationFilter'
 const SearchDialect = React.lazy(() => import('components/SearchDialect'))
@@ -39,9 +38,9 @@ const DictionaryListLargeScreen = React.lazy(() => import('components/Dictionary
 const ExportDialect = React.lazy(() => import('components/ExportDialect'))
 
 import { getSearchObject } from 'common/NavigationHelpers'
-import { SEARCH_DATA_TYPE_WORD } from 'common/Constants'
 
 import '!style-loader!css-loader!./PhrasesList.css'
+import '!style-loader!css-loader!components/DictionaryList/DictionaryList.css'
 
 // ===============================================================
 // WordList
@@ -138,7 +137,7 @@ function PhrasesListPresentation(props) {
           hasExportDialect: props.hasExportDialect,
            */
     // View mode
-    clickHandlerViewMode: props.wordsListClickHandlerViewMode,
+    clickHandlerViewMode: props.clickHandlerViewMode,
     dictionaryListViewMode: props.dictionaryListViewMode,
     hasViewModeButtons: props.hasViewModeButtons,
   }
@@ -156,10 +155,7 @@ function PhrasesListPresentation(props) {
       // --------------------
       columns: columnsEnhanced,
       items: props.items,
-      dictionaryListSmallScreenTemplate:
-        props.searchDialectDataType === SEARCH_DATA_TYPE_WORD
-          ? dictionaryListSmallScreenTemplateWords
-          : dictionaryListSmallScreenTemplatePhrases,
+      dictionaryListSmallScreenTemplate: dictionaryListSmallScreenTemplatePhrases,
     },
     hasPagination: props.hasPagination,
     pageSize: DefaultFetcherParams.pageSize,
@@ -198,9 +194,9 @@ function PhrasesListPresentation(props) {
               className="PrintHide buttonRaised"
             >
               <FVLabel
-                transKey="views.pages.explore.dialect.learn.words.create_new_word"
-                defaultStr={`Create New ${props.entryType.title}`}
-                transform="words"
+                transKey="views.pages.explore.dialect.learn.phrases.create_new_phrase"
+                defaultStr="Create New Phrase"
+                transform="phrases"
               />
             </button>
           </AuthorizationFilter>
@@ -485,17 +481,15 @@ PhrasesListPresentation.propTypes = {
   // Misc PhrasesList
   columns: array.isRequired, // NOTE: Important prop. Defines table headers and how cells are rendered.
   dialectClassName: string,
-  entryType: object,
   filter: object,
   handleCreateClick: func,
-  smallScreenTemplate: func, // NOTE: Overides generic template/layout used by DictionaryListSmallScreen
-  wordsListClickHandlerViewMode: func, // NOTE: event handler for clicks on view mode buttons (eg: Flashcard)
+  clickHandlerViewMode: func, // NOTE: event handler for clicks on view mode buttons (eg: Flashcard)
   dictionaryListViewMode: number, // NOTE: can force a specific view mode with this prop (eg: always in VIEWMODE_LARGE_SCREEN)
   hasSorting: bool, // NOTE: can explicitly disable sorting if needed. EG: since we are reusing components, sometimes the `columns` prop will have a sort property within the data but where you are reusing the component it doesn't make sense to sort, `hasSorting={false}` would help you.
   hasViewModeButtons: bool, // NOTE: Toggles all of the view mode buttons (currently there is only Flashcard but there used to be more options)
   items: oneOfType([array, instanceOf(List)]), // NOTE: Important prop. Primary source of data (filteredItems is also used!)
   pageTitle: string,
-  rowClickHandler: func, // NOTE: this list view is used in the browse mode where you can select items to add to other documents (eg: add a contributor to a word). This is the event handler for that action
+  rowClickHandler: func, // NOTE: this list view is used in the browse mode where you can select items to add to other documents (eg: add a contributor to a phrase). This is the event handler for that action
   sortHandler: func, // NOTE: event handler for sort actions. If not defined, the url will be updated instead.
   // <SearchDialect />
   handleSearch: func, // NOTE: After <SearchDialect /> updates search data in redux, this callback is called. TODO: could drop if all components are subscribed to Redux > Search updates.
@@ -514,21 +508,15 @@ PhrasesListPresentation.defaultProps = {
   hasExportDialect: false,
   // PhrasesList
   columns: [],
-  entryType: {
-    label: 'phrase',
-    title: 'Phrase',
-    labelPlural: 'phrases',
-    titlePlural: 'Phrases',
-  },
   handleCreateClick: () => {},
-  wordsListClickHandlerViewMode: () => {},
+  clickHandlerViewMode: () => {},
   // General List
   hasSorting: true,
   hasViewModeButtons: true,
   // Search
   handleSearch: () => {},
   resetSearch: () => {},
-  searchDialectDataType: 6,
+  searchDialectDataType: 5,
 }
 
 export default PhrasesListPresentation

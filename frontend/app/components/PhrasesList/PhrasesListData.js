@@ -17,7 +17,6 @@ import usePhrase from 'dataSources/usePhrase'
 import usePortal from 'dataSources/usePortal'
 import useSearchDialect from 'dataSources/useSearchDialect'
 import useWindowPath from 'dataSources/useWindowPath'
-import useWord from 'dataSources/useWord'
 
 // Helpers
 import { getDialectClassname } from 'common/Helpers'
@@ -29,7 +28,7 @@ import NavigationHelpers, {
 } from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
-import { WORKSPACES, SEARCH_DATA_TYPE_WORD } from 'common/Constants'
+import { WORKSPACES, SEARCH_DATA_TYPE_PHRASE } from 'common/Constants'
 
 // Components
 import AuthorizationFilter from 'components/AuthorizationFilter'
@@ -40,7 +39,6 @@ import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
-  dictionaryListSmallScreenTemplateWords,
   dictionaryListSmallScreenColumnDataTemplateCustomState,
 } from 'components/DictionaryList/DictionaryListSmallScreen'
 
@@ -54,7 +52,7 @@ import {
  *
  */
 
-function PhrasesListData({ children, searchDialectDataType }) {
+function PhrasesListData({ children }) {
   const { computeDocument, fetchDocument } = useDocument()
   const { computeDialect2, fetchDialect2 } = useDialect()
   const { intl } = useIntl()
@@ -64,15 +62,9 @@ function PhrasesListData({ children, searchDialectDataType }) {
   const { computePortal, fetchPortal } = usePortal()
   const { computeSearchDialect } = useSearchDialect()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
-  const { computeWords, fetchWords } = useWord()
   const { computePhrases, fetchPhrases } = usePhrase()
 
   const { searchNxqlQuery = '' } = computeSearchDialect
-
-  const entryType =
-    searchDialectDataType === SEARCH_DATA_TYPE_WORD
-      ? { label: 'word', title: 'Word', labelPlural: 'words', titlePlural: 'Words' }
-      : { label: 'phrase', title: 'Phrase', labelPlural: 'phrases', titlePlural: 'Phrases' }
 
   useEffect(() => {
     fetchData()
@@ -110,24 +102,21 @@ function PhrasesListData({ children, searchDialectDataType }) {
   const extractComputePortal = ProviderHelpers.getEntry(computePortal, `${routeParams.dialect_path}/Portal`)
   const dialectClassName = getDialectClassname(extractComputePortal)
   const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', extractComputePortal) ||
-    ''} ${intl.trans(entryType.labelPlural, entryType.titlePlural, 'first')}`
+    ''} ${intl.trans('phrases', 'Phrases', 'first')}`
 
   // Parsing computeDialect2
   const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
   const dialect = selectn('response', computedDialect2)
 
-  // Parsing computeWords
-  const computedEntries =
-    searchDialectDataType === SEARCH_DATA_TYPE_WORD
-      ? ProviderHelpers.getEntry(computeWords, dictionaryKey)
-      : ProviderHelpers.getEntry(computePhrases, dictionaryKey)
+  // Parsing computePhrases
+  const computedEntries = ProviderHelpers.getEntry(computePhrases, dictionaryKey)
   const items = selectn('response.entries', computedEntries)
   const metadata = selectn('response', computedEntries)
 
   const computeEntities = Immutable.fromJS([
     {
       id: dictionaryKey,
-      entity: searchDialectDataType === SEARCH_DATA_TYPE_WORD ? computeWords : computePhrases,
+      entity: computePhrases,
     },
   ])
 
@@ -138,7 +127,7 @@ function PhrasesListData({ children, searchDialectDataType }) {
     await ProviderHelpers.fetchIfMissing(dictionaryKey, fetchDocument, computeDocument)
     // Portal
     await ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, fetchPortal, computePortal)
-    // Words
+    // Phrases
     fetchListViewData()
   }
 
@@ -149,26 +138,15 @@ function PhrasesListData({ children, searchDialectDataType }) {
       currentAppliedFilter = ` AND ${searchNxqlQuery}`
     }
 
-    // Handle word categories
-    if (routeParams.category && !resetSearch) {
-      // Private
-      if (routeParams.area === 'Workspaces') {
-        currentAppliedFilter = ` AND fv-word:categories/* IN ("${routeParams.category}") &enrichment=category_children`
-      }
-      // Public
-      if (routeParams.area === 'sections') {
-        currentAppliedFilter = ` AND fvproxy:proxied_categories/* IN ("${routeParams.category}") &enrichment=category_children`
-      }
-    }
     // Handle phrasebooks
     if (routeParams.phraseBook && !resetSearch) {
       // Private
       if (routeParams.area === 'Workspaces') {
-        currentAppliedFilter = ` AND fv-word:categories/* IN ("${routeParams.category}") &enrichment=category_children`
+        currentAppliedFilter = ` AND fv-phrase:phrase_books/* IN ("${routeParams.phraseBook}")`
       }
       // Public
       if (routeParams.area === 'sections') {
-        currentAppliedFilter = ` AND fvproxy:proxied_categories/* IN ("${routeParams.category}") &enrichment=category_children`
+        currentAppliedFilter = ` AND fvproxy:proxied_categories/* IN ("${routeParams.phraseBook}")`
       }
     }
     // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
@@ -183,7 +161,7 @@ function PhrasesListData({ children, searchDialectDataType }) {
       routeParams.letter ? `&letter=${routeParams.letter}&starts_with_query=Document.CustomOrderQuery` : startsWithQuery
     }`
 
-    searchDialectDataType === SEARCH_DATA_TYPE_WORD ? fetchWords(dictionaryKey, nql) : fetchPhrases()
+    fetchPhrases(dictionaryKey, nql)
   }
 
   const onNavigateRequest = (path) => {
@@ -222,12 +200,12 @@ function PhrasesListData({ children, searchDialectDataType }) {
     const columnsArray = [
       {
         name: 'title',
-        title: intl.trans('word', 'Word', 'first'),
+        title: intl.trans('phrase', 'Phrase', 'first'),
         columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
         render: (v, data) => {
           const isWorkspaces = routeParams.area === WORKSPACES
-          const href = NavigationHelpers.generateUIDPath(routeParams.siteTheme, data, 'words')
-          const hrefEdit = NavigationHelpers.generateUIDEditPath(routeParams.siteTheme, data, 'words')
+          const href = NavigationHelpers.generateUIDPath(routeParams.siteTheme, data, 'phrases')
+          const hrefEdit = NavigationHelpers.generateUIDEditPath(routeParams.siteTheme, data, 'phrases')
           const hrefEditRedirect = `${hrefEdit}?redirect=${encodeURIComponent(
             `${window.location.pathname}${window.location.search}`
           )}`
@@ -296,7 +274,7 @@ function PhrasesListData({ children, searchDialectDataType }) {
         columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
         columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomAudio,
         render: (v, data, cellProps) => {
-          const firstAudio = selectn('contextParameters.word.' + cellProps.name + '[0]', data)
+          const firstAudio = selectn('contextParameters.phrase.' + cellProps.name + '[0]', data)
           if (firstAudio) {
             return (
               <Preview
@@ -319,7 +297,7 @@ function PhrasesListData({ children, searchDialectDataType }) {
         title: intl.trans('picture', 'Picture', 'first'),
         columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
         render: (v, data, cellProps) => {
-          const firstPicture = selectn('contextParameters.word.' + cellProps.name + '[0]', data)
+          const firstPicture = selectn('contextParameters.phrase.' + cellProps.name + '[0]', data)
           if (firstPicture) {
             return (
               <img
@@ -332,22 +310,15 @@ function PhrasesListData({ children, searchDialectDataType }) {
           }
         },
       },
-      {
-        name: 'fv-word:part_of_speech',
-        title: intl.trans('part_of_speech', 'Part of Speech', 'first'),
-        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
-        render: (v, data) => selectn('contextParameters.word.part_of_speech', data),
-        sortBy: 'fv-word:part_of_speech',
-      },
     ]
     // NOTE: Append `categories` & `state` columns if on Workspaces
     if (routeParams.area === WORKSPACES) {
       columnsArray.push({
-        name: 'fv-word:categories',
-        title: intl.trans('categories', 'Categories', 'first'),
+        name: 'fv-phrase:phrase_books',
+        title: intl.trans('phrase books', 'Phrase books', 'first'),
         render: (v, data) => {
           return UIHelpers.generateDelimitedDatumFromDataset({
-            dataSet: selectn('contextParameters.word.categories', data),
+            dataSet: selectn('contextParameters.phrase.phrase_books', data),
             extractDatum: (entry) => selectn('dc:title', entry),
           })
         },
@@ -380,7 +351,7 @@ function PhrasesListData({ children, searchDialectDataType }) {
       newUrl = appendPathArrayAfterLandmark({
         pathArray: [pageSize, currentPageIndex],
         splitWindowPath: splitWindowPath,
-        landmarkArray: ['words'],
+        landmarkArray: ['phrases'],
       })
     }
     if (newUrl) {
@@ -440,7 +411,7 @@ function PhrasesListData({ children, searchDialectDataType }) {
       // Replace them
       NavigationHelpers.navigateForwardReplaceMultiple(splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
     } else {
-      // No pagination in url (eg: .../learn/words), append `urlPage` & `urlPageSize`
+      // No pagination in url (eg: .../learn/phrases), append `urlPage` & `urlPageSize`
       NavigationHelpers.navigateForward(splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
     }
   }
@@ -454,28 +425,6 @@ function PhrasesListData({ children, searchDialectDataType }) {
 
     fetchListViewData({ pageIndex: routeParams.page, pageSize: routeParams.pageSize })
   }
-
-  const wordsSearchUi = [
-    {
-      defaultChecked: true,
-      idName: 'searchByTitle',
-      labelText: 'Word',
-    },
-    {
-      defaultChecked: true,
-      idName: 'searchByDefinitions',
-      labelText: 'Definitions',
-    },
-    {
-      idName: 'searchByTranslations',
-      labelText: 'Literal translations',
-    },
-    {
-      type: 'select',
-      idName: 'searchPartOfSpeech',
-      labelText: 'Parts of speech:',
-    },
-  ]
 
   const phrasesSearchUi = [
     {
@@ -495,16 +444,15 @@ function PhrasesListData({ children, searchDialectDataType }) {
   ]
 
   return children({
-    columns: columns,
+    columns,
     computeEntities,
     dialect,
     dialectClassName,
     dialectUid,
-    entryType,
-    fetcher: fetcher,
+    fetcher,
     fetcherParams: {
-      currentPageIndex: routeParams.page,
-      pageSize: routeParams.pageSize,
+      currentPageIndex: Number(routeParams.page),
+      pageSize: Number(routeParams.pageSize),
     },
     filter,
     handleCreateClick,
@@ -519,12 +467,12 @@ function PhrasesListData({ children, searchDialectDataType }) {
     pushWindowPath,
     routeParams,
     resetSearch: _resetSearch,
-    searchUi: searchDialectDataType === SEARCH_DATA_TYPE_WORD ? wordsSearchUi : phrasesSearchUi,
+    searchDialectDataType: SEARCH_DATA_TYPE_PHRASE,
+    searchUi: phrasesSearchUi,
     setRouteParams,
-    setListViewMode: setListViewMode,
-    smallScreenTemplate: dictionaryListSmallScreenTemplateWords,
+    setListViewMode,
     sortCol: DEFAULT_SORT_COL,
-    sortHandler: sortHandler,
+    sortHandler,
     sortType: DEFAULT_SORT_TYPE,
   })
 }

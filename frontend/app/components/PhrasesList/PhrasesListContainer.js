@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import PhrasesListPresentation from './PhrasesListPresentation'
 import PhrasesListData from './PhrasesListData'
 import PromiseWrapper from 'components/PromiseWrapper'
@@ -12,15 +11,14 @@ import PromiseWrapper from 'components/PromiseWrapper'
  *
  * @returns {node} jsx markup
  */
-function PhrasesListContainer({ searchDialectDataType }) {
+function PhrasesListContainer() {
   return (
-    <PhrasesListData searchDialectDataType={searchDialectDataType}>
+    <PhrasesListData>
       {({
         columns,
         computeEntities,
         dialect,
         dialectClassName,
-        entryType,
         fetcher,
         fetcherParams,
         filter,
@@ -34,22 +32,20 @@ function PhrasesListContainer({ searchDialectDataType }) {
         pushWindowPath,
         resetSearch,
         routeParams,
+        searchDialectDataType,
         searchUi,
         setListViewMode,
         setRouteParams,
-        smallScreenTemplate,
         sortHandler,
       }) => {
         return (
           <PromiseWrapper renderOnError computeEntities={computeEntities}>
             <PhrasesListPresentation
               dialectClassName={dialectClassName}
-              entryType={entryType}
               filter={filter}
               handleCreateClick={handleCreateClick}
-              wordsListClickHandlerViewMode={setListViewMode}
+              clickHandlerViewMode={setListViewMode}
               dictionaryListViewMode={listViewMode}
-              smallScreenTemplate={smallScreenTemplate}
               pageTitle={pageTitle}
               dialect={dialect}
               navigationRouteSearch={navigationRouteSearch}
@@ -86,11 +82,6 @@ function PhrasesListContainer({ searchDialectDataType }) {
       }}
     </PhrasesListData>
   )
-}
-// PROPTYPES
-const { number } = PropTypes
-PhrasesListContainer.propTypes = {
-  searchDialectDataType: number.isRequired,
 }
 
 export default PhrasesListContainer
