@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import useNavigationHelpers from 'common/useNavigationHelpers'
+// TODO: UPDATE CALLING FUNCTIONS TO REMOVE UNUSED PROPS
 function DialectFilterListData({ children, facets, facetType }) {
   const { getSearchAsObject } = useNavigationHelpers()
   const [listItemData, setListItemData] = useState([])
