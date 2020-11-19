@@ -1,5 +1,5 @@
 "id","label","type","category","template_strings","obsolete","enableForImmersion"
-"errors.feedback_include_link","errors.feedback_include_link","phrase","errors","","",true
+"errors.feedback_include_link","errors.feedback_include_link","phrase","errors","",""
 "errors.page_not_found","errors.page_not_found","phrase","errors","",""
 "errors.report_via_feedback","errors.report_via_feedback","phrase","errors","",""
 "general.about","general.about","phrase","general","",""
@@ -63,7 +63,7 @@
 "general.alberta","general.alberta","phrase","general","",""
 "general.all","general.all","phrase","general","",""
 "general.all_dialects","general.all_dialects","phrase","general","",""
-"general.alphabet","general.alphabet","phrase","general","",""
+"general.alphabet","general.alphabet","phrase","general","","",true
 "general.alphabet_de","general.alphabet_de","phrase","general","",""
 "general.alphabet_view","general.alphabet_view","phrase","general","",""
 "general.already_member","general.already_member","phrase","general","",""
@@ -158,7 +158,7 @@
 "general.conditions_of_use","general.conditions_of_use","phrase","general","",""
 "general.contact","general.contact","phrase","general","",""
 "general.contact_info","general.contact_info","phrase","general","",""
-"general.contact_information","general.contact_information","phrase","general","",""
+"general.contact_information","general.contact_information","phrase","general","","",true
 "general.contact_us","general.contact_us","phrase","general","",""
 "general.contact_us_to_publish_x","general.contact_us_to_publish_x","template","general","What is being published",""
 "general.contacts","general.contacts","phrase","general","",""
@@ -315,7 +315,7 @@
 "general.first_name","general.first_name","phrase","general","",""
 "general.first_page","general.first_page","phrase","general","",""
 "general.first_ppl_cult_found","general.first_ppl_cult_found","phrase","general","",""
-"general.first_voices","general.first_voices","phrase","general","","",true
+"general.first_voices","general.first_voices","phrase","general","",""
 "general.first_voices_meta_info_page","general.first_voices_meta_info_page","phrase","general","",""
 "general.first_voices_meta_page","general.first_voices_meta_page","phrase","general","",""
 "general.first_words","general.first_words","phrase","general","",""
@@ -398,10 +398,10 @@
 "general.july","general.july","phrase","general","",""
 "general.jun","general.jun","phrase","general","",""
 "general.june","general.june","phrase","general","",""
-"general.keyboard","general.keyboard","phrase","general","","",true
-"general.keyboards","general.keyboards","phrase","general","","",true
+"general.keyboard","general.keyboard","phrase","general","",""
+"general.keyboards","general.keyboards","phrase","general","",""
 "general.keyword","general.keyword","phrase","general","",""
-"general.kids","general.kids","phrase","general","","",true
+"general.kids","general.kids","phrase","general","",""
 "general.kids_home","general.kids_home","phrase","general","",""
 "general.kids_portal_home","general.kids_portal_home","phrase","general","",""
 "general.kitchen","general.kitchen","phrase","general","",""
@@ -415,7 +415,7 @@
 "general.language_admin","general.language_admin","phrase","general","",""
 "general.language_family","general.language_family","phrase","general","",""
 "general.language_group_created","general.language_group_created","phrase","general","",""
-"general.language_resources","general.language_resources","phrase","general","",""
+"general.language_resources","general.language_resources","phrase","general","","",true
 "general.language_statistics","general.language_statistics","phrase","general","",""
 "general.languages","general.languages","phrase","general","",""
 "general.languages_capitalized","general.languages_capitalized","phrase","general","",""
@@ -429,9 +429,9 @@
 "general.learn_our_lang","general.learn_our_lang","phrase","general","",""
 "general.lesson","general.lesson","phrase","general","",""
 "general.lessons","general.lessons","phrase","general","",""
-"general.link","general.link","phrase","general","","",true
+"general.link","general.link","phrase","general","",""
 "general.link_note_find_shared_media","general.link_note_find_shared_media","phrase","general","",""
-"general.links","general.links","phrase","general","","",true
+"general.links","general.links","phrase","general","",""
 "general.list_alphabetically","general.list_alphabetically","phrase","general","",""
 "general.list_approved_child_phrase_with_img","general.list_approved_child_phrase_with_img","phrase","general","",""
 "general.list_approved_child_songs_with_img","general.list_approved_child_songs_with_img","phrase","general","",""
@@ -474,11 +474,11 @@
 "general.location","general.location","phrase","general","",""
 "general.location_grouping","general.location_grouping","phrase","general","",""
 "general.log_in","general.log_in","phrase","general","",""
-"general.login","general.login","phrase","general","","",true
+"general.login","general.login","phrase","general","",""
 "general.login_error","general.login_error","phrase","general","",""
 "general.login_to_first_voices","general.login_to_first_voices","phrase","general","",""
 "general.logo","general.logo","phrase","general","",""
-"general.logout","general.logout","phrase","general","","",true
+"general.logout","general.logout","phrase","general","",""
 "general.logout_page","general.logout_page","phrase","general","",""
 "general.lowercase","general.lowercase","phrase","general","",""
 "general.mac_keylayout_file","general.mac_keylayout_file","phrase","general","",""
@@ -621,12 +621,12 @@
 "general.permissions","general.permissions","phrase","general","",""
 "general.personalize","general.personalize","phrase","general","",""
 "general.phone","general.phone","phrase","general","",""
-"general.photo","general.photo","phrase","general","","",true
+"general.photo","general.photo","phrase","general","",""
 "general.photo_album_curr","general.photo_album_curr","phrase","general","",""
 "general.photo_s","general.photo_s","phrase","general","",""
 "general.photographer","general.photographer","phrase","general","",""
 "general.photographer_artist","general.photographer_artist","phrase","general","",""
-"general.phrase","general.phrase","phrase","general","","",true
+"general.phrase","general.phrase","phrase","general","",""
 "general.phrase_add_book","general.phrase_add_book","phrase","general","",""
 "general.phrase_book","general.phrase_book","phrase","general","",""
 "general.phrase_book2","general.phrase_book2","phrase","general","",""
@@ -644,13 +644,13 @@
 "general.phrases","general.phrases","phrase","general","","",true
 "general.phrases_de","general.phrases_de","phrase","general","",""
 "general.pick_from_library","general.pick_from_library","phrase","general","",""
-"general.picture","general.picture","phrase","general","","",true
+"general.picture","general.picture","phrase","general","",""
 "general.picture_this","general.picture_this","phrase","general","",""
-"general.pictures","general.pictures","phrase","general","","",true
+"general.pictures","general.pictures","phrase","general","",""
 "general.play","general.play","phrase","general","",""
-"general.play_audio","general.play_audio","phrase","general","","",true
-"general.play_game","general.play_game","phrase","general","","",true
-"general.play_sound","general.play_sound","phrase","general","","",true
+"general.play_audio","general.play_audio","phrase","general","",""
+"general.play_game","general.play_game","phrase","general","",""
+"general.play_sound","general.play_sound","phrase","general","",""
 "general.please_choose_user_id","general.please_choose_user_id","phrase","general","",""
 "general.please_provide","general.please_provide","phrase","general","",""
 "general.please_select_country","general.please_select_country","phrase","general","",""
@@ -704,7 +704,7 @@
 "general.reject","general.reject","phrase","general","",""
 "general.related","general.related","phrase","general","",""
 "general.related_audio","general.related_audio","phrase","general","",""
-"general.related_links","general.related_links","phrase","general","",""
+"general.related_links","general.related_links","phrase","general","","",true
 "general.related_pictures","general.related_pictures","phrase","general","",""
 "general.related_videos","general.related_videos","phrase","general","",""
 "general.remove_x","general.remove_x","phrase","general","",""
@@ -808,7 +808,7 @@
 "general.sign_out","general.sign_out","phrase","general","",""
 "general.sign_up","general.sign_up","phrase","general","",""
 "general.small","general.small","phrase","general","",""
-"general.song","general.song","phrase","general","","",true
+"general.song","general.song","phrase","general","",""
 "general.song_and_story_books","general.song_and_story_books","phrase","general","",""
 "general.song_and_story_pages","general.song_and_story_pages","phrase","general","",""
 "general.song_book","general.song_book","phrase","general","",""
@@ -817,11 +817,11 @@
 "general.song_pages","general.song_pages","phrase","general","",""
 "general.song_story_books","general.song_story_books","phrase","general","",""
 "general.songs","general.songs","phrase","general","","",true
-"general.songs_and_stories","general.songs_and_stories","phrase","general","","",true
+"general.songs_and_stories","general.songs_and_stories","phrase","general","",""
 "general.sorry_no_match","general.sorry_no_match","phrase","general","",""
 "general.sort","general.sort","phrase","general","",""
 "general.sort_by","general.sort_by","phrase","general","",""
-"general.sound","general.sound","phrase","general","","",true
+"general.sound","general.sound","phrase","general","",""
 "general.sound_file","general.sound_file","phrase","general","",""
 "general.sound_restriction","general.sound_restriction","phrase","general","",""
 "general.source","general.source","phrase","general","",""
@@ -834,13 +834,13 @@
 "general.status_of_our_lang","general.status_of_our_lang","phrase","general","",""
 "general.statuses","general.statuses","phrase","general","",""
 "general.stories","general.stories","phrase","general","","",true
-"general.story","general.story","phrase","general","","",true
+"general.story","general.story","phrase","general","",""
 "general.story_book","general.story_book","phrase","general","",""
 "general.story_book_entries","general.story_book_entries","phrase","general","",""
 "general.story_book_entry","general.story_book_entry","phrase","general","",""
 "general.story_pages","general.story_pages","phrase","general","",""
-"general.submit","general.submit","phrase","general","","",true
-"general.success","general.success","phrase","general","","",true
+"general.submit","general.submit","phrase","general","",""
+"general.success","general.success","phrase","general","",""
 "general.summary","general.summary","phrase","general","",""
 "general.sunday","general.sunday","phrase","general","",""
 "general.super_admin_tools","general.super_admin_tools","phrase","general","",""
@@ -883,7 +883,7 @@
 "general.unpublished","general.unpublished","phrase","general","",""
 "general.unpublishing","general.unpublishing","phrase","general","",""
 "general.up","general.up","phrase","general","",""
-"general.update","general.update","phrase","general","","",true
+"general.update","general.update","phrase","general","",""
 "general.update_accounts","general.update_accounts","phrase","general","",""
 "general.updated","general.updated","phrase","general","",""
 "general.upload","general.upload","phrase","general","",""
@@ -907,13 +907,13 @@
 "general.verse_number","general.verse_number","phrase","general","",""
 "general.verses","general.verses","phrase","general","",""
 "general.version","general.version","phrase","general","",""
-"general.video","general.video","phrase","general","","",true
+"general.video","general.video","phrase","general","",""
 "general.video_upload","general.video_upload","phrase","general","",""
 "general.video_limit","general.video_limit","phrase","general","",""
 "general.video_recording","general.video_recording","phrase","general","",""
 "general.video_restriction","general.video_restriction","phrase","general","",""
 "general.video_s","general.video_s","phrase","general","",""
-"general.videos","general.videos","phrase","general","","",true
+"general.videos","general.videos","phrase","general","",""
 "general.videos_browse","general.videos_browse","phrase","general","",""
 "general.view","general.view","phrase","general","",""
 "general.view_accounts","general.view_accounts","phrase","general","",""
@@ -927,12 +927,12 @@
 "general.voice","general.voice","phrase","general","",""
 "general.wednesday","general.wednesday","phrase","general","",""
 "general.welcome","general.welcome","phrase","general","","",true
-"general.welcome_page","general.welcome_page","phrase","general","","",true
-"general.welcome_to","general.welcome_to","phrase","general","","",true
-"general.welcome_to_x","general.welcome_to_x","phrase","general","","",true
+"general.welcome_page","general.welcome_page","phrase","general","",""
+"general.welcome_to","general.welcome_to","phrase","general","",""
+"general.welcome_to_x","general.welcome_to_x","phrase","general","",""
 "general.were_added","general.were_added","phrase","general","",""
 "general.why_become_member","general.why_become_member","phrase","general","",""
-"general.word","general.word","phrase","general","","",true
+"general.word","general.word","phrase","general","",""
 "general.word_categories","general.word_categories","phrase","general","",""
 "general.word_category","general.word_category","phrase","general","",""
 "general.word_category_access","general.word_category_access","phrase","general","",""
@@ -951,7 +951,7 @@
 "general.word_search","general.word_search","phrase","general","",""
 "general.word_three","general.word_three","phrase","general","",""
 "general.word_two","general.word_two","phrase","general","",""
-"general.words","general.words","phrase","general","",""
+"general.words","general.words","phrase","general","","",true
 "general.words_de","general.words_de","phrase","general","",""
 "general.words_upper_case","general.words_upper_case","phrase","general","",""
 "general.workflow","general.workflow","phrase","general","",""
@@ -1130,33 +1130,35 @@
 "views.hocs.view.unpublish_x","views.hocs.view.unpublish_x","template","views_hocs_view","Document Type",""
 "views.hocs.view.warning1_x","views.hocs.view.warning1_x","template","views_hocs_view","Document Type",""
 "views.hocs.view.warning2_x","views.hocs.view.warning2_x","template","views_hocs_view","Document Type",""
-"views.pages.explore.archive.x_archive","views.pages.explore.archive.x_archive","phrase","views_pages_explore_archive","","",true
+"views.pages.explore.archive.x_archive","views.pages.explore.archive.x_archive","phrase","views_pages_explore_archive","",""
 "views.pages.explore.dialect.about_us","views.pages.explore.dialect.about_us","phrase","views_pages_explore_dialect","","",true
 "views.pages.explore.dialect.add_new_page","views.pages.explore.dialect.add_new_page","phrase","views_pages_explore_dialect","",""
-"views.pages.explore.dialect.community_portal","views.pages.explore.dialect.community_portal","phrase","views_pages_explore_dialect","","",true
+"views.pages.explore.dialect.community_portal","views.pages.explore.dialect.community_portal","phrase","views_pages_explore_dialect","",""
 "views.pages.explore.dialect.dialect_disabled","views.pages.explore.dialect.dialect_disabled","phrase","views_pages_explore_dialect","",""
 "views.pages.explore.dialect.dialect_enabled","views.pages.explore.dialect.dialect_enabled","phrase","views_pages_explore_dialect","",""
 "views.pages.explore.dialect.dialect_publised_successfully","views.pages.explore.dialect.dialect_publised_successfully","phrase","views_pages_explore_dialect","",""
 "views.pages.explore.dialect.dialect_unpublished_successfully","views.pages.explore.dialect.dialect_unpublished_successfully","phrase","views_pages_explore_dialect","",""
-"views.pages.explore.dialect.edit_x_community_portal","views.pages.explore.dialect.edit_x_community_portal","template","views_pages_explore_dialect","Dialect Name","",true
-"views.pages.explore.dialect.first_words","views.pages.explore.dialect.first_words","phrase","views_pages_explore_dialect","","",true
-"views.pages.explore.dialect.information","views.pages.explore.dialect.information","phrase","views_pages_explore_dialect","","",true
-"views.pages.explore.dialect.fetching_community_portal","views.pages.explore.dialect.fetching_community_portal","phrase","views_pages_explore_dialect","","",true
-"views.pages.explore.dialect.for_kids","views.pages.explore.dialect.for_kids","phrase","views_pages_explore_dialect","","",true
+"views.pages.explore.dialect.edit_x_community_portal","views.pages.explore.dialect.edit_x_community_portal","template","views_pages_explore_dialect","Dialect Name",""
+"views.pages.explore.dialect.first_words","views.pages.explore.dialect.first_words","phrase","views_pages_explore_dialect","",""
+"views.pages.explore.dialect.region_data","views.pages.explore.dialect.region_data","phrase","views_pages_explore_dialect","","",true
+"views.pages.explore.dialect.information","views.pages.explore.dialect.information","phrase","views_pages_explore_dialect","",""
+"views.pages.explore.dialect.fetching_community_portal","views.pages.explore.dialect.fetching_community_portal","phrase","views_pages_explore_dialect","",""
+"views.pages.explore.dialect.for_kids","views.pages.explore.dialect.for_kids","phrase","views_pages_explore_dialect","",""
+"views.pages.explore.dialect.kids_portal","views.pages.explore.dialect.kids_portal","phrase","views_pages_explore_dialect","","",true
 "views.pages.explore.dialect.learn_our_language","views.pages.explore.dialect.learn_our_language","phrase","views_pages_explore_dialect","","",true
-"views.pages.explore.dialect.media_browser","views.pages.explore.dialect.media_browser","phrase","views_pages_explore_dialect","","",true
-"views.pages.explore.dialect.nav_contributors","views.pages.explore.dialect.nav_contributors","phrase","views_pages_explore_dialect","","",true
-"views.pages.explore.dialect.nav_recorders","views.pages.explore.dialect.nav_recorders","phrase","views_pages_explore_dialect","","",true
-"views.pages.explore.dialect.nav_phrase_books","views.pages.explore.dialect.nav_phrase_books","phrase","views_pages_explore_dialect","","",true
-"views.pages.explore.dialect.more_options","views.pages.explore.dialect.more_options","phrase","views_pages_explore_dialect","","",true
-"views.pages.explore.dialect.name_of_archive","views.pages.explore.dialect.name_of_archive","phrase","views_pages_explore_dialect","","",true
+"views.pages.explore.dialect.media_browser","views.pages.explore.dialect.media_browser","phrase","views_pages_explore_dialect","",""
+"views.pages.explore.dialect.nav_contributors","views.pages.explore.dialect.nav_contributors","phrase","views_pages_explore_dialect","",""
+"views.pages.explore.dialect.nav_recorders","views.pages.explore.dialect.nav_recorders","phrase","views_pages_explore_dialect","",""
+"views.pages.explore.dialect.nav_phrase_books","views.pages.explore.dialect.nav_phrase_books","phrase","views_pages_explore_dialect","",""
+"views.pages.explore.dialect.more_options","views.pages.explore.dialect.more_options","phrase","views_pages_explore_dialect","",""
+"views.pages.explore.dialect.name_of_archive","views.pages.explore.dialect.name_of_archive","phrase","views_pages_explore_dialect","",""
 "views.pages.explore.dialect.photo_gallery","views.pages.explore.dialect.photo_gallery","phrase","views_pages_explore_dialect","","",true
 "views.pages.explore.dialect.play_game","views.pages.explore.dialect.play_game","phrase","views_pages_explore_dialect","","",true
 "views.pages.explore.dialect.portal_published_successfully","views.pages.explore.dialect.portal_published_successfully","phrase","views_pages_explore_dialect","",""
 "views.pages.explore.dialect.portal_unpublished_successfully","views.pages.explore.dialect.portal_unpublished_successfully","phrase","views_pages_explore_dialect","",""
 "views.pages.explore.dialect.problem_fetching_portal","views.pages.explore.dialect.problem_fetching_portal","phrase","views_pages_explore_dialect","",""
-"views.pages.explore.dialect.related_links","views.pages.explore.dialect.related_links","phrase","views_pages_explore_dialect","","",true
-"views.pages.explore.dialect.search_dialect","views.pages.explore.dialect.search_dialect","phrase","views_pages_explore_dialect","","",true
+"views.pages.explore.dialect.related_links","views.pages.explore.dialect.related_links","phrase","views_pages_explore_dialect","",""
+"views.pages.explore.dialect.search_dialect","views.pages.explore.dialect.search_dialect","phrase","views_pages_explore_dialect","",""
 "views.pages.explore.dialect.category.add_new_category_to_x","views.pages.explore.dialect.category.add_new_category_to_x","template","views_pages_explore_dialect_category","Dialect Name",""
 "views.pages.explore.dialect.category.browse_dialects","views.pages.explore.dialect.category.browse_dialects","phrase","views_pages_explore_dialect_category","",""
 "views.pages.explore.dialect.contributors.add_new_contributor_to_x","views.pages.explore.dialect.contributors.add_new_contributor_to_x","template","views_pages_explore_dialect_contributors","Dialect Name",""
@@ -1166,10 +1168,10 @@
 "views.pages.explore.dialect.gallery.edit_x_gallery","views.pages.explore.dialect.gallery.edit_x_gallery","template","views_pages_explore_dialect_gallery","Gallery Title",""
 "views.pages.explore.dialect.gallery.x_galleries","views.pages.explore.dialect.gallery.x_galleries","template","views_pages_explore_dialect_gallery","Dialect Title",""
 "views.pages.explore.dialect.learn.about_our_language","views.pages.explore.dialect.learn.about_our_language","phrase","views_pages_explore_dialect_learn","","",true
-"views.pages.explore.dialect.learn.language_portal","views.pages.explore.dialect.learn.language_portal","phrase","views_pages_explore_dialect_learn","","",true
+"views.pages.explore.dialect.learn.language_portal","views.pages.explore.dialect.learn.language_portal","phrase","views_pages_explore_dialect_learn","",""
 "views.pages.explore.dialect.learn.my_recently_created","views.pages.explore.dialect.learn.my_recently_created","phrase","views_pages_explore_dialect_learn","",""
 "views.pages.explore.dialect.learn.my_recently_modified","views.pages.explore.dialect.learn.my_recently_modified","phrase","views_pages_explore_dialect_learn","",""
-"views.pages.explore.dialect.learn.recent_activity","views.pages.explore.dialect.learn.recent_activity","phrase","views_pages_explore_dialect_learn","",""
+"views.pages.explore.dialect.learn.recent_activity","views.pages.explore.dialect.learn.recent_activity","phrase","views_pages_explore_dialect_learn","","",true
 "views.pages.explore.dialect.learn.recently_created","views.pages.explore.dialect.learn.recently_created","phrase","views_pages_explore_dialect_learn","",""
 "views.pages.explore.dialect.learn.recently_modified","views.pages.explore.dialect.learn.recently_modified","phrase","views_pages_explore_dialect_learn","",""
 "views.pages.explore.dialect.learn.alphabet.x_alphabet","views.pages.explore.dialect.learn.alphabet.x_alphabet","template","views_pages_explore_dialect_learn_alphabet","Dialect Title",""

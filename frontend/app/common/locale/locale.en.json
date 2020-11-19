@@ -1178,6 +1178,8 @@
         },
         "dialect": {
           "about_us": "ABOUT US",
+          "region_data": "Region Data",
+          "kids_portal": "Kids Portal",
           "add_new_page": "Add New Page",
           "category": {
             "add_new_category_to_x": "Add New Category to %s",
