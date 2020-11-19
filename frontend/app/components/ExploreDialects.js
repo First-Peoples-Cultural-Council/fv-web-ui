@@ -15,7 +15,6 @@
  */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import ConfGlobal from 'common/conf/local.js'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -30,7 +29,7 @@ import classNames from 'classnames'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import NavigationHelpers from 'common/NavigationHelpers'
 import PortalListDialects from 'components/PortalListDialects'
-import { WORKSPACES, SECTIONS } from 'common/Constants'
+import { WORKSPACES } from 'common/Constants'
 import FVLabel from 'components/FVLabel'
 
 /**
@@ -66,7 +65,7 @@ export class ExploreDialects extends Component {
 
   // Refetch data on URL change
   async componentDidUpdate(prevProps) {
-    if (this.props.routeParams.area != prevProps.routeParams.area) {
+    if (this.props.routeParams.area !== prevProps.routeParams.area) {
       await this._fetchData(this.props)
     }
   }
@@ -78,24 +77,34 @@ export class ExploreDialects extends Component {
     // TODO: determine which of the following can be moved to componentDidMount()
     // TODO: no need to re-declare/fetch data that doesn't change between renders
     //const computePortals = ProviderHelpers.getEntry(this.props.computePortals, this._getQueryPath())
-    const portalsEntries = selectn('response.entries', this.props.computePortals) || []
-
-    const sortedPortals = portalsEntries.sort(this._portalEntriesSort)
-
     const isLoggedIn = this.props.computeLogin.success && this.props.computeLogin.isConnected
 
-    const languages = selectn('directoryEntries.parent_languages', this.props.computeDirectory) || []
+    let content = (
+      <div>
+        <CircularProgress variant="indeterminate" style={{ verticalAlign: 'middle' }} />
+        Loading
+      </div>
+    )
 
-    const portalListProps = {
-      siteTheme: this.props.routeParams.siteTheme,
-      filteredItems: this.state.filteredList,
-      fieldMapping: {
-        title: this.titleFieldMapping,
-        logo: this.logoFieldMapping,
-      },
-      items: sortedPortals,
-      languages,
-      isWorkspaces: this.props.routeParams.area === WORKSPACES,
+    if (this.props.computePortals.success) {
+      const portalsEntries = this.props.computePortals.response || []
+
+      const sortedPortals = portalsEntries.sort(this._portalEntriesSort)
+
+      const languages = selectn('directoryEntries.parent_languages', this.props.computeDirectory) || []
+
+      const portalListProps = {
+        siteTheme: this.props.routeParams.siteTheme,
+        filteredItems: this.state.filteredList,
+        fieldMapping: {
+          title: this.titleFieldMapping,
+          logo: this.logoFieldMapping,
+        },
+        items: sortedPortals,
+        languages,
+        isWorkspaces: this.props.routeParams.area === WORKSPACES,
+      }
+      content = <PortalListDialects {...portalListProps} />
     }
 
     if (this.props.routeParams.area === WORKSPACES) {
@@ -113,15 +122,6 @@ export class ExploreDialects extends Component {
       )
     }
 
-    let content = (
-      <div>
-        <CircularProgress variant="indeterminate" style={{ verticalAlign: 'middle' }} />
-        Loading
-      </div>
-    )
-    if (this.props.computePortals && this.props.computePortals.success) {
-      content = <PortalListDialects {...portalListProps} />
-    }
     return (
       <div>
         <div className="row">
@@ -143,20 +143,6 @@ export class ExploreDialects extends Component {
   _fetchData = (newProps) => {
     newProps.fetchPortalsFromCustomAPI({ area: newProps.routeParams.area })
     newProps.fetchDirectory('parent_languages', 2000, true)
-  }
-
-  _getQueryPath = (props = this.props) => {
-    // Perform an API query for sections
-    if (props.routeParams.area === SECTIONS) {
-      // From s3 (static) (NOTE: when fetchPortals is fully switched remove headers from FVPortal to save OPTIONS call)
-      return `${ConfGlobal.apiURL}s3dialects/?area=${props.routeParams.area}`
-
-      // Proxy (not cached at the moment)
-      //return 'https://api.firstvoices.com/v1/api/v1/query/get_dialects?queryParams=' + props.routeParams.area;
-    }
-
-    // Direct method
-    return `/api/v1/query/get_dialects?queryParams=${props.routeParams.area}`
   }
 
   _portalEntriesSort = (a, b) => {

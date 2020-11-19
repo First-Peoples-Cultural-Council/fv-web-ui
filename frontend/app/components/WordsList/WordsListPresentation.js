@@ -38,6 +38,7 @@ const DictionaryListSmallScreen = React.lazy(() => import('components/Dictionary
 const DictionaryListLargeScreen = React.lazy(() => import('components/DictionaryList/DictionaryListLargeScreen'))
 const ExportDialect = React.lazy(() => import('components/ExportDialect'))
 import '!style-loader!css-loader!./WordsList.css'
+import '!style-loader!css-loader!components/DictionaryList/DictionaryList.css'
 
 // ===============================================================
 // WordList
