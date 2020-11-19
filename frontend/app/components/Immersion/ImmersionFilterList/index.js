@@ -11,7 +11,7 @@ import '!style-loader!css-loader!./immersionFilter.css'
 
 export class ImmersionFilterList extends Component {
   static propTypes = {
-    categories: array.isRequired,
+    categories: array,
     title: PropTypes.oneOfType([string, object]).isRequired,
     routeParams: any,
     selectedCategory: string,
@@ -102,6 +102,10 @@ export class ImmersionFilterList extends Component {
   }
 
   render() {
+    if (!this.props.categories || this.props.categories.length === 0) {
+      return null
+    }
+
     return (
       <div className="DialectFilterList" data-testid="DialectFilterList">
         <FormControl style={{ width: '100%' }}>

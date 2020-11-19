@@ -150,7 +150,7 @@ class ImmersionListView extends Component {
         type: v.type,
         templateStrings,
         categoryId: v.category,
-        base: intl.trans(id, 'Translated Label', null, strings, null, null, locale),
+        base: intl.trans(id, 'English Unavailable', null, strings, null, null, locale),
         translation: undefined,
         category: undefined,
         editButton: undefined,
@@ -162,7 +162,7 @@ class ImmersionListView extends Component {
       const category = allCategories.find((c) => {
         return c.value === v.category
       })
-      label.category = category ? category.label : undefined
+      label.category = category ? category.text : undefined
       const translatedLabel = translatedLabels.find((l) => {
         return l.properties['fvlabel:labelKey'] === v.value
       })

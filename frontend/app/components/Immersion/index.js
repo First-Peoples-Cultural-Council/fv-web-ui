@@ -253,7 +253,7 @@ class PageDialectImmersionList extends PageDialectLearnBase {
             <div>
               <ImmersionFilterList
                 title={<FVLabel transKey="categories_browse" defaultStr="Browse Categories" transform="words" />}
-                categories={mappedCategories}
+                //categories={mappedCategories} // FW-1534 - only releasing a few lables, no need for categories filter
                 routeParams={this.props.routeParams}
                 selectedCategory={selectedCategory}
                 changeCategory={this.changeCategory}
