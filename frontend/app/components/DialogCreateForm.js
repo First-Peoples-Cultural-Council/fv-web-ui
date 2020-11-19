@@ -5,7 +5,7 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 
-import PageDialectPhrasesCreate from 'components/Phrases/Create'
+import PageDialectPhrasesCreate from 'components/PhrasesCreateEdit/Create'
 
 import PageDialectLinksCreate from 'components/Links/create'
 import PageDialectCategoryCreate from 'components/Category/createV1'

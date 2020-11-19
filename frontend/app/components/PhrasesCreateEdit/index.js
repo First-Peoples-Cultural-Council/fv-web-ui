@@ -36,7 +36,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import AuthorizationFilter from 'components/AuthorizationFilter'
 import PageDialectLearnBase from 'components/LearnBase'
-import PhraseListView from 'components/Phrases/list-view'
+import PhraseListView from 'components/PhrasesCreateEdit/list-view'
 
 import AlphabetCharactersPresentation from 'components/AlphabetCharacters/AlphabetCharactersPresentation'
 import AlphabetCharactersData from 'components/AlphabetCharacters/AlphabetCharactersData'

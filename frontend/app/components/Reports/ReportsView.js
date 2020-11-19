@@ -35,7 +35,7 @@ import StringHelpers from 'common/StringHelpers'
 import PageDialectLearnBase from 'components/LearnBase'
 
 import WordsListView from 'components/WordsCreateEdit/list-view'
-import PhraseListView from 'components/Phrases/list-view'
+import PhraseListView from 'components/PhrasesCreateEdit/list-view'
 import SongsStoriesListViewAlt from 'components/SongsStories/list-view-alt'
 
 import ReportsBrowser from 'components/Reports/ReportsBrowser'
