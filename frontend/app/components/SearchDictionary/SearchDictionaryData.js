@@ -64,10 +64,9 @@ function SearchDictionaryData({ children }) {
   function fetchSearchResults() {
     if (query && query !== '') {
       const _searchTerm = StringHelpers.clean(query, CLEAN_FULLTEXT)
-      const latestVersion = routeParams.area === SECTIONS ? ' AND ecm:isLatestVersion = 1' : ' '
       searchDocuments(
         getQueryPath(),
-        `${latestVersion} AND ecm:primaryType IN ('${currentFilter}') AND ( ecm:fulltext_dictionary_all_field = '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ fv:definitions/*/translation ILIKE '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ dc:title ILIKE '${_searchTerm}' )&currentPageIndex=${Number(
+        `AND ecm:primaryType IN ('${currentFilter}') AND ( ecm:fulltext_dictionary_all_field = '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ fv:definitions/*/translation ILIKE '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ dc:title ILIKE '${_searchTerm}' )&currentPageIndex=${Number(
           page
         ) - 1}&pageSize=${pageSize}&sortBy=ecm:fulltextScore`
       )
