@@ -1,0 +1,136 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DialectFilterList Presentation 1`] = `
+<div
+  className="DialectFilterList"
+  data-testid="DialectFilterList"
+>
+  <h2>
+    Jest Testing
+  </h2>
+  <ul
+    className="DialectFilterListList DialectFilterListList--root"
+  >
+    <li
+      className="DialectFilterListItemParent DialectFilterListLink--active "
+    >
+      <div
+        className="DialectFilterListItemGroup"
+      >
+        <a
+          className="DialectFilterListLink DialectFilterListLink--parent DialectFilterListLink--active"
+          data-testid="DialectFilterListItem-0"
+          href="/?category=2100b13d-218e-4660-927a-9f80475a8019"
+          onClick={[Function]}
+        >
+          Parent Category II
+        </a>
+      </div>
+      <ul
+        className="DialectFilterListList"
+      >
+        <li>
+          <a
+            className="DialectFilterListLink DialectFilterListLink--child DialectFilterListLink--activeParent"
+            data-testid="DialectFilterListItem-0-0"
+            href="/?category=2e6a992f-2023-4be9-8317-2e7a824a349b"
+            onClick={[Function]}
+          >
+            Child Category IIII
+          </a>
+        </li>
+        <li>
+          <a
+            className="DialectFilterListLink DialectFilterListLink--child DialectFilterListLink--activeParent"
+            data-testid="DialectFilterListItem-0-1"
+            href="/?category=727cbb38-913f-40d9-9bde-ad83bf4129c9"
+            onClick={[Function]}
+          >
+            Child Category IIᑕ
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li
+      className="DialectFilterListItemParent  "
+    >
+      <div
+        className="DialectFilterListItemGroup"
+      >
+        <a
+          className="DialectFilterListLink DialectFilterListLink--parent "
+          data-testid="DialectFilterListItem-1"
+          href="/?category=b64f12e3-3f83-4046-99d5-872ff16e0762"
+          onClick={[Function]}
+        >
+          Parent Category O
+        </a>
+      </div>
+      <ul
+        className="DialectFilterListList"
+      >
+        <li>
+          <a
+            className="DialectFilterListLink DialectFilterListLink--child "
+            data-testid="DialectFilterListItem-1-0"
+            href="/?category=2446869b-8109-42ff-89a6-b37b4ddb35c8"
+            onClick={[Function]}
+          >
+            Child Category OII
+          </a>
+        </li>
+        <li>
+          <a
+            className="DialectFilterListLink DialectFilterListLink--child "
+            data-testid="DialectFilterListItem-1-1"
+            href="/?category=15bb8a84-f203-4a64-aa37-b97787d8b1ca"
+            onClick={[Function]}
+          >
+            Child Category Oᑕ
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li
+      className="DialectFilterListItemParent  "
+    >
+      <div
+        className="DialectFilterListItemGroup"
+      >
+        <a
+          className="DialectFilterListLink DialectFilterListLink--parent "
+          data-testid="DialectFilterListItem-2"
+          href="/?category=db456452-da58-4c75-81ba-8c5d13153c4e"
+          onClick={[Function]}
+        >
+          Parent Category ᑕ
+        </a>
+      </div>
+      <ul
+        className="DialectFilterListList"
+      >
+        <li>
+          <a
+            className="DialectFilterListLink DialectFilterListLink--child "
+            data-testid="DialectFilterListItem-2-0"
+            href="/?category=c2d3c4c2-b35c-438e-ae87-872fefe274ab"
+            onClick={[Function]}
+          >
+            Child Category ᑕII
+          </a>
+        </li>
+        <li>
+          <a
+            className="DialectFilterListLink DialectFilterListLink--child "
+            data-testid="DialectFilterListItem-2-1"
+            href="/?category=9c5c2e23-25df-4faa-bdb6-b297ba105461"
+            onClick={[Function]}
+          >
+            Child Category ᑕᑕ
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+`;

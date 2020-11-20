@@ -66,7 +66,6 @@ function DialectFilterListData({ children, filterListData, queryParam }) {
   const generateListItemData = (filters) => {
     const toReturn = []
     const selectedFilterId = queryParam === 'category' ? queryCategory : queryPhraseBook
-    // console.log('generateListItemData', filters)
     filters.forEach((filter) => {
       const childData = []
       const uidParent = filter.uid
@@ -107,7 +106,6 @@ function DialectFilterListData({ children, filterListData, queryParam }) {
     })
     return toReturn
   }
-
   return children({
     listItemData: listItemData,
   })
