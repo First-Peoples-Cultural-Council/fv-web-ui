@@ -33,10 +33,10 @@ function SearchDictionaryData({ children }) {
   const { routeParams } = useRoute()
   const { computeSearchDocuments, searchDocuments } = useSearch()
   const { page = 1, pageSize = 10, query } = getSearchObject()
-  const isDialect = routeParams.hasOwnProperty('dialect_path')
+  const isDialect = Object.prototype.hasOwnProperty.call(routeParams, 'dialect_path')
 
   // Local State
-  const [newSearchValue, setNewSearchValue] = useState(query)
+  const [newSearchValue, setNewSearchValue] = useState(decodeURI(query))
   const [currentFilter, setCurrentFilter] = useState("FVWord','FVPhrase','FVBook")
 
   const computedSearchDocuments = ProviderHelpers.getEntry(computeSearchDocuments, getQueryPath())
@@ -67,8 +67,8 @@ function SearchDictionaryData({ children }) {
       searchDocuments(
         getQueryPath(),
         `AND ecm:primaryType IN ('${currentFilter}') AND ( ecm:fulltext_dictionary_all_field = '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ fv:definitions/*/translation ILIKE '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ dc:title ILIKE '${_searchTerm}' )&currentPageIndex=${Number(
-          page,
-        ) - 1}&pageSize=${pageSize}&sortBy=ecm:fulltextScore`,
+          page
+        ) - 1}&pageSize=${pageSize}&sortBy=ecm:fulltextScore`
       )
     }
   }
@@ -115,7 +115,7 @@ function SearchDictionaryData({ children }) {
           formattedEntry.href = NavigationHelpers.generateUIDPath(
             routeParams.siteTheme,
             entry,
-            StringHelpers.makePlural(entry.properties['fvbook:type']),
+            StringHelpers.makePlural(entry.properties['fvbook:type'])
           )
           formattedEntry.translations = selectn('properties.fvbook:title_literal_translation', entry)
           _formattedData.push(formattedEntry)
@@ -135,8 +135,8 @@ function SearchDictionaryData({ children }) {
     if (newSearchValue && newSearchValue !== '') {
       navigate(
         `${window.location.pathname}?${getSearchObjectAsUrlQuery(
-          Object.assign({}, getSearchObject(), { query: newSearchValue }),
-        )}`,
+          Object.assign({}, getSearchObject(), { query: newSearchValue })
+        )}`
       )
     }
   }
@@ -147,13 +147,14 @@ function SearchDictionaryData({ children }) {
 
   const changePagination = (pagePageSize) => {
     navigate(
-      `${window.location.pathname}?${getSearchObjectAsUrlQuery(Object.assign({}, getSearchObject(), pagePageSize))}`,
+      `${window.location.pathname}?${getSearchObjectAsUrlQuery(Object.assign({}, getSearchObject(), pagePageSize))}`
     )
   }
 
   return children({
     computeEntities,
     currentFilter,
+    dialectName: routeParams.dialect_name,
     filters,
     handleFilter,
     handleSearchSubmit,
@@ -162,7 +163,7 @@ function SearchDictionaryData({ children }) {
     intl,
     isDialect,
     items: formattedData,
-    searchTerm: routeParams.searchTerm,
+    searchTerm: decodeURI(query),
     newSearchValue,
     // Props for Pagination
     changePagination,

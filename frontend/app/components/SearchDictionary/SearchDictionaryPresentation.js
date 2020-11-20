@@ -24,6 +24,7 @@ import '!style-loader!css-loader!./SearchDictionary.css'
 function SearchDictionaryPresentation({
   computeEntities,
   currentFilter,
+  dialectName,
   filters,
   handleFilter,
   handleSearchSubmit,
@@ -55,6 +56,15 @@ function SearchDictionaryPresentation({
       </li>
     )
   })
+  const heading = isDialect ? (
+    <h1 className="title">
+      <em>{searchTerm}</em> search results from {dialectName}
+    </h1>
+  ) : (
+    <h1 className="title">
+      <em>{searchTerm}</em> search results from FirstVoices
+    </h1>
+  )
   return (
     <div className="SearchDictionary">
       <div className="SearchDictionary__filters col-xs-12 col-md-2">
@@ -63,10 +73,7 @@ function SearchDictionaryPresentation({
       </div>
 
       <Paper className="SearchDictionary__container col-xs-12 col-md-10">
-        <h1 className="title">
-          <em>{searchTerm}</em> Search Results
-        </h1>
-
+        {heading}
         <div className="SearchDictionary__form">
           <div className="SearchDictionary__formPrimary">
             <input
@@ -115,6 +122,7 @@ const { array, bool, func, number, object, string } = PropTypes
 SearchDictionaryPresentation.propTypes = {
   computeEntities: object,
   currentFilter: string,
+  dialectName: string,
   filters: array,
   handleFilter: func,
   handleSearchSubmit: func,
