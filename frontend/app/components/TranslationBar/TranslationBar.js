@@ -60,7 +60,7 @@ class TranslationBar extends Component {
     this.props.setLocale(value)
   }
 
-  _handleChangeImmersion = () => {
+  _handleChangeImmersion = (event) => {
     this.props.updateCurrentUser(event.target.checked)
   }
 
