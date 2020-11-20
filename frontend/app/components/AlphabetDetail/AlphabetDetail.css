@@ -1,0 +1,13 @@
+.AlphabetDetail__row {
+  display: flex;
+  justify-content: space-between;
+}
+.AlphabetDetail__rowItem {
+  margin: 10px;
+}
+
+@media (max-width: 767px) {
+  .AlphabetDetail__row {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: FirstVoicesSecurity
+Bundle-Version: 1.0.qualifier
+Bundle-Name: FirstVoicesSecurity
+Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy
+Bundle-ManifestVersion: 2
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Vendor: Nuxeo
+Nuxeo-Component: OSGI-INF/extensions/ca.firstvoices.security.securitypolicies.groups.xml,
+  OSGI-INF/extensions/ca.firstvoices.security.securitypolicies.lifecycle.xml,
+  OSGI-INF/extensions/ca.firstvoices.permissions.xml,
+  OSGI-INF/extensions/ca.firstvoices.filters.xml,
+  OSGI-INF/extensions/ca.firstvoices.operations.xml,
+  OSGI-INF/extensions/ca.firstvoices.listeners.xml,
+  OSGI-INF/extensions/ca.firstvoices.auth.xml,
+  OSGI-INF/extensions/ca.firstvoices.fvuserprofile.services.xml

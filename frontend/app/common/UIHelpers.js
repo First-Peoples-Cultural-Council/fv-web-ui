@@ -164,4 +164,16 @@ export default {
 
     return false
   },
+  isFeatureEnabled(requestedFeature, dialect) {
+    const features = selectn('response.properties.fv-features:features', dialect)
+
+    if (
+      features &&
+      features.find((availableFeature) => availableFeature.enabled && availableFeature.feature_id === requestedFeature)
+    ) {
+      return true
+    }
+
+    return false
+  },
 }

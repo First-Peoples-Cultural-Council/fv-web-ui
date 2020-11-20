@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<component name="ca.firstvoices.fvuserprofile.services.FVUserProfileServiceImpl">
+	<implementation class="ca.firstvoices.security.services.FVUserProfileServiceImpl"/>
+
+	<service>
+		<provide interface="ca.firstvoices.security.services.FVUserProfileService"/>
+	</service>
+
+</component>

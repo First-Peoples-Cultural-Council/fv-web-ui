@@ -51,7 +51,7 @@ const proxiesKeys = [
 // @action - the action to perform if nothing found in store.
 // @reducer - the reducer to look for
 async function fetchIfMissing(key, action, reducer, actionParams) {
-  if (!selectn('success', getEntry(reducer, key)) && typeof action === 'function') {
+  if (key != undefined && !selectn('success', getEntry(reducer, key)) && typeof action === 'function') {
     await action(key, actionParams)
   }
 }
@@ -66,19 +66,24 @@ function filtersToNXQL(filterArray) {
 
   for (const appliedFilterKey in filterArray) {
     const ak = Object.assign({}, filterArray[appliedFilterKey])
-    if (ak && ak.hasOwnProperty('filterOptions') && ak.filterOptions && ak.filterOptions.hasOwnProperty('nxql')) {
+    if (
+      ak &&
+      Object.prototype.hasOwnProperty.call(ak, 'filterOptions') &&
+      ak.filterOptions &&
+      Object.prototype.hasOwnProperty.call(ak, 'nxql')
+    ) {
       if (ak.appliedFilter === true) ak.appliedFilter = 1
       if (ak.appliedFilter === false) ak.appliedFilter = 0
 
-      if (!ak.filterOptions.hasOwnProperty('nxqlGroup')) {
+      if (!Object.prototype.hasOwnProperty.call(ak, 'nxqlGroup')) {
         nxqlFilterString +=
           ' ' +
-          (ak.filterOptions.hasOwnProperty('operator') ? ak.filterOptions.operator : 'AND') +
+          (Object.prototype.hasOwnProperty.call(ak, 'operator') ? ak.filterOptions.operator : 'AND') +
           ' ' +
           generateNXQLString(ak.filterOptions.nxql, ak.appliedFilter)
       } else {
         if (
-          nxqlGroups.hasOwnProperty(ak.filterOptions.nxqlGroup) &&
+          Object.prototype.hasOwnProperty.call(nxqlGroups, ak.filterOptions.nxqlGroup) &&
           nxqlGroups[ak.filterOptions.nxqlGroup].length > 0
         ) {
           nxqlGroups[ak.filterOptions.nxqlGroup].push(generateNXQLString(ak.filterOptions.nxql, ak.appliedFilter))
@@ -320,7 +325,7 @@ function toJSKeepId(js) {
     return Immutable.Seq(js)
       .map(toJSKeepId)
       .toList()
-  } else if (js.hasOwnProperty('id')) {
+  } else if (Object.prototype.hasOwnProperty.call(js, 'id')) {
     return Immutable.Seq(js).toMap()
   }
   return Immutable.Seq(js)

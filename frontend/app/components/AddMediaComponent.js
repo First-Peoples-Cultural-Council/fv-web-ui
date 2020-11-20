@@ -219,7 +219,7 @@ export class AddMediaComponent extends Component {
 
     const actions = [
       <FVButton key="fb0" color="secondary" onClick={this.handleClose}>
-        <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
+        {this.props.intl.trans('cancel', 'Cancel', 'first')}
       </FVButton>,
     ]
 
@@ -245,11 +245,11 @@ export class AddMediaComponent extends Component {
     if (computeCreate && computeCreate.isFetching) {
       uploadText = (
         <div className={classNames('alert', 'alert-info')} role="alert">
-          <FVLabel
-            transKey="views.components.editor.uploading_message"
-            defaultStr="Uploading... Please be patient..."
-            transform="first"
-          />
+          {this.props.intl.trans(
+            'views.components.editor.uploading_message',
+            'Uploading... Please be patient...',
+            'first'
+          )}
         </div>
       )
     }
@@ -273,7 +273,7 @@ export class AddMediaComponent extends Component {
           style={{ margin: '10px', float: 'right' }}
           onClick={this._save}
         >
-          <FVLabel transKey="views.components.editor.upload_media" defaultStr="Upload Media" transform="words" />
+          {this.props.intl.trans('views.components.editor.upload_media', 'Upload Media', 'words')}
         </FVButton>
         <FVButton
           data-testid="Dialog__AddMediaComponentCancel"
@@ -282,7 +282,7 @@ export class AddMediaComponent extends Component {
           style={{ margin: '10px', float: 'right' }}
           onClick={this.handleClose}
         >
-          <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
+          {this.props.intl.trans('cancel', 'Cancel', 'first')}
         </FVButton>
       </form>
     )
@@ -305,7 +305,7 @@ export class AddMediaComponent extends Component {
               this._handleSelectElement(computeCreate.response)
             }}
           >
-            <FVLabel transKey="insert_into_entry" defaultStr="Insert into Entry" transform="first" />
+            {this.props.intl.trans('insert_into_entry', 'Insert into Entry', 'first')}
           </FVButton>
         </div>
       )

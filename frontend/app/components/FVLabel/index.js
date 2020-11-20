@@ -76,7 +76,7 @@ function FVLabel({
             },
           }).then((data) => {
             if (isMounted) {
-              if (data.properties.hasOwnProperty('fvproxy:proxied_audio')) {
+              if (Object.prototype.hasOwnProperty.call(data, 'fvproxy:proxied_audio')) {
                 setAudioId(selectn('properties.fvproxy:proxied_audio[0]', data))
               } else {
                 setAudioId(selectn('properties.fv:related_audio[0]', data))
@@ -107,52 +107,54 @@ function FVLabel({
     justifyContent: 'space-around',
   }
 
-  return (
-    <span className="fv-label">
-      {translation}
-      {isInHelpMode && (!usedFallback || isAdmin) && (
-        <span onClick={handleClick} className="fv-label-click-cover">
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorElement}
-            open={!!anchorElement}
-            onClose={handleClose}
-            getContentAnchorEl={null}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-          >
+  if (isInHelpMode && (!usedFallback || isAdmin)) {
+    // Helper mode activated
+    return (
+      <span onClick={handleClick} className="fv-label fv-label-click-cover">
+        {translation}
+
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorElement}
+          open={!!anchorElement}
+          onClose={handleClose}
+          onBlur={handleClose}
+          getContentAnchorEl={null}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        >
+          <ListItem>
+            <div>
+              <Typography variant="caption">{readableLocale[locale]}:</Typography>
+              <Typography variant="body2">
+                {intl.trans(transKey, defaultStr, transform, params, prepend, append, locale)}
+              </Typography>
+            </div>
+          </ListItem>
+          {!isFetching && !audioId && <ListItem disabled>No Audio</ListItem>}
+          {!isFetching && audioId && (
             <ListItem>
-              <div>
-                <Typography variant="caption">{readableLocale[locale]}:</Typography>
-                <Typography variant="body2">
-                  {intl.trans(transKey, defaultStr, transform, params, prepend, append, locale)}
-                </Typography>
+              <div style={audioContainerStyles}>
+                <Preview id={audioId} type="FVAudio" minimal styles={{ flex: 1 }} />
               </div>
             </ListItem>
-            {!isFetching && !audioId && <ListItem disabled>No Audio</ListItem>}
-            {!isFetching && audioId && (
-              <ListItem>
-                <div style={audioContainerStyles}>
-                  <Preview id={audioId} type="FVAudio" minimal styles={{ flex: 1 }} />
-                </div>
+          )}
+          {isFetching && (
+            <ListItem disabled>
+              <div style={audioContainerStyles} />
+            </ListItem>
+          )}
+          {routeParams.area === WORKSPACES && (
+            <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', actualDialect) }}>
+              <ListItem button onClick={openEdit}>
+                Edit Translation
               </ListItem>
-            )}
-            {isFetching && (
-              <ListItem disabled>
-                <div style={audioContainerStyles} />
-              </ListItem>
-            )}
-            {routeParams.area === WORKSPACES && (
-              <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', actualDialect) }}>
-                <ListItem button onClick={openEdit}>
-                  Edit Translation
-                </ListItem>
-              </AuthorizationFilter>
-            )}
-          </Menu>
-        </span>
-      )}
-    </span>
-  )
+            </AuthorizationFilter>
+          )}
+        </Menu>
+      </span>
+    )
+  }
+  return <span className="fv-label">{translation}</span>
 }
 
 const { string, array, object, bool, func } = proptypes

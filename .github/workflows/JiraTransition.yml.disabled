@@ -1,0 +1,154 @@
+name: Jira Transition
+
+on:
+  pull_request:
+    branches:
+      master
+    types: [opened, synchronize, reopened, edited, review_requested, review_request_removed]
+  push:
+    branches:
+      master
+  release:
+    types: [published]
+  pull_request_review:
+    types: [dismissed, submitted]
+    branches:
+      master
+
+jobs:
+  Add_PR_Review_Info_to_Issue:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request_review'
+    steps:
+
+    # Checkout the repo
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    # Setup the Jira command line tool
+    - name: Setup Jira CLI
+      uses: atlassian/gajira-cli@master
+      with:
+        version:
+          1.0.20
+
+    # Login to Jira
+    - name: Jira Login
+      uses: atlassian/gajira-login@master
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+    # Add pull request reviewer info the the issue
+    - name: Add info to issue
+      run: |
+        ./scripts/ci/ReviewerInfoComment.sh "${{ github.event.review.user.login }}" "${{ github.event.pull_request.title }}" "${{ github.event.repository.full_name }}" "${{ github.event.pull_request.number }}"
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+  Transition_DEV-DONE_to_QA-TO-DO:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+
+    # Checkout the repo
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    # Setup the Jira command line tool
+    - name: Setup Jira CLI
+      uses: atlassian/gajira-cli@master
+      with:
+        version:
+          1.0.20
+
+    # Login to Jira
+    - name: Jira Login
+      uses: atlassian/gajira-login@master
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+    # Filter commit payloads down to just the messages
+    - name: Filter payload
+      uses: Dovyski/payload-info-action@master
+      id: commit-message
+      with:
+        filter_push: '.commits[].message'
+
+    # If an issue key is found in commit messages and on Jira perform transition
+    - name: DEV DONE -> QA TO DO tasks
+      run: |
+        ./scripts/ci/Transition-DevDone-QAToDo.sh ${{ steps.commit-message.outputs.value }}
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+  Transition_QA-Done_to_QA-TO-DO_preprod:
+    runs-on: ubuntu-latest
+    if: "github.event.release.prerelease"
+    steps:
+
+    # Checkout the repo
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    # Setup the Jira command line tool
+    - name: Setup Jira CLI
+      uses: atlassian/gajira-cli@master
+      with:
+        version:
+          1.0.20
+
+    # Login to Jira
+    - name: Jira Login
+      uses: atlassian/gajira-login@master
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+    - name: Perform transition
+      run: |
+        ./scripts/ci/Transition-QADone-QAToDo-preprod.sh "${{ github.event.release.tag_name }}" "${{ github.event.repository.full_name }}"
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+  Transition_QA-Done_to_Launched:
+    runs-on: ubuntu-latest
+    if: "!github.event.release.prerelease && github.event_name == 'release'"
+    steps:
+
+    # Checkout the repo
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    # Setup the Jira command line tool
+    - name: Setup Jira CLI
+      uses: atlassian/gajira-cli@master
+      with:
+        version:
+          1.0.20
+
+    # Login to Jira
+    - name: Jira Login
+      uses: atlassian/gajira-login@master
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+
+    - name: Perform transition
+      run: |
+        ./scripts/ci/Transition-QADone-Launched.sh "${{ github.event.release.tag_name }}" "${{ github.event.repository.full_name }}"
+      env:
+        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+        JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}

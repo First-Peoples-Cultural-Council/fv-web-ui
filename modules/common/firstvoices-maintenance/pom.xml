@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <parent>
+    <artifactId>modules.common</artifactId>
+    <groupId>ca.firstvoices</groupId>
+    <version>3.5.4</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>firstvoices-maintenance</artifactId>
+  <name>Maintenance Services</name>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.nuxeo.ecm.automation</groupId>
+      <artifactId>nuxeo-automation-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.runtime</groupId>
+      <artifactId>nuxeo-runtime</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>FirstVoicesCoreIO</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>firstvoices-publisher</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>firstvoices-maintenance-common</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <artifactId>nuxeo-platform-audit-core</artifactId>
+      <version>10.10</version>
+    </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>firstvoices-data</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- Test dependencies -->
+    <dependency>
+      <artifactId>nuxeo-automation-test</artifactId>
+      <groupId>org.nuxeo.ecm.automation</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.runtime</groupId>
+      <artifactId>nuxeo-runtime-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <artifactId>nuxeo-platform-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.core</groupId>
+      <artifactId>nuxeo-core-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Type test dependencies -->
+    <!-- TO DO: Find out if we can include these dependencies decalred in Core Tests -->
+    <dependency>
+      <artifactId>nuxeo-platform-video-api</artifactId>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>nuxeo-platform-video-core</artifactId>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>nuxeo-platform-imaging-api</artifactId>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>nuxeo-platform-imaging-core</artifactId>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.binary.metadata</groupId>
+      <artifactId>nuxeo-binary-metadata</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <artifactId>nuxeo-platform-webapp-base</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.nuxeo.ecm.platform</groupId>
+      <artifactId>nuxeo-platform-webapp-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- FV test dependencies -->
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>firstvoices-core-tests</artifactId>
+      <scope>test</scope>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>firstvoices-core-tests</artifactId>
+      <scope>test</scope>
+      <type>test-jar</type>
+      <version>${project.version}</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="ca.firstvoices.enrichers.enrichers.contrib">
+	<extension target="org.nuxeo.ecm.core.io.MarshallerRegistry" point="marshallers">
+		<register class="ca.firstvoices.enrichers.AncestryEnricher" enable="true" />
+		<register class="ca.firstvoices.enrichers.CharacterEnricher" enable="true" />
+		<register class="ca.firstvoices.enrichers.DialectEnricher" enable="true" />
+		<register class="ca.firstvoices.enrichers.ParentDocEnricher" enable="true" />
+		<register class="ca.firstvoices.enrichers.PhraseEnricher" enable="true" />
+		<register class="ca.firstvoices.enrichers.PortalEnricher" enable="true" />
+		<register class="ca.firstvoices.enrichers.LightPortalEnricher" enable="true" />
+		<register class="ca.firstvoices.enrichers.LightAncestryEnricher" enable="true" />
+		<register class="ca.firstvoices.enrichers.BookEnricher" enable="true" />
+		<register class="ca.firstvoices.enrichers.WordEnricher" enable="true" />
+		<register class="ca.firstvoices.enrichers.LabelEnricher" enable="true" />
+		<register class="ca.firstvoices.enrichers.MediaEnricher" enable="true" />
+		<register class="ca.firstvoices.enrichers.GalleryEnricher" enable="true" />
+		<register class="ca.firstvoices.enrichers.UnpublishedChangesEnricher" enable="true" />
+	</extension>
+
+</component>

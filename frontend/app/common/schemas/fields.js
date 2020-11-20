@@ -123,6 +123,7 @@ const fields = {
       'fvcharacter:alphabet_order': t.maybe(t.Number),
       'fvcharacter:related_words': t.list(t.String),
       'fv:related_audio': t.list(t.maybe(t.String)),
+      'fv:related_videos': t.list(t.String),
     }
   ),
   FVUser: {
