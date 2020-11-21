@@ -20,16 +20,21 @@
 
 package ca.firstvoices.maintenance.listeners;
 
+import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
+
 import ca.firstvoices.maintenance.Constants;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import java.util.logging.Logger;
 import org.nuxeo.ecm.core.CoreService;
+import org.nuxeo.ecm.core.api.AbstractSession;
 import org.nuxeo.ecm.core.api.CoreInstance;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.repository.RepositoryManager;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventListener;
+import org.nuxeo.ecm.core.model.Document;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.transaction.TransactionHelper;
 
@@ -62,7 +67,6 @@ public class ExecuteGlobalJobsListener implements EventListener {
               // Publish anything that is stuck in republish state
               String query = "SELECT * FROM Document WHERE "
                   + " ecm:currentLifeCycleState LIKE 'Republish' AND "
-                  + " ecm:isProxy = 0 AND "
                   + " ecm:isTrashed = 0 AND "
                   + " ecm:isVersion = 0";
 
@@ -80,7 +84,7 @@ public class ExecuteGlobalJobsListener implements EventListener {
                   () -> "GLOBAL JOB: Found " + documents.totalSize()
                       + " docs to republish.");
 
-              republishDocuments(documents);
+              republishDocuments(session, documents);
               session.save();
 
               // commit the first page
@@ -94,7 +98,7 @@ public class ExecuteGlobalJobsListener implements EventListener {
                 TransactionHelper.runInTransaction(() -> {
                   DocumentModelList docs =
                       session.query(query, null, pageSize, i, false);
-                  republishDocuments(docs);
+                  republishDocuments(session, docs);
                   session.save();
                 });
               }
@@ -105,13 +109,21 @@ public class ExecuteGlobalJobsListener implements EventListener {
 
   }
 
-  private void republishDocuments(DocumentModelList docs) {
+  private void republishDocuments(CoreSession session, DocumentModelList docs) {
     FirstVoicesPublisherService publisherService =
         Framework.getService(FirstVoicesPublisherService.class);
 
     for (DocumentModel docInRepublishState : docs) {
       try {
-        publisherService.republish(docInRepublishState);
+        if (docInRepublishState.isProxy()) {
+          // For proxies set to PUBLIC directly
+          Document lowLevelDoc = ((AbstractSession) session).getSession()
+              .getDocumentByUUID(docInRepublishState.getId());
+          lowLevelDoc.setCurrentLifeCycleState(PUBLISHED_STATE);
+        } else {
+          // For workspaces documents, republish
+          publisherService.republish(docInRepublishState);
+        }
       } catch (Exception e) {
         log.severe(
             () -> "Failed when trying to execute global jobs with message: " + e

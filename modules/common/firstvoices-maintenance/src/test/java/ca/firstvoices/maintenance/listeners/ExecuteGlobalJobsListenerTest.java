@@ -44,7 +44,7 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
     "org.nuxeo.ecm.platform.commandline.executor", "org.nuxeo.ecm.platform.picture.core",
     "org.nuxeo.ecm.platform.rendition.core", "org.nuxeo.ecm.automation.scripting",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
-    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.templates.factories.xml",
+    "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.templates.factories.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml",
     "FirstVoicesCoreTests:OSGI-INF/nuxeo.conf.override.xml",
     "org.nuxeo.ecm.platform.publisher.core",
