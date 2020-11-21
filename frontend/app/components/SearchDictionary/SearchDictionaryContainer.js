@@ -18,6 +18,7 @@ function SearchDictionaryContainer() {
         changePagination,
         computeEntities,
         currentFilter,
+        dialectName,
         filters,
         handleFilter,
         handleSearchSubmit,
@@ -37,6 +38,7 @@ function SearchDictionaryContainer() {
             changePagination={changePagination}
             computeEntities={computeEntities}
             currentFilter={currentFilter}
+            dialectName={dialectName}
             filters={filters}
             handleFilter={handleFilter}
             handleSearchSubmit={handleSearchSubmit}
