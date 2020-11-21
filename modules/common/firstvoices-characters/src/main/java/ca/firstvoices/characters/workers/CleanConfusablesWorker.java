@@ -7,7 +7,6 @@ import ca.firstvoices.characters.services.CleanupCharactersService;
 import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
-import ca.firstvoices.publisher.services.UnpublishedChangesService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -122,18 +121,11 @@ public class CleanConfusablesWorker extends AbstractWork {
     for (DocumentModel dictionaryItem : cleanupCharactersService
         .getAllWordsPhrasesForConfusable(session, dictionaryId, confusableChar, batchSize)) {
 
-      // Check for unpublished changes (before we clean)
-      UnpublishedChangesService unpublishedChangesService = Framework
-          .getService(UnpublishedChangesService.class);
-
-      boolean unpublishedChangesExist = unpublishedChangesService
-          .checkUnpublishedChanges(session, dictionaryItem);
-
       // Clean confusables for document
       cleanupCharactersService.cleanConfusables(session, dictionaryItem, true);
 
-      if (!unpublishedChangesExist && StateUtils.isPublished(dictionaryItem)) {
-        dictionaryItem.followTransition(REPUBLISH_TRANSITION);
+      if (StateUtils.isPublished(dictionaryItem)) {
+        StateUtils.followTransitionIfAllowed(dictionaryItem, REPUBLISH_TRANSITION);
       }
     }
   }

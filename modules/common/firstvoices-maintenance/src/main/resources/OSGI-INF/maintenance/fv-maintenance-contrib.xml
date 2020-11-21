@@ -23,8 +23,8 @@
         <schedule id="queueRequiredJobs">
             <eventId>executeRequiredJobs</eventId>
             <eventCategory>maintenance</eventCategory>
-            <!-- every 10 minutes between 01am and 06am-->
-            <cronExpression>0 0/10 1-6 ? * *</cronExpression>
+            <!-- every 10 minutes between 01am and 05am-->
+            <cronExpression>0 0/10 1-5 ? * *</cronExpression>
             <timezone>PST</timezone>
         </schedule>
     </extension>
@@ -44,15 +44,36 @@
         </listener>
     </extension>
 
+    <!-- Global Jobs -->
+
+    <!-- Schedule global jobs -->
+    <!-- These general operations should run on documents regardless of the dialect -->
+    <extension target="org.nuxeo.ecm.core.scheduler.SchedulerService" point="schedule">
+        <schedule id="queueGlobalJobs">
+            <eventId>executeGlobalJobs</eventId>
+            <eventCategory>maintenance</eventCategory>
+            <!-- twice - every 15 minutes between 0530am and 0545am-->
+            <cronExpression>0 30/15 5 ? * *</cronExpression>
+            <timezone>PST</timezone>
+        </schedule>
+    </extension>
+
+    <!-- Listener will execute global jobs -->
+    <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
+        <listener name="executeGlobalJobsListener" class="ca.firstvoices.maintenance.listeners.ExecuteGlobalJobsListener">
+            <event>executeGlobalJobs</event>
+        </listener>
+    </extension>
+
     <!-- Listener will handle post commit, async cleanup events -->
     <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
-      <listener name="postCommitCleanupListener"
-        class="ca.firstvoices.maintenance.listeners.PostCommitCleanupListener"
-        async="true" postCommit="true" priority="350">
-        <event>documentModified</event>
-        <event>documentTrashed</event>
-        <event>lifecycle_transition_event</event>
-      </listener>
+        <listener name="postCommitCleanupListener"
+          class="ca.firstvoices.maintenance.listeners.PostCommitCleanupListener"
+          async="true" postCommit="true" priority="350">
+            <event>documentModified</event>
+            <event>documentTrashed</event>
+            <event>lifecycle_transition_event</event>
+        </listener>
     </extension>
 
     <!-- A work queue for handling maintenance tasks -->
