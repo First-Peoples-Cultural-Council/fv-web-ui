@@ -27,7 +27,6 @@ import ca.firstvoices.core.io.utils.DialectUtils;
 import ca.firstvoices.core.io.utils.SessionUtils;
 import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
-import ca.firstvoices.publisher.services.UnpublishedChangesService;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,7 +37,6 @@ import org.jetbrains.annotations.Nullable;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.runtime.api.Framework;
 
 public class CustomOrderComputeServiceImpl implements CustomOrderComputeService {
 
@@ -65,7 +63,7 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
       }
 
       if (Boolean.TRUE.equals(publish)) {
-        updateProxyIfPublished(session, asset);
+        updateProxyIfPublished(asset);
       }
     }
 
@@ -142,17 +140,10 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
     return ignoredCharacter;
   }
 
-  private void updateProxyIfPublished(CoreSession session, DocumentModel element) {
-    // If document is published, update the field on the proxy but only if no other changes
-    // exist in order to avoid publishing an archive's other changes prematurely.
-    UnpublishedChangesService unpublishedChangesService = Framework
-        .getService(UnpublishedChangesService.class);
-
-    boolean unpublishedChangesExist = unpublishedChangesService
-        .checkUnpublishedChanges(session, element);
-
-    if (!unpublishedChangesExist && StateUtils.isPublished(element)) {
-      element.followTransition(REPUBLISH_TRANSITION);
+  private void updateProxyIfPublished(DocumentModel doc) {
+    // If document is published, update the field on the proxy
+    if (StateUtils.isPublished(doc)) {
+      StateUtils.followTransitionIfAllowed(doc, REPUBLISH_TRANSITION);
     }
   }
 

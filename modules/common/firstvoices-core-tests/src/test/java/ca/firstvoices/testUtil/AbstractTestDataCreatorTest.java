@@ -1,10 +1,12 @@
 package ca.firstvoices.testUtil;
 
 import ca.firstvoices.testUtil.annotations.TestDataConfiguration;
-import java.io.IOException;
 import javax.inject.Inject;
 import org.junit.Before;
 import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.event.EventService;
+import org.nuxeo.ecm.core.event.impl.EventListenerDescriptor;
+import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Deploys;
 import org.nuxeo.runtime.test.runner.PartialDeploy;
@@ -23,7 +25,7 @@ public abstract class AbstractTestDataCreatorTest {
   @Inject private CoreSession session;
 
   @Before
-  public void initData() throws IOException {
+  public void initData() {
     this.dataCreator.reset();
 
     Class<? extends AbstractTestDataCreatorTest> clz = this.getClass();
@@ -39,6 +41,24 @@ public abstract class AbstractTestDataCreatorTest {
     // Always start a transaction if one isn't available for the test
     if (!TransactionHelper.isTransactionActive()) {
       TransactionHelper.startTransaction();
+    }
+  }
+
+  /**
+   * Unregister events so that they do not interfere with tests
+   * @param listenersToDisable list of listener names to deactivate
+   */
+  public static void unregisterEvents(String[] listenersToDisable) {
+    // Remove ancestry, publish, and bulk life cycle listeners
+    // To help isolate testing to the service
+    EventService eventService = Framework.getService(EventService.class);
+
+    for (String listener : listenersToDisable) {
+      EventListenerDescriptor listenerDescriptor = eventService.getEventListener(listener);
+
+      if (listenerDescriptor != null) {
+        eventService.removeEventListener(listenerDescriptor);
+      }
     }
   }
 

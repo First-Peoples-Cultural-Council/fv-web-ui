@@ -106,10 +106,8 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
         .computeAssetNativeOrderTranslation(session, document, false, false);
 
     if (Boolean.TRUE.equals(saveDocument)) {
-      SessionUtils.saveDocumentWithoutEvents(session, document,
+      return SessionUtils.saveDocumentWithoutEvents(session, document,
           true, Collections.singletonList(AssetListener.DISABLE_CHAR_ASSET_LISTENER));
-
-      return session.saveDocument(document);
     }
 
     return document;

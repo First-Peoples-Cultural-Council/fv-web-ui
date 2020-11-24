@@ -36,12 +36,9 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
-import org.nuxeo.ecm.core.event.EventService;
-import org.nuxeo.ecm.core.event.impl.EventListenerDescriptor;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
-import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.mockito.MockitoFeature;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
@@ -81,17 +78,8 @@ public class PublisherServiceTest extends AbstractTestDataCreatorTest {
   public static void unregisterEvents() {
     // Remove ancestry, publish, and bulk life cycle listeners
     // To help isolate testing to the service
-    EventService eventService = Framework.getService(EventService.class);
-    String[] listeners = new String[]{"ancestryAssignmentListener", "ProxyPublishedListener",
-        "bulkLifeCycleChangeListener"};
-
-    for (String listener : listeners) {
-      EventListenerDescriptor listenerDescriptor = eventService.getEventListener(listener);
-
-      if (listenerDescriptor != null) {
-        eventService.removeEventListener(listenerDescriptor);
-      }
-    }
+    unregisterEvents(new String[]{"ancestryAssignmentListener", "ProxyPublishedListener",
+        "bulkLifeCycleChangeListener"});
   }
 
   @Before
