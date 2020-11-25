@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import '!style-loader!css-loader!./SearchDialect.css'
 
 import {
   SEARCH_PART_OF_SPEECH_ANY,
