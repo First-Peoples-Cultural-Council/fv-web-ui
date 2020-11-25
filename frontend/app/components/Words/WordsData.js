@@ -94,8 +94,6 @@ function WordsData(props) {
 
   return props.children({
     computeEntities,
-    constSearchByAlphabet: SEARCH_BY_ALPHABET,
-    constSearchPartOfSpeechAny: SEARCH_PART_OF_SPEECH_ANY,
     flashcardMode: false,
     handleCategoryClick,
     handleAlphabetClick,

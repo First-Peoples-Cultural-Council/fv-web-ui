@@ -6,6 +6,7 @@ import selectn from 'selectn'
 
 import t from 'tcomb-form'
 
+import IntlService from 'common/services/IntlService'
 import filterFields from 'common/schemas/filterFields'
 import filterOptions from 'common/schemas/filterOptions'
 
@@ -14,7 +15,8 @@ import withToggle from 'components/withToggle'
 import ProviderHelpers from 'common/ProviderHelpers'
 import FormHelpers from 'common/FormHelpers'
 import '!style-loader!css-loader!./withFilter.css'
-import FVLabel from 'components/FVLabel'
+
+const intl = IntlService.instance
 
 const FiltersWithToggle = withToggle()
 
@@ -96,7 +98,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
         // eslint-disable-next-line
         const fields = Map(options.get('fields')).map(
           function fieldsMap(field) {
-            if (field.hasOwnProperty('nxql')) {
+            if (Object.prototype.hasOwnProperty.call(field, 'nxql')) {
               field.nxql = ProviderHelpers.replaceAllWorkspaceSectionKeys(field.nxql, this.props.area)
             }
 
@@ -118,9 +120,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
             >
               <form>
                 <FiltersWithToggle
-                  label={
-                    <FVLabel transKey="views.pages.search.filter_items" defaultStr="Filter items" transform="first" />
-                  }
+                  label={intl.trans('views.pages.search.filter_items', 'Filter items', 'first')}
                   mobileOnly
                 >
                   <t.form.Form
@@ -138,14 +138,14 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
                         this._onReset(e, this.props)
                       }}
                     >
-                      <FVLabel transKey="reset" defaultStr="Reset" transform="first" />
+                      {intl.trans('reset', 'Reset', 'first')}
                     </button>
                     <button
                       type="button"
                       onClick={this._onFilterSaveForm}
                       className="FilteredGridList__btn RaisedButton RaisedButton--primary"
                     >
-                      <FVLabel transKey="filter" defaultStr="Filter" transform="first" />
+                      {intl.trans('filter', 'Filter', 'first')}
                     </button>
                   </div>
                 </FiltersWithToggle>
@@ -172,7 +172,10 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
           // Test each of the filters against item
           for (const filterKey in filters) {
             const filter = selectn([props.filterOptionsKey, 'fields', filterKey], filterOptions)
-            const filterFunc = filter && filter.hasOwnProperty('filterFunc') ? filter.filterFunc : defaultFilterFunc
+            const filterFunc =
+              filter && Object.prototype.hasOwnProperty.call(filter, 'filterFunc')
+                ? filter.filterFunc
+                : defaultFilterFunc
 
             const filterValue = filters[filterKey]
             const propertyToSearch = selectn(filterKey, item)

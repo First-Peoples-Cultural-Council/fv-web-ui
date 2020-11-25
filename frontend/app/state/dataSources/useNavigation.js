@@ -1,6 +1,7 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import {
   changeTitleParams as _changeTitleParams,
+  loadNavigation as _loadNavigation,
   overrideBreadcrumbs as _overrideBreadcrumbs,
 } from 'reducers/navigation'
 
@@ -12,14 +13,19 @@ function useNavigation() {
     dispatch(dispatchObj)
   }
 
+  const loadNavigation = (breadcrumbs) => {
+    const dispatchObj = _loadNavigation(breadcrumbs)
+    dispatch(dispatchObj)
+  }
+
   const overrideBreadcrumbs = (breadcrumbs) => {
     const dispatchObj = _overrideBreadcrumbs(breadcrumbs)
     dispatch(dispatchObj)
   }
 
   return {
-    computeLoadNavigation: useSelector((state) => state.navigation.computeLoadNavigation),
     changeTitleParams,
+    loadNavigation,
     overrideBreadcrumbs,
   }
 }

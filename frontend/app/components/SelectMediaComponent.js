@@ -90,8 +90,8 @@ class SharedResourceGridTile extends Component {
     if (isDialectShared || isFVShared) {
       const tooltip = isDialectShared
         ? this.props.intl.trans('shared_from_x', 'Shared from ' + selectn('dc:title', resourceParentDialect), null, [
-          selectn('dc:title', resourceParentDialect),
-        ])
+            selectn('dc:title', resourceParentDialect),
+          ])
         : this.props.intl.trans('shared_from_x_collection', 'Shared from FirstVoices Collection', null, ['FirstVoices'])
       actionIcon = (
         <Tooltip title={tooltip}>
@@ -163,8 +163,8 @@ class SelectMediaComponent extends Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-      })
+          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+        })
       : DefaultFetcherParams
 
     this.state = {
@@ -272,7 +272,7 @@ class SelectMediaComponent extends Component {
               color="secondary"
               onClick={this._handleClose}
             >
-              <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
+              {this.props.intl.trans('cancel', 'Cancel', 'first')}
             </FVButton>
           </DialogActions>
         </Dialog>

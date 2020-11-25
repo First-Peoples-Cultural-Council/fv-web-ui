@@ -214,25 +214,15 @@ class ModalContent extends Component {
           <fieldset>
             <legend>Label Information</legend>
             {/* need locale key */}
-            <label className="control-label">
-              <FVLabel
-                transKey="original_associated_word_phrase"
-                defaultStr="Original Associated Word/Phrase"
-                transform="words"
-              />
-            </label>
+            <label className="control-label">Original Associated Word/Phrase</label>
             <div style={{ padding: '15px' }}>{this.renderTranslation(label)}</div>
             <div style={{ display: 'flex' }}>
               <div style={{ width: '50%' }}>
-                <label className="control-label">
-                  <FVLabel transKey="category" defaultStr="Category" transform="words" />
-                </label>{' '}
+                <label className="control-label">Category</label>{' '}
                 <div style={{ padding: '15px' }}>{label.category}</div>
               </div>
               <div style={{ width: '50%' }}>
-                <label className="control-label">
-                  <FVLabel transKey="state" defaultStr="State" transform="words" />
-                </label>
+                <label className="control-label">State</label>
                 <div style={{ padding: '15px' }}>{label.state}</div>
               </div>
             </div>
@@ -245,9 +235,7 @@ class ModalContent extends Component {
               {/* need locale key */}
             </div>
             <div className={error || hadError ? 'has-error' : ''}>
-              <label className="control-label">
-                <FVLabel transKey="translation" defaultStr="Translation" transform="words" /> *
-              </label>
+              <label className="control-label">Translation</label>
               {label.type === 'phrase' ? (
                 <TextField
                   id="translation"
@@ -304,11 +292,11 @@ class ModalContent extends Component {
         <DialogActions style={{ justifyContent: 'space-between' }}>
           <div>
             <FVButton variant="text" onClick={() => handleClose()} style={{ marginRight: '10px' }}>
-              <FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />
+              Cancel
             </FVButton>
             {label.state === 'Published' && (
               <FVButton variant="text" onClick={() => handleUnpublish()} style={{ marginRight: '10px' }}>
-                <FVLabel transKey="unpublish" defaultStr="Unpublish" transform="first" />
+                Unpublish
               </FVButton>
             )}
           </div>
@@ -321,7 +309,7 @@ class ModalContent extends Component {
                 }}
                 className="RaisedButton"
               >
-                <FVLabel transKey="save" defaultStr="Save" transform="first" />
+                Save
               </button>
               <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', _computeDialect2) }}>
                 <button
@@ -332,7 +320,7 @@ class ModalContent extends Component {
                   }}
                   className="RaisedButton RaisedButton--primary"
                 >
-                  <FVLabel transKey="publish" defaultStr="Publish Changes" transform="first" />
+                  Publish Changes
                 </button>
               </AuthorizationFilter>
             </div>
@@ -344,7 +332,7 @@ class ModalContent extends Component {
               }}
               className="RaisedButton RaisedButton--primary"
             >
-              <FVLabel transKey="save" defaultStr="Save" transform="first" />
+              Save
             </button>
           )}
         </DialogActions>

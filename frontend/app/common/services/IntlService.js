@@ -2,6 +2,7 @@
 /* eslint-disable */
 import selectn from 'selectn'
 import { vsprintf } from 'sprintf-js'
+import cache from './MemoizationCache'
 
 String.prototype.toUpperCaseWords = function() {
   return this.replace(/\w+/g, function(a) {
@@ -12,6 +13,7 @@ String.prototype.toUpperCaseWords = function() {
 String.prototype.toUpperCaseFirst = function() {
   return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase()
 }
+
 export default class IntlService {
   static $instance
 
@@ -260,6 +262,13 @@ export default class IntlService {
       return ''
     }
 
+    const cacheName = 'searchAndReplace'
+    const cacheKey = `${string}:${translateData}`
+
+    if (cache.contains(cacheName, cacheKey)) {
+      return cache.get(cacheName, cacheKey)
+    }
+
     // lets check for tags
     if (this.tagsRegex.test(string)) {
       return this.searchAndReplaceWithTags(string, translateData)
@@ -284,17 +293,27 @@ export default class IntlService {
       translateData.default = null
       const translatedString = this.translate(translateData)
       if (translatedString !== null && translateData !== undefined) {
+        cache.put(cacheName, cacheKey, translatedString)
         return translatedString
       }
     }
 
-    return this.notFoundPrefix + originalString + this.notFoundSuffix
+    const notFoundResult = this.notFoundPrefix + originalString + this.notFoundSuffix
+    cache.put(cacheName, cacheKey, notFoundResult)
+    return notFoundResult
   }
 
   searchAndReplaceWithTags(string, translateData) {
     // no point in searching for nothing
     if (string === null || string === undefined || string === '' || (string + '').length === 0) {
       return ''
+    }
+
+    const cacheName = 'searchAndReplaceWithTags'
+    const cacheKey = `${string}:${translateData}`
+
+    if (cache.contains(cacheName, cacheKey)) {
+      return cache.get(cacheName, cacheKey)
     }
 
     // make sure there are tags
@@ -326,7 +345,9 @@ export default class IntlService {
         const taglessResult = this.translate(Object.assign(translateData, taglessKeyData, { default: null }))
         if (taglessResult !== null && taglessResult !== undefined && (taglessResult + '').toLowerCase() !== 'null') {
           // we found something
-          return tags.start + taglessResult + tags.end
+          const result = tags.start + taglessResult + tags.end
+          cache.put(cacheName, cacheKey, result)
+          return result
         }
       }
 
@@ -335,12 +356,15 @@ export default class IntlService {
       if (keyData !== null && keyData !== undefined) {
         const result = this.translate(Object.assign(translateData, keyData, { default: null }))
         if (result !== null && result !== undefined && (result + '').toLowerCase() !== 'null') {
+          cache.put(cacheName, cacheKey, result)
           return result
         }
       }
     }
 
-    return this.notFoundPrefix + originalString + this.notFoundSuffix
+    const notFoundResult = this.notFoundPrefix + originalString + this.notFoundSuffix
+    cache.put(cacheName, cacheKey, notFoundResult)
+    return notFoundResult
   }
 
   locateAndReplace(string, translateData) {
@@ -348,12 +372,20 @@ export default class IntlService {
   }
 
   locateEnglishKey(string, baseKey, searchRegex) {
+    const cacheName = 'locateEnglishKey'
+    const cacheKey = `${string}:${baseKey}:${searchRegex}`
+
+    if (cache.contains(cacheName, cacheKey)) {
+      return cache.get(cacheName, cacheKey)
+    }
+
     baseKey = baseKey || 'en'
     const searchData = selectn(baseKey, this._localeLists)
     if (searchData !== null && typeof searchData === 'object') {
       for (const key in searchData) {
         const res = this.locateEnglishKey(string, baseKey + '.' + key, searchRegex)
         if (res !== null && res !== undefined) {
+          cache.put(cacheName, cacheKey, res)
           return res
         }
       }
@@ -362,10 +394,12 @@ export default class IntlService {
       if (!searchRegex && !hasRegex) {
         // normal string comparison
         if (this.normalizeString(string) == this.normalizeString(searchData)) {
-          return {
+          const result = {
             key: baseKey === 'en' ? null : baseKey.replace('en.', ''),
             params: [],
           }
+          cache.put(cacheName, cacheKey, result)
+          return result
         }
       } else if (searchRegex && hasRegex) {
         // search the regular expression
@@ -378,10 +412,12 @@ export default class IntlService {
               params.push(pieces[i + 1])
             }
           }
-          return {
+          const result = {
             key: baseKey === 'en' ? null : baseKey.replace('en.', ''),
             params: params || [],
           }
+          cache.put(cacheName, cacheKey, result)
+          return result
         }
       }
     }
@@ -392,10 +428,18 @@ export default class IntlService {
       return this.locateEnglishKey(string, 'en', true)
     }
 
+    cache.put(cacheName, cacheKey, null)
     return null
   }
 
   locateEnglishKey2(string, baseKey) {
+    const cacheName = 'locateEnglishKey2'
+    const cacheKey = `${string}:${baseKey}`
+
+    if (cache.contains(cacheName, cacheKey)) {
+      return cache.get(cacheName, cacheKey)
+    }
+
     baseKey = baseKey || 'en'
     const searchData = selectn(baseKey, this._localeLists)
     if (searchData !== null && typeof searchData === 'object') {
@@ -404,6 +448,7 @@ export default class IntlService {
         for (const key in searchData.general) {
           const res = this.locateEnglishKey(string, baseKey + '.general.' + key)
           if (res !== null && res !== undefined) {
+            cache.put(cacheName, cacheKey, res)
             return res
           }
         }
@@ -412,15 +457,18 @@ export default class IntlService {
       for (const key in searchData) {
         const res = this.locateEnglishKey(string, baseKey + '.' + key)
         if (res !== null && res !== undefined) {
+          cache.put(cacheName, cacheKey, res)
           return res
         }
       }
     } else if (searchData !== null) {
       if (this.normalizeString(string) == this.normalizeString(searchData)) {
-        return {
+        const result = {
           key: baseKey === 'en' ? null : baseKey.replace('en.', ''),
           params: [],
         }
+        cache.put(cacheName, cacheKey, result)
+        return result
       }
       // OK, so there may not have been a match on those strings BUT
       // what about matching against %s strings?
@@ -435,13 +483,17 @@ export default class IntlService {
               params.push(pieces[i + 1])
             }
           }
-          return {
+          const result = {
             key: baseKey === 'en' ? null : baseKey.replace('en.', ''),
             params: params || [],
           }
+          cache.put(cacheName, cacheKey, result)
+          return result
         }
       }
     }
+
+    cache.put(cacheName, cacheKey, null)
     return null
   }
 

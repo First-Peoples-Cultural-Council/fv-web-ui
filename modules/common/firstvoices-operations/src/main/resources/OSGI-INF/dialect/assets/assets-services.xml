@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.operations.dialect.assets.services.RelationsService" version="1.0">
+  <implementation class="ca.firstvoices.operations.dialect.assets.services.RelationsServiceImpl"/>
+  <service>
+    <provide interface="ca.firstvoices.operations.dialect.assets.services.RelationsService"/>
+  </service>
+</component>

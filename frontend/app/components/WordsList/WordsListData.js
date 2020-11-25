@@ -180,7 +180,7 @@ function WordsListData({ children }) {
         if (a.text > b.text) return 1
         return 0
       }
-      const partsOfSpeechSorted = partsOfSpeechUnsorted.sort(sorter)
+      const partsOfSpeechSorted = [...partsOfSpeechUnsorted].sort(sorter)
       setPartsOfSpeech([
         {
           text: 'Any',

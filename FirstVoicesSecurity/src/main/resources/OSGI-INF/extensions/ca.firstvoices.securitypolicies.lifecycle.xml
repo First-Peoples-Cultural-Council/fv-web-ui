@@ -1,9 +1,0 @@
-<component name="ca.firstvoices.securitypolicies.lifecycle.contrib">
-
-  <extension target="org.nuxeo.ecm.core.security.SecurityService" point="policies">
-
-    <policy name="nonenabled" class="ca.firstvoices.securitypolicies.lifecycle.NonRecorders" order="100" />
-
-  </extension>
-
-</component>
