@@ -6,18 +6,17 @@ import selectn from 'selectn'
 import Immutable from 'immutable'
 
 // FPCC
-
 import useDialect from 'dataSources/useDialect'
+import useDirectory from 'dataSources/useDirectory'
 import useDocument from 'dataSources/useDocument'
 import useIntl from 'dataSources/useIntl'
 import useListView from 'dataSources/useListView'
 import useLogin from 'dataSources/useLogin'
-import useRoute from 'dataSources/useRoute'
 import usePortal from 'dataSources/usePortal'
+import useRoute from 'dataSources/useRoute'
 import useSearchDialect from 'dataSources/useSearchDialect'
 import useWindowPath from 'dataSources/useWindowPath'
 import useWord from 'dataSources/useWord'
-import useDirectory from 'dataSources/useDirectory'
 
 // Helpers
 import useNavigationHelpers from 'common/useNavigationHelpers'
@@ -25,7 +24,6 @@ import { getDialectClassname } from 'common/Helpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
-import { WORKSPACES } from 'common/Constants'
 
 // Components
 import AuthorizationFilter from 'components/AuthorizationFilter'
@@ -36,27 +34,19 @@ import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
-  dictionaryListSmallScreenTemplateWords,
   dictionaryListSmallScreenColumnDataTemplateCustomState,
+  dictionaryListSmallScreenTemplateWords,
 } from 'components/DictionaryList/DictionaryListSmallScreen'
+
 import {
-  SEARCHDIALECT_CHECKBOX,
-  SEARCHDIALECT_SELECT,
-  SEARCH_PART_OF_SPEECH_ANY,
   SEARCH_BY_ALPHABET,
   SEARCH_BY_CATEGORY,
-  // SEARCH_BY_CUSTOM,
-  // SEARCH_BY_PHRASE_BOOK,
-  // SEARCH_DATA_TYPE_PHRASE,
-  // SEARCH_DATA_TYPE_WORD,
-  // SEARCH_TYPE_DEFAULT_SEARCH,
-  // SEARCH_TYPE_APPROXIMATE_SEARCH,
-  // SEARCH_TYPE_EXACT_SEARCH,
-  // SEARCH_TYPE_CONTAINS_SEARCH,
-  // SEARCH_TYPE_STARTS_WITH_SEARCH,
-  // SEARCH_TYPE_ENDS_WITH_SEARCH,
-  // SEARCH_TYPE_WILDCARD_SEARCH,
+  SEARCH_PART_OF_SPEECH_ANY,
+  SEARCHDIALECT_CHECKBOX,
+  SEARCHDIALECT_SELECT,
+  WORKSPACES,
 } from 'common/Constants'
+
 /**
  * @summary WordsListData
  * @version 1.0.1
@@ -84,7 +74,6 @@ function WordsListData({ children }) {
   const [partsOfSpeech, setPartsOfSpeech] = useState([])
   const [resetCount, setResetCount] = useState(0)
   const { siteTheme, dialect_path: dialectPath, area } = routeParams
-  // const { searchNxqlQuery = '' } = computeSearchDialect
   const {
     category: queryCategory,
     letter: queryLetter,
@@ -156,7 +145,7 @@ function WordsListData({ children }) {
 
       fetchWords(dictionaryKey, nql)
     }
-  }, [curFetchDocumentAction, area, queryCategory, queryLetter, queryPage, queryPageSize, querySortOrder, querySortBy])
+  }, [area, curFetchDocumentAction, queryCategory, queryLetter, queryPage, queryPageSize, querySortBy, querySortOrder])
 
   // Parts of speech
   // TODO: if this data is language specific update it to do a fetchIfMissing
@@ -381,11 +370,13 @@ function WordsListData({ children }) {
   }
   const hrefCreate = `/explore${dialectPath}/learn/words/create`
   return children({
+    browseMode,
     columns: columns,
     computeEntities,
     dialect,
     dialectClassName,
     dialectUid,
+    dictionaryId,
     fetcher: onPagination,
     fetcherParams: {
       currentPageIndex: queryPage,
@@ -393,6 +384,9 @@ function WordsListData({ children }) {
     },
     filter,
     hrefCreate,
+    incrementResetCount: () => {
+      setResetCount(resetCount + 1)
+    },
     isKidsTheme: siteTheme === 'kids',
     items,
     listViewMode: listView.mode,
@@ -401,16 +395,18 @@ function WordsListData({ children }) {
     page: parseInt(queryPage, 10),
     pageSize: parseInt(queryPageSize, 10),
     pageTitle,
-    dictionaryId,
-    pushWindowPath,
-    routeParams,
-    setRouteParams,
-    setListViewMode: setListViewMode,
-    smallScreenTemplate: dictionaryListSmallScreenTemplateWords,
-    sortCol: DEFAULT_SORT_COL,
-    sortHandler: sortHandler,
-    sortType: DEFAULT_SORT_TYPE,
     partsOfSpeech,
+    pushWindowPath,
+    queryCategory,
+    queryLetter,
+    querySearchByDefinitions,
+    querySearchByTitle,
+    querySearchByTranslations,
+    querySearchPartOfSpeech,
+    querySearchStyle,
+    querySearchTerm,
+    resetCount,
+    routeParams,
     searchUiSecondary: [
       {
         type: SEARCHDIALECT_CHECKBOX,
@@ -437,19 +433,12 @@ function WordsListData({ children }) {
         options: partsOfSpeech,
       },
     ],
-    resetCount,
-    incrementResetCount: () => {
-      setResetCount(resetCount + 1)
-    },
-    queryCategory,
-    queryLetter,
-    querySearchByDefinitions,
-    querySearchByTitle,
-    querySearchByTranslations,
-    querySearchPartOfSpeech,
-    querySearchStyle,
-    querySearchTerm,
-    browseMode,
+    setListViewMode: setListViewMode,
+    setRouteParams,
+    smallScreenTemplate: dictionaryListSmallScreenTemplateWords,
+    sortCol: DEFAULT_SORT_COL,
+    sortHandler: sortHandler,
+    sortType: DEFAULT_SORT_TYPE,
   })
 }
 

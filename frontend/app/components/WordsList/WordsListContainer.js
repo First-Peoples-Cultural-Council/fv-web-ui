@@ -1,5 +1,4 @@
 import React, { Suspense } from 'react'
-// import PropTypes from 'prop-types'
 import WordsListPresentation from './WordsListPresentation'
 import WordsListData from './WordsListData'
 import PromiseWrapper from 'components/PromiseWrapper'
@@ -8,24 +7,7 @@ const SearchDialectMessage = React.lazy(() => import('components/SearchDialect/S
 const SearchDialectContainer = React.lazy(() => import('components/SearchDialect/SearchDialectContainer'))
 const SearchDialectCheckbox = React.lazy(() => import('components/SearchDialect/SearchDialectCheckbox'))
 const SearchDialectSelect = React.lazy(() => import('components/SearchDialect/SearchDialectSelect'))
-import {
-  SEARCHDIALECT_CHECKBOX,
-  SEARCHDIALECT_SELECT,
-  // SEARCH_PART_OF_SPEECH_ANY,
-  // SEARCH_BY_ALPHABET,
-  // SEARCH_BY_CATEGORY,
-  // SEARCH_BY_CUSTOM,
-  // SEARCH_BY_PHRASE_BOOK,
-  // SEARCH_DATA_TYPE_PHRASE,
-  SEARCH_DATA_TYPE_WORD,
-  // SEARCH_TYPE_DEFAULT_SEARCH,
-  // SEARCH_TYPE_APPROXIMATE_SEARCH,
-  // SEARCH_TYPE_EXACT_SEARCH,
-  // SEARCH_TYPE_CONTAINS_SEARCH,
-  // SEARCH_TYPE_STARTS_WITH_SEARCH,
-  // SEARCH_TYPE_ENDS_WITH_SEARCH,
-  // SEARCH_TYPE_WILDCARD_SEARCH,
-} from 'common/Constants'
+import { SEARCHDIALECT_CHECKBOX, SEARCHDIALECT_SELECT, SEARCH_DATA_TYPE_WORD } from 'common/Constants'
 
 /**
  * @summary WordsListContainer
@@ -39,6 +21,7 @@ function WordsListContainer() {
   return (
     <WordsListData>
       {({
+        browseMode,
         columns,
         computeEntities,
         dialect,
@@ -54,13 +37,6 @@ function WordsListContainer() {
         navigationRouteSearch,
         pageTitle,
         pushWindowPath,
-        resetCount,
-        routeParams,
-        searchUiSecondary,
-        setListViewMode,
-        setRouteParams,
-        smallScreenTemplate,
-        sortHandler,
         queryCategory,
         queryLetter,
         querySearchByDefinitions,
@@ -69,7 +45,13 @@ function WordsListContainer() {
         querySearchPartOfSpeech,
         querySearchStyle,
         querySearchTerm,
-        browseMode,
+        resetCount,
+        routeParams,
+        searchUiSecondary,
+        setListViewMode,
+        setRouteParams,
+        smallScreenTemplate,
+        sortHandler,
       }) => {
         return (
           <PromiseWrapper renderOnError computeEntities={computeEntities}>

@@ -1,9 +1,12 @@
 /*
 Copyright 2016 First People's Cultural Council
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
     http://www.apache.org/licenses/LICENSE-2.0
+
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -11,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Libraries
 import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
@@ -19,8 +21,6 @@ import { List } from 'immutable'
 import Media from 'react-media'
 
 import useNavigationHelpers from 'common/useNavigationHelpers'
-
-// Components
 import { getIcon, getSortState, sortCol } from 'common/ListView'
 import withPagination from 'components/withPagination'
 import IntlService from 'common/services/IntlService'
@@ -33,15 +33,13 @@ import {
 import AuthorizationFilter from 'components/AuthorizationFilter'
 import Link from 'components/Link'
 
-const FlashcardList = React.lazy(() => import('components/FlashcardList'))
-const DictionaryListSmallScreen = React.lazy(() => import('components/DictionaryList/DictionaryListSmallScreen'))
-const DictionaryListLargeScreen = React.lazy(() => import('components/DictionaryList/DictionaryListLargeScreen'))
-const ExportDialect = React.lazy(() => import('components/ExportDialect'))
 import '!style-loader!css-loader!./WordsList.css'
 
-// ===============================================================
-// WordList
-// ===============================================================
+const DictionaryListLargeScreen = React.lazy(() => import('components/DictionaryList/DictionaryListLargeScreen'))
+const DictionaryListSmallScreen = React.lazy(() => import('components/DictionaryList/DictionaryListSmallScreen'))
+const ExportDialect = React.lazy(() => import('components/ExportDialect'))
+const FlashcardList = React.lazy(() => import('components/FlashcardList'))
+
 const VIEWMODE_DEFAULT = 0
 const VIEWMODE_FLASHCARD = 1
 const VIEWMODE_SMALL_SCREEN = 2
@@ -59,6 +57,7 @@ const VIEWMODE_LARGE_SCREEN = 3
 function WordsListPresentation(props) {
   const {
     // hasExportDialect,
+    childrenSearch,
     columns,
     dialect,
     dialectClassName,
@@ -84,7 +83,6 @@ function WordsListPresentation(props) {
     setRouteParams,
     sortHandler,
     wordsListClickHandlerViewMode,
-    childrenSearch,
   } = props
   const { getSearchAsObject } = useNavigationHelpers()
   const intl = IntlService.instance
