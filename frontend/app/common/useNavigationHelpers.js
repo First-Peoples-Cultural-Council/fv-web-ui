@@ -26,7 +26,7 @@ function useNavigationHelpers() {
     },
     getSearchAsObject: (defaultSearch = {}) => {
       const search = {}
-      const decode = ['letter']
+      const decode = ['letter', 'searchTerm']
       if (window.location.search !== '') {
         const searchParams = (window.location.search || '?').replace(/^\?/, '')
         searchParams.split('&').forEach((item) => {
