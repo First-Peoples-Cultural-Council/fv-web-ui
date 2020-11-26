@@ -4,8 +4,8 @@ import { SEARCH_DIALECT_UPDATE, SEARCH_DIALECT_RESET } from './actionTypes'
 import {
   SEARCH_PART_OF_SPEECH_ANY,
   SEARCH_BY_DEFAULT,
-  SEARCH_BY_CATEGORY,
-  SEARCH_BY_PHRASE_BOOK,
+  SEARCH_FILTERED_BY_CATEGORY,
+  SEARCH_FILTERED_BY_PHRASE_BOOK,
   SEARCH_TYPE_DEFAULT_SEARCH,
   SEARCH_TYPE_APPROXIMATE_SEARCH,
   SEARCH_TYPE_EXACT_SEARCH,
@@ -17,7 +17,7 @@ import {
 
 export const initialState = {
   searchByAlphabet: '',
-  searchByMode: SEARCH_BY_DEFAULT,
+  searchFilteredBy: SEARCH_BY_DEFAULT,
   searchBySettings: undefined,
   searchingDialectFilter: undefined,
   searchMessage: null,
@@ -77,7 +77,7 @@ const switchSearchModes = (searchField, searchValue, searchType) => {
 }
 
 const generateNxql = ({
-  searchByMode: _searchByMode,
+  searchFilteredBy: _searchFilteredBy,
   searchBySettings: _searchBySettings = {},
   searchTerm: _searchTerm,
   searchType: _searchType,
@@ -118,12 +118,12 @@ const generateNxql = ({
     }
   }
 
-  switch (_searchByMode) {
-    case SEARCH_BY_CATEGORY: {
+  switch (_searchFilteredBy) {
+    case SEARCH_FILTERED_BY_CATEGORY: {
       nxqlQueries.push(`${nxqlTmpl.searchByCategory}`)
       break
     }
-    case SEARCH_BY_PHRASE_BOOK: {
+    case SEARCH_FILTERED_BY_PHRASE_BOOK: {
       nxqlQueries.push(`${nxqlTmpl.searchByPhraseBook}`)
       break
     }
@@ -221,13 +221,20 @@ const computeSearchDialect = (state = initialState, action) => {
       // Update state
       // ------------------------------------------------------------
       const newState = Object.assign({}, state, action.payload || {})
-      const { searchByAlphabet, searchByMode, searchBySettings = {}, searchNxqlSort, searchTerm, searchType } = newState
+      const {
+        searchByAlphabet,
+        searchFilteredBy,
+        searchBySettings = {},
+        searchNxqlSort,
+        searchTerm,
+        searchType,
+      } = newState
 
       // Generate NXQL related data
       // ------------------------------------------------------
       newState.searchNxqlQuery = generateNxql({
         searchByAlphabet,
-        searchByMode,
+        searchFilteredBy,
         searchBySettings,
         searchTerm,
         searchType,
@@ -264,9 +271,9 @@ const computeSearchDialect = (state = initialState, action) => {
         urlParamActive.push(newState.searchQueryDecoder.searchByDefinitions)
       }
 
-      if (searchByMode !== undefined) {
-        // urlParam.push(`searchByMode=${searchByMode}`)
-        urlParam.push('searchByMode=')
+      if (searchFilteredBy !== undefined) {
+        // urlParam.push(`searchFilteredBy=${searchFilteredBy}`)
+        urlParam.push('searchFilteredBy=')
       }
 
       if (searchByTitle) {

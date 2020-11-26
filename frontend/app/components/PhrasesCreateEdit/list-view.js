@@ -258,7 +258,7 @@ export class PhrasesListView extends DataListView {
       hasViewModeButtons,
       navigationRouteSearch,
       rowClickHandler,
-      searchByMode,
+      searchFilteredBy,
     } = this.props
 
     const computeEntities = Immutable.fromJS([
@@ -354,7 +354,7 @@ export class PhrasesListView extends DataListView {
             dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplatePhrases}
             // SEARCH:
             childrenSearch={childrenSearch}
-            searchByMode={searchByMode}
+            searchFilteredBy={searchFilteredBy}
             // List view
             hasViewModeButtons={hasViewModeButtons}
             hasSorting={hasSorting}

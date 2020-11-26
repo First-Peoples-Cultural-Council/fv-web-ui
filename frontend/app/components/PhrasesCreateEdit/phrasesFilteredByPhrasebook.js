@@ -347,11 +347,11 @@ export class phrasesFilteredByPhrasebook extends Component {
   changeFilter = () => {
     const { filterInfo } = this.state
     const { computeSearchDialect, routeParams, splitWindowPath } = this.props
-    const { searchByMode, searchNxqlQuery } = computeSearchDialect
+    const { searchFilteredBy, searchNxqlQuery } = computeSearchDialect
 
     const newFilter = updateFilter({
       filterInfo,
-      searchByMode,
+      searchFilteredBy,
       searchNxqlQuery,
     })
 

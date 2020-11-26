@@ -3,19 +3,16 @@ import PropTypes from 'prop-types'
 
 import FVButton from 'components/FVButton'
 import {
-  // SEARCH_PART_OF_SPEECH_ANY,
-  SEARCH_BY_ALPHABET,
-  SEARCH_BY_CATEGORY,
-  // SEARCH_BY_CUSTOM,
-  SEARCH_BY_PHRASE_BOOK,
-  // SEARCH_DATA_TYPE_PHRASE,
   SEARCH_DATA_TYPE_WORD,
-  SEARCH_TYPE_DEFAULT_SEARCH,
+  SEARCH_FILTERED_BY_CATEGORY,
+  SEARCH_FILTERED_BY_CHARACTER,
+  SEARCH_FILTERED_BY_PHRASE_BOOK,
   SEARCH_TYPE_APPROXIMATE_SEARCH,
-  SEARCH_TYPE_EXACT_SEARCH,
   SEARCH_TYPE_CONTAINS_SEARCH,
-  SEARCH_TYPE_STARTS_WITH_SEARCH,
+  SEARCH_TYPE_DEFAULT_SEARCH,
   SEARCH_TYPE_ENDS_WITH_SEARCH,
+  SEARCH_TYPE_EXACT_SEARCH,
+  SEARCH_TYPE_STARTS_WITH_SEARCH,
   SEARCH_TYPE_WILDCARD_SEARCH,
 } from 'common/Constants'
 
@@ -47,11 +44,11 @@ function SearchDialectPresentation({
 }) {
   const getBrowseText = () => {
     switch (browseMode) {
-      case SEARCH_BY_ALPHABET:
+      case SEARCH_FILTERED_BY_CHARACTER:
         return 'Stop browsing Alphabetically'
-      case SEARCH_BY_CATEGORY:
+      case SEARCH_FILTERED_BY_CATEGORY:
         return 'Stop browsing by Category'
-      case SEARCH_BY_PHRASE_BOOK:
+      case SEARCH_FILTERED_BY_PHRASE_BOOK:
         return 'Stop browsing by Phrase Book'
       default:
         return 'Stop browsing and clear filter'

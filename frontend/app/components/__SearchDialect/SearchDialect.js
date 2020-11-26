@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 
 import {
   SEARCH_PART_OF_SPEECH_ANY,
-  SEARCH_BY_ALPHABET,
-  SEARCH_BY_CATEGORY,
+  SEARCH_FILTERED_BY_CHARACTER,
+  SEARCH_FILTERED_BY_CATEGORY,
   SEARCH_BY_CUSTOM,
-  SEARCH_BY_PHRASE_BOOK,
+  SEARCH_FILTERED_BY_PHRASE_BOOK,
   SEARCH_DATA_TYPE_PHRASE,
   SEARCH_DATA_TYPE_WORD,
   SEARCH_TYPE_DEFAULT_SEARCH,
@@ -49,7 +49,7 @@ export const SearchDialect = (props) => {
     if (!letter && !category && !phraseBook) {
       const defaultData = {
         searchByAlphabet: '',
-        searchByMode: csd.searchByMode || SEARCH_BY_CUSTOM,
+        searchFilteredBy: csd.searchFilteredBy || SEARCH_BY_CUSTOM,
         // searchBySettings describes the form state, eg: "input X is checked"
         searchBySettings: csd.searchBySettings || generateDefaultUiSettingsFromPropsSearchUI(),
         searchTerm: csd.searchTerm || '',
@@ -70,7 +70,7 @@ export const SearchDialect = (props) => {
     if (letter) {
       const letterData = {
         searchByAlphabet: letter,
-        searchByMode: SEARCH_BY_ALPHABET,
+        searchFilteredBy: SEARCH_FILTERED_BY_CHARACTER,
         searchBySettings: generateDefaultUiSettingsFromPropsSearchUI(),
         searchTerm: '',
         searchType: SEARCH_TYPE_DEFAULT_SEARCH,
@@ -88,7 +88,7 @@ export const SearchDialect = (props) => {
     if (category) {
       const categoryData = {
         searchByAlphabet: '',
-        searchByMode: SEARCH_BY_CATEGORY,
+        searchFilteredBy: SEARCH_FILTERED_BY_CATEGORY,
         searchBySettings: generateDefaultUiSettingsFromPropsSearchUI(),
         searchTerm: '',
         searchType: SEARCH_TYPE_DEFAULT_SEARCH,
@@ -106,7 +106,7 @@ export const SearchDialect = (props) => {
     if (phraseBook) {
       const phraseBookData = {
         searchByAlphabet: '',
-        searchByMode: SEARCH_BY_PHRASE_BOOK,
+        searchFilteredBy: SEARCH_FILTERED_BY_PHRASE_BOOK,
         searchBySettings: generateDefaultUiSettingsFromPropsSearchUI(),
         searchTerm: '',
         searchType: SEARCH_TYPE_DEFAULT_SEARCH,
@@ -186,14 +186,14 @@ export const SearchDialect = (props) => {
   // ------------------------------------------------------------
   const getBrowsing = () => {
     let resetButtonText = ''
-    switch (csd.searchByMode) {
-      case SEARCH_BY_ALPHABET:
+    switch (csd.searchFilteredBy) {
+      case SEARCH_FILTERED_BY_CHARACTER:
         resetButtonText = 'Stop browsing Alphabetically'
         break
-      case SEARCH_BY_CATEGORY:
+      case SEARCH_FILTERED_BY_CATEGORY:
         resetButtonText = 'Stop browsing by Category'
         break
-      case SEARCH_BY_PHRASE_BOOK:
+      case SEARCH_FILTERED_BY_PHRASE_BOOK:
         resetButtonText = 'Stop browsing by Phrase Book'
         break
       default:
@@ -286,7 +286,7 @@ export const SearchDialect = (props) => {
   // ------------------------------------------------------------
   const getSearchMessage = ({
     searchByAlphabet,
-    searchByMode: _searchByMode,
+    searchFilteredBy: _searchFilteredBy,
     searchBySettings: _searchBySettings = {},
     searchTerm: _searchTerm,
     searchType: _searchType,
@@ -441,16 +441,16 @@ export const SearchDialect = (props) => {
       return <div className={classNames('SearchDialectSearchFeedback', 'alert', 'alert-info')}>{msg}</div>
     }
 
-    switch (_searchByMode) {
-      case SEARCH_BY_ALPHABET: {
+    switch (_searchFilteredBy) {
+      case SEARCH_FILTERED_BY_CHARACTER: {
         msg = messages.startWith
         break
       }
-      case SEARCH_BY_CATEGORY: {
+      case SEARCH_FILTERED_BY_CATEGORY: {
         msg = messages.byCategory
         break
       }
-      case SEARCH_BY_PHRASE_BOOK: {
+      case SEARCH_FILTERED_BY_PHRASE_BOOK: {
         msg = messages.byPhraseBook
         break
       }
@@ -553,7 +553,7 @@ export const SearchDialect = (props) => {
   const _handleSearch = () => {
     const searchData = {
       searchByAlphabet: '',
-      searchByMode: SEARCH_BY_CUSTOM,
+      searchFilteredBy: SEARCH_BY_CUSTOM,
       searchBySettings: csd.searchBySettings || generateDefaultUiSettingsFromPropsSearchUI(),
       searchTerm: csd.searchTerm || '',
       searchType: csd.searchType || SEARCH_TYPE_DEFAULT_SEARCH,
@@ -606,7 +606,7 @@ export const SearchDialect = (props) => {
     searchDialectReset()
     const searchData = {
       searchByAlphabet: '',
-      searchByMode: SEARCH_BY_CUSTOM,
+      searchFilteredBy: SEARCH_BY_CUSTOM,
       searchBySettings: generateDefaultUiSettingsFromPropsSearchUI(),
       searchTerm: '',
       searchType: csd.searchType || SEARCH_TYPE_DEFAULT_SEARCH,
@@ -619,12 +619,12 @@ export const SearchDialect = (props) => {
 
   // Render
   // ------------------------------------------------------------
-  const { searchByMode, searchMessage } = csd
+  const { searchFilteredBy, searchMessage } = csd
   let searchBody = null
   if (
-    searchByMode === SEARCH_BY_ALPHABET ||
-    searchByMode === SEARCH_BY_CATEGORY ||
-    searchByMode === SEARCH_BY_PHRASE_BOOK
+    searchFilteredBy === SEARCH_FILTERED_BY_CHARACTER ||
+    searchFilteredBy === SEARCH_FILTERED_BY_CATEGORY ||
+    searchFilteredBy === SEARCH_FILTERED_BY_PHRASE_BOOK
   ) {
     searchBody = getBrowsing()
   } else {
@@ -649,7 +649,7 @@ SearchDialect.propTypes = {
   searchingDialectFilter: string, // Search by Categories
   searchUi: array.isRequired,
   searchByAlphabet: string,
-  searchByMode: string,
+  searchFilteredBy: string,
   searchBySettings: string,
   searchTerm: string,
   searchType: string,

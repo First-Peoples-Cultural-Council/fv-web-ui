@@ -36,7 +36,12 @@ import {
   dictionaryListSmallScreenColumnDataTemplateCustomState,
 } from 'components/DictionaryList/DictionaryListSmallScreen'
 
-import { SEARCH_BY_ALPHABET, SEARCH_BY_PHRASE_BOOK, SEARCHDIALECT_CHECKBOX, WORKSPACES } from 'common/Constants'
+import {
+  SEARCH_FILTERED_BY_CHARACTER,
+  SEARCH_FILTERED_BY_PHRASE_BOOK,
+  SEARCHDIALECT_CHECKBOX,
+  WORKSPACES,
+} from 'common/Constants'
 
 /**
  * @summary PhrasesListData
@@ -316,10 +321,10 @@ function PhrasesListData({ children }) {
 
   let browseMode
   if (queryLetter) {
-    browseMode = SEARCH_BY_ALPHABET
+    browseMode = SEARCH_FILTERED_BY_CHARACTER
   }
   if (queryPhraseBook) {
-    browseMode = SEARCH_BY_PHRASE_BOOK
+    browseMode = SEARCH_FILTERED_BY_PHRASE_BOOK
   }
 
   return children({

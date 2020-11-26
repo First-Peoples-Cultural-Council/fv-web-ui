@@ -24,7 +24,11 @@ import useSearchDialect from 'dataSources/useSearchDialect'
 import useWindowPath from 'dataSources/useWindowPath'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import { SEARCH_BY_ALPHABET, SEARCH_BY_PHRASE_BOOK, SEARCH_PART_OF_SPEECH_ANY } from 'common/Constants'
+import {
+  SEARCH_FILTERED_BY_CHARACTER,
+  SEARCH_FILTERED_BY_PHRASE_BOOK,
+  SEARCH_PART_OF_SPEECH_ANY,
+} from 'common/Constants'
 
 function PhrasesData(props) {
   const { computeDialect2, fetchDialect2 } = useDialect()
@@ -66,7 +70,7 @@ function PhrasesData(props) {
   const handlePhrasebookClick = async ({ selected }) => {
     await searchDialectUpdate({
       searchByAlphabet: '',
-      searchByMode: SEARCH_BY_PHRASE_BOOK,
+      searchFilteredBy: SEARCH_FILTERED_BY_PHRASE_BOOK,
       searchBySettings: {
         searchByTitle: true,
         searchByDefinitions: false,
@@ -81,7 +85,7 @@ function PhrasesData(props) {
   const handleAlphabetClick = async ({ letterClicked }) => {
     await searchDialectUpdate({
       searchByAlphabet: letterClicked,
-      searchByMode: SEARCH_BY_ALPHABET,
+      searchFilteredBy: SEARCH_FILTERED_BY_CHARACTER,
       searchBySettings: {
         searchByTitle: true,
         searchByDefinitions: false,

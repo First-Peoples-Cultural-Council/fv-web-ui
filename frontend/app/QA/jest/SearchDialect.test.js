@@ -55,7 +55,7 @@ import * as useSearchDialect from 'dataSources/useSearchDialect'
 const spyUseSearchDialect = jest.spyOn(useSearchDialect, 'default')
 spyUseSearchDialect.mockReturnValue({
   computeSearchDialect: {
-    searchByMode: SEARCH_BY_DEFAULT,
+    searchFilteredBy: SEARCH_BY_DEFAULT,
     searchBySettings: {},
     searchMessage: '',
     searchNxqlSort: '',
