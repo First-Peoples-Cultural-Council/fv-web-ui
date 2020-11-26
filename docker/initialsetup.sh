@@ -6,21 +6,28 @@
 echo ''
 echo "Running initial database setup."
 
-TARGET="$1"
+URL="$1"
 PORT="$2"
+PROTOCOL="$3"
 
-if [ -z "$2"]; then
+if [ -z "$3" ]; then
+    echo "No protocol specified. Using default http"
+    PROTOCOL="http"
+fi
+
+if [ -z "$2" ]; then
     echo "No port found. Using default 8080"
     PORT="8080"
 fi
 
 if [ -z "$1" ]; then
-    echo "No target url found. Using the default http://127.0.0.1:$PORT"
-    TARGET="http://127.0.0.1:$PORT"
+    echo "No target url found. Using the default $PROTOCOL://127.0.0.1:$PORT"
+    TARGET="$PROTOCOL://127.0.0.1:$PORT"
 else
-    TARGET="http://$1:$PORT"
-    echo "Target: $TARGET"
+    TARGET="$PROTOCOL://$URL:$PORT"
 fi
+
+echo "Target: $TARGET"
 
 if [[ -z "$CYPRESS_FV_USERNAME" || -z "$CYPRESS_FV_PASSWORD" ]]; then
     echo "No CYPRESS_FV_USERNAME and/or no CYPRESS_FV_PASSWORD environment variables were found."
