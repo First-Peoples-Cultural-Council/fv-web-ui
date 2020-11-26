@@ -35,7 +35,11 @@ function SearchDialectData({ children, incrementResetCount }) {
       formReference: formRefSearch,
     })
 
-    navigate(`${window.location.pathname}?${convertObjToUrlQuery(Object.assign({}, getSearchAsObject(), formData))}`)
+    navigate(
+      `${window.location.pathname}?${convertObjToUrlQuery(
+        Object.assign({}, getSearchAsObject(), { page: 1 }, formData)
+      )}`
+    )
   }
 
   // Handles search by enter key
