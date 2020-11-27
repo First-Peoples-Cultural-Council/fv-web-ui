@@ -65,7 +65,7 @@ function PhrasesListData({ children }) {
   const { computePhrases, fetchPhrases } = usePhrase()
   const { getSearchAsObject, convertObjToUrlQuery, navigate } = useNavigationHelpers()
   const [resetCount, setResetCount] = useState(0)
-  const { area, dialect_path: dialectPath, siteTheme, phraseBook: rpPhraseBook } = routeParams
+  const { area, dialect_path: dialectPath, siteTheme } = routeParams
   const { generateNxql } = useSearchDialectHelpers()
   const {
     phraseBook: queryPhraseBook,
@@ -81,7 +81,6 @@ function PhrasesListData({ children }) {
     sortOrder: querySortOrder,
   } = getSearchAsObject({
     defaults: {
-      phraseBook: rpPhraseBook,
       page: 1,
       pageSize: 10,
       sortBy: 'dc:title',
@@ -152,10 +151,15 @@ function PhrasesListData({ children }) {
   }, [
     area,
     curFetchDocumentAction,
-    queryPhraseBook,
     queryLetter,
     queryPage,
     queryPageSize,
+    queryPhraseBook,
+    querySearchByCulturalNotes,
+    querySearchByDefinitions,
+    querySearchByTitle,
+    querySearchStyle,
+    querySearchTerm,
     querySortBy,
     querySortOrder,
   ])
