@@ -16,7 +16,7 @@ function FlashcardButtonData({ children }) {
     navigate(`${window.location.pathname}?${convertObjToUrlQuery(Object.assign({}, restQueries))}`)
   }
   const onClickEnable = () => {
-    navigate(`${window.location.pathname}?${convertObjToUrlQuery(Object.assign({}, restQueries, { flashcard: 1 }))}`)
+    navigate(`${window.location.pathname}?${convertObjToUrlQuery(Object.assign({}, restQueries, { flashcard: true }))}`)
   }
   return children({
     queryFlashcard,
