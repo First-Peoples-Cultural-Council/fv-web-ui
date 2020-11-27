@@ -27,34 +27,7 @@ exports[`FlashcardButton Container 1`] = `
 </button>
 `;
 
-exports[`FlashcardButton Presentation ACTIVE flashcard mode 1`] = `
-<button
-  className="MuiButtonBase-root MuiButton-root MuiButton-contained WordsList__viewModeButton"
-  disabled={false}
-  onBlur={[Function]}
-  onClick={[Function]}
-  onDragLeave={[Function]}
-  onFocus={[Function]}
-  onKeyDown={[Function]}
-  onKeyUp={[Function]}
-  onMouseDown={[Function]}
-  onMouseLeave={[Function]}
-  onMouseUp={[Function]}
-  onTouchEnd={[Function]}
-  onTouchMove={[Function]}
-  onTouchStart={[Function]}
-  tabIndex={0}
-  type="button"
->
-  <span
-    className="MuiButton-label"
-  >
-    Flashcard view
-  </span>
-</button>
-`;
-
-exports[`FlashcardButton Presentation INACTIVE flashcard mode 1`] = `
+exports[`FlashcardButton Presentation: flashcard mode is active 1`] = `
 <button
   className="MuiButtonBase-root MuiButton-root MuiButton-contained WordsList__viewModeButton MuiButton-containedPrimary"
   disabled={false}
@@ -81,5 +54,32 @@ exports[`FlashcardButton Presentation INACTIVE flashcard mode 1`] = `
   <span
     className="MuiTouchRipple-root"
   />
+</button>
+`;
+
+exports[`FlashcardButton Presentation: flashcard mode is inactive 1`] = `
+<button
+  className="MuiButtonBase-root MuiButton-root MuiButton-contained WordsList__viewModeButton"
+  disabled={false}
+  onBlur={[Function]}
+  onClick={[Function]}
+  onDragLeave={[Function]}
+  onFocus={[Function]}
+  onKeyDown={[Function]}
+  onKeyUp={[Function]}
+  onMouseDown={[Function]}
+  onMouseLeave={[Function]}
+  onMouseUp={[Function]}
+  onTouchEnd={[Function]}
+  onTouchMove={[Function]}
+  onTouchStart={[Function]}
+  tabIndex={0}
+  type="button"
+>
+  <span
+    className="MuiButton-label"
+  >
+    Flashcard view
+  </span>
 </button>
 `;
