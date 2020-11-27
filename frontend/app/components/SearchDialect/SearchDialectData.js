@@ -17,14 +17,16 @@ import { getDialectClassname } from 'common/Helpers'
  * @param {function} props.children
  *
  */
-function SearchDialectData({ children, incrementResetCount }) {
+function SearchDialectData({ children, incrementResetCount, checkboxNames }) {
   const { intl } = useIntl()
   const formRefSearch = useRef(null)
   const { navigate, convertObjToUrlQuery, getSearchAsObject } = useNavigationHelpers()
   const { searchStyle, searchTerm } = getSearchAsObject({
-    page: 1,
-    pageSize: 10,
-    searchStyle: SEARCH_TYPE_DEFAULT_SEARCH,
+    defaults: {
+      page: 1,
+      pageSize: 10,
+      searchStyle: SEARCH_TYPE_DEFAULT_SEARCH,
+    },
   })
   const dialectClassName = getDialectClassname()
 
@@ -33,6 +35,7 @@ function SearchDialectData({ children, incrementResetCount }) {
   const onSearch = () => {
     const formData = getFormData({
       formReference: formRefSearch,
+      checkboxes: checkboxNames,
     })
 
     navigate(
