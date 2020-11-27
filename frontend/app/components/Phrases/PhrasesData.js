@@ -57,10 +57,6 @@ function PhrasesData(props) {
     },
   ])
 
-  const handlePhrasebookClick = () => {
-    // TODO: WILL BE FIXED IN FW-2027
-  }
-
   const handleAlphabetClick = () => {
     // TODO: WILL BE FIXED IN FW-2028
   }
@@ -68,10 +64,8 @@ function PhrasesData(props) {
   return props.children({
     computeEntities,
     flashcardMode: false,
-    handlePhrasebookClick,
     handleAlphabetClick,
     intl,
-    routeParams,
     splitWindowPath,
   })
 }
