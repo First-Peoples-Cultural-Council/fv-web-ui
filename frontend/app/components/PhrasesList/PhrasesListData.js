@@ -14,10 +14,10 @@ import useLogin from 'dataSources/useLogin'
 import usePhrase from 'dataSources/usePhrase'
 import usePortal from 'dataSources/usePortal'
 import useRoute from 'dataSources/useRoute'
-import useSearchDialect from 'dataSources/useSearchDialect'
 import useWindowPath from 'dataSources/useWindowPath'
 
 // Helpers
+import useSearchDialectHelpers from 'common/useSearchDialectHelpers'
 import useNavigationHelpers from 'common/useNavigationHelpers'
 import { getDialectClassname } from 'common/Helpers'
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -61,12 +61,12 @@ function PhrasesListData({ children }) {
   const { computeLogin } = useLogin()
   const { routeParams, setRouteParams } = useRoute()
   const { computePortal, fetchPortal } = usePortal()
-  const { computeSearchDialect } = useSearchDialect()
   const { pushWindowPath } = useWindowPath()
   const { computePhrases, fetchPhrases } = usePhrase()
   const { getSearchAsObject, convertObjToUrlQuery, navigate } = useNavigationHelpers()
   const [resetCount, setResetCount] = useState(0)
   const { area, dialect_path: dialectPath, siteTheme, phraseBook: rpPhraseBook } = routeParams
+  const { generateNxql } = useSearchDialectHelpers()
   const {
     phraseBook: queryPhraseBook,
     letter: queryLetter,
@@ -80,11 +80,14 @@ function PhrasesListData({ children }) {
     sortBy: querySortBy,
     sortOrder: querySortOrder,
   } = getSearchAsObject({
-    phraseBook: rpPhraseBook,
-    page: 1,
-    pageSize: 10,
-    sortBy: 'dc:title',
-    sortOrder: 'desc',
+    defaults: {
+      phraseBook: rpPhraseBook,
+      page: 1,
+      pageSize: 10,
+      sortBy: 'dc:title',
+      sortOrder: 'desc',
+    },
+    boolean: ['searchByDefinitions', 'searchByTitle', 'searchByCulturalNotes'],
   })
   const dictionaryKey = `${dialectPath}/Dictionary`
   const portalKey = `${dialectPath}/Portal`
@@ -119,13 +122,22 @@ function PhrasesListData({ children }) {
 
   useEffect(() => {
     if (curFetchDocumentAction === 'FV_DOCUMENT_FETCH_SUCCESS') {
-      let currentAppliedFilter = ''
-
+      let currentAppliedFilter
       // Handle phrasebooks
       if (queryPhraseBook) {
         currentAppliedFilter = ` AND ${
           area === 'Workspaces' ? 'fv-phrase:phrase_books' : 'fvproxy:proxied_categories'
         }/* IN ("${queryPhraseBook}")`
+      } else {
+        const searchNxqlQuery = generateNxql({
+          // phraseBook: queryPhraseBook,
+          searchByCulturalNotes: querySearchByCulturalNotes,
+          searchByDefinitions: querySearchByDefinitions,
+          searchByTitle: querySearchByTitle,
+          searchStyle: querySearchStyle,
+          searchTerm: querySearchTerm,
+        })
+        currentAppliedFilter = searchNxqlQuery ? ` AND ${searchNxqlQuery}` : ''
       }
       // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
       const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
@@ -149,8 +161,6 @@ function PhrasesListData({ children }) {
   ])
 
   const DEFAULT_LANGUAGE = 'english'
-  const { searchNxqlSort = {} } = computeSearchDialect
-  const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
 
   const [columns] = useState(getColumns())
 
@@ -326,7 +336,6 @@ function PhrasesListData({ children }) {
   if (queryPhraseBook) {
     browseMode = SEARCH_FILTERED_BY_PHRASE_BOOK
   }
-
   return children({
     browseMode,
     columns,
@@ -358,20 +367,22 @@ function PhrasesListData({ children }) {
     querySearchTerm,
     resetCount,
     routeParams,
+    checkboxNames: ['searchByCulturalNotes', 'searchByDefinitions', 'searchByTitle'],
     searchUiSecondary: [
       {
         type: SEARCHDIALECT_CHECKBOX,
-        defaultChecked: true,
+        defaultChecked: querySearchByTitle !== undefined ? querySearchByTitle : true,
         idName: 'searchByTitle',
         labelText: 'Phrase',
       },
       {
         type: SEARCHDIALECT_CHECKBOX,
-        defaultChecked: true,
+        defaultChecked: querySearchByDefinitions !== undefined ? querySearchByDefinitions : true,
         idName: 'searchByDefinitions',
         labelText: 'Definitions',
       },
       {
+        defaultChecked: querySearchByCulturalNotes !== undefined ? querySearchByCulturalNotes : false,
         type: SEARCHDIALECT_CHECKBOX,
         idName: 'searchByCulturalNotes',
         labelText: 'Cultural notes',
@@ -379,9 +390,9 @@ function PhrasesListData({ children }) {
     ],
     setListViewMode,
     setRouteParams, // TODO: VERIFY NEEDED
-    sortCol: DEFAULT_SORT_COL,
+    sortCol: querySortBy,
     sortHandler,
-    sortType: DEFAULT_SORT_TYPE,
+    sortType: querySortOrder,
   })
 }
 

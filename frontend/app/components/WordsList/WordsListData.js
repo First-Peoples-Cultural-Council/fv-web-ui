@@ -14,11 +14,11 @@ import useListView from 'dataSources/useListView'
 import useLogin from 'dataSources/useLogin'
 import usePortal from 'dataSources/usePortal'
 import useRoute from 'dataSources/useRoute'
-import useSearchDialect from 'dataSources/useSearchDialect'
 import useWindowPath from 'dataSources/useWindowPath'
 import useWord from 'dataSources/useWord'
 
 // Helpers
+import useSearchDialectHelpers from 'common/useSearchDialectHelpers'
 import useNavigationHelpers from 'common/useNavigationHelpers'
 import { getDialectClassname } from 'common/Helpers'
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -39,8 +39,8 @@ import {
 } from 'components/DictionaryList/DictionaryListSmallScreen'
 
 import {
-  SEARCH_BY_ALPHABET,
-  SEARCH_BY_CATEGORY,
+  SEARCH_FILTERED_BY_CATEGORY,
+  SEARCH_FILTERED_BY_CHARACTER,
   SEARCH_PART_OF_SPEECH_ANY,
   SEARCHDIALECT_CHECKBOX,
   SEARCHDIALECT_SELECT,
@@ -65,15 +65,15 @@ function WordsListData({ children }) {
   const { computeLogin } = useLogin()
   const { routeParams, setRouteParams } = useRoute()
   const { computePortal, fetchPortal } = usePortal()
-  const { computeSearchDialect } = useSearchDialect()
   const { pushWindowPath } = useWindowPath()
   const { computeWords, fetchWords } = useWord()
-  const { getSearchAsObject, convertObjToUrlQuery, navigate } = useNavigationHelpers()
   const { computeDirectory, fetchDirectory } = useDirectory()
   const [partsOfSpeechRequested, setPartsOfSpeechRequested] = useState(false)
   const [partsOfSpeech, setPartsOfSpeech] = useState([])
   const [resetCount, setResetCount] = useState(0)
   const { siteTheme, dialect_path: dialectPath, area } = routeParams
+  const { getSearchAsObject, convertObjToUrlQuery, navigate } = useNavigationHelpers()
+  const { generateNxql } = useSearchDialectHelpers()
   const {
     category: queryCategory,
     letter: queryLetter,
@@ -88,12 +88,14 @@ function WordsListData({ children }) {
     sortBy: querySortBy,
     sortOrder: querySortOrder,
   } = getSearchAsObject({
-    searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-    category: routeParams.category,
-    page: 1,
-    pageSize: 10,
-    sortBy: 'dc:title',
-    sortOrder: 'desc',
+    defaults: {
+      searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
+      page: 1,
+      pageSize: 10,
+      sortBy: 'fv:custom_order',
+      sortOrder: 'asc',
+    },
+    boolean: ['searchByDefinitions', 'searchByTitle', 'searchByTranslations'],
   })
   const dictionaryKey = `${dialectPath}/Dictionary`
   const portalKey = `${dialectPath}/Portal`
@@ -129,11 +131,22 @@ function WordsListData({ children }) {
 
   useEffect(() => {
     if (curFetchDocumentAction === 'FV_DOCUMENT_FETCH_SUCCESS') {
-      let currentAppliedFilter = ''
+      let currentAppliedFilter
       if (queryCategory) {
         currentAppliedFilter = ` AND ${
           area === 'Workspaces' ? 'fv-word:categories' : 'fvproxy:proxied_categories'
         }/* IN ("${queryCategory}") &enrichment=category_children`
+      } else {
+        const searchNxqlQuery = generateNxql({
+          searchByDefinitions: querySearchByDefinitions,
+          searchFilteredBy: queryCategory || queryLetter,
+          searchByTitle: querySearchByTitle,
+          searchByTranslations: querySearchByTranslations,
+          searchPartOfSpeech: querySearchPartOfSpeech,
+          searchTerm: querySearchTerm,
+          searchStyle: querySearchStyle,
+        })
+        currentAppliedFilter = searchNxqlQuery ? ` AND ${searchNxqlQuery}` : ''
       }
       // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
       const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
@@ -145,7 +158,22 @@ function WordsListData({ children }) {
 
       fetchWords(dictionaryKey, nql)
     }
-  }, [area, curFetchDocumentAction, queryCategory, queryLetter, queryPage, queryPageSize, querySortBy, querySortOrder])
+  }, [
+    area,
+    curFetchDocumentAction,
+    queryCategory,
+    queryLetter,
+    queryPage,
+    queryPageSize,
+    querySearchByDefinitions,
+    querySearchByTitle,
+    querySearchByTranslations,
+    querySearchPartOfSpeech,
+    querySearchStyle,
+    querySearchTerm,
+    querySortBy,
+    querySortOrder,
+  ])
 
   // Parts of speech
   // TODO: if this data is language specific update it to do a fetchIfMissing
@@ -185,9 +213,6 @@ function WordsListData({ children }) {
   }, [computeDirectory])
 
   const DEFAULT_LANGUAGE = 'english'
-  const { searchNxqlSort = {} } = computeSearchDialect
-  const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
-
   const [columns] = useState(getColumns())
 
   const computeEntities = Immutable.fromJS([
@@ -363,12 +388,13 @@ function WordsListData({ children }) {
   }
   let browseMode
   if (queryLetter) {
-    browseMode = SEARCH_BY_ALPHABET
+    browseMode = SEARCH_FILTERED_BY_CHARACTER
   }
   if (queryCategory) {
-    browseMode = SEARCH_BY_CATEGORY
+    browseMode = SEARCH_FILTERED_BY_CATEGORY
   }
   const hrefCreate = `/explore${dialectPath}/learn/words/create`
+
   return children({
     browseMode,
     columns: columns,
@@ -407,20 +433,22 @@ function WordsListData({ children }) {
     querySearchTerm,
     resetCount,
     routeParams,
+    checkboxNames: ['searchByDefinitions', 'searchByTitle', 'searchByTranslations'],
     searchUiSecondary: [
       {
         type: SEARCHDIALECT_CHECKBOX,
-        defaultChecked: true, // TODO: can set checked based on url queries
+        defaultChecked: querySearchByTitle !== undefined ? querySearchByTitle : true,
         idName: 'searchByTitle',
         labelText: 'Word',
       },
       {
         type: SEARCHDIALECT_CHECKBOX,
-        defaultChecked: true,
+        defaultChecked: querySearchByDefinitions !== undefined ? querySearchByDefinitions : true,
         idName: 'searchByDefinitions',
         labelText: 'Definitions',
       },
       {
+        defaultChecked: querySearchByTranslations !== undefined ? querySearchByTranslations : false,
         type: SEARCHDIALECT_CHECKBOX,
         idName: 'searchByTranslations',
         labelText: 'Literal translations',
@@ -436,9 +464,9 @@ function WordsListData({ children }) {
     setListViewMode: setListViewMode,
     setRouteParams,
     smallScreenTemplate: dictionaryListSmallScreenTemplateWords,
-    sortCol: DEFAULT_SORT_COL,
+    sortCol: querySortBy,
     sortHandler: sortHandler,
-    sortType: DEFAULT_SORT_TYPE,
+    sortType: querySortOrder,
   })
 }
 
