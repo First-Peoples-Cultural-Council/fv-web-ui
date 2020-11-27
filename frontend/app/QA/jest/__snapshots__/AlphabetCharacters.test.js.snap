@@ -47,7 +47,7 @@ exports[`AlphabetCharacters Presentation > 1 Active & 1 Inactive 1`] = `
       href="#"
       onClick={[Function]}
     >
-      Inctive
+      Inactive
     </a>
   </div>
 </div>

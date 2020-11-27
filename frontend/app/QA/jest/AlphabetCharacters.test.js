@@ -76,7 +76,7 @@ describe('AlphabetCharacters', () => {
         <AlphabetCharactersPresentation
           characters={[
             { title: 'Active', href: '#', isActiveCharacter: true },
-            { title: 'Inctive', href: '#', isActiveCharacter: false },
+            { title: 'Inactive', href: '#', isActiveCharacter: false },
           ]}
         />
       </Provider>
