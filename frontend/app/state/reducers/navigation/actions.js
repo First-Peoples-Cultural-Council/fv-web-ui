@@ -1,5 +1,4 @@
 import {
-  TOGGLE_MENU,
   NAVIGATE_PAGE,
   CHANGE_SITE_THEME,
   CHANGE_TITLE_PARAMS,
@@ -15,7 +14,6 @@ import {
 } from './actionTypes'
 
 import DirectoryOperations from 'operations/DirectoryOperations'
-import ProviderHelpers from 'common/ProviderHelpers'
 
 export const loadGuide = (currentPage, pageMatch) => {
   return (dispatch) => {
@@ -25,19 +23,6 @@ export const loadGuide = (currentPage, pageMatch) => {
 
     // Remove empties
     currentPageArray = currentPageArray.filter(String)
-
-    // NOTE: `preparedCurrentPage` being used?
-    // eslint-disable-next-line
-    const preparedCurrentPage = pageMatch.matchedPage.get('path').map((fragment, i) => {
-      const ANYTHING_BUT_SLASH_REGEX = '/' + ProviderHelpers.regex.ANYTHING_BUT_SLASH.replace('/', '\\/') + '/'
-      // Check if path fragment matches ANYTHING_BUT_SLASH regex and replace wildcard.
-      if (
-        fragment == ANYTHING_BUT_SLASH_REGEX ||
-        (fragment.hasOwnProperty('matcher') && fragment.matcher == ANYTHING_BUT_SLASH_REGEX)
-      ) {
-        currentPageArray[i] = '*'
-      }
-    })
 
     //console.log('GUIDE MATCH = /' + currentPageArray.join('/') + '/');
 
@@ -78,11 +63,6 @@ export const loadNavigation = () => {
 // Request to navigate to a page
 export const navigateTo = (path) => {
   return { type: NAVIGATE_PAGE, path }
-}
-
-// Request to toggle side-menu
-export const toggleMenuAction = () => {
-  return { type: TOGGLE_MENU }
 }
 
 // Change siteTheme

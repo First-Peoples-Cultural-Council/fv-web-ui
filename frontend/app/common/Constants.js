@@ -32,12 +32,13 @@ export const WIDGET_WORKSPACE = 'WIDGET_WORKSPACE'
 
 // --- Search ---
 export const SEARCH_PART_OF_SPEECH_ANY = 'Any'
+export const SEARCH_FILTERED_BY = 5
+export const SEARCH_FILTERED_BY_CHARACTER = `${SEARCH_FILTERED_BY}.1`
+export const SEARCH_FILTERED_BY_CATEGORY = `${SEARCH_FILTERED_BY}.2`
+export const SEARCH_FILTERED_BY_PHRASE_BOOK = `${SEARCH_FILTERED_BY}.3`
 // searchByMode CONSTANTS
-export const SEARCH_BY_DEFAULT = 0 // NOT YET SEARCHED
-export const SEARCH_BY_ALPHABET = 1 // ALPHABET
-export const SEARCH_BY_CATEGORY = 2 // WORD CATEGORY?
-export const SEARCH_BY_CUSTOM = 3 // USER CUSTOMIZED SEARCH
-export const SEARCH_BY_PHRASE_BOOK = 4 // PHRASES CATEGORY?
+export const SEARCH_BY_DEFAULT = 0 // TODO: REFACTOR TO DROP THIS
+export const SEARCH_BY_CUSTOM = 3 // TODO: DROP THIS AFTER `app/components/__SearchDialect/SearchDialect.js` IS OBSOLETE
 
 // USED WHEN SEARCHING ON DIFFERENT PAGES, EG: PHRASES VS WORDS
 // GENERATES DIFFERENT UI TEXT
@@ -53,6 +54,8 @@ export const SEARCH_TYPE_WILDCARD_SEARCH = 'wildcard'
 export const SEARCH_TYPE_DEFAULT_SEARCH = 'match'
 export const SEARCH_TYPE_DEFAULT = SEARCH_TYPE_DEFAULT_SEARCH
 
+export const SEARCHDIALECT_CHECKBOX = 'SEARCHDIALECT_CHECKBOX'
+export const SEARCHDIALECT_SELECT = 'SEARCHDIALECT_SELECT'
 // --- Export ---
 // https://nuxeo.github.io/api-playground/#/commands/Document.GetExportProgress
 // https://nuxeo.github.io/api-playground/#/commands/Document.GetFormattedDocument

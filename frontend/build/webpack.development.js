@@ -9,4 +9,7 @@ module.exports = env => merge(common(env), {
   output: {
     publicPath: '/',
   },
+  // See https://webpack.js.org/configuration/devtool/
+  // Slow initial build, but gives ability to debug source code
+  devtool: 'eval-source-map',
 })

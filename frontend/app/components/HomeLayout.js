@@ -71,7 +71,7 @@ export class HomeLayout extends Component {
               overflow: 'hidden',
             }
             return (
-              <PromiseWrapper renderOnError computeEntities={computeEntities}>
+              <PromiseWrapper hideProgress renderOnError computeEntities={computeEntities}>
                 <div className="row" style={homePageStyle}>
                   <div style={{ position: 'relative', height: '650px' }}>
                     <div className={classNames('col-xs-12')} style={{ height: '100%' }}>

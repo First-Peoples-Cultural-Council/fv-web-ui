@@ -60,7 +60,7 @@ import Typography from '@material-ui/core/Typography'
 
 import FVTab from 'components/FVTab'
 import WordsListView from 'components/WordsCreateEdit/list-view'
-import PhraseListView from 'components/Phrases/list-view'
+import PhraseListView from 'components/PhrasesCreateEdit/list-view'
 import FVLabel from 'components/FVLabel'
 
 import { WORKSPACES } from 'common/Constants'

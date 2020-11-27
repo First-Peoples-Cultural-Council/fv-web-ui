@@ -18,7 +18,6 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 import { Table, TableBody, TableCell, TableRow, TableFooter, TablePagination } from '@material-ui/core'
-import { Error } from '@material-ui/icons'
 import TablePaginationActions from './tablepagination'
 import SortingHeader from './sortingheader'
 
@@ -224,14 +223,7 @@ class ImmersionTable extends Component {
                             className="translation-cell DictionaryList__link DictionaryList__link--indigenous"
                             onClick={row.editClick}
                           >
-                            {row.translation ? (
-                              this.renderTranslation(row, 'translation')
-                            ) : (
-                              <div>
-                                <Error className={classes.icon} />
-                                <div className="untranslated">UNTRANSLATED</div> {/* need locale key for this */}
-                              </div>
-                            )}
+                            {row.translation ? this.renderTranslation(row, 'translation') : <span>UNTRANSLATED</span>}
                           </a>
                           {row.editButton}
                         </TableCell>

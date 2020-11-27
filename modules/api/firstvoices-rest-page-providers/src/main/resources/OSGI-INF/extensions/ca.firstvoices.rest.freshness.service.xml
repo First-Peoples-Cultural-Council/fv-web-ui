@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.rest.freshness.service" version="1.0.0">
+  <implementation class="ca.firstvoices.rest.freshness.services.DirectoryFreshnessServiceHashMapImpl"/>
+
+  <service>
+    <provide interface="ca.firstvoices.rest.freshness.services.DirectoryFreshnessService"/>
+  </service>
+</component>
