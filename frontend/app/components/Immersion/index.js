@@ -63,7 +63,6 @@ class PageDialectImmersionList extends PageDialectLearnBase {
     // // REDUX: reducers/state
     computeDocument: object.isRequired,
     computePortal: object.isRequired,
-    computeSearchDialect: object,
     properties: object.isRequired,
     splitWindowPath: array.isRequired,
     // // REDUX: actions/dispatch/func
