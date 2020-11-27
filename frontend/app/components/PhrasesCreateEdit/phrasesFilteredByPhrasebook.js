@@ -1,3 +1,7 @@
+// TODO: FIX OR DROP OVER IN FW-2027
+
+/* eslint-disable */
+
 /* Copyright 2016 First People's Cultural Council
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +21,7 @@ limitations under the License.
 // -------------------------------------------
 import React, { Component, Suspense } from 'react'
 import PropTypes from 'prop-types'
-import Immutable, { is, Set, Map } from 'immutable'
+import Immutable, { Set, Map } from 'immutable'
 import selectn from 'selectn'
 // REDUX
 import { connect } from 'react-redux'
@@ -28,7 +32,6 @@ import { fetchPortal } from 'reducers/fvPortal'
 import { pushWindowPath } from 'reducers/windowPath'
 import { setListViewMode } from 'reducers/listView'
 import { setRouteParams, updatePageProperties } from 'reducers/navigation'
-import { searchDialectReset } from 'reducers/searchDialect'
 
 // FPCC
 // -------------------------------------------
@@ -46,11 +49,7 @@ import Edit from '@material-ui/icons/Edit'
 import FVButton from 'components/FVButton'
 import IntlService from 'common/services/IntlService'
 import Link from 'components/Link'
-import NavigationHelpers, {
-  appendPathArrayAfterLandmark,
-  getSearchObject,
-  updateUrlIfPageOrPageSizeIsDifferent,
-} from 'common/NavigationHelpers'
+import NavigationHelpers, { appendPathArrayAfterLandmark, getSearchObject } from 'common/NavigationHelpers'
 import Preview from 'components/Preview'
 import PromiseWrapper from 'components/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -64,15 +63,9 @@ import {
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
   dictionaryListSmallScreenTemplatePhrases,
 } from 'components/DictionaryList/DictionaryListSmallScreen'
-import {
-  onNavigateRequest,
-  sortHandler,
-  updateFilter,
-  updateUrlAfterResetSearch,
-  useIdOrPathFallback,
-} from 'components/LearnBase'
+import { onNavigateRequest, sortHandler, updateUrlAfterResetSearch, useIdOrPathFallback } from 'components/LearnBase'
 import { WORKSPACES } from 'common/Constants'
-const SearchDialect = React.lazy(() => import('components/SearchDialect'))
+const SearchDialectContainer = React.lazy(() => import('components/SearchDialect/SearchDialectContainer'))
 const DictionaryList = React.lazy(() => import('components/DictionaryList/DictionaryList'))
 const intl = IntlService.instance
 
@@ -111,10 +104,6 @@ export class phrasesFilteredByPhrasebook extends Component {
     // NOTE: need to wait for computeDocument to finish before calling fetchListViewData
     // If we don't then within fetchListViewData dialectUid will be undefined and useIdOrPathFallback will use the path
     this.fetchListViewData()
-  }
-
-  componentWillUnmount() {
-    this.props.searchDialectReset()
   }
 
   constructor(props, context) {
@@ -189,7 +178,7 @@ export class phrasesFilteredByPhrasebook extends Component {
           // --------------------------------------------------
           childrenSearch={
             <Suspense fallback={<div>Loading...</div>}>
-              <SearchDialect
+              <SearchDialectContainer
                 handleSearch={this.changeFilter}
                 resetSearch={this.resetSearch}
                 searchUi={[
@@ -345,28 +334,27 @@ export class phrasesFilteredByPhrasebook extends Component {
   // END render
 
   changeFilter = () => {
-    const { filterInfo } = this.state
-    const { computeSearchDialect, routeParams, splitWindowPath } = this.props
-    const { searchFilteredBy, searchNxqlQuery } = computeSearchDialect
-
-    const newFilter = updateFilter({
-      filterInfo,
-      searchFilteredBy,
-      searchNxqlQuery,
-    })
-
-    // When facets change, pagination should be reset.
-    // In these pages (words/phrase), list views are controlled via URL
-    if (is(filterInfo, newFilter) === false) {
-      this.setState({ filterInfo: newFilter }, () => {
-        updateUrlIfPageOrPageSizeIsDifferent({
-          preserveSearch: true,
-          pushWindowPath: this.props.pushWindowPath,
-          routeParams,
-          splitWindowPath,
-        })
-      })
-    }
+    // TODO: DROPPED computeSearchDialect & updating immutable fitlers for url queries
+    // const { filterInfo } = this.state
+    // const { routeParams, splitWindowPath } = this.props
+    // const { searchFilteredBy, searchNxqlQuery } = computeSearchDialect
+    // const newFilter = updateFilter({
+    //   filterInfo,
+    //   searchFilteredBy,
+    //   searchNxqlQuery,
+    // })
+    // // When facets change, pagination should be reset.
+    // // In these pages (words/phrase), list views are controlled via URL
+    // if (is(filterInfo, newFilter) === false) {
+    //   this.setState({ filterInfo: newFilter }, () => {
+    //     updateUrlIfPageOrPageSizeIsDifferent({
+    //       preserveSearch: true,
+    //       pushWindowPath: this.props.pushWindowPath,
+    //       routeParams,
+    //       splitWindowPath,
+    //     })
+    //   })
+    // }
   }
 
   fetchListViewData({ pageIndex = 1, pageSize = 10 } = {}) {
@@ -618,7 +606,6 @@ phrasesFilteredByPhrasebook.propTypes = {
   computeLogin: object.isRequired,
   computePhrases: object.isRequired,
   computePortal: object.isRequired,
-  computeSearchDialect: object.isRequired,
   listView: object.isRequired,
   navigationRouteSearch: object.isRequired,
   properties: object.isRequired,
@@ -633,7 +620,6 @@ phrasesFilteredByPhrasebook.propTypes = {
   setListViewMode: func.isRequired,
   setRouteParams: func.isRequired,
   updatePageProperties: func.isRequired,
-  searchDialectReset: func.isRequired,
 }
 phrasesFilteredByPhrasebook.defaultProps = {
   DEFAULT_LANGUAGE: 'english',
@@ -642,14 +628,13 @@ phrasesFilteredByPhrasebook.defaultProps = {
 // REDUX: reducers/state
 // -------------------------------------------
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, fvDialect, fvPhrase, fvPortal, listView, navigation, nuxeo, searchDialect, windowPath } = state
+  const { document, fvDialect, fvPhrase, fvPortal, listView, navigation, nuxeo, windowPath } = state
 
   const { computeDialect2 } = fvDialect
   const { computeDocument } = document
   const { computeLogin } = nuxeo
   const { computePhrases } = fvPhrase
   const { computePortal } = fvPortal
-  const { computeSearchDialect } = searchDialect
   const { properties, route } = navigation
   const { splitWindowPath, _windowPath } = windowPath
 
@@ -659,7 +644,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeLogin,
     computePhrases,
     computePortal,
-    computeSearchDialect,
     listView,
     navigationRouteSearch: route.search,
     properties,
@@ -678,7 +662,7 @@ const mapDispatchToProps = {
   setListViewMode,
   setRouteParams,
   updatePageProperties,
-  searchDialectReset,
 }
+/* eslint-enable */
 
 export default connect(mapStateToProps, mapDispatchToProps)(phrasesFilteredByPhrasebook)

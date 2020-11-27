@@ -20,15 +20,9 @@ import useDocument from 'dataSources/useDocument'
 import useIntl from 'dataSources/useIntl'
 import usePortal from 'dataSources/usePortal'
 import useRoute from 'dataSources/useRoute'
-import useSearchDialect from 'dataSources/useSearchDialect'
 import useWindowPath from 'dataSources/useWindowPath'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import {
-  SEARCH_FILTERED_BY_CHARACTER,
-  SEARCH_FILTERED_BY_PHRASE_BOOK,
-  SEARCH_PART_OF_SPEECH_ANY,
-} from 'common/Constants'
 
 function PhrasesData(props) {
   const { computeDialect2, fetchDialect2 } = useDialect()
@@ -37,14 +31,10 @@ function PhrasesData(props) {
   const { computePortal, fetchPortal } = usePortal()
   const { routeParams } = useRoute()
   const { splitWindowPath } = useWindowPath()
-  const { searchDialectUpdate, searchDialectReset } = useSearchDialect()
-
   const dictionaryKey = `${routeParams.dialect_path}/Dictionary`
 
   useEffect(() => {
     fetchData()
-    // Specify how to clean up after this effect:
-    return searchDialectReset
   }, [])
 
   const fetchData = async () => {
@@ -67,33 +57,12 @@ function PhrasesData(props) {
     },
   ])
 
-  const handlePhrasebookClick = async ({ selected }) => {
-    await searchDialectUpdate({
-      searchByAlphabet: '',
-      searchFilteredBy: SEARCH_FILTERED_BY_PHRASE_BOOK,
-      searchBySettings: {
-        searchByTitle: true,
-        searchByDefinitions: false,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchingDialectFilter: selected.checkedFacetUid,
-      searchTerm: '',
-    })
+  const handlePhrasebookClick = () => {
+    // TODO: WILL BE FIXED IN FW-2027
   }
 
-  const handleAlphabetClick = async ({ letterClicked }) => {
-    await searchDialectUpdate({
-      searchByAlphabet: letterClicked,
-      searchFilteredBy: SEARCH_FILTERED_BY_CHARACTER,
-      searchBySettings: {
-        searchByTitle: true,
-        searchByDefinitions: false,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchTerm: '',
-    })
+  const handleAlphabetClick = () => {
+    // TODO: WILL BE FIXED IN FW-2028
   }
 
   return props.children({
