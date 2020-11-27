@@ -27,7 +27,6 @@ Category:
     - message displayed
 */
 import {
-  SEARCH_BY_DEFAULT,
   SEARCH_PART_OF_SPEECH_ANY,
   SEARCH_DATA_TYPE_WORD,
   SEARCHDIALECT_CHECKBOX,
@@ -48,24 +47,6 @@ jest.mock('@material-ui/core/styles', () => ({
   /* eslint-disable-next-line */
   withStyles: (styles) => (component) => component,
 }))
-
-// Mock: useSearchDialect
-// --------------------------------------------------
-import * as useSearchDialect from 'dataSources/useSearchDialect'
-const spyUseSearchDialect = jest.spyOn(useSearchDialect, 'default')
-spyUseSearchDialect.mockReturnValue({
-  computeSearchDialect: {
-    searchFilteredBy: SEARCH_BY_DEFAULT,
-    searchBySettings: {},
-    searchMessage: '',
-    searchNxqlSort: '',
-    searchNxqlQuery: '',
-    searchTerm: '',
-    searchType: 1,
-  },
-  searchDialectUpdate: () => {},
-  searchDialectReset: () => {},
-})
 
 // Mock: useRoute
 // --------------------------------------------------
