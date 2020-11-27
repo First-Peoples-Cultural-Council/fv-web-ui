@@ -145,21 +145,6 @@ function WordsListPresentation(props) {
       />
     ) : null
 
-  const listButtonArg = {
-    // Export
-    dialect,
-    exportDialectColumns,
-    exportDialectExportElement,
-    exportDialectLabel,
-    exportDialectQuery,
-    // Commented out until export is fixed
-    // hasExportDialect,
-    // View mode
-    clickHandlerViewMode: wordsListClickHandlerViewMode,
-    dictionaryListViewMode,
-    hasViewModeButtons,
-  }
-
   const getListSmallScreenArg = {
     dictionaryListSmallScreenProps: {
       rowClickHandler,
@@ -217,7 +202,20 @@ function WordsListPresentation(props) {
         <div className={dialectClassName}>
           {childrenSearch}
           {/* {chldrenListButtons} */}
-          {generateListButtons(listButtonArg)}
+          {generateListButtons({
+            // Export
+            dialect,
+            exportDialectColumns,
+            exportDialectExportElement,
+            exportDialectLabel,
+            exportDialectQuery,
+            // Commented out until export is fixed
+            // hasExportDialect,
+            // View mode
+            clickHandlerViewMode: wordsListClickHandlerViewMode,
+            dictionaryListViewMode,
+            hasViewModeButtons,
+          })}
           <Media
             queries={{
               small: '(max-width: 850px)',
