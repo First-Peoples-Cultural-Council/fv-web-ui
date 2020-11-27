@@ -51,7 +51,6 @@ import PageDialectLearnWordsCategories from 'components/Categories/WordCategorie
 
 import PhraseBooksGrid from 'components/PhraseBooksGrid'
 import WordsCategoriesGrid from 'components/WordsCategoriesGrid'
-import PageDialectLearnPhrasesByPhrasebook from 'components/PhrasesCreateEdit/phrasesFilteredByPhrasebook'
 
 import PageDialectImmersionList from 'components/Immersion'
 
@@ -149,7 +148,6 @@ export {
   PageDialectLearnWords,
   PageDialectLearnWordsCategories,
   PageDialectLearnPhrases,
-  PageDialectLearnPhrasesByPhrasebook,
   PhraseBooksGrid,
   WordsCategoriesGrid,
   PageDialectLearnStoriesAndSongs,
