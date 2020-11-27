@@ -347,7 +347,7 @@ const getSearchMessageTests = [
 ]
 
 describe('SearchDialectMessage', () => {
-  getSearchMessageTests.map(({ name, params, output }, index) => {
+  getSearchMessageTests.forEach(({ name, params, output }, index) => {
     test(`Test ${index}: ${name}`, () => {
       const out = ReactDOMServer.renderToStaticMarkup(<SearchDialectMessage {...params} />)
       const dom = new jsdom.JSDOM(`<!DOCTYPE html><div>${out}</div>`)
