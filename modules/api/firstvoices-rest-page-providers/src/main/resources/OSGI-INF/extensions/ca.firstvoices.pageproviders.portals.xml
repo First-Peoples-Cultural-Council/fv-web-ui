@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component name="ca.firstvoices.pageproviders.portals">
+
+  <require>org.nuxeo.runtime.started</require>
+
+  <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
+             point="providers">
+
+
+    <genericPageProvider name="PORTALS_LIST_SECTIONS_PP" class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider">
+      <property name="checkQueryCache">true</property>
+      <pattern quoteParameters="false">SELECT * FROM FVPortal WHERE ecm:path STARTSWITH '/FV/sections' AND ecm:isTrashed
+        =0 AND ecm:isVersion = 0
+      </pattern>
+    </genericPageProvider>
+
+    <genericPageProvider name="PORTALS_LIST_WORKSPACES_PP" class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider">
+      <property name="checkQueryCache">true</property>
+      <pattern quoteParameters="false">SELECT * FROM FVPortal WHERE ecm:path STARTSWITH '/FV/Workspaces' AND
+        ecm:isTrashed =0 AND ecm:isVersion = 0
+      </pattern>
+    </genericPageProvider>
+
+  </extension>
+
+</component>

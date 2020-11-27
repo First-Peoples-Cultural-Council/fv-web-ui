@@ -1,0 +1,10 @@
+<component name="ca.firstvoices.security.securitypolicies.group.contrib">
+
+  <extension target="org.nuxeo.ecm.core.security.SecurityService" point="policies">
+
+    <policy name="languagerecorders" class="ca.firstvoices.security.securitypolicies.groups.LanguageRecorders" order="100" />
+    <policy name="languageadministrators" class="ca.firstvoices.security.securitypolicies.groups.LanguageAdministrators" order="120" />
+
+  </extension>
+
+</component>

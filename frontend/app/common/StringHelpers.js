@@ -160,6 +160,18 @@ export default {
 
     return str.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i)
   },
+  // Very basic function for making strings plural - does NOT account for variations in pluralization e.g. mouse -> mice
+  makePlural: (string) => {
+    const lastCharacter = string.slice(-1)
+    if (lastCharacter === 'y') {
+      const plural = string.slice(0, -1)
+      return plural + 'ies'
+    }
+    if (lastCharacter === 's') {
+      return string + 'es'
+    }
+    return string + 's'
+  },
   queryStringToObject: (str, skipDecode = false) => {
     const _str = str.substring(str.indexOf('?') + 1).split('&')
     const params = {}

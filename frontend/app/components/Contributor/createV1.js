@@ -32,12 +32,16 @@ import FVButton from 'components/FVButton'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 import StatusBar from 'components/StatusBar'
-import FVLabel from 'components/FVLabel'
+
+import IntlService from 'common/services/IntlService'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
+
+const intl = IntlService.instance
+
 /**
  * Create contributor
  */
@@ -130,7 +134,7 @@ export class PageDialectContributorsCreate extends Component {
     const properties = {}
 
     for (const key in formValue) {
-      if (formValue.hasOwnProperty(key) && key) {
+      if (Object.prototype.hasOwnProperty.call(formValue, key) && key) {
         if (formValue[key] && formValue[key] != '') {
           properties[key] = formValue[key]
         }
@@ -177,11 +181,11 @@ export class PageDialectContributorsCreate extends Component {
     return (
       <div>
         <h1 style={{ lineHeight: '1.2', margin: '0 0 10px' }}>
-          <FVLabel
-            transKey="views.pages.explore.dialect.contributors.add_new_contributor_to_x"
-            defaultStr={'Add New Contributor to ' + dialect.get('dc:title')}
-            params={[dialect.get('dc:title')]}
-          />
+          {intl.trans(
+            'views.pages.explore.dialect.contributors.add_new_contributor_to_x',
+            'Add New Contributor to ' + dialect.get('dc:title'),
+            'first'
+          )}
         </h1>
 
         {contributor && contributor.message && contributor.action.includes('CREATE') ? (
@@ -200,7 +204,7 @@ export class PageDialectContributorsCreate extends Component {
               />
               <div className="form-group" style={{ marginTop: '20px' }}>
                 <FVButton variant="contained" color="primary" onClick={this._onRequestSaveForm}>
-                  <FVLabel transKey="save" defaultStr="Save" transform="first" />
+                  {intl.trans('save', 'Save', 'first')}
                 </FVButton>
               </div>
             </form>

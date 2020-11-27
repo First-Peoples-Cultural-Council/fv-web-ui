@@ -4906,7 +4906,7 @@ export const labelMap = [
   },
   {
     key: 'general.region',
-    isUsed: true,
+    isUsed: false,
     category: 'general',
     type: 'phrase',
     templateStrings: [],
@@ -7937,6 +7937,20 @@ export const labelMap = [
   },
   {
     key: 'views.pages.explore.dialect.about_us',
+    isUsed: true,
+    category: 'views_pages_explore_dialect',
+    type: 'phrase',
+    templateStrings: [],
+  },
+  {
+    key: 'views.pages.explore.dialect.region_data',
+    isUsed: true,
+    category: 'views_pages_explore_dialect',
+    type: 'phrase',
+    templateStrings: [],
+  },
+  {
+    key: 'views.pages.explore.dialect.kids_portal',
     isUsed: true,
     category: 'views_pages_explore_dialect',
     type: 'phrase',

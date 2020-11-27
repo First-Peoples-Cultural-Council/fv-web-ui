@@ -1,8 +1,0 @@
-.Search__btnGroup {
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-.Search__btn + .Search__btn {
-  margin-left: 10px;
-}

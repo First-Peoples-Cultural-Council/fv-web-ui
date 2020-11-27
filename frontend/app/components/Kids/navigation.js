@@ -21,8 +21,6 @@ import selectn from 'selectn'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
-import { toggleMenuAction } from 'reducers/navigation'
-// import { fetchUserTasks } from 'reducers/tasks'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -54,7 +52,6 @@ export class KidsNavigation extends Component {
     // fetchUserTasks: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
-    toggleMenuAction: func.isRequired,
     intl: object.isRequired,
   }
 
@@ -93,17 +90,24 @@ export class KidsNavigation extends Component {
 
     return (
       <div className="Navigation">
-        <AppBar position="static">
+        <AppBar style={{ background: 'white', marginBottom: '15px' }} position="static">
           <Toolbar style={{ alignItems: 'center', backgroundColor: 'inherit' }}>
-            <Typography variant="body2" component="div" noWrap style={{ flexGrow: 1 }}>
+            <Typography variant="body2" component="div" noWrap style={{ flexGrow: 1, width: '340px' }}>
               <a
-                style={{ textDecoration: 'none', color: '#fff' }}
+                style={{ textDecoration: 'none', fontSize: '1.4em', display: 'inline-flex' }}
                 onClick={this._onNavigateRequest.bind(this, homeURL)}
               >
                 {avatar}
-                <span className="hidden-xs">
-                  {(selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
-                    this.props.properties.title) + ' '}
+                <span
+                  className="hidden-xs"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  {selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
+                    this.props.properties.title}
+                  &nbsp;
                   <FVLabel transKey="views.pages.explore.dialect.for_kids" defaultStr="for Kids" />
                 </span>
               </a>
@@ -175,7 +179,6 @@ const mapDispatchToProps = {
   // fetchUserTasks,
   pushWindowPath,
   replaceWindowPath,
-  toggleMenuAction,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(KidsNavigation)

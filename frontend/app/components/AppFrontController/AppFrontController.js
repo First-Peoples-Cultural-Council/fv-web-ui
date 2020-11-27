@@ -25,10 +25,8 @@ import { Redirector } from 'common/Redirector'
 // import UIHelpers from 'common/UIHelpers'
 import StringHelpers from 'common/StringHelpers'
 import FVButton from 'components/FVButton'
-import Navigation from 'components/Navigation'
 import WorkspaceSwitcher from 'components/WorkspaceSwitcher'
 import KidsNavigation from 'components/Kids/navigation'
-import Footer from 'components/Footer'
 import Breadcrumb from 'components/Breadcrumb'
 
 import { PageError } from 'common/conf/pagesIndex'
@@ -139,14 +137,12 @@ export class AppFrontController extends Component {
     if (matchedPage === undefined || this.props.localeLoading) {
       isLoading = true
     }
+
     const isFrontPage = !matchedPage ? false : matchedPage.get('frontpage')
 
     if (matchedPage && (matchedPageUpdated || siteThemeUpdated)) {
-      const hideNavigation = matchedPage.has('navigation') && matchedPage.get('navigation') === false
-
       let page
-
-      let navigation = <Navigation frontpage={isFrontPage} routeParams={routeParams} />
+      let navigation
       // Note: https://eslint.org/docs/rules/no-prototype-builtins
       const siteTheme = Object.prototype.hasOwnProperty.call(routeParams, 'siteTheme')
         ? routeParams.siteTheme
@@ -159,7 +155,6 @@ export class AppFrontController extends Component {
           .get('print') === true
         : false
 
-      let footer = <Footer className={'Footer--' + siteTheme + '-theme'} />
       const clonedElement = React.cloneElement(matchedPage.get('page').toJS(), { routeParams: routeParams })
 
       // For print view return page only
@@ -170,7 +165,7 @@ export class AppFrontController extends Component {
 
       // Remove breadcrumbs for Kids portal
       // TODO: Make more generic if additional siteThemes are added in the future.
-      if (siteTheme === 'kids') {
+      if (siteTheme === 'kids' && !isFrontPage) {
         page = clonedElement
         navigation = <KidsNavigation frontpage={isFrontPage} routeParams={routeParams} />
       } else {
@@ -183,16 +178,10 @@ export class AppFrontController extends Component {
         }
       }
 
-      // Hide navigation
-      if (hideNavigation) {
-        navigation = footer = ''
-      }
-
       let warning = null
-      // Note: https://eslint.org/docs/rules/no-prototype-builtins
+
       if (Object.prototype.hasOwnProperty.call(matchedPage, 'warnings')) {
         warning = matchedPage.get('warnings').map((warningItem) => {
-          // Note: https://eslint.org/docs/rules/no-prototype-builtins
           if (Object.prototype.hasOwnProperty.call(this.props.warnings, warningItem) && !this.state.warningsDismissed) {
             return (
               <div
@@ -210,41 +199,25 @@ export class AppFrontController extends Component {
       }
 
       this.setState({
-        footer,
         isLoading,
-        navigation,
         page,
         print,
+        navigation,
         warning,
       })
     }
   }
 
   render() {
-    const { footer, isLoading, navigation, page, print, warning } = this.state
+    const { isLoading, page, print, warning, navigation } = this.state
 
     let toRender = null
     if (isLoading) {
+      // Note: We could avoid showing this "Loading..." message if
+      // PromiseWrapper would render a partial structure, then fill it with server data
       toRender = (
-        <div id="app-loader" className="app-loader">
-          <div
-            style={{
-              width: '50%',
-              margin: '50px auto',
-              border: '1px #ccc solid',
-              padding: '15px',
-              fontSize: '16pt',
-            }}
-          >
-            <p>
-              <strong>FirstVoices</strong>
-            </p>
-            <p>
-              FirstVoices is a suite of web-based tools and services designed to support Indigenous people engaged in
-              language archiving, language teaching and culture revitalization.
-            </p>
-          </div>
-          <p>Loading / Chargement / Cargando...</p>
+        <div className="app-loader">
+          <p>Loading...</p>
         </div>
       )
     } else {
@@ -261,9 +234,6 @@ export class AppFrontController extends Component {
               <div id="pageContainer" data-testid="pageContainer" className="AppFrontController__content">
                 {page}
               </div>
-              <div id="pageFooter" className="AppFrontController__footer row">
-                {footer}
-              </div>
             </div>
             <HelperModeToggle />
           </div>
@@ -275,6 +245,7 @@ export class AppFrontController extends Component {
   }
 
   _getInitialState() {
+    // Replace Immutable usage here
     let routes = Immutable.fromJS(ConfRoutes)
     const contextPath = ConfGlobal.contextPath.split('/').filter((v) => v !== '')
 
@@ -307,8 +278,7 @@ export class AppFrontController extends Component {
 
   _renderWithBreadcrumb = (reactElement, matchedPage, props, siteTheme) => {
     const themePalette = props.theme.palette
-    const { routeParams } = reactElement.props
-    const { /*splitWindowPath, */ computeLogin } = props
+    const { computeLogin } = props
     const { routes } = this.state
     let _workspaceSwitcher = null
     const area = selectn('routeParams.area', reactElement.props)
@@ -320,22 +290,11 @@ export class AppFrontController extends Component {
     ) {
       _workspaceSwitcher = <WorkspaceSwitcher className="AppFrontController__workspaceSwitcher" area={area} />
     }
-    const overrideBreadcrumbs = selectn('props.properties.breadcrumbs', this)
-    const findReplace = overrideBreadcrumbs
-      ? { find: overrideBreadcrumbs.find, replace: selectn(overrideBreadcrumbs.replace, this.props.properties) }
-      : undefined
     return (
       <div>
         <div className="breadcrumbContainer row">
           <div className="AppFrontController__waypoint clearfix" style={{ backgroundColor: themePalette.accent4Color }}>
-            <Breadcrumb
-              className="AppFrontController__breadcrumb"
-              matchedPage={matchedPage}
-              routes={routes}
-              routeParams={routeParams}
-              // splitWindowPath={splitWindowPath}
-              findReplace={findReplace}
-            />
+            <Breadcrumb.Container matchedPage={matchedPage} routes={routes} />
             {_workspaceSwitcher}
           </div>
         </div>
@@ -430,24 +389,19 @@ export class AppFrontController extends Component {
       }
 
       // Switch siteThemes based on route params
-      // Note: https://eslint.org/docs/rules/no-prototype-builtins
       const _siteTheme = Object.prototype.hasOwnProperty.call(_routeParams, 'siteTheme') || matchedPage.get('siteTheme')
       if (_siteTheme) {
         let newTheme = _siteTheme
 
         /*
         When to switch to workspace theme:
-
               routeParams has area=WORKSPACES
                 or
               matchedPage.path contains WORKSPACES
                 or
               matchedPage.siteTheme=WORKSPACES
-
                 AND
-
               current theme is not 'workspace'
-
           TODO: investigate if statecharts would simplify matters
         */
         // Note: https://eslint.org/docs/rules/no-prototype-builtins

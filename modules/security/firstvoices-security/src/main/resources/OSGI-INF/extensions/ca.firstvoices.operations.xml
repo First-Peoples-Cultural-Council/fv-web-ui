@@ -1,0 +1,15 @@
+<component name="ca.firstvoices.operations.contrib">
+
+	<extension point="operations" target="org.nuxeo.ecm.core.operation.OperationServiceComponent">
+		<operation class="ca.firstvoices.security.operations.FVDialectPublishedDocumentPermissions"
+			replace="true"/>
+		<operation class="ca.firstvoices.security.operations.FVDialectRegularDocumentPermissions"
+			replace="true"/>
+		<operation class="ca.firstvoices.security.operations.FVGenerateJsonStatistics" replace="true"/>
+		<operation class="ca.firstvoices.security.operations.FVPublishParents" replace="true"/>
+		<operation class="ca.firstvoices.security.operations.FVSetListenerFlag" replace="true"/>
+		<operation class="ca.firstvoices.security.operations.FVGetDialectsForUser"/>
+		<operation class="ca.firstvoices.security.operations.FVGetUserStartPage"/>
+	</extension>
+
+</component>

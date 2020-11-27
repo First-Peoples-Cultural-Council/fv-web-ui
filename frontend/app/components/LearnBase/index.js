@@ -17,7 +17,11 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { hasPagination, routeHasChanged } from 'common/NavigationHelpers'
 
-import { SEARCH_BY_ALPHABET, SEARCH_BY_CATEGORY, SEARCH_BY_PHRASE_BOOK } from 'common/Constants'
+import {
+  SEARCH_FILTERED_BY_CHARACTER,
+  SEARCH_FILTERED_BY_CATEGORY,
+  SEARCH_FILTERED_BY_PHRASE_BOOK,
+} from 'common/Constants'
 
 /**
  * Learn Base Page
@@ -638,20 +642,20 @@ export const getCategoriesOrPhrasebooks = ({ getEntryId, computeCategories }) =>
   return selectn('response.entries', computedCategories)
 }
 
-export const updateFilter = ({ filterInfo, searchByMode, searchNxqlQuery }) => {
+export const updateFilter = ({ filterInfo, searchFilteredBy, searchNxqlQuery }) => {
   let searchType
   let newFilter = filterInfo
 
-  switch (searchByMode) {
-    case SEARCH_BY_ALPHABET: {
+  switch (searchFilteredBy) {
+    case SEARCH_FILTERED_BY_CHARACTER: {
       searchType = 'startsWith'
       break
     }
-    case SEARCH_BY_CATEGORY: {
+    case SEARCH_FILTERED_BY_CATEGORY: {
       searchType = 'categories'
       break
     }
-    case SEARCH_BY_PHRASE_BOOK: {
+    case SEARCH_FILTERED_BY_PHRASE_BOOK: {
       searchType = 'phraseBook'
       break
     }

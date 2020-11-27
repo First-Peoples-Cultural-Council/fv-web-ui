@@ -33,7 +33,6 @@ import ProviderHelpers from 'common/ProviderHelpers'
 
 import ImmersionTable from './ImmersionTable'
 import LabelModal from './Modal'
-import SearchFields from './Search'
 
 /**
  * List view for words in immersion
@@ -143,14 +142,15 @@ class ImmersionListView extends Component {
     }
     const mappedLabels = allLabels.map((v) => {
       // eslint-disable-next-line
-      const strings = v.template_strings.split(',').map((s) => '%s')
-      const templateStrings = v.template_strings.split(',')
+      const strings = v.templateStrings.split(',').map((s) => '%s')
+      const templateStrings = v.templateStrings.split(',')
+      const id = v.value
       const label = {
-        labelKey: v.id,
+        labelKey: id,
         type: v.type,
         templateStrings,
         categoryId: v.category,
-        base: intl.trans(v.id, 'Translated Label', null, strings, null, null, locale),
+        base: intl.trans(id, 'English Unavailable', null, strings, null, null, locale),
         translation: undefined,
         category: undefined,
         editButton: undefined,
@@ -160,11 +160,11 @@ class ImmersionListView extends Component {
         state: 'N/A',
       }
       const category = allCategories.find((c) => {
-        return c.id === v.category
+        return c.value === v.category
       })
-      label.category = category ? category.label : undefined
+      label.category = category ? category.text : undefined
       const translatedLabel = translatedLabels.find((l) => {
-        return l.properties['fvlabel:labelKey'] === v.id
+        return l.properties['fvlabel:labelKey'] === v.value
       })
       if (translatedLabel) {
         label.state = translatedLabel.state
@@ -179,10 +179,6 @@ class ImmersionListView extends Component {
     })
     this.setState({ mappedTranslations: mappedLabels, allTranslations: mappedLabels })
     return
-  }
-
-  setMappedTranslations = (mappedTranslations) => {
-    this.setState({ mappedTranslations })
   }
 
   render() {
@@ -211,7 +207,6 @@ class ImmersionListView extends Component {
           'Loading...'
         ) : (
           <div>
-            <SearchFields items={allTranslations} setResults={this.setMappedTranslations} />
             <ImmersionTable
               mappedTranslations={mappedTranslations || []}
               routeParams={routeParams}

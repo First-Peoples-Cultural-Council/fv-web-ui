@@ -1,6 +1,16 @@
 module.exports = function babelConfig(api) {
   api.cache(true)
-  const presets = ['@babel/preset-env', '@babel/preset-react']
+  const presets = [
+    [
+      '@babel/preset-env',
+      {
+        targets: {
+          node: 'current',
+        },
+      },
+    ],
+    '@babel/preset-react',
+  ]
   const plugins = [
     // NOTE: Adding 'transform-class-properties' will break Cypress testing
     'syntax-dynamic-import',

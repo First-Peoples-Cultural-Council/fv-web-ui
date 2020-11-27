@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.rest.freshness.listener" version="1.0.0">
+
+  <extension target="org.nuxeo.ecm.core.event.EventServiceComponent" point="listener">
+    <listener name="freshnessListener" async="true" postCommit="true" priority="100"
+              class="ca.firstvoices.rest.freshness.listeners.DirectoryFreshnessListener">
+      <event>documentCreated</event>
+      <event>documentDuplicated</event>
+      <event>documentPublished</event>
+      <event>documentModified</event>
+      <event>documentRemoved</event>
+    </listener>
+  </extension>
+
+</component>

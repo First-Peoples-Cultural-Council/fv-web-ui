@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.operations.visibility.operations.UpdateVisibilityOperation.contrib"
+  version="1.0">
+
+  <extension point="operations" target="org.nuxeo.ecm.core.operation.OperationServiceComponent">
+    <operation class="ca.firstvoices.operations.visibility.operations.UpdateVisibilityOperation"/>
+  </extension>
+
+</component>

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.operations.visibility.services.UpdateVisibilityService.contrib" version="1.0">
+  <implementation class="ca.firstvoices.operations.visibility.services.UpdateVisibilityServiceImpl"/>
+  <service>
+    <provide interface="ca.firstvoices.operations.visibility.services.UpdateVisibilityService"/>
+  </service>
+</component>

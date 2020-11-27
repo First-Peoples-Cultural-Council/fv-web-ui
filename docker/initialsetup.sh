@@ -7,12 +7,19 @@ echo ''
 echo "Running initial database setup."
 
 TARGET="$1"
+PORT="$2"
+
+if [ -z "$2"]; then
+    echo "No port found. Using default 8080"
+    PORT="8080"
+fi
+
 if [ -z "$1" ]; then
-    echo "No target url found. Using the default http://127.0.0.1:8080"
-    TARGET="http://127.0.0.1:8080"
+    echo "No target url found. Using the default http://127.0.0.1:$PORT"
+    TARGET="http://127.0.0.1:$PORT"
 else
-    TARGET="http://$1:8080"
-    echo "Target: " $TARGET
+    TARGET="http://$1:$PORT"
+    echo "Target: $TARGET"
 fi
 
 if [[ -z "$CYPRESS_FV_USERNAME" || -z "$CYPRESS_FV_PASSWORD" ]]; then

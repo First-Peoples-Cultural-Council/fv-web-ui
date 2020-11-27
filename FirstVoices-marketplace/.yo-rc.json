@@ -1,8 +1,0 @@
-{
-  "generator-nuxeo": {
-    "promptValues": {
-      "parent_package": "ca.firstvoices",
-      "parent_artifact": "firstvoices-modules-parent"
-    }
-  }
-}

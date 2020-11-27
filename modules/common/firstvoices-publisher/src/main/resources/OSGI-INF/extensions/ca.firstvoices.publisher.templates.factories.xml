@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+
+<component name="ca.firstvoices.publisher.templates.factories.FVDialectFactory" version="1.0">
+
+  <extension point="factory"
+    target="org.nuxeo.ecm.platform.content.template.service.ContentTemplateService">
+    <contentFactory class="ca.firstvoices.publisher.templates.factories.FVDialectFactory"
+      name="FVDialectFactory"/>
+  </extension>
+
+  <extension target="org.nuxeo.ecm.platform.content.template.service.ContentTemplateService"
+    point="factoryBinding">
+    <factoryBinding name="FVDialectFactoryBinding" factoryName="FVDialectFactory"
+      targetType="FVDialect">
+      <template>
+        <templateItem typeName="FVDictionary" id="Dictionary" title="Dictionary" description=""/>
+        <templateItem typeName="FVLabelDictionary" id="Label Dictionary" title="Label Dictionary"
+          description=""/>
+        <templateItem typeName="FVAlphabet" id="Alphabet" title="Alphabet" description=""/>
+        <templateItem typeName="FVPortal" id="Portal" title="Portal" description=""/>
+        <templateItem typeName="FVResources" id="Resources" title="Resources" description=""/>
+        <templateItem typeName="FVContributors" id="Contributors" title="Contributors"
+          description=""/>
+        <templateItem typeName="FVCategories" id="Categories" title="Categories" description=""/>
+        <templateItem typeName="FVCategories" id="Phrase Books" title="Phrase Books"
+          description=""/>
+        <templateItem typeName="FVLinks" id="Links" title="Links" description=""/>
+        <templateItem typeName="FVBooks" id="Stories &amp; Songs" title="Stories &amp; Songs"
+          description=""/>
+      </template>
+    </factoryBinding>
+  </extension>
+
+</component>
