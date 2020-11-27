@@ -164,7 +164,7 @@ class PageDialectImmersionList extends PageDialectLearnBase {
 
   // FILTERS
   initialFilterInfo = () => {
-    // TODO: Don't think outeParams.handleCategoryClick exists
+    // TODO: Don't think routeParams.handleCategoryClick exists
     const routeParamsCategory = this.props.routeParams.handleCategoryClick
     return routeParamsCategory || null
   }
