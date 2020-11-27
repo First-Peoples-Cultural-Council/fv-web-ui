@@ -20,6 +20,7 @@ function PhrasesListContainer() {
     <PhrasesListData>
       {({
         browseMode,
+        checkboxNames,
         columns,
         computeEntities,
         dialect,
@@ -69,6 +70,7 @@ function PhrasesListContainer() {
               childrenSearch={
                 <Suspense fallback={<div>loading...</div>}>
                   <SearchDialectContainer
+                    checkboxNames={checkboxNames}
                     key={`forceRender${resetCount}`}
                     incrementResetCount={incrementResetCount}
                     browseMode={browseMode}

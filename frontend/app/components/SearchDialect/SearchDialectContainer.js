@@ -14,13 +14,14 @@ import SearchDialectData from 'components/SearchDialect/SearchDialectData'
  */
 function SearchDialectContainer({
   browseMode,
+  checkboxNames,
   childrenSearchMessage,
   childrenUiSecondary,
   incrementResetCount,
   searchDialectDataType,
 }) {
   return (
-    <SearchDialectData incrementResetCount={incrementResetCount}>
+    <SearchDialectData incrementResetCount={incrementResetCount} checkboxNames={checkboxNames}>
       {({ dialectClassName, formRefSearch, intl, onPressEnter, onReset, onSearch, searchStyle, searchTerm }) => {
         return (
           <SearchDialectPresentation
@@ -43,9 +44,10 @@ function SearchDialectContainer({
   )
 }
 // PROPTYPES
-const { func, node, string, number } = PropTypes
+const { array, func, node, string, number } = PropTypes
 SearchDialectContainer.propTypes = {
   browseMode: string,
+  checkboxNames: array,
   childrenSearchMessage: node,
   childrenUiSecondary: node,
   incrementResetCount: func,
