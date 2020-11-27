@@ -51,12 +51,12 @@ describe('FlashcardButton', () => {
     `)
   })
   // Presentation
-  test('Presentation ACTIVE flashcard mode', () => {
+  test('Presentation: flashcard mode is inactive', () => {
     const component = renderer.create(<FlashcardButtonPresentation />)
     const tree = component.toJSON()
     expect(tree).toMatchSnapshot()
   })
-  test('Presentation INACTIVE flashcard mode', () => {
+  test('Presentation: flashcard mode is active', () => {
     const component = renderer.create(<FlashcardButtonPresentation queryFlashcard={1} />)
     const tree = component.toJSON()
     expect(tree).toMatchSnapshot()
