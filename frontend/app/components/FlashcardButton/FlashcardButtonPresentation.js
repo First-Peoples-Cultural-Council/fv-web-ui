@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import FVButton from 'components/FVButton'
-import '!style-loader!css-loader!./FlashcardButton.css'
+
 /**
  * @summary FlashcardButtonPresentation
  * @version 1.0.1
