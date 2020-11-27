@@ -59,15 +59,10 @@ function WordsData(props) {
     // TODO: WILL BE FIXED IN FW-2035
   }
 
-  const handleAlphabetClick = () => {
-    // TODO: WILL BE FIXED IN FW-2028
-  }
-
   return props.children({
     computeEntities,
     flashcardMode: false,
     handleCategoryClick,
-    handleAlphabetClick,
     intl,
     routeParams,
   })
