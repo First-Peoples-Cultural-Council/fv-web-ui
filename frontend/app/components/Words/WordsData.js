@@ -20,11 +20,9 @@ import useDocument from 'dataSources/useDocument'
 import useIntl from 'dataSources/useIntl'
 import usePortal from 'dataSources/usePortal'
 import useRoute from 'dataSources/useRoute'
-import useSearchDialect from 'dataSources/useSearchDialect'
 import useWindowPath from 'dataSources/useWindowPath'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import { SEARCH_BY_ALPHABET, SEARCH_BY_CATEGORY, SEARCH_PART_OF_SPEECH_ANY } from 'common/Constants'
 
 function WordsData(props) {
   const { computeDialect2, fetchDialect2 } = useDialect()
@@ -33,14 +31,10 @@ function WordsData(props) {
   const { computePortal, fetchPortal } = usePortal()
   const { routeParams } = useRoute()
   const { splitWindowPath } = useWindowPath()
-  const { searchDialectUpdate, searchDialectReset } = useSearchDialect()
-
   const dictionaryKey = `${routeParams.dialect_path}/Dictionary`
 
   useEffect(() => {
     fetchData()
-    // Specify how to clean up after this effect:
-    return searchDialectReset
   }, [])
 
   const fetchData = async () => {
@@ -63,39 +57,16 @@ function WordsData(props) {
     },
   ])
 
-  const handleCategoryClick = async ({ selected }) => {
-    await searchDialectUpdate({
-      searchByAlphabet: '',
-      searchByMode: SEARCH_BY_CATEGORY,
-      searchBySettings: {
-        searchByTitle: true,
-        searchByDefinitions: false,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchingDialectFilter: selected.checkedFacetUid,
-      searchTerm: '',
-    })
+  const handleCategoryClick = () => {
+    // TODO: WILL BE FIXED IN FW-2035
   }
 
-  const handleAlphabetClick = async ({ letterClicked }) => {
-    await searchDialectUpdate({
-      searchByAlphabet: letterClicked,
-      searchByMode: SEARCH_BY_ALPHABET,
-      searchBySettings: {
-        searchByTitle: true,
-        searchByDefinitions: false,
-        searchByTranslations: false,
-        searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
-      },
-      searchTerm: '',
-    })
+  const handleAlphabetClick = () => {
+    // TODO: WILL BE FIXED IN FW-2028
   }
 
   return props.children({
     computeEntities,
-    constSearchByAlphabet: SEARCH_BY_ALPHABET,
-    constSearchPartOfSpeechAny: SEARCH_PART_OF_SPEECH_ANY,
     flashcardMode: false,
     handleCategoryClick,
     handleAlphabetClick,

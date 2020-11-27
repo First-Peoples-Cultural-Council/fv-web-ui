@@ -58,7 +58,7 @@ const DocumentListView = (props) => {
     handleSearch: props.handleSearch,
     resetSearch: props.resetSearch,
     searchUi: props.searchUi,
-    searchByMode: props.searchByMode,
+    searchFilteredBy: props.searchFilteredBy,
     searchDialectDataType: props.searchDialectDataType,
     // ==================================================
     cellHeight: 160,

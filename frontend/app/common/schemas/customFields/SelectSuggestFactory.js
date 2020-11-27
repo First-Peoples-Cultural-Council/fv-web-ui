@@ -2,11 +2,14 @@ import React from 'react'
 import t from 'tcomb-form'
 import selectn from 'selectn'
 
+import IntlService from 'common/services/IntlService'
+
 import AutoSuggestComponent from 'components/AutoSuggestComponent'
 import BrowseComponent from 'components/BrowseComponent'
 import Preview from 'components/Preview'
 import DialogCreateForm from 'components/DialogCreateForm'
-import FVLabel from 'components/FVLabel'
+
+const intl = IntlService.instance
 
 /**
  * Define auto-suggest factory
@@ -65,13 +68,8 @@ function renderInput(locals) {
           locals={locals}
           type={locals.type}
           label={
-            locals.labelBrowseComponent || (
-              <FVLabel
-                transKey="views.components.editor.browse_existing"
-                defaultStr="Browse Existing"
-                transform="words"
-              />
-            )
+            locals.labelBrowseComponent ||
+            intl.trans('views.components.editor.browse_existing', 'Browse Existing', 'words')
           }
           onComplete={onComplete}
           dialect={locals.context}

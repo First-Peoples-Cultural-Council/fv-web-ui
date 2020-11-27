@@ -25,10 +25,12 @@ function TablePagination({ localization, rowsPerPageOptions, showFirstLastPageBu
     sortOrder: querySortOrder,
     task: queryTask,
   } = getSearchAsObject({
-    page: 1,
-    pageSize: 10,
-    sortBy: 'date',
-    sortOrder: 'desc',
+    defaults: {
+      page: 1,
+      pageSize: 10,
+      sortBy: 'date',
+      sortOrder: 'desc',
+    },
   })
   const queryPageNum = Number(queryPage)
   const queryPageSizeNum = Number(queryPageSize)

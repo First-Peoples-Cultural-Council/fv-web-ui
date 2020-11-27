@@ -22,9 +22,9 @@ jobs:
 
       # Installs the correct Node version for the project
       - name: Setup Node.js for use with actions
-        uses: actions/setup-node@v1.1.0
+        uses: actions/setup-node@v1
         with:
-          node-version: '10.19.0'
+          node-version: '12.18.3'
 
       # Setup the maven build caching (~/.m2/repository directory) to restore from or save to
       - name: Cache project build
@@ -61,7 +61,7 @@ jobs:
 
         # Run Sonar Analysis on Frontend
       - name: Setup Sonar Analysis For Frontend
-        uses: warchant/setup-sonar-scanner@v1
+        uses: warchant/setup-sonar-scanner@v3
 
         # Run Sonar Analysis on Frontend
       - name: Sonar Analysis on Frontend

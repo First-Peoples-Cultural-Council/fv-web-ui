@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<component name="ca.firstvoices.dialect.categories.services.CategoryService" version="1.0">
-  <implementation class="ca.firstvoices.dialect.categories.services.CategoryServiceImpl"/>
-  <service>
-    <provide interface="ca.firstvoices.dialect.categories.services.CategoryService"/>
-  </service>
-</component>

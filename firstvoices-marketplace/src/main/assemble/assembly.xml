@@ -1,0 +1,82 @@
+<project name="first-voices-package"
+         default="build"
+         xmlns:nx="urn:nuxeo-build"
+         xmlns:artifact="urn:nuxeo-artifact">
+    <taskdef resource="org/nuxeo/build/antlib.xml" uri="urn:nuxeo-build"/>
+    <taskdef resource="org/nuxeo/build/artifact/antlib.xml" uri="urn:nuxeo-artifact"/>
+    <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+
+    <target name="build" description="Build First Voices Package">
+        <property name="outdir" value="${maven.project.build.directory}"/>
+        <tstamp/>
+        <delete failonerror="false" dir="${outdir}/marketplace"/>
+        <mkdir dir="${outdir}/marketplace"/>
+        <copy todir="${outdir}/marketplace">
+            <fileset dir="src/main/resources"/>
+            <filterset>
+                <filter token="VERSION" value="${maven.project.version}"/>
+                <filter token="DISTRIB_VERSION" value="${nuxeo.distribution.version}"/>
+            </filterset>
+        </copy>
+
+        <copy todir="${outdir}/marketplace/install/bundles">
+            <artifact:set excludeRoots="true">
+                <includes>
+                    <artifact groupId="ca.firstvoices*" scope="" type="!pom"/>
+                </includes>
+            </artifact:set>
+        </copy>
+
+        <!-- include these dependencies when the `full-marketplace` profile is active -->
+        <nx:profile name="full-marketplace">
+          <copy todir="${outdir}/marketplace/install/lib" overwrite="true">
+            <artifact:file artifactId="aws-java-sdk-cognitoidp"/>
+            <artifact:dependencies artifactId="aws-java-sdk-cognitoidp">
+              <excludes>
+                <artifact scope="test"/>
+                <artifact scope="provided"/>
+              </excludes>
+            </artifact:dependencies>
+
+            <artifact:file artifactId="aws-java-sdk-core"/>
+            <artifact:dependencies artifactId="aws-java-sdk-core">
+              <excludes>
+                <artifact scope="test"/>
+                <artifact scope="provided"/>
+              </excludes>
+            </artifact:dependencies>
+          </copy>
+        </nx:profile>
+
+        <!-- See here for more details: https://github.com/nuxeo/ant-assembly-maven-plugin-->
+        <copy todir="${outdir}/marketplace/install/lib" overwrite="true">
+
+           <artifact:file artifactId="firstvoices-maintenance-common"/>
+            <artifact:dependencies artifactId="firstvoices-maintenance-common">
+                <excludes>
+                    <artifact scope="test"/>
+                    <artifact scope="provided"/>
+                </excludes>
+            </artifact:dependencies>
+
+            <!-- Include javers-core and related dependencies as JARs to be deployed -->
+            <artifact:file artifactId="javers-core"/>
+            <artifact:dependencies artifactId="javers-core">
+                <excludes>
+                    <artifact scope="test"/>
+                    <artifact scope="provided"/>
+                </excludes>
+            </artifact:dependencies>
+
+        </copy>
+
+        <zip destfile="${outdir}/${maven.project.artifactId}-${maven.project.version}.zip"
+             basedir="${outdir}/marketplace"/>
+        <artifact:attach file="${outdir}/${maven.project.artifactId}-${maven.project.version}.zip" type="zip"/>
+
+        <copy file="${outdir}/${maven.project.artifactId}-${maven.project.version}.zip"
+              tofile="${outdir}/${maven.project.artifactId}-latest.zip"/>
+
+    </target>
+
+</project>

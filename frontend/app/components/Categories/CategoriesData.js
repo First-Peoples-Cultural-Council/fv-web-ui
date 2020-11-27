@@ -131,25 +131,13 @@ CategoriesData.propTypes = {
 }
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const {
-    document,
-    fvCharacter,
-    fvCategory,
-    fvPortal,
-    listView,
-    navigation,
-    nuxeo,
-    searchDialect,
-    windowPath,
-    locale,
-  } = state
+  const { document, fvCharacter, fvCategory, fvPortal, listView, navigation, nuxeo, windowPath, locale } = state
 
   const { computeCategories } = fvCategory
   const { computeCharacters } = fvCharacter
   const { computeDocument } = document
   const { computeLogin } = nuxeo
   const { computePortal } = fvPortal
-  const { computeSearchDialect } = searchDialect
   const { properties, route } = navigation
   const { splitWindowPath, _windowPath } = windowPath
   const { intlService } = locale
@@ -160,7 +148,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeDocument,
     computeLogin,
     computePortal,
-    computeSearchDialect,
     listView,
     properties,
     routeParams: route.routeParams,

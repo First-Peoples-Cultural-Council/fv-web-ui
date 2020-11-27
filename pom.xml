@@ -17,83 +17,21 @@
     <version>10.10</version>
   </parent>
 
+
   <groupId>ca.firstvoices</groupId>
   <artifactId>firstvoices-modules-parent</artifactId>
-  <name>First Voices Project Parent</name>
+  <name>First Voices</name>
   <packaging>pom</packaging>
   <version>3.5.4</version>
 
   <modules>
-    <module>FirstVoicesData</module>
-    <module>FirstVoicesCoreTests</module>
-    <module>FirstVoicesPublisher</module>
-    <module>FirstVoicesEnrichers</module>
-    <module>FirstVoicesSecurity</module>
-    <module>FirstVoicesREST</module>
-    <module>FirstVoicesRESTPageProviders</module>
-    <module>FirstVoicesExport</module>
-    <module>FVUserRegistration</module>
-    <module>FirstVoicesMaintenance</module>
-    <module>FirstVoicesMaintenanceCommon</module>
-    <module>FirstVoicesOperations</module>
-    <module>FirstVoicesCharacters</module>
-    <module>FirstVoicesCoreIO</module>
-    <module>FirstVoices-marketplace</module>
+    <module>modules</module>
+    <module>firstvoices-marketplace</module>
   </modules>
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesPublisher</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesMaintenance</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesMaintenanceCommon</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesEnrichers</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesSecurity</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesExport</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FVUserRegistration</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesCoreTests</artifactId>
-        <version>${project.version}</version>
-        <type>test-jar</type>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesCoreTests</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoices-marketplace</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+
       <dependency>
         <groupId>org.nuxeo.ecm.distribution</groupId>
         <artifactId>nuxeo-distribution-cap</artifactId>
@@ -117,46 +55,11 @@
         <version>${nuxeo.distribution.version}</version>
       </dependency>
       <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>migration-contributions</artifactId>
-        <version>${project.version}</version>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk-cognitoidp</artifactId>
+        <version>${aws.sdk.version}</version>
       </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesSecurity</artifactId>
-        <type>test-jar</type>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesData</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <artifactId>FirstVoicesOperations</artifactId>
-        <groupId>ca.firstvoices</groupId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesREST</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesRESTPageProviders</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesCharacters</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ca.firstvoices</groupId>
-        <artifactId>FirstVoicesCoreIO</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+
     </dependencies>
   </dependencyManagement>
 
@@ -212,50 +115,50 @@
 
   <profiles>
 
-    <profile>
-      <id>full</id>
+<!--    <profile>-->
+<!--      <id>full</id>-->
 
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
+<!--      <activation>-->
+<!--        <activeByDefault>true</activeByDefault>-->
+<!--      </activation>-->
 
-      <modules>
-        <module>FirstVoicesHealthMonitor</module>
-        <module>FirstVoicesCognitoAuth</module>
-        <module>FirstVoicesSimplifiedAPI</module>
-      </modules>
+<!--      <modules>-->
+<!--        <module>FirstVoicesHealthMonitor</module>-->
+<!--        <module>FirstVoicesCognitoAuth</module>-->
+<!--        <module>FirstVoicesSimplifiedAPI</module>-->
+<!--      </modules>-->
 
-      <dependencyManagement>
-        <dependencies>
-          <dependency>
-            <groupId>ca.firstvoices</groupId>
-            <artifactId>FirstVoicesCognitoAuth</artifactId>
-            <version>${project.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>ca.firstvoices</groupId>
-            <artifactId>FirstVoicesHealthMonitor</artifactId>
-            <version>${project.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>ca.firstvoices</groupId>
-            <artifactId>FirstVoicesSimplifiedAPI</artifactId>
-            <version>${project.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-cognitoidp</artifactId>
-            <version>${aws.sdk.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-core</artifactId>
-            <version>${aws.sdk.version}</version>
-          </dependency>
-        </dependencies>
-      </dependencyManagement>
+<!--      <dependencyManagement>-->
+<!--        <dependencies>-->
+<!--          <dependency>-->
+<!--            <groupId>ca.firstvoices</groupId>-->
+<!--            <artifactId>FirstVoicesCognitoAuth</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--          </dependency>-->
+<!--          <dependency>-->
+<!--            <groupId>ca.firstvoices</groupId>-->
+<!--            <artifactId>FirstVoicesHealthMonitor</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--          </dependency>-->
+<!--          <dependency>-->
+<!--            <groupId>ca.firstvoices</groupId>-->
+<!--            <artifactId>FirstVoicesSimplifiedAPI</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--          </dependency>-->
+<!--          <dependency>-->
+<!--            <groupId>com.amazonaws</groupId>-->
+<!--            <artifactId>aws-java-sdk-cognitoidp</artifactId>-->
+<!--            <version>${aws.sdk.version}</version>-->
+<!--          </dependency>-->
+<!--          <dependency>-->
+<!--            <groupId>com.amazonaws</groupId>-->
+<!--            <artifactId>aws-java-sdk-core</artifactId>-->
+<!--            <version>${aws.sdk.version}</version>-->
+<!--          </dependency>-->
+<!--        </dependencies>-->
+<!--      </dependencyManagement>-->
 
-    </profile>
+<!--    </profile>-->
     <profile>
       <id>sonar</id>
       <properties>

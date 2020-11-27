@@ -39,7 +39,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import CategoriesListView from 'components/Categories/CategoriesListView'
 import ContributorsListView from 'components/LearnBase/contributors-list-view'
 import LinksListView from 'components/LearnBase/links-list-view'
-import PhraseListView from 'components/Phrases/list-view'
+import PhraseListView from 'components/PhrasesCreateEdit/list-view'
 import WordsListView from 'components/WordsCreateEdit/list-view'
 import FVLabel from 'components/FVLabel'
 const DefaultFetcherParams = {
@@ -80,8 +80,8 @@ export class BrowseComponent extends Component {
     const providedTitleFilter = selectn('otherContext.providedFilter', this.props.dialect)
     const appliedParams = providedTitleFilter
       ? Object.assign({}, DefaultFetcherParams, {
-        filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
-      })
+          filters: { 'properties.dc:title': { appliedFilter: providedTitleFilter } },
+        })
       : DefaultFetcherParams
 
     this.state = {

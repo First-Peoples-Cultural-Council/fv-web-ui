@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>ca.firstvoices</groupId>
+    <artifactId>modules</artifactId>
+    <version>3.5.4</version>
+  </parent>
+
+  <artifactId>modules.common</artifactId>
+  <packaging>pom</packaging>
+  <name>Common Modules</name>
+
+  <modules>
+    <module>firstvoices-characters</module>
+    <module>firstvoices-core-io</module>
+    <module>firstvoices-core-tests</module>
+    <module>firstvoices-data</module>
+    <module>firstvoices-enrichers</module>
+    <module>firstvoices-export</module>
+    <module>firstvoices-health-monitor</module>
+    <module>firstvoices-maintenance</module>
+    <module>firstvoices-maintenance-common</module>
+    <module>firstvoices-operations</module>
+    <module>firstvoices-publisher</module>
+  </modules>
+
+</project>

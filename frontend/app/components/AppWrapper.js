@@ -24,12 +24,13 @@ import { changeSiteTheme } from 'reducers/navigation'
 import selectn from 'selectn'
 
 import AppFrontController from 'components/AppFrontController'
+import TranslationBar from 'components/TranslationBar/TranslationBar'
 
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
 import FirstVoices from 'common/themes/FirstVoices.js'
-import FirstVoicesKids from 'common/themes/FirstVoicesKids.js'
-import FirstVoicesWorkspace from 'common/themes/FirstVoicesWorkspace.js'
+import FirstVoicesKids from 'common/themes/FirstVoicesKids.js' /// Fix this
+import FirstVoicesWorkspace from 'common/themes/FirstVoicesWorkspace.js' /// Fix this
 
 const { func, object, string } = PropTypes
 class AppWrapper extends Component {
@@ -80,6 +81,7 @@ class AppWrapper extends Component {
       <ThemeProvider theme={this.state.muiTheme}>
         <div id="AppWrapper">
           <AppFrontController warnings={{}} />
+          <TranslationBar />
         </div>
       </ThemeProvider>
     )

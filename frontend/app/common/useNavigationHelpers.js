@@ -24,20 +24,28 @@ function useNavigationHelpers() {
       const ctxPath = URLHelpers.getContextPath()
       replaceWindowPath(url.indexOf(ctxPath) === 0 ? url : `${ctxPath}${url}`)
     },
-    getSearchAsObject: (defaultSearch = {}) => {
+    getSearchAsObject: ({ defaults = {}, decode = [], boolean = [] } = {}) => {
       const search = {}
-      const decode = ['letter']
+      const toDecode = ['letter', 'searchTerm', ...decode]
+      const toBoolean = [...boolean]
       if (window.location.search !== '') {
         const searchParams = (window.location.search || '?').replace(/^\?/, '')
         searchParams.split('&').forEach((item) => {
           if (item !== '' && /=/.test(item)) {
-            const propValue = item.split('=')
-            search[propValue[0]] = decode.includes(propValue[0]) ? decodeURI(propValue[1]) : propValue[1]
+            const [propName, propValue] = item.split('=')
+            let searchValue = propValue
+            if (toDecode.includes(propName)) {
+              searchValue = decodeURI(searchValue)
+            }
+            if (toBoolean.includes(propName)) {
+              searchValue = propValue === 'true' ? true : false
+            }
+            search[propName] = searchValue
           }
         })
       }
 
-      return Object.assign({}, defaultSearch, search)
+      return Object.assign({}, defaults, search)
     },
     convertObjToUrlQuery: (obj) => {
       const urlQueryArray = []
