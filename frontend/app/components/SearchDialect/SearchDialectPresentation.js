@@ -26,9 +26,6 @@ import {
  * @returns {node} jsx markup
  */
 function SearchDialectPresentation({
-  // searchBySettings,
-  // searchDialectUpdate,
-  // searchNxqlQuery,
   browseMode,
   childrenSearchMessage,
   childrenUiSecondary,
