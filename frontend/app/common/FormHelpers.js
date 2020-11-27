@@ -40,9 +40,8 @@ export default {
           continue
         }
       }
-
-      if (formValue.hasOwnProperty(key) && key) {
-        if (formValue[key] && formValue[key] != '') {
+      if (Object.prototype.hasOwnProperty.call(formValue, key) && key) {
+        if (formValue[key] && formValue[key] !== '') {
           properties[key] = formValue[key]
         }
       }
@@ -50,7 +49,7 @@ export default {
 
     return properties
   },
-  prepareFilters: function(filters, options, optionsKey) {
+  prepareFilters: (filters, options, optionsKey) => {
     const preparedFilters = {}
 
     // Test each of the filters against item
@@ -60,7 +59,7 @@ export default {
       // Add options to returned filter object
 
       // Filter not prepared
-      if (!filters[filterKey].hasOwnProperty('appliedFilter')) {
+      if (!Object.prototype.hasOwnProperty.call(filters[filterKey], 'appliedFilter')) {
         preparedFilters[filterKey] = {
           appliedFilter: filters[filterKey],
           filterOptions: filterOptions,
@@ -77,8 +76,9 @@ export default {
 /*
 Get FormData from `form`
 
-1) Pass in a reference to a `form`
-2) Optionally provide regex of field names that should be converted to js objects (via `JSON.parse()`)
+formReference = Pass in a reference to a `form`
+toParse = Optionally provide regex of field names that should be converted to js objects (via `JSON.parse()`)
+checkoxes = array of checkbox names. Used to return boolean of checkboxes
 
 Example
 
@@ -93,25 +93,38 @@ getFormData({
     /^fvm:source/,
     /^fv-word:related_phrases/,
   ],
+  checkboxes: ['idNameOfCheckbox', 'secondIdNameOfCheckbox', ...]
 })
 */
-export const getFormData = ({ formReference, toParse = [] }) => {
+export const getFormData = ({ formReference, toParse = [], checkboxes = [] }) => {
   const formDataFormatted = {}
+
   // Set form data using "current" only if it exists to allow for Callback refs
   const formData = new FormData(formReference.current || formReference)
 
+  const checkboxesAsBooleans = {}
+  if (checkboxes.length > 0) {
+    for (let index = 0; index < checkboxes.length; index++) {
+      checkboxesAsBooleans[checkboxes[index]] = false
+    }
+  }
+
   for (const value of formData.entries()) {
-    // parse any stringify-ed array/objects
     const name = value[0]
     const data = value[1]
 
+    // Parse any stringify-ed array/objects
     const shouldParse = toParse.some((regex) => {
       return regex.test(name)
     })
-
     if (shouldParse) {
       formDataFormatted[name] = JSON.parse(data)
       continue
+    }
+
+    // Update any checked checkboxes
+    if (checkboxes.includes(name)) {
+      checkboxesAsBooleans[name] = true
     }
 
     // Handle file
@@ -133,7 +146,8 @@ export const getFormData = ({ formReference, toParse = [] }) => {
 
     formDataFormatted[name] = data
   }
-  return formDataFormatted
+
+  return Object.assign(formDataFormatted, checkboxesAsBooleans)
 }
 
 /*
