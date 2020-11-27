@@ -16,6 +16,7 @@ module.exports = function babelConfig(api) {
     'syntax-dynamic-import',
     ['@babel/plugin-proposal-decorators', { legacy: true }],
     'dynamic-import-node',
+    '@babel/plugin-transform-runtime',
   ]
 
   return {

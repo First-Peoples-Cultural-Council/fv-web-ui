@@ -25,6 +25,7 @@ import { getIcon, getSortState, sortCol } from 'common/ListView'
 import withPagination from 'components/withPagination'
 import IntlService from 'common/services/IntlService'
 import FVButton from 'components/FVButton'
+import FlashcardButton from 'components/FlashcardButton'
 import FVLabel from 'components/FVLabel'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
@@ -40,8 +41,6 @@ const DictionaryListSmallScreen = React.lazy(() => import('components/Dictionary
 const ExportDialect = React.lazy(() => import('components/ExportDialect'))
 const FlashcardList = React.lazy(() => import('components/FlashcardList'))
 
-const VIEWMODE_DEFAULT = 0
-const VIEWMODE_FLASHCARD = 1
 const VIEWMODE_SMALL_SCREEN = 2
 const VIEWMODE_LARGE_SCREEN = 3
 
@@ -88,27 +87,24 @@ function WordsListPresentation(props) {
   const intl = IntlService.instance
   const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
   let columnsEnhanced = [...columns]
+  const { sortOrder: querySortOrder, sortBy: querySortBy, flashcard: queryFlashcard } = getSearchAsObject()
 
   // ============= SORT
   if (hasSorting) {
     // If window.location.search has sortOrder & sortBy,
     // Ensure the same values are in redux
     // before generating the sort markup
-    const windowLocationSearch = getSearchAsObject()
-    const windowLocationSearchSortOrder = windowLocationSearch.sortOrder
-    const windowLocationSearchSortBy = windowLocationSearch.sortBy
     if (
-      windowLocationSearchSortOrder &&
-      windowLocationSearchSortBy &&
-      (navigationRouteSearch.sortOrder !== windowLocationSearchSortOrder ||
-        navigationRouteSearch.sortBy !== windowLocationSearchSortBy)
+      querySortOrder &&
+      querySortBy &&
+      (navigationRouteSearch.sortOrder !== querySortOrder || navigationRouteSearch.sortBy !== querySortBy)
     ) {
       setRouteParams({
         search: {
           page: routeParams.page,
           pageSize: routeParams.pageSize,
-          sortOrder: windowLocationSearchSortOrder,
-          sortBy: windowLocationSearchSortBy,
+          sortOrder: querySortOrder,
+          sortBy: querySortBy,
         },
       })
     }
@@ -148,21 +144,6 @@ function WordsListPresentation(props) {
         }}
       />
     ) : null
-
-  const listButtonArg = {
-    // Export
-    dialect,
-    exportDialectColumns,
-    exportDialectExportElement,
-    exportDialectLabel,
-    exportDialectQuery,
-    // Commented out until export is fixed
-    // hasExportDialect,
-    // View mode
-    clickHandlerViewMode: wordsListClickHandlerViewMode,
-    dictionaryListViewMode,
-    hasViewModeButtons,
-  }
 
   const getListSmallScreenArg = {
     dictionaryListSmallScreenProps: {
@@ -221,7 +202,20 @@ function WordsListPresentation(props) {
         <div className={dialectClassName}>
           {childrenSearch}
           {/* {chldrenListButtons} */}
-          {generateListButtons(listButtonArg)}
+          {generateListButtons({
+            // Export
+            dialect,
+            exportDialectColumns,
+            exportDialectExportElement,
+            exportDialectLabel,
+            exportDialectQuery,
+            // Commented out until export is fixed
+            // hasExportDialect,
+            // View mode
+            clickHandlerViewMode: wordsListClickHandlerViewMode,
+            dictionaryListViewMode,
+            hasViewModeButtons,
+          })}
           <Media
             queries={{
               small: '(max-width: 850px)',
@@ -242,7 +236,7 @@ function WordsListPresentation(props) {
 
               //  Flashcard Specified: by view mode button or prop
               // -----------------------------------------
-              if (dictionaryListViewMode === VIEWMODE_FLASHCARD) {
+              if (queryFlashcard) {
                 // TODO: SPECIFY FlashcardList PROPS
                 let flashCards = <FlashcardList {...props} />
                 if (hasPagination) {
@@ -305,39 +299,9 @@ function generateListButtons({
   exportDialectLabel,
   exportDialectQuery,
   hasExportDialect,
-  // View mode
-  clickHandlerViewMode = () => {},
-  dictionaryListViewMode,
   hasViewModeButtons,
 }) {
-  let buttonFlashcard = null
   let exportDialect = null
-
-  if (hasViewModeButtons) {
-    buttonFlashcard =
-      dictionaryListViewMode === VIEWMODE_FLASHCARD ? (
-        <FVButton
-          variant="contained"
-          color="primary"
-          className="WordsList__viewModeButton"
-          onClick={() => {
-            clickHandlerViewMode(VIEWMODE_DEFAULT)
-          }}
-        >
-          Cancel flashcard view
-        </FVButton>
-      ) : (
-        <FVButton
-          variant="contained"
-          className="WordsList__viewModeButton"
-          onClick={() => {
-            clickHandlerViewMode(VIEWMODE_FLASHCARD)
-          }}
-        >
-          Flashcard view
-        </FVButton>
-      )
-  }
   if (hasExportDialect) {
     exportDialect = (
       <AuthorizationFilter filter={{ permission: 'Write', entity: dialect }}>
@@ -353,7 +317,7 @@ function generateListButtons({
 
   return (
     <div className="WordsList__ListButtonsGroup">
-      {buttonFlashcard}
+      {hasViewModeButtons && <FlashcardButton.Container />}
       {exportDialect}
     </div>
   )
