@@ -53,9 +53,9 @@ import FVLabel from 'components/FVLabel'
  */
 
 const { array, func, object, string } = PropTypes
-
 export class ExploreDialect extends Component {
   static propTypes = {
+    intl: object,
     routeParams: object.isRequired,
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
@@ -310,9 +310,8 @@ export class ExploreDialect extends Component {
       <PromiseWrapper computeEntities={computeEntities}>
         <div className="row">{toolbar}</div>
         <Header
-          portal={{ compute: computePortal, update: this.props.updatePortal }}
           dialect={{ compute: computeDialect2, update: this.props.updateDialect2 }}
-          login={this.props.computeLogin}
+          portal={{ compute: computePortal, update: this.props.updatePortal }}
           routeParams={this.props.routeParams}
         >
           <div className="dialect-navigation">

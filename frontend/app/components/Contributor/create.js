@@ -51,7 +51,6 @@ export class Contributor extends React.Component {
     generateUrlEdit: func,
     // REDUX: reducers/state
     routeParams: object.isRequired,
-    computeLogin: object.isRequired,
     computeContributor: object.isRequired,
     computeCreateContributor: object,
     computeDialect: object.isRequired,
@@ -94,8 +93,8 @@ export class Contributor extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "ContributorCopy" */ './copy').then((_copy) => {
-        return _copy.default
-      })
+          return _copy.default
+        })
 
     // USING this.DIALECT_PATH instead of setting state
     // this.setState({ dialectPath: dialectPath })
@@ -119,8 +118,8 @@ export class Contributor extends React.Component {
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "ContributorValidator" */ './validator').then((_validator) => {
-        return _validator.default
-      })
+          return _validator.default
+        })
 
     // Flip to ready state...
     this.setState({
@@ -172,10 +171,7 @@ export class Contributor extends React.Component {
     const { className, breadcrumb, groupName } = this.props
     const { errors, isBusy } = this.state
     return (
-      <AuthenticationFilter
-        login={this.props.computeLogin}
-        anon={false}
-        routeParams={this.props.routeParams}
+      <AuthenticationFilter.Container
         notAuthenticatedComponent={
           <StateErrorBoundary copy={this.state.copy} errorMessage={this.props.computeDialect.error} />
         }
@@ -201,7 +197,7 @@ export class Contributor extends React.Component {
             setFormRef={this.setFormRef}
           />
         </PromiseWrapper>
-      </AuthenticationFilter>
+      </AuthenticationFilter.Container>
     )
   }
   _stateGetError = () => {
@@ -309,19 +305,17 @@ export class Contributor extends React.Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvContributor, navigation, nuxeo, windowPath } = state
+  const { fvDialect, fvContributor, navigation, windowPath } = state
 
   const { computeContributor, computeCreateContributor } = fvContributor
   const { computeDialect, computeDialect2 } = fvDialect
   const { splitWindowPath } = windowPath
   const { route } = navigation
-  const { computeLogin } = nuxeo
   return {
     computeContributor,
     computeCreateContributor,
     computeDialect,
     computeDialect2,
-    computeLogin,
     routeParams: route.routeParams,
     splitWindowPath,
   }

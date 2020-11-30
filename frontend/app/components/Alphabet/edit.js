@@ -120,11 +120,8 @@ export class PageDialectAlphabetCharacterEdit extends Component {
     }
 
     return (
-      <AuthenticationFilter
+      <AuthenticationFilter.Container
         is403={this.state.is403}
-        login={this.props.computeLogin}
-        anon={false}
-        routeParams={this.props.routeParams}
         notAuthenticatedComponent={
           <StateErrorBoundary /*copy={this.state.copy} errorMessage={this.state.errorMessage}*/ />
         }
@@ -153,7 +150,7 @@ export class PageDialectAlphabetCharacterEdit extends Component {
             routeParams={this.props.routeParams}
           />
         </div>
-      </AuthenticationFilter>
+      </AuthenticationFilter.Container>
     )
   }
 
@@ -192,17 +189,15 @@ export class PageDialectAlphabetCharacterEdit extends Component {
 }
 
 // REDUX: reducers/state
-const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvCharacter, fvDialect, nuxeo, windowPath } = state
+const mapStateToProps = (state) => {
+  const { fvCharacter, fvDialect, windowPath } = state
 
   const { computeCharacter } = fvCharacter
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
-  const { computeLogin } = nuxeo
   return {
     computeCharacter,
     computeDialect2,
-    computeLogin,
     splitWindowPath,
     windowPath: _windowPath,
   }

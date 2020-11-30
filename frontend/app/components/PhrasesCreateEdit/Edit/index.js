@@ -56,7 +56,6 @@ export class PhrasesEdit extends Component {
     phrase: object,
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
-    computeLogin: object.isRequired,
     computePhrase: object.isRequired,
     properties: object.isRequired,
     routeParams: object.isRequired,
@@ -265,11 +264,8 @@ export class PhrasesEdit extends Component {
     }
 
     return (
-      <AuthenticationFilter
+      <AuthenticationFilter.Container
         is403={this.state.is403}
-        login={this.props.computeLogin}
-        anon={false}
-        routeParams={this.props.routeParams}
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
         <div>
@@ -296,7 +292,7 @@ export class PhrasesEdit extends Component {
             routeParams={this.props.routeParams}
           />
         </div>
-      </AuthenticationFilter>
+      </AuthenticationFilter.Container>
     )
   }
   _stateGetErrorBoundary = () => {
@@ -310,17 +306,15 @@ export class PhrasesEdit extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvPhrase, navigation, nuxeo, windowPath } = state
+  const { fvDialect, fvPhrase, navigation, windowPath } = state
 
   const { computePhrase } = fvPhrase
   const { computeDialect2 } = fvDialect
   const { _windowPath, splitWindowPath } = windowPath
   const { properties, route } = navigation
-  const { computeLogin } = nuxeo
   return {
     computeDialect2,
     computePhrase,
-    computeLogin,
     routeParams: route.routeParams,
     properties,
     splitWindowPath,

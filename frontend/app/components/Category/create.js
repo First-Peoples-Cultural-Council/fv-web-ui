@@ -44,7 +44,6 @@ export class Category extends React.Component {
     validator: object,
     // REDUX: reducers/state
     routeParams: object.isRequired,
-    computeLogin: object.isRequired,
     computeCategories: object.isRequired,
     computeCreateCategory: object,
     computeCategory: object,
@@ -88,14 +87,14 @@ export class Category extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "CategoryCopy" */ './copy').then((_copy) => {
-        return _copy.default
-      })
+          return _copy.default
+        })
 
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "CategoryValidator" */ './validator').then((_validator) => {
-        return _validator.default
-      })
+          return _validator.default
+        })
     await this._getData({ copy, validator })
   }
 
@@ -164,10 +163,7 @@ export class Category extends React.Component {
     const { className, breadcrumb, groupName } = this.props
     const { errors, isBusy, valueCategories } = this.state
     return (
-      <AuthenticationFilter
-        login={this.props.computeLogin}
-        anon={false}
-        routeParams={this.props.routeParams}
+      <AuthenticationFilter.Container
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
         <PromiseWrapper
@@ -192,7 +188,7 @@ export class Category extends React.Component {
             valueCategories={valueCategories}
           />
         </PromiseWrapper>
-      </AuthenticationFilter>
+      </AuthenticationFilter.Container>
     )
   }
   _stateGetError = () => {
@@ -329,14 +325,12 @@ export class Category extends React.Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvCategory, fvDialect, windowPath, navigation, nuxeo } = state
+  const { fvCategory, fvDialect, windowPath, navigation } = state
   const { computeCategory, computeCategories, computeCreateCategory } = fvCategory
   const { computeDialect, computeDialect2 } = fvDialect
   const { splitWindowPath } = windowPath
   const { route } = navigation
-  const { computeLogin } = nuxeo
   return {
-    computeLogin,
     computeCategory,
     computeCategories,
     computeCreateCategory,
