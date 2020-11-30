@@ -81,6 +81,9 @@ export default {
           backgroundColor: '#d57470',
         },
       },
+      '&:visited': {
+        color: '#fff',
+      },
       '&$disabled': {
         color: '#a1a1a1',
         backgroundColor: '#e5e5e5',

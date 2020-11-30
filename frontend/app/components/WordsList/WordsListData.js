@@ -394,7 +394,9 @@ function WordsListData({ children }) {
     browseMode = SEARCH_FILTERED_BY_CATEGORY
   }
   const hrefCreate = `/explore${dialectPath}/learn/words/create`
-
+  const onClickCreate = () => {
+    navigate(hrefCreate)
+  }
   return children({
     browseMode,
     columns: columns,
@@ -418,6 +420,7 @@ function WordsListData({ children }) {
     listViewMode: listView.mode,
     metadata,
     navigationRouteSearch: getSearchAsObject(), // TODO REMOVE?
+    onClickCreate,
     page: parseInt(queryPage, 10),
     pageSize: parseInt(queryPageSize, 10),
     pageTitle,

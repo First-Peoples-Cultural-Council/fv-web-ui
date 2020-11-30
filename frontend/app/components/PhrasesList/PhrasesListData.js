@@ -340,6 +340,10 @@ function PhrasesListData({ children }) {
   if (queryPhraseBook) {
     browseMode = SEARCH_FILTERED_BY_PHRASE_BOOK
   }
+  const hrefCreate = `/explore${dialectPath}/learn/phrases/create`
+  const onClickCreate = () => {
+    navigate(hrefCreate)
+  }
   return children({
     browseMode,
     columns,
@@ -352,7 +356,7 @@ function PhrasesListData({ children }) {
       pageSize: queryPageSize,
     },
     filter,
-    hrefCreate: `/explore${dialectPath}/learn/phrases/create`,
+    hrefCreate,
     incrementResetCount: () => {
       setResetCount(resetCount + 1)
     },
@@ -360,6 +364,7 @@ function PhrasesListData({ children }) {
     listViewMode: listView.mode,
     metadata,
     navigationRouteSearch: getSearchAsObject(), // TODO REMOVE?
+    onClickCreate,
     pageTitle,
     pushWindowPath,
     queryLetter,
