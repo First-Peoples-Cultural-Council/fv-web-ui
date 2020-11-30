@@ -470,6 +470,7 @@ PhrasesListPresentation.propTypes = {
   items: oneOfType([array, instanceOf(List)]), // NOTE: Important prop. Primary source of data (filteredItems is also used!)
   metadata: object, // TODO
   navigationRouteSearch: object, // NOTE: redux saved search settings, using sortOrder & sortBy. TODO: is this a logical spot for sort?
+  onClickCreate: func,
   pageTitle: string,
   pushWindowPath: func,
   routeParams: object, // NOTE: redux saved route params, using page & pageSize
