@@ -1,22 +1,9 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import Link from 'components/Link'
 import '!style-loader!css-loader!./DialectFilterList.css'
-
-export class DialectFilterListPresentation extends Component {
-  render() {
-    const { title, listItemData } = this.props
-    return (
-      <div className="DialectFilterList" data-testid="DialectFilterList">
-        <h2>{title}</h2>
-        {listItemData.length === 0 && this.componentHasNoData()}
-        {listItemData.length !== 0 && this.componentHasData()}
-      </div>
-    )
-  }
-
-  componentHasData = () => {
-    const { listItemData } = this.props
+function DialectFilterListPresentation({ title, listItemData }) {
+  const generateList = () => {
     const listItems = listItemData.map((parent, parentIndex) => {
       const {
         isActive: parentIsActive,
@@ -30,28 +17,28 @@ export class DialectFilterListPresentation extends Component {
       const childrenNodes =
         parent.children.length > 0
           ? parent.children.map((child, childIndex) => {
-            const { isActive: childIsActive, uid: childUid, text: childText, href: childHref } = child
+              const { isActive: childIsActive, uid: childUid, text: childText, href: childHref } = child
 
-            let childActiveClass = ''
-            if (parentActiveClass) {
-              childActiveClass = 'DialectFilterListLink--activeParent'
-            }
-            if (childIsActive) {
-              childActiveClass = 'DialectFilterListLink--active'
-            }
-            return (
-              <li key={childUid}>
-                <Link
-                  dataTestId={`DialectFilterListItem-${parentIndex}-${childIndex}`}
-                  className={`DialectFilterListLink DialectFilterListLink--child ${childActiveClass}`}
-                  href={childHref}
-                  title={childText}
-                >
-                  {childText}
-                </Link>
-              </li>
-            )
-          })
+              let childActiveClass = ''
+              if (parentActiveClass) {
+                childActiveClass = 'DialectFilterListLink--activeParent'
+              }
+              if (childIsActive) {
+                childActiveClass = 'DialectFilterListLink--active'
+              }
+              return (
+                <li key={childUid}>
+                  <Link
+                    dataTestId={`DialectFilterListItem-${parentIndex}-${childIndex}`}
+                    className={`DialectFilterListLink DialectFilterListLink--child ${childActiveClass}`}
+                    href={childHref}
+                    title={childText}
+                  >
+                    {childText}
+                  </Link>
+                </li>
+              )
+            })
           : null
 
       const parentActiveChildClass = parentHasActiveChild ? 'DialectFilterListLink--activeChild' : ''
@@ -75,9 +62,12 @@ export class DialectFilterListPresentation extends Component {
     return listItems ? <ul className="DialectFilterListList DialectFilterListList--root">{listItems}</ul> : null
   }
 
-  componentHasNoData = () => {
-    return null
-  }
+  return (
+    <div className="DialectFilterList" data-testid="DialectFilterList">
+      <h2>{title}</h2>
+      {listItemData.length !== 0 && generateList()}
+    </div>
+  )
 }
 
 // Proptypes

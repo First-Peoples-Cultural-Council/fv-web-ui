@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AlphabetCharacters Container 1`] = `
+<div
+  className="AlphabetCharacters"
+  data-testid="AlphabetCharacters"
+>
+  <h2>
+    <span
+      className="fv-label"
+    >
+      Browse Alphabetically
+    </span>
+  </h2>
+  <span
+    className="MuiTypography-root AlphabetCharacters__noCharacters MuiTypography-caption"
+  >
+    Characters are unavailable at this time
+  </span>
+</div>
+`;
+
+exports[`AlphabetCharacters Presentation > 1 Active & 1 Inactive 1`] = `
+<div
+  className="AlphabetCharacters"
+  data-testid="AlphabetCharacters"
+>
+  <h2>
+    <span
+      className="fv-label"
+    >
+      Browse Alphabetically
+    </span>
+  </h2>
+  <div
+    className="AlphabetCharactersTiles "
+  >
+    <a
+      className="AlphabetCharactersTile AlphabetCharactersTile--active"
+      href="#"
+      onClick={[Function]}
+    >
+      Active
+    </a>
+    <a
+      className="AlphabetCharactersTile "
+      href="#"
+      onClick={[Function]}
+    >
+      Inactive
+    </a>
+  </div>
+</div>
+`;
+
+exports[`AlphabetCharacters Presentation > No Chars 1`] = `
+<div
+  className="AlphabetCharacters"
+  data-testid="AlphabetCharacters"
+>
+  <h2>
+    <span
+      className="fv-label"
+    >
+      Browse Alphabetically
+    </span>
+  </h2>
+  <span
+    className="MuiTypography-root AlphabetCharacters__noCharacters MuiTypography-caption"
+  >
+    Characters are unavailable at this time
+  </span>
+</div>
+`;

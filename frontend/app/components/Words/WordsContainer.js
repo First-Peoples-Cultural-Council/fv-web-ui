@@ -18,8 +18,7 @@ import React from 'react'
 
 // FPCC
 // -------------------------------------------
-import AlphabetCharactersPresentation from 'components/AlphabetCharacters/AlphabetCharactersPresentation'
-import AlphabetCharactersData from 'components/AlphabetCharacters/AlphabetCharactersData'
+import AlphabetCharactersContainer from 'components/AlphabetCharacters/AlphabetCharactersContainer'
 import CategoriesData from 'components/Categories/CategoriesData'
 import DialectFilterListData from 'components/DialectFilterList/DialectFilterListData'
 import DialectFilterListPresentation from 'components/DialectFilterList/DialectFilterListPresentation'
@@ -31,42 +30,18 @@ import PromiseWrapper from 'components/PromiseWrapper'
 function WordsContainer() {
   return (
     <WordsData>
-      {({ computeEntities, handleCategoryClick, handleAlphabetClick, intl, routeParams, splitWindowPath }) => {
+      {({ computeEntities, intl }) => {
         return (
           <PromiseWrapper renderOnError computeEntities={computeEntities}>
             <div className="row">
               <div className="col-xs-12 col-md-3 PrintHide">
-                <AlphabetCharactersData
-                  letterClickedCallback={({ href, updateHistory }) => {
-                    handleAlphabetClick(href, updateHistory)
-                  }}
-                >
-                  {({ activeLetter, characters, generateAlphabetCharacterHref, letterClicked, dialectClassName }) => {
-                    return (
-                      <AlphabetCharactersPresentation
-                        activeLetter={activeLetter}
-                        characters={characters}
-                        dialectClassName={dialectClassName}
-                        generateAlphabetCharacterHref={generateAlphabetCharacterHref}
-                        letterClicked={letterClicked}
-                        splitWindowPath={splitWindowPath}
-                      />
-                    )
-                  }}
-                </AlphabetCharactersData>
+                <AlphabetCharactersContainer />
                 <CategoriesData>
                   {({ categoriesData }) => {
                     let categoriesDataToRender = null
                     if (categoriesData && categoriesData.length > 0) {
                       categoriesDataToRender = (
-                        <DialectFilterListData
-                          selectedCategoryId={routeParams.category}
-                          setDialectFilterCallback={handleCategoryClick}
-                          facets={categoriesData}
-                          facetType="category"
-                          type="words"
-                          workspaceKey="fv-word:categories"
-                        >
+                        <DialectFilterListData filterListData={categoriesData} queryParam="category">
                           {({ listItemData }) => {
                             return (
                               <DialectFilterListPresentation

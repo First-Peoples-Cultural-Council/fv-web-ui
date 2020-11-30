@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import PhrasesListPresentation from './PhrasesListPresentation'
 import PhrasesListData from './PhrasesListData'
 import PromiseWrapper from 'components/PromiseWrapper'
 
+const SearchDialectMessage = React.lazy(() => import('components/SearchDialect/SearchDialectMessage'))
+const SearchDialectContainer = React.lazy(() => import('components/SearchDialect/SearchDialectContainer'))
+const SearchDialectCheckbox = React.lazy(() => import('components/SearchDialect/SearchDialectCheckbox'))
+import { SEARCHDIALECT_CHECKBOX, SEARCH_DATA_TYPE_PHRASE } from 'common/Constants'
 /**
  * @summary PhrasesListContainer
  * @version 1.0.1
@@ -15,6 +19,8 @@ function PhrasesListContainer() {
   return (
     <PhrasesListData>
       {({
+        browseMode,
+        checkboxNames,
         columns,
         computeEntities,
         dialect,
@@ -22,18 +28,24 @@ function PhrasesListContainer() {
         fetcher,
         fetcherParams,
         filter,
-        handleCreateClick,
-        handleSearch,
+        hrefCreate,
+        incrementResetCount,
         items,
         listViewMode,
         metadata,
         navigationRouteSearch,
         pageTitle,
         pushWindowPath,
-        resetSearch,
+        queryLetter,
+        queryPhraseBook,
+        querySearchByCulturalNotes,
+        querySearchByDefinitions,
+        querySearchByTitle,
+        querySearchStyle,
+        querySearchTerm,
+        resetCount,
         routeParams,
-        searchDialectDataType,
-        searchUi,
+        searchUiSecondary,
         setListViewMode,
         setRouteParams,
         sortHandler,
@@ -43,7 +55,7 @@ function PhrasesListContainer() {
             <PhrasesListPresentation
               dialectClassName={dialectClassName}
               filter={filter}
-              handleCreateClick={handleCreateClick}
+              hrefCreate={hrefCreate}
               clickHandlerViewMode={setListViewMode}
               dictionaryListViewMode={listViewMode}
               pageTitle={pageTitle}
@@ -55,10 +67,43 @@ function PhrasesListContainer() {
               // ==================================================
               // Search
               // --------------------------------------------------
-              handleSearch={handleSearch}
-              resetSearch={resetSearch}
-              searchDialectDataType={searchDialectDataType}
-              searchUi={searchUi}
+              childrenSearch={
+                <Suspense fallback={<div>loading...</div>}>
+                  <SearchDialectContainer
+                    checkboxNames={checkboxNames}
+                    key={`forceRender${resetCount}`}
+                    incrementResetCount={incrementResetCount}
+                    browseMode={browseMode}
+                    childrenSearchMessage={
+                      <SearchDialectMessage
+                        dialectClassName={dialectClassName}
+                        letter={queryLetter}
+                        phraseBook={queryPhraseBook}
+                        searchStyle={querySearchStyle}
+                        searchTerm={querySearchTerm}
+                        shouldSearchCulturalNotes={querySearchByCulturalNotes}
+                        shouldSearchDefinitions={querySearchByDefinitions}
+                        shouldSearchTitle={querySearchByTitle}
+                        searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
+                      />
+                    }
+                    childrenUiSecondary={searchUiSecondary.map(({ defaultChecked, idName, labelText, type }, index) => {
+                      if (type === SEARCHDIALECT_CHECKBOX) {
+                        return (
+                          <SearchDialectCheckbox
+                            key={index}
+                            defaultChecked={defaultChecked}
+                            idName={idName}
+                            labelText={labelText}
+                          />
+                        )
+                      }
+                      return null
+                    })}
+                    searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
+                  />
+                </Suspense>
+              }
               // ==================================================
               // Table data
               // --------------------------------------------------

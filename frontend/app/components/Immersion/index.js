@@ -63,7 +63,6 @@ class PageDialectImmersionList extends PageDialectLearnBase {
     // // REDUX: reducers/state
     computeDocument: object.isRequired,
     computePortal: object.isRequired,
-    computeSearchDialect: object,
     properties: object.isRequired,
     splitWindowPath: array.isRequired,
     // // REDUX: actions/dispatch/func
@@ -165,6 +164,7 @@ class PageDialectImmersionList extends PageDialectLearnBase {
 
   // FILTERS
   initialFilterInfo = () => {
+    // TODO: Don't think routeParams.handleCategoryClick exists
     const routeParamsCategory = this.props.routeParams.handleCategoryClick
     return routeParamsCategory || null
   }

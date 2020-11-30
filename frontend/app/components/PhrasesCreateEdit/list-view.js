@@ -41,7 +41,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
 import Link from 'components/Link'
-import { SEARCH_DATA_TYPE_PHRASE } from 'common/Constants'
+// import { SEARCH_DATA_TYPE_PHRASE } from 'common/Constants'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildren,
@@ -253,15 +253,12 @@ export class PhrasesListView extends DataListView {
       gridCols,
       gridListView,
       gridViewProps,
-      handleSearch,
-      hasSearch,
+      childrenSearch,
       hasSorting,
       hasViewModeButtons,
       navigationRouteSearch,
-      resetSearch,
       rowClickHandler,
-      searchByMode,
-      searchUi,
+      searchFilteredBy,
     } = this.props
 
     const computeEntities = Immutable.fromJS([
@@ -356,12 +353,8 @@ export class PhrasesListView extends DataListView {
             dictionaryListViewMode={dictionaryListViewMode}
             dictionaryListSmallScreenTemplate={dictionaryListSmallScreenTemplatePhrases}
             // SEARCH:
-            handleSearch={handleSearch}
-            hasSearch={hasSearch}
-            searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
-            resetSearch={resetSearch}
-            searchByMode={searchByMode}
-            searchUi={searchUi}
+            childrenSearch={childrenSearch}
+            searchFilteredBy={searchFilteredBy}
             // List view
             hasViewModeButtons={hasViewModeButtons}
             hasSorting={hasSorting}

@@ -1,3 +1,5 @@
+// app/components/DictionaryList/DictionaryList.js
+
 /*
 Copyright 2016 First People's Cultural Council
 
@@ -16,58 +18,7 @@ limitations under the License.
 
 /*
 =============================================================================
-Search
-=============================================================================
-
-`handleSearch` func
-------------------------------------
-  Callback called after search is initiated in <SearchDialect />
-
-    TODO: Since SearchDialect is setting search data in Redux, we may be
-    TODO: able to drop this prop if the relevant ancestors are also using
-    TODO: redux to monitor changes to searchDialect.computeSearchDialect
-
-
-`hasSearch` bool
-------------------------------------
-  Toggles the <SearchDialect /> component
-
-
-`resetSearch` func
-------------------------------------
-  Callback called after search is reset in <SearchDialect />
-
-    TODO: Since SearchDialect is setting search data in Redux, we may be
-    TODO: able to drop this prop if the relevant ancestors are also using
-    TODO: redux to monitor changes to searchDialect.computeSearchDialect
-
-
-`searchUi` array of objects
-------------------------------------
-  Generates the UI under the search field, eg: checkboxes & selects
-
-  searchUi={[
-    { // For a checkbox:
-      defaultChecked: true, // [Optional] boolean to select/deselect the checkbox
-      idName: 'searchByTitle', // Used for id & name attributes
-      labelText: 'Phrase', // Text used in <label>
-    },
-    { // For a select:
-      type: 'select',
-      value: 'test', // [Optional] to set the selected option
-      idName: 'searchPartOfSpeech', // Used for id & name attributes
-      labelText: 'Parts of speech:', // Text used in <label>
-      options: [ // Array of objs to generate <option>s
-        {
-          value: 'test',
-          text: 'Test',
-        },
-      ],
-    },
-  ]}
-
-
-Known issues
+Search Known issues
 -----------------------------------------------------------------------------
 - 1,2, & 3 char searches don't work with title
 - Url params is getting removed by ancestor
@@ -202,6 +153,9 @@ import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { pushWindowPath } from 'reducers/windowPath'
 import { setRouteParams } from 'reducers/navigation'
+
+import useNavigationHelpers from 'common/useNavigationHelpers'
+
 // Components
 import {
   batchTitle,
@@ -214,13 +168,12 @@ import {
   getUidsFromComputedData,
   getUidsThatAreNotDeleted,
 } from 'common/ListView'
+import FlashcardButton from 'components/FlashcardButton'
 import withPagination from 'components/withPagination'
 import IntlService from 'common/services/IntlService'
 import FVButton from 'components/FVButton'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'components/DictionaryList/DictionaryListSmallScreen'
-import { getSearchObject } from 'common/NavigationHelpers'
 import AuthorizationFilter from 'components/AuthorizationFilter'
-const SearchDialect = React.lazy(() => import('components/SearchDialect'))
 const FlashcardList = React.lazy(() => import('components/FlashcardList'))
 const DictionaryListSmallScreen = React.lazy(() => import('components/DictionaryList/DictionaryListSmallScreen'))
 const DictionaryListLargeScreen = React.lazy(() => import('components/DictionaryList/DictionaryListLargeScreen'))
@@ -230,12 +183,12 @@ import '!style-loader!css-loader!./DictionaryList.css'
 // ===============================================================
 // DictionaryList
 // ===============================================================
-const VIEWMODE_DEFAULT = 0
-const VIEWMODE_FLASHCARD = 1
 const VIEWMODE_SMALL_SCREEN = 2
 const VIEWMODE_LARGE_SCREEN = 3
 
 const DictionaryList = (props) => {
+  const { getSearchAsObject } = useNavigationHelpers()
+  const { sortOrder: querySortOrder, sortBy: querySortBy, flashcard: queryFlashcard } = getSearchAsObject()
   const intl = IntlService.instance
   const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
   let columnsEnhanced = [...props.columns]
@@ -245,21 +198,17 @@ const DictionaryList = (props) => {
     // If window.location.search has sortOrder & sortBy,
     // Ensure the same values are in redux
     // before generating the sort markup
-    const windowLocationSearch = getSearchObject()
-    const windowLocationSearchSortOrder = windowLocationSearch.sortOrder
-    const windowLocationSearchSortBy = windowLocationSearch.sortBy
     if (
-      windowLocationSearchSortOrder &&
-      windowLocationSearchSortBy &&
-      (props.navigationRouteSearch.sortOrder !== windowLocationSearchSortOrder ||
-        props.navigationRouteSearch.sortBy !== windowLocationSearchSortBy)
+      querySortOrder &&
+      querySortBy &&
+      (props.navigationRouteSearch.sortOrder !== querySortOrder || props.navigationRouteSearch.sortBy !== querySortBy)
     ) {
       props.setRouteParams({
         search: {
           page: props.navigationRouteRouteParams.page,
           pageSize: props.navigationRouteRouteParams.pageSize,
-          sortOrder: windowLocationSearchSortOrder,
-          sortBy: windowLocationSearchSortBy,
+          sortOrder: querySortOrder,
+          sortBy: querySortBy,
         },
       })
     }
@@ -361,16 +310,7 @@ const DictionaryList = (props) => {
 
   return (
     <>
-      {props.hasSearch && (
-        <Suspense fallback={<div>Loading...</div>}>
-          <SearchDialect
-            handleSearch={props.handleSearch}
-            resetSearch={props.resetSearch}
-            searchUi={props.searchUi}
-            searchDialectDataType={props.searchDialectDataType}
-          />
-        </Suspense>
-      )}
+      {props.childrenSearch}
 
       {generateListButtons({
         // Export
@@ -408,9 +348,9 @@ const DictionaryList = (props) => {
           // User specified view states
           // =========================================
 
-          //  Flashcard Specified: by view mode button or prop
+          //  Flashcard
           // -----------------------------------------
-          if (props.dictionaryListViewMode === VIEWMODE_FLASHCARD) {
+          if (queryFlashcard) {
             // TODO: SPECIFY FlashcardList PROPS
             let flashCards = <FlashcardList {...props} />
             if (props.hasPagination) {
@@ -478,38 +418,9 @@ function generateListButtons({
   exportDialectQuery,
   hasExportDialect,
   // View mode
-  clickHandlerViewMode = () => {},
-  dictionaryListViewMode,
   hasViewModeButtons,
 }) {
-  let buttonFlashcard = null
   let exportDialect = null
-
-  if (hasViewModeButtons) {
-    buttonFlashcard =
-      dictionaryListViewMode === VIEWMODE_FLASHCARD ? (
-        <FVButton
-          variant="contained"
-          color="primary"
-          className="DictionaryList__viewModeButton"
-          onClick={() => {
-            clickHandlerViewMode(VIEWMODE_DEFAULT)
-          }}
-        >
-          Cancel flashcard view
-        </FVButton>
-      ) : (
-        <FVButton
-          variant="contained"
-          className="DictionaryList__viewModeButton"
-          onClick={() => {
-            clickHandlerViewMode(VIEWMODE_FLASHCARD)
-          }}
-        >
-          Flashcard view
-        </FVButton>
-      )
-  }
   if (hasExportDialect) {
     exportDialect = (
       <AuthorizationFilter filter={{ permission: 'Write', entity: dialect }}>
@@ -527,7 +438,7 @@ function generateListButtons({
 
   return (
     <div className="DictionaryList__ListButtonsGroup">
-      {buttonFlashcard}
+      {hasViewModeButtons && <FlashcardButton.Container />}
       {exportDialect}
     </div>
   )
@@ -712,7 +623,7 @@ function getListLargeScreen({ dictionaryListLargeScreenProps = {}, hasPagination
 
 // ===============================================================
 
-const { array, bool, func, instanceOf, number, object, oneOfType, string } = PropTypes
+const { array, bool, func, instanceOf, node, number, object, oneOfType, string } = PropTypes
 DictionaryList.propTypes = {
   // Pagination
   appendControls: array, // NOTE: array of elements to append just after the paging controls
@@ -754,11 +665,7 @@ DictionaryList.propTypes = {
   type: string, // TODO: DROP?
   wrapperStyle: object, // TODO: DROP?
   // <SearchDialect />
-  handleSearch: func, // NOTE: After <SearchDialect /> updates search data in redux, this callback is called. TODO: could drop if all components are subscribed to Redux > Search updates.
-  hasSearch: bool, // NOTE: Toggles the <SearchDialect /> component
-  searchDialectDataType: number, // NOTE: tells SearchDialect what it's working with (eg: SEARCH_DATA_TYPE_WORD, SEARCH_DATA_TYPE_PHRASE). Used in preparing appropriate UI messages & form markup
-  resetSearch: func, // NOTE: SearchDialect handles resetting (setting form back to initial state & updating redux), this is a followup callback after that happens
-  searchUi: array, // NOTE: array of objects used to generate the search form elements (eg: inputs, selects, if they are checked, etc), this prop is used to reset to the initial state when 'Reset' search is pressed
+  childrenSearch: node,
   // REDUX: reducers/state
   navigationRouteRouteParams: object.isRequired, // NOTE: redux saved route params, using page & pageSize
   navigationRouteSearch: object.isRequired, // NOTE: redux saved search settings, using sortOrder & sortBy. TODO: is this a logical spot for sort?
@@ -788,10 +695,6 @@ DictionaryList.defaultProps = {
   // General List
   hasSorting: true,
   hasViewModeButtons: true,
-  // Search
-  handleSearch: () => {},
-  hasSearch: false,
-  resetSearch: () => {},
   // REDUX: actions/dispatch/func
   pushWindowPath: () => {},
 }

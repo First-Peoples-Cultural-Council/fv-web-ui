@@ -6,25 +6,24 @@ import selectn from 'selectn'
 import Immutable from 'immutable'
 
 // FPCC
-
 import useDialect from 'dataSources/useDialect'
+import useDirectory from 'dataSources/useDirectory'
 import useDocument from 'dataSources/useDocument'
 import useIntl from 'dataSources/useIntl'
 import useListView from 'dataSources/useListView'
 import useLogin from 'dataSources/useLogin'
-import useRoute from 'dataSources/useRoute'
 import usePortal from 'dataSources/usePortal'
-import useSearchDialect from 'dataSources/useSearchDialect'
+import useRoute from 'dataSources/useRoute'
 import useWindowPath from 'dataSources/useWindowPath'
 import useWord from 'dataSources/useWord'
-import useNavigationHelpers from 'common/useNavigationHelpers'
 
 // Helpers
+import useSearchDialectHelpers from 'common/useSearchDialectHelpers'
+import useNavigationHelpers from 'common/useNavigationHelpers'
 import { getDialectClassname } from 'common/Helpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
-import { WORKSPACES } from 'common/Constants'
 
 // Components
 import AuthorizationFilter from 'components/AuthorizationFilter'
@@ -35,9 +34,18 @@ import {
   dictionaryListSmallScreenColumnDataTemplate,
   dictionaryListSmallScreenColumnDataTemplateCustomAudio,
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
-  dictionaryListSmallScreenTemplateWords,
   dictionaryListSmallScreenColumnDataTemplateCustomState,
+  dictionaryListSmallScreenTemplateWords,
 } from 'components/DictionaryList/DictionaryListSmallScreen'
+
+import {
+  SEARCH_FILTERED_BY_CATEGORY,
+  SEARCH_FILTERED_BY_CHARACTER,
+  SEARCH_PART_OF_SPEECH_ANY,
+  SEARCHDIALECT_CHECKBOX,
+  SEARCHDIALECT_SELECT,
+  WORKSPACES,
+} from 'common/Constants'
 
 /**
  * @summary WordsListData
@@ -57,25 +65,37 @@ function WordsListData({ children }) {
   const { computeLogin } = useLogin()
   const { routeParams, setRouteParams } = useRoute()
   const { computePortal, fetchPortal } = usePortal()
-  const { computeSearchDialect } = useSearchDialect()
   const { pushWindowPath } = useWindowPath()
   const { computeWords, fetchWords } = useWord()
-  const { getSearchAsObject, convertObjToUrlQuery, navigate } = useNavigationHelpers()
+  const { computeDirectory, fetchDirectory } = useDirectory()
+  const [partsOfSpeechRequested, setPartsOfSpeechRequested] = useState(false)
+  const [partsOfSpeech, setPartsOfSpeech] = useState([])
+  const [resetCount, setResetCount] = useState(0)
   const { siteTheme, dialect_path: dialectPath, area } = routeParams
-  // const { searchNxqlQuery = '' } = computeSearchDialect
+  const { getSearchAsObject, convertObjToUrlQuery, navigate } = useNavigationHelpers()
+  const { generateNxql } = useSearchDialectHelpers()
   const {
     category: queryCategory,
     letter: queryLetter,
     page: queryPage,
     pageSize: queryPageSize,
+    searchByDefinitions: querySearchByDefinitions,
+    searchByTitle: querySearchByTitle,
+    searchByTranslations: querySearchByTranslations,
+    searchPartOfSpeech: querySearchPartOfSpeech,
+    searchStyle: querySearchStyle,
+    searchTerm: querySearchTerm,
     sortBy: querySortBy,
     sortOrder: querySortOrder,
   } = getSearchAsObject({
-    category: routeParams.category,
-    page: 1,
-    pageSize: 10,
-    sortBy: 'dc:title',
-    sortOrder: 'desc',
+    defaults: {
+      searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
+      page: 1,
+      pageSize: 10,
+      sortBy: 'fv:custom_order',
+      sortOrder: 'asc',
+    },
+    boolean: ['searchByDefinitions', 'searchByTitle', 'searchByTranslations'],
   })
   const dictionaryKey = `${dialectPath}/Dictionary`
   const portalKey = `${dialectPath}/Portal`
@@ -111,11 +131,22 @@ function WordsListData({ children }) {
 
   useEffect(() => {
     if (curFetchDocumentAction === 'FV_DOCUMENT_FETCH_SUCCESS') {
-      let currentAppliedFilter = ''
+      let currentAppliedFilter
       if (queryCategory) {
         currentAppliedFilter = ` AND ${
           area === 'Workspaces' ? 'fv-word:categories' : 'fvproxy:proxied_categories'
         }/* IN ("${queryCategory}") &enrichment=category_children`
+      } else {
+        const searchNxqlQuery = generateNxql({
+          searchByDefinitions: querySearchByDefinitions,
+          searchFilteredBy: queryCategory || queryLetter,
+          searchByTitle: querySearchByTitle,
+          searchByTranslations: querySearchByTranslations,
+          searchPartOfSpeech: querySearchPartOfSpeech,
+          searchTerm: querySearchTerm,
+          searchStyle: querySearchStyle,
+        })
+        currentAppliedFilter = searchNxqlQuery ? ` AND ${searchNxqlQuery}` : ''
       }
       // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
       const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
@@ -127,12 +158,61 @@ function WordsListData({ children }) {
 
       fetchWords(dictionaryKey, nql)
     }
-  }, [curFetchDocumentAction, area, queryCategory, queryLetter, queryPage, queryPageSize, querySortOrder, querySortBy])
+  }, [
+    area,
+    curFetchDocumentAction,
+    queryCategory,
+    queryLetter,
+    queryPage,
+    queryPageSize,
+    querySearchByDefinitions,
+    querySearchByTitle,
+    querySearchByTranslations,
+    querySearchPartOfSpeech,
+    querySearchStyle,
+    querySearchTerm,
+    querySortBy,
+    querySortOrder,
+  ])
+
+  // Parts of speech
+  // TODO: if this data is language specific update it to do a fetchIfMissing
+  // TODO: if this data is NOT language specific, move it closer to app (or cache it somehow)
+  useEffect(() => {
+    const _partsOfSpeech = selectn('directoryEntries.parts_of_speech', computeDirectory) || []
+
+    // NOTE: used to rely on Redux booleans (isFetching, success) to determine if we should make a request
+    // React would rerender before Redux could set the flag and so we'd initiate duplicate requests
+    // That's why we are using a local `partsOfSpeechRequested` flag
+    if (_partsOfSpeech.length === 0 && partsOfSpeechRequested !== true) {
+      setPartsOfSpeechRequested(true)
+      fetchDirectory('parts_of_speech')
+    }
+
+    if (computeDirectory.success) {
+      // sort entires, create markup
+      const partsOfSpeechUnsorted = selectn('directoryEntries.parts_of_speech', computeDirectory) || []
+      const sorter = (a, b) => {
+        if (a.text < b.text) return -1
+        if (a.text > b.text) return 1
+        return 0
+      }
+      const partsOfSpeechSorted = [...partsOfSpeechUnsorted].sort(sorter)
+      setPartsOfSpeech([
+        {
+          text: 'Any',
+          value: SEARCH_PART_OF_SPEECH_ANY,
+        },
+        {
+          value: null,
+          text: '─────────────',
+        },
+        ...partsOfSpeechSorted,
+      ])
+    }
+  }, [computeDirectory])
 
   const DEFAULT_LANGUAGE = 'english'
-  const { searchNxqlSort = {} } = computeSearchDialect
-  const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
-
   const [columns] = useState(getColumns())
 
   const computeEntities = Immutable.fromJS([
@@ -141,36 +221,6 @@ function WordsListData({ children }) {
       entity: computeWords,
     },
   ])
-  /*
-  function fetchListViewData({ category, letter, pageIndex, pageSize, sortOrder, sortBy, resetSearch}) {
-    let currentAppliedFilter = ''
-
-    if (searchNxqlQuery && resetSearch !== true) {
-      currentAppliedFilter = ` AND ${searchNxqlQuery}`
-    }
-
-    if (category && resetSearch !== true) {
-      // Private
-      if (area === 'Workspaces') {
-        currentAppliedFilter = ` AND fv-word:categories/* IN ("${category}") &enrichment=category_children`
-      }
-      // Public
-      if (area === 'sections') {
-        currentAppliedFilter = ` AND fvproxy:proxied_categories/* IN ("${category}") &enrichment=category_children`
-      }
-    }
-    // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
-    const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
-
-    const nql = `${currentAppliedFilter}&currentPageIndex=${
-      pageIndex - 1
-    }&dialectId=${dialectUid}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}${
-      letter ? `&letter=${letter}&starts_with_query=Document.CustomOrderQuery` : startsWithQuery
-    }`
-
-    fetchWords(dictionaryKey, nql)
-  }
-  */
 
   // Filter for AuthorizationFilter
   const filter = {
@@ -323,11 +373,9 @@ function WordsListData({ children }) {
     return columnsArray
   }
 
-  function fetcher({ currentPageIndex, pageSize }) {
+  function onPagination({ currentPageIndex: page, pageSize }) {
     navigate(
-      `${window.location.pathname}?${convertObjToUrlQuery(
-        Object.assign({}, getSearchAsObject(), { page: currentPageIndex, pageSize })
-      )}`
+      `${window.location.pathname}?${convertObjToUrlQuery(Object.assign({}, getSearchAsObject(), { page, pageSize }))}`
     )
   }
 
@@ -338,47 +386,33 @@ function WordsListData({ children }) {
       )}`
     )
   }
-
-  const _resetSearch = () => {
-    const searchObj = getSearchAsObject()
-    const filterOut = ['category', 'letter', 'page', 'sortBy', 'sortOrder']
-    const filteredByKey = Object.fromEntries(
-      Object.entries(searchObj).filter(([key]) => {
-        return filterOut.includes(key) === false
-      })
-    )
-    navigate(
-      `${window.location.pathname}?${convertObjToUrlQuery(
-        Object.assign({}, filteredByKey, { page: 1, pageSize: searchObj.pageSize })
-      )}`
-    )
+  let browseMode
+  if (queryLetter) {
+    browseMode = SEARCH_FILTERED_BY_CHARACTER
   }
-
-  // TODO: Will be updated over in FW-1188-search-dialect-url
-  const handleSearch = (/*{ href, updateUrl = true } = {}*/) => {
-    // console.log('handleSearch', {href, updateUrl})
-    // if (href && updateUrl) {
-    //   navigate(href)
-    // } else {
-    //   resetURLPagination({ preserveSearch: true })
-    // }
-    // // fetchListViewData({ pageIndex: queryPage, pageSize: queryPageSize })
+  if (queryCategory) {
+    browseMode = SEARCH_FILTERED_BY_CATEGORY
   }
   const hrefCreate = `/explore${dialectPath}/learn/words/create`
+
   return children({
+    browseMode,
     columns: columns,
     computeEntities,
     dialect,
     dialectClassName,
     dialectUid,
-    fetcher,
+    dictionaryId,
+    fetcher: onPagination,
     fetcherParams: {
       currentPageIndex: queryPage,
       pageSize: queryPageSize,
     },
     filter,
     hrefCreate,
-    handleSearch,
+    incrementResetCount: () => {
+      setResetCount(resetCount + 1)
+    },
     isKidsTheme: siteTheme === 'kids',
     items,
     listViewMode: listView.mode,
@@ -387,16 +421,52 @@ function WordsListData({ children }) {
     page: parseInt(queryPage, 10),
     pageSize: parseInt(queryPageSize, 10),
     pageTitle,
-    dictionaryId,
+    partsOfSpeech,
     pushWindowPath,
+    queryCategory,
+    queryLetter,
+    querySearchByDefinitions,
+    querySearchByTitle,
+    querySearchByTranslations,
+    querySearchPartOfSpeech,
+    querySearchStyle,
+    querySearchTerm,
+    resetCount,
     routeParams,
-    resetSearch: _resetSearch,
-    setRouteParams,
+    checkboxNames: ['searchByDefinitions', 'searchByTitle', 'searchByTranslations'],
+    searchUiSecondary: [
+      {
+        type: SEARCHDIALECT_CHECKBOX,
+        defaultChecked: querySearchByTitle !== undefined ? querySearchByTitle : true,
+        idName: 'searchByTitle',
+        labelText: 'Word',
+      },
+      {
+        type: SEARCHDIALECT_CHECKBOX,
+        defaultChecked: querySearchByDefinitions !== undefined ? querySearchByDefinitions : true,
+        idName: 'searchByDefinitions',
+        labelText: 'Definitions',
+      },
+      {
+        defaultChecked: querySearchByTranslations !== undefined ? querySearchByTranslations : false,
+        type: SEARCHDIALECT_CHECKBOX,
+        idName: 'searchByTranslations',
+        labelText: 'Literal translations',
+      },
+      {
+        type: SEARCHDIALECT_SELECT,
+        defaultValue: querySearchPartOfSpeech,
+        idName: 'searchPartOfSpeech',
+        labelText: 'Parts of speech:',
+        options: partsOfSpeech,
+      },
+    ],
     setListViewMode: setListViewMode,
+    setRouteParams,
     smallScreenTemplate: dictionaryListSmallScreenTemplateWords,
-    sortCol: DEFAULT_SORT_COL,
+    sortCol: querySortBy,
     sortHandler: sortHandler,
-    sortType: DEFAULT_SORT_TYPE,
+    sortType: querySortOrder,
   })
 }
 

@@ -395,17 +395,13 @@ export class AppFrontController extends Component {
 
         /*
         When to switch to workspace theme:
-
               routeParams has area=WORKSPACES
                 or
               matchedPage.path contains WORKSPACES
                 or
               matchedPage.siteTheme=WORKSPACES
-
                 AND
-
               current theme is not 'workspace'
-
           TODO: investigate if statecharts would simplify matters
         */
         // Note: https://eslint.org/docs/rules/no-prototype-builtins

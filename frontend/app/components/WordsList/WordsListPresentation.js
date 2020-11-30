@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Libraries
 import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
@@ -22,12 +21,11 @@ import { List } from 'immutable'
 import Media from 'react-media'
 
 import useNavigationHelpers from 'common/useNavigationHelpers'
-
-// Components
 import { getIcon, getSortState, sortCol } from 'common/ListView'
 import withPagination from 'components/withPagination'
 import IntlService from 'common/services/IntlService'
 import FVButton from 'components/FVButton'
+import FlashcardButton from 'components/FlashcardButton'
 import FVLabel from 'components/FVLabel'
 import {
   dictionaryListSmallScreenColumnDataTemplate,
@@ -35,19 +33,14 @@ import {
 } from 'components/DictionaryList/DictionaryListSmallScreen'
 import AuthorizationFilter from 'components/AuthorizationFilter'
 import Link from 'components/Link'
-const SearchDialect = React.lazy(() => import('components/SearchDialect'))
-const FlashcardList = React.lazy(() => import('components/FlashcardList'))
-const DictionaryListSmallScreen = React.lazy(() => import('components/DictionaryList/DictionaryListSmallScreen'))
-const DictionaryListLargeScreen = React.lazy(() => import('components/DictionaryList/DictionaryListLargeScreen'))
-const ExportDialect = React.lazy(() => import('components/ExportDialect'))
-import '!style-loader!css-loader!./WordsList.css'
-import '!style-loader!css-loader!components/DictionaryList/DictionaryList.css'
 
-// ===============================================================
-// WordList
-// ===============================================================
-const VIEWMODE_DEFAULT = 0
-const VIEWMODE_FLASHCARD = 1
+import '!style-loader!css-loader!./WordsList.css'
+
+const DictionaryListLargeScreen = React.lazy(() => import('components/DictionaryList/DictionaryListLargeScreen'))
+const DictionaryListSmallScreen = React.lazy(() => import('components/DictionaryList/DictionaryListSmallScreen'))
+const ExportDialect = React.lazy(() => import('components/ExportDialect'))
+const FlashcardList = React.lazy(() => import('components/FlashcardList'))
+
 const VIEWMODE_SMALL_SCREEN = 2
 const VIEWMODE_LARGE_SCREEN = 3
 
@@ -63,6 +56,7 @@ const VIEWMODE_LARGE_SCREEN = 3
 function WordsListPresentation(props) {
   const {
     // hasExportDialect,
+    childrenSearch,
     columns,
     dialect,
     dialectClassName,
@@ -74,7 +68,6 @@ function WordsListPresentation(props) {
     fetcher,
     fetcherParams,
     filter,
-    handleSearch,
     hasPagination,
     hasSorting,
     hasViewModeButtons,
@@ -84,11 +77,8 @@ function WordsListPresentation(props) {
     navigationRouteSearch,
     pageTitle,
     pushWindowPath,
-    resetSearch,
     routeParams,
     rowClickHandler,
-    searchDialectDataType,
-    searchUi,
     setRouteParams,
     sortHandler,
     wordsListClickHandlerViewMode,
@@ -97,27 +87,24 @@ function WordsListPresentation(props) {
   const intl = IntlService.instance
   const DefaultFetcherParams = { currentPageIndex: 1, pageSize: 10, sortBy: 'fv:custom_order', sortOrder: 'asc' }
   let columnsEnhanced = [...columns]
+  const { sortOrder: querySortOrder, sortBy: querySortBy, flashcard: queryFlashcard } = getSearchAsObject()
 
   // ============= SORT
   if (hasSorting) {
     // If window.location.search has sortOrder & sortBy,
     // Ensure the same values are in redux
     // before generating the sort markup
-    const windowLocationSearch = getSearchAsObject()
-    const windowLocationSearchSortOrder = windowLocationSearch.sortOrder
-    const windowLocationSearchSortBy = windowLocationSearch.sortBy
     if (
-      windowLocationSearchSortOrder &&
-      windowLocationSearchSortBy &&
-      (navigationRouteSearch.sortOrder !== windowLocationSearchSortOrder ||
-        navigationRouteSearch.sortBy !== windowLocationSearchSortBy)
+      querySortOrder &&
+      querySortBy &&
+      (navigationRouteSearch.sortOrder !== querySortOrder || navigationRouteSearch.sortBy !== querySortBy)
     ) {
       setRouteParams({
         search: {
           page: routeParams.page,
           pageSize: routeParams.pageSize,
-          sortOrder: windowLocationSearchSortOrder,
-          sortBy: windowLocationSearchSortBy,
+          sortOrder: querySortOrder,
+          sortBy: querySortBy,
         },
       })
     }
@@ -157,21 +144,6 @@ function WordsListPresentation(props) {
         }}
       />
     ) : null
-
-  const listButtonArg = {
-    // Export
-    dialect,
-    exportDialectColumns,
-    exportDialectExportElement,
-    exportDialectLabel,
-    exportDialectQuery,
-    // Commented out until export is fixed
-    // hasExportDialect,
-    // View mode
-    clickHandlerViewMode: wordsListClickHandlerViewMode,
-    dictionaryListViewMode,
-    hasViewModeButtons,
-  }
 
   const getListSmallScreenArg = {
     dictionaryListSmallScreenProps: {
@@ -228,13 +200,22 @@ function WordsListPresentation(props) {
           </div>
         </AuthorizationFilter>
         <div className={dialectClassName}>
-          <SearchDialect
-            handleSearch={handleSearch}
-            resetSearch={resetSearch}
-            searchUi={searchUi}
-            searchDialectDataType={searchDialectDataType}
-          />
-          {generateListButtons(listButtonArg)}
+          {childrenSearch}
+          {/* {chldrenListButtons} */}
+          {generateListButtons({
+            // Export
+            dialect,
+            exportDialectColumns,
+            exportDialectExportElement,
+            exportDialectLabel,
+            exportDialectQuery,
+            // Commented out until export is fixed
+            // hasExportDialect,
+            // View mode
+            clickHandlerViewMode: wordsListClickHandlerViewMode,
+            dictionaryListViewMode,
+            hasViewModeButtons,
+          })}
           <Media
             queries={{
               small: '(max-width: 850px)',
@@ -255,7 +236,7 @@ function WordsListPresentation(props) {
 
               //  Flashcard Specified: by view mode button or prop
               // -----------------------------------------
-              if (dictionaryListViewMode === VIEWMODE_FLASHCARD) {
+              if (queryFlashcard) {
                 // TODO: SPECIFY FlashcardList PROPS
                 let flashCards = <FlashcardList {...props} />
                 if (hasPagination) {
@@ -318,39 +299,9 @@ function generateListButtons({
   exportDialectLabel,
   exportDialectQuery,
   hasExportDialect,
-  // View mode
-  clickHandlerViewMode = () => {},
-  dictionaryListViewMode,
   hasViewModeButtons,
 }) {
-  let buttonFlashcard = null
   let exportDialect = null
-
-  if (hasViewModeButtons) {
-    buttonFlashcard =
-      dictionaryListViewMode === VIEWMODE_FLASHCARD ? (
-        <FVButton
-          variant="contained"
-          color="primary"
-          className="WordsList__viewModeButton"
-          onClick={() => {
-            clickHandlerViewMode(VIEWMODE_DEFAULT)
-          }}
-        >
-          Cancel flashcard view
-        </FVButton>
-      ) : (
-        <FVButton
-          variant="contained"
-          className="WordsList__viewModeButton"
-          onClick={() => {
-            clickHandlerViewMode(VIEWMODE_FLASHCARD)
-          }}
-        >
-          Flashcard view
-        </FVButton>
-      )
-  }
   if (hasExportDialect) {
     exportDialect = (
       <AuthorizationFilter filter={{ permission: 'Write', entity: dialect }}>
@@ -366,7 +317,7 @@ function generateListButtons({
 
   return (
     <div className="WordsList__ListButtonsGroup">
-      {buttonFlashcard}
+      {hasViewModeButtons && <FlashcardButton.Container />}
       {exportDialect}
     </div>
   )
@@ -490,7 +441,7 @@ function getListLargeScreen({ dictionaryListLargeScreenProps = {}, hasPagination
 
 // ===============================================================
 
-const { array, bool, func, instanceOf, number, object, oneOfType, string } = PropTypes
+const { array, bool, func, instanceOf, node, number, object, oneOfType, string } = PropTypes
 WordsListPresentation.propTypes = {
   // Pagination
   fetcher: func, // TODO
@@ -518,11 +469,7 @@ WordsListPresentation.propTypes = {
   pageTitle: string,
   rowClickHandler: func, // NOTE: this list view is used in the browse mode where you can select items to add to other documents (eg: add a contributor to a word). This is the event handler for that action
   sortHandler: func, // NOTE: event handler for sort actions. If not defined, the url will be updated instead.
-  // <SearchDialect />
-  handleSearch: func, // NOTE: After <SearchDialect /> updates search data in redux, this callback is called. TODO: could drop if all components are subscribed to Redux > Search updates.
-  searchDialectDataType: number, // NOTE: tells SearchDialect what it's working with (eg: 6 = SEARCH_DATA_TYPE_WORD, 5 = SEARCH_DATA_TYPE_PHRASE). Used in preparing appropriate UI messages & form markup
-  resetSearch: func, // NOTE: SearchDialect handles resetting (setting form back to initial state & updating redux), this is a followup callback after that happens
-  searchUi: array, // NOTE: array of objects used to generate the search form elements (eg: inputs, selects, if they are checked, etc), this prop is used to reset to the initial state when 'Reset' search is pressed
+  childrenSearch: node,
   // REDUX: reducers/state
   routeParams: object, // NOTE: redux saved route params, using page & pageSize
   navigationRouteSearch: object, // NOTE: redux saved search settings, using sortOrder & sortBy. TODO: is this a logical spot for sort?
@@ -541,10 +488,6 @@ WordsListPresentation.defaultProps = {
   // General List
   hasSorting: true,
   hasViewModeButtons: true,
-  // Search
-  handleSearch: () => {},
-  resetSearch: () => {},
-  searchDialectDataType: 6,
 }
 
 export default WordsListPresentation

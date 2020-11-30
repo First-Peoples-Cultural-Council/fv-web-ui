@@ -6,29 +6,23 @@ import selectn from 'selectn'
 import Immutable from 'immutable'
 
 // FPCC
-
 import useDialect from 'dataSources/useDialect'
 import useDocument from 'dataSources/useDocument'
 import useIntl from 'dataSources/useIntl'
 import useListView from 'dataSources/useListView'
 import useLogin from 'dataSources/useLogin'
-import useRoute from 'dataSources/useRoute'
 import usePhrase from 'dataSources/usePhrase'
 import usePortal from 'dataSources/usePortal'
-import useSearchDialect from 'dataSources/useSearchDialect'
+import useRoute from 'dataSources/useRoute'
 import useWindowPath from 'dataSources/useWindowPath'
 
 // Helpers
+import useSearchDialectHelpers from 'common/useSearchDialectHelpers'
+import useNavigationHelpers from 'common/useNavigationHelpers'
 import { getDialectClassname } from 'common/Helpers'
-import NavigationHelpers, {
-  appendPathArrayAfterLandmark,
-  getSearchObject,
-  hasPagination,
-  updateUrlIfPageOrPageSizeIsDifferent,
-} from 'common/NavigationHelpers'
+import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
-import { WORKSPACES, SEARCH_DATA_TYPE_PHRASE } from 'common/Constants'
 
 // Components
 import AuthorizationFilter from 'components/AuthorizationFilter'
@@ -41,6 +35,13 @@ import {
   dictionaryListSmallScreenColumnDataTemplateCustomInspectChildrenCellRender,
   dictionaryListSmallScreenColumnDataTemplateCustomState,
 } from 'components/DictionaryList/DictionaryListSmallScreen'
+
+import {
+  SEARCH_FILTERED_BY_CHARACTER,
+  SEARCH_FILTERED_BY_PHRASE_BOOK,
+  SEARCHDIALECT_CHECKBOX,
+  WORKSPACES,
+} from 'common/Constants'
 
 /**
  * @summary PhrasesListData
@@ -58,60 +59,114 @@ function PhrasesListData({ children }) {
   const { intl } = useIntl()
   const { listView, setListViewMode } = useListView()
   const { computeLogin } = useLogin()
-  const { routeParams, setRouteParams, navigationRouteSearch } = useRoute()
+  const { routeParams, setRouteParams } = useRoute()
   const { computePortal, fetchPortal } = usePortal()
-  const { computeSearchDialect } = useSearchDialect()
-  const { pushWindowPath, splitWindowPath } = useWindowPath()
+  const { pushWindowPath } = useWindowPath()
   const { computePhrases, fetchPhrases } = usePhrase()
+  const { getSearchAsObject, convertObjToUrlQuery, navigate } = useNavigationHelpers()
+  const [resetCount, setResetCount] = useState(0)
+  const { area, dialect_path: dialectPath, siteTheme } = routeParams
+  const { generateNxql } = useSearchDialectHelpers()
+  const {
+    phraseBook: queryPhraseBook,
+    letter: queryLetter,
+    page: queryPage,
+    pageSize: queryPageSize,
+    searchByDefinitions: querySearchByDefinitions,
+    searchByTitle: querySearchByTitle,
+    searchStyle: querySearchStyle,
+    searchTerm: querySearchTerm,
+    searchByCulturalNotes: querySearchByCulturalNotes,
+    sortBy: querySortBy,
+    sortOrder: querySortOrder,
+  } = getSearchAsObject({
+    defaults: {
+      page: 1,
+      pageSize: 10,
+      sortBy: 'dc:title',
+      sortOrder: 'desc',
+    },
+    boolean: ['searchByDefinitions', 'searchByTitle', 'searchByCulturalNotes'],
+  })
+  const dictionaryKey = `${dialectPath}/Dictionary`
+  const portalKey = `${dialectPath}/Portal`
 
-  const { searchNxqlQuery = '' } = computeSearchDialect
-
+  // Fetch Dialect, Document, Portal
   useEffect(() => {
-    fetchData()
+    ProviderHelpers.fetchIfMissing(dialectPath, fetchDialect2, computeDialect2)
+    ProviderHelpers.fetchIfMissing(dictionaryKey, fetchDocument, computeDocument)
+    ProviderHelpers.fetchIfMissing(portalKey, fetchPortal, computePortal)
   }, [])
 
-  useEffect(() => {
-    if (curFetchDocumentAction === 'FV_DOCUMENT_FETCH_SUCCESS') {
-      fetchListViewData({ pageIndex: routeParams.page, pageSize: routeParams.pageSize })
-    }
-  }, [
-    curFetchDocumentAction,
-    routeParams.area,
-    routeParams.category,
-    routeParams.letter,
-    routeParams.page,
-    routeParams.pageSize,
-    navigationRouteSearch,
-  ])
+  // Parse Dialect
+  const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, dialectPath)
+  const dialect = selectn('response', computedDialect2)
 
-  const dictionaryKey = `${routeParams.dialect_path}/Dictionary`
-  const DEFAULT_LANGUAGE = 'english'
-  const { searchNxqlSort = {} } = computeSearchDialect
-  const { DEFAULT_SORT_COL, DEFAULT_SORT_TYPE } = searchNxqlSort
-
-  const [columns] = useState(getColumns())
-
-  // Parsing computeDocument
+  // Parse Document
   const extractComputeDocument = ProviderHelpers.getEntry(computeDocument, dictionaryKey)
   const dialectUid = selectn('response.contextParameters.ancestry.dialect.uid', extractComputeDocument)
   const curFetchDocumentAction = selectn('action', extractComputeDocument)
   const dictionary = selectn('response', extractComputeDocument)
-  const dictionaryId = selectn('uid', dictionary)
 
-  // Parsing computePortal
-  const extractComputePortal = ProviderHelpers.getEntry(computePortal, `${routeParams.dialect_path}/Portal`)
+  // Parse Portal
+  const extractComputePortal = ProviderHelpers.getEntry(computePortal, portalKey)
   const dialectClassName = getDialectClassname(extractComputePortal)
   const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', extractComputePortal) ||
     ''} ${intl.trans('phrases', 'Phrases', 'first')}`
 
-  // Parsing computeDialect2
-  const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
-  const dialect = selectn('response', computedDialect2)
-
-  // Parsing computePhrases
+  // Parse Phrases
   const computedEntries = ProviderHelpers.getEntry(computePhrases, dictionaryKey)
   const items = selectn('response.entries', computedEntries)
   const metadata = selectn('response', computedEntries)
+
+  useEffect(() => {
+    if (curFetchDocumentAction === 'FV_DOCUMENT_FETCH_SUCCESS') {
+      let currentAppliedFilter
+      // Handle phrasebooks
+      if (queryPhraseBook) {
+        currentAppliedFilter = ` AND ${
+          area === 'Workspaces' ? 'fv-phrase:phrase_books' : 'fvproxy:proxied_categories'
+        }/* IN ("${queryPhraseBook}")`
+      } else {
+        const searchNxqlQuery = generateNxql({
+          // phraseBook: queryPhraseBook,
+          searchByCulturalNotes: querySearchByCulturalNotes,
+          searchByDefinitions: querySearchByDefinitions,
+          searchByTitle: querySearchByTitle,
+          searchStyle: querySearchStyle,
+          searchTerm: querySearchTerm,
+        })
+        currentAppliedFilter = searchNxqlQuery ? ` AND ${searchNxqlQuery}` : ''
+      }
+      // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
+      const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
+
+      const nql = `${currentAppliedFilter}&currentPageIndex=${queryPage -
+        1}&dialectId=${dialectUid}&pageSize=${queryPageSize}&sortOrder=${querySortOrder}&sortBy=${querySortBy}${
+        queryLetter ? `&letter=${queryLetter}&starts_with_query=Document.CustomOrderQuery` : startsWithQuery
+      }`
+
+      fetchPhrases(dictionaryKey, nql)
+    }
+  }, [
+    area,
+    curFetchDocumentAction,
+    queryLetter,
+    queryPage,
+    queryPageSize,
+    queryPhraseBook,
+    querySearchByCulturalNotes,
+    querySearchByDefinitions,
+    querySearchByTitle,
+    querySearchStyle,
+    querySearchTerm,
+    querySortBy,
+    querySortOrder,
+  ])
+
+  const DEFAULT_LANGUAGE = 'english'
+
+  const [columns] = useState(getColumns())
 
   const computeEntities = Immutable.fromJS([
     {
@@ -119,75 +174,6 @@ function PhrasesListData({ children }) {
       entity: computePhrases,
     },
   ])
-
-  const fetchData = async () => {
-    // Dialect
-    await ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect2, computeDialect2)
-    // Document
-    await ProviderHelpers.fetchIfMissing(dictionaryKey, fetchDocument, computeDocument)
-    // Portal
-    await ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, fetchPortal, computePortal)
-    // Phrases
-    fetchListViewData()
-  }
-
-  async function fetchListViewData({ pageIndex = 1, pageSize = 10, resetSearch = false } = {}) {
-    let currentAppliedFilter = ''
-
-    if (searchNxqlQuery && !resetSearch) {
-      currentAppliedFilter = ` AND ${searchNxqlQuery}`
-    }
-
-    // Handle phrasebooks
-    if (routeParams.phraseBook && !resetSearch) {
-      // Private
-      if (routeParams.area === 'Workspaces') {
-        currentAppliedFilter = ` AND fv-phrase:phrase_books/* IN ("${routeParams.phraseBook}")`
-      }
-      // Public
-      if (routeParams.area === 'sections') {
-        currentAppliedFilter = ` AND fvproxy:proxied_categories/* IN ("${routeParams.phraseBook}")`
-      }
-    }
-    // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
-    const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
-    const searchObj = getSearchObject()
-    // 1st: redux values, 2nd: url search query, 3rd: defaults
-    const sortOrder = navigationRouteSearch.sortOrder || searchObj.sortOrder || DEFAULT_SORT_TYPE
-    const sortBy = navigationRouteSearch.sortBy || searchObj.sortBy || DEFAULT_SORT_COL
-
-    const nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
-      1}&dialectId=${dialectUid}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}${
-      routeParams.letter ? `&letter=${routeParams.letter}&starts_with_query=Document.CustomOrderQuery` : startsWithQuery
-    }`
-
-    fetchPhrases(dictionaryKey, nql)
-  }
-
-  const onNavigateRequest = (path) => {
-    if (hasPagination) {
-      NavigationHelpers.navigateForward(splitWindowPath.slice(0, splitWindowPath.length - 2), [path], pushWindowPath)
-    } else {
-      NavigationHelpers.navigateForward(splitWindowPath, [path], pushWindowPath)
-    }
-  }
-
-  const handleCreateClick = () => {
-    const url = appendPathArrayAfterLandmark({
-      pathArray: ['create'],
-      splitWindowPath: splitWindowPath,
-    })
-    if (url) {
-      NavigationHelpers.navigate(`/${url}`, pushWindowPath, false)
-    } else {
-      onNavigateRequest({
-        hasPagination,
-        path: 'create',
-        pushWindowPath,
-        splitWindowPath,
-      })
-    }
-  }
 
   // Filter for AuthorizationFilter
   const filter = {
@@ -203,9 +189,9 @@ function PhrasesListData({ children }) {
         title: intl.trans('phrase', 'Phrase', 'first'),
         columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.cellRender,
         render: (v, data) => {
-          const isWorkspaces = routeParams.area === WORKSPACES
-          const href = NavigationHelpers.generateUIDPath(routeParams.siteTheme, data, 'phrases')
-          const hrefEdit = NavigationHelpers.generateUIDEditPath(routeParams.siteTheme, data, 'phrases')
+          const isWorkspaces = area === WORKSPACES
+          const href = NavigationHelpers.generateUIDPath(siteTheme, data, 'phrases')
+          const hrefEdit = NavigationHelpers.generateUIDEditPath(siteTheme, data, 'phrases')
           const hrefEditRedirect = `${hrefEdit}?redirect=${encodeURIComponent(
             `${window.location.pathname}${window.location.search}`
           )}`
@@ -312,7 +298,7 @@ function PhrasesListData({ children }) {
       },
     ]
     // NOTE: Append `categories` & `state` columns if on Workspaces
-    if (routeParams.area === WORKSPACES) {
+    if (area === WORKSPACES) {
       columnsArray.push({
         name: 'fv-phrase:phrase_books',
         title: intl.trans('phrase books', 'Phrase books', 'first'),
@@ -333,147 +319,84 @@ function PhrasesListData({ children }) {
     return columnsArray
   }
 
-  function fetcher({ currentPageIndex, pageSize }) {
-    let newUrl = ''
-    if (routeParams.letter) {
-      newUrl = appendPathArrayAfterLandmark({
-        pathArray: [pageSize, currentPageIndex],
-        splitWindowPath: splitWindowPath,
-        landmarkArray: [routeParams.letter],
-      })
-    } else if (routeParams.category) {
-      newUrl = appendPathArrayAfterLandmark({
-        pathArray: [pageSize, currentPageIndex],
-        splitWindowPath: splitWindowPath,
-        landmarkArray: [routeParams.category],
-      })
-    } else {
-      newUrl = appendPathArrayAfterLandmark({
-        pathArray: [pageSize, currentPageIndex],
-        splitWindowPath: splitWindowPath,
-        landmarkArray: ['phrases'],
-      })
-    }
-    if (newUrl) {
-      NavigationHelpers.navigate(`/${newUrl}`, pushWindowPath)
-    }
+  function onPagination({ currentPageIndex: page, pageSize }) {
+    navigate(
+      `${window.location.pathname}?${convertObjToUrlQuery(Object.assign({}, getSearchAsObject(), { page, pageSize }))}`
+    )
   }
 
-  const sortHandler = async ({ page, pageSize, sortBy, sortOrder } = {}) => {
-    await setRouteParams({
-      search: {
-        pageSize,
-        page,
-        sortBy,
-        sortOrder,
-      },
-    })
-    // Conditionally update the url after a sort event
-    updateUrlIfPageOrPageSizeIsDifferent({
-      page,
-      pageSize,
-      pushWindowPath: pushWindowPath,
-      routeParamsPage: routeParams.page,
-      routeParamsPageSize: routeParams.pageSize,
-      splitWindowPath: splitWindowPath,
-      windowLocationSearch: window.location.search, // Set only if you want to append the search
-    })
+  const sortHandler = ({ page, pageSize, sortBy, sortOrder } = {}) => {
+    navigate(
+      `${window.location.pathname}?${convertObjToUrlQuery(
+        Object.assign({}, getSearchAsObject(), { page, pageSize, sortBy, sortOrder })
+      )}`
+    )
   }
 
-  const _resetSearch = () => {
-    // Remove alphabet/category filter urls
-    if (routeParams.category || routeParams.letter) {
-      let resetUrl = `/${splitWindowPath.join('/')}`
-      const _splitWindowPath = [...splitWindowPath]
-      const learnIndex = _splitWindowPath.indexOf('learn')
-      if (learnIndex !== -1) {
-        _splitWindowPath.splice(learnIndex + 2)
-        resetUrl = `/${_splitWindowPath.join('/')}`
-      }
-      NavigationHelpers.navigate(`${resetUrl}/${routeParams.pageSize}/1`, pushWindowPath, false)
-    } else {
-      // When facets change, pagination should be reset.
-      // In these pages (words/phrase), list views are controlled via URL
-      fetchListViewData({ pageIndex: routeParams.page, pageSize: routeParams.pageSize, resetSearch: true })
-      resetURLPagination()
-    }
+  let browseMode
+  if (queryLetter) {
+    browseMode = SEARCH_FILTERED_BY_CHARACTER
   }
-
-  const resetURLPagination = ({ pageSize = null, preserveSearch = false } = {}) => {
-    const urlPage = 1
-    const urlPageSize = pageSize || routeParams.pageSize || 10
-
-    const navHelperCallback = (url) => {
-      pushWindowPath(`${url}${preserveSearch ? window.location.search : ''}`)
-    }
-    const hasPaginationUrl = hasPagination(splitWindowPath)
-    if (hasPaginationUrl) {
-      // Replace them
-      NavigationHelpers.navigateForwardReplaceMultiple(splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
-    } else {
-      // No pagination in url (eg: .../learn/phrases), append `urlPage` & `urlPageSize`
-      NavigationHelpers.navigateForward(splitWindowPath, [urlPageSize, urlPage], navHelperCallback)
-    }
+  if (queryPhraseBook) {
+    browseMode = SEARCH_FILTERED_BY_PHRASE_BOOK
   }
-
-  const handleSearch = async ({ href, updateUrl = true } = {}) => {
-    if (href && updateUrl) {
-      NavigationHelpers.navigate(href, pushWindowPath, false)
-    } else {
-      resetURLPagination({ preserveSearch: true })
-    }
-
-    fetchListViewData({ pageIndex: routeParams.page, pageSize: routeParams.pageSize })
-  }
-
-  const phrasesSearchUi = [
-    {
-      defaultChecked: true,
-      idName: 'searchByTitle',
-      labelText: 'Phrase',
-    },
-    {
-      defaultChecked: true,
-      idName: 'searchByDefinitions',
-      labelText: 'Definitions',
-    },
-    {
-      idName: 'searchByCulturalNotes',
-      labelText: 'Cultural notes',
-    },
-  ]
-
   return children({
+    browseMode,
     columns,
     computeEntities,
     dialect,
     dialectClassName,
-    dialectUid,
-    fetcher,
+    fetcher: onPagination,
     fetcherParams: {
-      currentPageIndex: Number(routeParams.page),
-      pageSize: Number(routeParams.pageSize),
+      currentPageIndex: queryPage,
+      pageSize: queryPageSize,
     },
     filter,
-    handleCreateClick,
-    handleSearch,
-    isKidsTheme: routeParams.siteTheme === 'kids',
+    hrefCreate: `/explore${dialectPath}/learn/phrases/create`,
+    incrementResetCount: () => {
+      setResetCount(resetCount + 1)
+    },
     items,
     listViewMode: listView.mode,
     metadata,
-    navigationRouteSearch,
+    navigationRouteSearch: getSearchAsObject(), // TODO REMOVE?
     pageTitle,
-    dictionaryId,
     pushWindowPath,
+    queryLetter,
+    queryPhraseBook,
+    querySearchByCulturalNotes,
+    querySearchByDefinitions,
+    querySearchByTitle,
+    querySearchStyle,
+    querySearchTerm,
+    resetCount,
     routeParams,
-    resetSearch: _resetSearch,
-    searchDialectDataType: SEARCH_DATA_TYPE_PHRASE,
-    searchUi: phrasesSearchUi,
-    setRouteParams,
+    checkboxNames: ['searchByCulturalNotes', 'searchByDefinitions', 'searchByTitle'],
+    searchUiSecondary: [
+      {
+        type: SEARCHDIALECT_CHECKBOX,
+        defaultChecked: querySearchByTitle !== undefined ? querySearchByTitle : true,
+        idName: 'searchByTitle',
+        labelText: 'Phrase',
+      },
+      {
+        type: SEARCHDIALECT_CHECKBOX,
+        defaultChecked: querySearchByDefinitions !== undefined ? querySearchByDefinitions : true,
+        idName: 'searchByDefinitions',
+        labelText: 'Definitions',
+      },
+      {
+        defaultChecked: querySearchByCulturalNotes !== undefined ? querySearchByCulturalNotes : false,
+        type: SEARCHDIALECT_CHECKBOX,
+        idName: 'searchByCulturalNotes',
+        labelText: 'Cultural notes',
+      },
+    ],
     setListViewMode,
-    sortCol: DEFAULT_SORT_COL,
+    setRouteParams, // TODO: VERIFY NEEDED
+    sortCol: querySortBy,
     sortHandler,
-    sortType: DEFAULT_SORT_TYPE,
+    sortType: querySortOrder,
   })
 }
 

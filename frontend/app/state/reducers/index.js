@@ -28,9 +28,7 @@ import { localeReducer } from './locale'
 import { navigationReducer } from './navigation'
 import { nuxeoReducer } from './nuxeo'
 import { reportsReducer } from './reports'
-// import { restReducer } from './rest' // NOTE: restReducer not consumed by components, just other reducers
 import { searchReducer } from './search'
-import { searchDialectReducer } from './searchDialect'
 import { tasksReducer } from './tasks'
 import { visibilityReducer } from './visibility'
 import { windowPathReducer } from './windowPath'
@@ -66,7 +64,6 @@ export default combineReducers({
   nuxeo: nuxeoReducer,
   reports: reportsReducer,
   search: searchReducer,
-  searchDialect: searchDialectReducer,
   tasks: tasksReducer,
   visibility: visibilityReducer,
   windowPath: windowPathReducer,

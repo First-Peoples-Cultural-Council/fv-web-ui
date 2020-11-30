@@ -11,7 +11,7 @@ import useSearch from 'dataSources/useSearch'
 
 // Common
 import ProviderHelpers from 'common/ProviderHelpers'
-import NavigationHelpers, { getSearchObjectAsUrlQuery } from 'common/NavigationHelpers'
+import NavigationHelpers from 'common/NavigationHelpers'
 import useNavigationHelpers from 'common/useNavigationHelpers'
 import StringHelpers, { CLEAN_FULLTEXT } from 'common/StringHelpers'
 import { SECTIONS } from 'common/Constants'
@@ -28,11 +28,16 @@ import { SECTIONS } from 'common/Constants'
 function SearchDictionaryData({ children }) {
   //DataSources
   const { intl } = useIntl()
-  const { getSearchObject, navigate } = useNavigationHelpers()
+  const { getSearchAsObject, convertObjToUrlQuery, navigate } = useNavigationHelpers()
   const { properties } = useProperties()
   const { routeParams } = useRoute()
   const { computeSearchDocuments, searchDocuments } = useSearch()
-  const { page = 1, pageSize = 10, query } = getSearchObject()
+  const { page, pageSize, query } = getSearchAsObject({
+    defaults: {
+      page: 1,
+      pageSize: 10,
+    },
+  })
   const isDialect = Object.prototype.hasOwnProperty.call(routeParams, 'dialect_path')
 
   // Local State
@@ -134,8 +139,8 @@ function SearchDictionaryData({ children }) {
   const handleSearchSubmit = () => {
     if (newSearchValue && newSearchValue !== '') {
       navigate(
-        `${window.location.pathname}?${getSearchObjectAsUrlQuery(
-          Object.assign({}, getSearchObject(), { query: newSearchValue })
+        `${window.location.pathname}?${convertObjToUrlQuery(
+          Object.assign({}, getSearchAsObject(), { query: newSearchValue })
         )}`
       )
     }
@@ -147,7 +152,7 @@ function SearchDictionaryData({ children }) {
 
   const changePagination = (pagePageSize) => {
     navigate(
-      `${window.location.pathname}?${getSearchObjectAsUrlQuery(Object.assign({}, getSearchObject(), pagePageSize))}`
+      `${window.location.pathname}?${convertObjToUrlQuery(Object.assign({}, getSearchAsObject(), pagePageSize))}`
     )
   }
 

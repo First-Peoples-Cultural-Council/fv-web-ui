@@ -307,25 +307,6 @@ const addImmersionCategory = (route) => {
   })
 }
 
-// EXPLORE: Phrasebook, eg: /explore/.../learn/phrases/book/[uid]
-const addBrowsePhraseBook = (route) => {
-  return Object.assign({}, route, {
-    path: [...DIALECT_PATH_ONLY_DEFAULT, 'learn', 'phrases', 'book', new paramMatch('phraseBook', ANYTHING_BUT_SLASH)],
-    title: `${intl.translate({
-      key: 'views.pages.explore.dialect.learn.phrases.page_title_phrase_book',
-      default: 'Browsing by Phrase Book',
-      case: 'words',
-    })} | ${intl.translate({
-      key: 'views.pages.explore.dialect.learn.phrases.page_title',
-      default: 'Phrases',
-      case: 'words',
-    })} | {$dialect_name}`,
-    page: <Pages.PageDialectLearnPhrasesByPhrasebook />,
-    extractPaths: true,
-    redirects: [WORKSPACE_TO_SECTION_REDIRECT],
-  })
-}
-
 // KIDS: Phrasebook, eg: /kids/.../learn/phrases/book/[uid]
 const addBrowsePhraseBookKids = (route) => {
   return Object.assign({}, route, {
@@ -1863,10 +1844,6 @@ const routes = [
   },
   DIALECT_LEARN_PHRASES,
   addPagination(DIALECT_LEARN_PHRASES),
-  // EXPLORE: Phrasebook, eg: /explore/.../learn/phrases/book/[uid]
-  addBrowsePhraseBook(),
-  // EXPLORE: Phrasebook w/Pagination, eg: /explore/.../learn/phrases/book/[uid]/10/1
-  addPagination(addBrowsePhraseBook()),
   // Phrase by Alphabet, eg: /[kids|explore]/.../learn/phrases/alphabet/b
   addBrowsePhraseBookByAlphabet(DIALECT_LEARN_PHRASES),
   // Phrase by Alphabet w/Pagination, eg: /[kids|explore]/.../learn/phrases/alphabet/b/10/1

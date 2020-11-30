@@ -4,8 +4,10 @@ import ca.firstvoices.rest.data.Site;
 import ca.firstvoices.rest.data.SiteList;
 import ca.firstvoices.rest.helpers.EtagHelper;
 import ca.firstvoices.rest.helpers.PageProviderHelper;
-import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,6 +24,7 @@ import org.apache.http.HttpHeaders;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.api.security.ACE;
@@ -38,18 +41,19 @@ public class SitesObject extends DefaultObject {
 
   /**
    * Retrieve the PageProvider results for the given PageProvider.
+   *
    * @param doPrivileged if the query should be run in an unrestricted session
-   * */
+   */
   private Response simplePageProviderResponse(
-      HttpServletRequest request, String pageProviderName, Integer pageSize, Integer currentPage,
-      boolean doPrivileged) {
+      HttpServletRequest request, List<String> pageProviderNames, Integer pageSize,
+      Integer currentPage, boolean doPrivileged, ResultFilter rf) {
 
-    ResponseGeneratingQueryRunner runner =
-        new ResponseGeneratingQueryRunner(ctx.getCoreSession(),
-            request,
-            pageProviderName,
-            pageSize,
-            currentPage);
+    ResponseGeneratingQueryRunner runner = new ResponseGeneratingQueryRunner(ctx.getCoreSession(),
+        request,
+        pageProviderNames,
+        pageSize,
+        currentPage,
+        rf);
 
     if (doPrivileged) {
       runner.runUnrestricted();
@@ -67,11 +71,33 @@ public class SitesObject extends DefaultObject {
   public Response listSitesSections(
       @Context HttpServletRequest request, @QueryParam(value = "pageSize") Integer pageSize,
       @QueryParam(value = "currentPage") Integer currentPage) {
+
+    ResultFilter rf = ((s, pageProviderName, d) -> {
+      if (pageProviderName.equals(PORTALS_LIST_WORKSPACES_PP)) {
+        DocumentRef parentRef = d.getParentRef();
+        if (parentRef == null) {
+          return false;
+        }
+        DocumentModel parent = s.getDocument(parentRef);
+        if (parent == null) {
+          return false;
+        }
+        String lcs = parent.getCurrentLifeCycleState();
+        if (lcs == null) {
+          return false;
+        }
+        return lcs.equalsIgnoreCase("enabled");
+      }
+
+      return true;
+    });
+
     return simplePageProviderResponse(request,
-        PORTALS_LIST_SECTIONS_PP,
+        Arrays.asList(PORTALS_LIST_SECTIONS_PP, PORTALS_LIST_WORKSPACES_PP),
         pageSize,
         currentPage,
-        true);
+        true,
+        rf);
   }
 
   @GET
@@ -80,14 +106,14 @@ public class SitesObject extends DefaultObject {
       @Context HttpServletRequest request, @QueryParam(value = "pageSize") Integer pageSize,
       @QueryParam(value = "currentPage") Integer currentPage) {
     return simplePageProviderResponse(request,
-        PORTALS_LIST_WORKSPACES_PP,
+        Collections.singletonList(PORTALS_LIST_WORKSPACES_PP),
         pageSize,
         currentPage,
-        false);
+        false,
+        ACCEPT_ALL);
   }
 
-  private static class ResponseGeneratingQueryRunner
-      extends UnrestrictedSessionRunner {
+  private static class ResponseGeneratingQueryRunner extends UnrestrictedSessionRunner {
 
     private Response response;
 
@@ -96,30 +122,41 @@ public class SitesObject extends DefaultObject {
     }
 
     private final HttpServletRequest request;
-    private final String pageProviderName;
+    private final List<String> pageProviderNames;
     private final Integer pageSize;
     private final Integer currentPage;
+    private final ResultFilter resultFilter;
 
     ResponseGeneratingQueryRunner(
-        CoreSession session, HttpServletRequest request, String pageProviderName, Integer pageSize,
-        Integer currentPage) {
+        CoreSession session, HttpServletRequest request, List<String> pageProviderNames,
+        Integer pageSize, Integer currentPage, ResultFilter rf) {
       super(session);
 
       this.request = request;
-      this.pageProviderName = pageProviderName;
+      this.pageProviderNames = pageProviderNames;
       this.pageSize = pageSize;
       this.currentPage = currentPage;
+      this.resultFilter = rf;
     }
 
-    @Override
-    /**
+    /*
      * When finished, getResponse() can be used to retrieve the response object
-     * */
+     */
+    @Override
     public void run() {
-      List<DocumentModel> results = PageProviderHelper.getPageProviderResults(session,
-          pageProviderName,
-          pageSize,
-          currentPage);
+      List<DocumentModel> results = new LinkedList<>();
+
+      for (String pageProviderName : pageProviderNames) {
+        List<DocumentModel> localResults = PageProviderHelper.getPageProviderResults(session,
+            pageProviderName,
+            pageSize,
+            currentPage);
+
+        localResults
+            .stream()
+            .filter(dm -> resultFilter.accept(session, pageProviderName, dm))
+            .forEach(results::add);
+      }
 
       String etag = EtagHelper.computeEtag(results, EtagHelper.DC_MODIFIED_MAPPER);
       String ifNoneMatch = request.getHeader(HttpHeaders.IF_NONE_MATCH);
@@ -166,10 +203,11 @@ public class SitesObject extends DefaultObject {
           }
 
         } else {
-          associatedDialect = session.getDocument(new IdRef((String) dm.getProperty(
-              "fvancestry", "dialect")));
+          associatedDialect = session.getDocument(new IdRef((String) dm.getProperty("fvancestry",
+              "dialect")));
           associatedLanguageFamily = session.getDocument(new IdRef((String) dm.getProperty(
-              "fvancestry", "family")));
+              "fvancestry",
+              "family")));
           logoImageId = (String) dm.getProperty("fv-portal", "logo");
         }
 
@@ -178,23 +216,23 @@ public class SitesObject extends DefaultObject {
         if (associatedDialect != null && associatedDialect.getACP() != null
             && associatedDialect.getACP().getACL("local") != null) {
           for (ACE ace : associatedDialect.getACP().getACL("local").getACEs()) {
-            if (SecurityConstants.READ.equals(ace.getPermission())) {
-              if (session.getPrincipal() != null
-                  && session.getPrincipal().isMemberOf(ace.getUsername())) {
-                roles.add("Member");
-              }
+            if (SecurityConstants.READ.equals(ace.getPermission())
+                && session.getPrincipal() != null
+                && session.getPrincipal().isMemberOf(ace.getUsername())) {
+              roles.add("Member");
             }
           }
         }
 
+
         if (associatedDialect != null) {
 
-          return new Site(
-              associatedDialect.getPathAsString(),
+          return new Site(associatedDialect.getPathAsString(),
               associatedDialect.getId(),
               roles,
               (associatedDialect != null
-                  ? (String) associatedDialect.getPropertyValue("dc:title") : null),
+                  ? (String) associatedDialect.getPropertyValue("dc:title")
+                  : null),
               (associatedLanguageFamily != null
                   ? (String) associatedLanguageFamily.getPropertyValue("dc:title")
                   : null),
@@ -218,4 +256,11 @@ public class SitesObject extends DefaultObject {
 
   }
 
+
+  private interface ResultFilter {
+
+    boolean accept(final CoreSession session, final String pageProviderName, final DocumentModel d);
+  }
+
+  private static final ResultFilter ACCEPT_ALL = (s, ppName, dm) -> true;
 }
