@@ -42,7 +42,7 @@ public class LabelsObject extends DefaultObject {
 
   @GET
   @Path("/labels")
-  public Response getLabels(@Context HttpServletRequest request, QueryBuilder qb) {
+  public Response getLabels(@Context HttpServletRequest request) {
     return getLabelResponse(request, new QueryBuilder());
   }
 

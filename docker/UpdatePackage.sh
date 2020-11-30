@@ -44,14 +44,14 @@ else
 fi
 
 echo 'Removing old modules from docker container if they exist.'
-docker exec nuxeo-dev /bin/bash -c "rm /opt/nuxeo/server/nxserver/bundles/FirstVoices*.jar" > /dev/null 2>&1
+docker exec nuxeo-dev /bin/bash -c "rm /opt/nuxeo/server/nxserver/bundles/FirstVoices*.jar /opt/nuxeo/server/nxserver/bundles/firstvoices*jar" > /dev/null 2>&1
 echo ''
 
 echo 'Copying build package into shared docker volume.'
-cp FirstVoices-marketplace/target/FirstVoices-marketplace-package-latest.zip docker/nuxeo_dev_docker
+cp firstvoices-marketplace/target/firstvoices-marketplace-package-latest.zip docker/nuxeo_dev_docker
 
 echo 'Installing new package and restarting server.'
-docker exec nuxeo-dev /bin/bash -c "nuxeoctl stop && nuxeoctl mp-remove first-voices-package && nuxeoctl mp-install --accept=yes /opt/nuxeo/server/nxserver/tmp/FirstVoices-marketplace-package-latest.zip && nuxeoctl start"
+docker exec nuxeo-dev /bin/bash -c "nuxeoctl stop && nuxeoctl mp-remove first-voices-package && nuxeoctl mp-install --accept=yes /opt/nuxeo/server/nxserver/tmp/firstvoices-marketplace-package-latest.zip && nuxeoctl start"
 
 echo ''
 echo -e "---------------------------------------------------------------"
