@@ -36,6 +36,7 @@ function WordsListContainer() {
         listViewMode,
         metadata,
         navigationRouteSearch,
+        onClickCreate,
         pageTitle,
         pushWindowPath,
         queryCategory,
@@ -66,6 +67,7 @@ function WordsListContainer() {
               pageTitle={pageTitle}
               dialect={dialect}
               navigationRouteSearch={navigationRouteSearch}
+              onClickCreate={onClickCreate}
               pushWindowPath={pushWindowPath}
               routeParams={routeParams}
               setRouteParams={setRouteParams}

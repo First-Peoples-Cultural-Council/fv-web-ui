@@ -34,6 +34,7 @@ function PhrasesListContainer() {
         listViewMode,
         metadata,
         navigationRouteSearch,
+        onClickCreate,
         pageTitle,
         pushWindowPath,
         queryLetter,
@@ -61,6 +62,7 @@ function PhrasesListContainer() {
               pageTitle={pageTitle}
               dialect={dialect}
               navigationRouteSearch={navigationRouteSearch}
+              onClickCreate={onClickCreate}
               pushWindowPath={pushWindowPath}
               routeParams={routeParams}
               setRouteParams={setRouteParams}

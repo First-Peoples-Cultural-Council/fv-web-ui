@@ -32,7 +32,6 @@ import {
   dictionaryListSmallScreenTemplatePhrases,
 } from 'components/DictionaryList/DictionaryListSmallScreen'
 import AuthorizationFilter from 'components/AuthorizationFilter'
-import Link from 'components/Link'
 
 import '!style-loader!css-loader!./PhrasesList.css'
 import '!style-loader!css-loader!components/DictionaryList/DictionaryList.css'
@@ -77,6 +76,7 @@ function PhrasesListPresentation(props) {
     items,
     metadata,
     navigationRouteSearch,
+    onClickCreate,
     pageTitle,
     pushWindowPath,
     routeParams,
@@ -190,13 +190,21 @@ function PhrasesListPresentation(props) {
 
         <AuthorizationFilter filter={filter} hideFromSections routeParams={routeParams}>
           <div id="CreateNewEntry" className="text-right">
-            <Link className="PrintHide" href={hrefCreate}>
+            <FVButton
+              variant="contained"
+              href={hrefCreate}
+              onClick={(e) => {
+                e.preventDefault()
+                onClickCreate(hrefCreate)
+              }}
+              color="primary"
+            >
               <FVLabel
                 transKey="views.pages.explore.dialect.learn.phrases.create_new_phrase"
                 defaultStr="Create New Phrase"
                 transform="phrases"
               />
-            </Link>
+            </FVButton>
           </div>
         </AuthorizationFilter>
         <div className={dialectClassName}>
@@ -462,6 +470,7 @@ PhrasesListPresentation.propTypes = {
   items: oneOfType([array, instanceOf(List)]), // NOTE: Important prop. Primary source of data (filteredItems is also used!)
   metadata: object, // TODO
   navigationRouteSearch: object, // NOTE: redux saved search settings, using sortOrder & sortBy. TODO: is this a logical spot for sort?
+  onClickCreate: func,
   pageTitle: string,
   pushWindowPath: func,
   routeParams: object, // NOTE: redux saved route params, using page & pageSize

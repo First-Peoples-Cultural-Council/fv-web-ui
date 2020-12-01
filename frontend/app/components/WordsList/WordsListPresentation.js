@@ -32,7 +32,6 @@ import {
   dictionaryListSmallScreenTemplateWords,
 } from 'components/DictionaryList/DictionaryListSmallScreen'
 import AuthorizationFilter from 'components/AuthorizationFilter'
-import Link from 'components/Link'
 
 import '!style-loader!css-loader!./WordsList.css'
 
@@ -75,6 +74,7 @@ function WordsListPresentation(props) {
     items,
     metadata,
     navigationRouteSearch,
+    onClickCreate,
     pageTitle,
     pushWindowPath,
     routeParams,
@@ -190,13 +190,21 @@ function WordsListPresentation(props) {
 
         <AuthorizationFilter filter={filter} hideFromSections routeParams={routeParams}>
           <div id="CreateNewWord" className="text-right">
-            <Link className="PrintHide" href={hrefCreate}>
+            <FVButton
+              variant="contained"
+              href={hrefCreate}
+              onClick={(e) => {
+                e.preventDefault()
+                onClickCreate(hrefCreate)
+              }}
+              color="primary"
+            >
               <FVLabel
                 transKey="views.pages.explore.dialect.learn.words.create_new_word"
                 defaultStr="Create New Word"
                 transform="words"
               />
-            </Link>
+            </FVButton>
           </div>
         </AuthorizationFilter>
         <div className={dialectClassName}>
@@ -476,6 +484,7 @@ WordsListPresentation.propTypes = {
   pushWindowPath: func,
   setRouteParams: func,
   hrefCreate: string,
+  onClickCreate: func,
 }
 
 WordsListPresentation.defaultProps = {

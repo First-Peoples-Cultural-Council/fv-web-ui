@@ -14,11 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import { teal } from '@material-ui/core/colors'
-import typography from './FirstVoicesTypography'
-import components from './FirstVoicesComponents'
-export default {
-  components,
-  typography,
+import FirstVoices from './FirstVoices'
+export default Object.assign({}, FirstVoices, {
   palette: {
     primary: {
       contrastText: '#000000',
@@ -26,14 +23,8 @@ export default {
       light: '#64d8cb',
       main: '#26a69a',
     },
-    secondary: {
-      main: '#2b2e34',
-    },
     primary1Color: teal[400],
     primary2Color: teal[700],
-  },
-  appBarIcon: {
-    color: '#fff',
   },
   appBar: {
     color: '#fff',
@@ -46,9 +37,6 @@ export default {
     color: '#fff',
     backgroundColor: '#4d948d',
   },
-  immersionSwitch: {
-    color: '#fff!important',
-  },
   dialectContainer: {
     color: '#fff',
     backgroundColor: '#00796b',
@@ -58,7 +46,7 @@ export default {
   },
   button: {
     containedPrimary: {
-      color: '#fff', // '#000',
+      color: '#fff',
       backgroundColor: '#FF5790',
       '&:hover': {
         color: '#222',
@@ -68,13 +56,16 @@ export default {
           backgroundColor: '#ff87b0',
         },
       },
+      '&:visited': {
+        color: '#fff',
+      },
       '&$disabled': {
         color: '#a1a1a1',
         backgroundColor: '#e5e5e5',
       },
     },
     containedSecondary: {
-      color: '#fff', // '#000',
+      color: '#fff',
       backgroundColor: '#26a69a',
       '&:hover': {
         color: '#2f2f2f',
@@ -87,47 +78,6 @@ export default {
       '&$disabled': {
         color: '#a1a1a1',
         backgroundColor: '#e5e5e5',
-      },
-    },
-    outlinedPrimary: {
-      color: '#FF5790',
-      borderColor: '#FF5790',
-      fill: '#FF5790',
-      '&:hover': {
-        color: '#ff87b0',
-
-        borderColor: '#ff87b0',
-        // backgroundColor: '#fff',
-        // Reset on touch devices, it doesn't add specificity
-        '@media (hover: none)': {
-          backgroundColor: '#ff87b0',
-          fill: '#ff87b0',
-        },
-      },
-      '&$disabled': {
-        color: '#a1a1a1',
-        borderColor: '#e5e5e5',
-        fill: '#e5e5e5',
-      },
-    },
-    outlinedSecondary: {
-      color: '#26a69a',
-      borderColor: '#26a69a',
-      fill: '#26a69a',
-      '&:hover': {
-        color: '#89cac2',
-        borderColor: '#89cac2',
-        fill: '#89cac2',
-        // Reset on touch devices, it doesn't add specificity
-        '@media (hover: none)': {
-          borderColor: 'pink',
-          fill: 'pink',
-        },
-      },
-      '&$disabled': {
-        color: '#a1a1a1',
-        borderColor: '#e5e5e5',
-        fill: '#e5e5e5',
       },
     },
   },
@@ -180,4 +130,4 @@ export default {
       backgroundColor: '#f3f4f3',
     },
   },
-}
+})
