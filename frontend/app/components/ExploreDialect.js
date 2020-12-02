@@ -1,3 +1,4 @@
+/* global _paq */
 /*
 Copyright 2016 First People's Cultural Council
 
@@ -307,6 +308,8 @@ export class ExploreDialect extends Component {
         </AuthorizationFilter>
       )
     }
+    const useBerrySource =
+      selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) || window.location.pathname
     return (
       <PromiseWrapper computeEntities={computeEntities}>
         <div className="row">{toolbar}</div>
@@ -391,10 +394,12 @@ export class ExploreDialect extends Component {
                   Take our 15 minute survey to be entered for a chance to win a $50 gift card.
                 </p>
                 <FVButton
-                  href={`https://app.useberry.com/t/5TqLdd1k/?source=${selectn(
-                    'response.contextParameters.ancestry.dialect.dc:title',
-                    computePortal
-                  ) || window.location.pathname}`}
+                  href={`https://app.useberry.com/t/5TqLdd1k/?source=${useBerrySource}`}
+                  onClick={() => {
+                    if (typeof _paq !== 'undefined') {
+                      _paq.push(['trackEvent', 'Survey', 'FV Site Redesign', 'Site', useBerrySource])
+                    }
+                  }}
                   variant="contained"
                   color="secondary"
                   style={{ color: '#fff' }}
