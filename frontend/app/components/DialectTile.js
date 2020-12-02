@@ -40,19 +40,6 @@ const styles = () => ({
   },
 })
 
-const CustomTooltip = withStyles({
-  tooltip: {
-    backgroundColor: '#F7EAA3',
-    borderColor: '#C9BB70',
-    color: 'inherit',
-    fontSize: '1.5rem',
-    margin: '0',
-    border: '1px solid #C9BB70',
-    padding: '10px',
-    textAlign: 'center',
-  },
-})(Tooltip)
-
 function DialectTile({
   classes,
   dialectCoverImage,
@@ -63,19 +50,39 @@ function DialectTile({
   href,
   pushWindowPath,
 }) {
-  // For Public language sites and Workspaces
-  if (href.indexOf('sections') !== -1 || isWorkspaces) {
+  const isPrivate = !(href.indexOf('sections') !== -1 || isWorkspaces)
+
+  const CustomTooltip = withStyles({
+    tooltip: {
+      backgroundColor: '#F7EAA3',
+      borderColor: '#C9BB70',
+      color: 'inherit',
+      fontSize: '1.5rem',
+      margin: '0',
+      border: '1px solid #C9BB70',
+      padding: '10px',
+      textAlign: 'center',
+    },
+  })(Tooltip)
+
+  // tooltip needs to apply DOM event listeners to its child element, hence use of forwardRef
+  // see https://material-ui.com/components/tooltips/#custom-child-element
+  const Tile = React.forwardRef(function Tile(props, ref) {
+    const hrefToUse = isPrivate ? '/register' : NavigationHelpers.generateStaticURL(href)
     return (
       <a
-        href={NavigationHelpers.generateStaticURL(href)}
+        href={hrefToUse}
         onClick={(e) => {
           e.preventDefault()
-          NavigationHelpers.navigate(href, pushWindowPath, false)
+          NavigationHelpers.navigate(hrefToUse, pushWindowPath, false)
         }}
         title={dialectTitle}
+        {...props}
+        ref={ref}
       >
-        <Card className={`${classes.card} Dialect`}>
+        <Card className={`${classes.card} ${isPrivate ? 'DialectPrivate' : 'Dialect'}`}>
           <CardMedia className={`${classes.cover} DialectCover`} image={dialectCoverImage} title={dialectTitle} />
+          {isPrivate ? <LockIcon className={classes.privateIcon} /> : null}
           <div className={classes.details}>
             <CardContent className={classes.content}>
               <span className="DialectTitle fontBCSans">
@@ -88,32 +95,15 @@ function DialectTile({
         </Card>
       </a>
     )
-  }
+  })
+
   // For Private Language Sites on Sections
-  return (
+  return isPrivate ? (
     <CustomTooltip title="Private site: Please register to access" placement="top">
-      <a
-        href="/register"
-        onClick={(e) => {
-          e.preventDefault()
-          NavigationHelpers.navigate('/register', pushWindowPath, false)
-        }}
-      >
-        <Card className={`${classes.card} DialectPrivate`}>
-          <CardMedia className={`${classes.cover} DialectCover`} image={dialectCoverImage} title={dialectTitle} />
-          <LockIcon className={classes.privateIcon} />
-          <div className={classes.details}>
-            <CardContent className={classes.content}>
-              <span className="DialectTitle fontBCSans">
-                {dialectTitle}
-                {actionIcon}
-              </span>
-              <div className="DialectDescription">{dialectDescription}</div>
-            </CardContent>
-          </div>
-        </Card>
-      </a>
+      <Tile />
     </CustomTooltip>
+  ) : (
+    <Tile />
   )
 }
 const { bool, object, string, func } = PropTypes
