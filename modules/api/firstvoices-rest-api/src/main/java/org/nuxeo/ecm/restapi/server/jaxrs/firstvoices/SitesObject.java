@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
@@ -205,9 +206,6 @@ public class SitesObject extends DefaultObject {
         } else {
           associatedDialect = session.getDocument(new IdRef((String) dm.getProperty("fvancestry",
               "dialect")));
-          associatedLanguageFamily = session.getDocument(new IdRef((String) dm.getProperty(
-              "fvancestry",
-              "family")));
           logoImageId = (String) dm.getProperty("fv-portal", "logo");
         }
 
@@ -241,7 +239,7 @@ public class SitesObject extends DefaultObject {
           return null;
         }
 
-      }).filter(d -> d != null).collect(Collectors.toList());
+      }).filter(Objects::nonNull).collect(Collectors.toList());
       SiteList mappedResults = new SiteList(sites);
 
       Response.ResponseBuilder responseBuilder = Response.ok().entity(mappedResults).cacheControl(
