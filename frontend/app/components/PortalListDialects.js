@@ -95,6 +95,7 @@ export class PortalListDialects extends Component {
         actionIcon={actionIcon}
         pushWindowPath={this.props.pushWindowPath}
         data-cy="dialect-tile"
+        isWorkspaces={this.props.isWorkspaces}
       />
     )
   }
