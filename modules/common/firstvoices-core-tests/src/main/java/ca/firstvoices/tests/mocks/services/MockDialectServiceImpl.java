@@ -329,6 +329,7 @@ public class MockDialectServiceImpl implements MockDialectService {
       wordDoc.setPropertyValue("fv-word:part_of_speech",
           samplePartsOfSpeech[ThreadLocalRandom.current().nextInt(0, samplePartsOfSpeech.length)]);
       wordDoc.setPropertyValue("fv-word:pronunciation", wordDoc.getName() + " pronunciation");
+      wordDoc.setPropertyValue("fv:available_in_childrens_archive", "true");
 
       if (categories != null && !categories.isEmpty()) {
         String randomCategory = categories
