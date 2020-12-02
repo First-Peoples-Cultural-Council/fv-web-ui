@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fvpage" xmlns:nxsv="http://www.nuxeo.org/ecm/schemas/core/validation/" xmlns:ref="http://www.nuxeo.org/ecm/schemas/core/external-references/" targetNamespace="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fvpage">  
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fvpage" targetNamespace="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fvpage">
   <!-- helper XSD definitions for list types -->  
   <xs:complexType name="content"> 
     <xs:sequence> 
@@ -47,6 +47,6 @@
       <xs:element name="summary" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="primary_navigation" type="xs:boolean" default="false"/>
+  <xs:element name="primary_navigation" type="xs:boolean" />
   <xs:element name="url" type="xs:string"/>
 </xs:schema>
