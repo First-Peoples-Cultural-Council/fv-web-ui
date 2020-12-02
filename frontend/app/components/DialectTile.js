@@ -63,6 +63,7 @@ function DialectTile({
   href,
   pushWindowPath,
 }) {
+  // For Public language sites and Workspaces
   if (href.indexOf('sections') !== -1 || isWorkspaces) {
     return (
       <a
@@ -88,6 +89,7 @@ function DialectTile({
       </a>
     )
   }
+  // For Private Language Sites on Sections
   return (
     <CustomTooltip title="Private site: Please register to access" placement="top">
       <a
