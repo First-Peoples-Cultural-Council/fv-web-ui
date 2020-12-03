@@ -16,18 +16,17 @@
 import Grade from '@material-ui/icons/Grade'
 
 import ProviderHelpers from 'common/ProviderHelpers'
-import DialectTile from 'components/DialectTile'
+import DialectTile from 'components/DialectTile/DialectTileContainer'
 import { List } from 'immutable'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
 // REDUX
 import { connect } from 'react-redux'
-import { pushWindowPath } from 'reducers/windowPath'
 import selectn from 'selectn'
 import NavigationHelpers from '../common/NavigationHelpers'
 
-const { oneOfType, instanceOf, array, func, object, string, bool } = PropTypes
+const { oneOfType, instanceOf, array, object, string, bool } = PropTypes
 
 export class PortalListDialects extends Component {
   static propTypes = {
@@ -35,7 +34,6 @@ export class PortalListDialects extends Component {
     filteredItems: oneOfType([array, instanceOf(List)]),
     fieldMapping: object,
     siteTheme: string.isRequired,
-    pushWindowPath: func.isRequired,
     isWorkspaces: bool.isRequired,
     languages: array.isRequired,
     intl: object.isRequired,
@@ -69,31 +67,25 @@ export class PortalListDialects extends Component {
       </span>
     ) : null
 
-    // Dialect title
-    const title = selectn('title', tile)
-    let dialectCoverImage = 'assets/images/cover.png'
+    let dialectLogo = 'assets/images/cover.png'
     const logoID = selectn('logoId', tile) || null
-
     if (logoID !== null) {
-      dialectCoverImage = `${NavigationHelpers.getBaseURL()}nxpicsfile/default/${tile.logoId}/Thumbnail:content/`
+      dialectLogo = `${NavigationHelpers.getBaseURL()}nxpicsfile/default/${tile.logoId}/Thumbnail:content/`
     }
-
-    dialectCoverImage = encodeURI(dialectCoverImage)
+    dialectLogo = encodeURI(dialectLogo)
 
     const href = encodeURI(`/${this.props.siteTheme}${tile.path.replace('/Portal', '')}`)
-    const dialectTitle = this.props.intl.searchAndReplace(title)
-    const dialectDescription = tile.description ? (
-      <span className="DialectDescription">{this.props.intl.searchAndReplace(tile.description)}</span>
-    ) : null
+    const dialectTitle = selectn('title', tile)
+    const dialectGroups = selectn('groups', tile) || []
+
     return (
       <DialectTile
         key={tile.uid}
-        dialectCoverImage={dialectCoverImage}
         href={href}
+        dialectGroups={dialectGroups}
+        dialectLogo={dialectLogo}
         dialectTitle={dialectTitle}
-        dialectDescription={dialectDescription}
         actionIcon={actionIcon}
-        pushWindowPath={this.props.pushWindowPath}
         data-cy="dialect-tile"
         isWorkspaces={this.props.isWorkspaces}
       />
@@ -191,9 +183,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-// REDUX: actions/dispatch/func
-const mapDispatchToProps = {
-  pushWindowPath,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PortalListDialects)
+export default connect(mapStateToProps)(PortalListDialects)
