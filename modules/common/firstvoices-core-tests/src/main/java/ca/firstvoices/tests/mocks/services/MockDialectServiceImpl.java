@@ -326,6 +326,7 @@ public class MockDialectServiceImpl implements MockDialectService {
     for (String word : words) {
       final DocumentModel wordDoc = session
           .createDocumentModel(path + "/Dictionary", word, FV_WORD);
+
       ArrayList<Map<String, String>> definition = new ArrayList<>();
       Map<String, String> definitionEntry = new HashMap<>();
       definitionEntry.put(TRANSLATION, "Definition of " + word);
@@ -335,15 +336,16 @@ public class MockDialectServiceImpl implements MockDialectService {
       wordDoc.setPropertyValue("fv-word:part_of_speech",
           samplePartsOfSpeech[ThreadLocalRandom.current().nextInt(0, samplePartsOfSpeech.length)]);
       wordDoc.setPropertyValue("fv-word:pronunciation", wordDoc.getName() + " pronunciation");
+
       //Makes the word available in kids portal with 1/2 chance
       if (ThreadLocalRandom.current().nextInt(0, 2) == 0) {
         wordDoc.setPropertyValue("fv:available_in_childrens_archive", "true");
       }
+
       //Makes the word available in games with 1/3 chance
       if (ThreadLocalRandom.current().nextInt(0, 3) == 0) {
         wordDoc.setPropertyValue("fv-word:available_in_games", "true");
       }
-
 
       if (categories != null && !categories.isEmpty()) {
         String randomCategory = categories
@@ -373,8 +375,6 @@ public class MockDialectServiceImpl implements MockDialectService {
       definitionEntry.put(TRANSLATION, "Definition of " + newPhrase);
       definitionEntry.put(LANGUAGE, ENGLISH);
       definition.add(definitionEntry);
-
-
       phraseDoc.setPropertyValue("fv:definitions", definition);
 
       if (phraseBooks != null) {
@@ -383,6 +383,7 @@ public class MockDialectServiceImpl implements MockDialectService {
         String[] phraseBookArr = {randomPhraseBook};
         phraseDoc.setPropertyValue("fv-phrase:phrase_books", phraseBookArr);
       }
+
       //Makes the phrase available in kids portal with 1/2 chance
       if (ThreadLocalRandom.current().nextInt(0, 2) == 0) {
         phraseDoc.setPropertyValue("fv:available_in_childrens_archive", "true");
