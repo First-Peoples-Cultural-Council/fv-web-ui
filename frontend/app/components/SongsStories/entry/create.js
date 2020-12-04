@@ -50,7 +50,6 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
     routeParams: object,
     typePlural: string.isRequired,
     // REDUX: reducers/state
-    computeLogin: object.isRequired,
     computeBook: object.isRequired,
     computeBookEntry: object.isRequired,
     computeDialect2: object.isRequired,
@@ -172,7 +171,7 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
     const properties = {}
 
     for (const key in formValue) {
-      if (formValue.hasOwnProperty(key) && key) {
+      if (key && Object.prototype.hasOwnProperty.call(formValue, key)) {
         if (formValue[key] && formValue[key] !== '') {
           // Filter out null values in an array
           if (formValue[key] instanceof Array) {
@@ -251,11 +250,8 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
       }
     }
     return (
-      <AuthenticationFilter
+      <AuthenticationFilter.Container
         is403={this.state.is403}
-        login={this.props.computeLogin}
-        anon={false}
-        routeParams={this.props.routeParams}
         notAuthenticatedComponent={
           <StateErrorBoundary /*copy={this.state.copy} errorMessage={this.state.errorMessage}*/ />
         }
@@ -297,25 +293,23 @@ export class PageDialectStoriesAndSongsBookEntryCreate extends Component {
             </div>
           </div>
         </PromiseWrapper>
-      </AuthenticationFilter>
+      </AuthenticationFilter.Container>
     )
   }
 }
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvBook, fvDialect, nuxeo, windowPath } = state
+  const { fvBook, fvDialect, windowPath } = state
 
   const { computeBook, computeBookEntry } = fvBook
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
-  const { computeLogin } = nuxeo
 
   return {
     computeBook,
     computeBookEntry,
     computeDialect2,
-    computeLogin,
     splitWindowPath,
     windowPath: _windowPath,
   }

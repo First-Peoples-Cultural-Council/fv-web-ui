@@ -53,7 +53,6 @@ export class Phrasebook extends React.Component {
     validator: object,
     // REDUX: reducers/state
     routeParams: object.isRequired,
-    computeLogin: object.isRequired,
     computeCategories: object.isRequired,
     computeCreateCategory: object,
     computeCategory: object,
@@ -61,6 +60,7 @@ export class Phrasebook extends React.Component {
     computeDialect2: object.isRequired,
     splitWindowPath: array.isRequired,
     // REDUX: actions/dispatch/func
+    createCategory: func,
     fetchCategories: func.isRequired,
     fetchDialect: func.isRequired,
     pushWindowPath: func.isRequired,
@@ -94,14 +94,14 @@ export class Phrasebook extends React.Component {
   }
 
   async componentDidMount() {
-    const { routeParams /*, filter*/ } = this.props
+    const { routeParams } = this.props
     const { pageSize, page } = routeParams
 
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "PhrasebookCopy" */ './copy').then((_copy) => {
-        return _copy.default
-      })
+          return _copy.default
+        })
 
     categoriesPath = `${routeParams.dialect_path}/Phrase Books/`
 
@@ -134,8 +134,8 @@ export class Phrasebook extends React.Component {
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "PhrasebookValidator" */ './validator').then((_validator) => {
-        return _validator.default
-      })
+          return _validator.default
+        })
 
     // Flip to ready state...
     this.setState({
@@ -187,11 +187,8 @@ export class Phrasebook extends React.Component {
     const { className, breadcrumb, groupName } = this.props
     const { errors, isBusy } = this.state
     return (
-      <AuthenticationFilter
+      <AuthenticationFilter.Container
         is403={this.state.is403}
-        login={this.props.computeLogin}
-        anon={false}
-        routeParams={this.props.routeParams}
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
         <PromiseWrapper
@@ -215,7 +212,7 @@ export class Phrasebook extends React.Component {
             setFormRef={this.setFormRef}
           />
         </PromiseWrapper>
-      </AuthenticationFilter>
+      </AuthenticationFilter.Container>
     )
   }
   _stateGetError = () => {
@@ -316,14 +313,12 @@ export class Phrasebook extends React.Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvCategory, fvDialect, windowPath, navigation, nuxeo } = state
+  const { fvCategory, fvDialect, windowPath, navigation } = state
   const { computeCategories, computeCreateCategory, computeCategory } = fvCategory
   const { computeDialect, computeDialect2 } = fvDialect
   const { splitWindowPath } = windowPath
   const { route } = navigation
-  const { computeLogin } = nuxeo
   return {
-    computeLogin,
     computeCategories,
     computeCreateCategory,
     computeCategory,

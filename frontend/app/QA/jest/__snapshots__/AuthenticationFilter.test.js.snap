@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AuthenticationFilter Presentation: render CircularProgress 1`] = `
+<div
+  className="MuiCircularProgress-root MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
+  mode="indeterminate"
+  role="progressbar"
+  style={
+    Object {
+      "height": 40,
+      "width": 40,
+    }
+  }
+>
+  <svg
+    className="MuiCircularProgress-svg"
+    viewBox="22 22 44 44"
+  >
+    <circle
+      className="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+      cx={44}
+      cy={44}
+      fill="none"
+      r={20.2}
+      strokeWidth={3.6}
+      style={Object {}}
+    />
+  </svg>
+</div>
+`;
+
+exports[`AuthenticationFilter Presentation: render Error403 1`] = `
+<div
+  className="Error403"
+>
+  <h1
+    className="Error403__heading"
+  />
+  <div>
+    <p />
+    <p>
+      <a
+        className="RaisedButton RaisedButton--primary"
+        href="logout?requestedUrl=../"
+        style={
+          Object {
+            "alignItems": "center",
+            "color": "#fff",
+            "display": "inline-flex",
+            "justifyContent": "center",
+            "textDecoration": "none",
+          }
+        }
+      />
+    </p>
+  </div>
+</div>
+`;
+
+exports[`AuthenticationFilter Presentation: render children 1`] = `
+<div>
+  renderedChildren
+</div>
+`;
+
+exports[`AuthenticationFilter Presentation: render notAuthenticatedComponent v1 1`] = `
+<div>
+  renderedNotAuthenticatedComponent
+</div>
+`;
+
+exports[`AuthenticationFilter Presentation: render notAuthenticatedComponent v2 1`] = `
+<div>
+  renderedNotAuthenticatedComponent
+</div>
+`;
+
+exports[`AuthenticationFilter Presentation: render null 1`] = `null`;

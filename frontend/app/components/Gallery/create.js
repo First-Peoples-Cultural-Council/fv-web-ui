@@ -49,7 +49,6 @@ export class PageDialectGalleryCreate extends Component {
   static propTypes = {
     routeParams: object.isRequired,
     // REDUX: reducers/state
-    computeLogin: object.isRequired,
     computeDialect2: object.isRequired,
     computeGallery: object.isRequired,
     windowPath: string.isRequired,
@@ -80,7 +79,7 @@ export class PageDialectGalleryCreate extends Component {
     let currentGallery
     let nextGallery
 
-    if (this.state.galleryPath != null) {
+    if (this.state.galleryPath !== null) {
       currentGallery = ProviderHelpers.getEntry(prevProps.computeGallery, this.state.galleryPath)
       nextGallery = ProviderHelpers.getEntry(this.props.computeGallery, this.state.galleryPath)
     }
@@ -145,8 +144,8 @@ export class PageDialectGalleryCreate extends Component {
     const properties = {}
 
     for (const key in formValue) {
-      if (formValue.hasOwnProperty(key) && key) {
-        if (formValue[key] && formValue[key] != '') {
+      if (key && Object.prototype.hasOwnProperty.call(formValue, key)) {
+        if (formValue[key] && formValue[key] !== '') {
           //properties += key + '=' + ((formValue[key] instanceof Array) ? JSON.stringify(formValue[key]) : formValue[key]) + '\n';
           properties[key] = formValue[key]
         }
@@ -197,11 +196,8 @@ export class PageDialectGalleryCreate extends Component {
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
     return (
-      <AuthenticationFilter
+      <AuthenticationFilter.Container
         is403={this.state.is403}
-        login={this.props.computeLogin}
-        anon={false}
-        routeParams={this.props.routeParams}
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
@@ -240,7 +236,7 @@ export class PageDialectGalleryCreate extends Component {
             </div>
           </div>
         </PromiseWrapper>
-      </AuthenticationFilter>
+      </AuthenticationFilter.Container>
     )
   }
   _stateGetErrorBoundary = () => {
@@ -254,18 +250,16 @@ export class PageDialectGalleryCreate extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvGallery, navigation, nuxeo, windowPath } = state
+  const { fvDialect, fvGallery, navigation, windowPath } = state
 
   const { computeGallery } = fvGallery
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
   const { route } = navigation
-  const { computeLogin } = nuxeo
 
   return {
     computeDialect2,
     computeGallery,
-    computeLogin,
     routeParams: route.routeParams,
     splitWindowPath,
     windowPath: _windowPath,

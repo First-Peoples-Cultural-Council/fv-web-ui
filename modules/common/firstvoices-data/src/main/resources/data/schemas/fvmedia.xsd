@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fvmedia" xmlns:nxsv="http://www.nuxeo.org/ecm/schemas/core/validation/" xmlns:ref="http://www.nuxeo.org/ecm/schemas/core/external-references/" targetNamespace="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fvmedia">  
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fvmedia" targetNamespace="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fvmedia">
   <!-- helper XSD definitions for list types -->  
   <xs:complexType name="content"> 
     <xs:sequence> 
@@ -33,10 +33,18 @@
     </xs:sequence> 
   </xs:complexType>  
   <xs:element name="acknowledgement" type="xs:string"/>
-  <xs:element name="child_focused" type="xs:boolean" default="false"/>
+
+  <!--
+    FW-2015: Remove default="false" as we use this schema on proxies
+    and the system seems to attempt to set `false` on update, resulting
+    in a `cannot set property on proxy` error
+    See also https://jira.nuxeo.com/browse/NXP-19466
+   -->
+  <xs:element name="child_focused" type="xs:boolean" />
+  <xs:element name="shared" type="xs:boolean" />
+
   <xs:element name="copyright" type="xs:string"/>
   <xs:element name="origin" type="xs:string"/>
   <xs:element name="recorder" type="nxs:stringList"/>
-  <xs:element name="shared" type="xs:boolean" default="false"/>
   <xs:element name="source" type="nxs:stringList"/>
 </xs:schema>

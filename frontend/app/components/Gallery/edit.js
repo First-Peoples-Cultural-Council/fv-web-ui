@@ -56,7 +56,6 @@ export class PageDialectGalleryEdit extends Component {
     gallery: object,
     // REDUX: reducers/state
     routeParams: object.isRequired,
-    computeLogin: object.isRequired,
     computeGallery: object.isRequired,
     computeDialect2: object.isRequired,
     properties: object.isRequired,
@@ -113,7 +112,7 @@ export class PageDialectGalleryEdit extends Component {
       const title = selectn('properties.dc:title', gallery)
       const uid = selectn('uid', gallery)
 
-      if (title && selectn('pageTitleParams.galleryName', this.props.properties) != title) {
+      if (title && selectn('pageTitleParams.galleryName', this.props.properties) !== title) {
         this.props.changeTitleParams({ galleryName: title })
         this.props.overrideBreadcrumbs({ find: uid, replace: 'pageTitleParams.galleryName' })
       }
@@ -239,11 +238,8 @@ export class PageDialectGalleryEdit extends Component {
     ])
 
     return (
-      <AuthenticationFilter
+      <AuthenticationFilter.Container
         is403={this.state.is403}
-        login={this.props.computeLogin}
-        anon={false}
-        routeParams={this.props.routeParams}
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
         <PromiseWrapper computeEntities={computeEntities}>
@@ -272,7 +268,7 @@ export class PageDialectGalleryEdit extends Component {
             />
           </div>
         </PromiseWrapper>
-      </AuthenticationFilter>
+      </AuthenticationFilter.Container>
     )
     /*
     return (
@@ -324,19 +320,17 @@ export class PageDialectGalleryEdit extends Component {
 }
 
 // REDUX: reducers/state
-const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvGallery, navigation, nuxeo, windowPath } = state
+const mapStateToProps = (state) => {
+  const { fvDialect, fvGallery, navigation, windowPath } = state
 
   const { computeGallery } = fvGallery
   const { computeDialect2 } = fvDialect
   const { route, properties } = navigation
   const { splitWindowPath } = windowPath
-  const { computeLogin } = nuxeo
 
   return {
     computeDialect2,
     computeGallery,
-    computeLogin,
     routeParams: route.routeParams,
     properties,
     splitWindowPath,

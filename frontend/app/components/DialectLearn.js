@@ -78,26 +78,10 @@ import { WORKSPACES, SECTIONS } from 'common/Constants'
  */
 
 const { func, object, string } = PropTypes
-
-// const styles = (theme) => {
-//   return {
-//     expand: {
-//       transform: 'rotate(0deg)',
-//       transition: theme.transitions.create('transform', {
-//         duration: theme.transitions.duration.shortest,
-//       }),
-//       marginLeft: 'auto',
-//       [theme.breakpoints.up('sm')]: {
-//         marginRight: -8,
-//       },
-//     },
-//     expandOpen: {
-//       transform: 'rotate(180deg)',
-//     },
-//   }
-// }
 export class DialectLearn extends Component {
   static propTypes = {
+    intl: object,
+    theme: object,
     routeParams: object.isRequired,
     // REDUX: reducers/state
     computeCreatedPhrases: object.isRequired,
@@ -350,7 +334,6 @@ export class DialectLearn extends Component {
     const isSection = this.props.routeParams.area === SECTIONS
 
     const {
-      computeLogin,
       computeUserModifiedWords,
       computeUserCreatedWords,
       computeUserModifiedPhrases,
@@ -403,18 +386,13 @@ export class DialectLearn extends Component {
         })()}
 
         <Header
-          portal={{ compute: computePortal, update: this.props.updatePortal }}
           dialect={{ compute: computeDialect2, update: this.props.updateDialect2 }}
-          login={computeLogin}
-          isStatisticsVisible={this.state.showStats}
           handleShowStats={this._showStats}
+          isStatisticsVisible={this.state.showStats}
+          portal={{ compute: computePortal, update: this.props.updatePortal }}
           routeParams={this.props.routeParams}
         >
-          <ToolbarNavigation
-            routeParams={this.props.routeParams}
-            isStatisticsVisible={this.state.showStats}
-            handleShowStats={this._showStats}
-          />
+          <ToolbarNavigation handleShowStats={this._showStats} isStatisticsVisible={this.state.showStats} />
         </Header>
 
         <div className={classNames('row', 'dialect-body-container')} style={{ marginTop: '15px' }}>
@@ -533,7 +511,7 @@ export class DialectLearn extends Component {
                           />
                         </div>
 
-                        <AuthenticationFilter login={this.props.computeLogin} anon={false}>
+                        <AuthenticationFilter.Container>
                           <div className={classNames('col-xs-6')}>
                             <RecentActivityList
                               siteTheme={this.props.routeParams.siteTheme}
@@ -559,7 +537,7 @@ export class DialectLearn extends Component {
                               docType="word"
                             />
                           </div>
-                        </AuthenticationFilter>
+                        </AuthenticationFilter.Container>
                       </div>
                     </CardContent>
                   </Collapse>
@@ -622,7 +600,7 @@ export class DialectLearn extends Component {
                             docType="phrase"
                           />
                         </div>
-                        <AuthenticationFilter login={this.props.computeLogin} anon={false}>
+                        <AuthenticationFilter.Container>
                           <div className={classNames('col-xs-6')}>
                             <RecentActivityList
                               siteTheme={this.props.routeParams.siteTheme}
@@ -647,7 +625,7 @@ export class DialectLearn extends Component {
                               docType="phrase"
                             />
                           </div>
-                        </AuthenticationFilter>
+                        </AuthenticationFilter.Container>
                       </div>
                     </CardContent>
                   </Collapse>
@@ -710,7 +688,7 @@ export class DialectLearn extends Component {
                             docType="song"
                           />
                         </div>
-                        <AuthenticationFilter login={this.props.computeLogin} anon={false}>
+                        <AuthenticationFilter.Container>
                           <div className={classNames('col-xs-6')}>
                             <RecentActivityList
                               siteTheme={this.props.routeParams.siteTheme}
@@ -735,7 +713,7 @@ export class DialectLearn extends Component {
                               docType="song"
                             />
                           </div>
-                        </AuthenticationFilter>
+                        </AuthenticationFilter.Container>
                       </div>
                     </CardContent>
                   </Collapse>
@@ -798,7 +776,7 @@ export class DialectLearn extends Component {
                             docType="stories"
                           />
                         </div>
-                        <AuthenticationFilter login={this.props.computeLogin} anon={false}>
+                        <AuthenticationFilter.Container>
                           <div className={classNames('col-xs-6')}>
                             <RecentActivityList
                               siteTheme={this.props.routeParams.siteTheme}
@@ -823,7 +801,7 @@ export class DialectLearn extends Component {
                               docType="stories"
                             />
                           </div>
-                        </AuthenticationFilter>
+                        </AuthenticationFilter.Container>
                       </div>
                     </CardContent>
                   </Collapse>

@@ -63,11 +63,11 @@ const EditViewWithForm = withForm(PromiseWrapper, true)
 const { array, func, object } = PropTypes
 export class PageDialectBookEdit extends Component {
   static propTypes = {
+    intl: object,
     book: object,
     typePlural: string,
     // REDUX: reducers/state
     routeParams: object.isRequired,
-    computeLogin: object.isRequired,
     computeBook: object.isRequired,
     computeBookEntries: object.isRequired,
     computeDialect2: object.isRequired,
@@ -260,11 +260,8 @@ export class PageDialectBookEdit extends Component {
 
     const title = selectn('response.properties.dc:title', _computeBook)
     return (
-      <AuthenticationFilter
+      <AuthenticationFilter.Container
         is403={this.state.is403}
-        login={this.props.computeLogin}
-        anon={false}
-        routeParams={this.props.routeParams}
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
         <div>
@@ -340,7 +337,7 @@ export class PageDialectBookEdit extends Component {
             </DialogContent>
           </Dialog>
         </div>
-      </AuthenticationFilter>
+      </AuthenticationFilter.Container>
     )
   }
 
@@ -350,21 +347,19 @@ export class PageDialectBookEdit extends Component {
 }
 
 // REDUX: reducers/state
-const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvBook, fvDialect, navigation, nuxeo, windowPath, locale } = state
+const mapStateToProps = (state) => {
+  const { fvBook, fvDialect, navigation, windowPath, locale } = state
 
   const { computeBook, computeBookEntries } = fvBook
   const { computeDialect2 } = fvDialect
   const { splitWindowPath } = windowPath
   const { properties } = navigation
-  const { computeLogin } = nuxeo
   const { intlService } = locale
 
   return {
     computeBook,
     computeBookEntries,
     computeDialect2,
-    computeLogin,
     properties,
     splitWindowPath,
     intl: intlService,

@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.http.HttpHeaders;
+import org.nuxeo.ecm.automation.features.PrincipalHelper;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -28,9 +30,12 @@ import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.api.security.ACE;
+import org.nuxeo.ecm.core.api.security.PermissionProvider;
 import org.nuxeo.ecm.core.api.security.SecurityConstants;
+import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.ecm.webengine.model.impl.DefaultObject;
+import org.nuxeo.runtime.api.Framework;
 
 @WebObject(type = "site")
 @Produces({MediaType.APPLICATION_JSON})
@@ -205,9 +210,6 @@ public class SitesObject extends DefaultObject {
         } else {
           associatedDialect = session.getDocument(new IdRef((String) dm.getProperty("fvancestry",
               "dialect")));
-          associatedLanguageFamily = session.getDocument(new IdRef((String) dm.getProperty(
-              "fvancestry",
-              "family")));
           logoImageId = (String) dm.getProperty("fv-portal", "logo");
         }
 
@@ -224,12 +226,30 @@ public class SitesObject extends DefaultObject {
           }
         }
 
+        // Set groups so that response can be cached but we can still do
+        // conditional presentation based on the user's groups.
+        Set<String> groups = new HashSet<>();
+        if (associatedDialect != null && associatedDialect.getACP() != null
+            && associatedDialect.getACP().getACL("local") != null) {
+
+          UserManager userManager = Framework.getService(UserManager.class);
+
+          PrincipalHelper principalHelper =
+              new PrincipalHelper(userManager, Framework.getService(PermissionProvider.class));
+
+          groups =
+              principalHelper.getUserAndGroupIdsForPermission(
+                  associatedDialect, SecurityConstants.READ, false, false, true)
+                  .stream().filter(id -> id.startsWith("group:")).collect(Collectors.toSet());
+        }
+
 
         if (associatedDialect != null) {
 
           return new Site(associatedDialect.getPathAsString(),
               associatedDialect.getId(),
               roles,
+              groups,
               (associatedDialect != null
                   ? (String) associatedDialect.getPropertyValue("dc:title")
                   : null),
@@ -241,7 +261,7 @@ public class SitesObject extends DefaultObject {
           return null;
         }
 
-      }).filter(d -> d != null).collect(Collectors.toList());
+      }).filter(Objects::nonNull).collect(Collectors.toList());
       SiteList mappedResults = new SiteList(sites);
 
       Response.ResponseBuilder responseBuilder = Response.ok().entity(mappedResults).cacheControl(

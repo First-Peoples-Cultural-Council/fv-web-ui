@@ -67,7 +67,7 @@
   <extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService" point="types">
     <types>
       <!-- Disable some recursive transitions, see org.nuxeo.ecm.core.lifecycle.event -> BulkLifeCycleChangeListener-->
-      <type name="FVDialect" noRecursionForTransitions="Enable,Disable,Publish,Republish,RevertToNew,Unpublish">fv-lifecycle</type>
+      <type name="FVDialect" noRecursionForTransitions="Publish,Republish,Unpublish">fv-lifecycle</type>
     </types>
   </extension>
 

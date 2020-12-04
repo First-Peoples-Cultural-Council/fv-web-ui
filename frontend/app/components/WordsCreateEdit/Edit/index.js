@@ -50,7 +50,7 @@ import withForm from 'components/withForm'
 
 const EditViewWithForm = withForm(PromiseWrapper, true)
 
-const { array, func, object } = PropTypes
+const { array, func, string, object } = PropTypes
 export class WordsEdit extends Component {
   static propTypes = {
     word: object,
@@ -60,8 +60,9 @@ export class WordsEdit extends Component {
     properties: object.isRequired,
     splitWindowPath: array.isRequired,
     routeParams: object.isRequired,
-    computeLogin: object.isRequired,
+    windowPath: string,
     // REDUX: actions/dispatch/func
+    fetchPortal: func,
     changeTitleParams: func.isRequired,
     fetchDialect2: func.isRequired,
     fetchWord: func.isRequired,
@@ -102,9 +103,9 @@ export class WordsEdit extends Component {
       case typeof nextWord.equals === 'function' && nextWord.equals(previousWord) === false:
         return true
 
-        // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
-        //   console.log(4)
-        //   return true
+      // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
+      //   console.log(4)
+      //   return true
 
       case this.state.componentState != newState.componentState:
         return true
@@ -112,9 +113,9 @@ export class WordsEdit extends Component {
       case newProps.windowPath != this.props.windowPath:
         return true
 
-        // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
-        //   console.log(7)
-        //   return true
+      // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
+      //   console.log(7)
+      //   return true
 
       case is(newProps.computeWord, this.props.computeWord) === false:
         return true
@@ -286,11 +287,8 @@ export class WordsEdit extends Component {
     }
 
     return (
-      <AuthenticationFilter
-        login={this.props.computeLogin}
-        anon={false}
+      <AuthenticationFilter.Container
         is403={this.state.is403}
-        routeParams={this.props.routeParams}
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
         <PromiseWrapper
@@ -330,7 +328,7 @@ export class WordsEdit extends Component {
             />
           </div>
         </PromiseWrapper>
-      </AuthenticationFilter>
+      </AuthenticationFilter.Container>
     )
   }
   _stateGetErrorBoundary = () => {
@@ -344,15 +342,13 @@ export class WordsEdit extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvWord, navigation, nuxeo, windowPath } = state
+  const { fvDialect, fvWord, navigation, windowPath } = state
 
   const { computeWord } = fvWord
   const { computeDialect2 } = fvDialect
   const { properties } = navigation
   const { splitWindowPath } = windowPath
-  const { computeLogin } = nuxeo
   return {
-    computeLogin,
     computeDialect2,
     computeWord,
     properties,

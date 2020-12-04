@@ -111,7 +111,6 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
     computeCharacters: object.isRequired,
     computeDialect2: object.isRequired,
     computeDocument: object.isRequired,
-    computeLogin: object.isRequired,
     computePortal: object.isRequired,
     properties: object.isRequired,
     splitWindowPath: array.isRequired,
@@ -232,10 +231,9 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
         <Header
           portal={{ compute: _computePortal, update: this.props.updatePortal }}
           dialect={{ compute: _computeDialect2, update: this.props.updateDialect2 }}
-          login={this.props.computeLogin}
           routeParams={this.props.routeParams}
         >
-          <ToolbarNavigation hideStatistics routeParams={this.props.routeParams} />
+          <ToolbarNavigation hideStatistics />
         </Header>
 
         <div className={classNames('row', 'dialect-body-container')} style={{ marginTop: '15px' }}>
@@ -330,13 +328,12 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, fvCharacter, fvDialect, fvPortal, navigation, nuxeo, windowPath, locale } = state
+  const { document, fvCharacter, fvDialect, fvPortal, navigation, windowPath, locale } = state
 
   const { computeCharacters } = fvCharacter
   const { computeDocument } = document
   const { computePortal } = fvPortal
   const { properties } = navigation
-  const { computeLogin } = nuxeo
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
   const { intlService } = locale
@@ -345,7 +342,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
     computeCharacters,
     computeDialect2,
     computeDocument,
-    computeLogin,
     computePortal,
     properties,
     splitWindowPath,

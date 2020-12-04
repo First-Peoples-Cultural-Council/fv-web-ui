@@ -1,3 +1,4 @@
+/* global _paq */
 /*
 Copyright 2016 First People's Cultural Council
 
@@ -47,15 +48,16 @@ import TextHeader from 'components/Typography/text-header'
 import AuthorizationFilter from 'components/AuthorizationFilter'
 import Kids from 'components/Kids'
 import FVLabel from 'components/FVLabel'
+import FVButton from 'components/FVButton'
 
 /**
  * Dialect portal page showing all the various components of this dialect.
  */
 
 const { array, func, object, string } = PropTypes
-
 export class ExploreDialect extends Component {
   static propTypes = {
+    intl: object,
     routeParams: object.isRequired,
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
@@ -306,13 +308,14 @@ export class ExploreDialect extends Component {
         </AuthorizationFilter>
       )
     }
+    const useBerrySource =
+      selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) || window.location.pathname
     return (
       <PromiseWrapper computeEntities={computeEntities}>
         <div className="row">{toolbar}</div>
         <Header
-          portal={{ compute: computePortal, update: this.props.updatePortal }}
           dialect={{ compute: computeDialect2, update: this.props.updateDialect2 }}
-          login={this.props.computeLogin}
+          portal={{ compute: computePortal, update: this.props.updatePortal }}
           routeParams={this.props.routeParams}
         >
           <div className="dialect-navigation">
@@ -380,6 +383,32 @@ export class ExploreDialect extends Component {
 
           <div className={classNames('col-xs-12', 'col-md-4', 'col-md-offset-1')}>
             <div className="row">
+              <div
+                className={classNames('col-xs-12')}
+                style={{
+                  marginBottom: '20px',
+                }}
+              >
+                <TextHeader tag="h2" title="Want to help us make FirstVoices better?" />
+                <p style={{ marginBottom: '20px' }}>
+                  Take our 15 minute survey to be entered for a chance to win a $50 gift card.
+                </p>
+                <FVButton
+                  href={`https://app.useberry.com/t/5TqLdd1k/?source=${useBerrySource}`}
+                  onClick={() => {
+                    if (typeof _paq !== 'undefined') {
+                      _paq.push(['trackEvent', 'Survey', 'FV Site Redesign', 'Site', useBerrySource])
+                    }
+                  }}
+                  variant="contained"
+                  color="secondary"
+                  style={{ color: '#fff' }}
+                >
+                  Click here to get started!
+                </FVButton>
+              </div>
+            </div>
+            <div className="row">
               <div className={classNames('col-xs-12')}>
                 {featuredWords.length > 0 ? (
                   <TextHeader
@@ -410,7 +439,6 @@ export class ExploreDialect extends Component {
                     }
                   })}
                 />
-
                 <div>
                   {(selectn('response.contextParameters.portal.fv-portal:related_links.length', computePortal) > 0 ||
                     !isSection) && (

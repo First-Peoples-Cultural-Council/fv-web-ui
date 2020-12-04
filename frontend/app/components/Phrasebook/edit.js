@@ -62,7 +62,6 @@ export class PhrasebookEdit extends React.Component {
     computeDialect: object.isRequired,
     computeDialect2: object.isRequired,
     routeParams: object.isRequired,
-    computeLogin: object.isRequired,
     splitWindowPath: array.isRequired,
     // REDUX: actions/dispatch/func
     createCategory: func.isRequired,
@@ -106,14 +105,14 @@ export class PhrasebookEdit extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "PhrasebookCopy" */ './copy').then((_copy) => {
-        return _copy.default
-      })
+          return _copy.default
+        })
 
     const validator = this.props.validator
       ? this.props.validator
       : await import(/* webpackChunkName: "PhrasebookValidator" */ './validator').then((_validator) => {
-        return _validator.default
-      })
+          return _validator.default
+        })
     await this._getData({ copy, validator })
   }
   render() {
@@ -189,11 +188,8 @@ export class PhrasebookEdit extends React.Component {
     const { className, breadcrumb, groupName } = this.props
     const { errors, isBusy, isTrashed, valueDescription, valueName } = this.state
     return (
-      <AuthenticationFilter
+      <AuthenticationFilter.Container
         is403={this.state.is403}
-        login={this.props.computeLogin}
-        anon={false}
-        routeParams={this.props.routeParams}
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
         <PromiseWrapper
@@ -227,7 +223,7 @@ export class PhrasebookEdit extends React.Component {
             valueDescription={valueDescription}
           />
         </PromiseWrapper>
-      </AuthenticationFilter>
+      </AuthenticationFilter.Container>
     )
   }
   _stateGetError = () => {
@@ -344,15 +340,13 @@ export class PhrasebookEdit extends React.Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvCategory, fvDialect, navigation, nuxeo, windowPath } = state
+  const { fvCategory, fvDialect, navigation, windowPath } = state
 
   const { computeCategory, computeCategories, computeCreateCategory } = fvCategory
   const { computeDialect, computeDialect2 } = fvDialect
   const { splitWindowPath } = windowPath
   const { route } = navigation
-  const { computeLogin } = nuxeo
   return {
-    computeLogin,
     computeCategory,
     computeCategories,
     computeCreateCategory,
