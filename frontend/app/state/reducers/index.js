@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import { audioReducer } from './audio'
+import { cacheReducer } from './cache'
 import { directoryReducer } from './directory'
 import { documentReducer } from './document'
 import { errorReducer } from './error'
@@ -35,6 +36,7 @@ import { windowPathReducer } from './windowPath'
 
 export default combineReducers({
   audio: audioReducer,
+  cache: cacheReducer,
   directory: directoryReducer,
   document: documentReducer,
   error: errorReducer,
@@ -58,8 +60,8 @@ export default combineReducers({
   fvUser: fvUserReducer,
   fvVideo: fvVideoReducer,
   fvWord: fvWordReducer,
-  locale: localeReducer,
   listView: listViewReducer,
+  locale: localeReducer,
   navigation: navigationReducer,
   nuxeo: nuxeoReducer,
   reports: reportsReducer,

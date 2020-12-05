@@ -1,5 +1,6 @@
 package ca.firstvoices.rest.helpers;
 
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -55,5 +56,19 @@ public class EtagHelper {
 
   public static String computeEtag(List<DocumentModel> docs) {
     return computeEtag(docs, CHANGE_TOKEN_MAPPER);
+  }
+
+  public static String computeEtag(ByteBuffer b) {
+    MessageDigest md;
+
+    try {
+      md = MessageDigest.getInstance("SHA-256");
+    } catch (NoSuchAlgorithmException e) {
+      return null;
+    }
+
+    md.update(b);
+
+    return Base64.getEncoder().encodeToString(md.digest());
   }
 }

@@ -28,7 +28,6 @@ import FVButton from 'components/FVButton'
 import WorkspaceSwitcher from 'components/WorkspaceSwitcher'
 import KidsNavigation from 'components/Kids/navigation'
 import Breadcrumb from 'components/Breadcrumb'
-
 import { PageError } from 'common/conf/pagesIndex'
 
 import '!style-loader!css-loader!./AppFrontController.css'

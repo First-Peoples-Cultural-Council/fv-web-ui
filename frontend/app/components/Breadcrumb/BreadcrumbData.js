@@ -32,7 +32,7 @@ import '!style-loader!css-loader!./Breadcrumb.css'
 function BreadcrumbData({ children, matchedPage, routes }) {
   const { computeDialect2 } = useDialect()
   const { intl } = useIntl()
-  const { fetchPortal, computePortal } = usePortal()
+  const { fetchPortal, computePortal, cacheComputePortal } = usePortal()
   const { properties } = useProperties()
   const { routeParams } = useRoute()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
@@ -52,14 +52,20 @@ function BreadcrumbData({ children, matchedPage, routes }) {
     ? { find: overrideBreadcrumbTitle.find, replace: selectn(overrideBreadcrumbTitle.replace, properties) }
     : undefined
 
+  const portalPath = `${routeParams.dialect_path}/Portal`
   useEffect(() => {
     // If searching within a dialect, fetch portal (needed for portal logo src)
     if (isDialect) {
-      ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, fetchPortal, computePortal)
+      ProviderHelpers.fetchIfMissing({
+        key: portalPath,
+        action: fetchPortal,
+        reducer: computePortal,
+        reducerCache: cacheComputePortal,
+      })
     }
   }, [])
 
-  const computedPortal = ProviderHelpers.getEntry(computePortal, routeParams.dialect_path + '/Portal')
+  const computedPortal = ProviderHelpers.getEntry(computePortal, portalPath, cacheComputePortal)
   const portalLogo = selectn('response.contextParameters.portal.fv-portal:logo', computedPortal)
   const portalLogoSrc = UIHelpers.getThumbnail(portalLogo, 'Thumbnail')
 

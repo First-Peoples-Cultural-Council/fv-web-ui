@@ -34,7 +34,7 @@ function VisibilitySelectData({ children }) {
     if (dialectState === 'Published') {
       setPublicDialect(true)
     }
-    ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect2, computeDialect2)
+    ProviderHelpers.fetchIfMissing({ key: routeParams.dialect_path, action: fetchDialect2, reducer: computeDialect2 })
   }, [])
 
   // Set dialect state if/when fetch finishes

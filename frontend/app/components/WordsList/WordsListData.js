@@ -64,7 +64,7 @@ function WordsListData({ children }) {
   const { listView, setListViewMode } = useListView()
   const { computeLogin } = useLogin()
   const { routeParams, setRouteParams } = useRoute()
-  const { computePortal, fetchPortal } = usePortal()
+  const { computePortal, fetchPortal, cacheComputePortal } = usePortal()
   const { pushWindowPath } = useWindowPath()
   const { computeWords, fetchWords } = useWord()
   const { computeDirectory, fetchDirectory } = useDirectory()
@@ -102,9 +102,14 @@ function WordsListData({ children }) {
 
   // Fetch Dialect, Document, Portal
   useEffect(() => {
-    ProviderHelpers.fetchIfMissing(dialectPath, fetchDialect2, computeDialect2)
-    ProviderHelpers.fetchIfMissing(dictionaryKey, fetchDocument, computeDocument)
-    ProviderHelpers.fetchIfMissing(portalKey, fetchPortal, computePortal)
+    ProviderHelpers.fetchIfMissing({ key: dialectPath, action: fetchDialect2, reducer: computeDialect2 })
+    ProviderHelpers.fetchIfMissing({ key: dictionaryKey, action: fetchDocument, reducer: computeDocument })
+    ProviderHelpers.fetchIfMissing({
+      key: portalKey,
+      action: fetchPortal,
+      reducer: computePortal,
+      reducerCache: cacheComputePortal,
+    })
   }, [])
 
   // Parse Dialect
@@ -119,7 +124,7 @@ function WordsListData({ children }) {
   const dictionaryId = selectn('uid', dictionary)
 
   // Parse Portal
-  const extractComputePortal = ProviderHelpers.getEntry(computePortal, portalKey)
+  const extractComputePortal = ProviderHelpers.getEntry(computePortal, portalKey, cacheComputePortal)
   const dialectClassName = getDialectClassname(extractComputePortal)
   const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', extractComputePortal) ||
     ''} ${intl.trans('words', 'Words', 'first')}`

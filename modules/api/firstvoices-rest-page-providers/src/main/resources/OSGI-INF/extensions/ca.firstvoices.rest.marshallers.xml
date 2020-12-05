@@ -6,5 +6,6 @@
     <register class="ca.firstvoices.rest.marshallers.LabelCategoryWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.LabelCategoryListWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.SiteListWriter" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.StatisticsWriter" enable="true"/>
   </extension>
 </component>

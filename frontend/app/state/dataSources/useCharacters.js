@@ -10,6 +10,7 @@ function useCharacters() {
 
   return {
     computeCharacters: useSelector((state) => state.fvCharacter.computeCharacters),
+    cacheComputeCharacters: useSelector((state) => state.cache.computeCharacters),
     fetchCharacters,
   }
 }

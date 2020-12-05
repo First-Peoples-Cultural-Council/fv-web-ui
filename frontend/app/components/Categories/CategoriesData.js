@@ -50,7 +50,11 @@ class CategoriesData extends Component {
       if (this.props.fetchLatest) {
         this.props.fetchCategories(this.catPath)
       } else {
-        ProviderHelpers.fetchIfMissing(this.catPath, this.props.fetchCategories, this.props.computeCategories)
+        ProviderHelpers.fetchIfMissing({
+          key: this.catPath,
+          action: this.props.fetchCategories,
+          reducer: this.props.computeCategories,
+        })
       }
     }
   }

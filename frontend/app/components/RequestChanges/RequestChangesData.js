@@ -76,7 +76,7 @@ function RequestChangesData({
 
   useEffect(() => {
     if (docDialectPath) {
-      ProviderHelpers.fetchIfMissing(docDialectPath, fetchDialect2, computeDialect2)
+      ProviderHelpers.fetchIfMissing({ key: docDialectPath, action: fetchDialect2, reducer: computeDialect2 })
     }
   }, [docDialectPath])
 

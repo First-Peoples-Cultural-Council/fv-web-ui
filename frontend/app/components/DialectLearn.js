@@ -150,16 +150,16 @@ export class DialectLearn extends Component {
   }
 
   fetchData(newProps) {
-    ProviderHelpers.fetchIfMissing(
-      newProps.routeParams.dialect_path,
-      this.props.fetchDialect2,
-      this.props.computeDialect2
-    )
-    ProviderHelpers.fetchIfMissing(
-      newProps.routeParams.dialect_path + '/Portal',
-      this.props.fetchPortal,
-      this.props.computePortal
-    )
+    ProviderHelpers.fetchIfMissing({
+      key: newProps.routeParams.dialect_path,
+      action: this.props.fetchDialect2,
+      reducer: this.props.computeDialect2,
+    })
+    ProviderHelpers.fetchIfMissing({
+      key: newProps.routeParams.dialect_path + '/Portal',
+      action: this.props.fetchPortal,
+      reducer: this.props.computePortal,
+    })
   }
 
   // Fetch data on initial render
