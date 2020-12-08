@@ -13,7 +13,7 @@ import useSearch from 'dataSources/useSearch'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import useNavigationHelpers from 'common/useNavigationHelpers'
-import StringHelpers, { CLEAN_FULLTEXT } from 'common/StringHelpers'
+import StringHelpers, { CLEAN_NXQL } from 'common/StringHelpers'
 import { SECTIONS } from 'common/Constants'
 
 /**
@@ -68,7 +68,7 @@ function SearchDictionaryData({ children }) {
 
   function fetchSearchResults() {
     if (query && query !== '') {
-      const _searchTerm = StringHelpers.clean(query, CLEAN_FULLTEXT)
+      const _searchTerm = StringHelpers.clean(decodeURIComponent(query), CLEAN_NXQL)
       searchDocuments(
         getQueryPath(),
         `AND ecm:primaryType IN ('${currentFilter}') AND ( ecm:fulltext_dictionary_all_field = '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ fv:definitions/*/translation ILIKE '${_searchTerm}' OR /*+ES: OPERATOR(fuzzy) */ dc:title ILIKE '${_searchTerm}' )&currentPageIndex=${Number(
