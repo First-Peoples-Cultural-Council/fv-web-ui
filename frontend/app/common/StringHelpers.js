@@ -26,9 +26,9 @@ export default {
     if (!str) return str
 
     if (mode === CLEAN_NXQL) {
-      // Escape single quotes and URL decode
       _str = decodeURIComponent(str.replace(/'/g, "\\'"))
-
+      _str = decodeURIComponent(_str.replace(/\[/g, '\\['))
+      _str = decodeURIComponent(_str.replace(/\]/g, '\\]'))
       // Escape '&' operator
       _str = _str.replace(/&/g, '%26')
     }
@@ -46,10 +46,9 @@ export default {
       // Remove parentheses
       _str = _str.replace(/[()]/g, '')
 
-      // Escape single quotes and URL decode
+      // Escape !
       _str = _str.replace(/!/g, '\\!')
 
-      // Escape colon
       _str = decodeURIComponent(_str)
     }
 
@@ -59,7 +58,6 @@ export default {
       // Swap [] to empty string
       _str = _str.replace(/[[\]]/g, '')
     }
-
     return _str
   },
   extractErrorMessage: (jsonError) => {
