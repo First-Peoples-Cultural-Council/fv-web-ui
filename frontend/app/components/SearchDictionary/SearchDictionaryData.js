@@ -140,7 +140,7 @@ function SearchDictionaryData({ children }) {
     if (newSearchValue && newSearchValue !== '') {
       navigate(
         `${window.location.pathname}?${convertObjToUrlQuery(
-          Object.assign({}, getSearchAsObject(), { query: newSearchValue })
+          Object.assign({}, getSearchAsObject(), { query: newSearchValue, page: 1 })
         )}`
       )
     }
