@@ -27,7 +27,7 @@ import { createStore, applyMiddleware, compose } from 'redux'
 
 import rootReducer from 'state/reducers'
 
-import localCache from 'state/middleware/localCache'
+// import localCache from 'state/middleware/localCache'
 import { getConfiguredCache } from 'money-clip'
 
 // Views
@@ -51,7 +51,7 @@ const cache = getConfiguredCache({
   version: ConfGlobal.localCacheVersion,
   maxAge: ConfGlobal.localCacheMaxAge,
 })
-const localCacheMiddleware = localCache(cache.set)
+// const localCacheMiddleware = localCache(cache.set)
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 cache.get('cache').then((data) => {
@@ -60,7 +60,7 @@ cache.get('cache').then((data) => {
     {
       cache: data || {},
     },
-    composeEnhancers(applyMiddleware(thunkMiddleware, localCacheMiddleware))
+    composeEnhancers(applyMiddleware(thunkMiddleware /*, localCacheMiddleware*/))
   )
 
   // FW-1922: While this did not show any signs of slowing the page load
