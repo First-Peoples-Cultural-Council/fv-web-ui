@@ -130,7 +130,7 @@ public class AncestryEnricher extends AbstractJsonEnricher<DocumentModel> {
     if (isProxy) {
       DocumentModelList proxies = session.getProxies(new IdRef(docIdRef), null);
 
-      if (proxies.isEmpty()) {
+      if (!proxies.isEmpty()) {
         resolvedDoc = proxies.get(0);
       }
     }
