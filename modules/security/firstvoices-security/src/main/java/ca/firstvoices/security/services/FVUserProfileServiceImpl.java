@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.ThreadContext;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -74,6 +75,10 @@ public class FVUserProfileServiceImpl implements FVUserProfileService {
     if (dialects == null) {
       dialects = new DocumentModelListImpl();
     }
+
+    //Sentry Context
+    ThreadContext.put("userDialects",
+        dialects.stream().map(DocumentModel::getName).collect(Collectors.joining(", ")));
 
     return dialects;
   }
