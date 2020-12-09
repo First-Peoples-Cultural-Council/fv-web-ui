@@ -36,11 +36,19 @@ function useCategoriesCustomOrShared(fetchLatest = false) {
       if (fetchLatest === true) {
         fetchCategories(catPath)
       } else {
-        ProviderHelpers.fetchIfMissing(catPath, fetchCategories, computeCategories)
+        ProviderHelpers.fetchIfMissing({
+          action: fetchCategories,
+          key: catPath,
+          reducer: computeCategories,
+        })
       }
     }
     if (!sharedCategoriesInProgress) {
-      ProviderHelpers.fetchIfMissing(sharedCatPath, fetchSharedCategories, computeSharedCategories)
+      ProviderHelpers.fetchIfMissing({
+        action: fetchSharedCategories,
+        key: sharedCatPath,
+        reducer: computeSharedCategories,
+      })
     }
   }, [])
 

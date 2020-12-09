@@ -17,13 +17,18 @@ limitations under the License.
 import 'babel-polyfill'
 
 import React from 'react'
-import { render } from 'react-dom' // import ReactDOM from "react-dom"
-
+import { render } from 'react-dom'
 import ConfGlobal from 'common/conf/local.js'
 
 // REDUX
 import { Provider } from 'react-redux'
-import store from 'state/store'
+import thunkMiddleware from 'redux-thunk'
+import { createStore, applyMiddleware, compose } from 'redux'
+
+import rootReducer from 'state/reducers'
+
+import localCache from 'state/middleware/localCache'
+import { getConfiguredCache } from 'money-clip'
 
 // Views
 import AppWrapper from 'components/AppWrapper'
@@ -42,27 +47,37 @@ const context = {
     },
   },
 }
+const cache = getConfiguredCache({
+  version: ConfGlobal.localCacheVersion,
+  maxAge: ConfGlobal.localCacheMaxAge,
+})
+const localCacheMiddleware = localCache(cache.set)
 
-// FW-1922: While this did not show any signs of slowing the page load
-// It may be worth finding a way to avoid using render multiple times
-// https://stackoverflow.com/questions/31302803/is-it-ok-to-use-react-render-multiple-times-in-the-dom
-// https://github.com/facebook/react/issues/12700
-render(
-  <Provider store={store}>
-    <Login />
-  </Provider>,
-  document.getElementById('login')
-)
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+cache.get('cache').then((data) => {
+  const store = createStore(
+    rootReducer,
+    {
+      cache: data || {},
+    },
+    composeEnhancers(applyMiddleware(thunkMiddleware, localCacheMiddleware))
+  )
 
-render(
-  <Provider store={store}>
-    <AppWrapper {...context} />
-  </Provider>,
-  document.getElementById('app-wrapper')
-)
-
-/*window.addEventListener("unhandledrejection", function(err, promise) {
-// handle error here, for example log
-});*/
-
-// TODO: https://gist.github.com/Aldredcz/4d63b0a9049b00f54439f8780be7f0d8
+  // FW-1922: While this did not show any signs of slowing the page load
+  // It may be worth finding a way to avoid using render multiple times
+  // https://stackoverflow.com/questions/31302803/is-it-ok-to-use-react-render-multiple-times-in-the-dom
+  // https://github.com/facebook/react/issues/12700
+  render(
+    <Provider store={store}>
+      <Login />
+    </Provider>,
+    document.getElementById('login')
+  )
+  // Carry on as usual
+  render(
+    <Provider store={store}>
+      <AppWrapper {...context} />
+    </Provider>,
+    document.getElementById('app-wrapper')
+  )
+})

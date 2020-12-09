@@ -63,7 +63,7 @@ function PhraseData({ children }) {
 
   useEffect(() => {
     fetchData()
-    ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect2, computeDialect2)
+    ProviderHelpers.fetchIfMissing({ key: routeParams.dialect_path, action: fetchDialect2, reducer: computeDialect2 })
   }, [])
 
   useEffect(() => {

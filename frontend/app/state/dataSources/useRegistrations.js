@@ -85,7 +85,7 @@ function useRegistrations() {
   useEffect(() => {
     if (_userId) {
       setUserId(_userId)
-      ProviderHelpers.fetchIfMissing(_userId, fetchUserDialects, computeUserDialects)
+      ProviderHelpers.fetchIfMissing({ key: _userId, action: fetchUserDialects, reducer: computeUserDialects })
     }
   }, [_userId])
 

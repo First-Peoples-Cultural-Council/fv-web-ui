@@ -27,28 +27,25 @@ function WordsData(props) {
   const { computeDialect2, fetchDialect2 } = useDialect()
   const { computeDocument, fetchDocument } = useDocument()
   const { intl } = useIntl()
-  const { computePortal, fetchPortal } = usePortal()
+  const { computePortal, cacheComputePortal, fetchPortal } = usePortal()
   const { routeParams } = useRoute()
   const dictionaryKey = `${routeParams.dialect_path}/Dictionary`
 
+  const portalKey = `${routeParams.dialect_path}/Portal`
   useEffect(() => {
-    fetchData()
-  }, [])
-
-  const fetchData = async () => {
     // Dialect
-    await ProviderHelpers.fetchIfMissing(routeParams.dialect_path, fetchDialect2, computeDialect2)
+    ProviderHelpers.fetchIfMissing({ key: routeParams.dialect_path, action: fetchDialect2, reducer: computeDialect2 })
     // Document
-    await ProviderHelpers.fetchIfMissing(dictionaryKey, fetchDocument, computeDocument)
+    ProviderHelpers.fetchIfMissing({ key: dictionaryKey, action: fetchDocument, reducer: computeDocument })
     // Portal
-    await ProviderHelpers.fetchIfMissing(`${routeParams.dialect_path}/Portal`, fetchPortal, computePortal)
-  }
-
+    ProviderHelpers.fetchIfMissing({
+      key: portalKey,
+      action: fetchPortal,
+      reducer: computePortal,
+      reducerCache: cacheComputePortal,
+    })
+  }, [])
   const computeEntities = Immutable.fromJS([
-    {
-      id: routeParams.dialect_path,
-      entity: computePortal,
-    },
     {
       id: dictionaryKey,
       entity: computeDocument,

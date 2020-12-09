@@ -25,9 +25,7 @@ import org.apache.http.HttpHeaders;
 import org.nuxeo.ecm.automation.features.PrincipalHelper;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
-import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.PermissionProvider;
@@ -172,50 +170,33 @@ public class SitesObject extends DefaultObject {
       }
 
       List<Site> sites = results.stream().map(dm -> {
-        String logoImageId = null;
-        DocumentModel associatedDialect = null;
-        DocumentModel associatedLanguageFamily = null;
-        DocumentModel associatedLogo = null;
+        if (!session.exists(dm.getParentRef())) {
+          // If parent dialect does not exist, something is wrong with FVPortal, skip
+          return null;
+        }
+
+        // Dialect is parent of Portal
+        DocumentModel associatedDialect = session.getDocument(dm.getParentRef());
+
+        if (associatedDialect == null) {
+          // If for whatever reason we could not get the dialect, skip
+          return null;
+        }
+
+        String logoImageId;
 
         if (dm.isProxy()) {
-
-          String ancestryID = (String) dm.getProperty("fvancestry", "dialect");
-
-          if (ancestryID != null) {
-            DocumentModelList proxies = session.getProxies(new IdRef(ancestryID), null);
-            if (!proxies.isEmpty()) {
-              associatedDialect = proxies.get(0);
-            }
-          }
-
-          String associatedLanguageFamilyID = (String) dm.getProperty("fvancestry", "family");
-
-          if (associatedLanguageFamilyID != null) {
-            DocumentModelList proxies = session.getProxies(new IdRef(associatedLanguageFamilyID),
-                null);
-            if (!proxies.isEmpty()) {
-              associatedLanguageFamily = proxies.get(0);
-            }
-          }
-
-          String logoId = (String) dm.getProperty("fv-portal", "logo");
-          if (logoId != null) {
-            DocumentModelList proxies = session.getProxies(new IdRef(logoId), null);
-            if (!proxies.isEmpty()) {
-              associatedLogo = proxies.get(0);
-              logoImageId = associatedLogo.getId();
-            }
-          }
-
+          logoImageId = (String) dm.getProperty("fvproxy", "proxied_logo");
         } else {
-          associatedDialect = session.getDocument(new IdRef((String) dm.getProperty("fvancestry",
-              "dialect")));
-          logoImageId = (String) dm.getProperty("fv-portal", "logo");
+          // Do not fetch images for private dialects when displayed in the public view
+          // Temporary solution until FW-2155 is resolved
+          boolean isSectionsQuery = pageProviderNames.contains(PORTALS_LIST_SECTIONS_PP);
+          logoImageId = (isSectionsQuery) ? null : (String) dm.getProperty("fv-portal", "logo");
         }
 
         Set<String> roles = new HashSet<>();
 
-        if (associatedDialect != null && associatedDialect.getACP() != null
+        if (associatedDialect.getACP() != null
             && associatedDialect.getACP().getACL("local") != null) {
           for (ACE ace : associatedDialect.getACP().getACL("local").getACEs()) {
             if (SecurityConstants.READ.equals(ace.getPermission())
@@ -229,7 +210,7 @@ public class SitesObject extends DefaultObject {
         // Set groups so that response can be cached but we can still do
         // conditional presentation based on the user's groups.
         Set<String> groups = new HashSet<>();
-        if (associatedDialect != null && associatedDialect.getACP() != null
+        if (associatedDialect.getACP() != null
             && associatedDialect.getACP().getACL("local") != null) {
 
           UserManager userManager = Framework.getService(UserManager.class);
@@ -243,23 +224,13 @@ public class SitesObject extends DefaultObject {
                   .stream().filter(id -> id.startsWith("group:")).collect(Collectors.toSet());
         }
 
-
-        if (associatedDialect != null) {
-
-          return new Site(associatedDialect.getPathAsString(),
-              associatedDialect.getId(),
-              roles,
-              groups,
-              (associatedDialect != null
-                  ? (String) associatedDialect.getPropertyValue("dc:title")
-                  : null),
-              (associatedLanguageFamily != null
-                  ? (String) associatedLanguageFamily.getPropertyValue("dc:title")
-                  : null),
-              logoImageId);
-        } else {
-          return null;
-        }
+        return new Site(associatedDialect.getPathAsString(),
+            associatedDialect.getId(),
+            roles,
+            groups,
+            String.valueOf(associatedDialect.getPropertyValue("dc:title")),
+            (String) associatedDialect.getPropertyValue("fvdialect:parent_language"),
+            logoImageId);
 
       }).filter(Objects::nonNull).collect(Collectors.toList());
       SiteList mappedResults = new SiteList(sites);
@@ -275,7 +246,6 @@ public class SitesObject extends DefaultObject {
     }
 
   }
-
 
   private interface ResultFilter {
 

@@ -60,7 +60,7 @@ function PhrasesListData({ children }) {
   const { listView, setListViewMode } = useListView()
   const { computeLogin } = useLogin()
   const { routeParams, setRouteParams } = useRoute()
-  const { computePortal, fetchPortal } = usePortal()
+  const { computePortal, cacheComputePortal, fetchPortal } = usePortal()
   const { pushWindowPath } = useWindowPath()
   const { computePhrases, fetchPhrases } = usePhrase()
   const { getSearchAsObject, convertObjToUrlQuery, navigate } = useNavigationHelpers()
@@ -93,9 +93,14 @@ function PhrasesListData({ children }) {
 
   // Fetch Dialect, Document, Portal
   useEffect(() => {
-    ProviderHelpers.fetchIfMissing(dialectPath, fetchDialect2, computeDialect2)
-    ProviderHelpers.fetchIfMissing(dictionaryKey, fetchDocument, computeDocument)
-    ProviderHelpers.fetchIfMissing(portalKey, fetchPortal, computePortal)
+    ProviderHelpers.fetchIfMissing({ key: dialectPath, action: fetchDialect2, reducer: computeDialect2 })
+    ProviderHelpers.fetchIfMissing({ key: dictionaryKey, action: fetchDocument, reducer: computeDocument })
+    ProviderHelpers.fetchIfMissing({
+      key: portalKey,
+      action: fetchPortal,
+      reducer: computePortal,
+      reducerCache: cacheComputePortal,
+    })
   }, [])
 
   // Parse Dialect

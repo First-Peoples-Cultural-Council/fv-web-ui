@@ -149,7 +149,11 @@ export class AlphabetListView extends DataListView {
   }
   componentDidUpdate(prevProps) {
     if (prevProps.routeParams.dialect_path !== this.props.routeParams.dialect_path) {
-      ProviderHelpers.fetchIfMissing(this.props.routeParams.dialect_path, this.props.fetchDialect2)
+      ProviderHelpers.fetchIfMissing({
+        key: this.props.routeParams.dialect_path,
+        action: this.props.fetchDialect2,
+        reducer: this.props.computeDialect2,
+      })
     }
   }
 

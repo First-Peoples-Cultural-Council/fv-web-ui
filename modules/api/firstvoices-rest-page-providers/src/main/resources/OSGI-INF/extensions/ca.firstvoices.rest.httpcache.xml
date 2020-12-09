@@ -10,6 +10,7 @@
                   cacheTime="0"> <!-- Cache time is zero and in the service we set must-revalidate and an eTag -->
       <pattern>${org.nuxeo.ecm.contextPath}/api/v1/site/.*</pattern>
       <pattern>${org.nuxeo.ecm.contextPath}/api/v1/label/.*</pattern>
+      <pattern>${org.nuxeo.ecm.contextPath}/api/v1/statistics/.*</pattern>
     </filterConfig>
 
   </extension>

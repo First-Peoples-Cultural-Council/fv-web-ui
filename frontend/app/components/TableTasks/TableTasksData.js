@@ -52,7 +52,7 @@ function TableTasksData({ children, columnRender }) {
     if (_userId) {
       setUserId(_userId)
       fetchUserTasks(_userId)
-      ProviderHelpers.fetchIfMissing(_userId, fetchUserDialects, computeUserDialects)
+      ProviderHelpers.fetchIfMissing({ key: _userId, action: fetchUserDialects, reducer: computeUserDialects })
     }
   }
 
