@@ -118,7 +118,7 @@ public class GetDocumentsByCustomOrder {
 
     PageProvider<DocumentModel> pp =
         (PageProvider<DocumentModel>) PageProviderHelper.getPageProvider(
-        session, def, null, sortBy, sortOrder, targetPageSize, targetPage, (Object) null);
+        session, def, null, sortBy, sortOrder, targetPageSize, targetPage, null);
 
     PaginableDocumentModelListImpl res = new PaginableDocumentModelListImpl(pp);
     if (res.hasError()) {
