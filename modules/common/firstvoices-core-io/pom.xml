@@ -93,7 +93,7 @@
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
-      <artifactId>FirstVoicesRESTPageProviders</artifactId>
+      <artifactId>firstvoices-rest-page-providers</artifactId>
       <scope>test</scope>
       <version>${project.version}</version>
     </dependency>

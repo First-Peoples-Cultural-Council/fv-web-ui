@@ -25,7 +25,7 @@
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
-      <artifactId>FirstVoicesCoreIO</artifactId>
+      <artifactId>firstvoices-core-io</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
