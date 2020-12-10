@@ -134,7 +134,7 @@ public class EnricherUtilsTest extends AbstractFirstVoicesDataTest {
 
     CustomOrderComputeService customOrderComputeService =
         Framework.getService(CustomOrderComputeService.class);
-    customOrderComputeService.updateCustomOrderCharacters(session, allChars);
+    customOrderComputeService.updateCustomOrderCharacters(session, dialect, allChars);
 
     for (int i = 0; i < letterArray.length; i++) {
       String customOrder =
@@ -150,9 +150,9 @@ public class EnricherUtilsTest extends AbstractFirstVoicesDataTest {
 
     DocumentModelList allChars = new DocumentModelListImpl();
 
-    for (int i = 0; i < letterArray.length; i++) {
+    for (String letter : letterArray) {
       DocumentModel letterDoc = session.createDocumentModel(dialect.getPathAsString() + "/Alphabet",
-          letterArray[i],
+          letter,
           FV_CHARACTER);
       letterDoc.setPropertyValue("fva:dialect", dialect.getId());
       allChars.add(createDocument(session, letterDoc));
@@ -161,12 +161,12 @@ public class EnricherUtilsTest extends AbstractFirstVoicesDataTest {
 
     CustomOrderComputeService customOrderComputeService =
         Framework.getService(CustomOrderComputeService.class);
-    customOrderComputeService.updateCustomOrderCharacters(session, allChars);
+    customOrderComputeService.updateCustomOrderCharacters(session, dialect, allChars);
 
-    for (int i = 0; i < letterArray.length; i++) {
+    for (String letter : letterArray) {
       String customOrder =
-          EnricherUtils.convertLetterToCustomOrder(session, dialect.getId(), letterArray[i]);
-      String calculatedOrder = "~" + letterArray[i];
+          EnricherUtils.convertLetterToCustomOrder(session, dialect.getId(), letter);
+      String calculatedOrder = "~" + letter;
       assertEquals(calculatedOrder, customOrder);
     }
   }
