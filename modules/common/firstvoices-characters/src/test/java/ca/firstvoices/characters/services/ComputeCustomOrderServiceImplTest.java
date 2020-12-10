@@ -19,16 +19,10 @@ package ca.firstvoices.characters.services;
  *
  */
 
-import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_ALPHABET;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
-import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_DICTIONARY;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PHRASE;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
-import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
-import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
-import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
@@ -38,7 +32,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -342,7 +335,7 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
             "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo", "p", "p'", "s", "t",
             "t'", "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y", "y̓", "'"};
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
-    nativeOrderComputeService.updateCustomOrderCharacters(session,
+    nativeOrderComputeService.updateCustomOrderCharacters(session, alphabet,
         session.getChildren(new PathRef(alphabet.getPathAsString())));
     DocumentModelList characters = session.getChildren(new PathRef(alphabet.getPathAsString()));
 
@@ -360,7 +353,7 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
             "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo", "p", "p'", "s", "t",
             "t'", "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y", "y̓", "'"};
     createUnorderedAlphabet(unorderedAlphabet, alphabet.getPathAsString());
-    nativeOrderComputeService.updateCustomOrderCharacters(session,
+    nativeOrderComputeService.updateCustomOrderCharacters(session, alphabet,
         session.getChildren(new PathRef(alphabet.getPathAsString())));
     DocumentModelList characters = session.getChildren(new PathRef(alphabet.getPathAsString()));
 
@@ -382,7 +375,7 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
 
     createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
 
-    nativeOrderComputeService.updateCustomOrderCharacters(session,
+    nativeOrderComputeService.updateCustomOrderCharacters(session, alphabet,
         session.getChildren(new PathRef(alphabet.getPathAsString())));
     DocumentModelList characters = session.getChildren(new PathRef(alphabet.getPathAsString()));
 
@@ -520,9 +513,9 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
   }
 
   private void computeDialectNativeOrderTranslation(CoreSession session, DocumentModelList docs) {
-    docs.forEach(doc -> {
+    for (DocumentModel doc : docs) {
       nativeOrderComputeService.computeAssetNativeOrderTranslation(session, doc, true, true);
-    });
+    }
   }
 
 }
