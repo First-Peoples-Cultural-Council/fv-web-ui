@@ -142,7 +142,7 @@
     "padded-blocks": [1, "never"], // http://eslint.org/docs/rules/padded-blocks
     "prefer-const": 2, // http://eslint.org/docs/rules/prefer-const
     "quotes": [
-      2,
+      1,
       "single",
       "avoid-escape" // http://eslint.org/docs/rules/quotes
     ],
