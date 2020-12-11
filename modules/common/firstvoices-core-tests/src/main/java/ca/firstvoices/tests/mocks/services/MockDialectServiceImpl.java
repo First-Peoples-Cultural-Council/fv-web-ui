@@ -339,12 +339,12 @@ public class MockDialectServiceImpl implements MockDialectService {
 
       //Makes the word available in kids portal with 1/2 chance
       if (ThreadLocalRandom.current().nextInt(0, 2) == 0) {
-        wordDoc.setPropertyValue("fv:available_in_childrens_archive", "true");
+        wordDoc.setPropertyValue("fv:available_in_childrens_archive", true);
       }
 
       //Makes the word available in games with 1/3 chance
       if (ThreadLocalRandom.current().nextInt(0, 3) == 0) {
-        wordDoc.setPropertyValue("fv-word:available_in_games", "true");
+        wordDoc.setPropertyValue("fv-word:available_in_games", true);
       }
 
       if (categories != null && !categories.isEmpty()) {
@@ -386,7 +386,7 @@ public class MockDialectServiceImpl implements MockDialectService {
 
       //Makes the phrase available in kids portal with 1/2 chance
       if (ThreadLocalRandom.current().nextInt(0, 2) == 0) {
-        phraseDoc.setPropertyValue("fv:available_in_childrens_archive", "true");
+        phraseDoc.setPropertyValue("fv:available_in_childrens_archive", true);
       }
 
       fvPhrases.add(createDocument(session, phraseDoc));
