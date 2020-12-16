@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import AlphabetPresentation from 'components/Alphabet/AlphabetPresentation'
+import AlphabetPrintPresentation from 'components/Alphabet/AlphabetPrintPresentation'
 import AlphabetData from 'components/Alphabet/AlphabetData'
 
 /**
@@ -13,7 +14,7 @@ import AlphabetData from 'components/Alphabet/AlphabetData'
  *
  * @returns {node} jsx markup
  */
-function AlphabetContainer({ dialect }) {
+function AlphabetContainer({ dialect, isPrint }) {
   return (
     <AlphabetData dialect={dialect}>
       {({
@@ -26,7 +27,9 @@ function AlphabetContainer({ dialect }) {
         onCharacterLinkClick,
         properties,
       }) => {
-        return (
+        return isPrint ? (
+          <AlphabetPrintPresentation characters={characters} dialectName={dialectName} />
+        ) : (
           <AlphabetPresentation
             characters={characters}
             currentChar={currentChar}
@@ -44,9 +47,10 @@ function AlphabetContainer({ dialect }) {
   )
 }
 // PROPTYPES
-const { object } = PropTypes
+const { bool, object } = PropTypes
 AlphabetContainer.propTypes = {
   dialect: object,
+  isPrint: bool,
 }
 
 export default AlphabetContainer

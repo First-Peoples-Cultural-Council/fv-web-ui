@@ -51,6 +51,12 @@ function AlphabetData({ children, dialect }) {
           title: char.title,
           audio: selectn('contextParameters.character.related_audio[0].path', char),
           path: char.path,
+          upperCase: selectn('properties.fvcharacter:upper_case_character', char) || null,
+          relatedWord: selectn('contextParameters.character.related_words[0].dc:title', char) || null,
+          relatedDefinition:
+            selectn('contextParameters.character.related_words[0].fv:definitions[0].translation', char) ||
+            selectn('contextParameters.character.related_words[0].fv:literal_translation[0].translation', char) ||
+            null,
         }
       })
     : null

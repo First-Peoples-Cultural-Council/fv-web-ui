@@ -13,71 +13,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import Immutable from 'immutable'
-import classNames from 'classnames'
-import selectn from 'selectn'
 
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { fetchDialect2, updateDialect2 } from 'reducers/fvDialect'
-import { fetchDocument } from 'reducers/document'
 import { fetchPortal, updatePortal } from 'reducers/fvPortal'
-
-import GridListTile from '@material-ui/core/GridListTile'
 
 import PromiseWrapper from 'components/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import PageDialectLearnBase from 'components/LearnBase'
-import AlphabetListView from 'components/Alphabet/list-view'
-import FVLabel from 'components/FVLabel'
 import Header from 'components/Header'
 import ToolbarNavigation from 'components/LearnBase/toolbar-navigation'
 import AlphabetContainer from 'components/Alphabet/AlphabetContainer'
 
-const { any, bool, func, object } = PropTypes
-class AlphabetGridListTile extends Component {
-  static propTypes = {
-    tile: any, // TODO: set appropriate propType
-  }
-
-  render() {
-    return (
-      <GridListTile
-        key={selectn('uid', this.props.tile)}
-        style={{
-          border: '3px solid #e0e0e0',
-          borderRadius: '5px',
-          textAlign: 'center',
-          paddingTop: '15px',
-          width: '25%',
-          height: '164px',
-        }}
-      >
-        <span style={{ fontSize: '2em' }}>
-          {selectn('properties.fvcharacter:upper_case_character', this.props.tile)}{' '}
-          {selectn('properties.dc:title', this.props.tile)}
-        </span>
-        <br />
-        <br />
-        <strong style={{ fontSize: '1.3em' }}>
-          {selectn('contextParameters.character.related_words[0].dc:title', this.props.tile)}
-        </strong>
-        <br />
-        <>
-          {selectn('contextParameters.character.related_words[0].fv:definitions[0].translation', this.props.tile) ||
-            selectn(
-              'contextParameters.character.related_words[0].fv:literal_translation[0].translation',
-              this.props.tile
-            )}
-        </>
-      </GridListTile>
-    )
-  }
-}
-
+const { bool, func, object } = PropTypes
 /**
  * Learn alphabet
  */
@@ -92,11 +45,9 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
     print: bool,
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
-    computeDocument: object.isRequired,
     computePortal: object.isRequired,
     // REDUX: actions/dispatch/func
     fetchDialect2: func.isRequired,
-    fetchDocument: func.isRequired,
     fetchPortal: func.isRequired,
     updateDialect2: func.isRequired,
     updatePortal: func.isRequired,
@@ -106,7 +57,6 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
   fetchData(newProps) {
     newProps.fetchDialect2(newProps.routeParams.dialect_path)
     newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
-    newProps.fetchDocument(newProps.routeParams.dialect_path + '/Dictionary')
   }
 
   render() {
@@ -126,42 +76,21 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
       this.props.routeParams.dialect_path + '/Portal'
     )
 
-    // NOTE: when in print view we use AlphabetListView
-    if (this.props.print) {
-      const alphabetListView = <AlphabetListView pagination={false} dialect={selectn('response', _computeDialect2)} />
-      return (
-        <PromiseWrapper renderOnError computeEntities={computeEntities}>
-          <div className="row">
-            <div className={classNames('col-xs-8', 'col-xs-offset-2')}>
-              <h1>
-                <FVLabel
-                  transKey="views.pages.explore.dialect.learn.alphabet.x_alphabet"
-                  defaultStr={selectn('response.title', _computeDialect2) + ' Alphabet'}
-                  params={[selectn('response.title', _computeDialect2)]}
-                />
-              </h1>
-              {React.cloneElement(alphabetListView, {
-                gridListView: true,
-                gridViewProps: { style: { overflowY: 'auto', maxHeight: '100%' } },
-                gridListTile: AlphabetGridListTile,
-                dialect: selectn('response', _computeDialect2),
-              })}
-            </div>
-          </div>
-        </PromiseWrapper>
-      )
-    }
-
     return (
       <PromiseWrapper computeEntities={computeEntities}>
-        <Header
-          portal={{ compute: _computePortal, update: this.props.updatePortal }}
+        {this.props.print ? null : (
+          <Header
+            portal={{ compute: _computePortal, update: this.props.updatePortal }}
+            dialect={{ compute: _computeDialect2, update: this.props.updateDialect2 }}
+            routeParams={this.props.routeParams}
+          >
+            <ToolbarNavigation hideStatistics />
+          </Header>
+        )}
+        <AlphabetContainer
           dialect={{ compute: _computeDialect2, update: this.props.updateDialect2 }}
-          routeParams={this.props.routeParams}
-        >
-          <ToolbarNavigation hideStatistics />
-        </Header>
-        <AlphabetContainer dialect={{ compute: _computeDialect2, update: this.props.updateDialect2 }} />
+          isPrint={this.props.print}
+        />
       </PromiseWrapper>
     )
   }
@@ -169,15 +98,12 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, fvDialect, fvPortal } = state
-
-  const { computeDocument } = document
+  const { fvDialect, fvPortal } = state
   const { computePortal } = fvPortal
   const { computeDialect2 } = fvDialect
 
   return {
     computeDialect2,
-    computeDocument,
     computePortal,
   }
 }
@@ -185,7 +111,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   fetchDialect2,
-  fetchDocument,
   fetchPortal,
   updateDialect2,
   updatePortal,

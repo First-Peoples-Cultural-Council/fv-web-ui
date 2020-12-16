@@ -79,11 +79,12 @@ function AlphabetPresentation({
                     onClick={() => onCharacterClick(char)}
                     className="alphabet__character"
                   >
-                    {char.audio ? <PlayArrowIcon className="material-icons PrintHide" /> : null}
                     <span className="fontBCSans">{char.title}</span>
-
                     {char.audio && (
-                      <audio id={'charAudio' + char.uid} src={NavigationHelpers.getBaseURL() + char.audio} />
+                      <div className="alphabet__character--audio">
+                        <PlayArrowIcon className="material-icons" />
+                        <audio id={'charAudio' + char.uid} src={NavigationHelpers.getBaseURL() + char.audio} />
+                      </div>
                     )}
                   </FVButton>
                 )
