@@ -17,6 +17,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 import classNames from 'classnames'
+import selectn from 'selectn'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -28,28 +29,16 @@ import { fetchPortal, updatePortal } from 'reducers/fvPortal'
 import { navigateTo } from 'reducers/navigation'
 import { pushWindowPath } from 'reducers/windowPath'
 
-import selectn from 'selectn'
+import GridListTile from '@material-ui/core/GridListTile'
 
 import PromiseWrapper from 'components/PromiseWrapper'
-
-import TextHeader from 'components/Typography/text-header'
-
 import ProviderHelpers from 'common/ProviderHelpers'
-import NavigationHelpers from 'common/NavigationHelpers'
 import PageDialectLearnBase from 'components/LearnBase'
-
 import AlphabetListView from 'components/Alphabet/list-view'
-
 import FVLabel from 'components/FVLabel'
-
-import FVButton from 'components/FVButton'
-import GridListTile from '@material-ui/core/GridListTile'
-import PlayArrowIcon from '@material-ui/icons/PlayArrow'
-
 import Header from 'components/Header'
 import ToolbarNavigation from 'components/LearnBase/toolbar-navigation'
-import LearningSidebar from 'components/LearnBase/learning-sidebar'
-import { SECTIONS } from 'common/Constants'
+import AlphabetContainer from 'components/Alphabet/AlphabetContainer'
 
 const { any, array, bool, func, object, string } = PropTypes
 class AlphabetGridListTile extends Component {
@@ -132,43 +121,13 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
     this.state = {
       current_char: null,
     }
-
-    // Bind methods to 'this'
-    ;['_onNavigateRequest', '_onCharAudioTouchTap'].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   // NOTE: PageDialectLearnBase calls `fetchData`
   fetchData(newProps) {
     newProps.fetchDialect2(newProps.routeParams.dialect_path)
     newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
-
     newProps.fetchDocument(newProps.routeParams.dialect_path + '/Dictionary')
-
-    newProps.fetchCharacters(
-      newProps.routeParams.dialect_path + '/Alphabet',
-      '&sortOrder=asc&sortBy=fvcharacter:alphabet_order'
-    )
-  }
-
-  _onCharAudioTouchTap(char) {
-    const charElement = document.getElementById('charAudio' + char.uid)
-
-    if (charElement) {
-      document.getElementById('charAudio' + char.uid).play()
-    }
-
-    this.setState({
-      current_char: char,
-    })
-  }
-
-  _onNavigateRequest(path) {
-    const destination = this.props.navigateTo(path)
-    const newPathArray = this.props.splitWindowPath.slice()
-
-    newPathArray.push(destination.path)
-
-    this.props.pushWindowPath('/' + newPathArray.join('/'))
   }
 
   render() {
@@ -182,22 +141,11 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
         entity: this.props.computePortal,
       },
     ])
-
-    // const _computeDocument = ProviderHelpers.getEntry(
-    //   this.props.computeDocument,
-    //   this.props.routeParams.dialect_path + '/Dictionary'
-    // )
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
     const _computePortal = ProviderHelpers.getEntry(
       this.props.computePortal,
       this.props.routeParams.dialect_path + '/Portal'
     )
-    const _computeCharacters = ProviderHelpers.getEntry(
-      this.props.computeCharacters,
-      this.props.routeParams.dialect_path + '/Alphabet'
-    )
-
-    const isSection = this.props.routeParams.area === SECTIONS
 
     // NOTE: when in print view we use AlphabetListView
     if (this.props.print) {
@@ -235,92 +183,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
         >
           <ToolbarNavigation hideStatistics />
         </Header>
-
-        <div className={classNames('row', 'dialect-body-container')} style={{ marginTop: '15px' }}>
-          <div className={classNames('col-xs-12', 'col-md-7')}>
-            <div className="fontBCSans">
-              <TextHeader
-                title={this.props.intl.trans(
-                  'views.pages.explore.dialect.learn.alphabet.x_alphabet',
-                  selectn('response.title', _computeDialect2) + ' Alphabet',
-                  null,
-                  [selectn('response.title', _computeDialect2)]
-                )}
-                tag="h1"
-                properties={this.props.properties}
-                appendToTitle={
-                  <a className="PrintHide" href="alphabet/print" target="_blank">
-                    <i className="material-icons">print</i>
-                  </a>
-                }
-              />
-            </div>
-
-            {(() => {
-              if (this.state.current_char !== null) {
-                return (
-                  <FVButton
-                    className="fontBCSans"
-                    variant="contained"
-                    color="primary"
-                    onClick={this._onNavigateRequest.bind(
-                      this,
-                      this.state.current_char.path.split('/')[this.state.current_char.path.split('/').length - 1]
-                    )}
-                    style={{
-                      minWidth: 'inherit',
-                      textTransform: 'initial',
-                      margin: '10px 0',
-                    }}
-                  >
-                    {'View Words and Phrases that start with ' + this.state.current_char.title}
-                  </FVButton>
-                )
-              }
-            })()}
-
-            {(() => {
-              const characters = selectn('response.entries', _computeCharacters)
-
-              if (characters && characters.length > 0) {
-                const _this = this
-                return (
-                  <div style={{ marginBottom: '20px' }}>
-                    {selectn('response.entries', _computeCharacters).map((char) => {
-                      const text = <span className="fontBCSans">{char.title}</span>
-                      const audioFile = selectn('contextParameters.character.related_audio[0].path', char)
-
-                      return (
-                        <FVButton
-                          key={char.uid}
-                          variant="text"
-                          onClick={_this._onCharAudioTouchTap.bind(this, char)}
-                          //onClick={this._onNavigateRequest.bind(this, char.path.split('/')[char.path.split('/').length - 1])}
-                          className="alphabet__character"
-                        >
-                          {audioFile ? <PlayArrowIcon className="material-icons PrintHide" /> : null}
-                          {text}
-
-                          {audioFile && (
-                            <audio id={'charAudio' + char.uid} src={NavigationHelpers.getBaseURL() + audioFile} />
-                          )}
-                        </FVButton>
-                      )
-                    })}
-                  </div>
-                )
-              }
-            })()}
-          </div>
-
-          <div className={classNames('col-xs-12', 'col-md-4', 'col-md-offset-1')}>
-            <LearningSidebar
-              isSection={isSection}
-              properties={this.props.properties}
-              dialect={{ compute: _computeDialect2, update: this.props.updateDialect2 }}
-            />
-          </div>
-        </div>
+        <AlphabetContainer dialect={{ compute: _computeDialect2, update: this.props.updateDialect2 }} />
       </PromiseWrapper>
     )
   }
