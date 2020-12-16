@@ -4,7 +4,6 @@ import selectn from 'selectn'
 
 // FPCC
 import ProviderHelpers from 'common/ProviderHelpers'
-import { SECTIONS } from 'common/Constants'
 
 // DataSources
 import useCharacters from 'dataSources/useCharacters'
@@ -22,7 +21,7 @@ import useWindowPath from 'dataSources/useWindowPath'
  * @param {function} props.children
  *
  */
-function AlphabetData({ children, dialect }) {
+function AlphabetData({ children }) {
   const { computeCharacters, fetchCharacters } = useCharacters()
   const { intl } = useIntl()
   const { properties } = useProperties()
@@ -40,7 +39,6 @@ function AlphabetData({ children, dialect }) {
   const _computeCharacters = ProviderHelpers.getEntry(computeCharacters, routeParams.dialect_path + '/Alphabet')
 
   const rawCharacters = selectn('response.entries', _computeCharacters)
-  const dialectName = selectn('response.title', dialect.compute)
 
   const [currentChar, setCurrentChar] = useState({})
 
@@ -78,9 +76,7 @@ function AlphabetData({ children, dialect }) {
   return children({
     characters,
     currentChar,
-    dialectName,
     intl,
-    isSections: routeParams.area === SECTIONS,
     onCharacterClick,
     onCharacterLinkClick,
     properties,

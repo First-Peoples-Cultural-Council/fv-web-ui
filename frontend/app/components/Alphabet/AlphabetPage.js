@@ -16,6 +16,8 @@ limitations under the License.
 import React from 'react'
 import PropTypes from 'prop-types'
 import Immutable from 'immutable'
+import classNames from 'classnames'
+import selectn from 'selectn'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -23,11 +25,14 @@ import { connect } from 'react-redux'
 import { fetchDialect2, updateDialect2 } from 'reducers/fvDialect'
 import { fetchPortal, updatePortal } from 'reducers/fvPortal'
 
+import { SECTIONS } from 'common/Constants'
+
 import PromiseWrapper from 'components/PromiseWrapper'
 import ProviderHelpers from 'common/ProviderHelpers'
 import PageDialectLearnBase from 'components/LearnBase'
 import Header from 'components/Header'
 import ToolbarNavigation from 'components/LearnBase/toolbar-navigation'
+import LearningSidebar from 'components/LearnBase/learning-sidebar'
 import AlphabetContainer from 'components/Alphabet/AlphabetContainer'
 
 const { bool, func, object } = PropTypes
@@ -46,6 +51,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
     computePortal: object.isRequired,
+    properties: object.isRequired,
     // REDUX: actions/dispatch/func
     fetchDialect2: func.isRequired,
     fetchPortal: func.isRequired,
@@ -75,6 +81,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
       this.props.computePortal,
       this.props.routeParams.dialect_path + '/Portal'
     )
+    const dialectName = selectn('response.title', _computeDialect2)
 
     return (
       <PromiseWrapper computeEntities={computeEntities}>
@@ -87,10 +94,16 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
             <ToolbarNavigation hideStatistics />
           </Header>
         )}
-        <AlphabetContainer
-          dialect={{ compute: _computeDialect2, update: this.props.updateDialect2 }}
-          isPrint={this.props.print}
-        />
+        <div className={classNames('row', 'dialect-body-container')} style={{ marginTop: '15px' }}>
+          <AlphabetContainer dialectName={dialectName} isPrint={this.props.print} />
+          <div className={classNames('col-xs-12', 'col-md-4', 'col-md-offset-1')}>
+            <LearningSidebar
+              isSection={this.props.routeParams.area === SECTIONS}
+              properties={this.props.properties}
+              dialect={{ compute: _computeDialect2, update: this.props.updateDialect2 }}
+            />
+          </div>
+        </div>
       </PromiseWrapper>
     )
   }
@@ -98,13 +111,15 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvPortal } = state
+  const { fvDialect, fvPortal, navigation } = state
   const { computePortal } = fvPortal
   const { computeDialect2 } = fvDialect
+  const { properties } = navigation
 
   return {
     computeDialect2,
     computePortal,
+    properties,
   }
 }
 

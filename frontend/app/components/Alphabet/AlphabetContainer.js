@@ -10,33 +10,22 @@ import AlphabetData from 'components/Alphabet/AlphabetData'
  * @component
  *
  * @param {object} props
- * @param {object} dialect expects the following object "{ compute: computeDialect2, update: updateDialect2 }"
- *
+ * @param {string} dialectName
+ * @param {boolean} isPrint
  * @returns {node} jsx markup
  */
-function AlphabetContainer({ dialect, isPrint }) {
+function AlphabetContainer({ dialectName, isPrint }) {
   return (
-    <AlphabetData dialect={dialect}>
-      {({
-        characters,
-        currentChar,
-        dialectName,
-        intl,
-        isSections,
-        onCharacterClick,
-        onCharacterLinkClick,
-        properties,
-      }) => {
+    <AlphabetData>
+      {({ characters, currentChar, intl, onCharacterClick, onCharacterLinkClick, properties }) => {
         return isPrint ? (
           <AlphabetPrintPresentation characters={characters} dialectName={dialectName} />
         ) : (
           <AlphabetPresentation
             characters={characters}
             currentChar={currentChar}
-            dialect={dialect}
             dialectName={dialectName}
             intl={intl}
-            isSections={isSections}
             onCharacterClick={onCharacterClick}
             onCharacterLinkClick={onCharacterLinkClick}
             properties={properties}
@@ -47,9 +36,9 @@ function AlphabetContainer({ dialect, isPrint }) {
   )
 }
 // PROPTYPES
-const { bool, object } = PropTypes
+const { bool, string } = PropTypes
 AlphabetContainer.propTypes = {
-  dialect: object,
+  dialectName: string,
   isPrint: bool,
 }
 
