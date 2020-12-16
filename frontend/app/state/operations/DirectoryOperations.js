@@ -14,9 +14,6 @@
  limitations under the License.
  */
 import StringHelpers from 'common/StringHelpers'
-
-import request from 'request'
-
 import BaseOperations from 'operations/BaseOperations'
 import IntlService from 'common/services/IntlService'
 
@@ -27,13 +24,45 @@ export default class DirectoryOperations {
    * Gets one or more documents based on a path or id.
    * Allows for additional complex queries to be executed.
    */
-  static getDocumentsViaAPI(path = '', headers) {
+  static getDocumentsViaAPI(/*path = '', headers*/) {
+    return new Promise((resolve, reject) => {
+      reject('Server timeout while attempting to get documents.')
+    })
+    // return fetch(path, {
+    //   headers,
+    // }).then(response => {
+    //   debugger
+    //   return JSON.parse(response)
+    // }, error => {
+    //   debugger
+    //   if (Object.prototype.hasOwnProperty.call(error, 'response')) {
+    //     error.response.json().then((jsonError) => {
+    //       return StringHelpers.extractErrorMessage(jsonError)
+    //     })
+    //   } else {
+    //     let errorMessage = `Attempting to retrieve ${path}`
+
+    //     if (error) {
+    //       errorMessage += ' has resulted in '
+    //     } else {
+    //       errorMessage += ' - '
+    //     }
+
+    //     return errorMessage +
+    //         (error ||
+    //           IntlService.instance.translate({
+    //             key: 'operations.could_not_access_server',
+    //             default: 'Could not access server',
+    //             case: 'first',
+    //           }))
+    //   }
+    // })
+    /*
     return new Promise((resolve, reject) => {
       const options = {
         url: path,
         headers: headers,
       }
-
       request(options, (error, response, body) => {
         if (error || response.statusCode !== 200) {
           if (Object.prototype.hasOwnProperty.call(error, 'response')) {
@@ -70,9 +99,14 @@ export default class DirectoryOperations {
         reject('Server timeout while attempting to get documents.')
       }, TIMEOUT)
     })
+    */
   }
 
-  static getFromAPI(path) {
+  static getFromAPI(/*path*/) {
+    return new Promise((resolve, reject) => {
+      reject('Server timeout while attempting to get documents.')
+    })
+    /*
     return new Promise((resolve, reject) => {
       request.get({ url: path, json: true }, function handleResponse(error, response, body) {
         if (error) {
@@ -90,61 +124,69 @@ export default class DirectoryOperations {
         reject('Server timeout while attempting to get documents.')
       }, TIMEOUT)
     })
+    */
   }
 
   // Expects a path string and a javascript object with key value pairs for the endpoint params
-  static postToAPI(path, bodyObject) {
+  static postToAPI(/*path, bodyObject*/) {
     return new Promise((resolve, reject) => {
-      request.post(
-        {
-          url: path,
-          body: JSON.stringify(bodyObject),
-          headers: { 'content-type': 'application/json' },
-        },
-        function handleResponse(error, response, body) {
-          if (error) {
-            if (Object.prototype.hasOwnProperty.call(error, 'response')) {
-              error.response.json().then((jsonError) => {
-                return reject(StringHelpers.extractErrorMessage(jsonError))
-              })
-            } else {
-              return reject(error)
-            }
-          }
-          return resolve(body)
-        }
-      )
-      setTimeout(() => {
-        reject('Server timeout while attempting to send request.')
-      }, TIMEOUT)
+      reject('Server timeout while attempting to get documents.')
     })
+
+    // return new Promise((resolve, reject) => {
+    //   request.post(
+    //     {
+    //       url: path,
+    //       body: JSON.stringify(bodyObject),
+    //       headers: { 'content-type': 'application/json' },
+    //     },
+    //     function handleResponse(error, response, body) {
+    //       if (error) {
+    //         if (Object.prototype.hasOwnProperty.call(error, 'response')) {
+    //           error.response.json().then((jsonError) => {
+    //             return reject(StringHelpers.extractErrorMessage(jsonError))
+    //           })
+    //         } else {
+    //           return reject(error)
+    //         }
+    //       }
+    //       return resolve(body)
+    //     }
+    //   )
+    //   setTimeout(() => {
+    //     reject('Server timeout while attempting to send request.')
+    //   }, TIMEOUT)
+    // })
   }
 
-  static putToAPI(path, bodyObject = {}) {
+  static putToAPI(/*path, bodyObject = {}*/) {
     return new Promise((resolve, reject) => {
-      request.put(
-        {
-          url: path,
-          body: JSON.stringify(bodyObject),
-          headers: { 'content-type': 'application/json' },
-        },
-        function handleResponse(error, response, body) {
-          if (error) {
-            if (Object.prototype.hasOwnProperty.call(error, 'response')) {
-              error.response.json().then((jsonError) => {
-                return reject(StringHelpers.extractErrorMessage(jsonError))
-              })
-            } else {
-              return reject(error)
-            }
-          }
-          return resolve(body)
-        }
-      )
-      setTimeout(() => {
-        reject('Server timeout while attempting to send request.')
-      }, TIMEOUT)
+      reject('Server timeout while attempting to get documents.')
     })
+    // return new Promise((resolve, reject) => {
+    //   request.put(
+    //     {
+    //       url: path,
+    //       body: JSON.stringify(bodyObject),
+    //       headers: { 'content-type': 'application/json' },
+    //     },
+    //     function handleResponse(error, response, body) {
+    //       if (error) {
+    //         if (Object.prototype.hasOwnProperty.call(error, 'response')) {
+    //           error.response.json().then((jsonError) => {
+    //             return reject(StringHelpers.extractErrorMessage(jsonError))
+    //           })
+    //         } else {
+    //           return reject(error)
+    //         }
+    //       }
+    //       return resolve(body)
+    //     }
+    //   )
+    //   setTimeout(() => {
+    //     reject('Server timeout while attempting to send request.')
+    //   }, TIMEOUT)
+    // })
   }
 
   /**
