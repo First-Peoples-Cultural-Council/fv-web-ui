@@ -1,6 +1,7 @@
 package ca.firstvoices.tests.mocks.services;
 
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.EMAIL_COLUMN;
+import static org.nuxeo.ecm.platform.usermanager.UserConfig.FIRSTNAME_COLUMN;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.GROUPS_COLUMN;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.PASSWORD_COLUMN;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.SCHEMA_NAME;
@@ -69,6 +70,7 @@ public class MockUserServiceImpl implements MockUserService {
       DocumentModel userDoc = userManager.getBareUserModel();
       userDoc.setProperty(SCHEMA_NAME, USERNAME_COLUMN, username);
       userDoc.setProperty(SCHEMA_NAME, PASSWORD_COLUMN, username);
+      userDoc.setProperty(SCHEMA_NAME, FIRSTNAME_COLUMN, username);
       userDoc.setPropertyValue(GROUPS_COLUMN, groups);
       userDoc.setProperty(SCHEMA_NAME, EMAIL_COLUMN, "@.");
 

@@ -60,9 +60,12 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
       String partOfSpeech = (String) word.getPropertyValue("fv-word:part_of_speech");
       String pronunciation = (String) word.getPropertyValue("fv-word:pronunciation");
       String[] categories = (String[]) word.getPropertyValue("fv-word:categories");
+      ArrayList<Object> definitions = (ArrayList<Object>) word.getPropertyValue
+          ("fv:definitions");
       Assert.assertNotNull(partOfSpeech);
       Assert.assertNotNull(pronunciation);
       Assert.assertFalse(ArrayUtils.isEmpty(categories));
+      Assert.assertFalse(definitions.isEmpty());
     }
 
     //Check for phrases, phrase books set
@@ -71,7 +74,10 @@ public class GenerateDialectTest extends AbstractFirstVoicesCoreTestsTest {
     Assert.assertEquals(25, phrases.size());
     for (DocumentModel phrase : phrases) {
       String[] phraseBooks = (String[]) phrase.getPropertyValue("fv-phrase:phrase_books");
+      ArrayList<Object> definitions = (ArrayList<Object>) phrase.getPropertyValue
+          ("fv:definitions");
       Assert.assertFalse(ArrayUtils.isEmpty(phraseBooks));
+      Assert.assertFalse(definitions.isEmpty());
     }
 
     //Check for contributors

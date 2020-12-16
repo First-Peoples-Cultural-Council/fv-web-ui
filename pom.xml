@@ -60,6 +60,11 @@
         <version>${aws.sdk.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk-core</artifactId>
+        <version>${aws.sdk.version}</version>
+      </dependency>
+      <dependency>
         <groupId>io.sentry</groupId>
         <artifactId>sentry</artifactId>
         <version>3.0.0</version>
@@ -119,51 +124,6 @@
   </repositories>
 
   <profiles>
-
-<!--    <profile>-->
-<!--      <id>full</id>-->
-
-<!--      <activation>-->
-<!--        <activeByDefault>true</activeByDefault>-->
-<!--      </activation>-->
-
-<!--      <modules>-->
-<!--        <module>FirstVoicesHealthMonitor</module>-->
-<!--        <module>FirstVoicesCognitoAuth</module>-->
-<!--        <module>FirstVoicesSimplifiedAPI</module>-->
-<!--      </modules>-->
-
-<!--      <dependencyManagement>-->
-<!--        <dependencies>-->
-<!--          <dependency>-->
-<!--            <groupId>ca.firstvoices</groupId>-->
-<!--            <artifactId>FirstVoicesCognitoAuth</artifactId>-->
-<!--            <version>${project.version}</version>-->
-<!--          </dependency>-->
-<!--          <dependency>-->
-<!--            <groupId>ca.firstvoices</groupId>-->
-<!--            <artifactId>FirstVoicesHealthMonitor</artifactId>-->
-<!--            <version>${project.version}</version>-->
-<!--          </dependency>-->
-<!--          <dependency>-->
-<!--            <groupId>ca.firstvoices</groupId>-->
-<!--            <artifactId>FirstVoicesSimplifiedAPI</artifactId>-->
-<!--            <version>${project.version}</version>-->
-<!--          </dependency>-->
-<!--          <dependency>-->
-<!--            <groupId>com.amazonaws</groupId>-->
-<!--            <artifactId>aws-java-sdk-cognitoidp</artifactId>-->
-<!--            <version>${aws.sdk.version}</version>-->
-<!--          </dependency>-->
-<!--          <dependency>-->
-<!--            <groupId>com.amazonaws</groupId>-->
-<!--            <artifactId>aws-java-sdk-core</artifactId>-->
-<!--            <version>${aws.sdk.version}</version>-->
-<!--          </dependency>-->
-<!--        </dependencies>-->
-<!--      </dependencyManagement>-->
-
-<!--    </profile>-->
     <profile>
       <id>sonar</id>
       <properties>

@@ -83,6 +83,11 @@
       <artifactId>firstvoices-core-io</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>firstvoices-rest-api-simple</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -117,11 +122,6 @@
         <dependency>
           <groupId>ca.firstvoices</groupId>
           <artifactId>firstvoices-health-monitor</artifactId>
-          <version>${project.version}</version>
-        </dependency>
-        <dependency>
-          <groupId>ca.firstvoices</groupId>
-          <artifactId>firstvoices-rest-api-simple</artifactId>
           <version>${project.version}</version>
         </dependency>
       </dependencies>
