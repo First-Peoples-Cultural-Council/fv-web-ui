@@ -45,7 +45,7 @@ import PageDialectViewMedia from 'components/Media/view'
 import PageDialectViewWord from 'components/Word/WordContainer'
 import PageDialectViewPhrase from 'components/Phrase/PhraseContainer'
 import PageDialectViewBook from 'components/SongStory/SongStoryContainer'
-import PageDialectViewAlphabet from 'components/Alphabet/'
+import PageDialectViewAlphabet from 'components/Alphabet/AlphabetPage'
 import PageDialectViewCharacter from 'components/AlphabetDetail/AlphabetDetailContainer'
 import PageDialectLearnWordsCategories from 'components/Categories/WordCategories'
 
