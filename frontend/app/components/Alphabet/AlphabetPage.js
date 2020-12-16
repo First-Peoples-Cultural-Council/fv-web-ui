@@ -22,12 +22,9 @@ import selectn from 'selectn'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCharacters } from 'reducers/fvCharacter'
 import { fetchDialect2, updateDialect2 } from 'reducers/fvDialect'
 import { fetchDocument } from 'reducers/document'
 import { fetchPortal, updatePortal } from 'reducers/fvPortal'
-import { navigateTo } from 'reducers/navigation'
-import { pushWindowPath } from 'reducers/windowPath'
 
 import GridListTile from '@material-ui/core/GridListTile'
 
@@ -40,13 +37,10 @@ import Header from 'components/Header'
 import ToolbarNavigation from 'components/LearnBase/toolbar-navigation'
 import AlphabetContainer from 'components/Alphabet/AlphabetContainer'
 
-const { any, array, bool, func, object, string } = PropTypes
+const { any, bool, func, object } = PropTypes
 class AlphabetGridListTile extends Component {
   static propTypes = {
     tile: any, // TODO: set appropriate propType
-  }
-  constructor(props) {
-    super(props)
   }
 
   render() {
@@ -97,30 +91,15 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
     routeParams: object.isRequired,
     print: bool,
     // REDUX: reducers/state
-    computeCharacters: object.isRequired,
     computeDialect2: object.isRequired,
     computeDocument: object.isRequired,
     computePortal: object.isRequired,
-    properties: object.isRequired,
-    splitWindowPath: array.isRequired,
-    windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
-    fetchCharacters: func.isRequired,
     fetchDialect2: func.isRequired,
     fetchDocument: func.isRequired,
     fetchPortal: func.isRequired,
-    navigateTo: func.isRequired,
-    pushWindowPath: func.isRequired,
     updateDialect2: func.isRequired,
     updatePortal: func.isRequired,
-  }
-
-  constructor(props, context) {
-    super(props, context)
-
-    this.state = {
-      current_char: null,
-    }
   }
 
   // NOTE: PageDialectLearnBase calls `fetchData`
@@ -158,7 +137,6 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
                 <FVLabel
                   transKey="views.pages.explore.dialect.learn.alphabet.x_alphabet"
                   defaultStr={selectn('response.title', _computeDialect2) + ' Alphabet'}
-                  transform="words"
                   params={[selectn('response.title', _computeDialect2)]}
                 />
               </h1>
@@ -191,36 +169,24 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { document, fvCharacter, fvDialect, fvPortal, navigation, windowPath, locale } = state
+  const { document, fvDialect, fvPortal } = state
 
-  const { computeCharacters } = fvCharacter
   const { computeDocument } = document
   const { computePortal } = fvPortal
-  const { properties } = navigation
   const { computeDialect2 } = fvDialect
-  const { splitWindowPath, _windowPath } = windowPath
-  const { intlService } = locale
 
   return {
-    computeCharacters,
     computeDialect2,
     computeDocument,
     computePortal,
-    properties,
-    splitWindowPath,
-    windowPath: _windowPath,
-    intl: intlService,
   }
 }
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  fetchCharacters,
   fetchDialect2,
   fetchDocument,
   fetchPortal,
-  navigateTo,
-  pushWindowPath,
   updateDialect2,
   updatePortal,
 }
