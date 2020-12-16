@@ -151,10 +151,10 @@ function _getIntroductionTranslation(introductionTranslation) {
 }
 
 // PROPTYPES
-const { array, func, object, boolean } = PropTypes
+const { array, func, object, bool } = PropTypes
 DetailSongStoryPresentation.propTypes = {
   book: object.isRequired,
-  childrenDisplayButtons: boolean,
+  childrenDisplayButtons: bool,
   onEditClick: func,
   onViewClick: func,
   // Media

@@ -283,7 +283,7 @@ function AlphabetDetailPresentation({
   )
 }
 // PROPTYPES
-const { array, func, boolean, number, string, object } = PropTypes
+const { array, func, bool, number, string, object } = PropTypes
 AlphabetDetailPresentation.propTypes = {
   character: string,
   computedCharacter: object,
@@ -298,7 +298,7 @@ AlphabetDetailPresentation.propTypes = {
   relatedVideos: array,
   relatedWords: array,
   routeParams: object,
-  shouldRenderPageToolbar: boolean,
+  shouldRenderPageToolbar: bool,
   tabsOnChange: func,
   tabValue: number,
 }
