@@ -43,6 +43,20 @@ function AlphabetData({ children }) {
 
   const [currentChar, setCurrentChar] = useState({})
 
+  useEffect(() => {
+    // Trigger audio to play
+    const charElement = document.getElementById(currentChar.audioPath)
+    if (charElement) {
+      if (charElement.fireEvent) {
+        charElement.fireEvent('onclick')
+      } else {
+        const evObj = document.createEvent('Events')
+        evObj.initEvent('click', true, false)
+        charElement.dispatchEvent(evObj)
+      }
+    }
+  }, [currentChar])
+
   const characters = rawCharacters
     ? rawCharacters.map((char) => {
         const audio = selectn('contextParameters.character.related_audio[0].path', char)
@@ -62,19 +76,10 @@ function AlphabetData({ children }) {
     : null
 
   const onCharacterClick = (character) => {
-    // Trigger audio to play
-    const charElement = document.getElementById(character.audioPath)
-    if (charElement) {
-      if (charElement.fireEvent) {
-        charElement.fireEvent('onclick')
-      } else {
-        const evObj = document.createEvent('Events')
-        evObj.initEvent('click', true, false)
-        charElement.dispatchEvent(evObj)
-      }
-    }
     // Set currentChar and trigger reveal of characterLink
-    setCurrentChar(character)
+    if (character !== currentChar) {
+      setCurrentChar(character)
+    }
   }
 
   const onCharacterLinkClick = () => {
