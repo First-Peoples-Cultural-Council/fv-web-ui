@@ -32,7 +32,8 @@ import { getConfiguredCache } from 'money-clip'
 
 // Views
 import AppWrapper from 'components/AppWrapper'
-import Login from 'components/Login'
+// TODO: FW-2056
+// import Login from 'components/Login'
 
 // Sentry
 import * as Sentry from '@sentry/react'
@@ -69,16 +70,17 @@ cache.get('cache').then((data) => {
     composeEnhancers(applyMiddleware(thunkMiddleware, localCacheMiddleware))
   )
 
+  // TODO: FW-2056
   // FW-1922: While this did not show any signs of slowing the page load
   // It may be worth finding a way to avoid using render multiple times
   // https://stackoverflow.com/questions/31302803/is-it-ok-to-use-react-render-multiple-times-in-the-dom
   // https://github.com/facebook/react/issues/12700
-  render(
-    <Provider store={store}>
-      <Login />
-    </Provider>,
-    document.getElementById('login')
-  )
+  // render(
+  //   <Provider store={store}>
+  //     <Login />
+  //   </Provider>,
+  //   document.getElementById('login')
+  // )
   // Carry on as usual
   render(
     <Provider store={store}>
