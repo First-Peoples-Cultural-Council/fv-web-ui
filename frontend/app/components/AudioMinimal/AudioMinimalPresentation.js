@@ -16,10 +16,10 @@ import AVStop from '@material-ui/icons/Stop'
  *
  * @returns {node} jsx markup
  */
-function AudioMinimalPresentation({ isPlaying, onPause, onPlay, shouldStopPropagation }) {
+function AudioMinimalPresentation({ color, isPlaying, onPause, onPlay, shouldStopPropagation, src }) {
   return isPlaying ? (
     <AVStop
-      color="secondary"
+      color={color}
       onClick={(event) => {
         if (shouldStopPropagation) {
           event.stopPropagation()
@@ -29,7 +29,9 @@ function AudioMinimalPresentation({ isPlaying, onPause, onPlay, shouldStopPropag
     />
   ) : (
     <AVPlayArrow
-      color="secondary"
+      // id used by other components to getElement and trigger onPlay to expand click area e.g. Alphabet buttons
+      id={src}
+      color={color}
       onClick={(event) => {
         if (shouldStopPropagation) {
           event.stopPropagation()
@@ -40,14 +42,17 @@ function AudioMinimalPresentation({ isPlaying, onPause, onPlay, shouldStopPropag
   )
 }
 // PROPTYPES
-const { func, bool } = PropTypes
+const { func, bool, string } = PropTypes
 AudioMinimalPresentation.propTypes = {
+  color: string,
   isPlaying: bool,
   onPause: func,
   onPlay: func,
   shouldStopPropagation: bool,
+  src: string,
 }
 AudioMinimalPresentation.defaultProps = {
+  color: 'secondary',
   shouldStopPropagation: true,
   isPlaying: false,
   onPause: () => {},
