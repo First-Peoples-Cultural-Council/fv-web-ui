@@ -4,11 +4,9 @@ import classNames from 'classnames'
 
 import '!style-loader!css-loader!./Alphabet.css'
 
-import PlayArrowIcon from '@material-ui/icons/PlayArrow'
-
-import NavigationHelpers from 'common/NavigationHelpers'
 import TextHeader from 'components/Typography/text-header'
 import FVButton from 'components/FVButton'
+import AudioMinimal from 'components/AudioMinimal'
 
 /**
  * @summary AlphabetPresentation
@@ -76,10 +74,13 @@ function AlphabetPresentation({
                   className="alphabet__character"
                 >
                   <span className="fontBCSans">{char.title}</span>
-                  {char.audio && (
+                  {char.audioPath && (
                     <div className="alphabet__character--audio">
-                      <PlayArrowIcon className="material-icons" />
-                      <audio id={'charAudio' + char.uid} src={NavigationHelpers.getBaseURL() + char.audio} />
+                      <AudioMinimal.Container
+                        src={char.audioPath}
+                        color="primary"
+                        onPlayCallback={() => onCharacterClick(char)}
+                      />
                     </div>
                   )}
                 </FVButton>

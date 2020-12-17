@@ -4,6 +4,7 @@ import selectn from 'selectn'
 
 // FPCC
 import ProviderHelpers from 'common/ProviderHelpers'
+import NavigationHelpers from 'common/NavigationHelpers'
 
 // DataSources
 import useCharacters from 'dataSources/useCharacters'
@@ -44,10 +45,11 @@ function AlphabetData({ children }) {
 
   const characters = rawCharacters
     ? rawCharacters.map((char) => {
+        const audio = selectn('contextParameters.character.related_audio[0].path', char)
         return {
           uid: char.uid,
           title: char.title,
-          audio: selectn('contextParameters.character.related_audio[0].path', char),
+          audioPath: audio ? NavigationHelpers.getBaseURL() + audio : null,
           path: char.path,
           upperCase: selectn('properties.fvcharacter:upper_case_character', char) || null,
           relatedWord: selectn('contextParameters.character.related_words[0].dc:title', char) || null,
@@ -60,10 +62,18 @@ function AlphabetData({ children }) {
     : null
 
   const onCharacterClick = (character) => {
-    const charElement = document.getElementById('charAudio' + character.uid)
+    // Trigger audio to play
+    const charElement = document.getElementById(character.audioPath)
     if (charElement) {
-      document.getElementById('charAudio' + character.uid).play()
+      if (charElement.fireEvent) {
+        charElement.fireEvent('onclick')
+      } else {
+        const evObj = document.createEvent('Events')
+        evObj.initEvent('click', true, false)
+        charElement.dispatchEvent(evObj)
+      }
     }
+    // Set currentChar and trigger reveal of characterLink
     setCurrentChar(character)
   }
 
