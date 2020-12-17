@@ -96,13 +96,15 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
         )}
         <div className={classNames('row', 'dialect-body-container')} style={{ marginTop: '15px' }}>
           <AlphabetContainer dialectName={dialectName} isPrint={this.props.print} />
-          <div className={classNames('col-xs-12', 'col-md-4', 'col-md-offset-1')}>
-            <LearningSidebar
-              isSection={this.props.routeParams.area === SECTIONS}
-              properties={this.props.properties}
-              dialect={{ compute: _computeDialect2, update: this.props.updateDialect2 }}
-            />
-          </div>
+          {this.props.print ? null : (
+            <div className={classNames('col-xs-12', 'col-md-4', 'col-md-offset-1')}>
+              <LearningSidebar
+                isSection={this.props.routeParams.area === SECTIONS}
+                properties={this.props.properties}
+                dialect={{ compute: _computeDialect2, update: this.props.updateDialect2 }}
+              />
+            </div>
+          )}
         </div>
       </PromiseWrapper>
     )
