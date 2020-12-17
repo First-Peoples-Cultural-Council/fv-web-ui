@@ -14,6 +14,8 @@
  limitations under the License.
  */
 import StringHelpers from 'common/StringHelpers'
+// TODO: FW-2056 - need a modern/supported xhr library
+// import request from 'request'
 import BaseOperations from 'operations/BaseOperations'
 import IntlService from 'common/services/IntlService'
 
@@ -24,6 +26,7 @@ export default class DirectoryOperations {
    * Gets one or more documents based on a path or id.
    * Allows for additional complex queries to be executed.
    */
+  // TODO: FW-2056
   static getDocumentsViaAPI(/*path = '', headers*/) {
     return new Promise((resolve, reject) => {
       reject('Server timeout while attempting to get documents.')
@@ -102,6 +105,7 @@ export default class DirectoryOperations {
     */
   }
 
+  // TODO: FW-2056
   static getFromAPI(/*path*/) {
     return new Promise((resolve, reject) => {
       reject('Server timeout while attempting to get documents.')
@@ -127,6 +131,7 @@ export default class DirectoryOperations {
     */
   }
 
+  // TODO: FW-2056
   // Expects a path string and a javascript object with key value pairs for the endpoint params
   static postToAPI(/*path, bodyObject*/) {
     return new Promise((resolve, reject) => {
