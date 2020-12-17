@@ -135,7 +135,7 @@ function AlphabetDetailData({ children }) {
     relatedVideos: selectn('response.contextParameters.character.related_videos', computedCharacter) || [],
     relatedWords,
     routeParams,
-    shouldRenderPageToolbar: routeParams.area === WORKSPACES && selectn('response', computedCharacter),
+    shouldRenderPageToolbar: routeParams.area === WORKSPACES && selectn('response', computedCharacter) ? true : false,
     tabsOnChange: (e, _tabValue) => setTabValue(_tabValue),
     tabValue,
   })
