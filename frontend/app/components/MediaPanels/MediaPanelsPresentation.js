@@ -30,12 +30,12 @@ function MediaPanelsPresentation({ pictures, videos }) {
       return (
         <Paper>
           <MediaTab
-            tabItems={[{ label: 'Picture(s)' }, { label: 'Video(s)' }]}
+            tabItems={[{ label: 'Video(s)' }, { label: 'Picture(s)' }]}
             tabsValue={tabValue}
             tabsOnChange={(e, value) => setTabValue(value)}
           />
-          {tabValue === 0 && pictureMediaPanel}
-          {tabValue === 1 && videoMediaPanel}
+          {tabValue === 0 && videoMediaPanel}
+          {tabValue === 1 && pictureMediaPanel}
         </Paper>
       )
     } else if (pictures.length > 0) {
