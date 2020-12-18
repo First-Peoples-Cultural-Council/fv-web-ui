@@ -22,7 +22,7 @@
   <artifactId>firstvoices-modules-parent</artifactId>
   <name>First Voices</name>
   <packaging>pom</packaging>
-  <version>3.5.4</version>
+  <version>3.5.6-SNAPSHOT</version>
 
   <modules>
     <module>modules</module>

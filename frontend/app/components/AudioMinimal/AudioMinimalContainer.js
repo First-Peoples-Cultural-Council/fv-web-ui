@@ -15,17 +15,29 @@ import AudioMinimalData from './AudioMinimalData'
  */
 function AudioMinimalContainer(props) {
   return (
-    <AudioMinimalData src={props.src}>
+    <AudioMinimalData src={props.src} onPlayCallback={props.onPlayCallback}>
       {({ isPlaying, onPlay, onPause }) => {
-        return <AudioMinimalPresentation isPlaying={isPlaying} onPlay={onPlay} onPause={onPause} />
+        return (
+          <AudioMinimalPresentation
+            src={props.src}
+            isPlaying={isPlaying}
+            onPlay={onPlay}
+            onPause={onPause}
+            color={props.color}
+            shouldStopPropagation={props.shouldStopPropagation}
+          />
+        )
       }}
     </AudioMinimalData>
   )
 }
 // PROPTYPES
-const { string } = PropTypes
+const { bool, func, string } = PropTypes
 AudioMinimalContainer.propTypes = {
   src: string,
+  color: string,
+  onPlayCallback: func,
+  shouldStopPropagation: bool,
 }
 
 export default AudioMinimalContainer
