@@ -23,13 +23,12 @@ import { changeSiteTheme } from 'reducers/navigation'
 
 import selectn from 'selectn'
 
-// TODO: FW-2056
-// import AppFrontController from 'components/AppFrontController'
-// import TranslationBar from 'components/TranslationBar/TranslationBar'
-// import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
-// import FirstVoices from 'common/themes/FirstVoices.js'
-// import FirstVoicesKids from 'common/themes/FirstVoicesKids.js' /// Fix this
-// import FirstVoicesWorkspace from 'common/themes/FirstVoicesWorkspace.js' /// Fix this
+import AppFrontController from 'components/AppFrontController'
+import TranslationBar from 'components/TranslationBar/TranslationBar'
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import FirstVoices from 'common/themes/FirstVoices.js'
+import FirstVoicesKids from 'common/themes/FirstVoicesKids.js' /// Fix this
+import FirstVoicesWorkspace from 'common/themes/FirstVoicesWorkspace.js' /// Fix this
 
 const { func, object, string } = PropTypes
 class AppWrapper extends Component {
@@ -49,7 +48,7 @@ class AppWrapper extends Component {
 
     // TODO: FW-2056
     this.state = {
-      muiTheme: {}, // createMuiTheme(FirstVoices),
+      muiTheme: createMuiTheme(FirstVoices),
       siteTheme: 'default',
     }
   }
@@ -57,30 +56,21 @@ class AppWrapper extends Component {
     const theme = selectn('siteTheme', this.props.properties)
     const prevTheme = selectn('siteTheme', prevProps.properties)
     if (theme !== prevTheme && theme !== this.state.siteTheme) {
-      let newTheme
-      // TODO: FW-2056
-      switch (theme) {
-        case 'kids':
-          newTheme = {} // createMuiTheme(FirstVoicesKids)
-          break
-
-        case 'workspace':
-          newTheme = {} // createMuiTheme(FirstVoicesWorkspace)
-          break
-        default:
-          newTheme = {} // createMuiTheme(FirstVoices)
+      let newTheme = FirstVoices
+      if (theme === 'kids') {
+        newTheme = FirstVoicesKids
+      }
+      if (theme === 'workspace') {
+        newTheme = FirstVoicesWorkspace
       }
       this.setState({
-        muiTheme: newTheme,
+        muiTheme: createMuiTheme(newTheme),
         siteTheme: theme,
       })
     }
   }
 
   render() {
-    return <h1>React has rendered!</h1>
-    // TODO: FW-2056
-    /*
     return (
       <ThemeProvider theme={this.state.muiTheme}>
         <div id="AppWrapper">
@@ -89,7 +79,6 @@ class AppWrapper extends Component {
         </div>
       </ThemeProvider>
     )
-    */
   }
 }
 
