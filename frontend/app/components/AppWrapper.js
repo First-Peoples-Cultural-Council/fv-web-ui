@@ -46,7 +46,6 @@ class AppWrapper extends Component {
   constructor(props, context) {
     super(props, context)
 
-    // TODO: FW-2056
     this.state = {
       muiTheme: createMuiTheme(FirstVoices),
       siteTheme: 'default',
