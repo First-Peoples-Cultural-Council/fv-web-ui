@@ -460,12 +460,12 @@ function DetailWordPhrasePresentation({
   )
 }
 // PROPTYPES
-const { array, func, object, string, boolean } = PropTypes
+const { array, func, object, string, bool } = PropTypes
 DetailWordPhrasePresentation.propTypes = {
   acknowledgement: string,
   audio: array,
   categories: array,
-  childrenDisplayButtons: boolean,
+  childrenDisplayButtons: bool,
   culturalNotes: array,
   definitions: array,
   dialectClassName: string,
