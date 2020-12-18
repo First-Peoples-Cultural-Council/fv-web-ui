@@ -245,18 +245,27 @@ module.exports = (env) => ({
         test: /pixi\.js/,
         use: {
           loader: 'expose-loader?PIXI',
+          options: {
+            exposes: 'PIXI',
+          },
         },
       },
       {
         test: /phaser-split\.js$/,
         use: {
           loader: 'expose-loader?Phaser',
+          options: {
+            exposes: 'Phaser',
+          },
         },
       },
       {
         test: /p2\.js/,
         use: {
           loader: 'expose-loader?p2',
+          options: {
+            exposes: 'p2',
+          },
         },
       },
       /**
