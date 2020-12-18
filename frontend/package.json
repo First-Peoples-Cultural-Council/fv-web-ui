@@ -24,7 +24,6 @@
     "production:sourcemap": "webpack --color --progress --display-error-details --mode production --config build/webpack.production.sourcemap.js",
     "production:legacy": "webpack --color --progress --mode production --env.legacy --config build/webpack.production.js",
     "start": "webpack serve --color --progress --mode development --config build/webpack.development.js",
-    "startDual": "webpack serve --color --progress --mode development --config build/webpack.dual.js",
     "startPreprod": "npm run start -- --env.NUXEO_URL=\"https://preprod.firstvoices.com/nuxeo/\"  --env.CONTEXT_PATH=\"\"",
     "startDev": "npm run start -- --env.NUXEO_URL=\"https://dev.firstvoices.com/nuxeo/\"  --env.CONTEXT_PATH=\"\"",
     "test:databaseSetup:local": "bash ./cypress/scripts/TestDatabaseSetup.sh http://127.0.0.1:8080",

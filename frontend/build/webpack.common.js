@@ -8,8 +8,6 @@ const path = require('path')
 
 // Root Directories
 const frontEndRootDirectory = paths.frontEndRootDirectory
-// TODO: FW-2056
-// const rootDirectory = paths.rootDirectory
 
 // Source Directories
 const sourceDirectory = paths.sourceDirectory
@@ -126,26 +124,7 @@ module.exports = (env) => ({
    * Optimizations
    */
   optimization: {
-    runtimeChunk: true,
-    splitChunks: {
-      chunks: 'all',
-      maxInitialRequests: Infinity,
-      minSize: 0,
-      cacheGroups: {
-        reactVendor: {
-          test: /[\\/]node_modules[\\/](react|react-dom|react-redux|redux)[\\/]/,
-          name: 'core.vendors',
-        },
-        materialUI: {
-          test: /[\\/]node_modules[\\/](@material-ui)[\\/]/,
-          name: 'material-ui',
-        },
-        vendor: {
-          test: /[\\/]node_modules[\\/](!react)(!react-dom)(!react-redux)(!redux)(!@material-ui)[\\/]/,
-          name: 'vendor',
-        },
-      },
-    },
+    runtimeChunk: 'multiple',
   },
 
   /**
@@ -157,7 +136,7 @@ module.exports = (env) => ({
     filename: path.join(outputScriptsDirectory, '[name].[contenthash].js'),
     chunkFilename: path.join(outputScriptsDirectory, '[name].[contenthash].js'),
     path: env && env.legacy ? outputDirectoryLegacy : outputDirectory,
-    publicPath: '',
+    publicPath: '/',
   },
 
   /**
@@ -179,10 +158,8 @@ module.exports = (env) => ({
     }),
     new CaseSensitivePathsPlugin({ debug: true }),
     new WarningsToErrorsPlugin(),
-    // TODO: FW-2056
     new CleanWebpackPlugin(),
-    // TODO: FW-2056
-    // new CleanWebpackPlugin([env && env.legacy ? outputDirectoryLegacy : outputDirectory], { root: rootDirectory }),
+    // new CleanWebpackPlugin([env && env.legacy ? outputDirectoryLegacy : outputDirectory], { root: paths.rootDirectory }),
     new HtmlWebpackPlugin({
       template: path.resolve(frontEndRootDirectory, 'index.html'),
       templateParameters: {
@@ -225,23 +202,35 @@ module.exports = (env) => ({
        */
       {
         test: /\.js$/,
-        use: [{
-          loader: 'babel-loader',
-          options: {
-            exclude: env && env.legacy ? /node_modules\/(?!@fpcc|nuxeo)/ : /node_modules\/(?!@fpcc)/,
-            cacheDirectory: true,
-            presets: ['@babel/preset-env', '@babel/preset-react'],
-            plugins: [
-              ['@babel/plugin-syntax-dynamic-import'],
-              ['@babel/plugin-proposal-decorators', { legacy: true }],
-              ['@babel/plugin-proposal-class-properties', { loose: true }],
-            ],
+        use: [
+          {
+
+            loader: 'babel-loader',
+            options: {
+              exclude: env && env.legacy ? /node_modules\/(?!@fpcc|nuxeo)/ : /node_modules\/(?!@fpcc)/,
+              cacheDirectory: true,
+              presets: [
+                [
+                  '@babel/preset-env',
+                  {
+                    targets: {
+                      node: 'current',
+                    },
+                  },
+                ],
+                '@babel/preset-react',
+              ],
+              plugins: [
+                ['@babel/plugin-syntax-dynamic-import'],
+                ['@babel/plugin-proposal-decorators', { legacy: true }],
+                ['@babel/plugin-proposal-class-properties', { loose: true }],
+                'syntax-dynamic-import',
+                'dynamic-import-node',
+                '@babel/plugin-transform-runtime',
+              ],
+            },
           },
-        }],
-      },
-      {
-        test: require.resolve('react'),
-        use: 'expose-loader?React',
+        ],
       },
       /**
        * Look at removing this and just having peer dependencies
@@ -250,23 +239,41 @@ module.exports = (env) => ({
         test: /pixi\.js/,
         use: {
           loader: 'expose-loader?PIXI',
+          options: {
+            exposes: 'PIXI',
+          },
         },
       },
       {
         test: /phaser-split\.js$/,
         use: {
           loader: 'expose-loader?Phaser',
+          options: {
+            exposes: 'Phaser',
+          },
         },
       },
       {
         test: /p2\.js/,
         use: {
           loader: 'expose-loader?p2',
+          options: {
+            exposes: 'p2',
+          },
         },
       },
       /**
        * Style Loaders
        */
+      {
+        test: /\.css$/i,
+        use: ['style-loader', {
+          loader: 'css-loader',
+          options: {
+            import: true,
+          },
+        }],
+      },
       {
         test: /\.less$/,
         use: [
@@ -292,25 +299,29 @@ module.exports = (env) => ({
        */
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        use: [{
-          loader: 'url-loader?limit=10000&minetype=application/font-woff',
-          options: {
-            limit: 10000,
-            mimetype: 'application/font-woff',
-            name: path.join(outputFontsDirectory, '[name].[contenthash].[ext]'),
+        use: [
+          {
+            loader: 'url-loader?limit=10000&minetype=application/font-woff',
+            options: {
+              limit: 10000,
+              mimetype: 'application/font-woff',
+              name: path.join(outputFontsDirectory, '[name].[contenthash].[ext]'),
+            },
           },
-        }],
+        ],
       },
       {
         test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        use: [{
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            mimetype: 'application/octet-stream',
-            name: path.join(outputFontsDirectory, '[name].[contenthash].[ext]'),
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+              mimetype: 'application/octet-stream',
+              name: path.join(outputFontsDirectory, '[name].[contenthash].[ext]'),
+            },
           },
-        }],
+        ],
       },
       {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
