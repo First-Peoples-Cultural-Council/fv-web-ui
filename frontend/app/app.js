@@ -42,7 +42,6 @@ Sentry.init({
 })
 
 import 'normalize.css'
-require('bootstrap/less/bootstrap')
 import './assets/stylesheets/main.less'
 
 const context = {
