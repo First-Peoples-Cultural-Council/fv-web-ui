@@ -138,7 +138,7 @@ module.exports = (env) => ({
     filename: path.join(outputScriptsDirectory, '[name].[contenthash].js'),
     chunkFilename: path.join(outputScriptsDirectory, '[name].[contenthash].js'),
     path: env && env.legacy ? outputDirectoryLegacy : outputDirectory,
-    publicPath: '',
+    publicPath: '/',
   },
 
   /**
@@ -211,11 +211,24 @@ module.exports = (env) => ({
             options: {
               exclude: env && env.legacy ? /node_modules\/(?!@fpcc|nuxeo)/ : /node_modules\/(?!@fpcc)/,
               cacheDirectory: true,
-              presets: ['@babel/preset-env', '@babel/preset-react'],
+              presets: [
+                [
+                  '@babel/preset-env',
+                  {
+                    targets: {
+                      node: 'current',
+                    },
+                  },
+                ],
+                '@babel/preset-react',
+              ],
               plugins: [
                 ['@babel/plugin-syntax-dynamic-import'],
                 ['@babel/plugin-proposal-decorators', { legacy: true }],
                 ['@babel/plugin-proposal-class-properties', { loose: true }],
+                'syntax-dynamic-import',
+                'dynamic-import-node',
+                '@babel/plugin-transform-runtime',
               ],
             },
           },
@@ -250,6 +263,15 @@ module.exports = (env) => ({
        * Style Loaders
        */
       {
+        test: /\.css$/i,
+        use: ['style-loader', {
+          loader: 'css-loader',
+          options: {
+            import: true,
+          },
+        }],
+      },
+      {
         test: /\.less$/,
         use: [
           {
@@ -272,41 +294,41 @@ module.exports = (env) => ({
       /**
        * Font loaders
        */
-      // {
-      //   test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-      //   use: [
-      //     {
-      //       loader: 'url-loader?limit=10000&minetype=application/font-woff',
-      //       options: {
-      //         limit: 10000,
-      //         mimetype: 'application/font-woff',
-      //         name: path.join(outputFontsDirectory, '[name].[contenthash].[ext]'),
-      //       },
-      //     },
-      //   ],
-      // },
-      // {
-      //   test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-      //   use: [
-      //     {
-      //       loader: 'url-loader',
-      //       options: {
-      //         limit: 10000,
-      //         mimetype: 'application/octet-stream',
-      //         name: path.join(outputFontsDirectory, '[name].[contenthash].[ext]'),
-      //       },
-      //     },
-      //   ],
-      // },
-      // {
-      //   test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-      //   use: [{
-      //     loader: 'file-loader',
-      //     options: {
-      //       name: path.join(outputFontsDirectory, '[name].[contenthash].[ext]'),
-      //     },
-      //   }],
-      // },
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: [
+          {
+            loader: 'url-loader?limit=10000&minetype=application/font-woff',
+            options: {
+              limit: 10000,
+              mimetype: 'application/font-woff',
+              name: path.join(outputFontsDirectory, '[name].[contenthash].[ext]'),
+            },
+          },
+        ],
+      },
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+              mimetype: 'application/octet-stream',
+              name: path.join(outputFontsDirectory, '[name].[contenthash].[ext]'),
+            },
+          },
+        ],
+      },
+      {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: path.join(outputFontsDirectory, '[name].[contenthash].[ext]'),
+          },
+        }],
+      },
       /**
        * Image Loaders
        */
