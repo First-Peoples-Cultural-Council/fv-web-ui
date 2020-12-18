@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import '!style-loader!css-loader!./Alphabet.css'
+import './Alphabet.css'
 
 import TextHeader from 'components/Typography/text-header'
 import FVButton from 'components/FVButton'
