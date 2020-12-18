@@ -16,7 +16,7 @@ import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
 import WarningBanner from 'components/WarningBanner'
 import RequestReview from 'components/RequestReview'
-import '!style-loader!css-loader!./withForm.css'
+import './withForm.css'
 
 const confirmationButtonsStyle = { padding: '4px', marginLeft: '5px', border: '1px solid gray' }
 
@@ -66,7 +66,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
       // Passed validation
       if (formValue) {
         for (const key in formValue) {
-          if (formValue.hasOwnProperty(key) && key) {
+          if (Object.prototype.hasOwnProperty.call(formValue, key) && key) {
             // NOTE: we can encounter checkboxes that have formValue[key] === false.
             // If we just used `if (formValue[key])` in the following conditional,
             // we'd toss out unselected checkboxes

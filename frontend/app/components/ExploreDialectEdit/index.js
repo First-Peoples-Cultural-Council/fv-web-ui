@@ -45,7 +45,7 @@ import withForm from 'components/withForm'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
 
-import '!style-loader!css-loader!./ExploreDialectEdit.css'
+import './ExploreDialectEdit.css'
 
 const EditViewWithForm = withForm(PromiseWrapper, true)
 

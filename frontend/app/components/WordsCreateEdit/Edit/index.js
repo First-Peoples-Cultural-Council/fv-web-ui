@@ -37,7 +37,7 @@ import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Const
 import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import FVLabel from 'components/FVLabel'
-import '!style-loader!css-loader!./WordsEdit.css'
+import './WordsEdit.css'
 
 // Models
 import { Document } from 'nuxeo'

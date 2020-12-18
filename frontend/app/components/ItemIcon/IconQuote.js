@@ -1,5 +1,5 @@
 import React from 'react'
-import '!style-loader!css-loader!./IconQuote.css'
+import './IconQuote.css'
 /**
  * @summary IconQuote
  * @version 1.0.1

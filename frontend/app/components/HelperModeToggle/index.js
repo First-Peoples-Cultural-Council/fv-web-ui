@@ -13,7 +13,7 @@ import DocumentOperations from 'operations/DocumentOperations'
 
 import LabelModal from 'components/Immersion/Modal'
 import FVButton from 'components/FVButton/index'
-import '!style-loader!css-loader!./HelperModeToggle.css'
+import './HelperModeToggle.css'
 
 const HelperModeToggle = ({
   handleToggleHelpMode,

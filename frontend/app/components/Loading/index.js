@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 // TODO: that works on IE and is small kb
 import SpinnerBallFall from 'components/SpinnerBallFall'
 
-import '!style-loader!css-loader!./Loading.css'
+import './Loading.css'
 
 const { string } = PropTypes
 export class Loading extends React.Component {

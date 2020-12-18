@@ -32,7 +32,7 @@ import Preview from 'components/Preview'
 import PromiseWrapper from 'components/PromiseWrapper'
 import WordListView from 'components/WordsCreateEdit/list-view'
 
-import '!style-loader!css-loader!./AlphabetDetail.css'
+import './AlphabetDetail.css'
 /**
  * @summary AlphabetDetailPresentation
  * @version 1.0.1

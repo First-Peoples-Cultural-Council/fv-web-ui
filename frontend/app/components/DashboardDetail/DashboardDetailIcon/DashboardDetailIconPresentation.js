@@ -10,7 +10,7 @@ import IconSong from '@material-ui/icons/LibraryMusicOutlined'
 import IconNew from '@material-ui/icons/NewReleasesTwoTone'
 
 import { WORD, PHRASE, SONG, STORY } from 'common/Constants'
-import '!style-loader!css-loader!./DashboardDetailIcon.css'
+import './DashboardDetailIcon.css'
 /**
  * @summary DashboardDetailIconPresentation
  * @version 1.0.1

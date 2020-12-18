@@ -10,7 +10,7 @@ import TableTasksData from 'components/TableTasks/TableTasksData'
 import TasksData from './TasksData'
 import StringHelpers from 'common/StringHelpers'
 
-import '!style-loader!css-loader!./Tasks.css'
+import './Tasks.css'
 /**
  * @summary TasksContainer
  * @version 1.0.1

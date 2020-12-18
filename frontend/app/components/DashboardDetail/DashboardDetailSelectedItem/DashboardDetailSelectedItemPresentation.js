@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import '!style-loader!css-loader!./DashboardDetailSelectedItem.css'
+import './DashboardDetailSelectedItem.css'
 
 /**
  * @summary DashboardDetailSelectedItemPresentation

@@ -10,7 +10,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 // FPCC
 import FVLabel from 'components/FVLabel'
 
-import '!style-loader!css-loader!./AdminMenu.css'
+import './AdminMenu.css'
 /**
  * @summary AdminMenuPresentation
  * @version 1.0.1

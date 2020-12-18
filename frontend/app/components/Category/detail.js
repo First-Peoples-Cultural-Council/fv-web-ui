@@ -15,7 +15,7 @@ import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import StateDetail from './states/detail'
 
-import '!style-loader!css-loader!./styles.css'
+import './styles.css'
 
 // let _computeCategories = undefined
 // const categoryType = {
@@ -56,8 +56,8 @@ export class CategoryDetail extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "CategoryDetailCopy" */ './copy').then((_copy) => {
-        return _copy.default
-      })
+          return _copy.default
+        })
 
     await this._getData({ copy })
   }

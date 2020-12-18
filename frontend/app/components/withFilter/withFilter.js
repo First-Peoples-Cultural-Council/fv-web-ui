@@ -14,7 +14,7 @@ import withToggle from 'components/withToggle'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import FormHelpers from 'common/FormHelpers'
-import '!style-loader!css-loader!./withFilter.css'
+import './withFilter.css'
 
 const intl = IntlService.instance
 

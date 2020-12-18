@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Link from 'components/Link'
-import '!style-loader!css-loader!./DialectFilterList.css'
+import './DialectFilterList.css'
 function DialectFilterListPresentation({ title, listItemData }) {
   const generateList = () => {
     const listItems = listItemData.map((parent, parentIndex) => {

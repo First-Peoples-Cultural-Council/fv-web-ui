@@ -5,7 +5,7 @@ import Widget from 'components/Widget'
 import Link from 'components/Link'
 import FVLabel from 'components/FVLabel'
 import Typography from '@material-ui/core/Typography'
-import '!style-loader!css-loader!./WidgetLinks.css'
+import './WidgetLinks.css'
 /**
  * @summary WidgetLinksPresentation
  * @version 1.0.1

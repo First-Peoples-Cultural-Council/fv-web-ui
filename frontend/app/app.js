@@ -41,9 +41,9 @@ Sentry.init({
   dsn: 'https://b5b295e690dd4471be88933ec976d12d@o488868.ingest.sentry.io/5550001',
 })
 
-require('!style-loader!css-loader!normalize.css')
+import 'normalize.css'
 require('bootstrap/less/bootstrap')
-require('styles/main')
+import './assets/stylesheets/main.less'
 
 const context = {
   providedState: {

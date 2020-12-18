@@ -12,7 +12,7 @@ import Preview from 'components/Preview'
 import ProviderHelpers from 'common/ProviderHelpers'
 import { WORKSPACES } from 'common/Constants'
 import AuthorizationFilter from 'components/AuthorizationFilter/index'
-import '!style-loader!css-loader!./FVLabel.css'
+import './FVLabel.css'
 
 function FVLabel({
   transKey,

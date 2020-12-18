@@ -7,7 +7,7 @@ import ChevronRight from '@material-ui/icons/ChevronRight'
 
 import UIHelpers from 'common/UIHelpers'
 import FVLabel from 'components/FVLabel'
-import '!style-loader!css-loader!./Pagination.css'
+import './Pagination.css'
 /**
  * @summary PaginationPresentation
  * @version 1.0.1

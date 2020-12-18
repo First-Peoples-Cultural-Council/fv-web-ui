@@ -40,7 +40,7 @@ import VisibilityMinimal from 'components/VisibilityMinimal'
 import AuthorizationFilter from 'components/AuthorizationFilter'
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 
-import '!style-loader!css-loader!./PageToolbar.css'
+import './PageToolbar.css'
 
 const { array, func, node, object, string } = PropTypes
 

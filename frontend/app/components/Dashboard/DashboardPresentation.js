@@ -5,7 +5,7 @@ import selectn from 'selectn'
 import Typography from '@material-ui/core/Typography'
 
 import useTheme from 'dataSources/useTheme'
-import '!style-loader!css-loader!./Dashboard.css'
+import './Dashboard.css'
 
 /**
  * @summary DashboardPresentation

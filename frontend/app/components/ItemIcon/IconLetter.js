@@ -1,5 +1,5 @@
 import React from 'react'
-import '!style-loader!css-loader!./IconLetter.css'
+import './IconLetter.css'
 /**
  * @summary IconLetter
  * @version 1.0.1

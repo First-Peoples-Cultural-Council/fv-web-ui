@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import '!style-loader!css-loader!./IconStarburst.css'
+import './IconStarburst.css'
 /**
  * @summary IconStarburst
  * @version 1.0.1

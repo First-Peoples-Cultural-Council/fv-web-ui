@@ -15,7 +15,7 @@ import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import StateDetail from './states/detail'
 
-import '!style-loader!css-loader!./Contributor.css'
+import './Contributor.css'
 
 const { element, func, number, object, string } = PropTypes
 
@@ -50,8 +50,8 @@ export class Contributor extends React.Component {
     const copy = this.props.copy
       ? this.props.copy
       : await import(/* webpackChunkName: "ContributorDetailsCopy" */ './copy').then((_copy) => {
-        return _copy.default
-      })
+          return _copy.default
+        })
 
     await this._getData({ copy })
   }

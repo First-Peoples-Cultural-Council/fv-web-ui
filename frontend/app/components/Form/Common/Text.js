@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import '!style-loader!css-loader!./Text.css'
+import './Text.css'
 
 const { bool, string, func, object } = PropTypes
 
@@ -83,10 +83,10 @@ export default class Text extends React.Component {
 
     const labelClickHandler = wysiwyg
       ? () => {
-        if (this.state.wysiwygRef) {
-          this.state.wysiwygRef.focus()
+          if (this.state.wysiwygRef) {
+            this.state.wysiwygRef.focus()
+          }
         }
-      }
       : () => {}
     return (
       <div className={`${className} Text ${message ? 'Form__error Text--error' : ''}`}>

@@ -178,7 +178,7 @@ const FlashcardList = React.lazy(() => import('components/FlashcardList'))
 const DictionaryListSmallScreen = React.lazy(() => import('components/DictionaryList/DictionaryListSmallScreen'))
 const DictionaryListLargeScreen = React.lazy(() => import('components/DictionaryList/DictionaryListLargeScreen'))
 const ExportDialect = React.lazy(() => import('components/ExportDialect'))
-import '!style-loader!css-loader!./DictionaryList.css'
+import './DictionaryList.css'
 
 // ===============================================================
 // DictionaryList

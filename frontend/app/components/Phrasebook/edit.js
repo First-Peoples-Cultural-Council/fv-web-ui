@@ -37,7 +37,7 @@ import {
   DEFAULT_SORT_TYPE,
 } from 'common/Constants'
 
-import '!style-loader!css-loader!./Phrasebook.css'
+import './Phrasebook.css'
 
 const { array, element, func, number, object, string } = PropTypes
 

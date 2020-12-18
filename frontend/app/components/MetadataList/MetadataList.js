@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 
 import selectn from 'selectn'
 
-import '!style-loader!css-loader!./MetadataList.css'
+import './MetadataList.css'
 /**
  * Metadata list
  */

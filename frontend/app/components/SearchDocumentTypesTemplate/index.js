@@ -1,5 +1,5 @@
 import React from 'react'
-import '!style-loader!css-loader!./SearchDocumentTypesTemplate.css'
+import './SearchDocumentTypesTemplate.css'
 import IconButton from '@material-ui/core/IconButton'
 import Clear from '@material-ui/icons/Clear'
 import Tooltip from '@material-ui/core/Tooltip'

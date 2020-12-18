@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography'
 import IconProcessed from '@material-ui/icons/Check'
 import useTheme from 'dataSources/useTheme'
 import selectn from 'selectn'
-import '!style-loader!css-loader!./DashboardDetailSidebarItem.css'
+import './DashboardDetailSidebarItem.css'
 
 /**
  * @summary DashboardDetailSidebarItemPresentation

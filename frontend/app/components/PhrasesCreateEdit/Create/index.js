@@ -41,7 +41,7 @@ import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import FVLabel from 'components/FVLabel'
-import '!style-loader!css-loader!./PhrasesCreate.css'
+import './PhrasesCreate.css'
 
 /**
  * Create phrase entry

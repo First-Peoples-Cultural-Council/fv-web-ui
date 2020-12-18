@@ -33,8 +33,8 @@ import {
 } from 'components/DictionaryList/DictionaryListSmallScreen'
 import AuthorizationFilter from 'components/AuthorizationFilter'
 
-import '!style-loader!css-loader!./PhrasesList.css'
-import '!style-loader!css-loader!components/DictionaryList/DictionaryList.css'
+import './PhrasesList.css'
+import 'components/DictionaryList/DictionaryList.css'
 
 const DictionaryListLargeScreen = React.lazy(() => import('components/DictionaryList/DictionaryListLargeScreen'))
 const DictionaryListSmallScreen = React.lazy(() => import('components/DictionaryList/DictionaryListSmallScreen'))

@@ -48,7 +48,7 @@ import withActions from 'components/withActions'
 const DetailsViewWithActions = withActions(PromiseWrapper, true)
 
 //Stylesheet
-import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
+import 'react-image-gallery/styles/css/image-gallery.css'
 
 const { array, func, object, string } = PropTypes
 

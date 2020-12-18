@@ -29,7 +29,7 @@ import Close from '@material-ui/icons/Close'
 
 import FVTab from 'components/FVTab'
 import Statistics from 'components/Dashboard/Statistics'
-import '!style-loader!css-loader!./PageStats.css'
+import './PageStats.css'
 
 const { func, object, string } = PropTypes
 export class PageStats extends Component {

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import '!style-loader!css-loader!./Confirmation.css'
+import './Confirmation.css'
 import SpinnerBallFall from 'components/SpinnerBallFall'
 const STATE_INITIALIZING = 0
 const STATE_DEFAULT = 1

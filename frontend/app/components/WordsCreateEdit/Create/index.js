@@ -34,7 +34,7 @@ import PromiseWrapper from 'components/PromiseWrapper'
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
 import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
-import '!style-loader!css-loader!./WordsCreate.css'
+import './WordsCreate.css'
 
 // Views
 import fields from 'common/schemas/fields'

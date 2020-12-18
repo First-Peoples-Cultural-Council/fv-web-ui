@@ -11,7 +11,7 @@ import StringHelpers from 'common/StringHelpers'
 import Typography from '@material-ui/core/Typography'
 
 // FPCC
-import '!style-loader!css-loader!./VisibilitySelect.css'
+import './VisibilitySelect.css'
 
 /**
  * @summary VisibilitySelectPresentation

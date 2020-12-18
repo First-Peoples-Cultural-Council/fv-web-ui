@@ -30,7 +30,7 @@ import KidsNavigation from 'components/Kids/navigation'
 import Breadcrumb from 'components/Breadcrumb'
 import { PageError } from 'common/conf/pagesIndex'
 
-import '!style-loader!css-loader!./AppFrontController.css'
+import './AppFrontController.css'
 import FVLabel from 'components/FVLabel'
 import HelperModeToggle from 'components/HelperModeToggle/index'
 

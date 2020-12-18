@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import '!style-loader!css-loader!./ErrorBoundary.css'
+import './ErrorBoundary.css'
 
 const { string, object } = PropTypes
 export class ErrorBoundary extends React.Component {

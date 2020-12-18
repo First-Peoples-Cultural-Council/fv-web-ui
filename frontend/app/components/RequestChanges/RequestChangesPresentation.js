@@ -1,5 +1,5 @@
 import React from 'react'
-import '!style-loader!css-loader!./RequestChanges.css'
+import './RequestChanges.css'
 import FVButton from 'components/FVButton'
 import { /*getError,*/ getErrorFeedback } from 'common/FormHelpers'
 

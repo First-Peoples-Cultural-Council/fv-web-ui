@@ -7,7 +7,7 @@ import { pushWindowPath } from 'reducers/windowPath'
 import { FormControl, FormGroup } from '@material-ui/core'
 
 const { any, array, func, string, object } = PropTypes
-import '!style-loader!css-loader!./immersionFilter.css'
+import './immersionFilter.css'
 
 export class ImmersionFilterList extends Component {
   static propTypes = {

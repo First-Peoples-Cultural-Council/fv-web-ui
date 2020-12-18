@@ -19,7 +19,7 @@ import PropTypes from 'prop-types'
 import GridList from '@material-ui/core/GridList'
 import GridListTile from '@material-ui/core/GridListTile'
 import GridListTileBar from '@material-ui/core/GridListTileBar'
-import '!style-loader!css-loader!./PhraseBooksGrid.css'
+import './PhraseBooksGrid.css'
 
 import AudioMinimal from 'components/AudioMinimal'
 

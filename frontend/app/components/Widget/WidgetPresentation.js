@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
-import '!style-loader!css-loader!./Widget.css'
+import './Widget.css'
 import { TABLE_FULL_WIDTH } from 'common/Constants'
 /**
  * @summary WidgetPresentation

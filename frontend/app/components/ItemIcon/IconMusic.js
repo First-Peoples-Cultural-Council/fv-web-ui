@@ -1,5 +1,5 @@
 import React from 'react'
-import '!style-loader!css-loader!./IconMusic.css'
+import './IconMusic.css'
 /**
  * @summary IconMusic
  * @version 1.0.1

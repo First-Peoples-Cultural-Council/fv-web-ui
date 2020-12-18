@@ -16,7 +16,7 @@ limitations under the License.
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import '!style-loader!css-loader!./modalStyles.css'
+import './modalStyles.css'
 
 /**
  * List view for words in immersion
@@ -38,17 +38,15 @@ class TranslationInput extends Component {
     this.addListeners()
   }
 
-  componentDidUpdate(prevProps) {}
-
   componentWillUnmount() {
     this.removeListeners()
   }
 
-  handleChange = (name) => (event) => {}
+  handleChange = () => () => {}
 
   renderTranslation = () => {
     const { translation, templateStrings } = this.props
-    var count = 0
+    let count = 0
     const words = translation.map((word, i) => {
       const output = []
       if (word === '%s') {
@@ -65,7 +63,7 @@ class TranslationInput extends Component {
             className="translation-input"
             contentEditable="true"
             id={i.toString() + ' editable'}
-            suppressContentEditableWarning={true}
+            suppressContentEditableWarning
           >
             {word.toString()}
           </span>

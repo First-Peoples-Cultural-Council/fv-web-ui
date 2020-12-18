@@ -14,7 +14,7 @@ import UIHelpers from 'common/UIHelpers'
 import Link from 'components/Link'
 import Preview from 'components/Preview'
 
-import '!style-loader!css-loader!./SearchDictionary.css'
+import './SearchDictionary.css'
 
 /**
  * @summary SearchDictionaryListLargeScreen

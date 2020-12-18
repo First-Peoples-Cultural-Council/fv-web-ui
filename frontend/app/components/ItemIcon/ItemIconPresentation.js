@@ -15,7 +15,7 @@ import {
   // STORY,
 } from 'common/Constants'
 
-import '!style-loader!css-loader!./ItemIcon.css'
+import './ItemIcon.css'
 
 /**
  * @summary ItemIconPresentation

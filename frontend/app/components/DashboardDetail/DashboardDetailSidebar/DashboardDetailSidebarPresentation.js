@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import DashboardDetailSidebarItem from 'components/DashboardDetail/DashboardDetailSidebarItem'
 import ItemIcon from 'components/ItemIcon'
-import '!style-loader!css-loader!./DashboardDetailSidebar.css'
+import './DashboardDetailSidebar.css'
 import { EVEN, ODD } from 'common/Constants'
 /**
  * @summary DashboardDetailSidebarPresentation

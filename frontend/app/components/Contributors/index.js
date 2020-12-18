@@ -36,7 +36,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import withPagination from 'components/withPagination'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'components/DictionaryList/DictionaryListSmallScreen'
 
-import '!style-loader!css-loader!./Contributors.css'
+import './Contributors.css'
 
 const DictionaryList = React.lazy(() => import('components/DictionaryList/DictionaryList'))
 

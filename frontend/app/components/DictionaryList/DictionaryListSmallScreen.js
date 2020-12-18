@@ -20,7 +20,7 @@ import useRoute from 'dataSources/useRoute'
 
 import Typography from '@material-ui/core/Typography'
 import StringHelpers from 'common/StringHelpers'
-import '!style-loader!css-loader!./DictionaryListSmallScreen.css'
+import './DictionaryListSmallScreen.css'
 
 const DictionaryListSmallScreen = (props) => {
   const { items, columns } = props

@@ -9,7 +9,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import FVButton from 'components/FVButton'
 import sanitize from 'common/Sanitize'
 
-import '!style-loader!css-loader!react-image-gallery/styles/css/image-gallery.css'
+import 'react-image-gallery/styles/css/image-gallery.css'
 
 /**
  * @summary DetailWordPhrasePresentation

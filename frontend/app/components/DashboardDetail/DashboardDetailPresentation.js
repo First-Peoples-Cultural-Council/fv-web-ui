@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import '!style-loader!css-loader!./DashboardDetail.css'
+import './DashboardDetail.css'
 
 import IconWidget from '@material-ui/icons/Apps'
 import Link from 'components/Link'

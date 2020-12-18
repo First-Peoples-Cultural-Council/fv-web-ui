@@ -21,7 +21,7 @@ import { getFormData, handleSubmit } from 'common/FormHelpers'
 
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR, STATE_SUCCESS, STATE_ERROR_BOUNDARY } from 'common/Constants'
 
-import '!style-loader!css-loader!./styles.css'
+import './styles.css'
 
 const { array, element, func, number, object, string } = PropTypes
 

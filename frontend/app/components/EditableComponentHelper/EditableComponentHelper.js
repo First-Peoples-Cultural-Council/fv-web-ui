@@ -18,7 +18,7 @@ import options from 'common/schemas/options'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Edit from '@material-ui/icons/Edit'
 
-import '!style-loader!css-loader!./EditableComponentHelper.css'
+import './EditableComponentHelper.css'
 import FVLabel from 'components/FVLabel'
 import { connect } from 'react-redux'
 

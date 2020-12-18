@@ -10,7 +10,7 @@ import PromiseWrapper from 'components/PromiseWrapper'
 import SearchDictionaryListLargeScreen from 'components/SearchDictionary/SearchDictionaryListLargeScreen'
 import Pagination from 'components/Pagination'
 
-import '!style-loader!css-loader!./SearchDictionary.css'
+import './SearchDictionary.css'
 
 /**
  * @summary SearchDictionaryPresentation

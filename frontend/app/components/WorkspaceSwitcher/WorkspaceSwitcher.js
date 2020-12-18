@@ -29,7 +29,7 @@ import StringHelpers from 'common/StringHelpers'
 
 import { WORKSPACES, SECTIONS } from 'common/Constants'
 
-import '!style-loader!css-loader!./WorkspaceSwitcher.css'
+import './WorkspaceSwitcher.css'
 import FVLabel from 'components/FVLabel'
 
 const { array, func, object, string } = PropTypes

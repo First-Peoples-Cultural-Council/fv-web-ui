@@ -1,6 +1,6 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
-import '!style-loader!css-loader!./TEMPLATE.css'
+import './TEMPLATE.css'
 /**
  * @summary TEMPLATEPresentation
  * @version 1.0.1

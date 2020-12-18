@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactQuill from 'react-quill'
-import '!style-loader!css-loader!react-quill/dist/quill.snow.css'
-import '!style-loader!css-loader!./Editor.css'
+import 'react-quill/dist/quill.snow.css'
+import './Editor.css'
 const { bool, string, func } = PropTypes
 
 export class Editor extends Component {

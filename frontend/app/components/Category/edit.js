@@ -38,7 +38,7 @@ import {
   DEFAULT_SORT_TYPE,
 } from 'common/Constants'
 
-import '!style-loader!css-loader!./styles.css'
+import './styles.css'
 
 const { array, element, func, number, object, string } = PropTypes
 

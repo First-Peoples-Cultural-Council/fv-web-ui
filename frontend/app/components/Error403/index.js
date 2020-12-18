@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import NavigationHelpers from 'common/NavigationHelpers'
 
-import '!style-loader!css-loader!./Error403.css'
+import './Error403.css'
 
 const { object, string } = PropTypes
 export class Error403 extends React.Component {

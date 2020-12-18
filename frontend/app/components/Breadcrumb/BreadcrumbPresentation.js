@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import Avatar from '@material-ui/core/Avatar'
 
-import '!style-loader!css-loader!./Breadcrumb.css'
+import './Breadcrumb.css'
 
 /**
  * @summary BreadcrumbPresentation

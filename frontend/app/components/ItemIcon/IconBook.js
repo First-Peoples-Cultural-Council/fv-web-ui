@@ -1,5 +1,5 @@
 import React from 'react'
-import '!style-loader!css-loader!./IconBook.css'
+import './IconBook.css'
 /**
  * @summary IconBook
  * @version 1.0.1

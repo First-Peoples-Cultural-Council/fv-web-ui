@@ -31,7 +31,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 import PromiseWrapper from 'components/PromiseWrapper'
 
-import '!style-loader!css-loader!./DocumentView.css'
+import './DocumentView.css'
 import FVLabel from 'components/FVLabel'
 
 const { array, func, object, string } = PropTypes

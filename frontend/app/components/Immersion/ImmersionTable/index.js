@@ -25,7 +25,7 @@ import Preview from 'components/Preview'
 import FVLabel from 'components/FVLabel'
 import { windowLocationPathnameWithoutPagination } from 'common/NavigationHelpers'
 import { withStyles } from '@material-ui/core/styles'
-import '!style-loader!css-loader!./immersiontable.css'
+import './immersiontable.css'
 
 /**
  * List view for words in immersion

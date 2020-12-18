@@ -37,7 +37,7 @@ import { routeHasChanged } from 'common/NavigationHelpers'
 
 import FVLabel from 'components/FVLabel'
 
-import '!style-loader!css-loader!./TranslationBar.css'
+import './TranslationBar.css'
 
 const { func, string, object } = PropTypes
 class TranslationBar extends Component {

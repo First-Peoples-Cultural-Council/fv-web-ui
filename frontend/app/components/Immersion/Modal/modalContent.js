@@ -32,7 +32,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import { withStyles } from '@material-ui/core/styles'
 
 import TranslationInput from './translationInput'
-import '!style-loader!css-loader!./modalStyles.css'
+import './modalStyles.css'
 
 /**
  * List view for words in immersion

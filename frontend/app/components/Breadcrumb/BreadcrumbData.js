@@ -18,7 +18,7 @@ import useProperties from 'dataSources/useProperties'
 import useRoute from 'dataSources/useRoute'
 import useWindowPath from 'dataSources/useWindowPath'
 
-import '!style-loader!css-loader!./Breadcrumb.css'
+import './Breadcrumb.css'
 
 /**
  * @summary BreadcrumbData

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import useTheme from 'dataSources/useTheme'
 import selectn from 'selectn'
-import '!style-loader!css-loader!./DashboardDetailSelectedItemTask.css'
+import './DashboardDetailSelectedItemTask.css'
 
 /**
  * @summary DashboardDetailSelectedItemTaskPresentation

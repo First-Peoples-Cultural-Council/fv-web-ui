@@ -22,7 +22,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import ProviderHelpers from 'common/ProviderHelpers'
 import Error403 from 'components/Error403'
 
-import '!style-loader!css-loader!./PromiseWrapper.css'
+import './PromiseWrapper.css'
 import FVLabel from 'components/FVLabel'
 
 /**

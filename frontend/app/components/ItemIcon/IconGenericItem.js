@@ -1,5 +1,5 @@
 import React from 'react'
-import '!style-loader!css-loader!./IconGenericItem.css'
+import './IconGenericItem.css'
 /**
  * @summary IconGenericItem
  * @version 1.0.1
