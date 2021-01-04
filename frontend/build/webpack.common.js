@@ -56,13 +56,6 @@ module.exports = (env) => ({
   mode: 'development',
 
   /**
-   * Source Mapping
-   * enhance debugging by adding meta info for the browser devtools
-   * source-map most detailed at the expense of build speed.
-   **/
-  devtool: false,
-
-  /**
    * Development Server
    **/
   devServer: {
@@ -102,7 +95,6 @@ module.exports = (env) => ({
    */
   entry: {
     app: path.resolve(sourceDirectory, 'app.js'),
-    game_libs: ['pixi', 'p2', 'phaser'],
   },
 
   // These options change how modules are resolved
@@ -224,43 +216,11 @@ module.exports = (env) => ({
                 ['@babel/plugin-syntax-dynamic-import'],
                 ['@babel/plugin-proposal-decorators', { legacy: true }],
                 ['@babel/plugin-proposal-class-properties', { loose: true }],
-                'syntax-dynamic-import',
-                'dynamic-import-node',
                 '@babel/plugin-transform-runtime',
               ],
             },
           },
         ],
-      },
-      /**
-       * Look at removing this and just having peer dependencies
-       **/
-      {
-        test: /pixi\.js/,
-        use: {
-          loader: 'expose-loader?PIXI',
-          options: {
-            exposes: 'PIXI',
-          },
-        },
-      },
-      {
-        test: /phaser-split\.js$/,
-        use: {
-          loader: 'expose-loader?Phaser',
-          options: {
-            exposes: 'Phaser',
-          },
-        },
-      },
-      {
-        test: /p2\.js/,
-        use: {
-          loader: 'expose-loader?p2',
-          options: {
-            exposes: 'p2',
-          },
-        },
       },
       /**
        * Style Loaders
