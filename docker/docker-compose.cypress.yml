@@ -5,7 +5,7 @@ services:
       - START_WITH_DATA=cypress_fixtures
   cypress:
     working_dir: /e2e
-    image: "cypress/included:4.8.0"
+    image: "cypress/included:6.2.0"
     depends_on:
       - frontend
       - nuxeo-backend
