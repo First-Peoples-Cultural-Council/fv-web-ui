@@ -32,6 +32,22 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 
+/* eslint-disable */
+/* Game libraries
+============================================================
+Note: using the inline format for expose-loader so we
+don't have to configure an entry bundle just for games
+
+https://github.com/webpack-contrib/expose-loader#inline
+*/
+import pixi from 'expose-loader?exposes[]=PIXI!pixi'
+import p2 from 'expose-loader?exposes[]=p2!p2'
+// IMPORTANT: Phaser is last
+import Phaser from 'expose-loader?exposes[]=Phaser!phaser'
+/* END: Game libraries
+============================================================ */
+/* eslint-enable */
+
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
@@ -297,7 +313,7 @@ export class Quiz extends Component {
     }
 
     // Seperate all correct answers from all wrong answers
-    (selectn('response.entries', computeWords) || []).forEach(
+    ;(selectn('response.entries', computeWords) || []).forEach(
       function computeWordForEach(v, i) {
         // If word is a correct answer
         if (this.state.questionsOrder.includes(i)) {
@@ -455,9 +471,9 @@ export class Quiz extends Component {
             {answers.map((answer, i) => {
               return isCorrect && !answer.props.correct
                 ? React.cloneElement(answer, {
-                  disabled: true,
-                  key: i,
-                })
+                    disabled: true,
+                    key: i,
+                  })
                 : answer
             })}
           </div>

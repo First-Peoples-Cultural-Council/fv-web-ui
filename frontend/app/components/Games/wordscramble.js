@@ -41,6 +41,22 @@ import { fetchPhrases } from 'reducers/fvPhrase'
 import selectn from 'selectn'
 import FVLabel from 'components/FVLabel'
 
+/* eslint-disable */
+/* Game libraries
+============================================================
+Note: using the inline format for expose-loader so we
+don't have to configure an entry bundle just for games
+
+https://github.com/webpack-contrib/expose-loader#inline
+*/
+import pixi from 'expose-loader?exposes[]=PIXI!pixi'
+import p2 from 'expose-loader?exposes[]=p2!p2'
+// IMPORTANT: Phaser is last
+import Phaser from 'expose-loader?exposes[]=Phaser!phaser'
+/* END: Game libraries
+============================================================ */
+/* eslint-enable */
+
 const containerStyle = {
   background: 'url(/assets/games/fv-games-wordscramble/images/background.png)',
   backgroundSize: 'cover',
