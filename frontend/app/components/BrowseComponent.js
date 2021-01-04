@@ -15,7 +15,7 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-// import { Immutable, Map } from 'immutable'
+import Suspender from 'common/Suspender'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -30,18 +30,19 @@ import selectn from 'selectn'
 
 import { WORKSPACES } from 'common/Constants'
 
-import FVButton from 'components/FVButton'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import FVButton from 'components/FVButton'
 
-import CategoriesListView from 'components/Categories/CategoriesListView'
-import ContributorsListView from 'components/LearnBase/contributors-list-view'
-import LinksListView from 'components/LearnBase/links-list-view'
-import PhraseListView from 'components/PhrasesCreateEdit/list-view'
-import WordsListView from 'components/WordsCreateEdit/list-view'
 import FVLabel from 'components/FVLabel'
+
+const ContributorsListView = React.lazy(() => import('components/LearnBase/contributors-list-view'))
+const LinksListView = React.lazy(() => import('components/LearnBase/links-list-view'))
+const PhraseListView = React.lazy(() => import('components/PhrasesCreateEdit/list-view'))
+const WordsListView = React.lazy(() => import('components/WordsCreateEdit/list-view'))
+const CategoriesListView = React.lazy(() => import('components/Categories/CategoriesListView'))
 const DefaultFetcherParams = {
   currentPageIndex: 1,
   pageSize: 10,
@@ -107,16 +108,18 @@ export class BrowseComponent extends Component {
       case 'FVPhrase':
         title = 'Select existing phrases from ' + selectn('properties.dc:title', dialect) + ' dialect:'
         view = (
-          <PhraseListView
-            dialect={dialect}
-            hasSorting={false}
-            hasViewModeButtons={false}
-            rowClickHandler={this._handleSelectElement}
-            routeParams={{
-              siteTheme: 'explore',
-              dialect_path: dialectPath,
-            }}
-          />
+          <Suspender>
+            <PhraseListView
+              dialect={dialect}
+              hasSorting={false}
+              hasViewModeButtons={false}
+              rowClickHandler={this._handleSelectElement}
+              routeParams={{
+                siteTheme: 'explore',
+                dialect_path: dialectPath,
+              }}
+            />
+          </Suspender>
         )
         break
 
@@ -128,18 +131,20 @@ export class BrowseComponent extends Component {
         }`
         // Note: CategoriesListView has a rowClickHandler that checks for a props.action fn()
         view = (
-          <CategoriesListView
-            action={this._handleSelectElement}
-            containerType={this.props.containerType}
-            dialect={dialect}
-            hasSorting={false}
-            hasViewModeButtons={false}
-            routeParams={{
-              siteTheme: 'explore',
-              area: WORKSPACES,
-              dialect_path: dialectPath,
-            }}
-          />
+          <Suspender>
+            <CategoriesListView
+              action={this._handleSelectElement}
+              containerType={this.props.containerType}
+              dialect={dialect}
+              hasSorting={false}
+              hasViewModeButtons={false}
+              routeParams={{
+                siteTheme: 'explore',
+                area: WORKSPACES,
+                dialect_path: dialectPath,
+              }}
+            />
+          </Suspender>
         )
         break
 
@@ -152,15 +157,17 @@ export class BrowseComponent extends Component {
         )}:`
         // Note: ContributorsListView sets DictionaryList props (eg: hasSorting, rowClickhandler, etc)
         view = (
-          <ContributorsListView
-            action={this._handleSelectElement}
-            dialect={dialect}
-            routeParams={{
-              siteTheme: 'explore',
-              area: WORKSPACES,
-              dialect_path: dialectPath,
-            }}
-          />
+          <Suspender>
+            <ContributorsListView
+              action={this._handleSelectElement}
+              dialect={dialect}
+              routeParams={{
+                siteTheme: 'explore',
+                area: WORKSPACES,
+                dialect_path: dialectPath,
+              }}
+            />
+          </Suspender>
         )
         break
 
@@ -173,17 +180,19 @@ export class BrowseComponent extends Component {
         )}:`
         // Note: LinksListView has a rowClickHandler that checks for a props.action fn()
         view = (
-          <LinksListView
-            action={this._handleSelectElement}
-            dialect={dialect}
-            hasSorting={false}
-            hasViewModeButtons={false}
-            routeParams={{
-              siteTheme: 'explore',
-              area: WORKSPACES,
-              dialect_path: dialectPath,
-            }}
-          />
+          <Suspender>
+            <LinksListView
+              action={this._handleSelectElement}
+              dialect={dialect}
+              hasSorting={false}
+              hasViewModeButtons={false}
+              routeParams={{
+                siteTheme: 'explore',
+                area: WORKSPACES,
+                dialect_path: dialectPath,
+              }}
+            />
+          </Suspender>
         )
         break
 
@@ -195,16 +204,18 @@ export class BrowseComponent extends Component {
           [selectn('properties.dc:title', dialect)]
         )}:`
         view = (
-          <WordsListView
-            dialect={dialect}
-            hasSorting={false}
-            hasViewModeButtons={false}
-            routeParams={{
-              siteTheme: 'explore',
-              dialect_path: dialectPath,
-            }}
-            rowClickHandler={this._handleSelectElement}
-          />
+          <Suspender>
+            <WordsListView
+              dialect={dialect}
+              hasSorting={false}
+              hasViewModeButtons={false}
+              routeParams={{
+                siteTheme: 'explore',
+                dialect_path: dialectPath,
+              }}
+              rowClickHandler={this._handleSelectElement}
+            />
+          </Suspender>
         )
         break
       default: // Note: do nothing
