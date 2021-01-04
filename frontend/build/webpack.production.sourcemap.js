@@ -9,6 +9,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
  */
 module.exports = env => merge(common(env), {
   mode: 'production',
+  // TODO: configure server to disallow access to the Source Map file for normal users
   devtool: 'source-map',
   optimization: {
     // emitOnErrors: false,
@@ -16,7 +17,6 @@ module.exports = env => merge(common(env), {
     minimizer: [
       new OptimizeCSSAssetsPlugin({}),
       new TerserPlugin({
-        cache: true,
         parallel: true,
         sourceMap: true,
       }),
