@@ -1,7 +1,8 @@
 import React /*, { Component, PropTypes }*/ from 'react'
 import t from 'tcomb-form'
-import Editor from 'components/Editor'
 import selectn from 'selectn'
+import Suspender from 'common/Suspender'
+const Editor = React.lazy(() => import('components/Editor'))
 /**
  * Custom textarea field for tcomb-form that uses Quill
  */
@@ -11,14 +12,16 @@ function renderTextarea(locals) {
   const name = selectn(['attrs', 'nameAlt'], locals) || selectn(['attrs', 'name'], locals) || 'wysiwygName'
   return (
     <div data-testid={dataTestId}>
-      <Editor
-        id={id}
-        initialValue={locals.value}
-        name={name}
-        onChange={(content /*, delta, source, editor*/) => {
-          locals.onChange(content)
-        }}
-      />
+      <Suspender>
+        <Editor
+          id={id}
+          initialValue={locals.value}
+          name={name}
+          onChange={(content /*, delta, source, editor*/) => {
+            locals.onChange(content)
+          }}
+        />
+      </Suspender>
     </div>
   )
 }
