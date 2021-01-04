@@ -4,12 +4,7 @@ module.exports = function babelConfig(api) {
     // TODO: FW-2056 - Are we using the env.test config?
     env: {
       test: {
-        plugins: [
-          'transform-class-properties',
-          'syntax-dynamic-import',
-          ['@babel/plugin-proposal-decorators', { legacy: true }],
-          'dynamic-import-node',
-        ],
+        plugins: ['transform-class-properties', ['@babel/plugin-proposal-decorators', { legacy: true }]],
       },
     },
   }
