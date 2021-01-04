@@ -403,11 +403,6 @@ const routes = [
     breadcrumbs: false,
   },
   {
-    path: ['test'],
-    page: <Pages.PageTest />,
-    breadcrumbs: false,
-  },
-  {
     path: ['debug', 'end-points'],
     page: <Pages.PageDebugAPI />,
     breadcrumbs: false,

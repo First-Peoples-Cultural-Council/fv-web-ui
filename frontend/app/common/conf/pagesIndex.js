@@ -13,126 +13,127 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import React from 'react'
 
-import PageExploreDialects from 'components/ExploreDialects'
-import PageExploreFamily from 'components/ExploreFamily'
-import PageExploreLanguage from 'components/ExploreLanguage'
-import PageExploreDialect from 'components/ExploreDialect'
+const PageExploreDialects = React.lazy(() => import('components/ExploreDialects'))
+const PageExploreFamily = React.lazy(() => import('components/ExploreFamily'))
+const PageExploreLanguage = React.lazy(() => import('components/ExploreLanguage'))
+const PageExploreDialect = React.lazy(() => import('components/ExploreDialect'))
 
-import PageDialectLearn from 'components/DialectLearn'
-import PageDialectMedia from 'components/Media'
-import PageDialectPlay from 'components/Games'
+const PageDialectLearn = React.lazy(() => import('components/DialectLearn'))
+const PageDialectMedia = React.lazy(() => import('components/Media'))
+const PageDialectPlay = React.lazy(() => import('components/Games'))
 
-import PageJigsawGame from 'components/Games/jigsaw'
-import PageWordSearch from 'components/Games/wordsearch'
-import PageColouringBook from 'components/Games/colouringbook'
-import PagePictureThis from 'components/Games/picturethis'
-import PageHangman from 'components/Games/hangman'
-import PageWordscramble from 'components/Games/wordscramble'
-import PageQuiz from 'components/Games/quiz'
-import PageConcentration from 'components/Games/concentration'
+const PageJigsawGame = React.lazy(() => import('components/Games/jigsaw'))
+const PageWordSearch = React.lazy(() => import('components/Games/wordsearch'))
+const PageColouringBook = React.lazy(() => import('components/Games/colouringbook'))
+const PagePictureThis = React.lazy(() => import('components/Games/picturethis'))
+const PageHangman = React.lazy(() => import('components/Games/hangman'))
+const PageWordscramble = React.lazy(() => import('components/Games/wordscramble'))
+const PageQuiz = React.lazy(() => import('components/Games/quiz'))
+const PageConcentration = React.lazy(() => import('components/Games/concentration'))
 
-import PageDialectGalleries from 'components/Gallery'
-import PageDialectGalleryView from 'components/Gallery/view'
-import PageDialectReports from 'components/Reports'
-import PageDialectReportsView from 'components/Reports/ReportsView'
+const PageDialectGalleries = React.lazy(() => import('components/Gallery'))
+const PageDialectGalleryView = React.lazy(() => import('components/Gallery/view'))
+const PageDialectReports = React.lazy(() => import('components/Reports'))
+const PageDialectReportsView = React.lazy(() => import('components/Reports/ReportsView'))
 
-import PageDialectLearnWords from 'components/Words/WordsContainer'
-import PageDialectLearnPhrases from 'components/Phrases/PhrasesContainer'
-import PageDialectLearnStoriesAndSongs from 'components/SongsStories'
+const PageDialectLearnWords = React.lazy(() => import('components/Words/WordsContainer'))
+const PageDialectLearnPhrases = React.lazy(() => import('components/Phrases/PhrasesContainer'))
+const PageDialectLearnStoriesAndSongs = React.lazy(() => import('components/SongsStories'))
 
-import PageDialectViewMedia from 'components/Media/view'
-import PageDialectViewWord from 'components/Word/WordContainer'
-import PageDialectViewPhrase from 'components/Phrase/PhraseContainer'
-import PageDialectViewBook from 'components/SongStory/SongStoryContainer'
-import PageDialectViewAlphabet from 'components/Alphabet/AlphabetPage'
-import PageDialectViewCharacter from 'components/AlphabetDetail/AlphabetDetailContainer'
-import PageDialectLearnWordsCategories from 'components/Categories/WordCategories'
+const PageDialectViewMedia = React.lazy(() => import('components/Media/view'))
+const PageDialectViewWord = React.lazy(() => import('components/Word/WordContainer'))
+const PageDialectViewPhrase = React.lazy(() => import('components/Phrase/PhraseContainer'))
+const PageDialectViewBook = React.lazy(() => import('components/SongStory/SongStoryContainer'))
+const PageDialectViewAlphabet = React.lazy(() => import('components/Alphabet/AlphabetPage'))
+const PageDialectViewCharacter = React.lazy(() => import('components/AlphabetDetail/AlphabetDetailContainer'))
+const PageDialectLearnWordsCategories = React.lazy(() => import('components/Categories/WordCategories'))
 
-import PhraseBooksGrid from 'components/PhraseBooksGrid'
-import WordsCategoriesGrid from 'components/WordsCategoriesGrid'
+const PhraseBooksGrid = React.lazy(() => import('components/PhraseBooksGrid'))
+const WordsCategoriesGrid = React.lazy(() => import('components/WordsCategoriesGrid'))
 
-import PageDialectImmersionList from 'components/Immersion'
+const PageDialectImmersionList = React.lazy(() => import('components/Immersion'))
 
-import PageTest from 'components/Test'
-import PageDebugAPI from 'components/PageDebugAPI'
-import PageDebugTypography from 'components/DebugTypography'
-import PageError from 'components/PageError'
-import PageHome from 'components/HomeLayout'
-import PageContent from 'components/PageContent'
-import PagePlay from 'components/Games'
-import PageSearch from 'components/SearchDictionary/SearchDictionaryContainer'
-import PageTasks from 'components/Tasks/TasksContainer'
-import PageUserTasks from 'components/UserTasks'
-import PageUsersRegister from 'components/Register'
-import PageUsersForgotPassword from 'components/Users/forgotpassword'
+const PageDebugAPI = React.lazy(() => import('components/PageDebugAPI'))
+const PageDebugTypography = React.lazy(() => import('components/DebugTypography'))
+const PageError = React.lazy(() => import('components/PageError'))
+const PageHome = React.lazy(() => import('components/HomeLayout'))
+const PageContent = React.lazy(() => import('components/PageContent'))
+const PagePlay = React.lazy(() => import('components/Games'))
+const PageSearch = React.lazy(() => import('components/SearchDictionary/SearchDictionaryContainer'))
+const PageTasks = React.lazy(() => import('components/Tasks/TasksContainer'))
+const PageUserTasks = React.lazy(() => import('components/UserTasks'))
+const PageUsersRegister = React.lazy(() => import('components/Register'))
+const PageUsersForgotPassword = React.lazy(() => import('components/Users/forgotpassword'))
 
 // KIDS
-import KidsHome from 'components/KidsHome'
-import KidsPhrasesByPhrasebook from 'components/KidsPhrasesByPhrasebook/KidsPhrasesByPhrasebookContainer'
-import KidsWordsByCategory from 'components/KidsWordsByCategory/KidsWordsByCategoryContainer'
+const KidsHome = React.lazy(() => import('components/KidsHome'))
+const KidsPhrasesByPhrasebook = React.lazy(() =>
+  import('components/KidsPhrasesByPhrasebook/KidsPhrasesByPhrasebookContainer')
+)
+const KidsWordsByCategory = React.lazy(() => import('components/KidsWordsByCategory/KidsWordsByCategoryContainer'))
 
 // EDIT
-import PageExploreDialectEdit from 'components/ExploreDialectEdit'
-import PageDialectGalleryEdit from 'components/Gallery/edit'
-import PageDialectEditMedia from 'components/Media/edit'
-import PageDialectWordEdit from 'components/WordsCreateEdit/Edit'
-import PageDialectPhraseEdit from 'components/PhrasesCreateEdit/Edit'
-import PageDialectBookEdit from 'components/SongsStories/edit'
-import PageDialectBookEntryEdit from 'components/SongsStories/entry/edit'
-import PageDialectAlphabetCharacterEdit from 'components/Alphabet/edit'
+const PageExploreDialectEdit = React.lazy(() => import('components/ExploreDialectEdit'))
+const PageDialectGalleryEdit = React.lazy(() => import('components/Gallery/edit'))
+const PageDialectEditMedia = React.lazy(() => import('components/Media/edit'))
+const PageDialectWordEdit = React.lazy(() => import('components/WordsCreateEdit/Edit'))
+const PageDialectPhraseEdit = React.lazy(() => import('components/PhrasesCreateEdit/Edit'))
+const PageDialectBookEdit = React.lazy(() => import('components/SongsStories/edit'))
+const PageDialectBookEntryEdit = React.lazy(() => import('components/SongsStories/entry/edit'))
+const PageDialectAlphabetCharacterEdit = React.lazy(() => import('components/Alphabet/edit'))
 
 // CREATE
-import { default as PageDialectWordsCreate } from 'components/WordsCreateEdit/Create'
-import { default as CreateV2 } from 'components/WordsCreateEdit/CreateV2'
-import { default as CreateAudio } from 'components/Audio'
-import { default as PageDialectPhrasesCreate } from 'components/PhrasesCreateEdit/Create'
-import { default as PageDialectStoriesAndSongsCreate } from 'components/SongsStories/create'
-import { default as PageDialectStoriesAndSongsBookEntryCreate } from 'components/SongsStories/entry/create'
-import { default as PageDialectGalleryCreate } from 'components/Gallery/create'
+const PageDialectWordsCreate = React.lazy(() => import('components/WordsCreateEdit/Create'))
+const CreateV2 = React.lazy(() => import('components/WordsCreateEdit/CreateV2'))
+const CreateAudio = React.lazy(() => import('components/Audio'))
+const PageDialectPhrasesCreate = React.lazy(() => import('components/PhrasesCreateEdit/Create'))
+const PageDialectStoriesAndSongsCreate = React.lazy(() => import('components/SongsStories/create'))
+const PageDialectStoriesAndSongsBookEntryCreate = React.lazy(() => import('components/SongsStories/entry/create'))
+const PageDialectGalleryCreate = React.lazy(() => import('components/Gallery/create'))
 
 // CATEGORY
 // ----------------------
-import CategoryBrowse from 'components/Categories' // Browse
-import { default as CategoryDetail } from 'components/Category/detail' // Detail
-import { default as PageDialectCategoryCreate } from 'components/Category/createV1' // Create V1 for modal
-import { default as CategoryCreate } from 'components/Category/create' // Create
-import { default as CategoryEdit } from 'components/Category/edit' // Edit
+const CategoryBrowse = React.lazy(() => import('components/Categories')) // Browse
+const CategoryDetail = React.lazy(() => import('components/Category/detail')) // Detail
+const PageDialectCategoryCreate = React.lazy(() => import('components/Category/createV1')) // Create V1 for modal
+const CategoryCreate = React.lazy(() => import('components/Category/create')) // Create
+const CategoryEdit = React.lazy(() => import('components/Category/edit')) // Edit
 
 // CONTRIBUTOR
 // ----------------------
-import ContributorBrowse from 'components/Contributors' // Browse
-import { default as ContributorDetail } from 'components/Contributor/detail' // Detail
-import { default as ContributorCreateV1 } from 'components/Contributor/createV1' // Create V1
-import { default as ContributorCreate } from 'components/Contributor/create' // Create V2
-import { default as ContributorEdit } from 'components/Contributor/edit' // Edit
+const ContributorBrowse = React.lazy(() => import('components/Contributors')) // Browse
+const ContributorDetail = React.lazy(() => import('components/Contributor/detail')) // Detail
+const ContributorCreateV1 = React.lazy(() => import('components/Contributor/createV1')) // Create V1
+const ContributorCreate = React.lazy(() => import('components/Contributor/create')) // Create V2
+const ContributorEdit = React.lazy(() => import('components/Contributor/edit')) // Edit
 
 // PHRASEBOOK
 // ----------------------
-import PhrasebookBrowse from 'components/Phrasebooks' // Browse
-import { default as PhrasebookDetail } from 'components/Phrasebook/detail' // Detail
-import { default as PageDialectPhraseBooksCreate } from 'components/Phrasebook/createV1' // Create V1
-import { default as PhrasebookCreate } from 'components/Phrasebook/create' // Create V2
-import { default as PhrasebookEdit } from 'components/Phrasebook/edit' // Edit
+const PhrasebookBrowse = React.lazy(() => import('components/Phrasebooks')) // Browse
+const PhrasebookDetail = React.lazy(() => import('components/Phrasebook/detail')) // Detail
+const PageDialectPhraseBooksCreate = React.lazy(() => import('components/Phrasebook/createV1')) // Create V1
+const PhrasebookCreate = React.lazy(() => import('components/Phrasebook/create')) // Create V2
+const PhrasebookEdit = React.lazy(() => import('components/Phrasebook/edit')) // Edit
 
 // RECORDER
 // ----------------------
-import RecorderBrowse from 'components/Recorders' // Browse
-import { default as RecorderDetail } from 'components/Recorder/detail' // Detail
-import { default as RecorderCreate } from 'components/Recorder/create' // Create
-import { default as RecorderEdit } from 'components/Recorder/edit' // Edit
+const RecorderBrowse = React.lazy(() => import('components/Recorders')) // Browse
+const RecorderDetail = React.lazy(() => import('components/Recorder/detail')) // Detail
+const RecorderCreate = React.lazy(() => import('components/Recorder/create')) // Create
+const RecorderEdit = React.lazy(() => import('components/Recorder/edit')) // Edit
 
 // DASHBOARD
 // ----------------------
-import Dashboard from 'components/Dashboard'
-import DashboardDetailTasks from 'components/DashboardDetailTasks'
+const Dashboard = React.lazy(() => import('components/Dashboard'))
+const DashboardDetailTasks = React.lazy(() => import('components/DashboardDetailTasks'))
 
 // MENTOR-APPRENTICE PHOTO PROJECT
 // ----------------------
-import PageMAPPhotoProject from 'components/PhotoProject'
+const PageMAPPhotoProject = React.lazy(() => import('components/PhotoProject'))
 
 export {
-  PageTest,
   PageMAPPhotoProject,
   PageDebugAPI,
   PageDebugTypography,
