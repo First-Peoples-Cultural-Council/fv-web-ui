@@ -88,7 +88,7 @@
     "material-table": "^1.69.2",
     "memoize-one": "^5.1.1",
     "money-clip": "^3.0.2",
-    "normalize.css": "^8.0.1",
+    "normalize.css": "~3.0.3",
     "nuxeo": "^3.17.0",
     "path-browserify": "^1.0.1",
     "phaser-ce": "^2.16.1",
