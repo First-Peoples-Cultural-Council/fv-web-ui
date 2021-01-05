@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import useRoute from 'dataSources/useRoute'
 import StringHelpers from 'common/StringHelpers'
-
+import './DictionaryList.css'
 const DictionaryListLargeScreen = (props) => {
   const [columnClassNames, setColumnClassNames] = useState([])
   const { routeParams } = useRoute()
