@@ -78,7 +78,7 @@ public class ComputeCustomOrderWorker extends AbstractWork {
                     .getChild(dialectRef, DialectTypesConstants.FV_DICTIONARY_NAME).getId();
 
                 String query = "SELECT * FROM Document WHERE ecm:parentId='" + dictionaryId + "'"
-                    + " AND ecm:isProxy = 0 AND ecm:isCheckedInVersion = 0 AND ecm:isTrashed = 0";
+                    + " AND ecm:isProxy = 0 AND ecm:isVersion = 0 AND ecm:isTrashed = 0";
 
                 DocumentModelList docs = session.query(query, null, batchSize, 0, true);
 

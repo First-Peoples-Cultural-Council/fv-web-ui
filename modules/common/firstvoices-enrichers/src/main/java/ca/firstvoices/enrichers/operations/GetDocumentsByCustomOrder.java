@@ -26,26 +26,33 @@ package ca.firstvoices.enrichers.operations;
  */
 
 import ca.firstvoices.enrichers.utils.EnricherUtils;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 import org.nuxeo.ecm.automation.AutomationService;
-import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
+import org.nuxeo.ecm.automation.core.util.PageProviderHelper;
 import org.nuxeo.ecm.automation.core.util.StringList;
+import org.nuxeo.ecm.automation.jaxrs.io.documents.PaginableDocumentModelListImpl;
 import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.query.sql.NXQL;
+import org.nuxeo.ecm.platform.query.api.PageProvider;
+import org.nuxeo.ecm.platform.query.api.PageProviderDefinition;
 import org.nuxeo.ecm.platform.query.nxql.NXQLQueryBuilder;
 
 @Operation(id = GetDocumentsByCustomOrder.ID, category = Constants.CAT_FETCH, label = "Custom "
     + "Order Query", description = "Returns a list of words that begin with a character")
 public class GetDocumentsByCustomOrder {
+
+  private static final Logger log = Logger.getLogger(
+      GetDocumentsByCustomOrder.class.getCanonicalName()
+  );
 
   public static final String ID = "Document.CustomOrderQuery";
 
@@ -76,6 +83,7 @@ public class GetDocumentsByCustomOrder {
   @Param(name = "letter", required = false, description = "Desired letter")
   protected String letter;
 
+  @SuppressWarnings("unchecked")
   @OperationMethod
   public DocumentModelList run() throws OperationException {
 
@@ -88,6 +96,10 @@ public class GetDocumentsByCustomOrder {
       //      Just in case, handle it gracefully by just querying dc:title.
       query = query + " AND dc:title ILIKE '" + NXQLQueryBuilder
           .prepareStringLiteral(letter, false, true) + "%'";
+
+      log.warning(() ->
+          "Custom order is not set on letter `" + letter + "` in dialect `" + dialectId + "`");
+
     } else if (customOrder.startsWith("%") || customOrder.startsWith("$") || customOrder
         .startsWith("&") || customOrder.startsWith("'") || customOrder.startsWith("*")
         || customOrder.startsWith("_")) {
@@ -99,13 +111,19 @@ public class GetDocumentsByCustomOrder {
       query = query + " AND fv:custom_order LIKE \"" + customOrder + "%\"";
     }
 
-    Map<String, Object> params = new HashMap<>();
-    params.put("currentPageIndex", currentPageIndex);
-    params.put("query", query);
-    params.put("pageSize", pageSize);
-    params.put("sortBy", sortBy);
-    params.put("sortOrder", sortOrder);
-    OperationContext ctx = new OperationContext(session);
-    return (DocumentModelList) automationService.run(ctx, "Document.Query", params);
+    PageProviderDefinition def = PageProviderHelper.getQueryPageProviderDefinition(query, null);
+
+    Long targetPage = currentPageIndex != null ? currentPageIndex.longValue() : null;
+    Long targetPageSize = pageSize != null ? pageSize.longValue() : null;
+
+    PageProvider<DocumentModel> pp =
+        (PageProvider<DocumentModel>) PageProviderHelper.getPageProvider(
+        session, def, null, sortBy, sortOrder, targetPageSize, targetPage, (Object[]) null);
+
+    PaginableDocumentModelListImpl res = new PaginableDocumentModelListImpl(pp);
+    if (res.hasError()) {
+      throw new OperationException(res.getErrorMessage());
+    }
+    return res;
   }
 }

@@ -51,13 +51,13 @@ function AuthenticationFilterPresentation({
 }
 
 // PROPTYPES
-const { boolean, node, object } = PropTypes
+const { bool, node, object } = PropTypes
 AuthenticationFilterPresentation.propTypes = {
   // Calling components
   children: node,
   containerStyle: object,
-  hideFromSections: boolean,
-  is403: boolean,
+  hideFromSections: bool,
+  is403: bool,
   notAuthenticatedComponent: node,
   // Data layer
   routeParams: object,

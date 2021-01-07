@@ -29,7 +29,8 @@ public interface CustomOrderComputeService {
   DocumentModel computeAssetNativeOrderTranslation(CoreSession session, DocumentModel asset,
       boolean save, boolean publish);
 
-  void updateCustomOrderCharacters(CoreSession session, DocumentModelList chars);
+  void updateCustomOrderCharacters(CoreSession session,
+      DocumentModel alphabet, DocumentModelList chars);
 
   /**
    * Generates the custom order string and applies it to the element Core logic of custom order
@@ -47,8 +48,8 @@ public interface CustomOrderComputeService {
    * Returns characters in order
    *
    * @param session
-   * @param alphabet
+   * @param asset
    * @return
    */
-  DocumentModel[] loadCharacters(CoreSession session, DocumentModel alphabet);
+  DocumentModel[] loadCharacters(CoreSession session, DocumentModel asset);
 }

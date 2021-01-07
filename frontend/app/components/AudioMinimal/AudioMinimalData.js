@@ -11,12 +11,15 @@ import { useEffect, useState } from 'react'
  * @param {function} props.children props.children({ isPlaying, onPlay, onPause })
  * @see {@link AudioMinimalPresentation} for info on the children callback object
  */
-function AudioMinimalData({ children, src }) {
+function AudioMinimalData({ children, src, onPlayCallback }) {
   const [player] = useState(new Audio(src))
   const [isPlaying, setIsPlaying] = useState(false)
   const { lastPlayed, setLastPlayed, clearLastPlayed } = useAudio()
 
   const onPlay = () => {
+    if (onPlayCallback) {
+      onPlayCallback()
+    }
     setLastPlayed(src)
     setIsPlaying(true)
     player.currentTime = 0
@@ -60,6 +63,7 @@ const { string, func } = PropTypes
 AudioMinimalData.propTypes = {
   src: string.isRequired,
   children: func.isRequired,
+  onPlayCallback: func,
 }
 
 export default AudioMinimalData

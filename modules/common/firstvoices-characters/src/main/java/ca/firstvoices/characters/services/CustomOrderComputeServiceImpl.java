@@ -46,16 +46,17 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
   public static final String DOCUMENT_TITLE = "dc:title";
   public static final String FV_CUSTOM_ORDER = "fv:custom_order";
 
+
+  private DocumentModel[] loadedCharacters = null;
+  private DocumentModel alphabet = null;
+
   @Override
   // Called when a document is created or updated
   public DocumentModel computeAssetNativeOrderTranslation(CoreSession session, DocumentModel asset,
       boolean save, boolean publish) {
     if (!asset.isImmutable()) {
-      DocumentModel dialect = DialectUtils.getDialect(asset);
-      DocumentModel alphabet = session
-          .getChild(dialect.getRef(), DialectTypesConstants.FV_ALPHABET_NAME);
-      DocumentModel[] chars = loadCharacters(session, alphabet);
-      computeCustomOrder(asset, alphabet, chars);
+      loadedCharacters = loadCharacters(session, asset);
+      computeCustomOrder(asset, alphabet, loadedCharacters);
 
       if (Boolean.TRUE.equals(save)) {
         SessionUtils.saveDocumentWithoutEvents(session, asset, true,
@@ -185,27 +186,49 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
     return false;
   }
 
-  public DocumentModel[] loadCharacters(CoreSession session, DocumentModel alphabet) {
-    DocumentModelList chars = session.getChildren(alphabet.getRef());
-    updateCustomOrderCharacters(session, chars);
-    return chars.stream().filter(character -> !character.isTrashed()
-        && character.getPropertyValue("fvcharacter:alphabet_order") != null)
-        .sorted(Comparator.comparing(d -> (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
-        .toArray(DocumentModel[]::new);
+  public DocumentModel[] loadCharacters(CoreSession session, DocumentModel asset) {
+
+    if (loadedCharacters == null) {
+      DocumentModel dialect = DialectUtils.getDialect(asset);
+      alphabet = session
+          .getChild(dialect.getRef(), DialectTypesConstants.FV_ALPHABET_NAME);
+
+      DocumentModelList chars = session.getChildren(alphabet.getRef());
+      updateCustomOrderCharacters(session, alphabet, chars);
+      return chars.stream().filter(character -> !character.isTrashed()
+          && character.getPropertyValue("fvcharacter:alphabet_order") != null)
+          .sorted(Comparator.comparing(d ->
+              (Long) d.getPropertyValue("fvcharacter:alphabet_order")))
+          .toArray(DocumentModel[]::new);
+    } else {
+      return loadedCharacters;
+    }
   }
 
   @Override
-  public void updateCustomOrderCharacters(CoreSession session, DocumentModelList chars) {
-    chars.forEach(c -> {
-      Long alphabetOrder = (Long) c.getPropertyValue("fvcharacter:alphabet_order");
-      String originalCustomOrder = (String) c.getPropertyValue(FV_CUSTOM_ORDER);
+  public void updateCustomOrderCharacters(CoreSession session,
+      DocumentModel alphabet, DocumentModelList chars) {
+    boolean wasUpdated = false;
+
+    for (DocumentModel alphabetCharacter : chars) {
+      Long alphabetOrder = (Long) alphabetCharacter.getPropertyValue("fvcharacter:alphabet_order");
+      String originalCustomOrder =
+          (String) alphabetCharacter.getPropertyValue(FV_CUSTOM_ORDER);
       String updatedCustomOrder =
-          alphabetOrder == null ? NO_ORDER_STARTING_CHARACTER + c.getPropertyValue(DOCUMENT_TITLE)
+          alphabetOrder == null
+              ? NO_ORDER_STARTING_CHARACTER + alphabetCharacter.getPropertyValue(DOCUMENT_TITLE)
               : "" + ((char) (BASE + alphabetOrder));
       if (originalCustomOrder == null || !originalCustomOrder.equals(updatedCustomOrder)) {
-        c.setPropertyValue(FV_CUSTOM_ORDER, updatedCustomOrder);
-        session.saveDocument(c);
+        alphabetCharacter.setPropertyValue(FV_CUSTOM_ORDER, updatedCustomOrder);
+        session.saveDocument(alphabetCharacter);
+
+        wasUpdated = true;
       }
-    });
+    }
+
+    if (wasUpdated && StateUtils.isPublished(alphabet)) {
+      // Republish alphabet if custom order was updated
+      StateUtils.followTransitionIfAllowed(alphabet, REPUBLISH_TRANSITION);
+    }
   }
 }
