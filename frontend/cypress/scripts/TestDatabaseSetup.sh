@@ -5,9 +5,6 @@
 # $CYPRESS_FV_USERNAME and $CYPRESS_FV_PASSWORD .
 # Example usage: "bash ./TestDatabaseSetup.sh http://127.0.0.1:8080 -skip-clone"
 
-DIRECTORY=$PWD
-echo $DIRECTORY
-
 if [ -z "$1" ]; then
   echo "Error: No target url found. Please run the command again with a url specified."
   echo "Example: \"bash ./TestDatabaseSetup.sh http://127.0.0.1:8080\""
@@ -20,7 +17,6 @@ TARGET="$1"
 #TARGET="https://dev.firstvoices.com"
 echo "Target URL found: " "$TARGET"
 echo
-cd "$DIRECTORY" || exit
 # ----- TEST DIALECT PRIVATE ------
 echo "Creating a fresh TestDialectPrivate directory and all files"
 response=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/Mocks.GenerateDialect' -H 'Nuxeo-Transaction-Timeout: 3000' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{"randomize":"false","dialectName":"TestDialectPrivate","maxEntries":"30"},"context":{}}' -u "$CYPRESS_FV_USERNAME":"$CYPRESS_FV_PASSWORD")
@@ -28,7 +24,7 @@ if [[ "$response" -ne 200 ]]; then
   echo -e 'TestDialectPrivate creation failed \n'
   exit 1
 fi
-# Publish the language TestDialectPrivate
+# Enable the language TestDialectPrivate
 echo "Enable TestDialectPrivate"
 response=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/Document.FollowLifecycleTransition' -H 'Nuxeo-Transaction-Timeout: 10' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"input":"/FV/Workspaces/Data/Test/Test/TestDialectPrivate","context":{"value": "Enable"}}' -u "$CYPRESS_FV_USERNAME":"$CYPRESS_FV_PASSWORD")
 if [[ "$response" -ne 200 ]]; then
