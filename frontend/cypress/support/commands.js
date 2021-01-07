@@ -55,8 +55,8 @@ afterEach(() => {
 Cypress.Commands.add('login', (obj = {}) => {
   cy.log('Confirming environment variables are set...')
   // NOTE: Cypress drops the `CYPRESS_` prefix when using environment variables set in your bash file
-  const userName = (obj.userName || Cypress.env('ADMIN_USERNAME'))
-  const userPassword = Cypress.env(obj.userPassword || 'FV_PASSWORD' || 'ADMIN_PASSWORD')
+  const userName = obj.userName || Cypress.env('ADMIN_USERNAME')
+  const userPassword = obj.userPassword || Cypress.env('FV_PASSWORD') || Cypress.env('ADMIN_PASSWORD')
   let loginInfoExists = false
   if (userName != undefined && userPassword != undefined) {
     loginInfoExists = true
@@ -65,7 +65,7 @@ Cypress.Commands.add('login', (obj = {}) => {
     })
   } else {
     cy.log('Error: Login info not found').then(() => {
-      expect(loginInfoExists).to.be.true
+      expect(loginInfoExists).to.be.false
     })
   }
 
@@ -417,16 +417,16 @@ Cypress.Commands.add('browseSearch', (obj) => {
 })
 
 // Create contributor
-Cypress.Commands.add('createContributor', () => {
+Cypress.Commands.add('createContributor', (dialectString) => {
   cy.log('--- Running createContributor ---')
   return cy.request({
     method: 'POST',
-    url: Cypress.env('FRONTEND') + '/nuxeo/api/v1/path/FV/Workspaces/Data/Test/Test/TestLanguageTwo/Contributors',
+    url: Cypress.env('FRONTEND') + '/nuxeo/api/v1/path/FV/Workspaces/Data/Test/Test/' + dialectString + '/Contributors',
     body: {
       'entity-type': 'document',
       'type': 'FVContributor',
-      'name': 'AAA cy.createContributor() > dc:title [CY]',
-      'properties': {'dc:description': '<p>AAA cy.createContributor() > dc:description [CY]</p>', 'dc:title': 'AAA cy.createContributor() > dc:title [CY]'},
+      'name': ' Test Contributor name [CY]',
+      'properties': {'dc:description': '<p>Test Contributor dc:description [CY]</p>', 'dc:title': ' Test Contributor dc:title [CY]'},
     },
   })
 })
