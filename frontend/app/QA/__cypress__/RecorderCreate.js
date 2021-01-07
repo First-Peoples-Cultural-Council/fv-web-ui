@@ -1,20 +1,15 @@
-// NOTE: this file will be copied to `cypress/integration` and run from there,
-// so imports paths will be based on that location!
-
 import '@testing-library/cypress/add-commands'
+import copy from '../../../app/components/Recorder/copy'
 
-// TODO: ENABLE WEBPACK ALIASES IN CYPRESS TESTS!
-import copy from '../../../app/components/Recorder/copy.js'
-
-describe('RecorderCreate.js > RecorderCreate', () => {
+describe('Recorder/Create.js > RecorderCreate', () => {
   it('Create', () => {
     // Login
     cy.login({
-      userName: 'TESTLANGUAGESIX_ADMIN',
+      userName: 'TestDialectPrivate_language_administrators',
+      userPassword: 'TestDialectPrivate_language_administrators',
     })
 
-    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageSix/create/recorder')
-    cy.wait(500)
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestDialectPrivate/create/recorder')
     cy.findByText(copy.create.title).should('exist')
 
     // Submit w/no data
@@ -24,7 +19,7 @@ describe('RecorderCreate.js > RecorderCreate', () => {
     cy.findByLabelText(copy.validation.name)
 
     // Fill in required field
-    cy.findByLabelText(`${copy.create.name} *`).type('[CY] Contributor Name')
+    cy.findByLabelText(`${copy.create.name} *`).type('[CY] Recorder Name')
 
     // Resubmit
     cy.findByText(copy.create.submit).click()

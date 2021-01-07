@@ -33,10 +33,11 @@ const editPhraseBook = () => {
 describe('PhrasebookCreate.js > Phrasebook', () => {
   it('Edit a Phrasebook After Creation', () => {
     cy.login({
-      userName: 'TESTLANGUAGETWO_RECORDER',
+      userName: 'TestDialectPublic_recorders',
+      userPassword: 'TestDialectPublic_recorders',
     })
 
-    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/create/phrasebook')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestDialectPublic/create/phrasebook')
     cy.wait(2000)
 
     // Create a Phrasebook
@@ -53,11 +54,12 @@ describe('PhrasebookCreate.js > Phrasebook', () => {
 
   it('Edit a Phrasebook From The Browse List', () => {
     cy.login({
-      userName: 'TESTLANGUAGETWO_RECORDER',
+      userName: 'TestDialectPublic_recorders',
+      userPassword: 'TestDialectPublic_recorders',
     })
 
     // Create a Phrasebook
-    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/create/phrasebook')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestDialectPublic/create/phrasebook')
     cy.wait(2000)
     cy.findByLabelText(copy.create.name).type('[CY] Phrase book name')
     cy.findByText(copy.create.submit).click()

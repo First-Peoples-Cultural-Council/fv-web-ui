@@ -9,10 +9,11 @@ describe('PhrasebookCreate.js > Phrasebook', () => {
   it('Create', () => {
     // Login
     cy.login({
-      userName: 'TESTLANGUAGETWO_RECORDER',
+      userName: 'TestDialectPublic_recorders',
+      userPassword: 'TestDialectPublic_recorders',
     })
 
-    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/create/phrasebook')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestDialectPublic/create/phrasebook')
     cy.wait(500)
     cy.findByText(copy.create.title).should('exist')
 

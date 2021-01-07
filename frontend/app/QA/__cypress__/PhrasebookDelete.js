@@ -10,7 +10,7 @@ const createPhraseBooks = (start, max) => {
   }
 
   const phraseBookName = `[CY] A Phrase Book ${start}`
-  cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/create/phrasebook')
+  cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestDialectPublic/create/phrasebook')
   cy.wait(2000)
   cy.findByLabelText(copy.create.name).type(phraseBookName)
   cy.findByText(copy.create.submit).click()
@@ -65,7 +65,8 @@ const performBatchDelete = () => {
 describe('PhrasebookCreate.js > Phrasebook', () => {
   it('Delete a phrasebook from edit screen', () => {
     cy.login({
-      userName: 'TESTLANGUAGETWO_RECORDER',
+      userName: 'TestDialectPublic_recorders',
+      userPassword: 'TestDialectPublic_recorders',
     })
 
     // Create a Phrase Book
@@ -98,57 +99,10 @@ describe('PhrasebookCreate.js > Phrasebook', () => {
     cy.wait(500)
   })
 
-  it('Deletes a phrasebook from browse screen', () => {
-    cy.login({
-      userName: 'TESTLANGUAGETWO_RECORDER',
-    })
-
-    const phraseBookName = '[CY] A Phrase Book 0'
-
-    createPhraseBooks(0, 1)
-
-    cy.findByText(copy.create.success.browseView).click()
-    cy.wait(3000)
-
-    // Test state of phrasebook browse delete button
-    cy.findByText(phraseBookName)
-      .should('exist')
-      .parent()
-      .parent()
-      .contains(browseCopy.btnInitiate)
-      .click()
-    cy.wait(1000)
-    cy.findByText(phraseBookName)
-      .parent()
-      .parent()
-      .within(() => {
-        cy.findByText(browseCopy.btnDeny)
-          .should('exist')
-          .click()
-      })
-    cy.wait(2000)
-    cy.findByText(phraseBookName)
-      .should('exist')
-      .parent()
-      .parent()
-      .find('button.Confirmation__btnInitiate')
-      .click()
-
-    // Test Delete
-    cy.findByText(phraseBookName)
-      .parent()
-      .parent()
-      .within(() => {
-        cy.findByText(browseCopy.btnConfirm)
-          .should('exist')
-          .click()
-      })
-    cy.wait(2000)
-  })
-
   it('Batch deletes entries from from browse screen', () => {
     cy.login({
-      userName: 'TESTLANGUAGETWO_RECORDER',
+      userName: 'TestDialectPublic_recorders',
+      userPassword: 'TestDialectPublic_recorders',
     })
 
     // Create 10 Phrase Books

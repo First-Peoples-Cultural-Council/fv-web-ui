@@ -8,9 +8,10 @@ describe('ContributorCreateDelete.js > Contributor', () => {
   it('Create', () => {
     // Login
     cy.login({
-      userName: 'TESTLANGUAGETWO_ADMIN',
+      userName: 'TestDialectPublic_language_administrators',
+      userPassword: 'TestDialectPublic_language_administrators',
     })
-    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/create/contributor')
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestDialectPublic/create/contributor')
     cy.findByText(copy.create.title).should('exist')
 
     // Submit w/no data

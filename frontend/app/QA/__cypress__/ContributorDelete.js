@@ -7,12 +7,13 @@ import copy from '../../../app/components/Contributor/copy.js'
 describe('ContributorDelete.js > Contributor', () => {
   it('Delete', () => {
     cy.login({
-      userName: 'TESTLANGUAGETWO_ADMIN',
+      userName: 'TestDialectPublic_language_administrators',
+      userPassword: 'TestDialectPublic_language_administrators',
     })
-    cy.createContributor().then((response) => {
+    cy.createContributor('TestDialectPublic').then((response) => {
       const uid = response.body.uid
       cy.log(`--- CONTRIBUTOR ${uid} EXISTS ---`)
-      const url = Cypress.env('FRONTEND') + `/explore/FV/Workspaces/Data/Test/Test/TestLanguageTwo/contributor/${uid}`
+      const url = Cypress.env('FRONTEND') + `/explore/FV/Workspaces/Data/Test/Test/TestDialectPublic/contributor/${uid}`
       cy.visit(url)
       cy.deleteContributor(uid).then(() => {
         cy.visit(url)
