@@ -11,7 +11,6 @@ function usePortal() {
 
   return {
     computePortal: useSelector((state) => state.fvPortal.computePortal),
-    cacheComputePortal: useSelector((state) => state.cache.computePortal),
     fetchPortal,
   }
 }

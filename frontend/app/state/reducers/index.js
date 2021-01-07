@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux'
 import { audioReducer } from './audio'
-import { cacheReducer } from './cache'
 import { directoryReducer } from './directory'
 import { documentReducer } from './document'
 import { errorReducer } from './error'
@@ -36,7 +35,6 @@ import { windowPathReducer } from './windowPath'
 
 export default combineReducers({
   audio: audioReducer,
-  cache: cacheReducer,
   directory: directoryReducer,
   document: documentReducer,
   error: errorReducer,

@@ -32,7 +32,7 @@ import '!style-loader!css-loader!./Breadcrumb.css'
 function BreadcrumbData({ children, matchedPage, routes }) {
   const { computeDialect2 } = useDialect()
   const { intl } = useIntl()
-  const { fetchPortal, computePortal, cacheComputePortal } = usePortal()
+  const { fetchPortal, computePortal } = usePortal()
   const { properties } = useProperties()
   const { routeParams } = useRoute()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
@@ -60,12 +60,11 @@ function BreadcrumbData({ children, matchedPage, routes }) {
         key: portalPath,
         action: fetchPortal,
         reducer: computePortal,
-        reducerCache: cacheComputePortal,
       })
     }
   }, [])
 
-  const computedPortal = ProviderHelpers.getEntry(computePortal, portalPath, cacheComputePortal)
+  const computedPortal = ProviderHelpers.getEntry(computePortal, portalPath)
   const portalLogo = selectn('response.contextParameters.portal.fv-portal:logo', computedPortal)
   const portalLogoSrc = UIHelpers.getThumbnail(portalLogo, 'Thumbnail')
 
