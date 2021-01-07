@@ -28,6 +28,13 @@ echo "Target URL found: " $TARGET
 echo
 cd "$DIRECTORY" || return
 
+echo "Removing Users"
+response=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/Mocks.RemoveUsersForDialect' -H 'Nuxeo-Transaction-Timeout: 6000' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"context":{}}' -u "$CYPRESS_FV_USERNAME":"$CYPRESS_FV_PASSWORD")
+if [[ "$response" -ne 204 ]]; then
+  echo -e 'Mocks.RemoveUsersForDialect failed: Error ' "$response" ' \n'
+  exit 1
+  echo
+fi
 echo "Removing Dialects"
 response=$(curl -o /dev/null -s -w "%{response_code}\n" -X POST ${TARGET}'/nuxeo/site/automation/Mocks.RemoveDialects' -H 'Nuxeo-Transaction-Timeout: 6000' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"context":{}}' -u "$CYPRESS_FV_USERNAME":"$CYPRESS_FV_PASSWORD")
 if [[ "$response" -ne 204 ]]; then
@@ -35,6 +42,7 @@ if [[ "$response" -ne 204 ]]; then
   exit 1
   echo
 fi
+
 echo '-----------------------------------------'
 echo 'Database teardown completed successfully.'
 echo '-----------------------------------------'
