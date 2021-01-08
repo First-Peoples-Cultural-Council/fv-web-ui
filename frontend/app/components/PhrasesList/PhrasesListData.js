@@ -60,7 +60,7 @@ function PhrasesListData({ children }) {
   const { listView, setListViewMode } = useListView()
   const { computeLogin } = useLogin()
   const { routeParams, setRouteParams } = useRoute()
-  const { computePortal, cacheComputePortal, fetchPortal } = usePortal()
+  const { computePortal, fetchPortal } = usePortal()
   const { pushWindowPath } = useWindowPath()
   const { computePhrases, fetchPhrases } = usePhrase()
   const { getSearchAsObject, convertObjToUrlQuery, navigate } = useNavigationHelpers()
@@ -99,7 +99,6 @@ function PhrasesListData({ children }) {
       key: portalKey,
       action: fetchPortal,
       reducer: computePortal,
-      reducerCache: cacheComputePortal,
     })
   }, [])
 

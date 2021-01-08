@@ -43,7 +43,7 @@ import NavigationHelpers, {
 function KidsWordsByCategoryData({ children }) {
   const [uid, setUid] = useState()
   const { routeParams } = useRoute()
-  const { computePortal, cacheComputePortal, fetchPortal } = usePortal()
+  const { computePortal, fetchPortal } = usePortal()
   const { computeDocument, fetchDocument } = useDocument()
   const { computeWords, fetchWords } = useWord()
   const { splitWindowPath, pushWindowPath } = useWindowPath()
@@ -55,7 +55,6 @@ function KidsWordsByCategoryData({ children }) {
       key: `${routeParams.dialect_path}/Portal`,
       action: fetchPortal,
       reducer: computePortal,
-      reducerCache: cacheComputePortal,
     })
     ProviderHelpers.fetchIfMissing({ key: documentPath, action: fetchDocument, reducer: computeDocument })
   }, [])

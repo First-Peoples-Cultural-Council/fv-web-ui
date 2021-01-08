@@ -105,9 +105,11 @@ jobs:
         if: steps.changed-frontend.outputs.frontend_files
         run: |
           cd frontend
-          npm cache verify
-          npm i --no-optional
+          # npm cache verify
+          # npm i --no-optional
+          npm ci
           npm run build:production
+          
 
 
         # Run Sonar Analysis on Frontend (If Frontend Changes)

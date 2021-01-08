@@ -21,7 +21,7 @@ import { getDialectClassname } from 'common/Helpers'
 import Typography from '@material-ui/core/Typography'
 
 function DebugTypography() {
-  const { computePortal, cacheComputePortal, fetchPortal } = usePortal()
+  const { computePortal, fetchPortal } = usePortal()
   const { routeParams } = useRoute()
 
   const portalKey = `${routeParams.dialect_path}/Portal`
@@ -31,11 +31,10 @@ function DebugTypography() {
       action: fetchPortal,
       key: portalKey,
       reducer: computePortal,
-      reducerCache: cacheComputePortal,
     })
   }, [])
 
-  const extractComputePortal = ProviderHelpers.getEntry(computePortal, portalKey, cacheComputePortal)
+  const extractComputePortal = ProviderHelpers.getEntry(computePortal, portalKey)
   const dialectClassName = getDialectClassname(extractComputePortal)
 
   return (

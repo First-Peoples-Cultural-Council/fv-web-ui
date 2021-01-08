@@ -64,7 +64,7 @@ function WordsListData({ children }) {
   const { listView, setListViewMode } = useListView()
   const { computeLogin } = useLogin()
   const { routeParams, setRouteParams } = useRoute()
-  const { computePortal, fetchPortal, cacheComputePortal } = usePortal()
+  const { computePortal, fetchPortal } = usePortal()
   const { pushWindowPath } = useWindowPath()
   const { computeWords, fetchWords } = useWord()
   const { computeDirectory, fetchDirectory } = useDirectory()
@@ -108,7 +108,6 @@ function WordsListData({ children }) {
       key: portalKey,
       action: fetchPortal,
       reducer: computePortal,
-      reducerCache: cacheComputePortal,
     })
   }, [])
 
@@ -124,7 +123,7 @@ function WordsListData({ children }) {
   const dictionaryId = selectn('uid', dictionary)
 
   // Parse Portal
-  const extractComputePortal = ProviderHelpers.getEntry(computePortal, portalKey, cacheComputePortal)
+  const extractComputePortal = ProviderHelpers.getEntry(computePortal, portalKey)
   const dialectClassName = getDialectClassname(extractComputePortal)
   const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', extractComputePortal) ||
     ''} ${intl.trans('words', 'Words', 'first')}`

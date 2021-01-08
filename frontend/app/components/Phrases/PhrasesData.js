@@ -27,7 +27,7 @@ function PhrasesData(props) {
   const { computeDialect2, fetchDialect2 } = useDialect()
   const { computeDocument, fetchDocument } = useDocument()
   const { intl } = useIntl()
-  const { computePortal, cacheComputePortal, fetchPortal } = usePortal()
+  const { computePortal, fetchPortal } = usePortal()
   const { routeParams } = useRoute()
   const dictionaryKey = `${routeParams.dialect_path}/Dictionary`
   const portalKey = `${routeParams.dialect_path}/Portal`
@@ -41,7 +41,6 @@ function PhrasesData(props) {
       key: portalKey,
       action: fetchPortal,
       reducer: computePortal,
-      reducerCache: cacheComputePortal,
     })
   }, [])
 
