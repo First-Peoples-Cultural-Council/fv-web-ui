@@ -10,12 +10,12 @@ npm install -g wait-on
 echo "Cypress Base URL is set to {$CYPRESS_BASE_URL}"
 
 echo "*****"
-echo "Cypress CI config (`frontend/cypress_CI.json` -> `/e2e/cypress.json`) file content:"
+echo "Cypress CI config ($(frontend/cypress_CI.json) -> $(/e2e/cypress.json)) file content:"
 cat /e2e/cypress.json
 echo "*****"
 
 # Wait for last language to be setup and accessible
-wait-on $CYPRESS_BASE_URL/nuxeo/api/v1/path/FV/sections/Data/Test/Test/TestDialectPublic && \
+wait-on "$CYPRESS_BASE_URL/nuxeo/api/v1/path/FV/sections/Site/Resources/Pages/FirstVoices Apps" && \
     npm ci --quiet && \
     npm run --silent cy:trashCopy && \
     npm run --silent cy:copy && \

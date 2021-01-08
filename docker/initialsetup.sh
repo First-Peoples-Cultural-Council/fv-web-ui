@@ -36,8 +36,8 @@ else
   echo "Environment variables found for the creation of an admin account."
 fi
 
-echo "Sending initial database setup request"
 if [ "$START_WITH_DATA" != "cypress_fixtures" ]; then
+  echo "Sending initial database setup request"
   response=$(curl --max-time 120 --connect-timeout 120 -o /dev/null -s -w "%{response_code}\n" -X POST "${TARGET}"'/nuxeo/site/automation/Document.InitialDatabaseSetup' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{},"context":{}}' -u Administrator:Administrator)
   echo "Exit code: $?"
   if [[ "response" -ne 200 && "response" -ne 204 ]]; then
@@ -46,6 +46,7 @@ if [ "$START_WITH_DATA" != "cypress_fixtures" ]; then
     echo
   fi
 else
+  echo "Sending initial database setup request with a request to generate data"
   response=$(curl --max-time 3000 --connect-timeout 120 -o /dev/null -s -w "%{response_code}\n" -X POST "${TARGET}"'/nuxeo/site/automation/Document.InitialDatabaseSetup' -H 'Nuxeo-Transaction-Timeout: 3' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{"generateData":"true"},"context":{}}' -u Administrator:Administrator)
   echo "Exit code: $?"
   if [[ "response" -ne 200 && "response" -ne 204 ]]; then
@@ -150,10 +151,8 @@ else
   fi
   echo
 fi
-
 echo
 echo '--------------------------------------'
 echo 'Database setup completed successfully.'
 echo '--------------------------------------'
-
 exit 0
