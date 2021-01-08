@@ -29,7 +29,6 @@ import static org.nuxeo.ecm.platform.usermanager.UserConfig.PASSWORD_COLUMN;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.SCHEMA_NAME;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.USERNAME_COLUMN;
 
-import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.tests.mocks.services.MockDialectService;
 import ca.firstvoices.tests.mocks.services.MockUserService;
 import java.util.ArrayList;
@@ -85,7 +84,8 @@ public class InitialDatabaseSetup {
   @Context
   protected UserManager userManager;
 
-  @Param(name = "generateData", description = "Whether or not to generate dialects and data")
+  @Param(name = "generateData", required = false,
+      description = "Whether or not to generate dialects and data")
   protected Boolean generateData = false;
 
   /*
@@ -187,11 +187,23 @@ public class InitialDatabaseSetup {
       MockDialectService generateDialectService = Framework
           .getService(MockDialectService.class);
 
+      /* Create and Publish publicDialect */
+      DocumentModel publicDialect = generateDialectService
+          .generateMockDemoDialect(session, 30, "TestDialectPublic");
+
+      OperationContext operation = new OperationContext(session);
+      operation.setInput(publicDialect);
+      Map<String, Object> params = new HashMap<>();
+      params.put("phase", "work");
+      params.put("batchSize", 1000);
+      AutomationService automation = Framework.getService(AutomationService.class);
+      automation.run(operation, "Publishing.PublishDialect", params);
+
+      /* Create and Enable privateDialect */
       DocumentModel privateDialect = generateDialectService
           .generateMockDemoDialect(session, 30, "TestDialectPrivate");
 
-      DocumentModel publicDialect = generateDialectService
-          .generateMockDemoDialect(session, 30, "TestDialectPublic");
+      session.followTransition(privateDialect, "Enable");
 
       /* Generate test users for all dialects */
       MockUserService generateDialectUsersService = Framework
@@ -200,17 +212,6 @@ public class InitialDatabaseSetup {
       generateDialectUsersService
           .generateUsersForDialects(session, userManager);
 
-      /* Publish publicDialect */
-      AutomationService automation = Framework.getService(AutomationService.class);
-      OperationContext operation = new OperationContext(session);
-      operation.setInput(publicDialect);
-      Map<String, Object> params = new HashMap<>();
-      params.put("phase", "work");
-      params.put("batchSize", 1000);
-      automation.run(operation, "Publishing.PublishDialect", params);
-
-      /* Enable privateDialect */
-      StateUtils.followTransitionIfAllowed( privateDialect, "Enable");
     }
   }
 
