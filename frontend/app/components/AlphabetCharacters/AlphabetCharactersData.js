@@ -21,14 +21,14 @@ import useNavigationHelpers from 'common/useNavigationHelpers'
 function AlphabetCharactersData({ children }) {
   const [characters, setCharacters] = useState([])
   const { getSearchAsObject, navigate } = useNavigationHelpers()
-  const { fetchCharacters, computeCharacters, cacheComputeCharacters } = useCharacters()
-  const { computePortal, cacheComputePortal } = usePortal()
+  const { fetchCharacters, computeCharacters } = useCharacters()
+  const { computePortal } = usePortal()
   const { routeParams } = useRoute()
   const { letter: queryLetter } = getSearchAsObject()
   const alphabetPath = `${routeParams.dialect_path}/Alphabet`
   const portalPath = `${routeParams.dialect_path}/Portal`
 
-  const extractComputePortal = ProviderHelpers.getEntry(computePortal, portalPath, cacheComputePortal)
+  const extractComputePortal = ProviderHelpers.getEntry(computePortal, portalPath)
 
   useEffect(() => {
     ProviderHelpers.fetchIfMissing({
@@ -36,11 +36,10 @@ function AlphabetCharactersData({ children }) {
       actionParams: '&currentPageIndex=0&pageSize=100&sortOrder=asc&sortBy=fvcharacter:alphabet_order',
       key: alphabetPath,
       reducer: computeCharacters,
-      reducerCache: cacheComputePortal,
     })
   }, [])
 
-  const extractComputedCharacters = ProviderHelpers.getEntry(computeCharacters, alphabetPath, cacheComputeCharacters)
+  const extractComputedCharacters = ProviderHelpers.getEntry(computeCharacters, alphabetPath)
   const charactersUnprocessed = selectn('response.entries', extractComputedCharacters) || []
   useEffect(() => {
     const charactersProcessed = charactersUnprocessed.map(({ title }) => {

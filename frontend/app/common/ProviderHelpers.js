@@ -50,11 +50,8 @@ const proxiesKeys = [
 // @key - the key to look up (or set) in the store for this action/reducer
 // @action - the action to perform if nothing found in store.
 // @reducer - the reducer to look for
-async function fetchIfMissing({ action, actionParams, key, reducer, reducerCache }) {
-  if (reducerCache && reducerCache[key]) {
-    return
-  }
-  if (key != undefined && !selectn('success', getEntry(reducer, key)) && typeof action === 'function') {
+async function fetchIfMissing({ action, actionParams, key, reducer }) {
+  if (key !== undefined && !selectn('success', getEntry(reducer, key)) && typeof action === 'function') {
     await action(key, actionParams)
   }
 }
@@ -167,18 +164,11 @@ function getDialectPathFromURLArray(urlArray) {
   return null
 }
 
-function getEntry(wordResults, path, cache) {
-  // Proabaly not an immutable object!
-  const cacheData = selectn(path, cache)
-  if (cacheData) {
-    return cacheData
-  }
-
+function getEntry(wordResults, path) {
   if (!wordResults || wordResults.isEmpty() || !path) {
     return null
   }
 
-  // Proabaly an immutable object!
   const result = wordResults.find(function wordResultsFind(entry) {
     return entry.get('id') === path
   })
