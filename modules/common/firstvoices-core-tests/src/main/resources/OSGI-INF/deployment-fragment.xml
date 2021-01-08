@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<fragment version="1">
+
+<require>org.nuxeo.ecm.platform.web.common</require>
+  <install>
+    <unzip from="${bundle.fileName}" to="/" prefix="web">
+      <include>web/nuxeo.war/**</include>
+    </unzip>
+  </install>
+  
+  
+  <extension target="pages#PAGES">
+
+ <page view-id="/nxstartup.xhtml"
+      action="#{startupHelper.initDomainAndFindStartupPage('Domain', 'view')}" />
+
+    </extension>
+</fragment>
