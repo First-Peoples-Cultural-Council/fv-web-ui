@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.operations.bulkupdate.services.BulkUpdateService" version="1.0">
+  <implementation class="ca.firstvoices.operations.bulkupdate.services.BulkUpdateServiceImpl"/>
+  <service>
+    <provide interface="ca.firstvoices.operations.bulkupdate.services.BulkUpdateService"/>
+  </service>
+</component>
