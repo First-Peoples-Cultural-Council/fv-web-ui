@@ -19,4 +19,4 @@ services:
     volumes:
       - '${PWD}/../frontend:/e2e'
       - '${PWD}/../frontend/cypress_CI.json:/e2e/cypress.json'
-    entrypoint: ["/bin/sh", "-c", "${PWD}/../frontend/cypress/scripts/start_e2e_tests.sh"]
+    entrypoint: ["/bin/sh", "-c", "cypress/scripts/start_e2e_tests.sh"]
