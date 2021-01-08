@@ -50,8 +50,10 @@ const PageDialectViewAlphabet = React.lazy(() => import('components/Alphabet/Alp
 const PageDialectViewCharacter = React.lazy(() => import('components/AlphabetDetail/AlphabetDetailContainer'))
 const PageDialectLearnWordsCategories = React.lazy(() => import('components/Categories/WordCategories'))
 
-const PhraseBooksGrid = React.lazy(() => import('components/PhraseBooksGrid'))
-const WordsCategoriesGrid = React.lazy(() => import('components/WordsCategoriesGrid'))
+const PhraseBooksGridContainer = React.lazy(() => import('components/PhraseBooksGrid/PhraseBooksGridContainer'))
+const WordsCategoriesGridContainer = React.lazy(() =>
+  import('components/WordsCategoriesGrid/WordsCategoriesGridContainer')
+)
 
 const PageDialectImmersionList = React.lazy(() => import('components/Immersion'))
 
@@ -126,8 +128,10 @@ const RecorderEdit = React.lazy(() => import('components/Recorder/edit')) // Edi
 
 // DASHBOARD
 // ----------------------
-const Dashboard = React.lazy(() => import('components/Dashboard'))
-const DashboardDetailTasks = React.lazy(() => import('components/DashboardDetailTasks'))
+const DashboardContainer = React.lazy(() => import('components/Dashboard/DashboardContainer'))
+const DashboardDetailTasksContainer = React.lazy(() =>
+  import('components/DashboardDetailTasks/DashboardDetailTasksContainer')
+)
 
 // MENTOR-APPRENTICE PHOTO PROJECT
 // ----------------------
@@ -149,8 +153,8 @@ export {
   PageDialectLearnWords,
   PageDialectLearnWordsCategories,
   PageDialectLearnPhrases,
-  PhraseBooksGrid,
-  WordsCategoriesGrid,
+  PhraseBooksGridContainer,
+  WordsCategoriesGridContainer,
   PageDialectLearnStoriesAndSongs,
   PageDialectViewWord,
   PageDialectViewMedia,
@@ -224,6 +228,6 @@ export {
   RecorderDetail,
   RecorderEdit,
   // DASHBOARD
-  Dashboard,
-  DashboardDetailTasks,
+  DashboardContainer,
+  DashboardDetailTasksContainer,
 }
