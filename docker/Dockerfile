@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends nano
 
 # Add prebuilt version of marketplace package
 # ADD https://s3.ca-central-1.amazonaws.com/firstvoices.com/dist/core/${DIST_VERSION}/FirstVoices-marketplace-package-latest.zip /opt/nuxeo/server/tmp/
-ADD https://s3.ca-central-1.amazonaws.com/firstvoices.com/dist/FW-1808.zip /opt/nuxeo/server/tmp/
+ADD https://s3.ca-central-1.amazonaws.com/firstvoices.com/dist/FirstVoices-marketplace-package-latest.zip /opt/nuxeo/server/tmp/
 
 # No need to start Nuxeo here - will happen automatically.
 
