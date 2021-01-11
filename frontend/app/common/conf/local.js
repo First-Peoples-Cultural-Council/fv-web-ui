@@ -1,17 +1,7 @@
 /* globals ENV_CONTEXT_PATH */
 const CONTEXT_PATH = ENV_CONTEXT_PATH !== null && typeof ENV_CONTEXT_PATH !== 'undefined' ? ENV_CONTEXT_PATH : ''
 
-const secsToMS = (secs) => secs * 1000
-const minsToSecs = (mins) => mins * 60
-const hoursToMins = (hours) => hours * 60
-const daysToHours = (days) => days * 24
-// const minsToMS = (mins) => secsToMS(minsToSecs(mins))
-// const hoursToMS = hours => secsToMS(minsToSecs(hoursToMins(hours)))
-const daysToMS = (days) => secsToMS(minsToSecs(hoursToMins(daysToHours(days))))
-
 module.exports = {
-  localCacheVersion: 1,
-  localCacheMaxAge: daysToMS(7),
   title: 'FirstVoices',
   domain: 'FV',
   apiURL: 'https://api.firstvoices.com/v1/',

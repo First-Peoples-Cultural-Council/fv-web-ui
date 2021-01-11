@@ -64,7 +64,7 @@ function WordsListData({ children }) {
   const { listView, setListViewMode } = useListView()
   const { computeLogin } = useLogin()
   const { routeParams, setRouteParams } = useRoute()
-  const { computePortal, fetchPortal, cacheComputePortal } = usePortal()
+  const { computePortal, fetchPortal } = usePortal()
   const { pushWindowPath } = useWindowPath()
   const { computeWords, fetchWords } = useWord()
   const { computeDirectory, fetchDirectory } = useDirectory()
@@ -108,7 +108,6 @@ function WordsListData({ children }) {
       key: portalKey,
       action: fetchPortal,
       reducer: computePortal,
-      reducerCache: cacheComputePortal,
     })
   }, [])
 
@@ -124,10 +123,11 @@ function WordsListData({ children }) {
   const dictionaryId = selectn('uid', dictionary)
 
   // Parse Portal
-  const extractComputePortal = ProviderHelpers.getEntry(computePortal, portalKey, cacheComputePortal)
+  const extractComputePortal = ProviderHelpers.getEntry(computePortal, portalKey)
   const dialectClassName = getDialectClassname(extractComputePortal)
-  const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', extractComputePortal) ||
-    ''} ${intl.trans('words', 'Words', 'first')}`
+  const pageTitle = `${
+    selectn('response.contextParameters.ancestry.dialect.dc:title', extractComputePortal) || ''
+  } ${intl.trans('words', 'Words', 'first')}`
 
   // Parse Words
   const computedWords = ProviderHelpers.getEntry(computeWords, dictionaryId)
@@ -156,8 +156,9 @@ function WordsListData({ children }) {
       // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
       const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
 
-      const nql = `${currentAppliedFilter}&currentPageIndex=${queryPage -
-        1}&dialectId=${dialectUid}&pageSize=${queryPageSize}&sortOrder=${querySortOrder}&sortBy=${querySortBy}${
+      const nql = `${currentAppliedFilter}&currentPageIndex=${
+        queryPage - 1
+      }&dialectId=${dialectUid}&pageSize=${queryPageSize}&sortOrder=${querySortOrder}&sortBy=${querySortBy}${
         queryLetter ? `&letter=${queryLetter}&starts_with_query=Document.CustomOrderQuery` : startsWithQuery
       }`
 

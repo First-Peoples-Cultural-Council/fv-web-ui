@@ -43,7 +43,7 @@ import NavigationHelpers, {
 function KidsWordsByCategoryData({ children }) {
   const [uid, setUid] = useState()
   const { routeParams } = useRoute()
-  const { computePortal, cacheComputePortal, fetchPortal } = usePortal()
+  const { computePortal, fetchPortal } = usePortal()
   const { computeDocument, fetchDocument } = useDocument()
   const { computeWords, fetchWords } = useWord()
   const { splitWindowPath, pushWindowPath } = useWindowPath()
@@ -55,7 +55,6 @@ function KidsWordsByCategoryData({ children }) {
       key: `${routeParams.dialect_path}/Portal`,
       action: fetchPortal,
       reducer: computePortal,
-      reducerCache: cacheComputePortal,
     })
     ProviderHelpers.fetchIfMissing({ key: documentPath, action: fetchDocument, reducer: computeDocument })
   }, [])
@@ -89,8 +88,9 @@ function KidsWordsByCategoryData({ children }) {
       const sortOrder = searchParams.sortOrder || searchObj.sortOrder || 'fv:custom_order'
       const sortBy = searchParams.sortBy || searchObj.sortBy || 'asc'
 
-      let nql = `${currentAppliedFilter}&enrichment=category_children&currentPageIndex=${routeParams.page -
-        1}&pageSize=${routeParams.pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
+      let nql = `${currentAppliedFilter}&enrichment=category_children&currentPageIndex=${
+        routeParams.page - 1
+      }&pageSize=${routeParams.pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
 
       // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
       nql = `${nql}${ProviderHelpers.isStartsWithQuery(currentAppliedFilter)}`

@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.CacheControl;
@@ -39,24 +40,40 @@ import org.nuxeo.runtime.api.Framework;
 @Produces({MediaType.APPLICATION_JSON})
 public class SitesObject extends DefaultObject {
 
-  public static final String PORTALS_LIST_SECTIONS_PP = "PORTALS_LIST_SECTIONS_PP";
-  public static final String PORTALS_LIST_WORKSPACES_PP = "PORTALS_LIST_WORKSPACES_PP";
+  protected static final String PORTALS_LIST_SECTIONS_PP = "PORTALS_LIST_SECTIONS_PP";
+  protected static final String PORTALS_LIST_WORKSPACES_PP = "PORTALS_LIST_WORKSPACES_PP";
+  protected static final String DIALECTS_LIST_SECTIONS_PP = "DIALECTS_LIST_SECTIONS_PP";
+  protected static final String DIALECTS_LIST_WORKSPACES_PP = "DIALECTS_LIST_WORKSPACES_PP";
+
+  // they'll be tried in priority order, with the first one producing a result returning
+  protected static final List<String> PORTALS_FIND_PPLIST = Arrays.asList(
+      "PORTALS_FIND_PP_PRIORITY1",
+      "PORTALS_FIND_PP_PRIORITY2",
+      "PORTALS_FIND_PP_PRIORITY3",
+      "PORTALS_FIND_PP_PRIORITY4");
+
+  protected static final String PORTAL_FOR_DIALECT_PP = "PORTAL_FOR_DIALECT_PP";
 
   /**
    * Retrieve the PageProvider results for the given PageProvider.
    *
    * @param doPrivileged if the query should be run in an unrestricted session
    */
+  @SuppressWarnings("java:S107")
   private Response simplePageProviderResponse(
-      HttpServletRequest request, List<String> pageProviderNames, Integer pageSize,
-      Integer currentPage, boolean doPrivileged, ResultFilter rf) {
+      HttpServletRequest request, List<String> pageProviderNames,
+      List<String> cacheCheckOnlyPageProviderNames, boolean singleResult, Integer pageSize,
+      Integer currentPage, boolean doPrivileged, ResultFilter rf, Object... params) {
 
     ResponseGeneratingQueryRunner runner = new ResponseGeneratingQueryRunner(ctx.getCoreSession(),
         request,
         pageProviderNames,
+        cacheCheckOnlyPageProviderNames,
+        singleResult,
         pageSize,
         currentPage,
-        rf);
+        rf,
+        params);
 
     if (doPrivileged) {
       runner.runUnrestricted();
@@ -97,6 +114,8 @@ public class SitesObject extends DefaultObject {
 
     return simplePageProviderResponse(request,
         Arrays.asList(PORTALS_LIST_SECTIONS_PP, PORTALS_LIST_WORKSPACES_PP),
+        Arrays.asList(DIALECTS_LIST_SECTIONS_PP, DIALECTS_LIST_WORKSPACES_PP),
+        false,
         pageSize,
         currentPage,
         true,
@@ -110,10 +129,29 @@ public class SitesObject extends DefaultObject {
       @QueryParam(value = "currentPage") Integer currentPage) {
     return simplePageProviderResponse(request,
         Collections.singletonList(PORTALS_LIST_WORKSPACES_PP),
+        Collections.singletonList(DIALECTS_LIST_WORKSPACES_PP),
+        false,
         pageSize,
         currentPage,
         false,
         ACCEPT_ALL);
+  }
+
+  @GET
+  @Path("sections/{site}")
+  public Response findSiteSections(
+      @Context HttpServletRequest request, @PathParam("site") String site,
+      @QueryParam(value = "currentPage") Integer currentPage) {
+
+    return simplePageProviderResponse(request,
+        PORTALS_FIND_PPLIST,
+        Collections.emptyList(),
+        true,
+        null,
+        null,
+        true,
+        ACCEPT_ALL,
+        site);
   }
 
   private static class ResponseGeneratingQueryRunner extends UnrestrictedSessionRunner {
@@ -126,20 +164,28 @@ public class SitesObject extends DefaultObject {
 
     private final HttpServletRequest request;
     private final List<String> pageProviderNames;
+    private final List<String> cacheCheckOnlyPageProviderNames;
     private final Integer pageSize;
     private final Integer currentPage;
     private final ResultFilter resultFilter;
+    private final boolean singleResult;
+    private final Object[] params;
 
+    @SuppressWarnings("java:S107")
     ResponseGeneratingQueryRunner(
         CoreSession session, HttpServletRequest request, List<String> pageProviderNames,
-        Integer pageSize, Integer currentPage, ResultFilter rf) {
+        List<String> cacheCheckOnlyPageProviderNames, boolean singleResult, Integer pageSize,
+        Integer currentPage, ResultFilter rf, Object... params) {
       super(session);
 
       this.request = request;
       this.pageProviderNames = pageProviderNames;
+      this.cacheCheckOnlyPageProviderNames = cacheCheckOnlyPageProviderNames;
       this.pageSize = pageSize;
       this.currentPage = currentPage;
       this.resultFilter = rf;
+      this.singleResult = singleResult;
+      this.params = params;
     }
 
     /*
@@ -148,20 +194,43 @@ public class SitesObject extends DefaultObject {
     @Override
     public void run() {
       List<DocumentModel> results = new LinkedList<>();
+      List<DocumentModel> cacheComputationResults = new LinkedList<>();
 
       for (String pageProviderName : pageProviderNames) {
+        if (singleResult && !results.isEmpty()) {
+          //we already found a match
+          break;
+        }
+
         List<DocumentModel> localResults = PageProviderHelper.getPageProviderResults(session,
             pageProviderName,
             pageSize,
-            currentPage);
+            currentPage,
+            params);
 
         localResults
             .stream()
             .filter(dm -> resultFilter.accept(session, pageProviderName, dm))
-            .forEach(results::add);
+            .forEach(r -> {
+              results.add(r);
+              cacheComputationResults.add(r);
+            });
       }
 
-      String etag = EtagHelper.computeEtag(results, EtagHelper.DC_MODIFIED_MAPPER);
+      for (String cacheCheckPageProviderName : cacheCheckOnlyPageProviderNames) {
+        List<DocumentModel> localResults = PageProviderHelper.getPageProviderResults(session,
+            cacheCheckPageProviderName,
+            pageSize,
+            currentPage,
+            params);
+
+        localResults.stream().filter(dm -> resultFilter.accept(session,
+            cacheCheckPageProviderName,
+            dm)).forEach(cacheComputationResults::add);
+      }
+
+      String etag = EtagHelper.computeEtag(cacheComputationResults,
+          EtagHelper.DC_MODIFIED_AND_NAME_MAPPER);
       String ifNoneMatch = request.getHeader(HttpHeaders.IF_NONE_MATCH);
 
       if (ifNoneMatch != null && ifNoneMatch.equals(etag)) {
@@ -170,28 +239,51 @@ public class SitesObject extends DefaultObject {
       }
 
       List<Site> sites = results.stream().map(dm -> {
-        if (!session.exists(dm.getParentRef())) {
-          // If parent dialect does not exist, something is wrong with FVPortal, skip
-          return null;
+
+        DocumentModel associatedDialect = null;
+        DocumentModel portal = null;
+
+        if (dm.getType().equalsIgnoreCase("fvportal")) {
+          // We have the portal, get the dialect
+
+          if (!session.exists(dm.getParentRef())) {
+            // If parent dialect does not exist, something is wrong with FVPortal, skip
+            return null;
+          }
+
+          associatedDialect = session.getDocument(dm.getParentRef());
+          portal = dm;
+
+        } else {
+          // We have the dialect, find the portal
+          associatedDialect = dm;
+
+          List<DocumentModel> foundPortals = PageProviderHelper.getPageProviderResults(session,
+              PORTAL_FOR_DIALECT_PP,
+              null,
+              null,
+              dm.getId());
+
+          if (foundPortals.size() != 1) {
+            return null; // We have an unexpected number of portals -- skip
+          }
+          portal = foundPortals.get(0);
         }
 
-        // Dialect is parent of Portal
-        DocumentModel associatedDialect = session.getDocument(dm.getParentRef());
-
-        if (associatedDialect == null) {
-          // If for whatever reason we could not get the dialect, skip
+        if (associatedDialect == null || portal == null) {
+          // If for whatever reason we could not resolve the portal or dialect, skip
           return null;
         }
 
         String logoImageId;
 
-        if (dm.isProxy()) {
-          logoImageId = (String) dm.getProperty("fvproxy", "proxied_logo");
+        if (portal.isProxy()) {
+          logoImageId = (String) portal.getProperty("fvproxy", "proxied_logo");
         } else {
           // Do not fetch images for private dialects when displayed in the public view
           // Temporary solution until FW-2155 is resolved
           boolean isSectionsQuery = pageProviderNames.contains(PORTALS_LIST_SECTIONS_PP);
-          logoImageId = (isSectionsQuery) ? null : (String) dm.getProperty("fv-portal", "logo");
+          logoImageId = (isSectionsQuery) ? null : (String) portal.getProperty("fv-portal", "logo");
         }
 
         Set<String> roles = new HashSet<>();
@@ -199,8 +291,7 @@ public class SitesObject extends DefaultObject {
         if (associatedDialect.getACP() != null
             && associatedDialect.getACP().getACL("local") != null) {
           for (ACE ace : associatedDialect.getACP().getACL("local").getACEs()) {
-            if (SecurityConstants.READ.equals(ace.getPermission())
-                && session.getPrincipal() != null
+            if (SecurityConstants.READ.equals(ace.getPermission()) && session.getPrincipal() != null
                 && session.getPrincipal().isMemberOf(ace.getUsername())) {
               roles.add("Member");
             }
@@ -215,13 +306,18 @@ public class SitesObject extends DefaultObject {
 
           UserManager userManager = Framework.getService(UserManager.class);
 
-          PrincipalHelper principalHelper =
-              new PrincipalHelper(userManager, Framework.getService(PermissionProvider.class));
+          PrincipalHelper principalHelper = new PrincipalHelper(userManager,
+              Framework.getService(PermissionProvider.class));
 
-          groups =
-              principalHelper.getUserAndGroupIdsForPermission(
-                  associatedDialect, SecurityConstants.READ, false, false, true)
-                  .stream().filter(id -> id.startsWith("group:")).collect(Collectors.toSet());
+          groups = principalHelper
+              .getUserAndGroupIdsForPermission(associatedDialect,
+                  SecurityConstants.READ,
+                  false,
+                  false,
+                  true)
+              .stream()
+              .filter(id -> id.startsWith("group:"))
+              .collect(Collectors.toSet());
         }
 
         return new Site(associatedDialect.getPathAsString(),
@@ -233,16 +329,35 @@ public class SitesObject extends DefaultObject {
             logoImageId);
 
       }).filter(Objects::nonNull).collect(Collectors.toList());
-      SiteList mappedResults = new SiteList(sites);
 
-      Response.ResponseBuilder responseBuilder = Response.ok().entity(mappedResults).cacheControl(
-          CacheControl.valueOf("must-revalidate"));
+      if (singleResult) {
+        if (!sites.isEmpty()) {
+          Response.ResponseBuilder responseBuilder = Response
+              .ok()
+              .entity(sites.get(0))
+              .cacheControl(CacheControl.valueOf("must-revalidate"));
+          if (etag != null) {
+            responseBuilder.header(HttpHeaders.ETAG, etag);
+          }
 
-      if (etag != null) {
-        responseBuilder.header(HttpHeaders.ETAG, etag);
+          this.response = responseBuilder.build();
+        } else {
+          this.response = Response.status(404).build();
+        }
+
+      } else {
+
+        SiteList mappedResults = new SiteList(sites);
+        Response.ResponseBuilder responseBuilder = Response.ok().entity(mappedResults).cacheControl(
+            CacheControl.valueOf("must-revalidate"));
+        if (etag != null) {
+          responseBuilder.header(HttpHeaders.ETAG, etag);
+        }
+
+        this.response = responseBuilder.build();
       }
 
-      this.response = responseBuilder.build();
+
     }
 
   }

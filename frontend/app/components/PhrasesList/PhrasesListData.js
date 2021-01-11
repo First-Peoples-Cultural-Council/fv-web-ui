@@ -60,7 +60,7 @@ function PhrasesListData({ children }) {
   const { listView, setListViewMode } = useListView()
   const { computeLogin } = useLogin()
   const { routeParams, setRouteParams } = useRoute()
-  const { computePortal, cacheComputePortal, fetchPortal } = usePortal()
+  const { computePortal, fetchPortal } = usePortal()
   const { pushWindowPath } = useWindowPath()
   const { computePhrases, fetchPhrases } = usePhrase()
   const { getSearchAsObject, convertObjToUrlQuery, navigate } = useNavigationHelpers()
@@ -99,7 +99,6 @@ function PhrasesListData({ children }) {
       key: portalKey,
       action: fetchPortal,
       reducer: computePortal,
-      reducerCache: cacheComputePortal,
     })
   }, [])
 
@@ -116,8 +115,9 @@ function PhrasesListData({ children }) {
   // Parse Portal
   const extractComputePortal = ProviderHelpers.getEntry(computePortal, portalKey)
   const dialectClassName = getDialectClassname(extractComputePortal)
-  const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', extractComputePortal) ||
-    ''} ${intl.trans('phrases', 'Phrases', 'first')}`
+  const pageTitle = `${
+    selectn('response.contextParameters.ancestry.dialect.dc:title', extractComputePortal) || ''
+  } ${intl.trans('phrases', 'Phrases', 'first')}`
 
   // Parse Phrases
   const computedEntries = ProviderHelpers.getEntry(computePhrases, dictionaryKey)
@@ -146,8 +146,9 @@ function PhrasesListData({ children }) {
       // WORKAROUND: DY @ 17-04-2019 - Mark this query as a "starts with" query. See DirectoryOperations.js for note
       const startsWithQuery = ProviderHelpers.isStartsWithQuery(currentAppliedFilter)
 
-      const nql = `${currentAppliedFilter}&currentPageIndex=${queryPage -
-        1}&dialectId=${dialectUid}&pageSize=${queryPageSize}&sortOrder=${querySortOrder}&sortBy=${querySortBy}${
+      const nql = `${currentAppliedFilter}&currentPageIndex=${
+        queryPage - 1
+      }&dialectId=${dialectUid}&pageSize=${queryPageSize}&sortOrder=${querySortOrder}&sortBy=${querySortBy}${
         queryLetter ? `&letter=${queryLetter}&starts_with_query=Document.CustomOrderQuery` : startsWithQuery
       }`
 

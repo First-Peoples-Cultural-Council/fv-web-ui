@@ -1,6 +1,7 @@
 package ca.firstvoices.tests.mocks.services;
 
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_AUDIO;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOKS;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_BOOK_ENTRY;
@@ -11,11 +12,15 @@ import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CONTRIBUTOR;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CONTRIBUTORS;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_DICTIONARY;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PHRASE;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PICTURE;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_RESOURCES;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_VIDEO;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
 import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,12 +30,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.ThreadLocalRandom;
+import org.nuxeo.common.utils.FileUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
+import org.nuxeo.ecm.core.api.impl.blob.FileBlob;
 
 public class MockDialectServiceImpl implements MockDialectService {
 
@@ -175,8 +182,10 @@ public class MockDialectServiceImpl implements MockDialectService {
     generateFVCharacters(session, dialect.getPathAsString(), alphabetChars);
     DocumentModelList categories = generateFVCategories(session, dialect.getPathAsString());
     DocumentModelList phraseBooks = generateFVPhraseBooks(session, dialect.getPathAsString());
+    generateMedia(session, dialect.getPathAsString());
     generateFVWords(session, dialect.getPathAsString(), words, categories);
-    generateFVPhrases(session, dialect.getPathAsString(), maxEntries / 2, words, phraseBooks);
+    generateFVPhrases(session, dialect.getPathAsString(), maxEntries / 2, words,
+            phraseBooks);
     generateFVContributors(session, dialect.getPathAsString());
     generateFVSongs(session, dialect.getPathAsString(), 5, words);
     generateFVStories(session, dialect.getPathAsString(), 5, words);
@@ -207,8 +216,10 @@ public class MockDialectServiceImpl implements MockDialectService {
     generateFVCharacters(session, dialect.getPathAsString(), currentAlphabet);
     DocumentModelList categories = generateFVCategories(session, dialect.getPathAsString());
     DocumentModelList phraseBooks = generateFVPhraseBooks(session, dialect.getPathAsString());
-    generateFVPhrases(session, dialect.getPathAsString(), phraseEntries, currentWords, phraseBooks);
+    generateMedia(session, dialect.getPathAsString());
     generateFVWords(session, dialect.getPathAsString(), currentWords, categories);
+    generateFVPhrases(session, dialect.getPathAsString(), phraseEntries, currentWords,
+        phraseBooks);
     generateFVContributors(session, dialect.getPathAsString());
     generateFVSongs(session, dialect.getPathAsString(), 5, currentWords);
     generateFVStories(session, dialect.getPathAsString(), 5, currentWords);
@@ -289,6 +300,8 @@ public class MockDialectServiceImpl implements MockDialectService {
         session.createDocumentModel(dialect.getPathAsString(), "Contributors", FV_CONTRIBUTORS));
     createDocument(session,
         session.createDocumentModel(dialect.getPathAsString(), "Stories & Songs", FV_BOOKS));
+    createDocument(session,
+        session.createDocumentModel(dialect.getPathAsString(), "Resources", FV_RESOURCES));
 
     return dialect;
   }
@@ -317,6 +330,37 @@ public class MockDialectServiceImpl implements MockDialectService {
     return join.toString();
   }
 
+  private void generateMedia(CoreSession session, String path) {
+
+    String resourcesFolder = path + "/Resources";
+
+    //Generate an audio
+    DocumentModel audioDoc = createDocument(session,
+        session.createDocumentModel(resourcesFolder, "audio", FV_AUDIO));
+    File audioFile =  FileUtils.getResourceFileFromContext("nuxeo.war/mock-data-media/TestWav.wav");
+    FileBlob audioBlob = new FileBlob(audioFile, "audio/wav");
+    audioDoc.setPropertyValue("file:content", audioBlob);
+    session.saveDocument(audioDoc);
+
+    //Generate a picture
+    DocumentModel pictureDoc = createDocument(session,
+        session.createDocumentModel(resourcesFolder, "picture", FV_PICTURE));
+    File pictureFile = FileUtils
+        .getResourceFileFromContext("nuxeo.war/mock-data-media/TestPhoto.jpg");
+    FileBlob pictureBlob = new FileBlob(pictureFile, "image/jpeg");
+    pictureDoc.setPropertyValue("file:content", pictureBlob);
+    session.saveDocument(pictureDoc);
+
+    //Generate a video
+    DocumentModel videoDoc = createDocument(session,
+        session.createDocumentModel(resourcesFolder, "video", FV_VIDEO));
+    File videoFile = FileUtils
+        .getResourceFileFromContext("nuxeo.war/mock-data-media/TestVideo.mp4");
+    FileBlob videoBlob = new FileBlob(videoFile, "video/mp4");
+    videoDoc.setPropertyValue("file:content", videoBlob);
+    session.saveDocument(videoDoc);
+  }
+
   public DocumentModelList generateFVWords(CoreSession session, String path,
       String[] words, DocumentModelList categories) {
     //Generate word documents and set appropriate properties
@@ -336,6 +380,8 @@ public class MockDialectServiceImpl implements MockDialectService {
       wordDoc.setPropertyValue("fv-word:part_of_speech",
           samplePartsOfSpeech[ThreadLocalRandom.current().nextInt(0, samplePartsOfSpeech.length)]);
       wordDoc.setPropertyValue("fv-word:pronunciation", wordDoc.getName() + " pronunciation");
+
+      setMedia(session, path, wordDoc);
 
       //Makes the word available in kids portal with 1/2 chance
       if (ThreadLocalRandom.current().nextInt(0, 2) == 0) {
@@ -376,6 +422,8 @@ public class MockDialectServiceImpl implements MockDialectService {
       definitionEntry.put(LANGUAGE, ENGLISH);
       definition.add(definitionEntry);
       phraseDoc.setPropertyValue("fv:definitions", definition);
+
+      setMedia(session, path, phraseDoc);
 
       if (phraseBooks != null) {
         String randomPhraseBook = phraseBooks
@@ -479,6 +527,9 @@ public class MockDialectServiceImpl implements MockDialectService {
           wordsToUse);
       bookDoc.setPropertyValue("fvbook:introduction", introduction);
 
+      //attach media documents
+      setMedia(session, path, bookDoc);
+
       ArrayList<Map<String, String>> introductionTranslation = new ArrayList<>();
       Map<String, String> introductionTranslationEntry = new HashMap<>();
       introductionTranslationEntry.put(TRANSLATION, "Introduction translation to English");
@@ -517,4 +568,33 @@ public class MockDialectServiceImpl implements MockDialectService {
 
     return fvBooks;
   }
+
+  private void setMedia(CoreSession session, String path,
+      DocumentModel entry) {
+
+    // Get audio files and set on property
+    DocumentModelList audio = session
+        .getChildren(new PathRef(path + "/Resources"), FV_AUDIO);
+
+    if (!audio.isEmpty()) {
+      entry.setPropertyValue("fv:related_audio", new String[]{audio.get(0).getId()});
+    }
+
+    // Get images and set on property
+    DocumentModelList pictures = session
+        .getChildren(new PathRef(path + "/Resources"), FV_PICTURE);
+
+    if (!pictures.isEmpty()) {
+      entry.setPropertyValue("fv:related_pictures", new String[]{pictures.get(0).getId()});
+    }
+
+    // Get videos and set on property
+    DocumentModelList videos = session
+        .getChildren(new PathRef(path + "/Resources"), FV_VIDEO);
+
+    if (!videos.isEmpty()) {
+      entry.setPropertyValue("fv:related_videos", new String[]{videos.get(0).getId()});
+    }
+  }
+
 }

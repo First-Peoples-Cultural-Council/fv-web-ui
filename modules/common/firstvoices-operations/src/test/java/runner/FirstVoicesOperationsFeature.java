@@ -47,6 +47,8 @@ import org.nuxeo.runtime.test.runner.RunnerFeature;
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/assets/assets-operations.xml")
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/visibility/visibility-operations.xml")
 @Deploy("FirstVoicesOperations:OSGI-INF/dialect/visibility/visibility-services.xml")
+@Deploy("FirstVoicesOperations:OSGI-INF/bulkupdate/bulkupdate-services.xml")
+@Deploy("FirstVoicesOperations:OSGI-INF/bulkupdate/bulkupdate-operations.xml")
 
 @Deploy("FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml")
 
