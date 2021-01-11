@@ -187,17 +187,9 @@ public class InitialDatabaseSetup {
       MockDialectService generateDialectService = Framework
           .getService(MockDialectService.class);
 
-      /* Create and Publish publicDialect */
+      /* Create publicDialect */
       DocumentModel publicDialect = generateDialectService
           .generateMockDemoDialect(session, 30, "TestDialectPublic");
-
-      OperationContext operation = new OperationContext(session);
-      operation.setInput(publicDialect);
-      Map<String, Object> params = new HashMap<>();
-      params.put("phase", "work");
-      params.put("batchSize", 1000);
-      AutomationService automation = Framework.getService(AutomationService.class);
-      automation.run(operation, "Publishing.PublishDialect", params);
 
       /* Create and Enable privateDialect */
       DocumentModel privateDialect = generateDialectService
@@ -212,6 +204,15 @@ public class InitialDatabaseSetup {
       generateDialectUsersService
           .generateUsersForDialects(session, userManager);
 
+      /* Publish publicDialect
+      This should always happen last so `wait-on` scripts can detect it */
+      OperationContext operation = new OperationContext(session);
+      operation.setInput(publicDialect);
+      Map<String, Object> params = new HashMap<>();
+      params.put("phase", "work");
+      params.put("batchSize", 1000);
+      AutomationService automation = Framework.getService(AutomationService.class);
+      automation.run(operation, "Publishing.PublishDialect", params);
     }
   }
 
