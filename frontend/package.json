@@ -22,8 +22,7 @@
     "local:language:teardown": "bash ./cypress/scripts/LocalDevLanguageTeardown.sh",
     "production": "webpack --color --progress --config build/webpack.production.js",
     "production:serve": "webpack serve --color --progress --config build/webpack.production.js",
-    "production:sourcemap": "webpack --color --progress --config build/webpack.production.sourcemap.js",
-    "production:legacy": "webpack --color --progress --env.legacy --config build/webpack.production.js",
+    "production:legacy": "webpack --color --progress --env legacy --config build/webpack.production.js",
     "start": "webpack serve --color --progress --config build/webpack.development.js",
     "startPreprod": "npm run start -- --env.NUXEO_URL=\"https://preprod.firstvoices.com/nuxeo/\"  --env.CONTEXT_PATH=\"\"",
     "startDev": "npm run start -- --env.NUXEO_URL=\"https://dev.firstvoices.com/nuxeo/\"  --env.CONTEXT_PATH=\"\"",
@@ -172,7 +171,7 @@
     "webpack": "^5.11.0",
     "webpack-cli": "^4.2.0",
     "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^5.7.2",
+    "webpack-merge": "^5.7.3",
     "write-file-webpack-plugin": "^4.5.1"
   }
 }
