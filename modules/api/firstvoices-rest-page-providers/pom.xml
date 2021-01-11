@@ -150,6 +150,7 @@
       <artifactId>nuxeo-platform-user-registration-web</artifactId>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
 
   <build>

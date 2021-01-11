@@ -8,19 +8,85 @@
              point="providers">
 
 
-    <genericPageProvider name="PORTALS_LIST_SECTIONS_PP" class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider">
+    <genericPageProvider name="PORTALS_LIST_SECTIONS_PP"
+                         class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider">
       <property name="checkQueryCache">true</property>
       <pattern quoteParameters="false">SELECT * FROM FVPortal WHERE ecm:path STARTSWITH '/FV/sections' AND ecm:isTrashed
         =0 AND ecm:isVersion = 0
       </pattern>
     </genericPageProvider>
 
-    <genericPageProvider name="PORTALS_LIST_WORKSPACES_PP" class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider">
+    <genericPageProvider name="PORTALS_LIST_WORKSPACES_PP"
+                         class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider">
       <property name="checkQueryCache">true</property>
       <pattern quoteParameters="false">SELECT * FROM FVPortal WHERE ecm:path STARTSWITH '/FV/Workspaces' AND
         ecm:isTrashed =0 AND ecm:isVersion = 0
       </pattern>
     </genericPageProvider>
+
+    <!-- We also include queries for FVDialects so they can be factored into cache etags -->
+
+    <genericPageProvider name="DIALECTS_LIST_SECTIONS_PP"
+                         class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider">
+      <property name="checkQueryCache">true</property>
+      <pattern quoteParameters="false">SELECT * FROM FVDialect WHERE ecm:path STARTSWITH '/FV/sections' AND
+        ecm:isTrashed
+        =0 AND ecm:isVersion = 0
+      </pattern>
+    </genericPageProvider>
+
+    <genericPageProvider name="DIALECTS_LIST_WORKSPACES_PP"
+                         class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider">
+      <property name="checkQueryCache">true</property>
+      <pattern quoteParameters="false">SELECT * FROM FVDialect WHERE ecm:path STARTSWITH '/FV/Workspaces' AND
+        ecm:isTrashed =0 AND ecm:isVersion = 0
+      </pattern>
+    </genericPageProvider>
+
+
+    <!-- to be used by the `site` api, with the first having a match returning.
+     If we return a dialect, it will be mapped to the correct portal -->
+
+    <genericPageProvider name="PORTALS_FIND_PP_PRIORITY1"
+                         class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider">
+      <property name="checkQueryCache">true</property>
+      <pattern>SELECT * FROM FVDialect WHERE ecm:path STARTSWITH '/FV/sections' AND
+        ecm:isTrashed =0 AND ecm:isVersion = 0 AND fvdialect:short_url = ?
+      </pattern>
+    </genericPageProvider>
+
+    <genericPageProvider name="PORTALS_FIND_PP_PRIORITY2"
+                         class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider">
+      <property name="checkQueryCache">true</property>
+      <pattern>SELECT * FROM FVDialect WHERE ecm:path STARTSWITH '/FV/sections' AND
+        ecm:isTrashed =0 AND ecm:isVersion = 0 AND ecm:name = ?
+      </pattern>
+    </genericPageProvider>
+
+    <genericPageProvider name="PORTALS_FIND_PP_PRIORITY3"
+                         class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider">
+      <property name="checkQueryCache">true</property>
+      <pattern>SELECT * FROM FVDialect WHERE ecm:path STARTSWITH '/FV/sections' AND
+        ecm:isTrashed =0 AND ecm:isVersion = 0 AND dc:title = ?
+      </pattern>
+    </genericPageProvider>
+
+    <genericPageProvider name="PORTALS_FIND_PP_PRIORITY4"
+                         class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider">
+      <property name="checkQueryCache">true</property>
+      <pattern>SELECT * FROM FVDialect WHERE ecm:path STARTSWITH '/FV/sections' AND
+        ecm:isTrashed =0 AND ecm:isVersion = 0 AND ecm:uuid = ?
+      </pattern>
+    </genericPageProvider>
+
+    <genericPageProvider name="PORTAL_FOR_DIALECT_PP"
+                         class="org.nuxeo.elasticsearch.provider.ElasticSearchNxqlPageProvider">
+      <property name="checkQueryCache">true</property>
+      <pattern>SELECT * FROM FVPortal WHERE ecm:isTrashed =0 AND ecm:isVersion = 0 AND
+        ecm:ancestorId = ?
+      </pattern>
+    </genericPageProvider>
+
 
   </extension>
 

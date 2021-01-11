@@ -17,6 +17,7 @@ children:
           "greeting": "Welcome to the test language"
           "region": "Javaland"
           "country": "CA"
+          "short_url": "tdd1a"
         children:
           - type: FVDictionary
             name: "Dictionary"
