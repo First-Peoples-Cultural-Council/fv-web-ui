@@ -22,10 +22,7 @@ import ConfGlobal from 'common/conf/local.js'
 
 // REDUX
 import { Provider } from 'react-redux'
-import thunkMiddleware from 'redux-thunk'
-import { createStore, applyMiddleware, compose } from 'redux'
-
-import rootReducer from 'state/reducers'
+import store from 'state/store'
 
 // Views
 import AppWrapper from 'components/AppWrapper'
@@ -49,9 +46,6 @@ const context = {
     },
   },
 }
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-
-const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunkMiddleware)))
 
 // FW-1922: While this did not show any signs of slowing the page load
 // It may be worth finding a way to avoid using render multiple times
