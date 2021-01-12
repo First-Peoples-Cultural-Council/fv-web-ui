@@ -39,12 +39,12 @@ public class RemoveUsers {
       PathRef b = new PathRef("/FV/Workspaces/Data/Test");
 
       if (session.exists(a) || session.exists(b)) {
-        generateDialectUsersService.removeUsersForDialects(session, userManager);
+        generateDialectUsersService.removeUsersAndGroupsForDialects(session, userManager);
       } else {
         throw new IllegalArgumentException("/FV/Workspaces/Data/Test/Test/ must exist");
       }
     } else {
-      generateDialectUsersService.removeUsersForDialect(session, userManager, dialectName);
+      generateDialectUsersService.removeUsersAndGroupsForDialect(session, userManager, dialectName);
     }
   }
 }

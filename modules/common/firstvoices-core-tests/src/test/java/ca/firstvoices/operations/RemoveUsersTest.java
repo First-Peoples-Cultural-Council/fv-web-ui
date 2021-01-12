@@ -38,24 +38,15 @@ public class RemoveUsersTest extends AbstractFirstVoicesCoreTestsTest {
     params.put("dialectName", "Xx_Dialect_xX");
     automationService.run(ctx, GenerateUsers.ID, params);
 
-    List<String> existingUsers = userManager.getUserIds();
-    Assert.assertTrue(existingUsers.contains(dialect.getName() + "_members"));
-    Assert.assertTrue(existingUsers.contains(dialect.getName() + "_recorders"));
-    Assert.assertTrue(existingUsers.contains(dialect.getName() + "_recorders_with_approval"));
-    Assert.assertTrue(existingUsers.contains(dialect.getName() + "_language_administrators"));
+    // Confirm users and groups are created
+    Assert.assertEquals(4, userManager.searchUsers(dialect.getName()).size());
+    Assert.assertEquals(4, userManager.searchGroups(dialect.getName()).size());
 
     automationService.run(ctx, RemoveUsers.ID, params);
-    Assert.assertTrue(
-        userManager.getUsersInGroup(dialect.getName().toLowerCase() + "_members").isEmpty());
-    Assert.assertTrue(
-        userManager.getUsersInGroup(dialect.getName().toLowerCase() + "_recorders").isEmpty());
-    Assert.assertTrue(
-        userManager.getUsersInGroup(dialect.getName().toLowerCase() + "_recorders_with_approval")
-            .isEmpty());
-    Assert.assertTrue(
-        userManager.getUsersInGroup(dialect.getName().toLowerCase() + "_language_administrators")
-            .isEmpty());
 
+    // Confirm users and groups are removed
+    Assert.assertTrue(userManager.searchUsers(dialect.getName()).isEmpty());
+    Assert.assertTrue(userManager.searchGroups(dialect.getName()).isEmpty());
   }
 
   @Test
@@ -97,39 +88,22 @@ public class RemoveUsersTest extends AbstractFirstVoicesCoreTestsTest {
     automationService.run(ctx, GenerateUsers.ID);
 
     List<String> existingUsers = userManager.getUserIds();
-    Assert.assertTrue(existingUsers.contains(dialectA.getName() + "_members"));
-    Assert.assertTrue(existingUsers.contains(dialectA.getName() + "_recorders"));
-    Assert.assertTrue(existingUsers.contains(dialectA.getName() + "_recorders_with_approval"));
-    Assert.assertTrue(existingUsers.contains(dialectA.getName() + "_language_administrators"));
 
-    Assert.assertTrue(existingUsers.contains(dialectB.getName() + "_members"));
-    Assert.assertTrue(existingUsers.contains(dialectB.getName() + "_recorders"));
-    Assert.assertTrue(existingUsers.contains(dialectB.getName() + "_recorders_with_approval"));
-    Assert.assertTrue(existingUsers.contains(dialectB.getName() + "_language_administrators"));
+    // Confirm users and groups are created
+    Assert.assertEquals(4, userManager.searchUsers(dialectA.getName()).size());
+    Assert.assertEquals(4, userManager.searchUsers(dialectA.getName()).size());
+
+    Assert.assertEquals(4, userManager.searchGroups(dialectB.getName()).size());
+    Assert.assertEquals(4, userManager.searchGroups(dialectB.getName()).size());
 
     automationService.run(ctx, RemoveUsers.ID);
-    Assert.assertTrue(
-        userManager.getUsersInGroup(dialectA.getName().toLowerCase() + "_members").isEmpty());
-    Assert.assertTrue(
-        userManager.getUsersInGroup(dialectA.getName().toLowerCase() + "_recorders").isEmpty());
-    Assert.assertTrue(
-        userManager.getUsersInGroup(dialectA.getName().toLowerCase() + "_recorders_with_approval")
-            .isEmpty());
-    Assert.assertTrue(
-        userManager.getUsersInGroup(dialectA.getName().toLowerCase() + "_language_administrators")
-            .isEmpty());
 
-    Assert.assertTrue(
-        userManager.getUsersInGroup(dialectB.getName().toLowerCase() + "_members").isEmpty());
-    Assert.assertTrue(
-        userManager.getUsersInGroup(dialectB.getName().toLowerCase() + "_recorders").isEmpty());
-    Assert.assertTrue(
-        userManager.getUsersInGroup(dialectB.getName().toLowerCase() + "_recorders_with_approval")
-            .isEmpty());
-    Assert.assertTrue(
-        userManager.getUsersInGroup(dialectB.getName().toLowerCase() + "_language_administrators")
-            .isEmpty());
+    // Confirm users and groups are removed
+    Assert.assertTrue(userManager.searchUsers(dialectA.getName()).isEmpty());
+    Assert.assertTrue(userManager.searchUsers(dialectA.getName()).isEmpty());
 
+    Assert.assertTrue(userManager.searchGroups(dialectB.getName()).isEmpty());
+    Assert.assertTrue(userManager.searchGroups(dialectB.getName()).isEmpty());
   }
 
 }

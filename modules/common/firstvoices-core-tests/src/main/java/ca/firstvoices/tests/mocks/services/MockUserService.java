@@ -22,17 +22,18 @@ public interface MockUserService {
   void generateUsersForDialects(CoreSession session, UserManager userManager);
 
   /**
-   * Removes users from a given dialect
+   * Removes users and groups from a given dialect
    *
    * @param session     current session mock dialects are in
    * @param dialectName name of the dialect to remove users from
    */
-  void removeUsersForDialect(CoreSession session, UserManager userManager, String dialectName);
+  void removeUsersAndGroupsForDialect(CoreSession session,
+      UserManager userManager, String dialectName);
 
   /**
-   * Removes users from all dialects in the Test/Test directory
+   * Removes users and groups from all dialects in the Test/Test directory
    *
    * @param session current session mock dialects are in
    */
-  void removeUsersForDialects(CoreSession session, UserManager userManager);
+  void removeUsersAndGroupsForDialects(CoreSession session, UserManager userManager);
 }

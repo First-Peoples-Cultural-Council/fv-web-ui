@@ -5,7 +5,7 @@ services:
       - START_WITH_DATA=cypress_fixtures
   cypress:
     working_dir: /e2e
-    image: "cypress/included:6.2.0"
+    image: "cypress/included:6.2.1"
     depends_on:
       - frontend
       - nuxeo-backend
@@ -19,4 +19,4 @@ services:
     volumes:
       - '${PWD}/../frontend:/e2e'
       - '${PWD}/../frontend/cypress_CI.json:/e2e/cypress.json'
-    entrypoint: ["/bin/sh", "-c", "scripts/start_e2e_tests.sh"]
+    entrypoint: ["/bin/sh", "-c", "cypress/scripts/start_e2e_tests.sh"]

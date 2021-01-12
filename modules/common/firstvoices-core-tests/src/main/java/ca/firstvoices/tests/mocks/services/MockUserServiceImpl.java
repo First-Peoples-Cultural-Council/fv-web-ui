@@ -7,10 +7,12 @@ import static org.nuxeo.ecm.platform.usermanager.UserConfig.PASSWORD_COLUMN;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.SCHEMA_NAME;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.USERNAME_COLUMN;
 
+import java.util.HashSet;
 import java.util.List;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.NuxeoGroup;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 
@@ -37,22 +39,43 @@ public class MockUserServiceImpl implements MockUserService {
   }
 
   @Override
-  public void removeUsersForDialect(CoreSession session, UserManager userManager,
+  public void removeUsersAndGroupsForDialect(CoreSession session, UserManager userManager,
       String dialectName) {
     DocumentModelList usersToRemove = userManager.searchUsers(dialectName);
 
+    HashSet<String> groups = new HashSet<>();
+
     for (DocumentModel user : usersToRemove) {
+      if ("Guest".equals(user.getTitle())) {
+        // Skip Guest user
+        continue;
+      }
+
+      // Add to groups to be removed
+      List<String> groupNames = userManager.getPrincipal(user.getId()).getGroups();
+      if (groupNames != null && !groupNames.isEmpty()) {
+        groups.addAll(groupNames);
+      }
+
+      // Remove user
       userManager.deleteUser(user);
     }
 
+    // Remove all groups if they exist
+    for (String groupName : groups) {
+      NuxeoGroup group = userManager.getGroup(groupName);
+      if (group != null) {
+        userManager.deleteGroup(groupName);
+      }
+    }
   }
 
   @Override
-  public void removeUsersForDialects(CoreSession session, UserManager userManager) {
+  public void removeUsersAndGroupsForDialects(CoreSession session, UserManager userManager) {
     DocumentModelList mockDialects = session.query(
         "SELECT * FROM FVDialect WHERE ecm:path STARTSWITH '/FV/Workspaces/Data/Test/Test/'");
     for (DocumentModel dialect : mockDialects) {
-      removeUsersForDialect(session, userManager, dialect.getName());
+      removeUsersAndGroupsForDialect(session, userManager, dialect.getName());
     }
 
   }

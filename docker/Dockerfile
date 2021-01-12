@@ -14,7 +14,7 @@ RUN echo "deb http://httpredir.debian.org/debian jessie non-free" >> /etc/apt/so
 RUN apt-get update && apt-get install -y --no-install-recommends nano
 
 # Add prebuilt version of marketplace package
-ADD https://s3.ca-central-1.amazonaws.com/firstvoices.com/dist/core/${DIST_VERSION}/FirstVoices-marketplace-package-latest.zip /opt/nuxeo/server/tmp/ 
+ADD https://s3.ca-central-1.amazonaws.com/firstvoices.com/dist/core/${DIST_VERSION}/firstvoices-marketplace-package-latest.zip /opt/nuxeo/server/tmp/
 
 # No need to start Nuxeo here - will happen automatically.
 

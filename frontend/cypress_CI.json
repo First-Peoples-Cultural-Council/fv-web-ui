@@ -6,8 +6,7 @@
   "projectId": "CYPRESS_PROJECT_ID",
   "videoCompression": 0,
   "env": {
-    "TARGET": "http://nuxeo-backend:8080",
-    "FRONTEND": "http://fv-web-ui"
+    "FRONTEND": "http://frontend"
   },
   "viewportHeight": 660,
   "viewportWidth": 1000,

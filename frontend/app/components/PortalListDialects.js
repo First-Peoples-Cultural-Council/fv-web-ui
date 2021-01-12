@@ -24,7 +24,7 @@ import React, { Component } from 'react'
 // REDUX
 import { connect } from 'react-redux'
 import selectn from 'selectn'
-import NavigationHelpers from '../common/NavigationHelpers'
+import NavigationHelpers from 'common/NavigationHelpers'
 
 const { oneOfType, instanceOf, array, object, string, bool } = PropTypes
 

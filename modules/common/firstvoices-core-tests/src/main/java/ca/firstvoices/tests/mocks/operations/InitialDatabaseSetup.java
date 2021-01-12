@@ -29,14 +29,22 @@ import static org.nuxeo.ecm.platform.usermanager.UserConfig.PASSWORD_COLUMN;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.SCHEMA_NAME;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.USERNAME_COLUMN;
 
+import ca.firstvoices.tests.mocks.services.MockDialectService;
+import ca.firstvoices.tests.mocks.services.MockUserService;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import org.nuxeo.ecm.automation.AutomationService;
+import org.nuxeo.ecm.automation.OperationContext;
+import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
+import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.PathRef;
@@ -44,6 +52,7 @@ import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.impl.ACLImpl;
 import org.nuxeo.ecm.core.api.security.impl.ACPImpl;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  *
@@ -75,11 +84,15 @@ public class InitialDatabaseSetup {
   @Context
   protected UserManager userManager;
 
+  @Param(name = "generateData", required = false,
+      description = "Whether or not to generate dialects and data")
+  protected Boolean generateData = false;
+
   /*
     Create the proper folder structure.
  */
   @OperationMethod
-  public void run() {
+  public void run() throws OperationException {
 
     createNewDocument("Site", "Workspace", FV_WORKSPACES);
     createNewDocument("Site", "Section", FV_SECTIONS);
@@ -164,6 +177,42 @@ public class InitialDatabaseSetup {
       userDoc.setPropertyValue(GROUPS_COLUMN, groups);
       userDoc.setProperty(SCHEMA_NAME, EMAIL_COLUMN, "@.");
       userManager.createUser(userDoc);
+    }
+
+    /*
+        Generate dialect data if requested
+     */
+    if (Boolean.TRUE.equals(generateData)) {
+      /* Create test dialects */
+      MockDialectService generateDialectService = Framework
+          .getService(MockDialectService.class);
+
+      /* Create publicDialect */
+      DocumentModel publicDialect = generateDialectService
+          .generateMockDemoDialect(session, 30, "TestDialectPublic");
+
+      /* Create and Enable privateDialect */
+      DocumentModel privateDialect = generateDialectService
+          .generateMockDemoDialect(session, 30, "TestDialectPrivate");
+
+      session.followTransition(privateDialect, "Enable");
+
+      /* Generate test users for all dialects */
+      MockUserService generateDialectUsersService = Framework
+          .getService(MockUserService.class);
+
+      generateDialectUsersService
+          .generateUsersForDialects(session, userManager);
+
+      /* Publish publicDialect
+      This should always happen last so `wait-on` scripts can detect it */
+      OperationContext operation = new OperationContext(session);
+      operation.setInput(publicDialect);
+      Map<String, Object> params = new HashMap<>();
+      params.put("phase", "work");
+      params.put("batchSize", 1000);
+      AutomationService automation = Framework.getService(AutomationService.class);
+      automation.run(operation, "Publishing.PublishDialect", params);
     }
   }
 
