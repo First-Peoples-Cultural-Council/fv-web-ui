@@ -1,30 +1,30 @@
 module.exports = function babelConfig(api) {
   api.cache(true)
-  const presets = [
-    [
-      '@babel/preset-env',
-      {
-        targets: {
-          node: 'current',
-        },
-      },
-    ],
-    '@babel/preset-react',
-  ]
-  const plugins = [
-    // NOTE: Adding 'transform-class-properties' will break Cypress testing
-    '@babel/plugin-syntax-jsx',
-    ['@babel/plugin-proposal-decorators', { legacy: true }],
-    'dynamic-import-node',
-    '@babel/plugin-transform-runtime',
-  ]
   return {
-    presets,
-    plugins,
-    // TODO: FW-2056 - Are we using the env.test config?
+    // Note: env.test is used with Jest tests
+    // If presets/plugins is moved outside of env.test the website breaks
+    // ie: `extends.js?2998:3 Uncaught ReferenceError: exports is not defined`
+    // We configured presets/plugins for the website over in webpack.common
     env: {
       test: {
-        plugins: ['transform-class-properties', ['@babel/plugin-proposal-decorators', { legacy: true }]],
+        presets: [
+          [
+            '@babel/preset-env',
+            {
+              targets: {
+                node: 'current',
+              },
+            },
+          ],
+          '@babel/preset-react',
+        ],
+        plugins: [
+          '@babel/plugin-syntax-jsx',
+          '@babel/plugin-syntax-dynamic-import',
+          ['@babel/plugin-proposal-decorators', { legacy: true }],
+          ['@babel/plugin-proposal-class-properties', { loose: true }],
+          '@babel/plugin-transform-runtime',
+        ],
       },
     },
   }
