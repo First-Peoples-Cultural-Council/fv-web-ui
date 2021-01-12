@@ -157,6 +157,16 @@ CYPRESS_RECORD_KEY
 
 To run tests locally startup a local backend (see [this link](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/docker) for details).
 
+You can use the following command to create some test data:
+```
+$ npm run test:mockDataSetup:local
+```
+
+and the following command to remove that test data:
+```
+$ npm run test:mockDataTeardown:local
+```
+
 Launch the Cypress app (GUI) where you can run tests individually (recommended for creating new tests):
 
 ```
@@ -175,7 +185,7 @@ With debugging output enabled:
 $ npm run test:e2e:local:headless:debug
 ```
 
-#### Creating Cypress tests
+#### Creating Cypress tests (TODO: Needs Updating):
 
 The first thing to do when creating Cypress tests is to figure out if your test will need to create or change any backend data. If it does then you will need to use an existing test language or create a new one.
 
@@ -194,7 +204,7 @@ The following table shows the tests languages and how the current tests use them
 
 When you create a new test please update this table.
 
-##### Creating new data:
+##### Creating new data (TODO: Needs Updating):
 
 To create new data for use in tests you will have to add to the script located at [/frontend/cypress/scripts/TestDatabaseSetup.sh](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/blob/master/frontend/cypress/scripts/TestDatabaseSetup.sh) using the batch import tool, utils tool, and API endpoints, as needed.
 The script contains examples of how to do each of these, which can be copied with slight name changes. CSV files can be placed in the [/frontend/cypress/scripts/files directory](https://github.com/First-Peoples-Cultural-Council/fv-web-ui/tree/master/frontend/cypress/scripts/files).
