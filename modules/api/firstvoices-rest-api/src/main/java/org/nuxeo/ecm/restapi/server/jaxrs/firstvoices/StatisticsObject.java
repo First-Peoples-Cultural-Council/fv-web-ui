@@ -69,7 +69,7 @@ public class StatisticsObject extends DefaultObject {
 
     long lastHour = System.currentTimeMillis() / (3600 * 1000);
     String etag = EtagHelper.computeEtag(ByteBuffer.wrap(("" + principal.getName() + dialectPath
-        + +lastHour).getBytes()));
+        + lastHour).getBytes()));
 
     String ifNoneMatch = request.getHeader(HttpHeaders.IF_NONE_MATCH);
     if (ifNoneMatch != null && ifNoneMatch.equals(etag)) {
@@ -108,24 +108,21 @@ public class StatisticsObject extends DefaultObject {
     if (query != null) {
 
       // Total docs
-      queryToResult(session, query, 1, 0, true).ifPresent(count -> aggregate.put("total", count));
+      queryToResult(session, query).ifPresent(count -> aggregate.put("total", count));
 
       // By lifecycle
       final String[] lifeCycleStates = {"New", "Enabled", "Disabled", "Published"};
       for (String lcs : lifeCycleStates) {
         queryToResult(session,
-            query + " AND ecm:currentLifeCycleState='" + lcs + "'",
-            1,
-            0,
-            true).ifPresent(count -> aggregate.put(lcs.toLowerCase(), count));
+            query + " AND ecm:currentLifeCycleState='" + lcs
+                + "'").ifPresent(count -> aggregate.put(lcs.toLowerCase(), count));
       }
 
       // Children's archive
       queryToResult(session,
-          query + " AND fv:available_in_childrens_archive=1",
-          1,
-          0,
-          true).ifPresent(count -> aggregate.put("available_in_childrens_archive", count));
+          query + " AND fv:available_in_childrens_archive=1")
+          .ifPresent(count -> aggregate.put("available_in_childrens_archive",
+          count));
 
 
       // there are some preset ranges, but you can trivially add others by creating new
@@ -134,19 +131,16 @@ public class StatisticsObject extends DefaultObject {
         temporal.put(t, new HashMap<>());
 
         String createdQuery =
-            query + " AND dc:created > DATE '" + localDateToNXQLDate(t.getStart()) + "' AND"
-                + " dc:created <= DATE '" + localDateToNXQLDate(t.getEnd()) + "'";
-        queryToResult(session, createdQuery, 1, 0, true).ifPresent(count -> temporal
-            .get(t)
-            .put("created", count));
+            query + " AND dc:created > DATE '" + localDateToNXQLDate(t.getStart()) + "'";
+
+        Optional<BigDecimal> createdQueryResult = queryToResult(session, createdQuery);
+        createdQueryResult.ifPresent(count -> temporal.get(t).put("created", count));
 
         String modifiedQuery =
-            query + " AND dc:modified > DATE '" + localDateToNXQLDate(t.getStart()) + "' AND"
-                + " dc:modified <= DATE '" + localDateToNXQLDate(t.getEnd()) + "'";
+            query + " AND dc:modified > DATE '" + localDateToNXQLDate(t.getStart()) + "'";
 
-        queryToResult(session, modifiedQuery, 1, 0, true).ifPresent(count -> temporal
-            .get(t)
-            .put("modified", count));
+        Optional<BigDecimal> modifiedQueryResult = queryToResult(session, modifiedQuery);
+        modifiedQueryResult.ifPresent(count -> temporal.get(t).put("modified", count));
       }
     }
   }
@@ -191,10 +185,7 @@ public class StatisticsObject extends DefaultObject {
   private Optional<BigDecimal> queryToResult(CoreSession session, String query, Object... params) {
     BigDecimal result = null;
 
-    try (IterableQueryResult newDocs = session.queryAndFetch(query + " AND "
-            + "ecm:currentLifeCycleState='New'",
-        "NXQL",
-        params)) {
+    try (IterableQueryResult newDocs = session.queryAndFetch(query, "NXQL", params)) {
       for (Map<String, Serializable> a : newDocs) {
         if (a.containsKey("COUNT(ecm:uuid)")) {
           result = BigDecimal.valueOf((Long) a.get("COUNT(ecm:uuid)"));

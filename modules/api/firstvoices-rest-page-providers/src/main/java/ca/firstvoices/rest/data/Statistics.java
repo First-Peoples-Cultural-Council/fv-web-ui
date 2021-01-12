@@ -83,8 +83,8 @@ public class Statistics implements Serializable {
 
     public TemporalRange(final String friendlyName, TemporalAmount nowMinus) {
       this.friendlyName = friendlyName;
-      this.start = LocalDate.now();
-      this.end = this.start.minus(nowMinus);
+      this.end = LocalDate.now();
+      this.start = this.end.minus(nowMinus);
     }
 
     @Override
