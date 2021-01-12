@@ -65,7 +65,7 @@ jobs:
         if: steps.changed-backend.outputs.backend_files || steps.changed-frontend.outputs.frontend_files || steps.changed-package.outputs.package_files
         uses: actions/setup-node@v1
         with:
-          node-version: "12.18.3"
+          node-version: "13.12.0"
 
       # Setup the maven build caching (~/.m2/repository directory) to restore from or save to
       - name: Cache project build
