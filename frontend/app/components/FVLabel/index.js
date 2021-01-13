@@ -118,7 +118,6 @@ function FVLabel({
           anchorEl={anchorElement}
           open={!!anchorElement}
           onClose={handleClose}
-          onBlur={handleClose}
           getContentAnchorEl={null}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         >
