@@ -300,41 +300,29 @@ class ModalContent extends Component {
               </FVButton>
             )}
           </div>
-          {label.uid ? (
-            <div>
-              <button
-                type="submit"
-                onClick={() => {
-                  this.handleSave()
-                }}
-                className="RaisedButton"
-              >
-                Save
-              </button>
-              <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', _computeDialect2) }}>
-                <button
-                  style={{ marginLeft: '10px' }}
-                  type="submit"
-                  onClick={() => {
-                    this.handleSave(true)
-                  }}
-                  className="RaisedButton RaisedButton--primary"
-                >
-                  Publish Changes
-                </button>
-              </AuthorizationFilter>
-            </div>
-          ) : (
-            <button
-              type="submit"
+          <div>
+            <FVButton
+              style={{ marginRight: '5px' }}
+              variant="contained"
+              color="primary"
               onClick={() => {
                 this.handleSave()
               }}
-              className="RaisedButton RaisedButton--primary"
             >
               Save
-            </button>
-          )}
+            </FVButton>
+            <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', _computeDialect2) }}>
+              <FVButton
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  this.handleSave(true)
+                }}
+              >
+                Save & Publish
+              </FVButton>
+            </AuthorizationFilter>
+          </div>
         </DialogActions>
       </>
     )

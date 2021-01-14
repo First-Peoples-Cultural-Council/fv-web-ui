@@ -177,9 +177,10 @@ class LabelModal extends Component {
 
   handlePublish = (output, value) => {
     const { addNewLabelToIntl: updateIntl, handleClose, publishLabel: _publishLabel, label, intl } = this.props
+    const labelUid = label.uid ? label.uid : selectn('response.uid', output)
 
     _publishLabel(
-      label.uid,
+      labelUid,
       { value: value },
       null,
       intl.trans('views.hoc.view.x_published_successfully', 'Label Published Successfully!', 'first', ['Label'])
@@ -232,15 +233,15 @@ class LabelModal extends Component {
     const { loading } = this.state
     const computeEntities = label
       ? Immutable.fromJS([
-        {
-          id: label.uid,
-          entity: computeLabel,
-        },
-        {
-          id: dialectPath,
-          entity: computeDialect2,
-        },
-      ])
+          {
+            id: label.uid,
+            entity: computeLabel,
+          },
+          {
+            id: dialectPath,
+            entity: computeDialect2,
+          },
+        ])
       : null
     return (
       <div>
