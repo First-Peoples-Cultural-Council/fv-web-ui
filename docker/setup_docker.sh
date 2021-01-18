@@ -41,7 +41,7 @@ if [[ -z "$DIST_VERSION" ]]; then
 else
     echo -e "Building backend Docker image (using binary version $DIST_VERSION)"
     echo 
-    docker build -t me/nuxeo-dev --build-arg DIST_VERSION=$DIST_VERSION .
+    docker build --no-cache -t me/nuxeo-dev --build-arg DIST_VERSION=$DIST_VERSION .
 fi
 
 if [[ "$?" -ne 0 ]]; then
@@ -58,10 +58,10 @@ if [ "$1" == "--frontend" ] || [ "$2" == "--frontend" ] || [ "$3" == "--frontend
 
     if [[ -z "$DIST_VERSION" ]]; then
         echo 'Building backend Docker image (using latest binary version)'
-        docker build -t me/fv-web-ui .
+        docker build --no-cache -t me/fv-web-ui .
     else
         echo -e "Building backend Docker image (using binary version $DIST_VERSION)"
-        docker build -t me/fv-web-ui --build-arg DIST_VERSION=$DIST_VERSION .
+        docker build --no-cache -t me/fv-web-ui --build-arg DIST_VERSION=$DIST_VERSION .
     fi
 
     if [[ "$?" -ne 0 ]]; then

@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends apache2
 
 RUN mkdir -p /opt/fv/www/ && chown -R 1000:0 /opt/fv/www/ && chmod -R g+rwX /opt/fv/www/
 
+# Create directory for V2
+RUN mkdir -p /opt/fv/www/v2/ && chown -R 1000:0 /opt/fv/www/v2/ && chmod -R g+rwX /opt/fv/www/v2/
+
 RUN a2enmod headers && \
 a2enmod proxy && \
 a2enmod rewrite && \
@@ -20,7 +23,10 @@ a2enmod ssl
 # Add prebuilt version of marketplace package
 ADD https://s3.ca-central-1.amazonaws.com/firstvoices.com/dist/core/${DIST_VERSION}/public.tar.gz /app/
 # Tar retains folder structure, so we need to extract 2 layers deep
-RUN tar -C /opt/fv/www/ -xzf public.tar.gz --strip-components=2 && rm public.tar.gz
+RUN tar -C /opt/fv/www/ -xzf public.tar.gz --strip-components=2
+
+# Add prebuilt version of public artifact for v2 (for now copy)
+RUN tar -C /opt/fv/www/v2/ -xzf public.tar.gz --strip-components=2 && rm public.tar.gz
 
 COPY docker/apache2/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 
