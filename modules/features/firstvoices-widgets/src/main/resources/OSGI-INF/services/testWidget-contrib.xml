@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.features.widgets.services.widgetService.contrib" version="1.0">
+    <implementation class="ca.firstvoices.widgets.services.WidgetServiceImpl"/>
+
+    <service>
+        <provide interface="ca.firstvoices.widgets.services.WidgetService"/>
+    </service>
+</component>

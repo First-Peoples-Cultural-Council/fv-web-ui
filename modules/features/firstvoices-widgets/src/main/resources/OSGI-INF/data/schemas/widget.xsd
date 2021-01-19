@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema
+  xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/First-Voices/widget"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://www.nuxeo.org/ecm/project/schemas/First-Voices/widget">
+
+  <xs:simpleType name="widgetTypes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SimpleWidget" />
+      <xs:enumeration value="BasicWidget" />
+      <xs:enumeration value="ListWidget" />
+      <xs:enumeration value="GridWidget" />
+      <xs:enumeration value="AlphabetWidget" />
+      <xs:enumeration value="StatsWidget" />
+      <xs:enumeration value="ContactWidget" />
+      <xs:enumeration value="MapWidget" />
+      <xs:enumeration value="ScheduleWidget" /><!-- E.G. WOTD, POTD, etc... ? -->
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="widgetFormats">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Full" />
+      <xs:enumeration value="Abridged" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="dialect" type="xs:string"/>
+  <xs:element name="type" type="nxs:widgetTypes"/>
+  <xs:element name="format" type="nxs:widgetFormats"/>
+
+</xs:schema>

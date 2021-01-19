@@ -1,0 +1,11 @@
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
+Manifest-Version: 1.0
+Require-Bundle: org.nuxeo.runtime
+Bundle-Vendor: ca.firstvoices
+Bundle-Version: 1.0.0
+Bundle-Name: FirstVoicesLists
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: FirstVoicesLists
+Nuxeo-Component: OSGI-INF/services/addConfusables-contrib.xml,
+ OSGI-INF/ca.firstvoices.operations.xml

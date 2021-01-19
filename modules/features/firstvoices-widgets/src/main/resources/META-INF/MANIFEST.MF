@@ -1,0 +1,12 @@
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
+Manifest-Version: 1.0
+Require-Bundle: org.nuxeo.runtime
+Bundle-Vendor: ca.firstvoices
+Bundle-Version: 1.0.0
+Bundle-Name: FirstVoicesWidgets
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: FirstVoicesWidgets
+Nuxeo-Component: OSGI-INF/services/testWidget-contrib.xml,
+ OSGI-INF/data/widgets-contrib.xml,
+ OSGI-INF/ca.firstvoices.operations.xml
