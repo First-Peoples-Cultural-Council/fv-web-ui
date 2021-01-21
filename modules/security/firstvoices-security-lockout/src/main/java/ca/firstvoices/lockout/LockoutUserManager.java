@@ -13,7 +13,7 @@ import org.nuxeo.ecm.platform.usermanager.UserManagerImpl;
 
 public class LockoutUserManager extends UserManagerImpl {
 
-  WeakHashMap<String, LoginAttemptRecord> loginAttempts = new WeakHashMap<>();
+  private WeakHashMap<String, LoginAttemptRecord> loginAttempts = new WeakHashMap<>();
 
   @Override
   public boolean checkUsernamePassword(String username, String password) {
@@ -47,8 +47,8 @@ public class LockoutUserManager extends UserManagerImpl {
 
     private final ArrayList<Long> attempts = new ArrayList<>();
 
-    public static final long LOCK_TIME = 5 * 60 * 1000; // 5 minutes in ms
-    public static final long FAILED_ATTEMPTS_EXPIRY_TIME = 2 * 60 * 1000; // 2 minutes
+    public static final int LOCK_TIME = 5 * 60 * 1000; // 5 minutes in ms
+    public static final int FAILED_ATTEMPTS_EXPIRY_TIME = 2 * 60 * 1000; // 2 minutes
     public static final int FAILED_ATTEMPTS_TO_LOCK = 3;
 
     private Long lockedAt = null;
