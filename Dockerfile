@@ -23,10 +23,11 @@ a2enmod ssl
 # Add prebuilt version of marketplace package
 ADD https://s3.ca-central-1.amazonaws.com/firstvoices.com/dist/core/${DIST_VERSION}/public.tar.gz /app/
 # Tar retains folder structure, so we need to extract 2 layers deep
-RUN tar -C /opt/fv/www/ -xzf public.tar.gz --strip-components=2
+RUN tar -C /opt/fv/www/ -xzf public.tar.gz --strip-components=2 && rm public.tar.gz
 
 # Add prebuilt version of public artifact for v2 (for now copy)
-RUN tar -C /opt/fv/www/v2/ -xzf public.tar.gz --strip-components=2 && rm public.tar.gz
+ADD https://s3.ca-central-1.amazonaws.com/firstvoices.com/dist/core/${DIST_VERSION}/public_v2.tar.gz /app/
+RUN tar -C /opt/fv/www/v2/ -xzf public_v2.tar.gz --strip-components=3 && rm public_v2.tar.gz
 
 COPY docker/apache2/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 
