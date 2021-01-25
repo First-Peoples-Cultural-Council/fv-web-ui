@@ -52,9 +52,8 @@ public class OpenIDConnectProviderRegistryImpl extends DefaultComponent
   }
 
   @Override
-  public void registerContribution(Object contribution,
-                                   String extensionPoint,
-                                   ComponentInstance contributor) {
+  public void registerContribution(
+      Object contribution, String extensionPoint, ComponentInstance contributor) {
     if (PROVIDER_EP.equals(extensionPoint)) {
       OpenIDConnectProviderDescriptor provider = (OpenIDConnectProviderDescriptor) contribution;
 
@@ -116,32 +115,35 @@ public class OpenIDConnectProviderRegistryImpl extends DefaultComponent
 
       OAuth2ServiceProvider oauth2Provider = oauth2ProviderRegistry.getProvider(provider.getName());
 
-      if (oauth2Provider == null) {
-        oauth2Provider = oauth2ProviderRegistry.addProvider(provider.getName(),
-            provider.getDescription(),
-            provider.getTokenServerURL(),
-            provider.getAuthorizationServerURL(),
-            provider.getClientId(),
-            provider.getClientSecret(),
-            Arrays.asList(provider.getScopes()));
-      } else {
-        log.warn("Provider " + provider.getName()
-            + " is already in the Database, XML contribution  won't overwrite it");
+      if (oauth2Provider != null) {
+        // delete and recreate to pickup new config
+        oauth2ProviderRegistry.deleteProvider(provider.getName());
       }
-      providers.put(provider.getName(),
-          new OpenIDConnectProvider(oauth2Provider,
-              provider.getAccessTokenKey(),
-              provider.getUserInfoURL(),
-              provider.getUserInfoClass(),
-              provider.getIcon(),
-              provider.isEnabled(),
-              redirectUriResolver,
-              provider.getUserResolverClass(),
-              provider.getUserMapper(),
-              provider.getAuthenticationMethod()));
+
+      oauth2Provider = oauth2ProviderRegistry.addProvider(
+          provider.getName(),
+          provider.getDescription(),
+          provider.getTokenServerURL(),
+          provider.getAuthorizationServerURL(),
+          provider.getClientId(),
+          provider.getClientSecret(),
+          Arrays.asList(provider.getScopes()));
+
+      providers.put(provider.getName(), new OpenIDConnectProvider(
+          oauth2Provider,
+          provider.getAccessTokenKey(),
+          provider.getUserInfoURL(),
+          provider.getUserInfoClass(),
+          provider.getIcon(),
+          provider.isEnabled(),
+          redirectUriResolver,
+          provider.getUserResolverClass(),
+          provider.getUserMapper(),
+          provider.getAuthenticationMethod()));
 
       // contribute icon and link to the Login Screen
-      LoginScreenHelper.registerSingleProviderLoginScreenConfig(provider.getName(),
+      LoginScreenHelper.registerSingleProviderLoginScreenConfig(
+          provider.getName(),
           provider.getIcon(),
           provider.getUserInfoURL(),
           provider.getLabel(),
@@ -150,17 +152,17 @@ public class OpenIDConnectProviderRegistryImpl extends DefaultComponent
 
     } else {
       if (Framework.isTestModeSet()) {
-        providers.put(provider.getName(),
-            new OpenIDConnectProvider(null,
-                provider.getAccessTokenKey(),
-                provider.getUserInfoURL(),
-                provider.getUserInfoClass(),
-                provider.getIcon(),
-                provider.isEnabled(),
-                redirectUriResolver,
-                provider.getUserResolverClass(),
-                provider.getUserMapper(),
-                provider.getAuthenticationMethod()));
+        providers.put(provider.getName(), new OpenIDConnectProvider(
+            null,
+            provider.getAccessTokenKey(),
+            provider.getUserInfoURL(),
+            provider.getUserInfoClass(),
+            provider.getIcon(),
+            provider.isEnabled(),
+            redirectUriResolver,
+            provider.getUserResolverClass(),
+            provider.getUserMapper(),
+            provider.getAuthenticationMethod()));
       } else {
         log.error("Can not register OAuth Provider since OAuth Registry is not available");
       }
