@@ -20,7 +20,16 @@ module.exports = {
         test: /\.js?$/,
         loader: require.resolve('babel-loader'),
         options: {
-          presets: [require.resolve('@babel/preset-react')],
+          exclude: [/node_modules/],
+          presets: ['@babel/preset-react', '@babel/preset-env'],
+          plugins: [
+            [
+              '@babel/plugin-transform-runtime',
+              {
+                corejs: 3,
+              },
+            ],
+          ],
         },
       },
       {
