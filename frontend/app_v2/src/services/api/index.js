@@ -1,12 +1,6 @@
 import apiErrorHandler from 'services/api/apiErrorHandler'
 import { /*BASE_URL,*/ TIMEOUT } from 'services/api/config'
-// import ky from 'ky'
-const ky = () => {
-  return {
-    create: () => {},
-    get: () => {},
-  }
-}
+import ky from 'ky'
 const get = (path) => {
   const api = ky.create({
     timeout: TIMEOUT,
