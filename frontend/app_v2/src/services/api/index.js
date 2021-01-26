@@ -1,10 +1,10 @@
 import apiErrorHandler from 'services/api/apiErrorHandler'
 import { /*BASE_URL,*/ TIMEOUT } from 'services/api/config'
 import ky from 'ky'
+const api = ky.create({
+  timeout: TIMEOUT,
+})
 const get = (path) => {
-  const api = ky.create({
-    timeout: TIMEOUT,
-  })
   return (
     api
       // .get(`${BASE_URL}${path}`)
@@ -25,7 +25,5 @@ const get = (path) => {
 // }
 
 export default {
-  getSomethingSpecific: (path) => {
-    return get(path)
-  },
+  get,
 }

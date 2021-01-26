@@ -1,6 +1,7 @@
+import { useQuery } from 'react-query'
 import React from 'react'
 import PropTypes from 'prop-types'
-
+import api from 'services/api'
 import HeroBackground from 'components/About/hero-background.jpg'
 /**
  * @summary AboutData
@@ -12,6 +13,23 @@ import HeroBackground from 'components/About/hero-background.jpg'
  *
  */
 function AboutData({ children }) {
+  const url = 'https://api.github.com/repos/tannerlinsley/react-query'
+  const { isLoading, error, data } = useQuery(url, () => {
+    return api.get(url)
+  })
+  if (isLoading) {
+    // eslint-disable-next-line
+    console.log('LOADING', isLoading)
+  }
+  if (error) {
+    // eslint-disable-next-line
+    console.log('ERROR', error)
+  }
+  if (data) {
+    // eslint-disable-next-line
+    console.log('DATA', data)
+  }
+
   return children({
     hero: {
       background: HeroBackground,
