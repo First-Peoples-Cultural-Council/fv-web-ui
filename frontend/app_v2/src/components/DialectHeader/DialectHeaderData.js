@@ -10,8 +10,9 @@ import PropTypes from 'prop-types'
  *
  */
 function DialectHeaderData({ children }) {
+  const currentUser = { userInitials: 'GM' }
   return children({
-    log: 'Output from DialectHeaderData',
+    currentUser,
   })
 }
 // PROPTYPES

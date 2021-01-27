@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import DialectHeaderMenu from './DialectHeaderMenu'
 import DialectHeaderMobile from './DialectHeaderMobile'
 import FVToggle from 'components/FVToggle'
@@ -20,7 +20,7 @@ import ResourcesIcon from 'components/icons/ResourcesIcon'
  *
  * @returns {node} jsx markup
  */
-function DialectHeaderPresentation() {
+function DialectHeaderPresentation({ currentUser }) {
   const [mobileNavbarOpen, setMobileNavbarOpen] = useState(false)
   const [workspaceMode, setWorkspaceMode] = useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
@@ -95,7 +95,6 @@ function DialectHeaderPresentation() {
     },
     { title: 'Kids', icon: <KidsIcon styling={'fill-current h-12 w-8'} />, href: '/dialect/kids' },
   ]
-  const currentUser = { userInitials: 'GM' }
 
   const menus = menuData.map((menu) => (
     <DialectHeaderMenu
@@ -224,9 +223,9 @@ function DialectHeaderPresentation() {
   )
 }
 // PROPTYPES
-// const { string } = PropTypes
+const { object } = PropTypes
 DialectHeaderPresentation.propTypes = {
-  //   something: string,
+  currentUser: object,
 }
 
 export default DialectHeaderPresentation

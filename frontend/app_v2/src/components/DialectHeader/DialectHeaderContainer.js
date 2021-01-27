@@ -15,10 +15,8 @@ import DialectHeaderData from 'components/DialectHeader/DialectHeaderData'
 function DialectHeaderContainer() {
   return (
     <DialectHeaderData>
-      {({ log }) => {
-        // eslint-disable-next-line
-        console.log('DialectHeaderDataOutput', log)
-        return <DialectHeaderPresentation />
+      {({ currentUser }) => {
+        return <DialectHeaderPresentation currentUser={currentUser} />
       }}
     </DialectHeaderData>
   )
