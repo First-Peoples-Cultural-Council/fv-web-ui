@@ -1,9 +1,19 @@
+/* globals ENV_NUXEO_URL */
 import apiErrorHandler from 'services/api/apiErrorHandler'
 import { /*BASE_URL,*/ TIMEOUT } from 'services/api/config'
 import ky from 'ky'
 const api = ky.create({
   timeout: TIMEOUT,
 })
+
+// npm run start --env NUXEO_URL="http://0.0.0.0:3001/nuxeo/site"
+const getBaseURL = () => {
+  if (ENV_NUXEO_URL !== null && typeof ENV_NUXEO_URL !== 'undefined') {
+    return ENV_NUXEO_URL
+  }
+  const { protocol, hostname, port } = window.location
+  return `${protocol}//${hostname}${port ? `:${port}` : ''}/nuxeo`
+}
 const get = (path) => {
   return (
     api
@@ -26,4 +36,7 @@ const get = (path) => {
 
 export default {
   get,
+  getSections: (sitename) => {
+    return get(`${getBaseURL()}/api/v1/site/sections/${sitename}`)
+  },
 }
