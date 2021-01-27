@@ -1,4 +1,3 @@
-import { useQuery } from 'react-query'
 import React from 'react'
 import PropTypes from 'prop-types'
 import api from 'services/api'
@@ -24,26 +23,11 @@ export function adaptor(response) {
 }
 function AboutData({ children }) {
   const { language } = useSearchParams({ decode: [{ name: 'language', type: 'uri' }] })
-  const { /*isLoading, error,*/ data } = useQuery(['sections', language], () => {
-    return api.getSections(language)
-  })
-  // if (isLoading) {
-  //   // eslint-disable-next-line
-  //   console.log('LOADING', isLoading)
-  // }
-  // if (error) {
-  //   // eslint-disable-next-line
-  //   console.log('ERROR', error)
-  // }
-  // if (data) {
-  //   // eslint-disable-next-line
-  //   console.log('DATA', data)
-  // }
-
+  const { data } = api.getSections(language, adaptor)
   return children({
     hero: {
       background: HeroBackground,
-      foreground: data ? adaptor(data).title : 'OUR PEOPLE',
+      foreground: data ? data.title : 'OUR PEOPLE',
       foregroundIcon: '"icon"',
     },
     content: {
