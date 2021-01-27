@@ -1,17 +1,22 @@
 import { useLocation } from 'react-router-dom'
-// {
-//     defaultValues: {
-//         page: 1
-//     },
-//     decode: [{
-//         name: 'dialectName',
-//         type: 'uri'
-//     },{
-//         name: 'shouldSearch',
-//         type: 'bool'
-//     },]
-// }
-function useQuery({ defaultValues = {}, decode = [] } = {}) {
+/* Example
+useSearchParams({
+    defaultValues: {
+        pageSize: 1
+    },
+    decode: [{
+        name: 'dialectName',
+        type: 'uri'
+    },{
+        name: 'shouldSearch',
+        type: 'bool'
+    },{
+        name: 'page',
+        type: 'numb'
+    },]
+})
+*/
+function useSearchParams({ defaultValues = {}, decode = [] } = {}) {
   const { search } = useLocation()
   const searchObj = {}
   const toDecode = [
@@ -53,4 +58,4 @@ function useQuery({ defaultValues = {}, decode = [] } = {}) {
 
   // return new URLSearchParams(useLocation().search)
 }
-export default useQuery
+export default useSearchParams
