@@ -1,6 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-
+import { BrowserRouter as Router } from 'react-router-dom'
 import AppFrameContainer from './components/AppFrame/AppFrameContainer'
 
-ReactDOM.render(<AppFrameContainer />, document.getElementById('root'))
+ReactDOM.render(
+  <Router>
+    <AppFrameContainer />
+  </Router>,
+  document.getElementById('root')
+)
