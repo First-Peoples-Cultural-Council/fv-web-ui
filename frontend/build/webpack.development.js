@@ -7,7 +7,7 @@ const common = require('./webpack.common')
 module.exports = env => merge(common(env), {
   mode: 'development',
   output: {
-    publicPath: '/',
+    publicPath: 'http://0.0.0.0:3001/',
   },
   // See https://webpack.js.org/configuration/devtool/
   // Slow initial build, but gives ability to debug source code
