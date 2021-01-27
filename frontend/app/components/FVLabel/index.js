@@ -57,8 +57,8 @@ function FVLabel({
     }
   }, [])
 
-  const playAudio = (audioPath) => {
-    new Audio(NavigationHelpers.getBaseURL() + audioPath).play();
+  const playAudio = (pathToAudio) => {
+    new Audio(NavigationHelpers.getBaseURL() + pathToAudio).play()
   }
 
   const handleClick = (event) => {
@@ -97,46 +97,45 @@ function FVLabel({
     startEditingLabel(actualTransKey)
   }
 
-  const defaultLabel = <span className="fv-label">{translation}</span>;
+  const defaultLabel = <span className="fv-label">{translation}</span>
 
   if (isInHelpMode && (!usedFallback || isAdmin)) {
-
     // Only enable helper mode for available FVLabel objects
     const allLabels = selectn('directoryEntries.fv_labels', computeDirectory) || []
 
     const mappedLabel = allLabels.find((l) => {
       return l.value === transKey
-    });
+    })
 
     if (!mappedLabel) {
-      return defaultLabel;
+      return defaultLabel
     }
 
-    const translatedLabel = intl.trans(transKey, defaultStr, transform, params, prepend, append, locale);
-    const isTranslated = translatedLabel != translation;
+    const translatedLabel = intl.trans(transKey, defaultStr, transform, params, prepend, append, locale)
+    const isTranslated = translatedLabel != translation
 
-    let editMenu = '';
+    let editMenu = ''
 
     if (routeParams.area === WORKSPACES) {
       // Menu for editing users
-      editMenu = <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', actualDialect) }}>
-        <ListItem button onClick={openEdit}>
-          {isTranslated && (<div>
-            <Edit className="FlatButton__icon" />
-            <span className="fv-label-immersion-menu">
-              Edit translation
-            </span>
-          </div>
-          )}
-          {!isTranslated && (<div>
-            <Add className="FlatButton__icon" />
-            <span className="fv-label-immersion-menu">
-              Add translation
-        </span>
-          </div>
-          )}
-        </ListItem>
-      </AuthorizationFilter>;
+      editMenu = (
+        <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', actualDialect) }}>
+          <ListItem button onClick={openEdit}>
+            {isTranslated && (
+              <div>
+                <Edit className="FlatButton__icon" />
+                <span className="fv-label-immersion-menu">Edit translation</span>
+              </div>
+            )}
+            {!isTranslated && (
+              <div>
+                <Add className="FlatButton__icon" />
+                <span className="fv-label-immersion-menu">Add translation</span>
+              </div>
+            )}
+          </ListItem>
+        </AuthorizationFilter>
+      )
     }
 
     // Helper mode activated

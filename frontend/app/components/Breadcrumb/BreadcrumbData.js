@@ -60,22 +60,17 @@ function BreadcrumbData({ children, matchedPage, routes }) {
   const mapTraslationKey = function (pathKey) {
     switch (pathKey) {
       case 'learn':
-        return 'views.pages.explore.dialect.learn_our_language';
-        break;
+        return 'views.pages.explore.dialect.learn_our_language'
       case 'gallery':
-        return 'views.pages.explore.dialect.photo_gallery';
-        break;
+        return 'views.pages.explore.dialect.photo_gallery'
       case 'kids':
-        return 'views.pages.explore.dialect.kids_portal';
-        break;
+        return 'views.pages.explore.dialect.kids_portal'
       case 'play':
-        return 'views.pages.explore.dialect.play_game';
-        break;
+        return 'views.pages.explore.dialect.play_game'
       default:
         // If general does not exist, FVLabel will fall back to default string
-        return "general." + pathKey;
+        return 'general.' + pathKey
     }
-
   }
 
   useEffect(() => {
@@ -111,7 +106,7 @@ function BreadcrumbData({ children, matchedPage, routes }) {
       splitPathIndex >= indexDialect // Omits Language and Language Family from breadcrumb
     ) {
       const pathTitle = findReplace ? splitPathItem.replace(findReplace.find, findReplace.replace) : splitPathItem
-      const decodedPathTitle = decodeURIComponent(pathTitle).replace('&amp;', '&');
+      const decodedPathTitle = decodeURIComponent(pathTitle).replace('&amp;', '&')
 
       const DialectHomePage = splitPathIndex === indexDialect ? intl.trans('home_page', 'Home Page') : ''
       let hrefPath = '/' + splitPath.slice(0, splitPathIndex + 1).join('/')
@@ -129,17 +124,17 @@ function BreadcrumbData({ children, matchedPage, routes }) {
           splitPathIndex === splitPath.length - 1 ? (
             breadcrumbItemTitle
           ) : (
-              <a
-                key={splitPathIndex}
-                href={hrefPath}
-                onClick={(e) => {
-                  e.preventDefault()
-                  NavigationHelpers.navigate(hrefPath, pushWindowPath, false)
-                }}
-              >
-                {breadcrumbItemTitle}
-              </a>
-            )
+            <a
+              key={splitPathIndex}
+              href={hrefPath}
+              onClick={(e) => {
+                e.preventDefault()
+                NavigationHelpers.navigate(hrefPath, pushWindowPath, false)
+              }}
+            >
+              {breadcrumbItemTitle}
+            </a>
+          )
 
         return (
           <li
