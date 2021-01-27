@@ -16,7 +16,7 @@ exports[`HeroPresentation Renders "left" variant 1`] = `
   class="
       flex
       justify-center
-      text-white h-96
+      text-white py-8
     "
   data-testid="HeroPresentation"
 >
@@ -25,11 +25,9 @@ exports[`HeroPresentation Renders "left" variant 1`] = `
             flex
             flex-grow
             flex-initial
-            font-bold
             items-center
             max-w-screen-xl
             px-8
-            text-4xl
             flex-row justify-start
           "
     data-testid="HeroPresentation__foreground"
