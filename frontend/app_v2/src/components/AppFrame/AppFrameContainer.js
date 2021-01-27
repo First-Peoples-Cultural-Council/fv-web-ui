@@ -1,7 +1,6 @@
 import React from 'react'
-import { BrowserRouter as Router, Switch, Route, Link /*, useRouteMatch*/ } from 'react-router-dom'
+import { Switch, Route, Link } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from 'react-query'
-
 import 'tailwindcss/tailwind.css'
 import './AppFrame.css'
 import About from 'components/About'
@@ -20,34 +19,32 @@ const queryClient = new QueryClient()
 function AppFrameContainer() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <div className="AppFrame">
-          <Header.Container className="AppV2__header" />
-          {/* Sample nav for header */}
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/about">About</Link>
-              </li>
-            </ul>
-          </nav>
-          <main role="main">
-            <Suspender>
-              <Switch>
-                <Route path="/about">
-                  <About.Container />
-                </Route>
-                <Route path="/">
-                  <Home />
-                </Route>
-              </Switch>
-            </Suspender>
-          </main>
-        </div>
-      </Router>
+      <div className="AppFrame">
+        <Header.Container className="AppV2__header" />
+        {/* Sample nav for header */}
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/about?language=ÜgwÛ">About</Link>
+            </li>
+          </ul>
+        </nav>
+        <main role="main">
+          <Suspender>
+            <Switch>
+              <Route path="/about">
+                <About.Container />
+              </Route>
+              <Route path="/">
+                <Home />
+              </Route>
+            </Switch>
+          </Suspender>
+        </main>
+      </div>
     </QueryClientProvider>
   )
 }
