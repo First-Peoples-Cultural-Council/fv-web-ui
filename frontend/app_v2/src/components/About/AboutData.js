@@ -3,6 +3,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import api from 'services/api'
 import HeroBackground from 'components/About/hero-background.jpg'
+import useSearchParams from 'common/useSearchParams'
+
 /**
  * @summary AboutData
  * @version 1.0.1
@@ -12,28 +14,36 @@ import HeroBackground from 'components/About/hero-background.jpg'
  * @param {function} props.children
  *
  */
+export function adaptor(response) {
+  const { title, uid, path } = response
+  return {
+    title,
+    uid,
+    path,
+  }
+}
 function AboutData({ children }) {
-  const url = 'https://api.github.com/repos/tannerlinsley/react-query'
-  const { isLoading, error, data } = useQuery(url, () => {
-    return api.get(url)
+  const { language } = useSearchParams({ decode: [{ name: 'language', type: 'uri' }] })
+  const { /*isLoading, error,*/ data } = useQuery(['sections', language], () => {
+    return api.getSections(language)
   })
-  if (isLoading) {
-    // eslint-disable-next-line
-    console.log('LOADING', isLoading)
-  }
-  if (error) {
-    // eslint-disable-next-line
-    console.log('ERROR', error)
-  }
-  if (data) {
-    // eslint-disable-next-line
-    console.log('DATA', data)
-  }
+  // if (isLoading) {
+  //   // eslint-disable-next-line
+  //   console.log('LOADING', isLoading)
+  // }
+  // if (error) {
+  //   // eslint-disable-next-line
+  //   console.log('ERROR', error)
+  // }
+  // if (data) {
+  //   // eslint-disable-next-line
+  //   console.log('DATA', data)
+  // }
 
   return children({
     hero: {
       background: HeroBackground,
-      foreground: 'OUR PEOPLE',
+      foreground: data ? adaptor(data).title : 'OUR PEOPLE',
       foregroundIcon: '"icon"',
     },
     content: {
