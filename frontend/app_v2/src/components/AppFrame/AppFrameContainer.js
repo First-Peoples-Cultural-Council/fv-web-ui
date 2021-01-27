@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch } from 'rea
 
 import './AppFrame.css'
 import Header from 'components/Header'
+import DialectHeader from 'components/DialectHeader'
 
 /**
  * @summary AppFrameContainer
@@ -18,6 +19,7 @@ function AppFrameContainer() {
     <Router>
       <div className="AppFrame">
         <Header.Container className="AppV2__header" />
+        <DialectHeader.Container />
         {/* Sample nav for header */}
         <nav>
           <ul>
