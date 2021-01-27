@@ -2,6 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import ChevronDownIcon from 'components/icons/ChevronDownIcon'
+import AboutIcon from 'components/icons/AboutIcon'
+import DictionaryIcon from 'components/icons/DictionaryIcon'
+import KidsIcon from 'components/icons/KidsIcon'
+import LearnIcon from 'components/icons/LearnIcon'
+import ResourcesIcon from 'components/icons/ResourcesIcon'
 
 /**
  * @summary DialectHeaderMenu
@@ -12,9 +17,27 @@ import ChevronDownIcon from 'components/icons/ChevronDownIcon'
  *
  * @returns {node} jsx markup
  */
-function DialectHeaderMenu({ title, icon, itemsData, href }) {
+function DialectHeaderMenu({ title, itemsData, href }) {
   const [isOpen, setIsOpen] = useState(false)
   const hasItems = !Array.isArray(itemsData) || !itemsData.length ? false : true
+
+  const getIcon = (menuTitle) => {
+    const iconStyling = 'fill-current h-12 w-8'
+    switch (menuTitle) {
+      case 'About':
+        return <AboutIcon styling={iconStyling} />
+      case 'Dictionary':
+        return <DictionaryIcon styling={iconStyling} />
+      case 'Kids':
+        return <KidsIcon styling={iconStyling} />
+      case 'Learn':
+        return <LearnIcon styling={iconStyling} />
+      case 'Resources':
+        return <ResourcesIcon styling={iconStyling} />
+      default:
+        return null
+    }
+  }
 
   const menuItems = itemsData
     ? itemsData.map((menuItem) => (
@@ -65,7 +88,7 @@ function DialectHeaderMenu({ title, icon, itemsData, href }) {
         // onBlur={() => setIsOpen(false)}
         className="group p-2 bg-fv-charcoal rounded-md  inline-flex items-center text-lg font-medium text-white hover:text-gray-100 focus:outline-none"
       >
-        {icon}
+        {getIcon(title)}
         <p className="ml-3 mr-2">{title}</p>
         {hasItems ? <ChevronDownIcon styling={'fill-current h-8'} /> : null}
       </button>

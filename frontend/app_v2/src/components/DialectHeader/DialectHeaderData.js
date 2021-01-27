@@ -10,9 +10,46 @@ import PropTypes from 'prop-types'
  *
  */
 function DialectHeaderData({ children }) {
+  const dialectPath = '/DIALECT_PATH_GOES_HERE'
   const currentUser = { userInitials: 'GM' }
+  const menuData = [
+    {
+      title: 'Dictionary',
+      itemsData: [
+        { title: 'Words', href: `${dialectPath}/words` },
+        { title: 'Phrases', href: `${dialectPath}/phrases` },
+        { title: 'Alphabet', href: `${dialectPath}/alphabet` },
+        { title: 'Browse by Topic', href: `${dialectPath}/topics` },
+      ],
+    },
+    {
+      title: 'Learn',
+      itemsData: [
+        { title: 'Songs', href: `${dialectPath}/songs` },
+        { title: 'Stories', href: `${dialectPath}/stories` },
+        { title: 'Games', href: `${dialectPath}/games` },
+      ],
+    },
+    {
+      title: 'Resources',
+      itemsData: [
+        { title: 'Kids Site', href: `${dialectPath}/kids` },
+        { title: 'Mobile App', href: `${dialectPath}/app` },
+        { title: 'Keyboard App', href: `${dialectPath}/keyboard` },
+      ],
+    },
+    {
+      title: 'About',
+      itemsData: [
+        { title: 'Our Language', href: `${dialectPath}/ourlanguage` },
+        { title: 'Our People', href: `${dialectPath}/ourpeople` },
+      ],
+    },
+    { title: 'Kids', href: `${dialectPath}/kids` },
+  ]
   return children({
     currentUser,
+    menuData,
   })
 }
 // PROPTYPES

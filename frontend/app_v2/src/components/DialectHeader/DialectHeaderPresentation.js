@@ -5,11 +5,6 @@ import DialectHeaderMobile from './DialectHeaderMobile'
 import FVToggle from 'components/FVToggle'
 
 import Logo from 'components/icons/Logo'
-import AboutIcon from 'components/icons/AboutIcon'
-import DictionaryIcon from 'components/icons/DictionaryIcon'
-import KidsIcon from 'components/icons/KidsIcon'
-import LearnIcon from 'components/icons/LearnIcon'
-import ResourcesIcon from 'components/icons/ResourcesIcon'
 
 /**
  * @summary DialectHeaderPresentation
@@ -20,7 +15,7 @@ import ResourcesIcon from 'components/icons/ResourcesIcon'
  *
  * @returns {node} jsx markup
  */
-function DialectHeaderPresentation({ currentUser }) {
+function DialectHeaderPresentation({ currentUser, menuData }) {
   const [mobileNavbarOpen, setMobileNavbarOpen] = useState(false)
   const [workspaceMode, setWorkspaceMode] = useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
@@ -56,51 +51,11 @@ function DialectHeaderPresentation({ currentUser }) {
 
   // Hardcoding menu data temporarily
   // TODO: Store menu data on dialect
-  const menuData = [
-    {
-      title: 'Dictionary',
-      icon: <DictionaryIcon styling={'fill-current h-12 w-8'} />,
-      itemsData: [
-        { title: 'Words', href: '/dialect/words' },
-        { title: 'Phrases', href: '/dialect/phrases' },
-        { title: 'Alphabet', href: '/dialect/alphabet' },
-        { title: 'Browse by Topic', href: '/dialect/topics' },
-      ],
-    },
-    {
-      title: 'Learn',
-      icon: <LearnIcon styling={'fill-current h-12 w-8'} />,
-      itemsData: [
-        { title: 'Songs', href: '/dialect/songs' },
-        { title: 'Stories', href: '/dialect/stories' },
-        { title: 'Games', href: '/dialect/games' },
-      ],
-    },
-    {
-      title: 'Resources',
-      icon: <ResourcesIcon styling={'fill-current h-12 w-8'} />,
-      itemsData: [
-        { title: 'Kids Site', href: '/dialect/kids' },
-        { title: 'Mobile App', href: '/dialect/app' },
-        { title: 'Keyboard App', href: '/dialect/keyboard' },
-      ],
-    },
-    {
-      title: 'About',
-      icon: <AboutIcon styling={'fill-current h-12 w-8'} />,
-      itemsData: [
-        { title: 'Our Language', href: '/dialect/ourlanguage' },
-        { title: 'Our People', href: '/dialect/ourpeople' },
-      ],
-    },
-    { title: 'Kids', icon: <KidsIcon styling={'fill-current h-12 w-8'} />, href: '/dialect/kids' },
-  ]
 
   const menus = menuData.map((menu) => (
     <DialectHeaderMenu
       key={`DialectHeaderMenu_${menu.title}`}
       title={menu.title}
-      icon={menu.icon}
       itemsData={menu.itemsData}
       href={menu.href ? menu.href : null}
     />
@@ -223,9 +178,10 @@ function DialectHeaderPresentation({ currentUser }) {
   )
 }
 // PROPTYPES
-const { object } = PropTypes
+const { array, object } = PropTypes
 DialectHeaderPresentation.propTypes = {
   currentUser: object,
+  menuData: array,
 }
 
 export default DialectHeaderPresentation

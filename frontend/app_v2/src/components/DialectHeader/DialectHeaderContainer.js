@@ -15,8 +15,8 @@ import DialectHeaderData from 'components/DialectHeader/DialectHeaderData'
 function DialectHeaderContainer() {
   return (
     <DialectHeaderData>
-      {({ currentUser }) => {
-        return <DialectHeaderPresentation currentUser={currentUser} />
+      {({ currentUser, menuData }) => {
+        return <DialectHeaderPresentation currentUser={currentUser} menuData={menuData} />
       }}
     </DialectHeaderData>
   )
