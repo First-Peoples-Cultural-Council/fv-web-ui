@@ -15,12 +15,11 @@ import ContentData from 'components/Content/ContentData'
 function ContentContainer() {
   return (
     <ContentData>
-      {(ContentDataOutput) => {
-        // TODO FW-Content
-        // eslint-disable-next-line
-        console.log('ContentDataOutput', ContentDataOutput)
-        return <ContentPresentation />
-      }}
+      {
+        (/*ContentDataOutput*/) => {
+          return <ContentPresentation />
+        }
+      }
     </ContentData>
   )
 }

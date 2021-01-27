@@ -15,12 +15,11 @@ import HeroData from 'components/Hero/HeroData'
 function HeroContainer() {
   return (
     <HeroData>
-      {(HeroDataOutput) => {
-        // TODO FW-Hero
-        // eslint-disable-next-line
-        console.log('HeroDataOutput', HeroDataOutput)
-        return <HeroPresentation />
-      }}
+      {
+        (/*HeroDataOutput*/) => {
+          return <HeroPresentation />
+        }
+      }
     </HeroData>
   )
 }

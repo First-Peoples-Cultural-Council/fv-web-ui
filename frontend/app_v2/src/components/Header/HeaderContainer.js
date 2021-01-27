@@ -1,5 +1,5 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import HeaderPresentation from 'components/Header/HeaderPresentation'
 import HeaderData from 'components/Header/HeaderData'
 
@@ -15,19 +15,18 @@ import HeaderData from 'components/Header/HeaderData'
 function HeaderContainer({ children }) {
   return (
     <HeaderData>
-      {(HeaderDataOutput) => {
-        // TODO FW-Header
-        // eslint-disable-next-line
-        console.log('HeaderDataOutput', HeaderDataOutput)
-        return <HeaderPresentation>{children}</HeaderPresentation>
-      }}
+      {
+        (/*HeaderDataOutput*/) => {
+          return <HeaderPresentation>{children}</HeaderPresentation>
+        }
+      }
     </HeaderData>
   )
 }
 // PROPTYPES
-// const { string } = PropTypes
+const { node } = PropTypes
 HeaderContainer.propTypes = {
-  //   something: string,
+  children: node,
 }
 
 export default HeaderContainer
