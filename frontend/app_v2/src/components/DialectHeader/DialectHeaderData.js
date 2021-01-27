@@ -11,7 +11,9 @@ import PropTypes from 'prop-types'
  */
 function DialectHeaderData({ children }) {
   const dialectPath = '/DIALECT_PATH_GOES_HERE'
-  const currentUser = { userInitials: 'GM' }
+  // Note: change dialectName variable to a language name on your local docker
+  const dialectName = 'ÜgwÛ'
+  const currentUser = { userInitials: 'TU' }
   const menuData = [
     {
       title: 'Dictionary',
@@ -42,7 +44,7 @@ function DialectHeaderData({ children }) {
       title: 'About',
       itemsData: [
         { title: 'Our Language', href: `${dialectPath}/ourlanguage` },
-        { title: 'Our People', href: `${dialectPath}/ourpeople` },
+        { title: 'Our People', href: `/about?language=${dialectName}` },
       ],
     },
     { title: 'Kids', href: `${dialectPath}/kids` },

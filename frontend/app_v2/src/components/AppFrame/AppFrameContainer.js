@@ -18,10 +18,10 @@ import DialectHeader from 'components/DialectHeader'
 function AppFrameContainer() {
   return (
     <div className="AppFrame">
-      <DialectHeader.Container />
       <Header.Container className="AppV2__header" />
       {/* Sample nav for header */}
       <nav>
+        <DialectHeader.Container />
         <ul>
           <li>
             <Link to="/">Home</Link>

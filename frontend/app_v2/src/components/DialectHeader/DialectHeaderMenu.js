@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import ChevronDownIcon from 'components/icons/ChevronDownIcon'
@@ -42,11 +43,11 @@ function DialectHeaderMenu({ title, itemsData, href }) {
   const menuItems = itemsData
     ? itemsData.map((menuItem) => (
         <div key={`HeaderMenu_${menuItem.title}`}>
-          <a href={menuItem.href} className="-m-3 py-1 flex items-start rounded-lg hover:bg-gray-50">
+          <Link to={menuItem.href} className="-m-3 py-1 flex items-start rounded-lg hover:bg-gray-50">
             <div className="ml-4">
               <p className="text-lg font-medium text-black">{menuItem.title}</p>
             </div>
-          </a>
+          </Link>
         </div>
       ))
     : null
@@ -85,7 +86,6 @@ function DialectHeaderMenu({ title, itemsData, href }) {
       <button
         type="button"
         onClick={() => onMenuClick()}
-        // onBlur={() => setIsOpen(false)}
         className="group p-2 bg-fv-charcoal rounded-md  inline-flex items-center text-lg font-medium text-white hover:text-gray-100 focus:outline-none"
       >
         {getIcon(title)}
