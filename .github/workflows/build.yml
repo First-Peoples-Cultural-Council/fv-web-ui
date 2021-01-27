@@ -21,6 +21,7 @@ jobs:
         with:
           frontend_files: |
             frontend/app/**
+            frontend/app_v2/**
             frontend/build/**
             frontend/gulpfile.js/**
             frontend/nuxeo/**
