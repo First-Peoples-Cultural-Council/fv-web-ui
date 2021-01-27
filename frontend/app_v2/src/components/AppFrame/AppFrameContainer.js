@@ -6,7 +6,7 @@ import 'tailwindcss/tailwind.css'
 import './AppFrame.css'
 import About from 'components/About'
 import Suspender from 'components/Suspender'
-
+import Header from 'components/Header'
 const queryClient = new QueryClient()
 /**
  * @summary AppFrameContainer
@@ -22,7 +22,7 @@ function AppFrameContainer() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <div className="AppFrame">
-          {/* <Header.Container className="AppV2__header" /> */}
+          <Header.Container className="AppV2__header" />
           {/* Sample nav for header */}
           <nav>
             <ul>
