@@ -1,7 +1,8 @@
 /* globals ENV_NUXEO_URL */
 import apiErrorHandler from 'services/api/apiErrorHandler'
-import { /*BASE_URL,*/ TIMEOUT } from 'services/api/config'
+import { useQuery } from 'react-query'
 import ky from 'ky'
+import { /*BASE_URL,*/ TIMEOUT } from 'services/api/config'
 const api = ky.create({
   timeout: TIMEOUT,
 })
@@ -36,7 +37,14 @@ const get = (path) => {
 
 export default {
   get,
-  getSections: (sitename) => {
-    return get(`${getBaseURL()}/api/v1/site/sections/${sitename}`)
+  getSections: (sitename, dataAdaptor) => {
+    const { isLoading, error, data } = useQuery(['sections', sitename], () => {
+      return get(`${getBaseURL()}/api/v1/site/sections/${sitename}`)
+    })
+    if (isLoading === false && error === null && data && dataAdaptor) {
+      const transformedData = dataAdaptor(Object.assign({}, data))
+      return { isLoading, error, data: transformedData, dataOriginal: data }
+    }
+    return { isLoading, error, data, dataOriginal: data }
   },
 }
