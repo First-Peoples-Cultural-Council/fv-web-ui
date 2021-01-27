@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 /**
- * @summary DialectHeaderPresentation
+ * @summary AboutIcon
  * @version 1.0.1
  * @component
  *

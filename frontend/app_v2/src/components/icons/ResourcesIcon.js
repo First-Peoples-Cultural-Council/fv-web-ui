@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 /**
- * @summary DialectHeaderPresentation
+ * @summary ResourcesIcon
  * @version 1.0.1
  * @component
  *
@@ -9,7 +9,7 @@ import PropTypes from 'prop-types'
  *
  * @returns {node} jsx markup
  */
-function LearnIcon({ styling }) {
+function ResourcesIcon({ styling }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -28,8 +28,8 @@ function LearnIcon({ styling }) {
 }
 // PROPTYPES
 const { string } = PropTypes
-LearnIcon.propTypes = {
+ResourcesIcon.propTypes = {
   styling: string,
 }
 
-export default LearnIcon
+export default ResourcesIcon

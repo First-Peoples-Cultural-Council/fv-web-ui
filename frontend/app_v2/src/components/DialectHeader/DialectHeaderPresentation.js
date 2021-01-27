@@ -5,6 +5,8 @@ import DialectHeaderMobile from './DialectHeaderMobile'
 import FVToggle from 'components/FVToggle'
 
 import Logo from 'components/icons/Logo'
+import HamburgerMenuIcon from 'components/icons/HamburgerMenuIcon'
+import CloseIcon from 'components/icons/CloseIcon'
 
 /**
  * @summary DialectHeaderPresentation
@@ -147,21 +149,7 @@ function DialectHeaderPresentation({ currentUser, menuData }) {
               className="bg-fv-charcoal rounded-md p-2 inline-flex items-center justify-center text-white hover:text-gray-100 focus:outline-none"
             >
               <span className="sr-only">Open menu</span>
-              <svg
-                className="h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                {mobileNavbarOpen ? (
-                  // X icon
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  // Hamburger menu icon
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
+              {mobileNavbarOpen ? <CloseIcon styling={'h-6 w-6'} /> : <HamburgerMenuIcon styling={'h-6 w-6'} />}
             </button>
           </div>
         </div>
