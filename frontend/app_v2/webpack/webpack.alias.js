@@ -7,6 +7,7 @@ module.exports = {
   src: paths.src,
   images: paths.pubImages,
   services: paths.services,
+  common: paths.common,
   //   common: path.resolve(src, 'common'),
   //   qa: path.resolve(src, 'qa'),
   //   state: sourceStateDirectory,
