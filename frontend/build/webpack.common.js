@@ -33,6 +33,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const GitRevisionPlugin = require('git-revision-webpack-plugin')
+const { ModuleFederationPlugin } = require('webpack').container
 
 const gitRevisionPlugin = new GitRevisionPlugin({
   lightweightTags: true,
@@ -113,13 +114,6 @@ module.exports = (env) => ({
   },
 
   /**
-   * Optimizations
-   */
-  optimization: {
-    runtimeChunk: 'multiple',
-  },
-
-  /**
    * The top-level output key contains set of options instructing
    * webpack on how and where it should output your bundles,
    * assets and anything else you bundle or load with webpack.
@@ -181,6 +175,18 @@ module.exports = (env) => ({
       ENV_NUXEO_URL: env && env.NUXEO_URL ? JSON.stringify(env.NUXEO_URL) : null,
       ENV_WEB_URL: env && env.WEB_URL ? JSON.stringify(env.WEB_URL) : null,
       ENV_CONTEXT_PATH: env && env.CONTEXT_PATH ? JSON.stringify(env.CONTEXT_PATH) : null,
+    }),
+    new ModuleFederationPlugin({
+      name: 'app_v1',
+      library: { type: 'var', name: 'app_v1' },
+      filename: 'remoteEntry.js',
+      // exposes: {
+      //   './Component': 'components/Component',
+      // },
+      remotes: {
+        'app_v2': 'app_v2',
+      },
+      // shared: { react: { singleton: true }, "react-dom": { singleton: true } },
     }),
   ],
 

@@ -6,3 +6,5 @@ yarn-error.log
 coverage
 cypress/integration/__cypress__/*
 !cypress/integration/__cypress__/__README__.js
+!app_v2/public
+app_v2/dist
