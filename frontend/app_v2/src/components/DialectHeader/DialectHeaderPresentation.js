@@ -4,9 +4,7 @@ import DialectHeaderMenu from './DialectHeaderMenu'
 import DialectHeaderMobile from './DialectHeaderMobile'
 import FVToggle from 'components/FVToggle'
 
-import Logo from 'components/icons/Logo'
-import HamburgerMenuIcon from 'components/icons/HamburgerMenuIcon'
-import CloseIcon from 'components/icons/CloseIcon'
+import useIcon from 'common/useIcon'
 
 /**
  * @summary DialectHeaderPresentation
@@ -51,9 +49,6 @@ function DialectHeaderPresentation({ currentUser, menuData }) {
     }
   }, [isUserMenuOpen])
 
-  // Hardcoding menu data temporarily
-  // TODO: Store menu data on dialect
-
   const menus = menuData.map((menu) => (
     <DialectHeaderMenu
       key={`DialectHeaderMenu_${menu.title}`}
@@ -70,7 +65,7 @@ function DialectHeaderPresentation({ currentUser, menuData }) {
           <div className="justify-start lg:w-0 lg:flex-1">
             <a href="/home">
               <span className="sr-only">FirstVoices Logo</span>
-              <Logo styling={'fill-current text-white h-10'} />
+              {useIcon('Logo', 'fill-current text-white h-10')}
             </a>
           </div>
 
@@ -149,7 +144,7 @@ function DialectHeaderPresentation({ currentUser, menuData }) {
               className="bg-fv-charcoal rounded-md p-2 inline-flex items-center justify-center text-white hover:text-gray-100 focus:outline-none"
             >
               <span className="sr-only">Open menu</span>
-              {mobileNavbarOpen ? <CloseIcon styling={'h-6 w-6'} /> : <HamburgerMenuIcon styling={'h-6 w-6'} />}
+              {mobileNavbarOpen ? useIcon('Close', 'h-6 w-6') : useIcon('HamburgerMenu', 'h-6 w-6')}
             </button>
           </div>
         </div>

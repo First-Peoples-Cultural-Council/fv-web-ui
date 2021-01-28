@@ -2,12 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
-import ChevronDownIcon from 'components/icons/ChevronDownIcon'
-import AboutIcon from 'components/icons/AboutIcon'
-import DictionaryIcon from 'components/icons/DictionaryIcon'
-import KidsIcon from 'components/icons/KidsIcon'
-import LearnIcon from 'components/icons/LearnIcon'
-import ResourcesIcon from 'components/icons/ResourcesIcon'
+import useIcon from 'common/useIcon'
 
 /**
  * @summary DialectHeaderMenu
@@ -21,24 +16,6 @@ import ResourcesIcon from 'components/icons/ResourcesIcon'
 function DialectHeaderMenu({ title, itemsData, href }) {
   const [isOpen, setIsOpen] = useState(false)
   const hasItems = !Array.isArray(itemsData) || !itemsData.length ? false : true
-
-  const getIcon = (menuTitle) => {
-    const iconStyling = 'fill-current h-12 w-8'
-    switch (menuTitle) {
-      case 'About':
-        return <AboutIcon styling={iconStyling} />
-      case 'Dictionary':
-        return <DictionaryIcon styling={iconStyling} />
-      case 'Kids':
-        return <KidsIcon styling={iconStyling} />
-      case 'Learn':
-        return <LearnIcon styling={iconStyling} />
-      case 'Resources':
-        return <ResourcesIcon styling={iconStyling} />
-      default:
-        return null
-    }
-  }
 
   const menuItems = itemsData
     ? itemsData.map((menuItem) => (
@@ -88,9 +65,9 @@ function DialectHeaderMenu({ title, itemsData, href }) {
         onClick={() => onMenuClick()}
         className="group p-2 bg-fv-charcoal rounded-md  inline-flex items-center text-lg font-medium text-white hover:text-gray-100 focus:outline-none"
       >
-        {getIcon(title)}
+        {useIcon(title, 'fill-current h-12 w-8')}
         <p className="ml-3 mr-2">{title}</p>
-        {hasItems ? <ChevronDownIcon styling={'fill-current h-8'} /> : null}
+        {hasItems ? useIcon('ChevronDown', 'fill-current h-8') : null}
       </button>
       {/*
         'Solutions' flyout menu, show/hide based on flyout menu state.
@@ -113,10 +90,9 @@ function DialectHeaderMenu({ title, itemsData, href }) {
 }
 
 // PROPTYPES
-const { array, object, string } = PropTypes
+const { array, string } = PropTypes
 DialectHeaderMenu.propTypes = {
   title: string,
-  icon: object,
   href: string,
   itemsData: array,
 }
