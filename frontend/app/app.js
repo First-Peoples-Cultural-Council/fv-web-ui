@@ -13,8 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-
-import 'babel-polyfill'
+import 'core-js'
 
 import React from 'react'
 import { render } from 'react-dom'
@@ -23,11 +22,9 @@ import ConfGlobal from 'common/conf/local.js'
 // REDUX
 import { Provider } from 'react-redux'
 import store from 'state/store'
-
 // Views
 import AppWrapper from 'components/AppWrapper'
 import Login from 'components/Login'
-
 // Sentry
 import * as Sentry from '@sentry/react'
 Sentry.init({
@@ -57,6 +54,7 @@ render(
   </Provider>,
   document.getElementById('login')
 )
+
 // Carry on as usual
 render(
   <Provider store={store}>

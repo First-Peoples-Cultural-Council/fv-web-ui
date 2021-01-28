@@ -26,13 +26,13 @@ const outputStylesDirectory = paths.outputStylesDirectory
 const outputGamesDirectory = paths.outputGamesDirectory
 
 // Plugins
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const WarningsToErrorsPlugin = require('warnings-to-errors-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const GitRevisionPlugin = require('git-revision-webpack-plugin')
+const { ModuleFederationPlugin } = require('webpack').container
 
 const gitRevisionPlugin = new GitRevisionPlugin({
   lightweightTags: true,
@@ -113,13 +113,6 @@ module.exports = (env) => ({
   },
 
   /**
-   * Optimizations
-   */
-  optimization: {
-    runtimeChunk: 'multiple',
-  },
-
-  /**
    * The top-level output key contains set of options instructing
    * webpack on how and where it should output your bundles,
    * assets and anything else you bundle or load with webpack.
@@ -128,7 +121,7 @@ module.exports = (env) => ({
     filename: path.join(outputScriptsDirectory, '[name].[contenthash].js'),
     chunkFilename: path.join(outputScriptsDirectory, '[name].[contenthash].js'),
     path: env && env.legacy ? outputDirectoryLegacy : outputDirectory,
-    publicPath: '/',
+    publicPath: 'auto',
   },
 
   /**
@@ -148,7 +141,6 @@ module.exports = (env) => ({
       // set the current working directory for displaying module paths
       cwd: process.cwd(),
     }),
-    new CaseSensitivePathsPlugin({ debug: true }),
     new WarningsToErrorsPlugin(),
     new CleanWebpackPlugin(),
     // new CleanWebpackPlugin([env && env.legacy ? outputDirectoryLegacy : outputDirectory], { root: paths.rootDirectory }),
@@ -159,6 +151,7 @@ module.exports = (env) => ({
         COMMIT: gitRevisionPlugin.commithash(),
         BRANCH: gitRevisionPlugin.branch(),
         DATE: new Date().toLocaleString('en-CA', { timeZone: 'America/Vancouver' }),
+        V2_URL: env.V2_URL || 'http://0.0.0.0:3002',
         IS_LEGACY: env && env.legacy ? true : false,
       },
       minify: {
@@ -176,11 +169,24 @@ module.exports = (env) => ({
         { from: sourceImagesDirectory, to: outputImagesDirectory },
         { from: sourceFaviconsDirectory, to: env && env.legacy ? outputDirectoryLegacy : outputDirectory },
         { from: sourceGamesDirectory, to: outputGamesDirectory },
-      ]}),
+      ],
+    }),
     new webpack.DefinePlugin({
       ENV_NUXEO_URL: env && env.NUXEO_URL ? JSON.stringify(env.NUXEO_URL) : null,
       ENV_WEB_URL: env && env.WEB_URL ? JSON.stringify(env.WEB_URL) : null,
       ENV_CONTEXT_PATH: env && env.CONTEXT_PATH ? JSON.stringify(env.CONTEXT_PATH) : null,
+    }),
+    new ModuleFederationPlugin({
+      name: 'app_v1',
+      library: { type: 'var', name: 'app_v1' },
+      filename: path.join(outputScriptsDirectory, 'remoteEntry.' + gitRevisionPlugin.commithash() + '.js'),
+      exposes: {
+        './PageDebugAPI': 'components/PageDebugAPI',
+      },
+      remotes: {
+        'app_v2': 'app_v2',
+      },
+      // shared: { react: { singleton: true }, "react-dom": { singleton: true } },
     }),
   ],
 

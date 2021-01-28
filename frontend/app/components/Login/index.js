@@ -49,7 +49,7 @@ export class Login extends Component {
     }
 
     this.anchorEl = null
-    ;['_handleOpen', '_handleClose', '_onNavigateRequest'].forEach((method) => (this[method] = this[method].bind(this)))
+      ;['_handleOpen', '_handleClose', '_onNavigateRequest'].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   _handleOpen(event) {
@@ -99,7 +99,7 @@ export class Login extends Component {
     }
     return (
       <span className={'Login Login--welcome hidden-xs'}>
-        <span className={'fv-label'}>WELCOME</span>, Guest
+        <FVLabel transKey="general.welcome" defaultStr="WELCOME" transform="upper" />, Guest
         <a className={'Navigation__link'} href="/nuxeo/logout?requestedUrl=login.jsp">
           SIGN IN
         </a>

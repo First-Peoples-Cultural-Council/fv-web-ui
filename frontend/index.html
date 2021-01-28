@@ -20,9 +20,14 @@
   <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#b91d47" />
   <meta name="msapplication-TileColor" content="#b91d47" />
   <meta name="theme-color" content="#ffffff" />
+
+  <script src="<%= V2_URL %>/remoteEntry.<%= COMMIT %>.js"></script>
+
   <!-- https://web.dev/defer-non-critical-css/ -->
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"></noscript>
+  <noscript>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
+  </noscript>
   <style>
     .app-loader {
       color: #000000;
@@ -290,7 +295,7 @@
                   <div>
                     <a class="Navigation__link" href="/explore/FV/sections/Data">EXPLORE LANGUAGES</a>
                     <span id="login" class="Login Login--signIn">
-                      <span class="Login Login--welcome hidden-xs undefined">
+                      <span class="Login Login--welcome hidden-xs">
                         <span class="fv-label">WELCOME</span>, Guest
                         <a class="Navigation__link" href="/nuxeo/logout?requestedUrl=login.jsp">SIGN IN</a>
                       </span>

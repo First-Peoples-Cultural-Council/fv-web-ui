@@ -48,7 +48,6 @@ import TextHeader from 'components/Typography/text-header'
 import AuthorizationFilter from 'components/AuthorizationFilter'
 import Kids from 'components/Kids'
 import FVLabel from 'components/FVLabel'
-import FVButton from 'components/FVButton'
 
 /**
  * Dialect portal page showing all the various components of this dialect.
@@ -262,8 +261,8 @@ export class ExploreDialect extends Component {
           controls
         />
       ) : (
-        ''
-      )
+          ''
+        )
       portalTitle = (
         <h1 className={classNames('display', 'dialect-greeting-container', dialectClassName)}>
           <AuthorizationFilter
@@ -308,8 +307,7 @@ export class ExploreDialect extends Component {
         </AuthorizationFilter>
       )
     }
-    const useBerrySource =
-      selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) || window.location.pathname
+
     return (
       <PromiseWrapper computeEntities={computeEntities}>
         <div className="row">{toolbar}</div>
@@ -326,7 +324,7 @@ export class ExploreDialect extends Component {
                     href={this.props.windowPath + '/learn'}
                     onClick={this._onNavigateRequest.bind(this, this.props.windowPath + '/learn')}
                   >
-                    <FVLabel transKey="learn_our_lang" defaultStr="Learn our Language" />
+                    <FVLabel transKey="views.pages.explore.dialect.learn_our_language" defaultStr="Learn our Language" />
                   </a>
                   <a
                     href={this.props.windowPath + '/play'}
@@ -352,16 +350,17 @@ export class ExploreDialect extends Component {
           </div>
         </Header>
 
-        <div className={classNames('row', 'dialect-body-container')} style={{ marginTop: '15px' }}>
+        <div className={classNames('row', 'dialect-body-container', dialectClassName)} style={{ marginTop: '15px' }}>
           <div className={classNames('col-xs-12', 'col-md-7')}>
             <div>{portalTitle}</div>
 
             <div className={dialectClassName}>
-              <TextHeader
-                title={this.props.intl.trans('views.pages.explore.dialect.about_us', 'ABOUT US', 'upper')}
-                tag="h2"
-                properties={this.props.properties}
-              />
+              <h2>
+                <FVLabel transKey="views.pages.explore.dialect.about_us"
+                  defaultStr="ABOUT US" transform="upper" />
+              </h2>
+              <hr className="dialect-hr" />
+
               <AuthorizationFilter
                 filter={{ permission: 'Write', entity: selectn('response', computeDialect2) }}
                 renderPartial
@@ -383,32 +382,6 @@ export class ExploreDialect extends Component {
 
           <div className={classNames('col-xs-12', 'col-md-4', 'col-md-offset-1')}>
             <div className="row">
-              <div
-                className={classNames('col-xs-12')}
-                style={{
-                  marginBottom: '20px',
-                }}
-              >
-                <TextHeader tag="h2" title="Want to help us make FirstVoices better?" />
-                <p style={{ marginBottom: '20px' }}>
-                  Take our 15 minute survey to be entered for a chance to win a $50 gift card.
-                </p>
-                <FVButton
-                  href={`https://app.useberry.com/t/5TqLdd1k/?source=${useBerrySource}`}
-                  onClick={() => {
-                    if (typeof _paq !== 'undefined') {
-                      _paq.push(['trackEvent', 'Survey', 'FV Site Redesign', 'Site', useBerrySource])
-                    }
-                  }}
-                  variant="contained"
-                  color="secondary"
-                  style={{ color: '#fff' }}
-                >
-                  Click here to get started!
-                </FVButton>
-              </div>
-            </div>
-            <div className="row">
               <div className={classNames('col-xs-12')}>
                 {featuredWords.length > 0 ? (
                   <TextHeader
@@ -417,8 +390,8 @@ export class ExploreDialect extends Component {
                     properties={this.props.properties}
                   />
                 ) : (
-                  ''
-                )}
+                    ''
+                  )}
 
                 <GridView
                   action={this._handleSelectionChange}
@@ -442,40 +415,40 @@ export class ExploreDialect extends Component {
                 <div>
                   {(selectn('response.contextParameters.portal.fv-portal:related_links.length', computePortal) > 0 ||
                     !isSection) && (
-                    <AuthorizationFilter
-                      filter={{ permission: 'Write', entity: selectn('response', computePortal) }}
-                      renderPartial
-                    >
-                      <div>
-                        <TextHeader
-                          tag="h2"
-                          title={this.props.intl.trans('related_links', 'RELATED LINKS', 'upper')}
-                          properties={this.props.properties}
-                        />
-                        <EditableComponentHelper
-                          dataTestid="EditableComponent__fv-portal-related_links"
-                          isSection={isSection}
-                          computeEntity={computePortal}
-                          updateEntity={this.props.updatePortal}
-                          context={computeDialect2}
-                          showPreview
-                          previewType="FVLink"
-                          property="fv-portal:related_links"
-                          sectionProperty="contextParameters.portal.fv-portal:related_links"
-                          entity={selectn('response', computePortal)}
-                        />
-                      </div>
-                    </AuthorizationFilter>
-                  )}
+                      <AuthorizationFilter
+                        filter={{ permission: 'Write', entity: selectn('response', computePortal) }}
+                        renderPartial
+                      >
+                        <div>
+                          <h2>
+                            <FVLabel transKey="related_links"
+                              defaultStr="RELATED LINKS" transform="upper" />
+                          </h2>
+                          <hr className="dialect-hr" />
+                          <EditableComponentHelper
+                            dataTestid="EditableComponent__fv-portal-related_links"
+                            isSection={isSection}
+                            computeEntity={computePortal}
+                            updateEntity={this.props.updatePortal}
+                            context={computeDialect2}
+                            showPreview
+                            previewType="FVLink"
+                            property="fv-portal:related_links"
+                            sectionProperty="contextParameters.portal.fv-portal:related_links"
+                            entity={selectn('response', computePortal)}
+                          />
+                        </div>
+                      </AuthorizationFilter>
+                    )}
                 </div>
               </div>
 
               <div className={classNames('col-xs-12')}>
-                <TextHeader
-                  tag="h2"
-                  title={this.props.intl.trans('views.pages.explore.dialect.region_data', 'REGION DATA', 'upper')}
-                  properties={this.props.properties}
-                />
+                <h2>
+                  <FVLabel transKey="views.pages.explore.dialect.region_data"
+                    defaultStr="REGION DATA" transform="upper" />
+                </h2>
+                <hr className="dialect-hr" />
 
                 <div className={classNames('dialect-info-banner')}>
                   <div>

@@ -74,7 +74,7 @@ class LabelModal extends Component {
     }
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   // This is a pretty aggresive rerendering approach meant to fix an issue with adding audio causing a rerender
   // We should refactor the various modals and forms to avoid needing to do this
@@ -162,7 +162,8 @@ class LabelModal extends Component {
 
     _updateLabel(newDocument, null, null).then((output) => {
       if (isPublishing) {
-        this.handlePublish(output, 'Republish')
+        this.handlePublish(output,
+          (selectn('response.state', output) == 'Publish' ? 'Republish' : 'Publish'));
       } else {
         this.setState({ loading: false })
         updateIntl(
@@ -224,8 +225,8 @@ class LabelModal extends Component {
         dialectPath={dialectPath}
       />
     ) : (
-      <div />
-    )
+        <div />
+      )
   }
 
   render() {
@@ -233,15 +234,15 @@ class LabelModal extends Component {
     const { loading } = this.state
     const computeEntities = label
       ? Immutable.fromJS([
-          {
-            id: label.uid,
-            entity: computeLabel,
-          },
-          {
-            id: dialectPath,
-            entity: computeDialect2,
-          },
-        ])
+        {
+          id: label.uid,
+          entity: computeLabel,
+        },
+        {
+          id: dialectPath,
+          entity: computeDialect2,
+        },
+      ])
       : null
     return (
       <div>
@@ -257,17 +258,17 @@ class LabelModal extends Component {
               {isNew ? (
                 this.renderContent()
               ) : (
-                <PromiseWrapper computeEntities={computeEntities}>{this.renderContent()}</PromiseWrapper>
-              )}
+                  <PromiseWrapper computeEntities={computeEntities}>{this.renderContent()}</PromiseWrapper>
+                )}
             </>
           ) : (
-            <div className="PromiseWrapper__spinnerContainer">
-              <CircularProgress variant="indeterminate" className="PromiseWrapper__spinner" />
-              <div className="PromiseWrapper__spinnerMessage">
-                <FVLabel transKey="loading" defaultStr="Loading..." transform="first" />
+              <div className="PromiseWrapper__spinnerContainer">
+                <CircularProgress variant="indeterminate" className="PromiseWrapper__spinner" />
+                <div className="PromiseWrapper__spinnerMessage">
+                  <FVLabel transKey="loading" defaultStr="Loading..." transform="first" />
+                </div>
               </div>
-            </div>
-          )}
+            )}
         </Dialog>
       </div>
     )

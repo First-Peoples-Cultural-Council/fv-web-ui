@@ -83,8 +83,8 @@ export class KidsNavigation extends Component {
     const avatar = portalLogo ? (
       <Avatar src={NavigationHelpers.getBaseURL() + portalLogo} size={50} style={{ marginRight: '10px' }} />
     ) : (
-      ''
-    )
+        ''
+      )
     const homeURL = NavigationHelpers.generateStaticURL('/kids' + this.props.routeParams.dialect_path)
     const showHome = this.props.routeParams.dialect_path !== undefined && homeURL !== window.location.pathname
 
@@ -108,7 +108,7 @@ export class KidsNavigation extends Component {
                   {selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
                     this.props.properties.title}
                   &nbsp;
-                  <FVLabel transKey="views.pages.explore.dialect.for_kids" defaultStr="for Kids" />
+                  <FVLabel transKey="views.pages.explore.dialect.kids_portal" defaultStr="Kids Portal" />
                 </span>
               </a>
             </Typography>

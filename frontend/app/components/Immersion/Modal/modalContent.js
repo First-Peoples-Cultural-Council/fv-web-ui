@@ -108,7 +108,7 @@ class ModalContent extends Component {
     }
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   componentDidUpdate(prevProps) {
     const { type, label } = this.props
@@ -205,59 +205,38 @@ class ModalContent extends Component {
             paddingRight: '24px',
           }}
         >
-          <DialogTitle id="responsive-dialog-title">Edit label</DialogTitle> {/* need locale key */}
+          <DialogTitle id="responsive-dialog-title">Edit label for {this.renderTranslation(label)}</DialogTitle> {/* need locale key */}
           <IconButton key="close" aria-label="Close" onClick={() => handleClose()}>
             <CloseIcon />
           </IconButton>
         </div>
         <DialogContent>
-          <fieldset>
-            <legend>Label Information</legend>
-            {/* need locale key */}
-            <label className="control-label">Original Associated Word/Phrase</label>
-            <div style={{ padding: '15px' }}>{this.renderTranslation(label)}</div>
-            <div style={{ display: 'flex' }}>
-              <div style={{ width: '50%' }}>
-                <label className="control-label">Category</label>{' '}
-                <div style={{ padding: '15px' }}>{label.category}</div>
-              </div>
-              <div style={{ width: '50%' }}>
-                <label className="control-label">State</label>
-                <div style={{ padding: '15px' }}>{label.state}</div>
-              </div>
-            </div>
-          </fieldset>
-          <fieldset>
-            <legend>Immersive Information</legend>
-            {/* need locale key */}
-            <div className="alert alert-info">
-              <i>{"This will show for the site's 'Immersion' experience."}</i>
-              {/* need locale key */}
-            </div>
-            <div className={error || hadError ? 'has-error' : ''}>
-              <label className="control-label">Translation</label>
-              {label.type === 'phrase' ? (
-                <TextField
-                  id="translation"
-                  fullWidth
-                  multiline
-                  required
-                  rowsMax="4"
-                  value={translation[0]}
-                  onChange={(ev) => this.handleChange(ev, 0)}
-                  margin="normal"
-                  className=""
-                  InputProps={{
-                    disableUnderline: true,
-                    classes: {
-                      root: classes.inputRoot,
-                      input: classes.translationInput,
-                      error: classes.translationError,
-                    },
-                  }}
-                  error={error || hadError}
-                />
-              ) : (
+
+          {/* need locale key */}
+          <div className={error || hadError ? 'has-error' : ''}>
+            <label className="control-label">Translation</label>
+            {label.type === 'phrase' ? (
+              <TextField
+                id="translation"
+                fullWidth
+                multiline
+                required
+                rowsMax="4"
+                value={translation[0]}
+                onChange={(ev) => this.handleChange(ev, 0)}
+                margin="normal"
+                className=""
+                InputProps={{
+                  disableUnderline: true,
+                  classes: {
+                    root: classes.inputRoot,
+                    input: classes.translationInput,
+                    error: classes.translationError,
+                  },
+                }}
+                error={error || hadError}
+              />
+            ) : (
                 <div>
                   <TranslationInput
                     templateStrings={label.templateStrings}
@@ -266,28 +245,28 @@ class ModalContent extends Component {
                   />
                 </div>
               )}
-              {error && (
-                <span className="help-block error-block">
-                  <FVLabel
-                    transKey="models.value_in_field_x_cannot_be_empty"
-                    defaultStr="Value in field 'translation' cannot be empty"
-                    transform="first"
-                    params={['"Translation"']}
-                  />
-                </span>
-              )}
-            </div>
+            {error && (
+              <span className="help-block error-block">
+                <FVLabel
+                  transKey="models.value_in_field_x_cannot_be_empty"
+                  defaultStr="Value in field 'translation' cannot be empty"
+                  transform="first"
+                  params={['"Translation"']}
+                />
+              </span>
+            )}
+          </div>
 
-            <div className="related-audio">
-              <t.form.Form
-                ref={audioRef}
-                type={t.struct(this.fields)}
-                context={selectn('response', _computeDialect2)}
-                value={label.relatedAudio ? { 'fv:related_audio': [label.relatedAudio] } : formValue}
-                options={this.options}
-              />
-            </div>
-          </fieldset>
+          <div className="related-audio">
+            <t.form.Form
+              ref={audioRef}
+              type={t.struct(this.fields)}
+              context={selectn('response', _computeDialect2)}
+              value={label.relatedAudio ? { 'fv:related_audio': [label.relatedAudio] } : formValue}
+              options={this.options}
+            />
+          </div>
+
         </DialogContent>
         <DialogActions style={{ justifyContent: 'space-between' }}>
           <div>

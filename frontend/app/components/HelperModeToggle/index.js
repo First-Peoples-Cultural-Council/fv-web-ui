@@ -3,9 +3,8 @@ import propTypes from 'prop-types'
 import { connect } from 'react-redux'
 import selectn from 'selectn'
 
-import { Tooltip, Snackbar, IconButton } from '@material-ui/core'
-import LiveHelpIcon from '@material-ui/icons/LiveHelp'
-import CloseIcon from '@material-ui/icons/Close'
+import { Snackbar, IconButton } from '@material-ui/core'
+import { Close } from '@material-ui/icons'
 
 import { toggleHelpMode, setEditingLabel } from 'reducers/locale'
 import { fetchLabelDirectory } from 'reducers/directory'
@@ -37,29 +36,22 @@ const HelperModeToggle = ({
   useEffect(() => {
     if (!fetched) {
       _fetchLabelDirectory('fv_labels', 'immersive_labels')
-      _fetchLabelDirectory('fv_label_categories', 'categories')
       setFetched(true)
     }
     if (editingLabel) {
       const uid = selectn(editingLabel, labelIds)
       setIsNew(!uid)
       const allLabels = selectn('directoryEntries.fv_labels', computeDirectory) || []
-      const allCategories = selectn('directoryEntries.fv_label_categories', computeDirectory) || []
 
       const mappedLabel = allLabels.find((l) => {
         return l.id === editingLabel
       })
-      const category = mappedLabel
-        ? allCategories.find((c) => {
-            return c.id === mappedLabel.category
-          })
-        : null
+
       const templateStrings = mappedLabel ? mappedLabel.template_strings.split(',') : []
       const _label = {
         labelKey: editingLabel,
         type: mappedLabel ? mappedLabel.type : 'phrase',
         templateStrings,
-        category: category ? category.label : 'Unknown',
         base: intl.trans(editingLabel, 'Translated Label', null, templateStrings, null, null, locale),
         translation: undefined,
         uid,
@@ -111,22 +103,19 @@ const HelperModeToggle = ({
     <div className="helper-mode-toggle">
       {isImmersionModeOn && (
         <>
-          <Tooltip title={isInHelpMode ? 'Close Helper' : 'Turn on Helper then click labels to translate'}>
-            <FVButton isFab color="primary" onClick={handleToggleHelpMode}>
-              {!isInHelpMode && (
-                <>
-                  <LiveHelpIcon />
-                  Activate Translation Helper
+          <FVButton isFab onClick={handleToggleHelpMode}>
+            {!isInHelpMode && (
+              <>
+                Open Immersion Helper
                 </>
-              )}
-              {isInHelpMode && (
-                <>
-                  Close Helper Mode
-                  <CloseIcon />
-                </>
-              )}
-            </FVButton>
-          </Tooltip>
+            )}
+            {isInHelpMode && (
+              <>
+                Close Immersion Helper
+                  <Close />
+              </>
+            )}
+          </FVButton>
           <LabelModal
             isNew={isNew}
             dialectPath={routeParams.dialect_path}
@@ -145,10 +134,10 @@ const HelperModeToggle = ({
             ContentProps={{
               'aria-describedby': 'message-id',
             }}
-            message={<span id="message-id">Click on labels to see their translation and audio.</span>}
+            message={<span id="message-id">Click on words with a red box around them to see their translation and audio.</span>}
             action={[
               <IconButton key="close" aria-label="Close" color="inherit" onClick={closeSnackbar}>
-                <CloseIcon />
+                <Close />
               </IconButton>,
             ]}
           />

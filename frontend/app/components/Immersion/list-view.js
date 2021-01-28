@@ -44,8 +44,6 @@ class ImmersionListView extends Component {
     parentID: string,
     routeParams: object.isRequired,
     allLabels: array,
-    allCategories: array,
-    selectedCategory: string,
     selectedFilter: string,
     // // Search
     // // REDUX: reducers/state
@@ -78,8 +76,7 @@ class ImmersionListView extends Component {
   componentDidUpdate(prevProps) {
     if (
       this.props.computeLabels !== prevProps.computeLabels ||
-      this.props.allLabels.length !== prevProps.allLabels.length ||
-      this.props.allCategories.length !== prevProps.allCategories.length
+      this.props.allLabels.length !== prevProps.allLabels.length
     ) {
       this.mapTranslatedLabels()
     }
@@ -132,11 +129,11 @@ class ImmersionListView extends Component {
   }
 
   mapTranslatedLabels() {
-    const { allLabels, allCategories, computeLabels, intl, locale } = this.props
+    const { allLabels, computeLabels, intl, locale } = this.props
     const computedLabels = ProviderHelpers.getEntry(computeLabels, this._getPathOrParentID(this.props))
     const translatedLabels = selectn('response.entries', computedLabels)
 
-    if (allLabels.length === 0 || !translatedLabels || allCategories.length === 0) {
+    if (allLabels.length === 0 || !translatedLabels) {
       this.setState({ mappedTranslations: null })
       return
     }
@@ -149,20 +146,14 @@ class ImmersionListView extends Component {
         labelKey: id,
         type: v.type,
         templateStrings,
-        categoryId: v.category,
         base: intl.trans(id, 'English Unavailable', null, strings, null, null, locale),
         translation: undefined,
-        category: undefined,
         editButton: undefined,
-        editClick: () => {},
+        editClick: () => { },
         uid: undefined,
         relatedAudio: undefined,
         state: 'N/A',
       }
-      const category = allCategories.find((c) => {
-        return c.value === v.category
-      })
-      label.category = category ? category.text : undefined
       const translatedLabel = translatedLabels.find((l) => {
         return l.properties['fvlabel:labelKey'] === v.value
       })
@@ -182,7 +173,7 @@ class ImmersionListView extends Component {
   }
 
   render() {
-    const { computeLabels, computeDialect2, routeParams, dialect, selectedCategory, selectedFilter } = this.props
+    const { computeLabels, computeDialect2, routeParams, dialect, selectedFilter } = this.props
     const { mappedTranslations, allTranslations, isEditingOpen, editingLabel, isNew } = this.state
 
     const computeEntities = Immutable.fromJS([
@@ -206,15 +197,14 @@ class ImmersionListView extends Component {
         {!allTranslations ? (
           'Loading...'
         ) : (
-          <div>
-            <ImmersionTable
-              mappedTranslations={mappedTranslations || []}
-              routeParams={routeParams}
-              selectedCategory={selectedCategory}
-              selectedFilter={selectedFilter}
-            />
-          </div>
-        )}
+            <div>
+              <ImmersionTable
+                mappedTranslations={mappedTranslations || []}
+                routeParams={routeParams}
+                selectedFilter={selectedFilter}
+              />
+            </div>
+          )}
         <LabelModal
           isNew={isNew}
           dialectPath={routeParams.dialect_path}

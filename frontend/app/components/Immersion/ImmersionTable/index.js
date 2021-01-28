@@ -74,7 +74,6 @@ class ImmersionTable extends Component {
   static propTypes = {
     routeParams: object.isRequired,
     mappedTranslations: array.isRequired,
-    selectedCategory: string,
     selectedFilter: string,
     classes: object.isRequired,
   }
@@ -157,15 +156,9 @@ class ImmersionTable extends Component {
   }
 
   render() {
-    const { mappedTranslations, selectedCategory, selectedFilter, classes } = this.props
+    const { mappedTranslations, selectedFilter, classes } = this.props
     const { order, orderBy, pageNumber, pageSize } = this.state
     const filteredTranslations = mappedTranslations
-      .filter((label) => {
-        if (!selectedCategory) {
-          return true
-        }
-        return label.categoryId.startsWith(selectedCategory)
-      })
       .filter((label) => {
         if (selectedFilter === 'untranslated') {
           return !label.translation
@@ -200,7 +193,6 @@ class ImmersionTable extends Component {
                 ),
               },
               { id: 'audio', label: <FVLabel transKey="audio" defaultStr="Audio" transform="words" />, noSort: true },
-              { id: 'category', label: <FVLabel transKey="category" defaultStr="Category" transform="words" /> },
               { id: 'state', label: <FVLabel transKey="state" defaultStr="State" transform="words" /> },
               { id: 'type', label: <FVLabel transKey="type" defaultStr="Type" transform="words" /> },
             ]}
@@ -242,9 +234,6 @@ class ImmersionTable extends Component {
                             />
                           )}
                         </TableCell>
-                        <TableCell className="DictionaryList__data DictionaryList__data--category">
-                          {row.category || 'UNCATEGORIZED'} {/* need locale key for this */}
-                        </TableCell>
                         <TableCell className="DictionaryList__data DictionaryList__data--state"> {row.state}</TableCell>
                         <TableCell className="DictionaryList__data DictionaryList__data--type"> {row.type}</TableCell>
                       </TableRow>
@@ -252,12 +241,12 @@ class ImmersionTable extends Component {
                   })}
               </>
             ) : (
-              <TableRow style={{ background: 'white' }}>
-                <TableCell colSpan={5} className="DictionaryList__data">
-                  <FVLabel transKey="no_results_found" defaultStr="No Results Found" transform="words" />
-                </TableCell>
-              </TableRow>
-            )}
+                <TableRow style={{ background: 'white' }}>
+                  <TableCell colSpan={5} className="DictionaryList__data">
+                    <FVLabel transKey="no_results_found" defaultStr="No Results Found" transform="words" />
+                  </TableCell>
+                </TableRow>
+              )}
             {emptyRows > 0 && (
               <TableRow>
                 <TableCell colSpan={5} />

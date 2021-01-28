@@ -39,7 +39,6 @@ import { withStyles } from '@material-ui/core/styles'
 
 // Immersion specific
 import ImmersionListView from './list-view'
-import ImmersionFilterList from './ImmersionFilterList'
 
 const styles = (theme) => {
   const {
@@ -82,8 +81,6 @@ class PageDialectImmersionList extends PageDialectLearnBase {
   constructor(props, context) {
     super(props, context)
 
-    const selectedCategory = this.initialFilterInfo()
-
     const computeEntities = Immutable.fromJS([
       {
         id: props.routeParams.dialect_path,
@@ -97,20 +94,19 @@ class PageDialectImmersionList extends PageDialectLearnBase {
 
     this.state = {
       computeEntities,
-      selectedCategory,
       translateFilter: 'either',
     }
 
-    // Bind methods to 'this'
-    ;[
-      '_getURLPageProps', // NOTE: Comes from PageDialectLearnBase
-      '_handleFacetSelected', // NOTE: Comes from PageDialectLearnBase
-      '_handleFilterChange', // NOTE: Comes from PageDialectLearnBase
-      '_handlePagePropertiesChange', // NOTE: Comes from PageDialectLearnBase
-      '_onNavigateRequest', // NOTE: Comes from PageDialectLearnBase
-      '_resetURLPagination', // NOTE: Comes from PageDialectLearnBase
-      'handleDialectFilterList', // NOTE: Comes from PageDialectLearnBase
-    ].forEach((method) => (this[method] = this[method].bind(this)))
+      // Bind methods to 'this'
+      ;[
+        '_getURLPageProps', // NOTE: Comes from PageDialectLearnBase
+        '_handleFacetSelected', // NOTE: Comes from PageDialectLearnBase
+        '_handleFilterChange', // NOTE: Comes from PageDialectLearnBase
+        '_handlePagePropertiesChange', // NOTE: Comes from PageDialectLearnBase
+        '_onNavigateRequest', // NOTE: Comes from PageDialectLearnBase
+        '_resetURLPagination', // NOTE: Comes from PageDialectLearnBase
+        'handleDialectFilterList', // NOTE: Comes from PageDialectLearnBase
+      ].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   _getPageKey = () => {
@@ -121,7 +117,6 @@ class PageDialectImmersionList extends PageDialectLearnBase {
     newProps.fetchPortal(newProps.routeParams.dialect_path + '/Portal')
     newProps.fetchDocument(newProps.routeParams.dialect_path + '/Label Dictionary')
     if (newProps.computeDirectory.isFetching !== true && newProps.computeDirectory.success !== true) {
-      newProps.fetchLabelDirectory('fv_label_categories', 'categories')
       newProps.fetchLabelDirectory('fv_labels', 'immersive_labels')
     }
   }
@@ -158,30 +153,20 @@ class PageDialectImmersionList extends PageDialectLearnBase {
     return tree
   }
 
-  handleSearch = () => {}
+  handleSearch = () => { }
 
-  resetSearch = () => {}
+  resetSearch = () => { }
 
   // FILTERS
-  initialFilterInfo = () => {
-    // TODO: Don't think routeParams.handleCategoryClick exists
-    const routeParamsCategory = this.props.routeParams.handleCategoryClick
-    return routeParamsCategory || null
-  }
-
-  changeCategory = (selectedCategory) => {
-    this.setState({ selectedCategory })
-  }
-
   changeFilter = (translateFilter) => {
     this.setState({ translateFilter })
   }
 
-  clearFilter = () => {}
+  clearFilter = () => { }
 
   render() {
     const { classes } = this.props
-    const { computeEntities, selectedCategory, translateFilter } = this.state
+    const { computeEntities, translateFilter } = this.state
 
     const { routeParams } = this.props
     const computeDocument = ProviderHelpers.getEntry(
@@ -191,10 +176,6 @@ class PageDialectImmersionList extends PageDialectLearnBase {
 
     const computePortal = ProviderHelpers.getEntry(this.props.computePortal, `${routeParams.dialect_path}/Portal`)
 
-    const categories = selectn('directoryEntries.fv_label_categories', this.props.computeDirectory) || []
-    const mappedCategories = this.listToTree(categories)
-
-    const categoriesSize = mappedCategories.length
     const allLabels = selectn('directoryEntries.fv_labels', this.props.computeDirectory) || []
 
     const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
@@ -205,8 +186,6 @@ class PageDialectImmersionList extends PageDialectLearnBase {
         parentID={selectn('response.uid', computeDocument)}
         routeParams={this.props.routeParams}
         allLabels={allLabels}
-        allCategories={categories}
-        selectedCategory={selectedCategory}
         selectedFilter={translateFilter}
       />
     ) : null
@@ -216,7 +195,7 @@ class PageDialectImmersionList extends PageDialectLearnBase {
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         <div className="row">
-          <div className={classNames('col-xs-12', 'col-md-2', categoriesSize === 0 ? 'hidden' : null, 'PrintHide')}>
+          <div className={classNames('col-xs-12', 'col-md-2', 'PrintHide')}>
             <div>
               <FormControl>
                 <h2>
@@ -250,17 +229,8 @@ class PageDialectImmersionList extends PageDialectLearnBase {
                 </RadioGroup>
               </FormControl>
             </div>
-            <div>
-              <ImmersionFilterList
-                title={<FVLabel transKey="categories_browse" defaultStr="Browse Categories" transform="words" />}
-                //categories={mappedCategories} // FW-1534 - only releasing a few lables, no need for categories filter
-                routeParams={this.props.routeParams}
-                selectedCategory={selectedCategory}
-                changeCategory={this.changeCategory}
-              />
-            </div>
           </div>
-          <div className={classNames('col-xs-12', categoriesSize === 0 ? 'col-md-12' : 'col-md-10')}>
+          <div className={classNames('col-xs-12', 'col-md-10')}>
             <h1 className="DialectPageTitle">{pageTitle}</h1>
             <div className={dialectClassName}>{wordListView}</div>
           </div>

@@ -300,95 +300,14 @@ Configure ESLint in `.eslintrc`.
 
 For example, downgrading a rule to a warning instead of an error.
 
-## Structuring a component
+## Federated Modules
 
-A standardized structure should make it easier to work on other people's components. When creating new components please try to follow this structure:
+We are in the process of rewriting the codebase and are using Webpack's Federated Modules to slowly transition the site.
 
-```
-// 1) Group imports first
+You will now need to run both servers when developing locally:
+- V1: from this directory, start the server as normal e.g: `npm run start`. V1 should be at `http://0.0.0.0:3001`
+- V2: from the `./app_v2` directory run `npm run start`. V2 is at `http://0.0.0.0:3002`
 
-import React, { Component, PropTypes } from 'react'
-
-// 1a) ^ Using old version of React/PropTypes.
-// Newer releases have standalone PropTypes lib/import
-
-// REDUX
-import { connect } from 'react-redux'
-// REDUX: actions/dispatch/func
-import { someActionForRedux } from 'reducers/someExample'
-
-// 2) Then extract anything from imports
-
-const { func, object } = PropTypes
-
-// 3) A component will have 2 exports. The 1st is the component not wrapped in a provider.
-// We could use this export when testing since it allows us to easily mock up Redux data/actions.
-
-export class ExampleComponent extends Component {
-
-    // 4) propTypes before defaultProps.
-    // Seeing propTypes first gives an overview of all that is in play.
-
-    static propTypes = {
-        somethingFromParent: object,
-
-        // 5) Grouping Redux related data/fn() under a comment helps to differentiate them from parent props
-
-        // REDUX: reducers/state
-        someDataFromRedux: object.isRequired,
-        // REDUX: actions/dispatch/func
-        someActionForRedux: func.isRequired,
-    }
-
-    // 6) defaultProps should be added only as needed, no need for 1:1 mapping between propTypes & defaultProps
-
-    static defaultProps = {
-        somethingFromParent: {},
-    }
-
-    state = {}
-
-    // 7) ^ If using a function to set initial state it will need to be defined before, eg:
-    // _getInitialState = () => {}
-    // state = this._getInitialState()
-
-    // 8) component lifecyle methods before render()
-
-    render() {}
-
-    // 9) All remaining component functions after render()
-
-    // 10) If 'fat arrow' syntax is used for function definitions, we won't need to bind `this` in the constructor
-
-    anotherFunction = () => {return this._getInitialState()}
-
-}
-
-
-// REDUX: reducers/state
-const mapStateToProps = (state) => {
-  const { someRootLevelNamespace } = state
-
-  const { someDataFromRedux } = someRootLevelNamespace
-
-  return {
-    someDataFromRedux,
-  }
-}
-
-// REDUX: actions/dispatch/func
-const mapDispatchToProps = {
-  someActionForRedux,
-}
-
-// 11) Thee default export is a Redux wrapped component.
-// This export is intended to be used by the app.
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ExampleComponent)
-```
 
 ## Licensing
 
