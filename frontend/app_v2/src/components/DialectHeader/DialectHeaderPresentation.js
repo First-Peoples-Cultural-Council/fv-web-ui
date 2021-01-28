@@ -102,11 +102,11 @@ function DialectHeaderPresentation({ currentUser, menuData }) {
               {isUserMenuOpen ? (
                 <div className="absolute mt-8 w-72 py-8 transform lg:-translate-x-0" role="menu">
                   <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                    <div className="text-base text-fv-charcoal font-medium grid bg-white gap-12 p-8 md:gap-8">
-                      <a href="/dashboard" className="-m-3 py-1  hover:bg-gray-100" role="menuitem">
-                        Dashboard
-                      </a>
-                      <div className="whitespace-nowrap -m-3 py-1 hover:bg-gray-100">
+                    <ul className="text-base text-fv-charcoal font-medium grid bg-white gap-12 p-8 md:gap-8">
+                      <li className="-m-3 py-1  hover:bg-gray-100" role="menuitem">
+                        <a href="/dashboard">Dashboard</a>
+                      </li>
+                      <li className="whitespace-nowrap -m-3 py-1 hover:bg-gray-100">
                         <label htmlFor="toggle" className="inline-block">
                           Workspace Mode
                         </label>
@@ -115,11 +115,11 @@ function DialectHeaderPresentation({ currentUser, menuData }) {
                           toggleCallback={onWorkspaceModeClick}
                           styling={'ml-6 inline-block align-middle'}
                         />
-                      </div>
-                      <a href="/nuxeo/logout" className="-m-3 py-1 hover:bg-gray-100" role="menuitem">
-                        Sign out
-                      </a>
-                    </div>
+                      </li>
+                      <li className="-m-3 py-1 hover:bg-gray-100" role="menuitem">
+                        <a href="/nuxeo/logout">Sign out</a>
+                      </li>
+                    </ul>
                   </div>
                 </div>
               ) : null}
