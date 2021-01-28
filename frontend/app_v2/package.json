@@ -7,9 +7,7 @@
   "scripts": {
     "start": "webpack serve --config webpack/webpack.development.js --env NUXEO_URL='http://0.0.0.0:3001/nuxeo/site'",
     "build:production": "webpack --color --progress --config webpack/webpack.production.js",
-    "build:legacy": "webpack --color --progress --config webpack/webpack.legacy.js",
     "build:debug:production": "webpack serve --color --progress --config webpack/webpack.production.js",
-    "build:debug:legacy": "webpack serve --color --progress --config webpack/webpack.legacy.js",
     "test:coverage": "jest --coverage",
     "test:update": "jest -u",
     "test:watch": "jest --watch",
