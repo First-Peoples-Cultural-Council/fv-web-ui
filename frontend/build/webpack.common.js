@@ -26,7 +26,6 @@ const outputStylesDirectory = paths.outputStylesDirectory
 const outputGamesDirectory = paths.outputGamesDirectory
 
 // Plugins
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const WarningsToErrorsPlugin = require('warnings-to-errors-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -122,7 +121,7 @@ module.exports = (env) => ({
     filename: path.join(outputScriptsDirectory, '[name].[contenthash].js'),
     chunkFilename: path.join(outputScriptsDirectory, '[name].[contenthash].js'),
     path: env && env.legacy ? outputDirectoryLegacy : outputDirectory,
-    publicPath: '/',
+    publicPath: 'auto',
   },
 
   /**
@@ -142,7 +141,6 @@ module.exports = (env) => ({
       // set the current working directory for displaying module paths
       cwd: process.cwd(),
     }),
-    new CaseSensitivePathsPlugin({ debug: true }),
     new WarningsToErrorsPlugin(),
     new CleanWebpackPlugin(),
     // new CleanWebpackPlugin([env && env.legacy ? outputDirectoryLegacy : outputDirectory], { root: paths.rootDirectory }),
@@ -153,6 +151,7 @@ module.exports = (env) => ({
         COMMIT: gitRevisionPlugin.commithash(),
         BRANCH: gitRevisionPlugin.branch(),
         DATE: new Date().toLocaleString('en-CA', { timeZone: 'America/Vancouver' }),
+        V2_URL: env.V2_URL || 'http://0.0.0.0:3002',
         IS_LEGACY: env && env.legacy ? true : false,
       },
       minify: {
@@ -170,7 +169,8 @@ module.exports = (env) => ({
         { from: sourceImagesDirectory, to: outputImagesDirectory },
         { from: sourceFaviconsDirectory, to: env && env.legacy ? outputDirectoryLegacy : outputDirectory },
         { from: sourceGamesDirectory, to: outputGamesDirectory },
-      ]}),
+      ],
+    }),
     new webpack.DefinePlugin({
       ENV_NUXEO_URL: env && env.NUXEO_URL ? JSON.stringify(env.NUXEO_URL) : null,
       ENV_WEB_URL: env && env.WEB_URL ? JSON.stringify(env.WEB_URL) : null,
@@ -179,10 +179,10 @@ module.exports = (env) => ({
     new ModuleFederationPlugin({
       name: 'app_v1',
       library: { type: 'var', name: 'app_v1' },
-      filename: 'remoteEntry.js',
-      // exposes: {
-      //   './Component': 'components/Component',
-      // },
+      filename: path.join(outputScriptsDirectory, 'remoteEntry.' + gitRevisionPlugin.commithash() + '.js'),
+      exposes: {
+        './PageDebugAPI': 'components/PageDebugAPI',
+      },
       remotes: {
         'app_v2': 'app_v2',
       },
