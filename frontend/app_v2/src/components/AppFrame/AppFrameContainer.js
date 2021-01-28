@@ -1,5 +1,5 @@
 import React from 'react'
-import { Switch, Route, Link } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import './AppFrame.css'
 import About from 'components/About'
 import Suspender from 'components/Suspender'
@@ -19,18 +19,8 @@ function AppFrameContainer() {
   return (
     <div className="AppFrame">
       <Header.Container className="AppV2__header" />
-      {/* Sample nav for header */}
       <nav>
         <DialectHeader.Container />
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            {/* Note: change `?language=...` param to a language name on your local docker */}
-            <Link to="/about?language=ÜgwÛ">About</Link>
-          </li>
-        </ul>
       </nav>
       <main role="main">
         <Suspender>
