@@ -124,13 +124,11 @@ public class OpenIDConnectProviderRegistryImpl extends DefaultComponent
         oauth2Provider.setScopes(provider.getScopes());
         oauth2Provider.setTokenServerURL(provider.getTokenServerURL());
         oauth2Provider.setUserAuthorizationURL(provider.getAuthorizationServerURL());
-        final OAuth2ServiceProvider oauth2ProviderToUpdate = oauth2Provider;
-        Framework.doPrivileged(() -> oauth2ProviderRegistry.updateProvider(
-            provider.getName(),
-            oauth2ProviderToUpdate));
+        oauth2ProviderRegistry.updateProvider(provider.getName(), oauth2Provider);
       }
 
-      oauth2Provider = oauth2ProviderRegistry.addProvider(provider.getName(),
+      oauth2Provider = oauth2ProviderRegistry.addProvider(
+          provider.getName(),
           provider.getDescription(),
           provider.getTokenServerURL(),
           provider.getAuthorizationServerURL(),
@@ -138,7 +136,8 @@ public class OpenIDConnectProviderRegistryImpl extends DefaultComponent
           provider.getClientSecret(),
           Arrays.asList(provider.getScopes()));
 
-      providers.put(provider.getName(), new OpenIDConnectProvider(oauth2Provider,
+      providers.put(provider.getName(), new OpenIDConnectProvider(
+          oauth2Provider,
           provider.getAccessTokenKey(),
           provider.getUserInfoURL(),
           provider.getUserInfoClass(),
@@ -150,7 +149,8 @@ public class OpenIDConnectProviderRegistryImpl extends DefaultComponent
           provider.getAuthenticationMethod()));
 
       // contribute icon and link to the Login Screen
-      LoginScreenHelper.registerSingleProviderLoginScreenConfig(provider.getName(),
+      LoginScreenHelper.registerSingleProviderLoginScreenConfig(
+          provider.getName(),
           provider.getIcon(),
           provider.getUserInfoURL(),
           provider.getLabel(),
@@ -159,7 +159,8 @@ public class OpenIDConnectProviderRegistryImpl extends DefaultComponent
 
     } else {
       if (Framework.isTestModeSet()) {
-        providers.put(provider.getName(), new OpenIDConnectProvider(null,
+        providers.put(provider.getName(), new OpenIDConnectProvider(
+            null,
             provider.getAccessTokenKey(),
             provider.getUserInfoURL(),
             provider.getUserInfoClass(),

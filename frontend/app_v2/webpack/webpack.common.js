@@ -1,16 +1,10 @@
 const webpack = require('webpack')
 const alias = require('./webpack.alias')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const GitRevisionPlugin = require('git-revision-webpack-plugin')
 const { ModuleFederationPlugin } = require('webpack').container
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const postcssNormalize = require('postcss-normalize')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-
-const gitRevisionPlugin = new GitRevisionPlugin({
-  lightweightTags: true,
-  branch: true,
-})
 
 module.exports = (env) => {
   return {
@@ -20,7 +14,7 @@ module.exports = (env) => {
       extensions: ['.jsx', '.js', '.json'],
     },
     output: {
-      publicPath: 'auto',
+      publicPath: '/',
     },
     module: {
       rules: [
@@ -53,11 +47,7 @@ module.exports = (env) => {
                     [
                       'postcss-preset-env',
                       {
-                        /* See https://github.com/tailwindlabs/tailwindcss/discussions/2462 */
-                        stage: 1,
-                        features: {
-                          'focus-within-pseudo-class': false,
-                        },
+                        // Options
                       },
                     ],
                     postcssNormalize(/* pluginOptions */),
@@ -84,7 +74,7 @@ module.exports = (env) => {
       new ModuleFederationPlugin({
         name: 'app_v2',
         library: { type: 'var', name: 'app_v2' },
-        filename: 'remoteEntry.' + gitRevisionPlugin.commithash() + '.js',
+        filename: 'remoteEntry.js',
         exposes: {
           './HeaderContainer': 'components/Header/HeaderContainer',
         },
@@ -94,19 +84,7 @@ module.exports = (env) => {
         // shared: { react: { singleton: true }, "react-dom": { singleton: true } },
       }),
       new HtmlWebpackPlugin({
-        template: './index.html',
-        //inject: false,
-        templateParameters: {
-          VERSION: gitRevisionPlugin.version(),
-          COMMIT: gitRevisionPlugin.commithash(),
-          BRANCH: gitRevisionPlugin.branch(),
-          DATE: new Date().toLocaleString('en-CA', { timeZone: 'America/Vancouver' }),
-          V1_URL: env.V1_URL || 'http://0.0.0.0:3001',
-        },
-        minify: {
-          collapseWhitespace: true,
-          minifyCSS: true,
-        },
+        template: './public/index.html',
       }),
     ],
   }
