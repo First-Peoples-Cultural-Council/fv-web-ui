@@ -38,19 +38,19 @@ const ToolbarNavigation = ({ hideStatistics, isStatisticsVisible, handleShowStat
         <div className="col-xs-12 col-md-10">
           <div float="left">
             <Link href={`/explore${dialectPath}/learn/words?page=1&pageSize=10`}>
-              <FVLabel transKey="words" defaultStr="Words" />
+              <FVLabel transKey="general.words" defaultStr="Words" />
             </Link>
             <Link href={`/explore${dialectPath}/learn/phrases?page=1&pageSize=10`}>
-              <FVLabel transKey="phrases" defaultStr="Phrases" />
+              <FVLabel transKey="general.phrases" defaultStr="Phrases" />
             </Link>
             <Link href={`/explore${dialectPath}/learn/songs`}>
-              <FVLabel transKey="songs" defaultStr="Songs" />
+              <FVLabel transKey="general.songs" defaultStr="Songs" />
             </Link>
             <Link href={`/explore${dialectPath}/learn/stories`}>
-              <FVLabel transKey="stories" defaultStr="Stories" />
+              <FVLabel transKey="general.stories" defaultStr="Stories" />
             </Link>
             <Link href={`/explore${dialectPath}/learn/alphabet`}>
-              <FVLabel transKey="alphabet" defaultStr="Alphabet" />
+              <FVLabel transKey="general.alphabet" defaultStr="Alphabet" />
             </Link>
           </div>
         </div>

@@ -24,7 +24,6 @@ import FVProvider from 'components/FVProvider'
 
 // Views
 import AppWrapper from 'components/AppWrapper'
-import Suspender from 'common/Suspender'
 import Login from 'components/Login'
 // Sentry
 import * as Sentry from '@sentry/react'
@@ -34,7 +33,6 @@ Sentry.init({
 
 import 'normalize.css'
 import './assets/stylesheets/main.less'
-const Header = React.lazy(() => import('app_v2/HeaderContainer'))
 
 const context = {
   providedState: {
@@ -52,13 +50,9 @@ const context = {
 // https://github.com/facebook/react/issues/12700
 render(
   <FVProvider>
-    <Suspender>
-      <Header>
-        <Login />
-      </Header>
-    </Suspender>
+    <Login />
   </FVProvider>,
-  document.getElementById('pageNavigation')
+  document.getElementById('login')
 )
 
 // Carry on as usual

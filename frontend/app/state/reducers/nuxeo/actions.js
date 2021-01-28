@@ -9,7 +9,7 @@ import { CONNECT, GET_CURRENT_USER_START, GET_CURRENT_USER_SUCCESS, GET_CURRENT_
  * Actions: Represent that something happened
  */
 export const nuxeoConnect = () => {
-  return async(dispatch) => {
+  return async (dispatch) => {
     // console.log('! nuxeoConnect 1')
     await BaseOperations.initClient()
     // console.log('! nuxeoConnect 2')
@@ -25,8 +25,17 @@ export const getCurrentUser = () => {
 
     return UserOperations.getCurrentUser()
       .then((response) => {
+        let immersionLookup = selectn('properties.languagePreference', response)
         dispatch({ type: GET_CURRENT_USER_SUCCESS, user: response, isAnonymous: response.isAnonymous })
-        setImmersionMode(selectn('properties.languagePreference', response) === 'true')(dispatch, getState)
+
+        if (response.isAnonymous &&
+          localStorage !== null && localStorage !== undefined
+          && Object.prototype.hasOwnProperty.call(localStorage, 'intl-service-immersion-mode')) {
+          // For anonymous users retrieve persistant immersion from local storage
+          immersionLookup = localStorage.getItem('intl-service-immersion-mode')
+        }
+
+        setImmersionMode(immersionLookup === 'true')(dispatch, getState)
       })
       .catch((error) => {
         dispatch({ type: GET_CURRENT_USER_ERROR, error: error })
@@ -50,5 +59,15 @@ export const updateCurrentUser = (languagePreference = false) => {
           })
       })
     }
+    // user local storage
+    localStorage.setItem('intl-service-immersion-mode', languagePreference)
+
+    return UserOperations.getCurrentUser()
+      .then((response) => {
+        dispatch({ type: GET_CURRENT_USER_SUCCESS, user: response, isAnonymous: response.isAnonymous })
+      })
+      .catch((error) => {
+        dispatch({ type: GET_CURRENT_USER_ERROR, error: error })
+      })
   }
 }

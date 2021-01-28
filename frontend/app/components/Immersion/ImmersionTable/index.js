@@ -74,7 +74,6 @@ class ImmersionTable extends Component {
   static propTypes = {
     routeParams: object.isRequired,
     mappedTranslations: array.isRequired,
-    selectedCategory: string,
     selectedFilter: string,
     classes: object.isRequired,
   }
@@ -157,24 +156,17 @@ class ImmersionTable extends Component {
   }
 
   render() {
-    const { mappedTranslations, selectedCategory, selectedFilter, classes } = this.props
+    const { mappedTranslations, selectedFilter, classes } = this.props
     const { order, orderBy, pageNumber, pageSize } = this.state
-    const filteredTranslations = mappedTranslations
-      .filter((label) => {
-        if (!selectedCategory) {
-          return true
-        }
-        return label.categoryId.startsWith(selectedCategory)
-      })
-      .filter((label) => {
-        if (selectedFilter === 'untranslated') {
-          return !label.translation
-        }
-        if (selectedFilter === 'translated') {
-          return label.translation !== undefined
-        }
-        return true
-      })
+    const filteredTranslations = mappedTranslations.filter((label) => {
+      if (selectedFilter === 'untranslated') {
+        return !label.translation
+      }
+      if (selectedFilter === 'translated') {
+        return label.translation !== undefined
+      }
+      return true
+    })
     const emptyRows = pageSize - Math.min(pageSize, (filteredTranslations.length || 1) - pageNumber * pageSize)
 
     return (
@@ -200,7 +192,6 @@ class ImmersionTable extends Component {
                 ),
               },
               { id: 'audio', label: <FVLabel transKey="audio" defaultStr="Audio" transform="words" />, noSort: true },
-              { id: 'category', label: <FVLabel transKey="category" defaultStr="Category" transform="words" /> },
               { id: 'state', label: <FVLabel transKey="state" defaultStr="State" transform="words" /> },
               { id: 'type', label: <FVLabel transKey="type" defaultStr="Type" transform="words" /> },
             ]}
@@ -241,9 +232,6 @@ class ImmersionTable extends Component {
                               type="FVAudio"
                             />
                           )}
-                        </TableCell>
-                        <TableCell className="DictionaryList__data DictionaryList__data--category">
-                          {row.category || 'UNCATEGORIZED'} {/* need locale key for this */}
                         </TableCell>
                         <TableCell className="DictionaryList__data DictionaryList__data--state"> {row.state}</TableCell>
                         <TableCell className="DictionaryList__data DictionaryList__data--type"> {row.type}</TableCell>
