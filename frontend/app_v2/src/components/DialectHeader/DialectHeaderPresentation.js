@@ -91,7 +91,7 @@ function DialectHeaderPresentation({ currentUser, menuData }) {
               <div className="ml-4 flex items-center md:ml-6">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="max-w-xs p-3 bg-fv-orange  text-white text-xl rounded-full h-12 w-12 flex items-center justify-center focus:outline-none"
+                  className="max-w-xs p-3 bg-fv-orange  text-white text-xl rounded-full h-12 w-12 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                   id="user-menu"
                 >
                   <span className="sr-only">Open user menu</span>
@@ -131,13 +131,12 @@ function DialectHeaderPresentation({ currentUser, menuData }) {
               onClick={() => openCloseMobileNavbar()}
               className="bg-fv-charcoal rounded-md p-2 inline-flex items-center justify-center text-white hover:text-gray-100 focus:outline-none"
             >
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">{mobileNavbarOpen ? 'Close menu' : 'Open menu'}</span>
               {mobileNavbarOpen ? useIcon('Close', 'h-6 w-6') : useIcon('HamburgerMenu', 'h-6 w-6')}
             </button>
           </div>
         </div>
       </nav>
-
       {/* -- Mobile Menu -- */}
       {mobileNavbarOpen ? <DialectHeaderMobile openCloseNavbar={openCloseMobileNavbar} menuData={menuData} /> : null}
     </header>

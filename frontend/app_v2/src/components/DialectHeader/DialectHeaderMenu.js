@@ -63,7 +63,7 @@ function DialectHeaderMenu({ title, itemsData, href }) {
       <button
         type="button"
         onClick={() => onMenuClick()}
-        className="group p-2 bg-fv-charcoal rounded-md  inline-flex items-center text-lg font-medium text-white hover:text-gray-100 focus:outline-none"
+        className="group p-2 bg-fv-charcoal rounded-md  inline-flex items-center text-lg font-medium text-white hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-fv-turquoise"
       >
         {useIcon(title, 'fill-current h-12 w-8')}
         <p className="ml-3 mr-2">{title}</p>
