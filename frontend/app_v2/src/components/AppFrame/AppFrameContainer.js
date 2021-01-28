@@ -4,7 +4,7 @@ import './AppFrame.css'
 import About from 'components/About'
 import Suspender from 'components/Suspender'
 import Header from 'components/Header'
-import PageDebugAPI from 'app_v1/PageDebugAPI'
+import DialectHeader from 'components/DialectHeader'
 
 /**
  * @summary AppFrameContainer
@@ -21,6 +21,7 @@ function AppFrameContainer() {
       <Header.Container className="AppV2__header" />
       {/* Sample nav for header */}
       <nav>
+        <DialectHeader.Container />
         <ul>
           <li>
             <Link to="/">Home</Link>
@@ -29,9 +30,6 @@ function AppFrameContainer() {
             {/* Note: change `?language=...` param to a language name on your local docker */}
             <Link to="/about?language=ÜgwÛ">About</Link>
           </li>
-          <li>
-            <Link to="/v1">V1 Test</Link>
-          </li>
         </ul>
       </nav>
       <main role="main">
@@ -39,9 +37,6 @@ function AppFrameContainer() {
           <Switch>
             <Route path="/about">
               <About.Container />
-            </Route>
-            <Route path="/debug-test">
-              <PageDebugAPIContainer />
             </Route>
             <Route path="/">
               <Home />
@@ -58,11 +53,6 @@ function AppFrameContainer() {
 function Home() {
   return <h2>[Showing Home page]</h2>
 }
-
-function PageDebugAPIContainer() {
-  return <PageDebugAPI />
-}
-
 // function About() {
 //   const match = useRouteMatch()
 
