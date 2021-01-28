@@ -69,15 +69,6 @@ function DialectHeaderMenu({ title, itemsData, href }) {
         <p className="ml-3 mr-2">{title}</p>
         {hasItems ? useIcon('ChevronDown', 'fill-current h-8') : null}
       </button>
-      {/*
-        'Solutions' flyout menu, show/hide based on flyout menu state.
-
-        Entering: "transition ease-out duration-200"
-        From: "opacity-0 translate-y-1"
-        To: "opacity-100 translate-y-0"
-        Leaving: "transition ease-in duration-150"
-        From: "opacity-100 translate-y-0"
-        To: "opacity-0 translate-y-1" */}
       {isOpen && hasItems ? (
         <div className="absolute z-10 mt-3 w-48 transform px-2 sm:px-0 lg:ml-0 lg:left-1/2 lg:-translate-x-1/2">
           <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
