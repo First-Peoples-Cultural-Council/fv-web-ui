@@ -59,7 +59,7 @@ function DialectHeaderPresentation({ currentUser, menuData }) {
   ))
 
   return (
-    <div id="Dialect_header" className="relative bg-fv-charcoal">
+    <header id="Dialect_header" className="relative bg-fv-charcoal">
       <nav className="max-w-screen-2xl mx-auto px-4 sm:px-6 xl:px-20">
         <div className="flex justify-between items-center py-6 md:justify-start md:space-x-10">
           <div className="justify-start lg:w-0 lg:flex-1">
@@ -70,18 +70,6 @@ function DialectHeaderPresentation({ currentUser, menuData }) {
           </div>
 
           <div className="hidden md:flex space-x-6">{menus}</div>
-          {/* <form name="searchForm" id="searchForm" action="/explore/FV/sections/Data/search">
-                  <div className="">
-                    <div className="">
-                      <input
-                        name="query"
-                        placeholder="Search:"
-                        type="search"
-                      />
-                      <input value="&#x1F50E;" type="submit" tabIndex="0" />
-                    </div>
-                  </div>
-                </form> */}
           {!currentUser ? (
             <div className="ml-8 hidden md:flex items-center justify-end md:flex-1 lg:w-0">
               <a
@@ -152,12 +140,7 @@ function DialectHeaderPresentation({ currentUser, menuData }) {
 
       {/* -- Mobile Menu -- */}
       {mobileNavbarOpen ? <DialectHeaderMobile openCloseNavbar={openCloseMobileNavbar} menuData={menuData} /> : null}
-      <header className="bg-white shadow">
-        <div className="max-w-screen-2xl py-6 px-4 sm:px-6 lg:px-8 xl:px-20 mx-auto">
-          <h1 className="text-lg leading-tight text-gray-900">Breadcrumbs</h1>
-        </div>
-      </header>
-    </div>
+    </header>
   )
 }
 // PROPTYPES
