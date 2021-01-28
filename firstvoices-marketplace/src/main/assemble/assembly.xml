@@ -1,5 +1,6 @@
 <project name="first-voices-package"
          default="build"
+         xmlns:nx="urn:nuxeo-build"
          xmlns:artifact="urn:nuxeo-artifact">
   <taskdef resource="org/nuxeo/build/antlib.xml" uri="urn:nuxeo-build"/>
   <taskdef resource="org/nuxeo/build/artifact/antlib.xml" uri="urn:nuxeo-artifact"/>
@@ -45,23 +46,28 @@
           <artifact scope="provided"/>
         </excludes>
       </artifact:dependencies>
-
-      <artifact:file artifactId="aws-java-sdk-core"/>
-      <artifact:dependencies artifactId="aws-java-sdk-core">
-        <excludes>
-          <artifact scope="test"/>
-          <artifact scope="provided"/>
-        </excludes>
-      </artifact:dependencies>
-
-      <artifact:file artifactId="aws-java-sdk-cognitoidp"/>
-      <artifact:dependencies artifactId="aws-java-sdk-cognitoidp">
-        <excludes>
-          <artifact scope="test"/>
-          <artifact scope="provided"/>
-        </excludes>
-      </artifact:dependencies>
     </copy>
+
+    <nx:profile name="full-marketplace">
+      <copy todir="${outdir}/marketplace/install/lib" overwrite="true">
+        <!-- Only include AWS sdks if full profile is executed -->
+          <artifact:file artifactId="aws-java-sdk-core"/>
+          <artifact:dependencies artifactId="aws-java-sdk-core">
+            <excludes>
+              <artifact scope="test"/>
+              <artifact scope="provided"/>
+            </excludes>
+          </artifact:dependencies>
+
+          <artifact:file artifactId="aws-java-sdk-cognitoidp"/>
+          <artifact:dependencies artifactId="aws-java-sdk-cognitoidp">
+            <excludes>
+              <artifact scope="test"/>
+              <artifact scope="provided"/>
+            </excludes>
+          </artifact:dependencies>
+      </copy>
+    </nx:profile>
 
     <zip destfile="${outdir}/${maven.project.artifactId}-${maven.project.version}.zip"
          basedir="${outdir}/marketplace"/>
