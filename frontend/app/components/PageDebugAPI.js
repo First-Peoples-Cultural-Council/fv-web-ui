@@ -24,6 +24,8 @@ import { fetchSharedPictures } from 'reducers/fvPicture'
 import { fetchWord } from 'reducers/fvWord'
 import { pushWindowPath } from 'reducers/windowPath'
 
+const Header = React.lazy(() => import('app_v2/HeaderContainer'))
+
 const DefaultFetcherParams = { filters: { 'properties.dc:title': '', dialect: '78086057-9c34-48f7-995f-9dc3b313231b' } }
 
 // const argsFunction = function argumentNames(fun) {
@@ -297,6 +299,7 @@ export class PageDebugAPI extends Component {
 
     return (
       <div className="row">
+        <Header>test</Header>
         <div className="col-xs-12">{providersElements}</div>
       </div>
     )

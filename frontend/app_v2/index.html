@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>App V2</title>
+    <!-- App V1 remoteEntry -->
+    <script src="<%= V1_URL %>/assets/javascripts/remoteEntry.<%= COMMIT %>.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <div>
+        <strong>Version:</strong>
+        <%= VERSION %> (
+            <%= DATE %>)
+                <br/>
+                <span style="color: #0d6c80;">
+                    <strong>Commit</strong>:
+                    <a style="color: #0d6c80;" href="https://github.com/First-Peoples-Cultural-Council/fv-web-ui/commits/<%= COMMIT %>">
+                        <%= COMMIT %>
+                    </a> |
+                    <strong>Branch</strong>:
+                    <%= BRANCH %>
+                </span>
+    </div>
+</body>
+
+</html>
