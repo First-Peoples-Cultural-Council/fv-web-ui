@@ -5,30 +5,33 @@
     <require>org.nuxeo.runtime.started</require>
 
     <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
-               point="providers">
+      point="providers">
 
-        <coreQueryPageProvider name="CATEGORIES_LIST_PP">
+        <coreQueryPageProvider name="FIND_CATEGORIES_PP">
             <pattern>
-                SELECT * FROM FVCategory where ecm:isTrashed = 0 and ecm:isVersion = 0
+                SELECT * from FVCategories where ecm:ancestorId=? and ecm:name='Categories' and ecm:isVersion=0 and
+                ecm:isTrashed=0
             </pattern>
             <sort column="dc:title" ascending="true"/>
-            <pageSize>50</pageSize>
+            <pageSize>1000</pageSize>
         </coreQueryPageProvider>
-        <coreQueryPageProvider name="CATEGORIES_LIST_PUBLIC_ONLY_PP">
+
+
+        <coreQueryPageProvider name="FIND_CATEGORY_IN_CATEGORIES_PP">
             <pattern>
-                SELECT * FROM FVCategory where ecm:isTrashed = 0 and ecm:isVersion = 0 and
-                ecm:isProxy = 1 and ecm:path STARTSWITH '/FV/sections/'
+                SELECT * from FVCategory where ecm:ancestorId=? and ecm:isVersion=0 and ecm:isTrashed=0
             </pattern>
             <sort column="dc:title" ascending="true"/>
-            <pageSize>50</pageSize>
+            <pageSize>1000</pageSize>
         </coreQueryPageProvider>
-        <coreQueryPageProvider name="CATEGORY_CHILDREN_PP">
+
+
+        <coreQueryPageProvider name="FIND_WORDS_WITH_CATEGORY_PP">
             <pattern>
-                SELECT * FROM Document where ecm:isTrashed = 0 and ecm:isVersion = 0 and
-                ecm:ancestorId = ?
+                select * from FVWord where fv-word:categories = ? and ecm:isVersion=0 and ecm:isTrashed=0
             </pattern>
             <sort column="dc:title" ascending="true"/>
-            <pageSize>50</pageSize>
+            <pageSize>1000</pageSize>
         </coreQueryPageProvider>
 
 
