@@ -81,7 +81,13 @@ module.exports = (env) => {
         remotes: {
           app_v1: 'app_v1',
         },
-        // shared: { react: { singleton: true }, "react-dom": { singleton: true } },
+        shared: {
+          react: { eager: true, singleton: true, requiredVersion: '^17.0.1' },
+          'react-dom': { eager: true, singleton: true, requiredVersion: '^17.0.1' },
+          'react-redux': { eager: true, singleton: true, requiredVersion: '^17.0.1' },
+          redux: { eager: true, singleton: true, requiredVersion: '^7.2.2' },
+          'redux-thunk': { eager: true, singleton: true, requiredVersion: '^2.3.0' },
+        },
       }),
       new HtmlWebpackPlugin({
         template: './public/index.html',

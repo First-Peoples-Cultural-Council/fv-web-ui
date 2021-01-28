@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import api from 'services/api'
 import HeroBackground from 'components/About/hero-background.jpg'
-import useSearchParams from 'common/useSearchParams'
 
 /**
  * @summary AboutData
@@ -21,8 +20,7 @@ export function adaptor(response) {
     path,
   }
 }
-function AboutData({ children }) {
-  const { language } = useSearchParams({ decode: [{ name: 'language', type: 'uri' }] })
+function AboutData({ children, language }) {
   const { data } = api.getSections(language, adaptor)
   return children({
     hero: {
