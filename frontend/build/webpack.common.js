@@ -151,7 +151,7 @@ module.exports = (env) => ({
         COMMIT: gitRevisionPlugin.commithash(),
         BRANCH: gitRevisionPlugin.branch(),
         DATE: new Date().toLocaleString('en-CA', { timeZone: 'America/Vancouver' }),
-        V2_URL: env.V2_URL || 'http://0.0.0.0:3002',
+        V2_URL: env.V2_URL || '/v2',
         IS_LEGACY: env && env.legacy ? true : false,
       },
       minify: {
