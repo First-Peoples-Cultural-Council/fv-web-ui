@@ -7,6 +7,7 @@ import Header from 'components/Header'
 import useRoute from 'app_v1/useRoute'
 import WordsListContainer from 'app_v1/WordsListContainer'
 import useSearchParams from 'common/useSearchParams'
+import DialectHeader from 'components/DialectHeader'
 
 /**
  * @summary AppFrameContainer
@@ -49,6 +50,7 @@ function AppFrameContainer() {
       <Header.Container className="AppV2__header" />
       {/* Sample nav for header */}
       <nav>
+        <DialectHeader.Container />
         <ul>
           <li>
             <Link to="/">Home</Link>
