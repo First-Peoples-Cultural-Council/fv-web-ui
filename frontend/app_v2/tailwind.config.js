@@ -9,6 +9,9 @@ module.exports = {
       xl: '1280px',
     },
     extend: {
+      fontSize: {
+        xxs: '.5rem',
+      },
       colors: {
         'fv-red': {
           light: '#b36e54',
@@ -37,6 +40,12 @@ module.exports = {
         },
         'fv-charcoal': {
           DEFAULT: '#313133',
+        },
+        'fv-green': {
+          DEFAULT: '#7EC71A',
+        },
+        'fv-warning-red': {
+          DEFAULT: '#D64A4A',
         },
       },
     },
