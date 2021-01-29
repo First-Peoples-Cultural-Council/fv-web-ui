@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import api from 'services/api'
-import HeroBackground from 'components/About/hero-background.jpg'
+import HeroBackground from 'images/hero-background.jpg'
 
 /**
  * @summary AboutData
