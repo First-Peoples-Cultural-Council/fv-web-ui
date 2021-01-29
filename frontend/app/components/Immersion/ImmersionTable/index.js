@@ -158,16 +158,15 @@ class ImmersionTable extends Component {
   render() {
     const { mappedTranslations, selectedFilter, classes } = this.props
     const { order, orderBy, pageNumber, pageSize } = this.state
-    const filteredTranslations = mappedTranslations
-      .filter((label) => {
-        if (selectedFilter === 'untranslated') {
-          return !label.translation
-        }
-        if (selectedFilter === 'translated') {
-          return label.translation !== undefined
-        }
-        return true
-      })
+    const filteredTranslations = mappedTranslations.filter((label) => {
+      if (selectedFilter === 'untranslated') {
+        return !label.translation
+      }
+      if (selectedFilter === 'translated') {
+        return label.translation !== undefined
+      }
+      return true
+    })
     const emptyRows = pageSize - Math.min(pageSize, (filteredTranslations.length || 1) - pageNumber * pageSize)
 
     return (
@@ -241,12 +240,12 @@ class ImmersionTable extends Component {
                   })}
               </>
             ) : (
-                <TableRow style={{ background: 'white' }}>
-                  <TableCell colSpan={5} className="DictionaryList__data">
-                    <FVLabel transKey="no_results_found" defaultStr="No Results Found" transform="words" />
-                  </TableCell>
-                </TableRow>
-              )}
+              <TableRow style={{ background: 'white' }}>
+                <TableCell colSpan={5} className="DictionaryList__data">
+                  <FVLabel transKey="no_results_found" defaultStr="No Results Found" transform="words" />
+                </TableCell>
+              </TableRow>
+            )}
             {emptyRows > 0 && (
               <TableRow>
                 <TableCell colSpan={5} />

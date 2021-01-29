@@ -104,15 +104,11 @@ const HelperModeToggle = ({
       {isImmersionModeOn && (
         <>
           <FVButton isFab onClick={handleToggleHelpMode}>
-            {!isInHelpMode && (
-              <>
-                Open Immersion Helper
-                </>
-            )}
+            {!isInHelpMode && <>Open Immersion Helper</>}
             {isInHelpMode && (
               <>
                 Close Immersion Helper
-                  <Close />
+                <Close />
               </>
             )}
           </FVButton>
@@ -134,7 +130,9 @@ const HelperModeToggle = ({
             ContentProps={{
               'aria-describedby': 'message-id',
             }}
-            message={<span id="message-id">Click on words with a red box around them to see their translation and audio.</span>}
+            message={
+              <span id="message-id">Click on words with a red box around them to see their translation and audio.</span>
+            }
             action={[
               <IconButton key="close" aria-label="Close" color="inherit" onClick={closeSnackbar}>
                 <Close />

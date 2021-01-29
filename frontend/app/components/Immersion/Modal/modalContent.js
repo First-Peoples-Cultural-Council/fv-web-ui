@@ -108,7 +108,7 @@ class ModalContent extends Component {
     }
   }
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   componentDidUpdate(prevProps) {
     const { type, label } = this.props
@@ -205,13 +205,13 @@ class ModalContent extends Component {
             paddingRight: '24px',
           }}
         >
-          <DialogTitle id="responsive-dialog-title">Edit label for {this.renderTranslation(label)}</DialogTitle> {/* need locale key */}
+          <DialogTitle id="responsive-dialog-title">Edit label for {this.renderTranslation(label)}</DialogTitle>{' '}
+          {/* need locale key */}
           <IconButton key="close" aria-label="Close" onClick={() => handleClose()}>
             <CloseIcon />
           </IconButton>
         </div>
         <DialogContent>
-
           {/* need locale key */}
           <div className={error || hadError ? 'has-error' : ''}>
             <label className="control-label">Translation</label>
@@ -237,14 +237,14 @@ class ModalContent extends Component {
                 error={error || hadError}
               />
             ) : (
-                <div>
-                  <TranslationInput
-                    templateStrings={label.templateStrings}
-                    translation={translation}
-                    onChange={this.handleChange}
-                  />
-                </div>
-              )}
+              <div>
+                <TranslationInput
+                  templateStrings={label.templateStrings}
+                  translation={translation}
+                  onChange={this.handleChange}
+                />
+              </div>
+            )}
             {error && (
               <span className="help-block error-block">
                 <FVLabel
@@ -266,7 +266,6 @@ class ModalContent extends Component {
               options={this.options}
             />
           </div>
-
         </DialogContent>
         <DialogActions style={{ justifyContent: 'space-between' }}>
           <div>

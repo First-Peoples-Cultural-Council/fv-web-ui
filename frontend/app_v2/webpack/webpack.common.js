@@ -4,8 +4,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const GitRevisionPlugin = require('git-revision-webpack-plugin')
 const { ModuleFederationPlugin } = require('webpack').container
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const postcssNormalize = require('postcss-normalize')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
 
 const gitRevisionPlugin = new GitRevisionPlugin({
   lightweightTags: true,
@@ -16,11 +16,26 @@ module.exports = (env) => {
   return {
     entry: './src/index',
     resolve: {
-      alias: alias,
+      alias,
       extensions: ['.jsx', '.js', '.json'],
     },
+    // https://webpack.js.org/configuration/performance/
+    performance: {
+      maxAssetSize: 250000,
+      maxEntrypointSize: 250000,
+      hints: 'warning',
+    },
     output: {
+      filename: 'assets/js/[name].[contenthash].js',
+      chunkFilename: 'assets/js/[name].[contenthash].js',
+      // filename: (pathData) => {
+      //   return 'assets/js/[name].[contenthash].js'
+      // },
+      // chunkFilename: (pathData) => {
+      //   return 'assets/js/[name].[contenthash].js'
+      // },
       publicPath: 'auto',
+      path: alias.dist,
     },
     module: {
       rules: [
@@ -60,7 +75,6 @@ module.exports = (env) => {
                         },
                       },
                     ],
-                    postcssNormalize(/* pluginOptions */),
                   ],
                 },
               },
@@ -75,7 +89,10 @@ module.exports = (env) => {
     },
     plugins: [
       new CleanWebpackPlugin(),
-      new MiniCssExtractPlugin(),
+      new MiniCssExtractPlugin({
+        filename: 'assets/styles/[name].[contenthash].css',
+        chunkFilename: 'assets/styles/[id].[contenthash].css',
+      }),
       new webpack.DefinePlugin({
         ENV_NUXEO_URL: env && env.NUXEO_URL ? JSON.stringify(env.NUXEO_URL) : null,
         ENV_WEB_URL: env && env.WEB_URL ? JSON.stringify(env.WEB_URL) : null,
@@ -91,7 +108,13 @@ module.exports = (env) => {
         remotes: {
           app_v1: 'app_v1',
         },
-        // shared: { react: { singleton: true }, "react-dom": { singleton: true } },
+        shared: {
+          react: { eager: true, singleton: true, requiredVersion: '^17.0.1' },
+          'react-dom': { eager: true, singleton: true, requiredVersion: '^17.0.1' },
+          'react-redux': { eager: true, singleton: true, requiredVersion: '^17.0.1' },
+          redux: { eager: true, singleton: true, requiredVersion: '^7.2.2' },
+          'redux-thunk': { eager: true, singleton: true, requiredVersion: '^2.3.0' },
+        },
       }),
       new HtmlWebpackPlugin({
         template: './index.html',
@@ -103,10 +126,19 @@ module.exports = (env) => {
           DATE: new Date().toLocaleString('en-CA', { timeZone: 'America/Vancouver' }),
           V1_URL: env.V1_URL || 'http://0.0.0.0:3001',
         },
+        // scriptLoading: 'defer', // TODO: INVESTIGATE THIS SETTING FOR PERFORMANCE
         minify: {
           collapseWhitespace: true,
           minifyCSS: true,
         },
+      }),
+      new CopyPlugin({
+        patterns: [
+          // { from: alias.assetsServer, to: alias.distServer },
+          { from: alias.fonts, to: alias.distFonts },
+          { from: alias.images, to: alias.distImages },
+          { from: alias.favicons, to: alias.dist },
+        ],
       }),
     ],
   }

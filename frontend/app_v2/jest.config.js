@@ -96,22 +96,8 @@ module.exports = {
     //
     '^components/(.*)$': alias.components + '/$1',
     '^src/(.*)$': alias.src + '/$1',
-    '^images/(.*)$': alias.images + '/$1',
     '^common/(.*)$': alias.common + '/$1',
     '^services/(.*)$': alias.services + '/$1',
-    // '^assets/(.*)$': alias.assets + '/$1',
-    // '^common/(.*)$': alias.common + '/$1',
-    // '^qa/(.*)$': alias.qa + '/$1',
-    // '^state/(.*)$': alias.state + '/$1',
-    // '^dataSources/(.*)$': alias.dataSources + '/$1',
-    // '^operations/(.*)$': alias.operations + '/$1',
-    // '^reducers/(.*)$': alias.reducers + '/$1',
-    // '^games/(.*)$': alias.games + '/$1',
-    // '^images/(.*)$': alias.images + '/$1',
-    // '^styles/(.*)$': alias.styles + '/$1',
-    // '^phaser/(.*)$': alias.phaser + '/$1',
-    // '^pixi/(.*)$': alias.pixi + '/$1',
-    // '^p2/(.*)$': alias.p2 + '/$1',
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader

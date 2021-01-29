@@ -1,4 +1,3 @@
-const path = require('path')
 const { merge } = require('webpack-merge')
 const common = require('./webpack.common.js')
 const TerserPlugin = require('terser-webpack-plugin')
@@ -7,10 +6,6 @@ module.exports = (env) =>
   merge(common(env), {
     mode: 'production',
     devtool: 'source-map',
-    output: {
-      filename: 'main.evergreen.js',
-      path: path.resolve(process.cwd(), 'dist'),
-    },
     optimization: {
       minimize: true,
       minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],

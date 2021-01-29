@@ -143,9 +143,9 @@ export class DialectLearn extends Component {
         stories: false,
       },
     }
-      ;['_showStats', '_publishChangesAction', '_loadRecentActivity'].forEach(
-        (method) => (this[method] = this[method].bind(this))
-      )
+    ;['_showStats', '_publishChangesAction', '_loadRecentActivity'].forEach(
+      (method) => (this[method] = this[method].bind(this))
+    )
   }
 
   fetchData(newProps) {
@@ -398,8 +398,11 @@ export class DialectLearn extends Component {
           <div className={classNames('col-xs-12', 'col-md-7')}>
             <div>
               <h2>
-                <FVLabel transKey="views.pages.explore.dialect.learn.about_our_language"
-                  defaultStr="About Our Language" transform="upper" />
+                <FVLabel
+                  transKey="views.pages.explore.dialect.learn.about_our_language"
+                  defaultStr="About Our Language"
+                  transform="upper"
+                />
               </h2>
               <hr className="dialect-hr" />
               <AuthorizationFilter
@@ -439,8 +442,11 @@ export class DialectLearn extends Component {
             <div className="row PrintHide" style={{ marginTop: '15px' }}>
               <div className={classNames('col-xs-12')}>
                 <h2>
-                  <FVLabel transKey="views.pages.explore.dialect.learn.recent_activity"
-                    defaultStr="Recent Activity" transform="upper" />
+                  <FVLabel
+                    transKey="views.pages.explore.dialect.learn.recent_activity"
+                    defaultStr="Recent Activity"
+                    transform="upper"
+                  />
                 </h2>
                 <hr className="dialect-hr" />
               </div>

@@ -1,4 +1,4 @@
-/* globals ENV_NUXEO_URL */
+/* DISABLEglobals ENV_NUXEO_URL */
 import apiErrorHandler from 'services/api/apiErrorHandler'
 import { useQuery } from 'react-query'
 import ky from 'ky'
@@ -8,13 +8,13 @@ const api = ky.create({
 })
 
 // npm run start --env NUXEO_URL="http://0.0.0.0:3001/nuxeo/site"
-const getBaseURL = () => {
-  if (ENV_NUXEO_URL !== null && typeof ENV_NUXEO_URL !== 'undefined') {
-    return ENV_NUXEO_URL
-  }
-  const { protocol, hostname, port } = window.location
-  return `${protocol}//${hostname}${port ? `:${port}` : ''}/nuxeo`
-}
+// const getBaseURL = () => {
+//   if (ENV_NUXEO_URL !== null && typeof ENV_NUXEO_URL !== 'undefined') {
+//     return ENV_NUXEO_URL
+//   }
+//   const { protocol, hostname, port } = window.location
+//   return `${protocol}//${hostname}${port ? `:${port}` : ''}/nuxeo`
+// }
 const get = (path) => {
   return (
     api
@@ -39,7 +39,7 @@ export default {
   get,
   getSections: (sitename, dataAdaptor) => {
     const { isLoading, error, data } = useQuery(['sections', sitename], () => {
-      return get(`${getBaseURL()}/api/v1/site/sections/${sitename}`)
+      return get(`/nuxeo/api/v1/site/sections/${sitename}`)
     })
     if (isLoading === false && error === null && data && dataAdaptor) {
       const transformedData = dataAdaptor(Object.assign({}, data))

@@ -20,8 +20,8 @@ import { render } from 'react-dom'
 import ConfGlobal from 'common/conf/local.js'
 
 // REDUX
-import { Provider } from 'react-redux'
-import store from 'state/store'
+import FVProvider from 'components/FVProvider'
+
 // Views
 import AppWrapper from 'components/AppWrapper'
 import Login from 'components/Login'
@@ -49,16 +49,16 @@ const context = {
 // https://stackoverflow.com/questions/31302803/is-it-ok-to-use-react-render-multiple-times-in-the-dom
 // https://github.com/facebook/react/issues/12700
 render(
-  <Provider store={store}>
+  <FVProvider>
     <Login />
-  </Provider>,
+  </FVProvider>,
   document.getElementById('login')
 )
 
 // Carry on as usual
 render(
-  <Provider store={store}>
+  <FVProvider>
     <AppWrapper {...context} />
-  </Provider>,
+  </FVProvider>,
   document.getElementById('app-wrapper')
 )

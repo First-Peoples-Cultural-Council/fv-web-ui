@@ -181,12 +181,20 @@ module.exports = (env) => ({
       library: { type: 'var', name: 'app_v1' },
       filename: path.join(outputScriptsDirectory, 'remoteEntry.' + gitRevisionPlugin.commithash() + '.js'),
       exposes: {
-        './PageDebugAPI': 'components/PageDebugAPI',
+        './useRoute': 'dataSources/useRoute',
+        './FVProvider': 'components/FVProvider',
+        './WordsListContainer': 'components/WordsList/WordsListContainer',
       },
       remotes: {
         'app_v2': 'app_v2',
       },
-      // shared: { react: { singleton: true }, "react-dom": { singleton: true } },
+      shared: {
+        react: { eager: true, singleton: true, requiredVersion: '^17.0.1' },
+        'react-dom': { eager: true, singleton: true, requiredVersion: '^17.0.1' },
+        'react-redux': { eager: true, singleton: true, requiredVersion: '^17.0.1' },
+        'redux': { eager: true, singleton: true, requiredVersion: '^7.2.2' },
+        'redux-thunk': { eager: true, singleton: true, requiredVersion: '^2.3.0' },
+      },
     }),
   ],
 
