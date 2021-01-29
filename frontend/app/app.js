@@ -28,7 +28,7 @@ import Login from 'components/Login'
 // Sentry
 import * as Sentry from '@sentry/react'
 Sentry.init({
-  dsn: 'https://b5b295e690dd4471be88933ec976d12d@o488868.ingest.sentry.io/5550001',
+  dsn: 'https://9f99c993909b4dda85e7178a0eadc7fa@o155797.ingest.sentry.io/1212465',
 })
 
 import 'normalize.css'
