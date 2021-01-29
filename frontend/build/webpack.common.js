@@ -172,6 +172,7 @@ module.exports = (env) => ({
       ],
     }),
     new webpack.DefinePlugin({
+      GIT_VERSION: gitRevisionPlugin.version(),
       ENV_NUXEO_URL: env && env.NUXEO_URL ? JSON.stringify(env.NUXEO_URL) : null,
       ENV_WEB_URL: env && env.WEB_URL ? JSON.stringify(env.WEB_URL) : null,
       ENV_CONTEXT_PATH: env && env.CONTEXT_PATH ? JSON.stringify(env.CONTEXT_PATH) : null,
