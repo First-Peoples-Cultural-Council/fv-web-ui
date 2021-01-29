@@ -97,16 +97,16 @@ class PageDialectImmersionList extends PageDialectLearnBase {
       translateFilter: 'either',
     }
 
-      // Bind methods to 'this'
-      ;[
-        '_getURLPageProps', // NOTE: Comes from PageDialectLearnBase
-        '_handleFacetSelected', // NOTE: Comes from PageDialectLearnBase
-        '_handleFilterChange', // NOTE: Comes from PageDialectLearnBase
-        '_handlePagePropertiesChange', // NOTE: Comes from PageDialectLearnBase
-        '_onNavigateRequest', // NOTE: Comes from PageDialectLearnBase
-        '_resetURLPagination', // NOTE: Comes from PageDialectLearnBase
-        'handleDialectFilterList', // NOTE: Comes from PageDialectLearnBase
-      ].forEach((method) => (this[method] = this[method].bind(this)))
+    // Bind methods to 'this'
+    ;[
+      '_getURLPageProps', // NOTE: Comes from PageDialectLearnBase
+      '_handleFacetSelected', // NOTE: Comes from PageDialectLearnBase
+      '_handleFilterChange', // NOTE: Comes from PageDialectLearnBase
+      '_handlePagePropertiesChange', // NOTE: Comes from PageDialectLearnBase
+      '_onNavigateRequest', // NOTE: Comes from PageDialectLearnBase
+      '_resetURLPagination', // NOTE: Comes from PageDialectLearnBase
+      'handleDialectFilterList', // NOTE: Comes from PageDialectLearnBase
+    ].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   _getPageKey = () => {
@@ -153,16 +153,16 @@ class PageDialectImmersionList extends PageDialectLearnBase {
     return tree
   }
 
-  handleSearch = () => { }
+  handleSearch = () => {}
 
-  resetSearch = () => { }
+  resetSearch = () => {}
 
   // FILTERS
   changeFilter = (translateFilter) => {
     this.setState({ translateFilter })
   }
 
-  clearFilter = () => { }
+  clearFilter = () => {}
 
   render() {
     const { classes } = this.props
@@ -178,8 +178,9 @@ class PageDialectImmersionList extends PageDialectLearnBase {
 
     const allLabels = selectn('directoryEntries.fv_labels', this.props.computeDirectory) || []
 
-    const pageTitle = `${selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
-      ''} Immersion Portal` // need locale key
+    const pageTitle = `${
+      selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) || ''
+    } Immersion Portal` // need locale key
 
     const wordListView = selectn('response.uid', computeDocument) ? (
       <ImmersionListView

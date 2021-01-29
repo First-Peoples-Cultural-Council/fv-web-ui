@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 /* global _paq */
 /*
 Copyright 2016 First People's Cultural Council
@@ -261,8 +262,8 @@ export class ExploreDialect extends Component {
           controls
         />
       ) : (
-          ''
-        )
+        ''
+      )
       portalTitle = (
         <h1 className={classNames('display', 'dialect-greeting-container', dialectClassName)}>
           <AuthorizationFilter
@@ -324,7 +325,10 @@ export class ExploreDialect extends Component {
                     href={this.props.windowPath + '/learn'}
                     onClick={this._onNavigateRequest.bind(this, this.props.windowPath + '/learn')}
                   >
-                    <FVLabel transKey="views.pages.explore.dialect.learn_our_language" defaultStr="Learn our Language" />
+                    <FVLabel
+                      transKey="views.pages.explore.dialect.learn_our_language"
+                      defaultStr="Learn our Language"
+                    />
                   </a>
                   <a
                     href={this.props.windowPath + '/play'}
@@ -356,8 +360,7 @@ export class ExploreDialect extends Component {
 
             <div className={dialectClassName}>
               <h2>
-                <FVLabel transKey="views.pages.explore.dialect.about_us"
-                  defaultStr="ABOUT US" transform="upper" />
+                <FVLabel transKey="views.pages.explore.dialect.about_us" defaultStr="ABOUT US" transform="upper" />
               </h2>
               <hr className="dialect-hr" />
 
@@ -390,8 +393,8 @@ export class ExploreDialect extends Component {
                     properties={this.props.properties}
                   />
                 ) : (
-                    ''
-                  )}
+                  ''
+                )}
 
                 <GridView
                   action={this._handleSelectionChange}
@@ -415,38 +418,40 @@ export class ExploreDialect extends Component {
                 <div>
                   {(selectn('response.contextParameters.portal.fv-portal:related_links.length', computePortal) > 0 ||
                     !isSection) && (
-                      <AuthorizationFilter
-                        filter={{ permission: 'Write', entity: selectn('response', computePortal) }}
-                        renderPartial
-                      >
-                        <div>
-                          <h2>
-                            <FVLabel transKey="related_links"
-                              defaultStr="RELATED LINKS" transform="upper" />
-                          </h2>
-                          <hr className="dialect-hr" />
-                          <EditableComponentHelper
-                            dataTestid="EditableComponent__fv-portal-related_links"
-                            isSection={isSection}
-                            computeEntity={computePortal}
-                            updateEntity={this.props.updatePortal}
-                            context={computeDialect2}
-                            showPreview
-                            previewType="FVLink"
-                            property="fv-portal:related_links"
-                            sectionProperty="contextParameters.portal.fv-portal:related_links"
-                            entity={selectn('response', computePortal)}
-                          />
-                        </div>
-                      </AuthorizationFilter>
-                    )}
+                    <AuthorizationFilter
+                      filter={{ permission: 'Write', entity: selectn('response', computePortal) }}
+                      renderPartial
+                    >
+                      <div>
+                        <h2>
+                          <FVLabel transKey="related_links" defaultStr="RELATED LINKS" transform="upper" />
+                        </h2>
+                        <hr className="dialect-hr" />
+                        <EditableComponentHelper
+                          dataTestid="EditableComponent__fv-portal-related_links"
+                          isSection={isSection}
+                          computeEntity={computePortal}
+                          updateEntity={this.props.updatePortal}
+                          context={computeDialect2}
+                          showPreview
+                          previewType="FVLink"
+                          property="fv-portal:related_links"
+                          sectionProperty="contextParameters.portal.fv-portal:related_links"
+                          entity={selectn('response', computePortal)}
+                        />
+                      </div>
+                    </AuthorizationFilter>
+                  )}
                 </div>
               </div>
 
               <div className={classNames('col-xs-12')}>
                 <h2>
-                  <FVLabel transKey="views.pages.explore.dialect.region_data"
-                    defaultStr="REGION DATA" transform="upper" />
+                  <FVLabel
+                    transKey="views.pages.explore.dialect.region_data"
+                    defaultStr="REGION DATA"
+                    transform="upper"
+                  />
                 </h2>
                 <hr className="dialect-hr" />
 

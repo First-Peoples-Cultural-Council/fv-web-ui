@@ -149,7 +149,7 @@ class ImmersionListView extends Component {
         base: intl.trans(id, 'English Unavailable', null, strings, null, null, locale),
         translation: undefined,
         editButton: undefined,
-        editClick: () => { },
+        editClick: () => {},
         uid: undefined,
         relatedAudio: undefined,
         state: 'N/A',
@@ -197,14 +197,14 @@ class ImmersionListView extends Component {
         {!allTranslations ? (
           'Loading...'
         ) : (
-            <div>
-              <ImmersionTable
-                mappedTranslations={mappedTranslations || []}
-                routeParams={routeParams}
-                selectedFilter={selectedFilter}
-              />
-            </div>
-          )}
+          <div>
+            <ImmersionTable
+              mappedTranslations={mappedTranslations || []}
+              routeParams={routeParams}
+              selectedFilter={selectedFilter}
+            />
+          </div>
+        )}
         <LabelModal
           isNew={isNew}
           dialectPath={routeParams.dialect_path}
