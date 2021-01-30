@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Switch, Route, Link } from 'react-router-dom'
 import './AppFrame.css'
 import About from 'components/About'
 import Suspender from 'components/Suspender'
 import Header from 'components/Header'
+import useRoute from 'app_v1/useRoute'
+import WordsListContainer from 'app_v1/WordsListContainer'
+import useSearchParams from 'common/useSearchParams'
 import DialectHeader from 'components/DialectHeader'
 
 /**
@@ -16,6 +19,32 @@ import DialectHeader from 'components/DialectHeader'
  * @returns {node} jsx markup
  */
 function AppFrameContainer() {
+  /*
+  Note: the following values should match what's in your Nuxeo backend
+
+  You can hardcode changes below or override them using url query params, eg:
+  http://0.0.0.0:3002/?language=somethingElse&dialect_path=/garden/the/down
+  */
+  const { dialect_path, language } = useSearchParams({
+    defaultValues: {
+      language: "k'w",
+      // uid: '7ef2204c-f2d9-4904-b9bd-745e5ad01706',
+      dialect_path: "/FV/Workspaces/Data/Test/Test/k'w",
+    },
+    decode: [
+      // { name: 'uid', type: 'uri' },
+      { name: 'language', type: 'uri' },
+      { name: 'dialect_path', type: 'uri' },
+    ],
+  })
+  const { setRouteParams } = useRoute()
+  useEffect(() => {
+    setRouteParams({
+      matchedRouteParams: {
+        dialect_path,
+      },
+    })
+  }, [])
   return (
     <div className="AppFrame">
       <Header.Container className="AppV2__header" />
@@ -27,8 +56,10 @@ function AppFrameContainer() {
             <Link to="/">Home</Link>
           </li>
           <li>
-            {/* Note: change `?language=...` param to a language name on your local docker */}
-            <Link to="/about?language=ÜgwÛ">About</Link>
+            <Link to="/about">About</Link>
+          </li>
+          <li>
+            <Link to="/words">Words</Link>
           </li>
         </ul>
       </nav>
@@ -36,7 +67,10 @@ function AppFrameContainer() {
         <Suspender>
           <Switch>
             <Route path="/about">
-              <About.Container />
+              <About.Container language={language} />
+            </Route>
+            <Route path="/words">
+              <WordsListContainer />
             </Route>
             <Route path="/">
               <Home />
@@ -53,19 +87,5 @@ function AppFrameContainer() {
 function Home() {
   return <h2>[Showing Home page]</h2>
 }
-// function About() {
-//   const match = useRouteMatch()
-
-//   return (
-//     <>
-//       <h2>About</h2>
-
-//       <Link to="/about/subpage">Go to About subpage</Link>
-//       <Route path={`${match.url}/subpage`}>
-//         <div>This is a subpage for About</div>
-//       </Route>
-//     </>
-//   )
-// }
 
 export default AppFrameContainer

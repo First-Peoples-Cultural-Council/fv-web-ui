@@ -25,14 +25,14 @@ export const getCurrentUser = () => {
 
     return UserOperations.getCurrentUser()
       .then((response) => {
-        let immersionLookup = selectn('properties.languagePreference', response);
-        dispatch({ type: GET_CURRENT_USER_SUCCESS, user: response, isAnonymous: response.isAnonymous });
+        let immersionLookup = selectn('properties.languagePreference', response)
+        dispatch({ type: GET_CURRENT_USER_SUCCESS, user: response, isAnonymous: response.isAnonymous })
 
         if (response.isAnonymous &&
           localStorage !== null && localStorage !== undefined
-          && localStorage.hasOwnProperty('intl-service-immersion-mode')) {
+          && Object.prototype.hasOwnProperty.call(localStorage, 'intl-service-immersion-mode')) {
           // For anonymous users retrieve persistant immersion from local storage
-          immersionLookup = localStorage.getItem('intl-service-immersion-mode');
+          immersionLookup = localStorage.getItem('intl-service-immersion-mode')
         }
 
         setImmersionMode(immersionLookup === 'true')(dispatch, getState)
@@ -58,17 +58,16 @@ export const updateCurrentUser = (languagePreference = false) => {
             dispatch({ type: GET_CURRENT_USER_ERROR, error: error })
           })
       })
-    } else {
-      // user local storage
-      localStorage.setItem('intl-service-immersion-mode', languagePreference);
-
-      return UserOperations.getCurrentUser()
-        .then((response) => {
-          dispatch({ type: GET_CURRENT_USER_SUCCESS, user: response, isAnonymous: response.isAnonymous })
-        })
-        .catch((error) => {
-          dispatch({ type: GET_CURRENT_USER_ERROR, error: error })
-        })
     }
+    // user local storage
+    localStorage.setItem('intl-service-immersion-mode', languagePreference)
+
+    return UserOperations.getCurrentUser()
+      .then((response) => {
+        dispatch({ type: GET_CURRENT_USER_SUCCESS, user: response, isAnonymous: response.isAnonymous })
+      })
+      .catch((error) => {
+        dispatch({ type: GET_CURRENT_USER_ERROR, error: error })
+      })
   }
 }

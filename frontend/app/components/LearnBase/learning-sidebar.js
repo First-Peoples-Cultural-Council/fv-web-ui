@@ -40,7 +40,7 @@ export class LearningSidebar extends Component {
 
   constructor(props, context) {
     super(props, context)
-      ;[].forEach((method) => (this[method] = this[method].bind(this)))
+    ;[].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   render() {
@@ -61,8 +61,7 @@ export class LearningSidebar extends Component {
                 >
                   <div>
                     <h2>
-                      <FVLabel transKey="language_resources"
-                        defaultStr="Language Resources" transform="upper" />
+                      <FVLabel transKey="language_resources" defaultStr="Language Resources" transform="upper" />
                     </h2>
                     <hr className="dialect-hr" />
                     <EditableComponentHelper
@@ -93,8 +92,7 @@ export class LearningSidebar extends Component {
                 >
                   <div>
                     <h2>
-                      <FVLabel transKey="our_keyboards"
-                        defaultStr="OUR KEYBOARDS" transform="upper" />
+                      <FVLabel transKey="our_keyboards" defaultStr="OUR KEYBOARDS" transform="upper" />
                     </h2>
                     <hr className="dialect-hr" />
                     <EditableComponentHelper
@@ -125,8 +123,7 @@ export class LearningSidebar extends Component {
                 >
                   <div>
                     <h2>
-                      <FVLabel transKey="contact_information"
-                        defaultStr="CONTACT INFORMATION" transform="upper" />
+                      <FVLabel transKey="contact_information" defaultStr="CONTACT INFORMATION" transform="upper" />
                     </h2>
                     <hr className="dialect-hr" />
                     <EditableComponentHelper

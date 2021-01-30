@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+/* globals GIT_VERSION */
 import 'core-js'
 
 import React from 'react'
@@ -20,15 +21,17 @@ import { render } from 'react-dom'
 import ConfGlobal from 'common/conf/local.js'
 
 // REDUX
-import { Provider } from 'react-redux'
-import store from 'state/store'
+import FVProvider from 'components/FVProvider'
+
 // Views
 import AppWrapper from 'components/AppWrapper'
 import Login from 'components/Login'
 // Sentry
 import * as Sentry from '@sentry/react'
+
 Sentry.init({
-  dsn: 'https://b5b295e690dd4471be88933ec976d12d@o488868.ingest.sentry.io/5550001',
+  dsn: 'https://9f99c993909b4dda85e7178a0eadc7fa@o155797.ingest.sentry.io/1212465',
+  release: 'fv-web-ui-v1@' + GIT_VERSION,
 })
 
 import 'normalize.css'
@@ -49,16 +52,16 @@ const context = {
 // https://stackoverflow.com/questions/31302803/is-it-ok-to-use-react-render-multiple-times-in-the-dom
 // https://github.com/facebook/react/issues/12700
 render(
-  <Provider store={store}>
+  <FVProvider>
     <Login />
-  </Provider>,
+  </FVProvider>,
   document.getElementById('login')
 )
 
 // Carry on as usual
 render(
-  <Provider store={store}>
+  <FVProvider>
     <AppWrapper {...context} />
-  </Provider>,
+  </FVProvider>,
   document.getElementById('app-wrapper')
 )

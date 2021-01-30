@@ -83,8 +83,8 @@ export class KidsNavigation extends Component {
     const avatar = portalLogo ? (
       <Avatar src={NavigationHelpers.getBaseURL() + portalLogo} size={50} style={{ marginRight: '10px' }} />
     ) : (
-        ''
-      )
+      ''
+    )
     const homeURL = NavigationHelpers.generateStaticURL('/kids' + this.props.routeParams.dialect_path)
     const showHome = this.props.routeParams.dialect_path !== undefined && homeURL !== window.location.pathname
 

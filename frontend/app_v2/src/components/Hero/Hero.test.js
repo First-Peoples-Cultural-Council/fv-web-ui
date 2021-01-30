@@ -20,7 +20,7 @@ import { render, screen } from '@testing-library/react'
 // import HeroContainer from 'components/Hero/HeroContainer'
 // import HeroData from 'components/Hero/HeroData'
 import HeroPresentation from 'components/Hero/HeroPresentation'
-import HeroBackground from 'components/Hero/hero-background.jpg'
+import HeroBackground from 'images/hero-background.jpg'
 /*
 // Container
 describe('HeroContainer', () => {

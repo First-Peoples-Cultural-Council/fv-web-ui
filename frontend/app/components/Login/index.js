@@ -49,7 +49,7 @@ export class Login extends Component {
     }
 
     this.anchorEl = null
-      ;['_handleOpen', '_handleClose', '_onNavigateRequest'].forEach((method) => (this[method] = this[method].bind(this)))
+    ;['_handleOpen', '_handleClose', '_onNavigateRequest'].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   _handleOpen(event) {
