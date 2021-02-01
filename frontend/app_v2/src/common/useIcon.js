@@ -1,6 +1,7 @@
 import React from 'react'
 
 import AboutIcon from 'common/icons/AboutIcon'
+import AudioIcon from 'common/icons/AudioIcon'
 import ChevronDownIcon from 'common/icons/ChevronDownIcon'
 import ChevronLeftIcon from 'common/icons/ChevronLeftIcon'
 import ChevronRightIcon from 'common/icons/ChevronRightIcon'
@@ -26,6 +27,8 @@ function useIcon(iconName, iconStyling) {
   switch (iconName) {
     case 'About':
       return <AboutIcon styling={styling} />
+    case 'Audio':
+      return <AudioIcon styling={styling} />
     case 'Dictionary':
       return <DictionaryIcon styling={styling} />
     case 'ChevronDown':
