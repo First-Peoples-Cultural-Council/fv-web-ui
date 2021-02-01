@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 
 /**
@@ -14,12 +15,32 @@ function WidgetWotdData({ children }) {
     title: "ali'wadzāgwis",
     definition:
       'the people sitting at a potlatch, that is, the members of the invited clans as opposed to the host clan.',
-    audioFile: '',
+    audioSrc:
+      'http://localhost:3001/nuxeo/nxfile/default/16537646-937b-489a-ae3d-3f41ff8ba794/file:content/TestWav.wav',
     url:
-      'https://www.firstvoices.com/explore/FV/sections/Data/Athabascan/Yekooche/Yekooche/learn/words/167adc92-020c-4fa8-94a3-3cdf18ac05ae',
+      'http://localhost:3001/explore/FV/Workspaces/Data/Test/Test/TestDialectPublic/learn/words/4ad2f6f8-2105-4144-b75e-19de15134a2a',
   }
+
+  const [player] = useState(new Audio(entry.audioSrc))
+  const [isPlaying, setIsPlaying] = useState(false)
+
+  const onAudioClick = () => {
+    if (isPlaying) {
+      player.pause()
+      setIsPlaying(false)
+    } else {
+      setIsPlaying(true)
+      player.play()
+    }
+  }
+
+  player.onended = () => {
+    setIsPlaying(false)
+  }
+
   return children({
     entry,
+    onAudioClick,
   })
 }
 // PROPTYPES

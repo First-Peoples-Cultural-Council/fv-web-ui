@@ -15,8 +15,8 @@ import WidgetWotdData from 'components/WidgetWotd/WidgetWotdData'
 function WidgetWotdContainer() {
   return (
     <WidgetWotdData>
-      {({ entry }) => {
-        return <WidgetWotdPresentation entry={entry} />
+      {({ entry, onAudioClick }) => {
+        return <WidgetWotdPresentation entry={entry} onAudioClick={onAudioClick} />
       }}
     </WidgetWotdData>
   )
