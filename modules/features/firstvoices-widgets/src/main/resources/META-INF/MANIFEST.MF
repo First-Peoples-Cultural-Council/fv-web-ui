@@ -8,5 +8,5 @@ Bundle-Name: FirstVoicesWidgets
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: FirstVoicesWidgets
 Nuxeo-Component: OSGI-INF/services/testWidget-contrib.xml,
- OSGI-INF/data/widgets-contrib.xml,
+ OSGI-INF/widgets-contrib.xml,
  OSGI-INF/ca.firstvoices.operations.xml

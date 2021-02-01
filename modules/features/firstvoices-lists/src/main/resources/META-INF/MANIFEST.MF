@@ -7,5 +7,6 @@ Bundle-Version: 1.0.0
 Bundle-Name: FirstVoicesLists
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: FirstVoicesLists
-Nuxeo-Component: OSGI-INF/services/addConfusables-contrib.xml,
+Nuxeo-Component: OSGI-INF/services/listService-contrib.xml,
+ OSGI-INF/lists-contrib.xml,
  OSGI-INF/ca.firstvoices.operations.xml

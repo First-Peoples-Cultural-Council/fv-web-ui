@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<component name="fv-lists-contrib" version="1.0">
+
+  <require>org.nuxeo.runtime.started</require>
+  <require>org.nuxeo.ecm.core.schema.TypeService</require>
+  <require>org.nuxeo.ecm.core.CoreExtensions</require>
+
+  <!-- LIST TYPE -->
+  <extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
+    <doctype name="FVList" extends="Document">
+      <schema name="uid"/>
+      <schema name="dublincore"/>
+      <schema name="common"/>
+      <schema name="fvancestry"/> <!-- maybe? -->
+      <schema name="fvcore"/> <!-- maybe? -->
+
+      <facet name="Configurable"/>
+      <facet name="HiddenInCreation"/>
+      <facet name="HiddenInNavigation"/>
+    </doctype>
+  </extension>
+
+  <!-- Allow subtype -->
+  <doctype name="FVBook" extends="Document">
+    <schema name="fvbook"/>
+    <schema name="dublincore"/>
+    <schema name="common"/>
+    <schema name="uid"/>
+    <schema name="fvancestry"/>
+    <schema name="fvcore"/>
+    <schema name="fvlegacy"/>
+    <facet name="Folderish"/>
+    <facet name="NXTag"/>
+    <facet name="Publishable"/>
+    <facet name="Orderable"/>
+    <subtypes>
+      <type>FVBookEntry</type>
+    </subtypes>
+  </doctype>
+
+  <!-- LIST DIRECTORY -->
+
+  <!-- Defined list schema (for directory) -->
+  <extension target="org.nuxeo.ecm.core.schema.TypeService"
+    point="schema">
+    <schema name="fvLists" src="OSGI-INF/data/schemas/lists.xsd" />
+  </extension>
+
+  <!-- Define directory for list items -->
+  <extension target="org.nuxeo.ecm.directory.sql.SQLDirectoryFactory"
+    point="directories">
+    <directory name="fvLists">
+      <schema>fvLists</schema>
+      <dataSource>java:/nxsqldirectory</dataSource>
+      <cacheEntryName>fv-lists-cache</cacheEntryName>
+      <table>list2doc</table>
+      <idField>relationId</idField>
+      <autoincrementIdField>true</autoincrementIdField>
+      <createTablePolicy>on_missing_columns</createTablePolicy>
+      <querySizeLimit>1000</querySizeLimit>
+    </directory>
+  </extension>
+
+  <!-- Consider a Redis cache? -->
+  <!-- https://doc.nuxeo.com/nxdoc/how-to-configure-a-new-directory-cache/ -->
+  <!-- https://doc.nuxeo.com/nxdoc/dbs-cache/ -->
+  <extension target="org.nuxeo.ecm.core.cache.CacheService" point="caches">
+    <cache name="fv-lists-cache">
+      <ttl>20</ttl>
+      <option name="maxSize">100</option>
+      <option name="concurrencyLevel">500</option>
+    </cache>
+  </extension>
+
+</component>

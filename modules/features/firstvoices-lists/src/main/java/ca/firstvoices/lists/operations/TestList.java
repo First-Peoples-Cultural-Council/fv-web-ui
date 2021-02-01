@@ -12,11 +12,11 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.impl.blob.StringBlob;
 
 @Operation(id = TestList.ID, category = Constants.GROUP_NAME,
-    label = Constants.CONFUSABLES_STATUS_ACTION_ID,
-    description = "Operation to show the status of confusables on a dialect")
+    label = Constants.TEST_LIST_OPERATION,
+    description = "Operation to test list functionality")
 public class TestList {
 
-  public static final String ID = Constants.CONFUSABLES_STATUS_ACTION_ID;
+  public static final String ID = Constants.TEST_LIST_OPERATION;
 
   @OperationMethod
   public Blob run(DocumentModel dialect) throws OperationException {
