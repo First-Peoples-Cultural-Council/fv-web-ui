@@ -1,0 +1,13 @@
+<component name="ca.firstvoices.auth.lockout">
+
+  <require>org.nuxeo.ecm.platform.ui.web.auth.WebEngineConfig</require>
+  <require>org.nuxeo.ecm.platform.ui.web.auth.defaultConfig</require>
+  <require>ca.firstvoices.studio.extensions</require>
+  <require>ca.firstvoices.lockout.usermanager</require>
+
+  <extension point="userManager" target="org.nuxeo.ecm.platform.usermanager.UserService">
+    <userManager class="ca.firstvoices.lockout.LockoutUserManager">
+    </userManager>
+  </extension>
+
+</component>

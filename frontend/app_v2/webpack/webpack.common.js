@@ -124,7 +124,7 @@ module.exports = (env) => {
           COMMIT: gitRevisionPlugin.commithash(),
           BRANCH: gitRevisionPlugin.branch(),
           DATE: new Date().toLocaleString('en-CA', { timeZone: 'America/Vancouver' }),
-          V1_URL: env.V1_URL || 'http://0.0.0.0:3001',
+          V1_URL: env.V1_URL || '',
         },
         // scriptLoading: 'defer', // TODO: INVESTIGATE THIS SETTING FOR PERFORMANCE
         minify: {
