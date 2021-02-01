@@ -28,6 +28,7 @@ const outputGamesDirectory = paths.outputGamesDirectory
 // Plugins
 const WarningsToErrorsPlugin = require('warnings-to-errors-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackSkipAssetsPlugin = require('html-webpack-skip-assets-plugin').HtmlWebpackSkipAssetsPlugin
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
@@ -196,6 +197,10 @@ module.exports = (env) => ({
         'redux': { eager: true, singleton: true, requiredVersion: '^7.2.2' },
         'redux-thunk': { eager: true, singleton: true, requiredVersion: '^2.3.0' },
       },
+    }),
+    new HtmlWebpackSkipAssetsPlugin({
+      // Exclude reference to own remoteEntry in HTML output
+      skipAssets: [path.join(outputScriptsDirectory, 'remoteEntry.' + gitRevisionPlugin.commithash() + '.js')],
     }),
   ],
 

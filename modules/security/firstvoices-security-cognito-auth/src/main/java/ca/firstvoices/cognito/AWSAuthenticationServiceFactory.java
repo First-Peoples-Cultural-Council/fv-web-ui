@@ -3,6 +3,7 @@ package ca.firstvoices.cognito;
 import ca.firstvoices.cognito.exceptions.MiscellaneousFailureException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.model.ComponentInstance;
 import org.nuxeo.runtime.model.DefaultComponent;
 
@@ -27,25 +28,31 @@ public class AWSAuthenticationServiceFactory extends DefaultComponent {
   @Override
   public void registerContribution(Object contribution, String xp, ComponentInstance component) {
 
-    if ("configuration".equals(xp)) {
-      LOG.info("Configuration loaded: " + contribution.toString());
+    boolean awsAuthenticationEnabled =
+        Framework.getService(AWSAwareUserManagerConfigurationService.class)
+            .getConfig().authenticateWithCognito;
 
-      this.config = (AWSAuthenticationServiceConfigurationDescriptor) contribution;
+    if (awsAuthenticationEnabled) {
+      if ("configuration".equals(xp)) {
+        LOG.info("Configuration loaded: " + contribution.toString());
 
-      this.authenticationService = new AWSAuthenticationServiceImpl(this.config.accessKey,
-          this.config.secretKey,
-          this.config.userPool,
-          this.config.region,
-          this.config.clientID);
-      try {
-        this.authenticationService.testConnection();
-      } catch (MiscellaneousFailureException e) {
-        LOG.warn("An exception occurred while testing the connection. AWS Cognito authentication"
-            + " will not work", e);
+        this.config = (AWSAuthenticationServiceConfigurationDescriptor) contribution;
+
+        this.authenticationService = new AWSAuthenticationServiceImpl(this.config.accessKey,
+            this.config.secretKey,
+            this.config.userPool,
+            this.config.region,
+            this.config.clientID);
+        try {
+          this.authenticationService.testConnection();
+        } catch (MiscellaneousFailureException e) {
+          LOG.warn("An exception occurred while testing the connection. AWS Cognito authentication"
+              + " will not work", e);
+        }
       }
-    }
 
-    super.registerContribution(contribution, xp, component);
+      super.registerContribution(contribution, xp, component);
+    }
   }
 
   @Override

@@ -1,6 +1,7 @@
 const webpack = require('webpack')
 const alias = require('./webpack.alias')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackSkipAssetsPlugin = require('html-webpack-skip-assets-plugin').HtmlWebpackSkipAssetsPlugin
 const GitRevisionPlugin = require('git-revision-webpack-plugin')
 const { ModuleFederationPlugin } = require('webpack').container
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -101,7 +102,7 @@ module.exports = (env) => {
       new ModuleFederationPlugin({
         name: 'app_v2',
         library: { type: 'var', name: 'app_v2' },
-        filename: 'remoteEntry.' + gitRevisionPlugin.commithash() + '.js',
+        filename: 'assets/js/remoteEntry.' + gitRevisionPlugin.commithash() + '.js',
         exposes: {
           './HeaderContainer': 'components/Header/HeaderContainer',
         },
@@ -131,6 +132,10 @@ module.exports = (env) => {
           collapseWhitespace: true,
           minifyCSS: true,
         },
+      }),
+      new HtmlWebpackSkipAssetsPlugin({
+        // Exclude reference to own remoteEntry in HTML output
+        skipAssets: ['assets/js/remoteEntry.' + gitRevisionPlugin.commithash() + '.js'],
       }),
       new CopyPlugin({
         patterns: [
