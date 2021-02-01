@@ -11,10 +11,12 @@ import PropTypes from 'prop-types'
  */
 function WidgetWotdData({ children }) {
   const entry = {
-    title: "adelht̲s̲'ine",
+    title: "ali'wadzāgwis",
     definition:
       'the people sitting at a potlatch, that is, the members of the invited clans as opposed to the host clan.',
     audioFile: '',
+    url:
+      'https://www.firstvoices.com/explore/FV/sections/Data/Athabascan/Yekooche/Yekooche/learn/words/167adc92-020c-4fa8-94a3-3cdf18ac05ae',
   }
   return children({
     entry,
