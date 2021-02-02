@@ -61,7 +61,11 @@ export class LearningSidebar extends Component {
                 >
                   <div>
                     <h2>
-                      <FVLabel transKey="language_resources" defaultStr="Language Resources" transform="upper" />
+                      <FVLabel
+                        transKey="general.language_resources"
+                        defaultStr="Language Resources"
+                        transform="upper"
+                      />
                     </h2>
                     <hr className="dialect-hr" />
                     <EditableComponentHelper
@@ -92,7 +96,7 @@ export class LearningSidebar extends Component {
                 >
                   <div>
                     <h2>
-                      <FVLabel transKey="our_keyboards" defaultStr="OUR KEYBOARDS" transform="upper" />
+                      <FVLabel transKey="general.our_keyboards" defaultStr="OUR KEYBOARDS" transform="upper" />
                     </h2>
                     <hr className="dialect-hr" />
                     <EditableComponentHelper
@@ -123,7 +127,11 @@ export class LearningSidebar extends Component {
                 >
                   <div>
                     <h2>
-                      <FVLabel transKey="contact_information" defaultStr="CONTACT INFORMATION" transform="upper" />
+                      <FVLabel
+                        transKey="general.contact_information"
+                        defaultStr="CONTACT INFORMATION"
+                        transform="upper"
+                      />
                     </h2>
                     <hr className="dialect-hr" />
                     <EditableComponentHelper
