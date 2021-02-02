@@ -11,6 +11,7 @@ import PropTypes from 'prop-types'
  *
  */
 function WidgetWotdData({ children }) {
+  // Temporary hardcoded data - replace with your own to run locally
   const entry = {
     title: "ali'wadzāgwis",
     definition:
