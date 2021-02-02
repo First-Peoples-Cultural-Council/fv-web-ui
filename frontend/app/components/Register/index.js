@@ -52,6 +52,7 @@ export class Register extends Component {
     computeUserSelfregister: object.isRequired,
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
+    intl: object.isRequired,
     // REDUX: actions/dispatch/func
     fetchDialect2: func.isRequired,
     pushWindowPath: func.isRequired,
@@ -74,7 +75,7 @@ export class Register extends Component {
   }
 
   fetchData(newProps) {
-    if (newProps.routeParams.hasOwnProperty('dialect_path')) {
+    if (Object.prototype.hasOwnProperty.call(newProps.routeParams, 'dialect_path')) {
       newProps.fetchDialect2(newProps.routeParams.dialect_path)
     }
   }
@@ -99,20 +100,20 @@ export class Register extends Component {
     }
 
     // 'Redirect' on success
-    if (selectn('success', currentWord) != selectn('success', nextWord) && selectn('success', nextWord) === true) {
+    if (selectn('success', currentWord) !== selectn('success', nextWord) && selectn('success', nextWord) === true) {
       //nextProps.replaceWindowPath('/' + nextProps.routeParams.siteTheme + selectn('response.path', nextWord).replace('Dictionary', 'learn/words'));
     }
   }
 
   shouldComponentUpdate(newProps /*, newState*/) {
     switch (true) {
-      case newProps.windowPath != this.props.windowPath:
+      case newProps.windowPath !== this.props.windowPath:
         return true
 
-      case newProps.computeDialect2 != this.props.computeDialect2:
+      case newProps.computeDialect2 !== this.props.computeDialect2:
         return true
 
-      case newProps.computeUserSelfregister != this.props.computeUserSelfregister:
+      case newProps.computeUserSelfregister !== this.props.computeUserSelfregister:
         return true
       default: // NOTE: do nothing
     }
@@ -129,7 +130,7 @@ export class Register extends Component {
     const properties = {}
 
     for (const key in formValue) {
-      if (formValue.hasOwnProperty(key) && key) {
+      if (Object.prototype.hasOwnProperty.call(formValue, key) && key) {
         if (formValue[key] && formValue[key] !== '') {
           properties[key] = formValue[key]
         }
@@ -277,7 +278,7 @@ export class Register extends Component {
                   onClick={this._onRequestSaveForm.bind(this, this.props.computeLogin)}
                   color="primary"
                 >
-                  <FVLabel transKey="register" defaultStr="Register" transform="first" />
+                  <FVLabel transKey="register" defaultStr="Register" />
                 </FVButton>
               </div>
             </form>
