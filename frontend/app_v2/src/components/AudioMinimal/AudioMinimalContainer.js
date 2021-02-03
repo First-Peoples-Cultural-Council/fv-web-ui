@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import AudioMinimalPresentation from './AudioMinimalPresentation'
 import AudioMinimalData from './AudioMinimalData'
-
 /**
  * @summary AudioMinimalContainer
  * @version 1.0.1
@@ -15,15 +14,14 @@ import AudioMinimalData from './AudioMinimalData'
 function AudioMinimalContainer({ src }) {
   return (
     <AudioMinimalData src={src}>
-      {({ isPlaying, isLoading, isErrored, hasErrored, onKeyPress, onClick }) => {
+      {({ isPlaying, isLoading, isErrored, hasErrored, onClick }) => {
         return (
           <AudioMinimalPresentation
-            onClick={onClick}
-            onKeyPress={onKeyPress}
-            isPlaying={isPlaying}
-            isLoading={isLoading}
             hasErrored={hasErrored}
             isErrored={isErrored}
+            isLoading={isLoading}
+            isPlaying={isPlaying}
+            onClick={onClick}
           />
         )
       }}
