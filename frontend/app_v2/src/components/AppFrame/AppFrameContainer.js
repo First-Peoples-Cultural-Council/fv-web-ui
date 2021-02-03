@@ -8,6 +8,8 @@ import WordsListContainer from 'app_v1/WordsListContainer'
 import useSearchParams from 'common/useSearchParams'
 import DialectHeader from 'components/DialectHeader'
 import Topics from 'components/Topics'
+import WidgetWotd from 'components/WidgetWotd'
+
 /**
  * @summary AppFrameContainer
  * @version 1.0.1
@@ -77,6 +79,7 @@ function AppFrameContainer() {
             </Route>
             <Route path="/">
               <Home />
+              <WidgetWotd.Container />
             </Route>
           </Switch>
         </Suspender>

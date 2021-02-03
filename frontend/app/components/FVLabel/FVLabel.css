@@ -15,6 +15,24 @@
   vertical-align: top;
 }
 
+.fv-label-translation-li {
+  opacity: 1 !important;
+}
+
+.fv-label-english-sm {
+  font-size: 10px;
+  font-weight: bold;
+  padding-right: 5px;
+}
+
+.fv-label-icon {
+  margin-right: 7px;
+}
+
+.fv-label.translationListItem {
+  opacity: 1;
+}
+
 @media (max-width: 768px) {
   .fv-label-click-cover {
     background: radial-gradient(transparent, #88585867);

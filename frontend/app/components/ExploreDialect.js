@@ -294,7 +294,7 @@ export class ExploreDialect extends Component {
         >
           <div>
             <h3>
-              <FVLabel transKey="news" defaultStr="News" transform="first" />
+              <FVLabel transKey="general.news" defaultStr="News" transform="first" />
             </h3>
             <EditableComponentHelper
               dataTestid="EditableComponent__fv-portal-news"
@@ -424,7 +424,7 @@ export class ExploreDialect extends Component {
                     >
                       <div>
                         <h2>
-                          <FVLabel transKey="related_links" defaultStr="RELATED LINKS" transform="upper" />
+                          <FVLabel transKey="general.related_links" defaultStr="RELATED LINKS" transform="upper" />
                         </h2>
                         <hr className="dialect-hr" />
                         <EditableComponentHelper

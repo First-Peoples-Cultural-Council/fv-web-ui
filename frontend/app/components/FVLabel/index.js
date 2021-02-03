@@ -4,7 +4,7 @@ import proptypes from 'prop-types'
 import { connect } from 'react-redux'
 import Menu from '@material-ui/core/Menu'
 import ListItem from '@material-ui/core/ListItem'
-import { PlayArrow, Translate, Edit, Add, Close } from '@material-ui/icons'
+import { PlayArrow, Edit, Add, Close } from '@material-ui/icons'
 import { setEditingLabel } from 'reducers/locale'
 
 import ProviderHelpers from 'common/ProviderHelpers'
@@ -123,13 +123,13 @@ function FVLabel({
           <ListItem button onClick={openEdit}>
             {isTranslated && (
               <div>
-                <Edit className="FlatButton__icon" />
+                <Edit className="fv-label-icon FlatButton__icon" />
                 <span className="fv-label-immersion-menu">Edit translation</span>
               </div>
             )}
             {!isTranslated && (
               <div>
-                <Add className="FlatButton__icon" />
+                <Add className="fv-label-icon FlatButton__icon" />
                 <span className="fv-label-immersion-menu">Add translation</span>
               </div>
             )}
@@ -150,19 +150,19 @@ function FVLabel({
           getContentAnchorEl={null}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         >
+          <ListItem className="fv-label-translation-li" disabled autoFocus={false}>
+            <span className="fv-label-english-sm">ENG</span>
+            <span className="fv-label-immersion-menu">{translatedLabel}</span>
+          </ListItem>
           {!isFetching && audioPath && (
             <ListItem button onClick={() => playAudio(audioPath)}>
-              <PlayArrow className="FlatButton__icon" />
+              <PlayArrow className="fv-label-icon FlatButton__icon" />
               <span className="fv-label-immersion-menu">Listen to {translation}</span>
             </ListItem>
           )}
-          <ListItem>
-            <Translate className="FlatButton__icon" />
-            <span className="fv-label-immersion-menu">{translatedLabel}</span>
-          </ListItem>
           {editMenu}
           <ListItem button onClick={handleClose}>
-            <Close className="FlatButton__icon" />
+            <Close className="fv-label-icon FlatButton__icon" />
             <span className="fv-label-immersion-menu">Close</span>
           </ListItem>
         </Menu>

@@ -1,55 +1,68 @@
 import React from 'react'
 
-import AboutIcon from 'common/icons/AboutIcon'
+import About from 'common/icons/AboutIcon'
+import Audio from 'common/icons/AudioIcon'
 import Book from 'common/icons/Book'
 import ChatBubble from 'common/icons/ChatBubble'
-import ChevronDownIcon from 'common/icons/ChevronDownIcon'
-import ChevronLeftIcon from 'common/icons/ChevronLeftIcon'
-import ChevronRightIcon from 'common/icons/ChevronRightIcon'
-import CloseIcon from 'common/icons/CloseIcon'
-import DictionaryIcon from 'common/icons/DictionaryIcon'
-import HamburgerMenuIcon from 'common/icons/HamburgerMenuIcon'
-import KidsIcon from 'common/icons/KidsIcon'
-import LearnIcon from 'common/icons/LearnIcon'
+import ChevronDown from 'common/icons/ChevronDownIcon'
+import ChevronLeft from 'common/icons/ChevronLeftIcon'
+import ChevronRight from 'common/icons/ChevronRightIcon'
+import Close from 'common/icons/CloseIcon'
+import Dictionary from 'common/icons/DictionaryIcon'
+import Facebook from 'common/icons/FacebookIcon'
+import HamburgerMenu from 'common/icons/HamburgerMenuIcon'
+import Kids from 'common/icons/KidsIcon'
+import Learn from 'common/icons/LearnIcon'
 import Lessons from 'common/icons/Lessons'
-import LoginIcon from 'common/icons/LoginIcon'
+import LinkedIn from 'common/icons/LinkedInIcon'
+import Login from 'common/icons/LoginIcon'
 import Logo from 'common/icons/Logo'
+import Mail from 'common/icons/MailIcon'
 import MusicNote from 'common/icons/MusicNote'
-import PlaceHolderIcon from 'common/icons/PlaceHolderIcon'
-import Quote from 'common/icons/Quote'
-import ResourcesIcon from 'common/icons/ResourcesIcon'
-import PlayCircle from 'common/icons/PlayCircle'
 import PauseCircle from 'common/icons/PauseCircle'
+import PlaceHolder from 'common/icons/PlaceHolderIcon'
+import PlayCircle from 'common/icons/PlayCircle'
+import Quote from 'common/icons/Quote'
+import Resources from 'common/icons/ResourcesIcon'
 import TimesCircle from 'common/icons/TimesCircle'
+import Twitter from 'common/icons/TwitterIcon'
+import WebShare from 'common/icons/WebShareIcon'
 
 // a helper function that given a string name returns an icon, if no string is supplied it will return a blank placeholder icon
 
 function useIcon(iconName, iconStyling) {
   const styling = iconStyling ? iconStyling : 'fill-current h-12 w-8'
   const icons = {
-    About: AboutIcon,
+    About,
+    Audio,
     Book,
     ChatBubble,
-    ChevronDown: ChevronDownIcon,
-    ChevronLeft: ChevronLeftIcon,
-    ChevronRight: ChevronRightIcon,
-    Close: CloseIcon,
-    Dictionary: DictionaryIcon,
-    HamburgerMenu: HamburgerMenuIcon,
-    Kids: KidsIcon,
-    Learn: LearnIcon,
+    ChevronDown,
+    ChevronLeft,
+    ChevronRight,
+    Close,
+    Dictionary,
+    Facebook,
+    HamburgerMenu,
+    Kids,
+    Learn,
     Lessons,
-    Login: LoginIcon,
+    LinkedIn,
+    Login,
     Logo,
+    Mail,
     MusicNote,
-    Quote,
-    Resources: ResourcesIcon,
-    PlayCircle,
     PauseCircle,
+    PlaceHolder,
+    PlayCircle,
+    Quote,
+    Resources,
     TimesCircle,
+    Twitter,
+    WebShare,
   }
   const iconFile = icons[iconName]
-  const Icon = iconFile ? iconFile : PlaceHolderIcon
+  const Icon = iconFile ? iconFile : PlaceHolder
   return <Icon styling={styling} />
 }
 export default useIcon

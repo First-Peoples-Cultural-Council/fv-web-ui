@@ -1,6 +1,7 @@
 const webpack = require('webpack')
 const alias = require('./webpack.alias')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackSkipAssetsPlugin = require('html-webpack-skip-assets-plugin').HtmlWebpackSkipAssetsPlugin
 const GitRevisionPlugin = require('git-revision-webpack-plugin')
 const { ModuleFederationPlugin } = require('webpack').container
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
@@ -101,7 +102,7 @@ module.exports = (env) => {
       new ModuleFederationPlugin({
         name: 'app_v2',
         library: { type: 'var', name: 'app_v2' },
-        filename: 'remoteEntry.' + gitRevisionPlugin.commithash() + '.js',
+        filename: 'assets/js/remoteEntry.' + gitRevisionPlugin.commithash() + '.js',
         exposes: {
           './HeaderContainer': 'components/Header/HeaderContainer',
         },
@@ -124,13 +125,17 @@ module.exports = (env) => {
           COMMIT: gitRevisionPlugin.commithash(),
           BRANCH: gitRevisionPlugin.branch(),
           DATE: new Date().toLocaleString('en-CA', { timeZone: 'America/Vancouver' }),
-          V1_URL: env.V1_URL || 'http://0.0.0.0:3001',
+          V1_URL: env.V1_URL || '',
         },
         // scriptLoading: 'defer', // TODO: INVESTIGATE THIS SETTING FOR PERFORMANCE
         minify: {
           collapseWhitespace: true,
           minifyCSS: true,
         },
+      }),
+      new HtmlWebpackSkipAssetsPlugin({
+        // Exclude reference to own remoteEntry in HTML output
+        skipAssets: ['assets/js/remoteEntry.' + gitRevisionPlugin.commithash() + '.js'],
       }),
       new CopyPlugin({
         patterns: [
