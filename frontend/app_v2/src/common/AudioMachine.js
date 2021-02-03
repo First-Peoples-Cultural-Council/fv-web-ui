@@ -12,7 +12,7 @@ const handleAudioError = assign(({ src, errored }) => {
   return {
     player: new Audio(),
     src: undefined,
-    errored: [...errored, src],
+    errored: errored.includes(src) ? errored : [...errored, src],
   }
 })
 const loadAudio = assign(({ player }, { src }) => {
