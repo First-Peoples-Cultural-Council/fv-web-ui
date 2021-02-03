@@ -8,6 +8,12 @@ module.exports = (env) =>
     devServer: {
       port: 3002,
       historyApiFallback: true,
+      proxy: [
+        {
+          context: ['/nuxeo/**', '!/nuxeo/app/**'],
+          target: 'http://127.0.0.1:8080',
+        },
+      ],
     },
     output: {
       publicPath: 'http://localhost:3002/',

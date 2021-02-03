@@ -35,6 +35,12 @@ function WidgetLinksData({ children }) {
         transKey: 'views.pages.explore.dialect.nav_phrase_books',
         transform: 'words',
       },
+      {
+        url: `/explore${path}/immersion/50/1`,
+        text: 'Immersion Portal',
+        transKey: 'views.pages.explore.dialect.immersion',
+        transform: 'words',
+      },
     ]
     if (id) {
       _links.push({

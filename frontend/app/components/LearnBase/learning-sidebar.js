@@ -21,9 +21,10 @@ import { connect } from 'react-redux'
 
 import classNames from 'classnames'
 import selectn from 'selectn'
-import TextHeader from 'components/Typography/text-header'
 import AuthorizationFilter from 'components/AuthorizationFilter'
 import EditableComponentHelper from 'components/EditableComponentHelper'
+
+import FVLabel from 'components/FVLabel'
 
 /**
  * Sidebar for learning page
@@ -43,10 +44,10 @@ export class LearningSidebar extends Component {
   }
 
   render() {
-    const { dialect, properties, isSection } = this.props
+    const { dialect, dialectClassName, isSection } = this.props
 
     return (
-      <div className="row">
+      <div className={classNames('row', dialectClassName)}>
         <div className={classNames('col-xs-12')}>
           {(() => {
             if (
@@ -59,11 +60,14 @@ export class LearningSidebar extends Component {
                   renderPartial
                 >
                   <div>
-                    <TextHeader
-                      title={this.props.intl.trans('language_resources', 'Language Resources', 'upper')}
-                      tag="h2"
-                      properties={properties}
-                    />
+                    <h2>
+                      <FVLabel
+                        transKey="general.language_resources"
+                        defaultStr="Language Resources"
+                        transform="upper"
+                      />
+                    </h2>
+                    <hr className="dialect-hr" />
                     <EditableComponentHelper
                       dataTestid="EditableComponent__fvdialect-language_resources"
                       isSection={isSection}
@@ -91,11 +95,10 @@ export class LearningSidebar extends Component {
                   renderPartial
                 >
                   <div>
-                    <TextHeader
-                      title={this.props.intl.trans('our_keyboards', 'OUR KEYBOARDS', 'upper')}
-                      tag="h2"
-                      properties={properties}
-                    />
+                    <h2>
+                      <FVLabel transKey="general.our_keyboards" defaultStr="OUR KEYBOARDS" transform="upper" />
+                    </h2>
+                    <hr className="dialect-hr" />
                     <EditableComponentHelper
                       dataTestid="EditableComponent__fvdialect-keyboards"
                       isSection={isSection}
@@ -123,11 +126,14 @@ export class LearningSidebar extends Component {
                   renderPartial
                 >
                   <div>
-                    <TextHeader
-                      title={this.props.intl.trans('contact_information', 'CONTACT INFORMATION', 'upper')}
-                      tag="h2"
-                      properties={properties}
-                    />
+                    <h2>
+                      <FVLabel
+                        transKey="general.contact_information"
+                        defaultStr="CONTACT INFORMATION"
+                        transform="upper"
+                      />
+                    </h2>
+                    <hr className="dialect-hr" />
                     <EditableComponentHelper
                       dataTestid="EditableComponent__fvdialect-contact_information"
                       isSection={isSection}

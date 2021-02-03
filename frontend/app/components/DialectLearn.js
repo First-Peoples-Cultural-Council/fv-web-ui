@@ -51,7 +51,6 @@ import PageToolbar from 'components/PageToolbar'
 import EditableComponentHelper from 'components/EditableComponentHelper'
 
 import RecentActivityList from 'components/Dashboard/RecentActivityList'
-import TextHeader from 'components/Typography/text-header'
 
 import AuthorizationFilter from 'components/AuthorizationFilter'
 import AuthenticationFilter from 'components/AuthenticationFilter'
@@ -395,18 +394,17 @@ export class DialectLearn extends Component {
           <ToolbarNavigation handleShowStats={this._showStats} isStatisticsVisible={this.state.showStats} />
         </Header>
 
-        <div className={classNames('row', 'dialect-body-container')} style={{ marginTop: '15px' }}>
+        <div className={classNames('row', 'dialect-body-container', dialectClassName)} style={{ marginTop: '15px' }}>
           <div className={classNames('col-xs-12', 'col-md-7')}>
-            <div className={dialectClassName}>
-              <TextHeader
-                title={this.props.intl.trans(
-                  'views.pages.explore.dialect.learn.about_our_language',
-                  'About Our Language',
-                  'upper'
-                )}
-                tag="h2"
-                properties={this.props.properties}
-              />
+            <div>
+              <h2>
+                <FVLabel
+                  transKey="views.pages.explore.dialect.learn.about_our_language"
+                  defaultStr="About Our Language"
+                  transform="upper"
+                />
+              </h2>
+              <hr className="dialect-hr" />
               <AuthorizationFilter
                 filter={{ permission: 'Write', entity: selectn('response', computeDialect2) }}
                 renderPartial
@@ -443,15 +441,14 @@ export class DialectLearn extends Component {
 
             <div className="row PrintHide" style={{ marginTop: '15px' }}>
               <div className={classNames('col-xs-12')}>
-                <TextHeader
-                  title={this.props.intl.trans(
-                    'views.pages.explore.dialect.learn.recent_activity',
-                    'Recent Activity',
-                    'upper'
-                  )}
-                  tag="h2"
-                  properties={this.props.properties}
-                />
+                <h2>
+                  <FVLabel
+                    transKey="views.pages.explore.dialect.learn.recent_activity"
+                    defaultStr="Recent Activity"
+                    transform="upper"
+                  />
+                </h2>
+                <hr className="dialect-hr" />
               </div>
 
               <div className={classNames('col-xs-12', 'col-md-6')}>
@@ -814,6 +811,7 @@ export class DialectLearn extends Component {
             <LearningSidebar
               isSection={isSection}
               properties={this.props.properties}
+              dialectClassname={dialectClassName}
               dialect={{ compute: computeDialect2, update: this.props.updateDialect2 }}
             />
           </div>

@@ -162,7 +162,7 @@ class LabelModal extends Component {
 
     _updateLabel(newDocument, null, null).then((output) => {
       if (isPublishing) {
-        this.handlePublish(output, 'Republish')
+        this.handlePublish(output, selectn('response.state', output) == 'Publish' ? 'Republish' : 'Publish')
       } else {
         this.setState({ loading: false })
         updateIntl(

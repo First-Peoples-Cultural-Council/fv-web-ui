@@ -18,6 +18,8 @@ services:
       - NUXEO_DATA=/opt/nuxeo/ext_data
       - NUXEO_CLID=CLID
       - NUXEO_URL=http://localhost:8080/nuxeo
+      - NUXEO_CUSTOM_PARAM=
+        fv.cognito.authenticateWithCognito=false\n
       - CYPRESS_FV_USERNAME
       - CYPRESS_FV_PASSWORD
     labels:

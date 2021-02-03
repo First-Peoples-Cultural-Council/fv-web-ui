@@ -706,7 +706,7 @@
     "redirecting": "Redirecting",
     "reference": "Reference",
     "region": "region",
-    "register": "register",
+    "register": "Register",
     "registration": "registration",
     "reject": "Reject",
     "related": "related",
@@ -1204,7 +1204,6 @@
             "edit_x_gallery": "Edit %s Gallery",
             "x_galleries": "%s Galleries"
           },
-          "for_kids": "for Kids",
           "learn": {
             "about_our_language": "About our Language",
             "alphabet": {

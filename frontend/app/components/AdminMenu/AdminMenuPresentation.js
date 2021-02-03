@@ -72,14 +72,6 @@ function AdminMenuPresentation({ handleItemClick, tooltipTitle }) {
     >
       <FVLabel transKey="views.pages.explore.dialect.nav_recorders" defaultStr="Recorders" transform="words" />
     </MenuItem>,
-    <MenuItem
-      key="immersionPortal"
-      onClick={(e) => {
-        handleItemClick('/immersion/50/1', e)
-      }}
-    >
-      <FVLabel transKey="views.pages.explore.dialect.immersion" defaultStr="Immersion Portal" transform="words" />
-    </MenuItem>,
   ]
   return (
     <div className="AdminMenu">

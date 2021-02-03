@@ -9,6 +9,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 import UIHelpers from 'common/UIHelpers'
 import { matchPath } from 'common/conf/routes'
 import { SECTIONS } from 'common/Constants'
+import FVLabel from 'components/FVLabel'
 
 // DataSources
 import useDialect from 'dataSources/useDialect'
@@ -53,6 +54,25 @@ function BreadcrumbData({ children, matchedPage, routes }) {
     : undefined
 
   const portalPath = `${routeParams.dialect_path}/Portal`
+
+  // FW-1534: Map translations in breadcrumbs to translation keys
+  // These links are accessible in ExploreDialect.js
+  const mapTraslationKey = function (pathKey) {
+    switch (pathKey) {
+      case 'learn':
+        return 'views.pages.explore.dialect.learn_our_language'
+      case 'gallery':
+        return 'views.pages.explore.dialect.photo_gallery'
+      case 'kids':
+        return 'views.pages.explore.dialect.kids_portal'
+      case 'play':
+        return 'views.pages.explore.dialect.play_game'
+      default:
+        // If general does not exist, FVLabel will fall back to default string
+        return 'general.' + pathKey
+    }
+  }
+
   useEffect(() => {
     // If searching within a dialect, fetch portal (needed for portal logo src)
     if (isDialect) {
@@ -86,6 +106,7 @@ function BreadcrumbData({ children, matchedPage, routes }) {
       splitPathIndex >= indexDialect // Omits Language and Language Family from breadcrumb
     ) {
       const pathTitle = findReplace ? splitPathItem.replace(findReplace.find, findReplace.replace) : splitPathItem
+      const decodedPathTitle = decodeURIComponent(pathTitle).replace('&amp;', '&')
 
       const DialectHomePage = splitPathIndex === indexDialect ? intl.trans('home_page', 'Home Page') : ''
       let hrefPath = '/' + splitPath.slice(0, splitPathIndex + 1).join('/')
@@ -96,7 +117,7 @@ function BreadcrumbData({ children, matchedPage, routes }) {
         const dialectTitle =
           _computeDialect2 && _computeDialect2.success
             ? _computeDialect2.response.properties['dc:title']
-            : decodeURIComponent(pathTitle)
+            : decodedPathTitle
 
         const breadcrumbItemTitle = `${dialectTitle} ${DialectHomePage}`
         const breadcrumbItem =
@@ -128,7 +149,7 @@ function BreadcrumbData({ children, matchedPage, routes }) {
       if (splitPathIndex === splitPath.length - 1) {
         return (
           <li data-testid={'BreadcrumbCurrentPage'} key={splitPathIndex} className="active">
-            {decodeURIComponent(pathTitle)}
+            <FVLabel transKey={mapTraslationKey(decodedPathTitle)} defaultStr={decodedPathTitle} case="lower" />
           </li>
         )
       }
@@ -179,9 +200,7 @@ function BreadcrumbData({ children, matchedPage, routes }) {
               NavigationHelpers.navigate(hrefPath, pushWindowPath, false)
             }}
           >
-            {`${intl.searchAndReplace(decodeURIComponent(pathTitle).replace('&amp;', '&'), {
-              case: 'lower',
-            })}`}
+            <FVLabel transKey={mapTraslationKey(decodedPathTitle)} defaultStr={decodedPathTitle} case="lower" />
           </a>
         </li>
       )

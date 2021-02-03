@@ -108,7 +108,7 @@ export class KidsNavigation extends Component {
                   {selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) ||
                     this.props.properties.title}
                   &nbsp;
-                  <FVLabel transKey="views.pages.explore.dialect.for_kids" defaultStr="for Kids" />
+                  <FVLabel transKey="views.pages.explore.dialect.kids_portal" defaultStr="Kids Portal" />
                 </span>
               </a>
             </Typography>
