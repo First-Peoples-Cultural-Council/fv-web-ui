@@ -239,7 +239,7 @@ if (selectedLanguage != null) { %>
           <c:choose>
             <c:when test="${isUserLocked == 'true'}">
               <div class="feedbackMessage errorMessage">
-                Account temporarily locked
+                Sorry, too many failed login attempts. Please try again in a few minutes.
               </div>
             </c:when>
             <c:otherwise>
