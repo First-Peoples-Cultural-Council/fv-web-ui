@@ -134,8 +134,6 @@ function AppStateProvider({ children }) {
       send(AUDIO_STOPPED, { src })
     })
     player.addEventListener('error', () => {
-      // TODO: Developed this against a 404ing audio file
-      // TODO: but couldn't get into the AUDIO_ERRORED state
       send(AUDIO_ERRORED)
     })
   }, [player])

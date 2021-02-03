@@ -1,6 +1,4 @@
 import React from 'react'
-const AppStateContext = React.createContext({
-  id: 'AppStateContext',
-})
+const AppStateContext = React.createContext()
 
 export default AppStateContext
