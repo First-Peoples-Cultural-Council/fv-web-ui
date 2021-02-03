@@ -113,16 +113,6 @@ const audioMachine = Machine({
             target: AUDIO_LOADING,
           },
         ],
-        ESCAPE: [
-          {
-            target: AUDIO_STOPPED,
-            cond: isSameSrc,
-            actions: pauseAudio,
-          },
-          {
-            target: AUDIO_LOADING,
-          },
-        ],
         [AUDIO_ERRORED]: { target: AUDIO_ERRORED },
       },
     },
