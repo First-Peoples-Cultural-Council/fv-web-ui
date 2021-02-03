@@ -10,13 +10,13 @@ const queryClient = new QueryClient()
 
 ReactDOM.render(
   <AppV1Provider>
-    <AppStateProvider>
-      <QueryClientProvider client={queryClient}>
-        <Router>
+    <Router>
+      <AppStateProvider>
+        <QueryClientProvider client={queryClient}>
           <AppFrameContainer />
-        </Router>
-      </QueryClientProvider>
-    </AppStateProvider>
+        </QueryClientProvider>
+      </AppStateProvider>
+    </Router>
   </AppV1Provider>,
   document.getElementById('root')
 )

@@ -6,6 +6,7 @@ import {
   AUDIO_LOADED,
   AUDIO_STOPPED,
   AUDIO_PLAYING,
+  PAGE_NAVIGATION,
 } from 'common/constants'
 
 const handleAudioError = assign(({ src, errored }) => {
@@ -29,6 +30,10 @@ const playAudio = ({ player }) => {
 }
 const pauseAudio = ({ player }) => {
   player.pause()
+}
+const stopAudio = ({ player }) => {
+  player.pause()
+  player.currentTime = 0
 }
 const isSameSrc = ({ src: oldSrc }, { src: newSrc }) => {
   return oldSrc === newSrc
@@ -84,6 +89,10 @@ const audioMachine = Machine({
     },
     [AUDIO_PLAYING]: {
       on: {
+        [PAGE_NAVIGATION]: {
+          target: AUDIO_STOPPED,
+          actions: stopAudio,
+        },
         [AUDIO_STOPPED]: [
           {
             target: AUDIO_STOPPED,
