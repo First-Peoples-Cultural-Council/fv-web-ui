@@ -1,23 +1,15 @@
-import PropTypes from 'prop-types'
-
 /**
  * @summary TEMPLATEData
- * @version 1.0.1
+ * @version 1.0.0
  * @component
  *
  * @param {object} props
- * @param {function} props.children
  *
  */
-function TEMPLATEData({ children }) {
-  return children({
-    log: 'Output from TEMPLATEData',
-  })
-}
-// PROPTYPES
-const { func } = PropTypes
-TEMPLATEData.propTypes = {
-  children: func,
+function TEMPLATEData({ exampleInput }) {
+  return {
+    exampleOutput: `Output from TEMPLATEData (${exampleInput})`,
+  }
 }
 
 export default TEMPLATEData
