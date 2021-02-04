@@ -47,4 +47,17 @@ export default {
     }
     return { isLoading, error, data, dataOriginal: data }
   },
+  // TODO: remove postman example server url
+  getCommunityHome: (sitename, dataAdaptor) => {
+    const { isLoading, error, data } = useQuery(['sections', sitename], () => {
+      return get(
+        `https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`
+      )
+    })
+    if (isLoading === false && error === null && data && dataAdaptor) {
+      const transformedData = dataAdaptor(Object.assign({}, data))
+      return { isLoading, error, data: transformedData, dataOriginal: data }
+    }
+    return { isLoading, error, data, dataOriginal: data }
+  },
 }
