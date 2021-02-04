@@ -47,8 +47,8 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
   public static final String FV_CUSTOM_ORDER = "fv:custom_order";
 
 
-  private DocumentModel[] loadedCharacters = null;
-  private DocumentModel alphabet = null;
+  private DocumentModel[] loadedCharacters = null; // do these need to be transient? test
+  private DocumentModel alphabet = null; // do these need to be transient? test
 
   @Override
   // Called when a document is created or updated
@@ -56,7 +56,7 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
       boolean save, boolean publish) {
     if (!asset.isImmutable()) {
       loadedCharacters = loadCharacters(session, asset);
-      computeCustomOrder(asset, alphabet, loadedCharacters);
+      computeCustomOrder(asset, alphabet, loadedCharacters); // only save if changed (!!!!!)
 
       if (Boolean.TRUE.equals(save)) {
         SessionUtils.saveDocumentWithoutEvents(session, asset, true,
@@ -144,7 +144,7 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
   private void updateProxyIfPublished(DocumentModel doc) {
     // If document is published, update the field on the proxy
     if (StateUtils.isPublished(doc)) {
-      StateUtils.followTransitionIfAllowed(doc, REPUBLISH_TRANSITION);
+      StateUtils.followTransitionIfAllowed(doc, REPUBLISH_TRANSITION); // test? how do we scale here? can we just queue Publish Dialect? or do this manually once Workspace is confirmed?
     }
   }
 
@@ -193,7 +193,7 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
       alphabet = session
           .getChild(dialect.getRef(), DialectTypesConstants.FV_ALPHABET_NAME);
 
-      DocumentModelList chars = session.getChildren(alphabet.getRef());
+      DocumentModelList chars = session.getChildren(alphabet.getRef()); ////// INCLUDES A TRASHED CHAR !!!
       updateCustomOrderCharacters(session, alphabet, chars);
       return chars.stream().filter(character -> !character.isTrashed()
           && character.getPropertyValue("fvcharacter:alphabet_order") != null)
@@ -220,7 +220,7 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
               : "" + ((char) (BASE + alphabetOrder));
       if (originalCustomOrder == null || !originalCustomOrder.equals(updatedCustomOrder)) {
         alphabetCharacter.setPropertyValue(FV_CUSTOM_ORDER, updatedCustomOrder);
-        session.saveDocument(alphabetCharacter);
+        session.saveDocument(alphabetCharacter); //////// SAVE WITHOUT CHAR LISTENER (!!!!!)
 
         wasUpdated = true;
       }
@@ -228,7 +228,7 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
 
     if (wasUpdated && StateUtils.isPublished(alphabet)) {
       // Republish alphabet if custom order was updated
-      StateUtils.followTransitionIfAllowed(alphabet, REPUBLISH_TRANSITION);
+      StateUtils.followTransitionIfAllowed(alphabet, REPUBLISH_TRANSITION); // test???
     }
   }
 }

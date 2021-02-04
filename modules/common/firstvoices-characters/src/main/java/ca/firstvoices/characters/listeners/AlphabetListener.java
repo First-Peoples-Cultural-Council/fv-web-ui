@@ -72,7 +72,7 @@ public class AlphabetListener implements EventListener {
     // Get non trashed characters
     DocumentModelList characters = session
         .getChildren(alphabet.getRef(), DialectTypesConstants.FV_CHARACTER, new NotTrashedFilter(),
-            null);
+            null);////// use this!!!!
 
     if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE) && !characters.isEmpty()) {
 
