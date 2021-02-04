@@ -1246,6 +1246,7 @@ const routes = [
       ' | {$dialect_name} | {$siteTheme}',
     page: <Pages.WordsCategoriesGridContainer />,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
+    extractPaths: true,
   },
   addCategoryKids(DIALECT_LEARN_WORDS_ONLY_KIDS),
   addPagination(addCategoryKids(DIALECT_LEARN_WORDS_ONLY_KIDS)),
