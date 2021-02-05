@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react'
 import { Switch, Route, Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 import './AppFrame.css'
 import About from 'components/About'
+import Home from 'components/Home'
 import Suspender from 'components/Suspender'
 import useRoute from 'app_v1/useRoute'
 import WordsListContainer from 'app_v1/WordsListContainer'
 import useSearchParams from 'common/useSearchParams'
 import DialectHeader from 'components/DialectHeader'
-import Topics from 'components/Topics'
-import WidgetWotd from 'components/WidgetWotd'
 
 /**
  * @summary AppFrameContainer
@@ -60,38 +60,34 @@ function AppFrameContainer() {
           <li>
             <Link to="/words">Words</Link>
           </li>
-          <li>
-            <Link to="/topics">Topics</Link>
-          </li>
         </ul>
       </nav>
       <main role="main">
         <Suspender>
           <Switch>
             <Route path="/about">
+              <Helmet>
+                <title>About</title>
+              </Helmet>
               <About.Container language={language} />
             </Route>
             <Route path="/words">
+              <Helmet>
+                <title>Words</title>
+              </Helmet>
               <WordsListContainer />
             </Route>
-            <Route path="/topics">
-              <Topics.Container />
-            </Route>
             <Route path="/">
-              <Home />
-              <WidgetWotd.Container />
+              <Helmet>
+                <title>Home</title>
+              </Helmet>
+              <Home.Container />
             </Route>
           </Switch>
         </Suspender>
       </main>
     </div>
   )
-}
-
-// Example sub-pages that would be imported/lazy loaded
-// ============================================================
-function Home() {
-  return <h2>[Showing Home page]</h2>
 }
 
 export default AppFrameContainer
