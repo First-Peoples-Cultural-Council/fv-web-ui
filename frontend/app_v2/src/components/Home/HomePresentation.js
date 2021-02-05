@@ -67,7 +67,7 @@ function HomePresentation({
             const { audio, hasShare, heading, subheading, title, url } = widgetProps
             return (
               <div key={index} className="px-6">
-                <WidgetWotd.Container
+                <WidgetWotd.Presentation
                   audio={audio}
                   hasShare={hasShare}
                   heading={heading}
