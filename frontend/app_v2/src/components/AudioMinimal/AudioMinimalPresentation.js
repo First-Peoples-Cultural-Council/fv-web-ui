@@ -59,41 +59,56 @@ function AudioMinimalPresentation({ hasErrored, icons, isErrored, isLoading, isP
 
   if (isErrored || hasErrored) {
     return (
-      <button type="button" disabled>
+      <button type="button" disabled aria-live="off">
+        <div className="sr-only">Error loading audio</div>
         {Icons.Error}
       </button>
     )
   }
   if (isLoading) {
     return (
-      <button type="button" disabled>
+      <button type="button" disabled aria-live="off">
+        <div className="sr-only">Loading audio</div>
         {Icons.Play}
       </button>
     )
   }
 
   return (
-    <button type="button" onClick={onClick} onKeyDown={onKeyPress} ref={buttonRef}>
-      {isPlaying ? Icons.Pause : Icons.Play}
+    <button type="button" onClick={onClick} onKeyDown={onKeyPress} ref={buttonRef} aria-live="off">
+      {isPlaying === true && (
+        <>
+          <div className="sr-only">Pause audio</div>
+          {Icons.Pause}
+        </>
+      )}
+      {isPlaying === false && (
+        <>
+          <div className="sr-only">Play audio</div>
+          {Icons.Play}
+        </>
+      )}
     </button>
   )
 }
 // PROPTYPES
 const { func, bool, object } = PropTypes
 AudioMinimalPresentation.propTypes = {
-  isPlaying: bool,
-  isLoading: bool,
-  isErrored: bool,
   hasErrored: bool,
-  onClick: func,
   icons: object,
+  isErrored: bool,
+  isLoading: bool,
+  isPlaying: bool,
+  onClick: func,
+  onKeyPress: func,
 }
 AudioMinimalPresentation.defaultProps = {
-  isPlaying: false,
-  isLoading: false,
-  isErrored: false,
   hasErrored: false,
+  isErrored: false,
+  isLoading: false,
+  isPlaying: false,
   onClick: () => {},
+  onKeyPress: () => {},
 }
 
 export default AudioMinimalPresentation
