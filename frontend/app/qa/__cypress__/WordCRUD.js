@@ -1,4 +1,4 @@
-const waitMedium = 2000
+const waitMedium = 1000
 const waitShort = 50
 
 // ===============================================
