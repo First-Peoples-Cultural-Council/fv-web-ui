@@ -17,45 +17,8 @@
 // ==================================================
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-// import HeroContainer from 'components/Hero/HeroContainer'
-// import HeroData from 'components/Hero/HeroData'
 import HeroPresentation from 'components/Hero/HeroPresentation'
 import HeroBackground from 'images/hero-background.jpg'
-/*
-// Container
-describe('HeroContainer', () => {
-  test('Container', () => {
-    const component = renderer.create(<HeroContainer />)
-    const tree = component.toJSON()
-    expect(tree).toMatchSnapshot()
-  })
-})
-*/
-/*
-// Data
-describe('HeroData', () => {
-  test('Data', () => {
-    // Updated in HeroData.children
-    let output = {}
-
-    renderer.create(
-      <HeroData>
-        {(dataLayerOutput) => {
-          output = dataLayerOutput
-          return null
-        }}
-      </HeroData>
-    )
-    expect(output).toMatchInlineSnapshot(`
-        Object {
-          "onClickDisable": [Function],
-          "onClickEnable": [Function],
-          "queryFlashcard": undefined,
-        }
-      `)
-  })
-})
-*/
 
 // Presentation
 describe('HeroPresentation', () => {
