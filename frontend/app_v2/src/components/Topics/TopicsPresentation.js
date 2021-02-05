@@ -1,6 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 // import dev from './dev.png'
+import {
+  WIDGET_LIST_WORD,
+  WIDGET_LIST_PHRASE,
+  WIDGET_LIST_SONG,
+  WIDGET_LIST_STORY,
+  // WIDGET_LIST_MIXED,
+  // WIDGET_LIST_GENERIC,
+} from 'common/constants'
 import './Topics.css'
 import useIcon from 'common/useIcon'
 import AudioMinimal from 'components/AudioMinimal'
@@ -76,14 +84,13 @@ function TopicsWord({
     </div>
   )
 }
-function TopicsList(/*{
+function TopicsPhrase(/*{
   heading,
   image,
   listCount,
-  listType,
   url,
 }*/) {
-  return <div className="Topic">TopicsList</div>
+  return <div className="Topic">TopicsPhrase</div>
 }
 function TopicsSong(/*{
   audio,
@@ -103,18 +110,16 @@ function TopicsStory(/*{
   return <div className="Topic">TopicsStory</div>
 }
 function TopicsPresentation({ topics }) {
-  const topicComponents = topics.map(({ audio, heading, image, listCount, listType, subheading, type, url }, index) => {
+  const topicComponents = topics.map(({ audio, heading, image, listCount, subheading, type, url }, index) => {
     const key = `topic${index}`
     switch (type) {
-      case 'word':
+      case WIDGET_LIST_WORD:
         return <TopicsWord key={key} audio={audio} heading={heading} image={image} subheading={subheading} url={url} />
-      case 'list':
-        return (
-          <TopicsList key={key} heading={heading} image={image} listCount={listCount} listType={listType} url={url} />
-        )
-      case 'song':
+      case WIDGET_LIST_PHRASE:
+        return <TopicsPhrase key={key} heading={heading} image={image} listCount={listCount} url={url} />
+      case WIDGET_LIST_SONG:
         return <TopicsSong key={key} audio={audio} heading={heading} image={image} subheading={subheading} url={url} />
-      case 'story':
+      case WIDGET_LIST_STORY:
         return <TopicsStory key={key} heading={heading} image={image} subheading={subheading} url={url} />
 
       default:
