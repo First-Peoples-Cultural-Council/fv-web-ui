@@ -21,17 +21,7 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import {
-  askToDisableResource,
-  askToEnableResource,
-  askToPublishResource,
-  askToUnpublishResource,
-  disableResource,
-  enableResource,
-  fetchResource,
-  publishResource,
-  unpublishResource,
-} from 'reducers/fvResources'
+import { fetchResource, publishResource } from 'reducers/fvResources'
 import { changeTitleParams, overrideBreadcrumbs } from 'reducers/navigation'
 import { fetchDialect2 } from 'reducers/fvDialect'
 import { pushWindowPath } from 'reducers/windowPath'
@@ -83,19 +73,12 @@ export class MediaView extends Component {
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
-    askToDisableResource: func.isRequired,
-    askToEnableResource: func.isRequired,
-    askToPublishResource: func.isRequired,
-    askToUnpublishResource: func.isRequired,
     changeTitleParams: func.isRequired,
-    disableResource: func.isRequired,
-    enableResource: func.isRequired,
     fetchDialect2: func.isRequired,
     fetchResource: func.isRequired,
     overrideBreadcrumbs: func.isRequired,
-    pushWindowPath: func.isRequired,
     publishResource: func.isRequired,
-    unpublishResource: func.isRequired,
+    pushWindowPath: func.isRequired,
   }
   static defaultProps = {
     deleteResource: () => {},
@@ -253,10 +236,10 @@ export class MediaView extends Component {
                                           <ListItemText
                                             primary={thumbnail.title}
                                             secondary={
-                                              <p>
+                                              <>
                                                 <span style={{ color: '#000' }}>{thumbnail.description}</span>
                                                 -- ({thumbnail.width + 'x' + thumbnail.height})
-                                              </p>
+                                              </>
                                             }
                                           />
                                         </ListItem>
@@ -446,19 +429,12 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  askToDisableResource,
-  askToEnableResource,
-  askToPublishResource,
-  askToUnpublishResource,
   changeTitleParams,
-  disableResource,
-  enableResource,
   fetchDialect2,
   fetchResource,
   overrideBreadcrumbs,
   pushWindowPath,
   publishResource,
-  unpublishResource,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MediaView)
