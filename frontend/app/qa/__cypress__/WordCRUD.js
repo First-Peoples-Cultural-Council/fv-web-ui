@@ -61,7 +61,6 @@ describe('WordCRUD.js > PageDialectWordsCreate', () => {
       cy.findByText(initialContent.descriptionAudio).should('exist')
     })
     cy.findByText(initialContent.titlePicture).should('exist')
-    cy.findByText(initialContent.titleVideo).should('exist')
 
     cy.findByText('metadata', { exact: false }).click()
     cy.findByText(initialContent.titleSource).should('exist')
@@ -131,13 +130,11 @@ function getContent(prefix) {
     definition: `${prefix} Definition`,
     literalTranslation: `${prefix} Literal Translation`,
     pronounciation: `${prefix} Pronounciation`,
-    titleAudio: `${prefix} Related audio > Name`,
-    descriptionAudio: `${prefix} Related audio > Description`,
-    titlePicture: `${prefix} Related picture > Name`,
-    descriptionPicture: `${prefix} Related picture > Description`,
-    titleVideo: `${prefix} Related video > Name`,
-    descriptionVideo: `${prefix} Related video > Description`,
-    titleSource: `${prefix} New Contributor > Contributor`,
+    titleAudio: `${prefix} Related audio title`,
+    descriptionAudio: `${prefix} Related audio description`,
+    titlePicture: `${prefix} Related picture title`,
+    descriptionPicture: `${prefix} Related picture description`,
+    titleSource: `${prefix} Contributor name`,
   }
 }
 
@@ -154,8 +151,6 @@ function populateWordForm({
   descriptionAudio,
   titlePicture,
   descriptionPicture,
-  titleVideo,
-  descriptionVideo,
   titleSource,
 }) {
   // [POPULATE] Word
@@ -193,15 +188,6 @@ function populateWordForm({
   cy.formPopulateRelatedPictures({
     name: titlePicture,
     description: descriptionPicture,
-  })
-  cy.wait(waitMedium)
-  cy.findByText('Insert into entry').click()
-
-  // [POPULATE] video
-  cy.logger({ type: 'subheader', text: `${prefix} Video` })
-  cy.formPopulateRelatedVideos({
-    name: titleVideo,
-    description: descriptionVideo,
   })
   cy.wait(waitMedium)
   cy.findByText('Insert into entry').click()
