@@ -7,14 +7,13 @@ const api = ky.create({
   timeout: TIMEOUT,
 })
 
-// npm run start --env NUXEO_URL="http://0.0.0.0:3001/nuxeo/site"
-// const getBaseURL = () => {
+// const getNuxeoURL = () => {
 //   if (ENV_NUXEO_URL !== null && typeof ENV_NUXEO_URL !== 'undefined') {
 //     return ENV_NUXEO_URL
 //   }
-//   const { protocol, hostname, port } = window.location
-//   return `${protocol}//${hostname}${port ? `:${port}` : ''}/nuxeo`
+//   return '/nuxeo'
 // }
+
 const get = (path) => {
   return (
     api
@@ -37,6 +36,16 @@ const get = (path) => {
 
 export default {
   get,
+  getById: (id, dataAdaptor) => {
+    const { isLoading, error, data } = useQuery(['id', id], () => {
+      return get(`/nuxeo/api/v1/id/${id}?properties=*`)
+    })
+    if (isLoading === false && error === null && data && dataAdaptor) {
+      const transformedData = dataAdaptor(Object.assign({}, data))
+      return { isLoading, error, data: transformedData, dataOriginal: data }
+    }
+    return { isLoading, error, data, dataOriginal: data }
+  },
   getSections: (sitename, dataAdaptor) => {
     const { isLoading, error, data } = useQuery(['sections', sitename], () => {
       return get(`/nuxeo/api/v1/site/sections/${sitename}`)
