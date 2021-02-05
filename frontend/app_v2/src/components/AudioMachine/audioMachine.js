@@ -71,6 +71,9 @@ const audioMachine = Machine({
         CLICK: {
           target: AUDIO_LOADING,
         },
+        ARROWRIGHT: {
+          target: AUDIO_LOADING,
+        },
         [AUDIO_ERRORED]: { target: AUDIO_ERRORED },
       },
     },
@@ -87,6 +90,16 @@ const audioMachine = Machine({
     [AUDIO_STOPPED]: {
       on: {
         CLICK: [
+          {
+            target: AUDIO_PLAYING,
+            cond: isSameSrc,
+            actions: playAudio,
+          },
+          {
+            target: AUDIO_LOADING,
+          },
+        ],
+        ARROWRIGHT: [
           {
             target: AUDIO_PLAYING,
             cond: isSameSrc,
