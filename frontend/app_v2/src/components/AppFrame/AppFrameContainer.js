@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Switch, Route, Link } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import './AppFrame.css'
 import About from 'components/About'
@@ -48,9 +48,8 @@ function AppFrameContainer() {
   }, [])
   return (
     <div className="AppFrame">
-      <nav>
-        <DialectHeader.Container />
-        <ul className="p-0 flex flex-row w-full justify-evenly">
+      <DialectHeader.Container />
+      {/* <ul className="p-0 flex flex-row w-full justify-evenly">
           <li>
             <Link to="/">Home</Link>
           </li>
@@ -60,8 +59,7 @@ function AppFrameContainer() {
           <li>
             <Link to="/words">Words</Link>
           </li>
-        </ul>
-      </nav>
+        </ul> */}
       <main role="main">
         <Suspender>
           <Switch>
