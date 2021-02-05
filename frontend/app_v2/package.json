@@ -7,7 +7,8 @@
   "scripts": {
     "start": "webpack serve --env V1_URL=http://0.0.0.0:3001 --config webpack/webpack.development.js",
     "build:production": "webpack --color --progress --config webpack/webpack.production.js",
-    "build:production:serve": "npm run build:production; cp src/assets/server.js dist/server.js; node dist/server.js",
+    "serve:production": "cp src/assets/server.js dist/server.js; node dist/server.js",
+    "build:production:serve": "npm run build:production; npm run serve:production",
     "test:coverage": "jest --coverage",
     "test:update": "jest -u",
     "test:watch": "jest --watch",
