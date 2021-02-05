@@ -1,4 +1,4 @@
-package ca.firstvoices.lockout;
+package ca.firstvoices.security.lockout;
 
 
 import java.util.ArrayList;
@@ -14,6 +14,12 @@ import org.nuxeo.ecm.platform.usermanager.UserManagerImpl;
 public class LockoutUserManager extends UserManagerImpl {
 
   private transient WeakHashMap<String, LoginAttemptRecord> loginAttempts = new WeakHashMap<>();
+
+  public boolean isUserLocked(String username) {
+    final LoginAttemptRecord record = loginAttempts.get(username);
+
+    return record != null && record.isLocked();
+  }
 
   @Override
   public boolean checkUsernamePassword(String username, String password) {
@@ -83,4 +89,5 @@ public class LockoutUserManager extends UserManagerImpl {
     }
 
   }
+
 }

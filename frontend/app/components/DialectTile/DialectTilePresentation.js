@@ -18,7 +18,15 @@ import { DialectTileStyles, CustomTooltip } from './DialectTileStyles'
  *
  * @returns {node} jsx markup
  */
-function DialectTilePresentation({ dialectLogo, dialectTitle, actionIcon, isPrivate, href, onDialectClick }) {
+function DialectTilePresentation({
+  dialectLogo,
+  dialectTitle,
+  actionIcon,
+  isLoggedIn,
+  isPrivate,
+  href,
+  onDialectClick,
+}) {
   const classes = DialectTileStyles()
   // tooltip needs to apply DOM event listeners to its child element, hence use of forwardRef
   // see https://material-ui.com/components/tooltips/#custom-child-element
@@ -42,7 +50,12 @@ function DialectTilePresentation({ dialectLogo, dialectTitle, actionIcon, isPriv
   })
 
   return isPrivate ? (
-    <CustomTooltip title="Private site: Please register to access" placement="top">
+    <CustomTooltip
+      title={
+        isLoggedIn ? 'Private site: Please contact hello@firstvoices.com' : 'Private site: Please register to access'
+      }
+      placement="top"
+    >
       <Tile />
     </CustomTooltip>
   ) : (
@@ -57,6 +70,7 @@ DialectTilePresentation.propTypes = {
   dialectTitle: string.isRequired,
   actionIcon: object,
   href: string.isRequired,
+  isLoggedIn: bool.isRequired,
   isPrivate: bool.isRequired,
   onDialectClick: func.isRequired,
 }

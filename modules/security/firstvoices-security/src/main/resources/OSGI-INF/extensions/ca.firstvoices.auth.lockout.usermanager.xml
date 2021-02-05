@@ -1,10 +1,10 @@
-<component name="ca.firstvoices.lockout.usermanager">
+<component name="ca.firstvoices.security.lockout.usermanager">
 
   <documentation>
     Lockout User Manager
   </documentation>
 
-  <implementation class="ca.firstvoices.lockout.LockoutUserManager"/>
+  <implementation class="ca.firstvoices.security.lockout.LockoutUserManager"/>
 
   <service>
     <provide interface="org.nuxeo.ecm.platform.usermanager.UserManager"/>

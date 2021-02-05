@@ -64,11 +64,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Installs the correct version of java for the project
-      - name: Set up JDK 1.8
+      - name: Set up JDK 11
         if: steps.changed-backend.outputs.backend_files
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 11
 
       # Installs the correct Node version for the project
       - name: Setup Node.js for use with actions
@@ -84,9 +84,9 @@ jobs:
         uses: actions/cache@v1.1.2
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-maven-JDK11-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-maven-
+            ${{ runner.os }}-maven-JDK11
 
 
         # Build only the backend if changes are made to the backend and not frontend

@@ -19,6 +19,8 @@
 <%@ page import="org.nuxeo.ecm.platform.ui.web.auth.service.LoginVideo" %>
 <%@ page import="org.nuxeo.ecm.platform.web.common.locale.LocaleProvider"%>
 <%@ page import="org.nuxeo.ecm.platform.web.common.vh.VirtualHostHelper" %>
+<%@ page import="ca.firstvoices.security.lockout.LockoutUserManager" %>
+<%@ page import="org.nuxeo.ecm.platform.usermanager.UserManager" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -72,6 +74,21 @@ String NUXEO_URL = VirtualHostHelper.getBaseURL(request);
 boolean displayMobileBanner = !"false".equals(request.getParameter("displayMobileBanner"));
 
 String urlWithContext =  fvContext.equals("") ? "" : ( NUXEO_URL + fvContext);
+
+UserManager userManager = Framework.getService(UserManager.class);
+
+boolean isUserLocked = false;
+
+if (userManager != null) {
+  if (userManager.getClass().isAssignableFrom(LockoutUserManager.class)) {
+    String username = request.getParameter("user_name");
+    if (username != null) {
+         isUserLocked = ((LockoutUserManager)userManager).isUserLocked(username);
+    }
+  }
+}
+request.setAttribute("isUserLocked", isUserLocked ? "true":"false");
+
 %>
 
 <html>
@@ -219,9 +236,18 @@ if (selectedLanguage != null) { %>
           </div>
         </c:if>
         <c:if test="${param.loginFailed == 'true' and param.connectionFailed != 'true'}">
-         <div class="feedbackMessage errorMessage">
-           <fmt:message bundle="${messages}" key="label.login.invalidUsernameOrPassword" />
-         </div>
+          <c:choose>
+            <c:when test="${isUserLocked == 'true'}">
+              <div class="feedbackMessage errorMessage">
+                Sorry, too many failed login attempts. Please try again in a few minutes.
+              </div>
+            </c:when>
+            <c:otherwise>
+              <div class="feedbackMessage errorMessage">
+                <fmt:message bundle="${messages}" key="label.login.invalidUsernameOrPassword" />
+              </div>
+            </c:otherwise>
+          </c:choose>
         </c:if>
         <c:if test="${param.loginMissing}">
          <div class="feedbackMessage errorMessage">

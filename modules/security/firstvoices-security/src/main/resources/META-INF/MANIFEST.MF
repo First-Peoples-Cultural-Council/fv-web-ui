@@ -14,4 +14,6 @@ Nuxeo-Component: OSGI-INF/extensions/ca.firstvoices.security.securitypolicies.gr
   OSGI-INF/extensions/ca.firstvoices.operations.xml,
   OSGI-INF/extensions/ca.firstvoices.listeners.xml,
   OSGI-INF/extensions/ca.firstvoices.auth.xml,
-  OSGI-INF/extensions/ca.firstvoices.fvuserprofile.services.xml
+  OSGI-INF/extensions/ca.firstvoices.fvuserprofile.services.xml,
+  OSGI-INF/extensions/ca.firstvoices.auth.lockout.usermanager.xml,
+  OSGI-INF/extensions/ca.firstvoices.auth.lockout.xml

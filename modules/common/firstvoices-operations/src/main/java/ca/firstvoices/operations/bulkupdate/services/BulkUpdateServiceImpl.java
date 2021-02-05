@@ -8,12 +8,11 @@ import java.util.List;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
-import org.nuxeo.ecm.core.api.DocumentRefList;
 
 public class BulkUpdateServiceImpl implements BulkUpdateService {
 
   public void bulkUpdate(
-      CoreSession session, DocumentRefList refs, BulkUpdateMode mode, String field,
+      CoreSession session, List<DocumentRef> refs, BulkUpdateMode mode, String field,
       Serializable value) {
 
     for (DocumentRef ref : refs) {
