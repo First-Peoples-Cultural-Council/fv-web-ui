@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 // import dev from './dev.png'
 import {
   WIDGET_LIST_WORD,
@@ -21,15 +22,15 @@ import AudioMinimal from 'components/AudioMinimal'
  *
  * @returns {node} jsx markup
  */
-function TopicsWord({
-  audio,
-  heading,
-  image,
-  subheading,
-  // url,
-}) {
+function TopicsWord({ audio, heading, image, subheading, url }) {
+  const styles = image
+    ? {
+        backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)), url(${image})`,
+      }
+    : {}
   return (
     <div
+      style={styles}
       className={`
       Topic
       bg-fv-turquoise
@@ -66,7 +67,7 @@ function TopicsWord({
         font-medium
       `}
         >
-          {heading}
+          <Link to={url}>{heading}</Link>
         </h1>
       )}
       {subheading && (

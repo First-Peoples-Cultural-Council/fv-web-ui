@@ -21,26 +21,27 @@ export function adaptor(/*{response}*/) {
       {
         audio: 'nuxeo/nxfile/default/2bef9658-cd69-4705-a00a-f7c642598d0e/file:content/TestWav.wav',
         heading: 'Games',
-        // image: '/assets/images/bg-word.jpg',
+        image:
+          'https://dev.firstvoices.com/nuxeo/nxfile/default/51ac02d0-27c3-44c6-8674-b13699369cd5/picture:views/2/content/Medium_TestPhoto.jpg?changeToken=0-0%2F10-0',
         subheading: 'word.definition',
         type: WIDGET_LIST_WORD,
-        url: '/words/word.heading',
+        url: '/words/games',
       },
       {
         audio: '/nuxeo/nxfile/default/079ac1e8-dbb0-4ef3-b55c-f55a00a473a7/file:content/sample1.mp3',
         heading: 'Long song',
-        image: '/assets/images/bg-word2.jpg',
+        // image: '/assets/images/bg-word2.jpg',
         subheading: 'word2.definition',
         type: WIDGET_LIST_WORD,
-        url: '/words/word2.heading',
+        url: '/words/long-song',
       },
       {
         audio: '/nuxeo/nxfile/default/000aa0a0-aaa0-0aa0-a00a-a00a00a000a0/file:content/BROKEN.mp3',
         heading: 'BROKEN',
-        image: '/assets/images/bg-word2.jpg',
+        // image: '/assets/images/bg-word2.jpg',
         subheading: 'word2.definition',
         type: WIDGET_LIST_WORD,
-        url: '/words/word2.heading',
+        url: '/words/BROKEN',
       },
       {
         heading: 'list.heading',
