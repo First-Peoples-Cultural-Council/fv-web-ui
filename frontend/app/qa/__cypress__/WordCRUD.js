@@ -18,6 +18,13 @@ describe('WordCRUD.js > PageDialectWordsCreate', () => {
     cy.findByText('Create New Word', { exact: false }).click()
     cy.findByText('Add New Word to TestDialectPublic').should('exist')
 
+    // Test validation
+    cy.logger({ type: 'subheader', text: 'Empty Save' })
+    cy.findByTestId('PageDialectWordsCreate__form').within(() => {
+      cy.findByText('save', { exact: false }).click()
+    })
+    cy.findByText('Value in field "Word" cannot be empty.').should('exist')
+
     // CREATE
     cy.logger({ text: 'Create' })
     const initialContent = getContent('[CREATE]')
@@ -87,15 +94,11 @@ describe('WordCRUD.js > PageDialectWordsCreate', () => {
 
     cy.findByText('delete word', { exact: false }).click()
 
-    // TODO: need more reliable hook
     cy.findByTestId('ViewWithActions__dialog').within(() => {
       cy.findByText('delete').click()
     })
     cy.wait(waitShort)
     cy.findByText('Delete word success', { exact: false }).should('exist')
-
-    // NOTE: reload can still access page (or with saved url)
-    // cy.reload()
   })
 })
 
