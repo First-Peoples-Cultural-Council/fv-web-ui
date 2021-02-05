@@ -8,6 +8,7 @@
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <it.jacoco.destFile>${project.basedir}/../target/jacoco-it.exec</it.jacoco.destFile>
     <sonar.coverage.jacoco.xmlReportPaths>${it.jacoco.destFile}</sonar.coverage.jacoco.xmlReportPaths>
+    <sonar.scanner.force-deprecated-java-version-grace-period>true</sonar.scanner.force-deprecated-java-version-grace-period>
     <it.failsafe.argLine />
   </properties>
 
@@ -22,7 +23,7 @@
   <artifactId>firstvoices-modules-parent</artifactId>
   <name>First Voices</name>
   <packaging>pom</packaging>
-  <version>3.5.6-SNAPSHOT</version>
+  <version>3.5.6</version>
 
   <modules>
     <module>modules</module>

@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Bundle-SymbolicName: FirstVoicesLockout.test
-Bundle-Name: FirstVoicesLockout.test
-Import-Package: org.nuxeo.ecm.core,
- org.nuxeo.ecm.directory

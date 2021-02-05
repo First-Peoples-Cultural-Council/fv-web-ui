@@ -39,23 +39,24 @@ public class AWSAuthenticationServiceImpl implements AWSAuthenticationService {
   private String userPool;
   private String region;
   private String clientID;
+  private boolean enable;
 
   private AWSCognitoIdentityProvider identityProvider;
   private AWSPasswordValidator passwordValidator;
 
 
-  public AWSAuthenticationServiceImpl(String accessKey,
-                                      String secretKey,
-                                      String userPool,
-                                      String region,
-                                      String clientID) {
+  public AWSAuthenticationServiceImpl(
+      boolean enable, String accessKey, String secretKey, String userPool, String region,
+      String clientID) {
+    this.enable = enable;
     this.accessKey = accessKey;
     this.secretKey = secretKey;
     this.userPool = userPool;
     this.region = region;
     this.clientID = clientID;
 
-    this.identityProvider = AWSCognitoIdentityProviderClientBuilder.standard()
+    this.identityProvider = AWSCognitoIdentityProviderClientBuilder
+        .standard()
         .withRegion(region)
         .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(this.accessKey,
             this.secretKey)))
@@ -73,7 +74,13 @@ public class AWSAuthenticationServiceImpl implements AWSAuthenticationService {
     return true;
   }
 
-  @Override public void testConnection() throws MiscellaneousFailureException {
+  @Override
+  public void testConnection() throws MiscellaneousFailureException {
+    if (!this.enable) {
+      LOG.info("AWS Cognito disabled in config file");
+      return;
+    }
+
     try {
       LOG.info("Testing connection to AWS Cognito by requesting user pool metadata");
       DescribeUserPoolResult result =
@@ -89,26 +96,28 @@ public class AWSAuthenticationServiceImpl implements AWSAuthenticationService {
     }
   }
 
-  @Override public boolean userExists(String username) {
-    ListUsersResult usersResult =
-        this.identityProvider.listUsers(new ListUsersRequest().withUserPoolId(userPool)
-            .withLimit(1)
-            .withFilter("username = \"" + username + "\""));
+  @Override
+  public boolean userExists(String username) {
+    ListUsersResult usersResult = this.identityProvider.listUsers(new ListUsersRequest()
+        .withUserPoolId(userPool)
+        .withLimit(1)
+        .withFilter("username = \"" + username + "\""));
 
     return usersResult.getUsers().size() != 0;
   }
 
-  @Override public boolean authenticate(String username, String password)
+  @Override
+  public boolean authenticate(String username, String password)
       throws MiscellaneousFailureException {
     try {
       Map<String, String> authParams = new HashMap<>();
       authParams.put("USERNAME", username);
       authParams.put("PASSWORD", password);
 
-      InitiateAuthRequest authRequest =
-          new InitiateAuthRequest().withAuthFlow(AuthFlowType.USER_PASSWORD_AUTH)
-              .withClientId(this.clientID)
-              .withAuthParameters(authParams);
+      InitiateAuthRequest authRequest = new InitiateAuthRequest()
+          .withAuthFlow(AuthFlowType.USER_PASSWORD_AUTH)
+          .withClientId(this.clientID)
+          .withAuthParameters(authParams);
 
       InitiateAuthResult initiateAuthResult = this.identityProvider.initiateAuth(authRequest);
 
@@ -124,15 +133,16 @@ public class AWSAuthenticationServiceImpl implements AWSAuthenticationService {
     }
   }
 
-  @Override public void updatePassword(String username, String password)
+  @Override
+  public void updatePassword(String username, String password)
       throws MiscellaneousFailureException {
     if (password != null && userExists(username)) {
 
-      AdminSetUserPasswordRequest passwordRequest =
-          new AdminSetUserPasswordRequest().withUserPoolId(userPool)
-              .withPermanent(true)
-              .withUsername(username)
-              .withPassword(password);
+      AdminSetUserPasswordRequest passwordRequest = new AdminSetUserPasswordRequest()
+          .withUserPoolId(userPool)
+          .withPermanent(true)
+          .withUsername(username)
+          .withPassword(password);
 
       try {
         this.identityProvider.adminSetUserPassword(passwordRequest);
@@ -143,7 +153,8 @@ public class AWSAuthenticationServiceImpl implements AWSAuthenticationService {
     }
   }
 
-  @Override public void migrateUser(String username, String password, String email)
+  @Override
+  public void migrateUser(String username, String password, String email)
       throws MiscellaneousFailureException, InvalidMigrationException {
 
 
@@ -186,11 +197,11 @@ public class AWSAuthenticationServiceImpl implements AWSAuthenticationService {
       this.identityProvider.adminCreateUser(request);
 
       //mark the password as permanent
-      AdminSetUserPasswordRequest passwordRequest =
-          new AdminSetUserPasswordRequest().withUserPoolId(this.userPool)
-              .withPermanent(true)
-              .withUsername(username)
-              .withPassword(password);
+      AdminSetUserPasswordRequest passwordRequest = new AdminSetUserPasswordRequest()
+          .withUserPoolId(this.userPool)
+          .withPermanent(true)
+          .withUsername(username)
+          .withPassword(password);
 
       this.identityProvider.adminSetUserPassword(passwordRequest);
 

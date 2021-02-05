@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 <component name="ca.firstvoices.operations.bulkupdate.operations.contrib" version="1.0">
 
+  <extension point="adapters" target="org.nuxeo.ecm.core.operation.OperationServiceComponent">
+    <adapter accept="java.lang.String" class="ca.firstvoices.operations.bulkupdate.adapters.BulkUpdateModeAdapter"
+             produce="ca.firstvoices.operations.bulkupdate.BulkUpdateMode"/>
+  </extension>
+
   <extension point="operations" target="org.nuxeo.ecm.core.operation.OperationServiceComponent">
     <operation class="ca.firstvoices.operations.bulkupdate.operations.BulkUpdate"/>
   </extension>

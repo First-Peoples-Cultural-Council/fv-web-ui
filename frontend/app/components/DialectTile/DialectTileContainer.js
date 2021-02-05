@@ -15,14 +15,15 @@ import DialectTileData from 'components/DialectTile/DialectTileData'
  */
 function DialectTileContainer({ dialectGroups, dialectLogo, dialectTitle, actionIcon, isWorkspaces, href }) {
   return (
-    <DialectTileData dialectGroups={dialectGroups} isWorkspaces={isWorkspaces} href={href}>
-      {({ isPrivate, hrefToUse, onDialectClick }) => {
+    <DialectTileData dialectGroups={dialectGroups} dialectTitle={dialectTitle} isWorkspaces={isWorkspaces} href={href}>
+      {({ isLoggedIn, isPrivate, hrefToUse, onDialectClick }) => {
         return (
           <DialectTilePresentation
             actionIcon={actionIcon}
             dialectLogo={dialectLogo}
             dialectTitle={dialectTitle}
             href={hrefToUse}
+            isLoggedIn={isLoggedIn}
             isPrivate={isPrivate}
             onDialectClick={onDialectClick}
           />
