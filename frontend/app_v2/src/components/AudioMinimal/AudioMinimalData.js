@@ -26,6 +26,9 @@ function AudioMinimalData({ src }) {
     onClick: () => {
       send('CLICK', { src })
     },
+    onKeyPress: ({ code }) => {
+      send(code.toUpperCase(), { src })
+    },
   }
 }
 
