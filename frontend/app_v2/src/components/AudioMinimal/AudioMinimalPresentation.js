@@ -3,89 +3,90 @@ import PropTypes from 'prop-types'
 import useIcon from 'common/useIcon'
 /**
  * @summary AudioMinimalPresentation
- * @version 1.0.1
+ * @version 1.0.0
  * @component
  *
  * @param {object} props
- * @param {boolean} [props.isPlaying]
- * @param {function} [props.onClick]
- * @param {function} [props.onKeyPress]
  *
  * @returns {node} jsx markup
  */
-function AudioMinimalPresentation({ onKeyPress, onClick, isPlaying, isLoading, isErrored, hasErrored }) {
-  const PlayCircle = useIcon(
-    'PlayCircle',
-    `
-    fill-current
-    w-7
-    h-7
-    lg:w-8
-    lg:h-8
-    xl:w-12
-    xl:h-12
-  `
-  )
-  const PauseCircle = useIcon(
-    'PauseCircle',
-    `
-    fill-current
-    w-7
-    h-7
-    lg:w-8
-    lg:h-8
-    xl:w-12
-    xl:h-12
-  `
-  )
-  const TimesCircle = useIcon(
-    'TimesCircle',
-    `
-    fill-current
-    w-7
-    h-7
-    lg:w-8
-    lg:h-8
-    xl:w-12
-    xl:h-12
-  `
-  )
+function AudioMinimalPresentation({ hasErrored, icons, isErrored, isLoading, isPlaying, onClick }) {
+  const iconsDefault = {
+    Play: useIcon(
+      'PlayCircle',
+      `
+        fill-current
+        w-7
+        h-7
+        lg:w-8
+        lg:h-8
+        xl:w-12
+        xl:h-12
+      `
+    ),
+    Pause: useIcon(
+      'PauseCircle',
+      `
+        fill-current
+        w-7
+        h-7
+        lg:w-8
+        lg:h-8
+        xl:w-12
+        xl:h-12
+      `
+    ),
+    Error: useIcon(
+      'TimesCircle',
+      `
+        fill-current
+        w-7
+        h-7
+        lg:w-8
+        lg:h-8
+        xl:w-12
+        xl:h-12
+      `
+    ),
+  }
+  const Icons = Object.assign({}, iconsDefault, icons)
+
   if (isErrored || hasErrored) {
     return (
       <button type="button" disabled>
-        {TimesCircle}
+        {Icons.Error}
       </button>
     )
   }
   if (isLoading) {
     return (
       <button type="button" disabled>
-        {PlayCircle}
+        {Icons.Play}
       </button>
     )
   }
   if (isPlaying) {
     return (
-      <button type="button" onKeyPress={onKeyPress} onClick={onClick}>
-        {PauseCircle}
+      <button type="button" onClick={onClick}>
+        {Icons.Pause}
       </button>
     )
   }
   return (
     <button type="button" onClick={onClick}>
-      {PlayCircle}
+      {Icons.Play}
     </button>
   )
 }
 // PROPTYPES
-const { func, bool } = PropTypes
+const { func, bool, object } = PropTypes
 AudioMinimalPresentation.propTypes = {
   isPlaying: bool,
   isLoading: bool,
   isErrored: bool,
   hasErrored: bool,
   onClick: func,
-  onKeyPress: func,
+  icons: object,
 }
 AudioMinimalPresentation.defaultProps = {
   isPlaying: false,
@@ -93,7 +94,6 @@ AudioMinimalPresentation.defaultProps = {
   isErrored: false,
   hasErrored: false,
   onClick: () => {},
-  onKeyPress: () => {},
 }
 
 export default AudioMinimalPresentation

@@ -2,41 +2,36 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import AudioMinimalPresentation from './AudioMinimalPresentation'
 import AudioMinimalData from './AudioMinimalData'
-
 /**
  * @summary AudioMinimalContainer
- * @version 1.0.1
+ * @version 1.0.0
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function AudioMinimalContainer({ src }) {
+function AudioMinimalContainer({ src, icons }) {
+  const { isPlaying, isLoading, isErrored, hasErrored, onClick } = AudioMinimalData({ src })
   return (
-    <AudioMinimalData src={src}>
-      {({ isPlaying, isLoading, isErrored, hasErrored, onKeyPress, onClick }) => {
-        return (
-          <AudioMinimalPresentation
-            onClick={onClick}
-            onKeyPress={onKeyPress}
-            isPlaying={isPlaying}
-            isLoading={isLoading}
-            hasErrored={hasErrored}
-            isErrored={isErrored}
-          />
-        )
-      }}
-    </AudioMinimalData>
+    <AudioMinimalPresentation
+      hasErrored={hasErrored}
+      isErrored={isErrored}
+      isLoading={isLoading}
+      isPlaying={isPlaying}
+      onClick={onClick}
+      icons={icons}
+    />
   )
 }
 // PROPTYPES
-const { bool, func, string } = PropTypes
+const { bool, func, string, object } = PropTypes
 AudioMinimalContainer.propTypes = {
   src: string,
   color: string,
   onPlayCallback: func,
   shouldStopPropagation: bool,
+  icons: object,
 }
 
 export default AudioMinimalContainer
