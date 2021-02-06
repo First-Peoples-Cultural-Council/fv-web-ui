@@ -78,14 +78,6 @@ public interface CleanupCharactersService {
   Set<String> getCharactersToSkipForDialect(DocumentModel dialect);
 
   /**
-   * Return a list of all non-trashed characters in a document's associated alphabet
-   *
-   * @param doc Document model
-   * @return Document model list of associated characters
-   */
-  DocumentModelList getCharacters(DocumentModel doc);
-
-  /**
    * Return a list of characters that have confusables defined
    *
    * @param doc Document model
@@ -121,10 +113,4 @@ public interface CleanupCharactersService {
   DocumentModelList getAllWordsPhrasesForConfusable(CoreSession session, String dictionaryId,
       String confusableChar,
       int batchSize);
-
-  /**
-   * @param doc Document model
-   * @return The associated alphabet document for the given document
-   */
-  DocumentModel getAlphabet(DocumentModel doc);
 }

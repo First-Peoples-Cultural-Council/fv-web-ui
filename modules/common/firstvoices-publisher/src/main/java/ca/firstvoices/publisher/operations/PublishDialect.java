@@ -68,7 +68,7 @@ public class PublishDialect extends AbstractMaintenanceOperation {
 
   @Override
   protected void executeInitPhase(DocumentModel dialect) {
-    // Add job to fully create proxies overnight
+    // Add job to fully create proxies overnight /////// ONLY allow if the dialect is not published
     RequiredJobsUtils.addToRequiredJobs(dialect, Constants.PUBLISH_DIALECT_JOB_ID);
   }
 

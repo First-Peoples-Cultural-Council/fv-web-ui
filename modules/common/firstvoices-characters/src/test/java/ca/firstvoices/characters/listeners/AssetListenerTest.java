@@ -14,7 +14,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
@@ -56,6 +55,7 @@ public class AssetListenerTest extends AbstractTestDataCreatorTest {
     char1.setPropertyValue(CleanupCharactersServiceImpl.LC_CONFUSABLES, new String[]{"$"});
     char1.putContextData(CharacterListener.DISABLE_CHARACTER_LISTENER, true);
     session.createDocument(char1);
+    session.save();
   }
 
   @Test

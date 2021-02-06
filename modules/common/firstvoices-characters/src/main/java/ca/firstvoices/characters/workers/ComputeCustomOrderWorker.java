@@ -73,6 +73,7 @@ public class ComputeCustomOrderWorker extends AbstractWork {
               setStatus("Recalculating custom order for `" + dialect.getTitle() + "`");
 
               try {
+                // FIRST --- test that order is good for alphabet....
                 // execute a first query to get total size and work on first batch
                 String dictionaryId = session
                     .getChild(dialectRef, DialectTypesConstants.FV_DICTIONARY_NAME).getId();
@@ -113,6 +114,8 @@ public class ComputeCustomOrderWorker extends AbstractWork {
                 RequiredJobsUtils
                     .removeFromRequiredJobs(dialect, Constants.COMPUTE_ORDER_JOB_ID, true);
 
+                // Add re-publish dialect
+
               } catch (Exception e) {
                 setStatus("Failed");
                 RequiredJobsUtils
@@ -126,7 +129,7 @@ public class ComputeCustomOrderWorker extends AbstractWork {
 
   private void updateCustomOrderForEntries(CoreSession session, DocumentModelList docs) {
     for (DocumentModel doc : docs) {
-      service.computeAssetNativeOrderTranslation(session, doc, true, true);
+      service.computeAssetNativeOrderTranslation(session, doc, true, false);
     }
   }
 

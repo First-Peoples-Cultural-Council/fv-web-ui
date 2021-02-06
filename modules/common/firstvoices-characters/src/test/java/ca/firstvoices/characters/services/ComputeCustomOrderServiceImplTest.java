@@ -23,8 +23,11 @@ import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PHRASE;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
+import ca.firstvoices.characters.CharactersTestUtils;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import ca.firstvoices.testUtil.FirstVoicesDataFeature;
@@ -33,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -61,6 +65,7 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.services.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.publisher.templates.factories.xml",
     "FirstVoicesSecurity:OSGI-INF/extensions/ca.firstvoices.operations.xml",
+    "FirstVoicesCharacters:OSGI-INF/services/charactersCore-contrib.xml",
     "FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml",
     "FirstVoicesNuxeoPublisher:OSGI-INF/extensions/ca.firstvoices.services.xml",
     "FirstVoicesCoreTests:OSGI-INF/nuxeo.conf.override.xml",
@@ -73,6 +78,13 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
   @Inject private FirstVoicesPublisherService firstVoicesPublisherService;
 
   @Inject private TrashService trashService;
+
+  @BeforeClass
+  public static void unregisterEvents() {
+    // Remove ancestry listener
+    // To help isolate testing to the service
+    unregisterEvents(new String[]{"ancestryAssignmentListener"});
+  }
 
   @Before
   public void setDialectReference() {
@@ -90,7 +102,9 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
             "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo", "p", "p'", "s", "t", "t'",
             "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y", "y̓", "'"};
 
-    createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
+    DocumentModelList createdChars =
+        CharactersTestUtils.createOrderedAlphabet(session,
+            orderedAlphabet, alphabet.getPathAsString());
     DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
     computeDialectNativeOrderTranslation(session, createdWords);
 
@@ -108,6 +122,19 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
       assertEquals(i, Integer.valueOf(reference));
       i--;
     }
+
+    // Validate
+    assertTrue(nativeOrderComputeService.validateAlphabetOrder(session, alphabet));
+
+    // Mess it up and validate
+    DocumentModel char1 =
+        session.getDocument(createdChars.get(0).getRef());
+    char1.setPropertyValue("fv:custom_order", "z");
+    session.saveDocument(char1);
+
+    session.save();
+
+    assertFalse(nativeOrderComputeService.validateAlphabetOrder(session, alphabet));
   }
 
   @Test
@@ -127,7 +154,8 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
             "ƛ", "ƛ̕", "m", "m̕", "n", "n̕", "p", "p̕", "q", "qʷ", "s", "š", "t", "t̕", "u", "ʔu",
             "ʕu", "uu", "ʔuu", "ʕuu", "w", "w̕", "x", "x̣", "xʷ", "x̣ʷ", "y", "y̕", "ʕ", "ʔ"};
 
-    createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
+    DocumentModelList createdChars =
+        CharactersTestUtils.createOrderedAlphabet(session, orderedAlphabet, alphabet.getPathAsString());
     DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
     computeDialectNativeOrderTranslation(session, createdWords);
     Integer i = orderedWords.length - 1;
@@ -142,6 +170,19 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
       assertEquals(i, Integer.valueOf(reference));
       i--;
     }
+
+    // Validate
+    assertTrue(nativeOrderComputeService.validateAlphabetOrder(session, alphabet));
+
+    // Mess it up and validate
+    DocumentModel char1 =
+        session.getDocument(createdChars.get(0).getRef());
+    char1.setPropertyValue("fvcharacter:alphabet_order", "22");
+    session.saveDocument(char1);
+
+    session.save();
+
+    assertFalse(nativeOrderComputeService.validateAlphabetOrder(session, alphabet));
   }
 
   @Test
@@ -180,7 +221,7 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
             "ã", "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó",
             "ô", "õ", "ö", "÷", "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ"};
 
-    createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
+    CharactersTestUtils.createOrderedAlphabet(session, orderedAlphabet, alphabet.getPathAsString());
     DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
     computeDialectNativeOrderTranslation(session, createdWords);
     Integer i = orderedWords.length - 1;
@@ -225,7 +266,7 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
             "ã", "ä", "å", "æ", "ç", "è", "é", "ê", "ë", "ì", "í", "î", "ï", "ð", "ñ", "ò", "ó",
             "ô", "õ", "ö", "÷", "ø", "ù", "ú", "û", "ü", "ý", "þ", "ÿ"};
 
-    createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
+    CharactersTestUtils.createOrderedAlphabet(session, orderedAlphabet, alphabet.getPathAsString());
     DocumentModelList createdPhrases = createWordsorPhrases(orderedPhrases, FV_PHRASE);
     computeDialectNativeOrderTranslation(session, createdPhrases);
     Integer i = orderedPhrases.length - 1;
@@ -252,7 +293,7 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
             "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo", "p", "p'", "s", "t",
             "t'", "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y", "y̓", "'"};
 
-    createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
+    CharactersTestUtils.createOrderedAlphabet(session, orderedAlphabet, alphabet.getPathAsString());
     DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
 
     session.save();
@@ -310,7 +351,7 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
     String[] orderedAlphabet = {"d", "c"};
 
     createUnorderedAlphabet(unorderedAlphabet, alphabet.getPathAsString());
-    createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
+    CharactersTestUtils.createOrderedAlphabet(session, orderedAlphabet, alphabet.getPathAsString());
     DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
 
     computeDialectNativeOrderTranslation(session, createdWords);
@@ -334,7 +375,7 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
         {"z", "aa", "a", "b", "d", "e", "ee", "g", "g̱", "gw", "h", "hl", "i", "ii", "j", "k", "k'",
             "ḵ", "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo", "p", "p'", "s", "t",
             "t'", "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y", "y̓", "'"};
-    createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
+    CharactersTestUtils.createOrderedAlphabet(session, orderedAlphabet, alphabet.getPathAsString());
     nativeOrderComputeService.updateCustomOrderCharacters(session, alphabet,
         session.getChildren(new PathRef(alphabet.getPathAsString())));
     DocumentModelList characters = session.getChildren(new PathRef(alphabet.getPathAsString()));
@@ -373,7 +414,7 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
 
     String[] orderedAlphabet = {"À", "Á", "Â", "Ã", "Ä", "Å", "Æ", "Ç", "È"};
 
-    createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
+    CharactersTestUtils.createOrderedAlphabet(session, orderedAlphabet, alphabet.getPathAsString());
 
     nativeOrderComputeService.updateCustomOrderCharacters(session, alphabet,
         session.getChildren(new PathRef(alphabet.getPathAsString())));
@@ -400,7 +441,7 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
             "ḵ'", "kw", "kw'", "l", "Ì", "m", "m̓", "n", "n̓", "o", "oo", "p", "p'", "s", "t", "t'",
             "tl'", "ts", "ts'", "u", "uu", "w", "w̓", "x", "x̱", "xw", "y", "y̓", "'"};
 
-    createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
+    CharactersTestUtils.createOrderedAlphabet(session, orderedAlphabet, alphabet.getPathAsString());
     createWordsorPhrases(orderedWords, FV_WORD);
     firstVoicesPublisherService.transitionDialectToPublished(session, dialect);
 
@@ -453,7 +494,7 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
 
     String[] orderedAlphabet = {"a", "b", "c", "d", "e", "f"};
 
-    createOrderedAlphabet(orderedAlphabet, alphabet.getPathAsString());
+    CharactersTestUtils.createOrderedAlphabet(session, orderedAlphabet, alphabet.getPathAsString());
     DocumentModelList createdWords = createWordsorPhrases(orderedWords, FV_WORD);
 
     alphabet.setPropertyValue("fv-alphabet:ignored_characters", (Serializable) testList);
@@ -474,28 +515,10 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
     }
   }
 
-  public DocumentModel createDocument(DocumentModel model) {
-    model.setPropertyValue("dc:title", model.getName());
-    DocumentModel newDoc = session.createDocument(model);
-
-    session.saveDocument(newDoc);
-    return newDoc;
-  }
-
-  private void createOrderedAlphabet(String[] alphabet, String path) {
-    Integer i = 0;
-    for (String letter : alphabet) {
-      DocumentModel letterDoc = session.createDocumentModel(path, letter, FV_CHARACTER);
-      letterDoc.setPropertyValue("fvcharacter:alphabet_order", i);
-      createDocument(letterDoc);
-      i++;
-    }
-  }
-
   private void createUnorderedAlphabet(String[] alphabet, String path) {
     for (String letter : alphabet) {
       DocumentModel letterDoc = session.createDocumentModel(path, letter, FV_CHARACTER);
-      createDocument(letterDoc);
+      CharactersTestUtils.createDocument(session, letterDoc);
     }
   }
 
@@ -506,7 +529,7 @@ public class ComputeCustomOrderServiceImplTest extends AbstractFirstVoicesDataTe
           session.createDocumentModel(dictionary.getPathAsString(), docs[i], typeName);
       document.setPropertyValue("fv:reference", "" + i);
       document.setPropertyValue("fv:update_confusables_required", true);
-      document = createDocument(document);
+      document = CharactersTestUtils.createDocument(session, document);
       createdDocs.add(document);
     }
     return createdDocs;

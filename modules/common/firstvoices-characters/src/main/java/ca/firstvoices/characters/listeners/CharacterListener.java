@@ -28,6 +28,7 @@ import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
 import static org.nuxeo.ecm.core.api.trash.TrashService.DOCUMENT_TRASHED;
 import static org.nuxeo.ecm.core.api.trash.TrashService.DOCUMENT_UNTRASHED;
 
+import ca.firstvoices.characters.services.CharactersCoreService;
 import ca.firstvoices.characters.services.CleanupCharactersService;
 import ca.firstvoices.core.io.utils.DialectUtils;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
@@ -63,8 +64,12 @@ public class CharacterListener implements EventListener {
   protected EventContext eventCtx;
   protected DocumentEventContext docCtx;
   protected DocumentModel doc;
-  CleanupCharactersService cleanupCharactersService = Framework
+
+  CleanupCharactersService ccs = Framework
       .getService(CleanupCharactersService.class);
+
+  CharactersCoreService cs = Framework
+      .getService(CharactersCoreService.class);
 
   /**
    * Specific criteria that must be true for this event to run
@@ -96,10 +101,15 @@ public class CharacterListener implements EventListener {
     // Set of required jobs to set
     HashSet<String> requiredJobsToSet = new HashSet<>();
 
+    DocumentModelList characters =
+        cs.getCharacters(eventCtx.getCoreSession(), doc);
+    DocumentModel alphabet =
+        cs.getAlphabet(eventCtx.getCoreSession(), doc);
+
     switch (event.getName()) {
       case DOCUMENT_CREATED:
 
-        if (cleanupCharactersService.hasConfusableCharacters(doc)) {
+        if (ccs.hasConfusableCharacters(doc)) {
           // If confusables are defined upon creation, queue a cleanup
           requiredJobsToSet.add(CLEAN_CONFUSABLES_JOB_ID);
         }
@@ -110,18 +120,20 @@ public class CharacterListener implements EventListener {
         break;
       case ABOUT_TO_CREATE:
         // Validate character ensuring only valid character entries are added
-        validateCharacter(event, doc);
+        validateCharacter(event, doc, alphabet, characters);
         break;
       case BEFORE_DOC_UPDATE:
-        // Validate character ensuring only valid character entries are added
-        validateCharacter(event, doc);
+        if (titleOrUppercaseChanged(doc)) {
+          // Validate character ensuring only valid character entries are added
+          validateCharacter(event, doc, alphabet, characters);
+        }
 
         if (confusablePropertyChanged(doc)) {
           // If confusables property changed, queue a cleanup
           requiredJobsToSet.add(CLEAN_CONFUSABLES_JOB_ID);
         }
 
-        if (sortRelatedPropertyChanged(doc)) {
+        if (titleOrUppercaseChanged(doc) || characterOrderChanged(doc)) {
           // If sort order, title has changed, queue an order recompute
           requiredJobsToSet.add(COMPUTE_ORDER_JOB_ID);
         }
@@ -156,16 +168,22 @@ public class CharacterListener implements EventListener {
   /**
    * Determines if a field that impacts custom sort has changed
    */
-  private boolean sortRelatedPropertyChanged(DocumentModel characterDoc) {
-    return characterDoc.getProperty(DC_TITLE).isDirty() || characterDoc.getProperty(CHAR_ORDER)
-        .isDirty() || characterDoc.getProperty(UC_CHAR).isDirty();
+  private boolean characterOrderChanged(DocumentModel characterDoc) {
+    return characterDoc.getProperty(CHAR_ORDER).isDirty();
   }
 
+  /**
+   * Determines if a field that impacts custom sort has changed
+   */
+  private boolean titleOrUppercaseChanged(DocumentModel characterDoc) {
+    return characterDoc.getProperty(DC_TITLE).isDirty()
+        || characterDoc.getProperty(UC_CHAR).isDirty();
+  }
 
-  public void validateCharacter(Event event, DocumentModel characterDoc) {
+  public void validateCharacter(Event event,
+      DocumentModel characterDoc, DocumentModel alphabet,
+      DocumentModelList characters) {
     try {
-      DocumentModelList characters = cleanupCharactersService.getCharacters(characterDoc);
-      DocumentModel alphabet = cleanupCharactersService.getAlphabet(characterDoc);
 
       //All character documents except for the modified doc
       List<DocumentModel> otherCharacters = characters.stream()
@@ -176,10 +194,10 @@ public class CharacterListener implements EventListener {
           .equals(DocumentEventTypes.ABOUT_TO_CREATE)) {
 
         // Ensures all characters are unique
-        cleanupCharactersService.validateCharacters(otherCharacters, alphabet, characterDoc);
+        ccs.validateCharacters(otherCharacters, alphabet, characterDoc);
 
         // Ensures current character is valid
-        cleanupCharactersService.validateConfusableCharacter(characterDoc, otherCharacters);
+        ccs.validateConfusableCharacter(characterDoc, otherCharacters);
       }
     } catch (Exception exception) {
       event.markBubbleException();
