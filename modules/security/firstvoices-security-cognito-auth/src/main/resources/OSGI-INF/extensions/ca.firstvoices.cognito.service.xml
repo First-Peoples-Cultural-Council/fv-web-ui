@@ -13,6 +13,7 @@
     <extension target="ca.firstvoices.cognito.aws" point="configuration">
 
         <configuration>
+            <enable>${fv.cognito.enable}</enable>
             <accessKey>${fv.cognito.accessKey}</accessKey>
             <secretKey>${fv.cognito.secretKey}</secretKey>
             <region>${fv.cognito.region}</region>

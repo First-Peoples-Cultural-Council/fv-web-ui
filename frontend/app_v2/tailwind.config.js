@@ -48,6 +48,10 @@ module.exports = {
           DEFAULT: '#D64A4A',
         },
       },
+      borderRadius: {
+        50: '3.13rem',
+        25: '1.6rem',
+      },
     },
   },
   variants: {

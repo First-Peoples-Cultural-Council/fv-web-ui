@@ -10,6 +10,7 @@ nuxeo.template.includes=common
 ## on production servers should be left empty like this:
 fv.contextPath=
 
+fv.cognito.enable=false
 fv.cognito.authenticateWithCognito=false
 fv.cognito.userPool=USER_POOL_ID_STRING
 fv.cognito.accessKey=ACCESS_KEY_PLACEHOLDER
