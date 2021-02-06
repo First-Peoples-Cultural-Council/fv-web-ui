@@ -125,7 +125,6 @@ public class CleanConfusablesWorker extends AbstractWork {
       cleanupCharactersService.cleanConfusables(session, dictionaryItem, true);
 
       if (StateUtils.isPublished(dictionaryItem)) {
-        /// maybe also here -- avoid individual publish - instead republish job?
         StateUtils.followTransitionIfAllowed(dictionaryItem, REPUBLISH_TRANSITION);
       }
     }
