@@ -9,7 +9,15 @@ import PropTypes from 'prop-types'
  *
  * @returns {node} jsx markup
  */
-function HeroPresentation({ background, foreground, foregroundIcon, variant }) {
+function HeroPresentation({
+  // uid,
+  background,
+  foreground,
+  foregroundIcon,
+  // hasSearch,
+  variant,
+}) {
+  // console.log('HeroPresentation', { uid, background, foreground, foregroundIcon, hasSearch, variant })
   if (!background && !foreground && !foregroundIcon) {
     return null
   }
@@ -51,11 +59,13 @@ function HeroPresentation({ background, foreground, foregroundIcon, variant }) {
   )
 }
 // PROPTYPES
-const { node, oneOf } = PropTypes
+const { string, bool, oneOf } = PropTypes
 HeroPresentation.propTypes = {
-  background: node,
-  foreground: node,
-  foregroundIcon: node,
+  uid: string,
+  hasSearch: bool,
+  background: string,
+  foreground: string,
+  foregroundIcon: string,
   variant: oneOf(['left', 'center']),
 }
 HeroPresentation.defaultProps = {
