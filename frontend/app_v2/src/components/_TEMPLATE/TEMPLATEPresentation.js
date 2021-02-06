@@ -1,22 +1,21 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
-// import './TEMPLATE.css'
+import PropTypes from 'prop-types'
 /**
  * @summary TEMPLATEPresentation
- * @version 1.0.1
+ * @version 1.0.0
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function TEMPLATEPresentation() {
-  return <div className="TEMPLATE">TEMPLATEPresentation</div>
+function TEMPLATEPresentation({ exampleProp }) {
+  return <div className="TEMPLATE">TEMPLATEPresentation: {exampleProp}</div>
 }
 // PROPTYPES
-// const { string } = PropTypes
+const { string } = PropTypes
 TEMPLATEPresentation.propTypes = {
-  //   something: string,
+  exampleProp: string,
 }
 
 export default TEMPLATEPresentation
