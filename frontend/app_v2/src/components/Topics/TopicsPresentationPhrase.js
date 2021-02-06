@@ -12,17 +12,17 @@ import PropTypes from 'prop-types'
  *
  * @returns {node} jsx markup
  */
-function TopicsPresentationPhrase({ heading, image, listCount, url }) {
+function TopicsPresentationPhrase(/*{ heading, image, listCount, url }*/) {
   // eslint-disable-next-line
-  console.log('TopicsPresentationPhrase', { heading, image, listCount, url })
+  // console.log('TopicsPresentationPhrase', { heading, image, listCount, url })
   return <div className="Topic">TopicsPresentationPhrase</div>
 }
 // PROPTYPES
-const { string } = PropTypes
+const { string, number } = PropTypes
 TopicsPresentationPhrase.propTypes = {
   heading: string,
   image: string,
-  listCount: string,
+  listCount: number,
   url: string,
 }
 export default TopicsPresentationPhrase
