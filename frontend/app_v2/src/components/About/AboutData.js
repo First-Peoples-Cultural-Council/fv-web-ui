@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import api from 'services/api'
 import HeroBackground from 'images/hero-background.jpg'
 
 /**
@@ -20,17 +19,18 @@ export function adaptor(response) {
     path,
   }
 }
-function AboutData({ children, language }) {
-  const { data } = api.getSections(language, adaptor)
+function AboutData({ children, hero, content }) {
   return children({
     hero: {
       background: HeroBackground,
-      foreground: data ? data.title : 'OUR PEOPLE',
-      foregroundIcon: '"icon"',
+      foreground: hero ? hero.foreground : 'OUR PEOPLE',
+      foregroundIcon: hero ? hero.foregroundIcon : '"icon"',
     },
     content: {
-      heading: "Kwak'wala-speaking peoples",
-      body: (
+      heading: content ? content.heading : "Kwak'wala-speaking peoples",
+      body: content ? (
+        content.body
+      ) : (
         <>
           <p>
             Eiusmod reprehenderit magna laboris do non do do dolore aute ex. Duis dolore sunt non cupidatat duis
