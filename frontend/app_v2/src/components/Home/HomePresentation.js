@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import WidgetWotd from 'components/WidgetWotd'
 import Topics from 'components/Topics'
+import Hero from 'components/Hero'
 
 import {
   WIDGET_HERO,
@@ -42,8 +43,18 @@ function HomePresentation({
       {widgets.length > 0 &&
         widgets.map(({ type, ...widgetProps }, index) => {
           if (type === WIDGET_HERO) {
-            // console.log('WIDGET_HERO props', widgetProps)
-            return <div key={index}>WIDGET_HERO</div>
+            const { uid, background, foreground, foregroundIcon, hasSearch, variant } = widgetProps
+            return (
+              <Hero.Presentation
+                key={index}
+                background={background}
+                foreground={foreground}
+                foregroundIcon={foregroundIcon}
+                variant={variant}
+                hasSearch={hasSearch}
+                uid={uid}
+              />
+            )
           }
 
           if (type === WIDGET_WELCOME) {
