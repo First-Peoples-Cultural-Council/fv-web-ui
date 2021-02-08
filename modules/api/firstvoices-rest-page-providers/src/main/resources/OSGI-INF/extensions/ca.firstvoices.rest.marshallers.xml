@@ -8,5 +8,9 @@
     <register class="ca.firstvoices.rest.marshallers.SiteListWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.SiteWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.StatisticsWriter" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.CategoryListWriter" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.CategoryWriter" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.PhraseListWriter" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.PhraseWriter" enable="true"/>
   </extension>
 </component>
