@@ -94,6 +94,7 @@ function FVLabel({
   const openEdit = (event) => {
     event.preventDefault()
     event.stopPropagation()
+    setAnchorElement(undefined)
     startEditingLabel(actualTransKey)
   }
 
