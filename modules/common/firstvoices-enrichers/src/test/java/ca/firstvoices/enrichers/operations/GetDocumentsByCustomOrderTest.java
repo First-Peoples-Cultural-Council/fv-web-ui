@@ -51,10 +51,13 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
  */
 @RunWith(FeaturesRunner.class)
 @Features({FirstVoicesCoreTestsFeature.class})
-@Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.enrichers.operations.xml")
-@Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.pageproviders.xml")
-@Deploy("FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.nuxeo.enrichers.xml")
-@Deploy("FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml")
+@Deploy({
+    "FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.enrichers.operations.xml",
+    "FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.pageproviders.xml",
+    "FirstVoicesNuxeo:OSGI-INF/extensions/ca.firstvoices.nuxeo.enrichers.xml",
+    "FirstVoicesCharacters:OSGI-INF/services/charactersCore-contrib.xml",
+    "FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml"
+})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesDataTest {
 
