@@ -1,8 +1,8 @@
 // import PropTypes from 'prop-types'
-// import React, { useEffect } from 'react'
+import { useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import api from 'services/api'
-// import AppStateContext from 'common/AppStateContext'
+import AppStateContext from 'common/AppStateContext'
 
 export function adaptor(response) {
   const { title, uid, path } = response
@@ -14,10 +14,11 @@ export function adaptor(response) {
 }
 function UpdateAppStateProvider() {
   const { language } = useParams()
+  const { reducer } = useContext(AppStateContext)
+  const { dispatch } = reducer
   const { isLoading, error, data } = api.getSections(language, adaptor)
   if (isLoading === false && error === null) {
-    // eslint-disable-next-line
-    console.log('Update the AppStateContext with', { data })
+    dispatch({ type: 'api.getSections', payload: data })
   }
   return null
 }
