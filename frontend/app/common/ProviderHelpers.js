@@ -67,28 +67,29 @@ function filtersToNXQL(filterArray) {
   for (const appliedFilterKey in filterArray) {
     const ak = Object.assign({}, filterArray[appliedFilterKey])
     if (
-      ak &&
       Object.prototype.hasOwnProperty.call(ak, 'filterOptions') &&
       ak.filterOptions &&
-      Object.prototype.hasOwnProperty.call(ak, 'nxql')
+      Object.prototype.hasOwnProperty.call(ak.filterOptions, 'nxql')
     ) {
+      const filterOptions = ak.filterOptions
+
       if (ak.appliedFilter === true) ak.appliedFilter = 1
       if (ak.appliedFilter === false) ak.appliedFilter = 0
 
-      if (!Object.prototype.hasOwnProperty.call(ak, 'nxqlGroup')) {
+      if (!Object.prototype.hasOwnProperty.call(filterOptions, 'nxqlGroup')) {
         nxqlFilterString +=
           ' ' +
-          (Object.prototype.hasOwnProperty.call(ak, 'operator') ? ak.filterOptions.operator : 'AND') +
+          (Object.prototype.hasOwnProperty.call(filterOptions, 'operator') ? filterOptions.operator : 'AND') +
           ' ' +
-          generateNXQLString(ak.filterOptions.nxql, ak.appliedFilter)
+          generateNXQLString(filterOptions.nxql, ak.appliedFilter)
       } else {
         if (
-          Object.prototype.hasOwnProperty.call(nxqlGroups, ak.filterOptions.nxqlGroup) &&
-          nxqlGroups[ak.filterOptions.nxqlGroup].length > 0
+          Object.prototype.hasOwnProperty.call(nxqlGroups, filterOptions.nxqlGroup) &&
+          nxqlGroups[filterOptions.nxqlGroup].length > 0
         ) {
-          nxqlGroups[ak.filterOptions.nxqlGroup].push(generateNXQLString(ak.filterOptions.nxql, ak.appliedFilter))
+          nxqlGroups[filterOptions.nxqlGroup].push(generateNXQLString(filterOptions.nxql, ak.appliedFilter))
         } else {
-          nxqlGroups[ak.filterOptions.nxqlGroup] = [generateNXQLString(ak.filterOptions.nxql, ak.appliedFilter)]
+          nxqlGroups[filterOptions.nxqlGroup] = [generateNXQLString(filterOptions.nxql, ak.appliedFilter)]
         }
       }
     }
