@@ -57,17 +57,20 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
           Framework.getService(CharactersCoreService.class);
 
       DocumentModel alphabet = cs.getAlphabet(session, dialect);
+      DocumentModelList characters = cs.getCharacters(session, alphabet);
 
-      asset = computeCustomOrder(asset, alphabet,
-          cs.getCharacters(session, alphabet));
+      if (isAlphabetComputed(session, characters)) {
+        // Only process custom order if the alphabet is fully computed
+        asset = computeCustomOrder(asset, alphabet, characters);
 
-      if (Boolean.TRUE.equals(save) && asset.isDirty()) {
-        SessionUtils.saveDocumentWithoutEvents(session, asset, true,
-            Collections.singletonList(AssetListener.DISABLE_CHAR_ASSET_LISTENER));
-      }
+        if (Boolean.TRUE.equals(save) && asset.isDirty()) {
+          SessionUtils.saveDocumentWithoutEvents(session, asset, true,
+              Collections.singletonList(AssetListener.DISABLE_CHAR_ASSET_LISTENER));
+        }
 
-      if (Boolean.TRUE.equals(publish)) {
-        updateProxyIfPublished(asset);
+        if (Boolean.TRUE.equals(publish)) {
+          updateProxyIfPublished(asset);
+        }
       }
     }
 
@@ -106,7 +109,7 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
                 (String) charDoc.getPropertyValue("fvcharacter:upper_case_character"))).findFirst()
             .orElse(null);
         if (characterDoc != null) {
-          // The character exists in the archive:
+          // The character exists in the archive: /////// check if `null`
           String computedCharacterOrder = (String) characterDoc
               .getPropertyValue(FV_CUSTOM_ORDER);
           nativeTitle.append(computedCharacterOrder);
@@ -229,6 +232,35 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
     if (wasUpdated && StateUtils.isPublished(alphabet)) {
       StateUtils.followTransitionIfAllowed(alphabet, REPUBLISH_TRANSITION);
     }
+  }
+
+  @Override
+  public void updateCustomOrderCharacters(CoreSession session,
+      DocumentModel alphabet) {
+    CharactersCoreService cs =
+        Framework.getService(CharactersCoreService.class);
+
+    updateCustomOrderCharacters(session, alphabet, cs.getCharacters(session, alphabet));
+  }
+
+  @Override
+  public boolean isAlphabetComputed(CoreSession session, DocumentModel alphabet) {
+    CharactersCoreService cs =
+        Framework.getService(CharactersCoreService.class);
+
+    DocumentModelList characters = cs.getCharacters(session, alphabet);
+
+    return isAlphabetComputed(session, characters);
+  }
+
+  @Override
+  public boolean isAlphabetComputed(CoreSession session, DocumentModelList characters) {
+    if (characters == null || characters.isEmpty()) {
+      return false;
+    }
+
+    return characters.stream()
+        .noneMatch(charDoc -> charDoc.getPropertyValue(FV_CUSTOM_ORDER) == null);
   }
 
   private boolean checkAlphabetOrder(DocumentModelList inCustomOrder,

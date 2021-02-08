@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 import ca.firstvoices.characters.services.CleanupCharactersServiceImpl;
+import ca.firstvoices.characters.services.CustomOrderComputeService;
 import ca.firstvoices.data.schemas.DialectTypesConstants;
 import ca.firstvoices.testUtil.AbstractTestDataCreatorTest;
 import ca.firstvoices.testUtil.annotations.TestDataConfiguration;
@@ -40,6 +41,9 @@ public class AssetListenerTest extends AbstractTestDataCreatorTest {
   @Inject
   EventService eventService;
 
+  @Inject
+  CustomOrderComputeService cos;
+
   @Before
   public void initCharacterTests() {
     assertNotNull("Asset listener registered", eventService.getEventListener("asset_listener"));
@@ -56,6 +60,9 @@ public class AssetListenerTest extends AbstractTestDataCreatorTest {
     char1.putContextData(CharacterListener.DISABLE_CHARACTER_LISTENER, true);
     session.createDocument(char1);
     session.save();
+
+    // Compute custom_order mapping for alphabet
+    cos.updateCustomOrderCharacters(session, alphabet);
   }
 
   @Test

@@ -56,6 +56,8 @@ public class CharactersTestUtils {
       docs.add(letterDoc);
     }
 
+    session.save();
+
     return docs;
   }
 

@@ -23,6 +23,7 @@ package ca.firstvoices.enrichers.operations;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 import static ca.firstvoices.testUtil.helpers.DocumentTestHelpers.createDocument;
+
 import ca.firstvoices.characters.services.CustomOrderComputeService;
 import ca.firstvoices.runner.FirstVoicesCoreTestsFeature;
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
@@ -30,6 +31,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +43,6 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.test.DefaultRepositoryInit;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
-import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
@@ -65,6 +66,9 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesDataTest {
 
   private static final String[] orderedWords =
       {"aada gadaalee", "adoḵs", "agwii-gin̓am", "laahitkw", "lag̱am-bax̱", "la'oo'a'a"};
+
+  @Inject
+  private CustomOrderComputeService cos;
 
   @Before
   public void setup() {
@@ -94,9 +98,13 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesDataTest {
 
   @Test
   public void getDocumentsByCustomOrderOperationTest() throws OperationException {
+    // Ensure alphabet is calculated
+    cos.updateCustomOrderCharacters(session, alphabet);
 
     // Create words and compute custom order
     createWordsorPhrases(orderedWords, FV_WORD, true);
+
+    session.save();
 
     OperationContext ctx = new OperationContext(session);
 
@@ -154,9 +162,7 @@ public class GetDocumentsByCustomOrderTest extends AbstractFirstVoicesDataTest {
           createWordorPhrase(value, typeName, "fv:reference", String.valueOf(i));
 
       if (computeOrder) {
-        CustomOrderComputeService customOrder =
-            Framework.getService(CustomOrderComputeService.class);
-        customOrder.computeAssetNativeOrderTranslation(session, createdDoc, true, false);
+        cos.computeAssetNativeOrderTranslation(session, createdDoc, true, false);
       }
 
       i++;
