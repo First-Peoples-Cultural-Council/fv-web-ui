@@ -34,21 +34,20 @@ function HomePresentation({
   // isLoading,
   // error,
   data,
-  // dataOriginal,
+  language,
 }) {
   const widgets = data ? data.widgets : []
-
   return (
     <div className="Home">
       {widgets.length > 0 &&
         widgets.map(({ type, ...widgetProps }, index) => {
           if (type === WIDGET_HERO) {
-            const { uid, background, foreground, foregroundIcon, hasSearch, variant } = widgetProps
+            const { uid, background, /*foreground,*/ foregroundIcon, hasSearch, variant } = widgetProps
             return (
               <Hero.Presentation
                 key={index}
                 background={background}
-                foreground={foreground}
+                foreground={<h1 className="font-bold text-5xl">{language.title}</h1>}
                 foregroundIcon={foregroundIcon}
                 variant={variant}
                 hasSearch={hasSearch}
@@ -123,6 +122,7 @@ function HomePresentation({
 const { object } = PropTypes
 HomePresentation.propTypes = {
   data: object,
+  language: object,
 }
 
 export default HomePresentation
