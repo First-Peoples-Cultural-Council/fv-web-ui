@@ -13,9 +13,9 @@ import AboutData from 'components/About/AboutData'
  *
  * @returns {node} jsx markup
  */
-function AboutContainer() {
+function AboutContainer({ language }) {
   return (
-    <AboutData>
+    <AboutData language={language}>
       {({ hero, content }) => {
         const { background: heroBackground, foreground: heroForeground, foregroundIcon: heroIcon } = hero
         const { heading: contentHeading, body: contentBody } = content

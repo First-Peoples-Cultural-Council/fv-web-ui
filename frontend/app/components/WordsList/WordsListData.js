@@ -109,7 +109,7 @@ function WordsListData({ children }) {
       action: fetchPortal,
       reducer: computePortal,
     })
-  }, [])
+  }, [dictionaryKey, portalKey])
 
   // Parse Dialect
   const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, dialectPath)

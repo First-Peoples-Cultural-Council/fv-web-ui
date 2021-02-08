@@ -3,12 +3,32 @@
 
 <head>
     <title>App V2</title>
+
+    <meta name="google-site-verification" content="EDJl0zb8mhsF1z_YbnEcdOwKF72uLcZw_3FGbSMVGSM" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
     <!-- App V1 remoteEntry -->
     <script src="<%= V1_URL %>/assets/javascripts/remoteEntry.<%= COMMIT %>.js"></script>
+    <style>
+        /* CRITICAL CSS */
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        .root {
+            min-height: 100vh;
+        }
+        .tempNav {
+            min-height: 112px;
+            background-color: rgb(49, 49, 51);
+        }
+    </style>
 </head>
 
 <body>
-    <div id="root"></div>
+    <div id="root" class="root">
+        <div class='tempNav'></div>
+    </div>
     <div>
         <strong>Version:</strong>
         <%= VERSION %> (

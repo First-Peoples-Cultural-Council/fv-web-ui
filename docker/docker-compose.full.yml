@@ -29,7 +29,6 @@ services:
     container_name: fv-web-ui
     ports:
       - '3001:80'
-      - '3002:81'
     environment:
       WAIT_HOSTS: nuxeo-backend:8080
       WAIT_SLEEP_INTERVAL: 15

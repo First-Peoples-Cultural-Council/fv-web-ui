@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import DialectHeaderMenu from './DialectHeaderMenu'
-import DialectHeaderMobile from './DialectHeaderMobile'
+import DialectHeaderPresentationMenu from './DialectHeaderPresentationMenu'
+import DialectHeaderPresentationMobile from './DialectHeaderPresentationMobile'
 import FVToggle from 'components/FVToggle'
 
 import useIcon from 'common/useIcon'
@@ -50,7 +50,7 @@ function DialectHeaderPresentation({ currentUser, menuData }) {
   }, [isUserMenuOpen])
 
   const menus = menuData.map((menu) => (
-    <DialectHeaderMenu
+    <DialectHeaderPresentationMenu
       key={`DialectHeaderMenu_${menu.title}`}
       title={menu.title}
       itemsData={menu.itemsData}
@@ -138,7 +138,9 @@ function DialectHeaderPresentation({ currentUser, menuData }) {
         </div>
       </nav>
       {/* -- Mobile Menu -- */}
-      {mobileNavbarOpen ? <DialectHeaderMobile openCloseNavbar={openCloseMobileNavbar} menuData={menuData} /> : null}
+      {mobileNavbarOpen ? (
+        <DialectHeaderPresentationMobile openCloseNavbar={openCloseMobileNavbar} menuData={menuData} />
+      ) : null}
     </header>
   )
 }

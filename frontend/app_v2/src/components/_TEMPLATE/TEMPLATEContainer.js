@@ -5,7 +5,7 @@ import TEMPLATEData from 'components/TEMPLATE/TEMPLATEData'
 
 /**
  * @summary TEMPLATEContainer
- * @version 1.0.1
+ * @version 1.0.0
  * @component
  *
  * @param {object} props
@@ -13,16 +13,8 @@ import TEMPLATEData from 'components/TEMPLATE/TEMPLATEData'
  * @returns {node} jsx markup
  */
 function TEMPLATEContainer() {
-  return (
-    <TEMPLATEData>
-      {(TEMPLATEDataOutput) => {
-        // TODO FW-TEMPLATE
-        // eslint-disable-next-line
-        console.log('TEMPLATEDataOutput', TEMPLATEDataOutput)
-        return <TEMPLATEPresentation />
-      }}
-    </TEMPLATEData>
-  )
+  const { exampleOutput } = TEMPLATEData({ exampleInput: 'passedInToData' })
+  return <TEMPLATEPresentation exampleProp={exampleOutput} />
 }
 // PROPTYPES
 // const { string } = PropTypes

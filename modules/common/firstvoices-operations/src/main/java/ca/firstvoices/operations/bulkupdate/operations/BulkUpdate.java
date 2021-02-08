@@ -23,13 +23,16 @@ package ca.firstvoices.operations.bulkupdate.operations;
 import ca.firstvoices.operations.bulkupdate.BulkUpdateMode;
 import ca.firstvoices.operations.bulkupdate.services.BulkUpdateService;
 import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentRefList;
+import org.nuxeo.ecm.core.api.DocumentRef;
+import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.runtime.api.Framework;
 
 @Operation(id = BulkUpdate.ID,
@@ -51,7 +54,16 @@ public class BulkUpdate {
   @Context CoreSession session;
 
   @OperationMethod()
-  public void run(DocumentRefList refs) {
-    bulkUpdateService.bulkUpdate(session, refs, mode, field, value);
+  public void run(List<Object> refs) {
+    List<DocumentRef> drf = refs.stream().map(r -> {
+      if (r instanceof String) {
+        return new IdRef((String) r);
+      } else if (r instanceof DocumentRef) {
+        return (DocumentRef) r;
+      }
+      return null;
+    }).collect(Collectors.toList());
+
+    bulkUpdateService.bulkUpdate(session, drf, mode, field, value);
   }
 }

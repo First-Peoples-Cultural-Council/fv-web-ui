@@ -69,7 +69,7 @@ Cypress.Commands.add('login', (obj = {}) => {
     })
   }
 
-  const url = obj.url || (Cypress.env('FRONTEND') + '/nuxeo/startup')
+  const url = obj.url || Cypress.env('FRONTEND') + '/nuxeo/startup'
   const body = obj.body || {
     user_name: userName,
     user_password: userPassword,
@@ -96,14 +96,13 @@ Cypress.Commands.add('login', (obj = {}) => {
 // Logs any user out using a GET request.
 Cypress.Commands.add('logout', () => {
   cy.log('--- LOGGING OUT ---')
-  cy.request({method: 'GET', url: (Cypress.env('FRONTEND') + '/nuxeo/logout'), failOnStatusCode: false})
+  cy.request({ method: 'GET', url: Cypress.env('FRONTEND') + '/nuxeo/logout', failOnStatusCode: false })
   cy.visit('')
   cy.wait(2000)
   cy.log('--- SHOULD BE LOGGED OUT ---')
 })
 
-
-Cypress.Commands.add('logger', ({type = 'header', text = ''}) => {
+Cypress.Commands.add('logger', ({ type = 'header', text = '' }) => {
   const divider = '====================================='
   const subdivider = '-------------------------------------'
   switch (type) {
@@ -146,10 +145,7 @@ Cypress.Commands.add('abort', () => {
 //   clearFilter: true,
 // })
 Cypress.Commands.add('AlphabetCharacters', (obj) => {
-  const _obj = Object.assign(
-    {letter: undefined, confirmData: true, shouldPaginate: false, clearFilter: true},
-    obj
-  )
+  const _obj = Object.assign({ letter: undefined, confirmData: true, shouldPaginate: false, clearFilter: true }, obj)
   cy.log('--- Running cypress/support/commands.js > AlphabetCharacters ---')
   cy.log('--- AlphabetCharacters: Filter by letter  ---')
   // Filter by letter
@@ -276,10 +272,7 @@ Cypress.Commands.add('DialectFilterList', (obj) => {
 //   clearFilter: true,
 // })
 Cypress.Commands.add('FlashcardList', (obj) => {
-  const _obj = Object.assign(
-    {confirmData: true, shouldPaginate: false, clearFilter: true},
-    obj
-  )
+  const _obj = Object.assign({ confirmData: true, shouldPaginate: false, clearFilter: true }, obj)
   cy.log('--- Running cypress/support/commands.js > FlashcardList ---')
 
   cy.log('--- FlashcardList: Confirm not in flashcard mode  ---')
@@ -357,20 +350,29 @@ Cypress.Commands.add('browseSearch', (obj) => {
   cy.findByTestId('SearchDialect').within(() => {
     cy.findByTestId('SearchDialectFormSelectSearchType').select(searchTypeString[_obj.searchType])
 
-
     if (_obj.searchWord !== undefined) {
-      _obj.searchWord ? cy.findByLabelText(new RegExp(searchingByWordText, 'i')).check() : cy.findByLabelText(new RegExp(searchingByWordText, 'i')).uncheck()
+      _obj.searchWord
+        ? cy.findByLabelText(new RegExp(searchingByWordText, 'i')).check()
+        : cy.findByLabelText(new RegExp(searchingByWordText, 'i')).uncheck()
     }
     if (_obj.searchPhrase !== undefined) {
-      _obj.searchPhrase ? cy.findByLabelText(new RegExp(searchingByPhraseText, 'i')).check() : cy.findByLabelText(new RegExp(searchingByPhraseText, 'i')).uncheck()
+      _obj.searchPhrase
+        ? cy.findByLabelText(new RegExp(searchingByPhraseText, 'i')).check()
+        : cy.findByLabelText(new RegExp(searchingByPhraseText, 'i')).uncheck()
     }
 
-    _obj.searchDefinitions ? cy.findByLabelText(new RegExp(searchingByDefinitionsText, 'i')).check() : cy.findByLabelText(new RegExp(searchingByDefinitionsText, 'i')).uncheck()
+    _obj.searchDefinitions
+      ? cy.findByLabelText(new RegExp(searchingByDefinitionsText, 'i')).check()
+      : cy.findByLabelText(new RegExp(searchingByDefinitionsText, 'i')).uncheck()
     if (_obj.searchLiteralTranslations !== undefined) {
-      _obj.searchLiteralTranslations ? cy.findByLabelText(new RegExp(searchingByLiteralTranslationsText, 'i')).check() : cy.findByLabelText(new RegExp(searchingByLiteralTranslationsText, 'i')).uncheck()
+      _obj.searchLiteralTranslations
+        ? cy.findByLabelText(new RegExp(searchingByLiteralTranslationsText, 'i')).check()
+        : cy.findByLabelText(new RegExp(searchingByLiteralTranslationsText, 'i')).uncheck()
     }
     if (_obj.searchCulturalNotes !== undefined) {
-      _obj.searchCulturalNotes ? cy.findByLabelText(new RegExp(searchingByCulturalNotesText, 'i')).check() : cy.findByLabelText(new RegExp(searchingByCulturalNotesText, 'i')).uncheck()
+      _obj.searchCulturalNotes
+        ? cy.findByLabelText(new RegExp(searchingByCulturalNotesText, 'i')).check()
+        : cy.findByLabelText(new RegExp(searchingByCulturalNotesText, 'i')).uncheck()
     }
     if (_obj.searchPartsOfSpeech) {
       cy.findByLabelText(new RegExp(searchingByPartsOfSpeech, 'i')).select(_obj.searchPartsOfSpeech)
@@ -424,9 +426,12 @@ Cypress.Commands.add('createContributor', (dialectString) => {
     url: Cypress.env('FRONTEND') + '/nuxeo/api/v1/path/FV/Workspaces/Data/Test/Test/' + dialectString + '/Contributors',
     body: {
       'entity-type': 'document',
-      'type': 'FVContributor',
-      'name': ' Test Contributor name [CY]',
-      'properties': {'dc:description': '<p>Test Contributor dc:description [CY]</p>', 'dc:title': ' Test Contributor dc:title [CY]'},
+      type: 'FVContributor',
+      name: ' Test Contributor name [CY]',
+      properties: {
+        'dc:description': '<p>Test Contributor dc:description [CY]</p>',
+        'dc:title': ' Test Contributor dc:title [CY]',
+      },
     },
   })
 })
@@ -437,9 +442,9 @@ Cypress.Commands.add('deleteContributor', (uid) => {
     method: 'POST',
     url: Cypress.env('FRONTEND') + '/nuxeo/api/v1/automation/Document.Trash',
     body: {
-      'params': {},
-      'context': {},
-      'input': uid,
+      params: {},
+      context: {},
+      input: uid,
     },
   })
 })
@@ -448,7 +453,7 @@ Cypress.Commands.add('deleteContributor', (uid) => {
 // formClickAllXs
 // ===============================================
 Cypress.Commands.add('formClickAllXs', () => {
-  cy.logger({type: 'subheader', text: 'formClickAllXs'})
+  cy.logger({ type: 'subheader', text: 'formClickAllXs' })
   cy.get('.btn-remove').each(($el, index, $list) => {
     const reversedIndex = $list.length - 1 - index
     cy.wrap($list[reversedIndex]).click()
@@ -462,160 +467,142 @@ Cypress.Commands.add('formClickAllXs', () => {
 // ===============================================
 // formPopulateRelatedAudio
 // ===============================================
-Cypress.Commands.add('formPopulateRelatedAudio', ({name, description}) => {
-  cy.logger({type: 'subheader', text: 'formPopulateRelatedAudio'})
-  cy.findByText('Related audio')
+Cypress.Commands.add('formPopulateRelatedAudio', ({ name, description }) => {
+  cy.logger({ type: 'subheader', text: 'formPopulateRelatedAudio' })
+  cy.findByText('Related Audio')
     .parents('fieldset:first')
     .within(() => {
-      cy.findByText('+ Add Related Audio', { exact: false })
-        .parents('button:first')
-        .click()
+      cy.findByText('+ Add related audio', { exact: false }).parents('button:first').click()
 
       cy.findByText('upload audio', { exact: false }).click()
     })
-  cy.findByTestId('AddMediaComponent')
-    .within(() => {
-      // Note: There are duplicate IDs because of modals & tcomb-form
-      // So we can't use getByLabelText. Have to getByText and move up the dom
-      cy.findByText('name', { exact: false }).parent().find('input[type=text]').type(name)
-      cy.findByText('description', { exact: false }).parent().find('textarea').type(description)
-      cy.findByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
-      cy.findByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
+  cy.findByTestId('AddMediaComponent').within(() => {
+    // Note: There are duplicate IDs because of modals & tcomb-form
+    // So we can't use getByLabelText. Have to getByText and move up the dom
+    cy.findByText('name', { exact: false }).parent().find('input[type=text]').type(name)
+    cy.findByText('description', { exact: false }).parent().find('textarea').type(description)
+    cy.findByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
+    cy.findByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
 
-      const fileName = 'TestRelatedAudio.wav'
-      cy.fixture(fileName, 'base64').then((fileContent) => {
-        cy.get('input[type=file]').upload({ fileContent, fileName, mimeType: 'audio/wav', encoding: 'base64' })
-      })
-      cy.findByText('Upload Media', { exact: true }).click()
+    const fileName = 'TestRelatedAudio.wav'
+    cy.fixture(fileName, 'base64').then((fileContent) => {
+      cy.get('input[type=file]').attachFile({ fileContent, fileName, mimeType: 'audio/wav', encoding: 'base64' })
     })
+    cy.findByText('Upload Media', { exact: true }).click()
+  })
 })
 
 // ===============================================
 // formPopulateRelatedPictures
 // ===============================================
-Cypress.Commands.add('formPopulateRelatedPictures', ({name, description}) => {
-  cy.logger({type: 'subheader', text: 'formPopulateRelatedPictures'})
-  cy.findByText('Related pictures')
+Cypress.Commands.add('formPopulateRelatedPictures', ({ name, description }) => {
+  cy.logger({ type: 'subheader', text: 'formPopulateRelatedPictures' })
+  cy.findByText('Related Pictures')
     .parents('fieldset:first')
     .within(() => {
-      cy.findByText('+ Add Related pictures', { exact: false })
-        .parents('button:first')
-        .click()
+      cy.findByText('+ Add related pictures', { exact: false }).parents('button:first').click()
 
       cy.findByText('upload picture', { exact: false }).click()
     })
-  cy.findByTestId('AddMediaComponent')
-    .within(() => {
-      // Note: There are duplicate IDs because of modals & tcomb-form
-      // So we can't use getByLabelText. Have to getByText and move up the dom
-      cy.findByText('name', { exact: false }).parent().find('input[type=text]').type(name)
-      cy.findByText('description', { exact: false }).parent().find('textarea').type(
-        description
-      )
-      cy.findByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
-      cy.findByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
-      const fileName = 'TestRelatedImage.png'
-      cy.fixture(fileName, 'base64').then((fileContent) => {
-        cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'image/png', encoding: 'base64' })
-      })
-      cy.findByText('Upload Media', { exact: true }).click()
+  cy.findByTestId('AddMediaComponent').within(() => {
+    // Note: There are duplicate IDs because of modals & tcomb-form
+    // So we can't use getByLabelText. Have to getByText and move up the dom
+    cy.findByText('name', { exact: false }).parent().find('input[type=text]').type(name)
+    cy.findByText('description', { exact: false }).parent().find('textarea').type(description)
+    cy.findByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
+    cy.findByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
+    const fileName = 'TestRelatedImage.png'
+    cy.fixture(fileName, 'base64').then((fileContent) => {
+      cy.get('[name="file"]').attachFile({ fileContent, fileName, mimeType: 'image/png', encoding: 'base64' })
     })
+    cy.findByText('Upload Media', { exact: true }).click()
+  })
 })
 
 // ===============================================
 // formPopulateRelatedVideos
 // ===============================================
-Cypress.Commands.add('formPopulateRelatedVideos', ({name, description}) => {
-  cy.logger({type: 'subheader', text: 'formPopulateRelatedVideos'})
-  cy.findByText('Related videos')
+Cypress.Commands.add('formPopulateRelatedVideos', ({ name, description }) => {
+  cy.logger({ type: 'subheader', text: 'formPopulateRelatedVideos' })
+  cy.findByText('Related Videos')
     .parents('fieldset:first')
     .within(() => {
-      cy.findByText('+ Add Related videos', { exact: false })
-        .parents('button:first')
-        .click()
+      cy.findByText('+ Add related videos', { exact: false }).parents('button:first').click()
 
       cy.findByText('upload video', { exact: false }).click()
     })
-  cy.findByTestId('AddMediaComponent')
-    .within(() => {
-      // Note: There are duplicate IDs because of modals & tcomb-form
-      // So we can't use getByLabelText. Have to getByText and move up the dom
-      cy.findByText('name', { exact: false }).parent().find('input[type=text]').type(name)
-      cy.findByText('description', { exact: false }).parent().find('textarea').type(
-        description
-      )
-      cy.findByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
-      cy.findByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
-      const fileName = 'TestRelatedVideo.mp4'
-      cy.fixture(fileName, 'base64').then((fileContent) => {
-        cy.get('[name="file"]').upload({ fileContent, fileName, mimeType: 'video/mp4', encoding: 'base64' })
-      })
-      cy.findByText('Upload Media', { exact: true }).click()
+  cy.findByTestId('AddMediaComponent').within(() => {
+    // Note: There are duplicate IDs because of modals & tcomb-form
+    // So we can't use getByLabelText. Have to getByText and move up the dom
+    cy.findByText('name', { exact: false }).parent().find('input[type=text]').type(name)
+    cy.findByText('description', { exact: false }).parent().find('textarea').type(description)
+    cy.findByText('Shared across dialects', { exact: false }).parent().find('input[type=checkbox]').check()
+    cy.findByText('Child focused', { exact: false }).parent().find('input[type=checkbox]').check()
+    const fileName = 'TestRelatedVideo.mp4'
+    cy.fixture(fileName, 'base64').then((fileContent) => {
+      cy.get('[name="file"]').attachFile({ fileContent, fileName, mimeType: 'video/mp4', encoding: 'base64' })
     })
+    cy.findByText('Upload Media', { exact: true }).click()
+  })
 })
-
 
 // ===============================================
 // formBrowseMediaSelectItem
 // ===============================================
-Cypress.Commands.add('formBrowseMediaSelectItem', ({
-  sectionTitle,
-  sectionTitleExact = false,
-  addButtonText,
-  browseButtonText,
-  mediaTitle,
-}) => {
-  cy.logger({type: 'subheader', text: 'formBrowseMediaSelectItem'})
-  cy.findByText(sectionTitle, { exact: sectionTitleExact })
-    .parents('fieldset:first')
-    .within(() => {
-      cy.findByText(addButtonText, { exact: false })
-        .parents('button:first')
-        .click()
+Cypress.Commands.add(
+  'formBrowseMediaSelectItem',
+  ({ sectionTitle, sectionTitleExact = false, addButtonText, browseButtonText, mediaTitle }) => {
+    cy.logger({ type: 'subheader', text: 'formBrowseMediaSelectItem' })
+    cy.findByText(sectionTitle, { exact: sectionTitleExact })
+      .parents('fieldset:first')
+      .within(() => {
+        cy.findByText(addButtonText, { exact: false }).parents('button:first').click()
 
-      cy.findByText(browseButtonText, { exact: false }).click()
-    })
-  cy.wait(1000)
-  cy.findByText('select existing', { exact: false }).should('exist')
-  cy.findByTestId('withFilter')
-    .within(() => {
+        cy.findByText(browseButtonText, { exact: false }).click()
+      })
+    cy.wait(1000)
+    cy.findByText('select existing', { exact: false }).should('exist')
+    cy.findByTestId('withFilter').within(() => {
       cy.findByTestId('properties.dc-title').type(mediaTitle, { timeout: 8000 })
       cy.findByText('Filter').click()
     })
-  cy.wait(500)
-  cy.findByTestId('MediaList')
-    .within(() => {
+    cy.wait(500)
+    cy.findByTestId('MediaList').within(() => {
       cy.findByLabelText(`${mediaTitle}`, { exact: false }).click()
     })
-})
+  }
+)
 
 // ===============================================
 // formBrowseTableSelectItem
 // ===============================================
-Cypress.Commands.add('formBrowseTableSelectItem', ({sectionTitle, addButtonText, browseButtonText, itemTitle}) => {
-  cy.logger({type: 'subheader', text: 'formBrowseTableSelectItem'})
-  cy.findByText(sectionTitle, { exact: false })
-    .parents('fieldset:first')
-    .within(() => {
-      cy.findByText(addButtonText, { exact: false }).click()
+Cypress.Commands.add(
+  'formBrowseTableSelectItem',
+  ({ sectionTitle, sectionTitleExact = false, addButtonText, browseButtonText, itemTitle }) => {
+    cy.logger({ type: 'subheader', text: 'formBrowseTableSelectItem' })
+    cy.findByText(sectionTitle, { exact: sectionTitleExact })
+      .parents('fieldset:first')
+      .within(() => {
+        cy.findByText(addButtonText, { exact: false }).click()
 
-      cy.findByText(browseButtonText, { exact: false }).click()
-    })
-  cy.wait(1000)
-  cy.findByTestId('BrowseComponent__dialogContent')
-    .within(() => {
+        cy.findByText(browseButtonText, { exact: false }).click()
+      })
+    cy.wait(1000)
+    cy.findByTestId('BrowseComponent__dialogContent').within(() => {
       cy.findByText(`${itemTitle}`, { exact: false })
-        .parent('[data-testid=DictionaryList__row]').within(()=>{
+        .parent('[data-testid=DictionaryList__row]')
+        .within(() => {
           cy.findByText('select', { exact: false }).click()
         })
     })
-})
+  }
+)
 
 // ===============================================
 // formPopulateSource
 // ===============================================
-Cypress.Commands.add('formPopulateSource', ({name}) => {
-  cy.logger({type: 'subheader', text: 'formPopulateSource'})
+Cypress.Commands.add('formPopulateSource', ({ name }) => {
+  cy.logger({ type: 'subheader', text: 'formPopulateSource' })
   cy.findByText('Source')
     .parent()
     .within(() => {
@@ -623,9 +610,11 @@ Cypress.Commands.add('formPopulateSource', ({name}) => {
       cy.findByText('create new contributor', { exact: false }).click()
     })
   cy.findByTestId('DialogCreateForm__DialogContent').within(() => {
-    cy.findByText('Contributor name', { exact: false }).parent().within(()=>{
-      cy.get('input[type=text]').type(name)
-    })
+    cy.findByText('Contributor name', { exact: false })
+      .parent()
+      .within(() => {
+        cy.get('input[type=text]').type(name)
+      })
     cy.findByText('save', { exact: false }).click()
   })
 })
@@ -633,8 +622,8 @@ Cypress.Commands.add('formPopulateSource', ({name}) => {
 // ===============================================
 // formPopulateDefinitions
 // ===============================================
-Cypress.Commands.add('formPopulateDefinitions', ({definition}) => {
-  cy.logger({type: 'subheader', text: 'formPopulateDefinitions'})
+Cypress.Commands.add('formPopulateDefinitions', ({ definition }) => {
+  cy.logger({ type: 'subheader', text: 'formPopulateDefinitions' })
 
   cy.findByText('Definitions', { exact: false })
     .parents('fieldset:first')
@@ -644,21 +633,20 @@ Cypress.Commands.add('formPopulateDefinitions', ({definition}) => {
     })
 })
 
-
 // ===============================================
 // formPopulateCulturalNotes
 // ===============================================
-Cypress.Commands.add('formPopulateCulturalNotes', ({prefix}) => {
-  cy.logger({type: 'subheader', text: 'formPopulateCulturalNotes'})
+Cypress.Commands.add('formPopulateCulturalNotes', ({ prefix }) => {
+  cy.logger({ type: 'subheader', text: 'formPopulateCulturalNotes' })
 
-  cy.findByText('Cultural note', { exact: false })
+  cy.findByText('Cultural Note', { exact: true })
     .parent()
     .within(() => {
       cy.findByText('+ Add cultural note', { exact: false }).click()
-      cy.logger({type: 'subheader', text: 'Create 2 cultural notes'})
+      cy.logger({ type: 'subheader', text: 'Create 2 cultural notes' })
       cy.findByTestId('fv-cultural_note0').type(`${prefix} cultural note 0`)
       cy.findByText('+ Add cultural note', { exact: false }).click()
-      cy.logger({type: 'subheader', text: 'Change order'})
+      cy.logger({ type: 'subheader', text: 'Change order' })
       cy.findByTestId('fv-cultural_note1').type(`${prefix} cultural note 1`)
       cy.findByTestId('fv-cultural_note1')
         .parent()
@@ -669,27 +657,29 @@ Cypress.Commands.add('formPopulateCulturalNotes', ({prefix}) => {
           cy.findByText('▲').click()
         })
     })
-  cy.logger({type: 'subheader', text: 'Confirm order'})
-  cy.findByText('Cultural note', { exact: false })
+  cy.logger({ type: 'subheader', text: 'Confirm order' })
+  cy.findByText('Cultural Note', { exact: true })
     .parent()
     .within(() => {
-      cy.get('input.form-control[type=text]:first')
-        .invoke('val')
-        .should('be.eq', `${prefix} cultural note 1`)
+      cy.get('input.form-control[type=text]:first').invoke('val').should('be.eq', `${prefix} cultural note 1`)
     })
 })
 
-Cypress.Commands.add('clickandwait', {
-  prevSubject: true,
-}, (subject, amount) => {
-  cy.wrap(subject).click()
-  if (RegExp('[0-9]{1,4}').test(amount)) {
-    cy.wait(amount)
-  } else if (amount === 'long') {
-    cy.wait(2000)
-  } else if (amount === 'medium') {
-    cy.wait(1000)
-  } else {
-    cy.wait(500)
+Cypress.Commands.add(
+  'clickandwait',
+  {
+    prevSubject: true,
+  },
+  (subject, amount) => {
+    cy.wrap(subject).click()
+    if (RegExp('[0-9]{1,4}').test(amount)) {
+      cy.wait(amount)
+    } else if (amount === 'long') {
+      cy.wait(2000)
+    } else if (amount === 'medium') {
+      cy.wait(1000)
+    } else {
+      cy.wait(500)
+    }
   }
-})
+)

@@ -4,16 +4,6 @@ import selectn from 'selectn'
 import { vsprintf } from 'sprintf-js'
 import cache from './MemoizationCache'
 
-String.prototype.toUpperCaseWords = function() {
-  return this.replace(/\w+/g, function(a) {
-    return a.charAt(0).toUpperCase() + a.slice(1).toLowerCase()
-  })
-}
-
-String.prototype.toUpperCaseFirst = function() {
-  return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase()
-}
-
 export default class IntlService {
   static $instance
 
@@ -129,9 +119,8 @@ export default class IntlService {
   }
 
   translate(translateData, returnTranslationInfo) {
-    const postProcessResult = function(result, _translateData) {
+    const postProcessResult = function (result, _translateData) {
       if (result !== null) {
-        const charCase = _translateData.case || null
         const params = _translateData.params || []
 
         // lets handle any string replacements
@@ -140,22 +129,10 @@ export default class IntlService {
           result = vsprintf(result, params)
         }
 
-        if (charCase !== null) {
-          if (charCase === 'upper') {
-            result = (result + '').toUpperCase()
-          } else if (charCase === 'lower') {
-            result = (result + '').toLowerCase()
-          } else if (charCase === 'words') {
-            result = (result + '').toLowerCase().toUpperCaseWords()
-          } else if (charCase === 'first') {
-            result = (result + '').toLowerCase().toUpperCaseFirst()
-          }
-        }
-
         result = (result + '').replace('&amp;', '&')
         result = (result + '').replace('&AMP;', '&')
 
-        const postProcessSwaps = function(_result) {
+        const postProcessSwaps = function (_result) {
           const swapMatches = (_result + '').match(/\$\{([a-zA-Z0-9\.\_]+)\}/g)
           if (swapMatches !== null && swapMatches.length > 0) {
             for (const idx in swapMatches) {
@@ -164,7 +141,6 @@ export default class IntlService {
               const matchTranslated = self.translate({
                 key: matchKey.toLowerCase(),
                 default: null,
-                case: _translateData.case || null,
               })
 
               if (matchTranslated !== null && matchTranslated !== undefined && (match + '').length > 0) {

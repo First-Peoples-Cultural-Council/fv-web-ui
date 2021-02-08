@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import useIcon from 'common/useIcon'
@@ -57,6 +57,13 @@ function DialectHeaderMenu({ title, itemsData, href }) {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [isOpen])
+
+  // Logic to close menu on location change
+  const location = useLocation()
+
+  useEffect(() => {
+    setIsOpen(false)
+  }, [location])
 
   return (
     <div id={`HeaderMenu_${title}`} ref={dialectHeaderMenu} className="relative">

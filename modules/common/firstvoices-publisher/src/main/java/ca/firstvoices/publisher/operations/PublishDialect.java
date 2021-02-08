@@ -20,6 +20,7 @@
 
 package ca.firstvoices.publisher.operations;
 
+import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.maintenance.common.AbstractMaintenanceOperation;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import ca.firstvoices.publisher.Constants;
@@ -68,8 +69,11 @@ public class PublishDialect extends AbstractMaintenanceOperation {
 
   @Override
   protected void executeInitPhase(DocumentModel dialect) {
-    // Add job to fully create proxies overnight
-    RequiredJobsUtils.addToRequiredJobs(dialect, Constants.PUBLISH_DIALECT_JOB_ID);
+    if (!StateUtils.isPublished(dialect)) {
+      // Add job to fully create proxies overnight
+      // Dialect.Publish is not meant for republishing
+      RequiredJobsUtils.addToRequiredJobs(dialect, Constants.PUBLISH_DIALECT_JOB_ID);
+    }
   }
 
   @Override

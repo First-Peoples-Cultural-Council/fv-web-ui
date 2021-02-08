@@ -7,13 +7,15 @@ import org.nuxeo.runtime.model.ComponentInstance;
 import org.nuxeo.runtime.model.DefaultComponent;
 
 public class AWSAuthenticationServiceFactory extends DefaultComponent {
+
   private static Log LOG = LogFactory.getLog(AWSAuthenticationServiceFactory.class);
 
 
   private AWSAuthenticationServiceConfigurationDescriptor config;
   private AWSAuthenticationService authenticationService;
 
-  @Override public <T> T getAdapter(Class<T> adapter) {
+  @Override
+  public <T> T getAdapter(Class<T> adapter) {
 
     if (AWSAuthenticationService.class.isAssignableFrom(adapter)) {
       if (this.authenticationService == null) {
@@ -32,7 +34,9 @@ public class AWSAuthenticationServiceFactory extends DefaultComponent {
 
       this.config = (AWSAuthenticationServiceConfigurationDescriptor) contribution;
 
-      this.authenticationService = new AWSAuthenticationServiceImpl(this.config.accessKey,
+      this.authenticationService = new AWSAuthenticationServiceImpl(
+          this.config.enable,
+          this.config.accessKey,
           this.config.secretKey,
           this.config.userPool,
           this.config.region,

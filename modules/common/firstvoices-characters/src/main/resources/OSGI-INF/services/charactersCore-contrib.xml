@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.characters.services.charactersCore.contrib" version="1.0">
+
+    <implementation class="ca.firstvoices.characters.services.CharactersCoreServiceImpl"/>
+
+    <service>
+        <provide interface="ca.firstvoices.characters.services.CharactersCoreService"/>
+    </service>
+
+</component>

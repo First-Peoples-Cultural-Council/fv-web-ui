@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 
 /**
- * @summary HeroData
+ * @summary ShareData
  * @version 1.0.1
  * @component
  *
@@ -9,15 +9,15 @@ import PropTypes from 'prop-types'
  * @param {function} props.children
  *
  */
-function HeroData({ children }) {
+function ShareData({ children }) {
   return children({
-    log: 'Output from HeroData',
+    log: 'Output from ShareData',
   })
 }
 // PROPTYPES
 const { func } = PropTypes
-HeroData.propTypes = {
+ShareData.propTypes = {
   children: func,
 }
 
-export default HeroData
+export default ShareData

@@ -39,8 +39,9 @@ public class Constants {
   public static final String COMPUTE_ORDER_JOB_ID = GROUP_NAME + ".ComputeCustomOrder";
   public static final String COMPUTE_ORDER_ACTION_ID = COMPUTE_ORDER_JOB_ID;
 
-  // Confusables Status Operation
+  // Status Operations
   public static final String CONFUSABLES_STATUS_ACTION_ID = GROUP_NAME + ".ConfusablesStatus";
+  public static final String CUSTOM_ORDER_STATUS_ACTION_ID = GROUP_NAME + ".CustomOrderStatus";
 
   private Constants() {
     throw new IllegalStateException("Utility class");

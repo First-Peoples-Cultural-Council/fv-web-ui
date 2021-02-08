@@ -10,5 +10,9 @@
   },
   "viewportHeight": 660,
   "viewportWidth": 1000,
-  "defaultCommandTimeout": 10000
+  "defaultCommandTimeout": 10000,
+  "retries": {
+    "runMode": 3,
+    "openMode": 0
+  }
 }

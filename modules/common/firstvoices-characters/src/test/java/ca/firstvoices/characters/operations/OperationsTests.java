@@ -18,42 +18,40 @@ package ca.firstvoices.characters.operations;/*
  *
  */
 
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
-import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_DIALECT;
-import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE;
-import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMILY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyInt;
 
 import ca.firstvoices.characters.Constants;
+import ca.firstvoices.characters.services.CharactersCoreService;
 import ca.firstvoices.characters.services.CleanupCharactersService;
+import ca.firstvoices.characters.services.CustomOrderComputeService;
 import ca.firstvoices.core.io.utils.PropertyUtils;
 import ca.firstvoices.maintenance.common.CommonConstants;
 import ca.firstvoices.testUtil.AbstractFirstVoicesDataTest;
 import ca.firstvoices.testUtil.FirstVoicesDataFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import javax.inject.Inject;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.test.AutomationFeature;
-import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
@@ -82,6 +80,12 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 public class OperationsTests extends AbstractFirstVoicesDataTest {
 
   @Mock @RuntimeService CleanupCharactersService cleanupCharactersService;
+
+  @Mock @RuntimeService
+  CustomOrderComputeService customOrderComputeService;
+
+  @Mock @RuntimeService
+  CharactersCoreService charactersCoreService;
 
   Map<String, Object> defaultInitParams = new HashMap<>();
   LinkedHashMap<String, String> operations = new LinkedHashMap<>();
@@ -139,8 +143,6 @@ public class OperationsTests extends AbstractFirstVoicesDataTest {
 
     assertFalse("Required jobs does not contain " + Constants.CLEAN_CONFUSABLES_JOB_ID,
         requiredJobs.contains(Constants.CLEAN_CONFUSABLES_JOB_ID));
-
-
   }
 
   @Test
@@ -183,5 +185,54 @@ public class OperationsTests extends AbstractFirstVoicesDataTest {
 
     assertEquals(1, ((LinkedHashMap<?, ?>) jsonMap.get(chars.get(0))).get("Words/Phrases"));
     assertEquals(0, ((LinkedHashMap<?, ?>) jsonMap.get(chars.get(1))).get("Words/Phrases"));
+  }
+
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testCustomOrderStatus() throws OperationException, IOException {
+    List<String> chars = Arrays.asList("&", "^");
+
+    // Mock data to return two confusables
+    Mockito.when(customOrderComputeService.validateAlphabetOrder(anyObject(), anyObject())).thenReturn(false);
+
+    // Mock data to return fake characters
+    Mockito
+        .when(charactersCoreService.getCharacters(anyObject(),
+            anyObject(),
+            anyString()))
+        .thenAnswer(method -> {
+          DocumentModelList docs = new DocumentModelListImpl();
+
+          DocumentModel char1 =
+              session.createDocumentModel("/", "char1", FV_CHARACTER);
+
+          char1.setPropertyValue("fv:custom_order", "$");
+          char1.setPropertyValue("fvcharacter:alphabet_order", "10");
+
+          DocumentModel char2 =
+              session.createDocumentModel("/", "char2", FV_CHARACTER);
+
+          char2.setPropertyValue("fv:custom_order", "6");
+          char2.setPropertyValue("fvcharacter:alphabet_order", "1");
+
+          docs.add(char1);
+          docs.add(char2);
+
+          return docs;
+        });
+
+    // Call operation and get response
+    OperationContext ctx = new OperationContext(session);
+    ctx.setInput(dialect);
+
+    StringBlob response =
+        (StringBlob) automationService.run(ctx, Constants.CUSTOM_ORDER_STATUS_ACTION_ID);
+
+    ObjectMapper mapper = new ObjectMapper();
+    @SuppressWarnings("unchecked") Map<String, Object> jsonMap =
+        mapper.readValue(response.getStream(), Map.class);
+
+    assertTrue(String.valueOf(jsonMap.get("result")).contains("not in order"));
+    assertEquals(2, ((ArrayList<String>) jsonMap.get("results")).size());
   }
 }

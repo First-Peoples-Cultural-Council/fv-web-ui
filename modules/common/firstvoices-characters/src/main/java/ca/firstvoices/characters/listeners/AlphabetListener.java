@@ -20,12 +20,14 @@
 
 package ca.firstvoices.characters.listeners;
 
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_ALPHABET;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
+
 import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.services.CleanupCharactersService;
 import ca.firstvoices.core.io.utils.DialectUtils;
 import ca.firstvoices.core.io.utils.DocumentUtils;
 import ca.firstvoices.core.io.utils.filters.NotTrashedFilter;
-import ca.firstvoices.data.schemas.DialectTypesConstants;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -63,7 +65,7 @@ public class AlphabetListener implements EventListener {
 
     DocumentModel alphabet = ((DocumentEventContext) ctx).getSourceDocument();
     if (alphabet == null || !DocumentUtils.isActiveDoc(alphabet)
-        || !DialectTypesConstants.FV_ALPHABET.equals(alphabet.getType())) {
+        || !FV_ALPHABET.equals(alphabet.getType())) {
       return;
     }
 
@@ -71,7 +73,7 @@ public class AlphabetListener implements EventListener {
 
     // Get non trashed characters
     DocumentModelList characters = session
-        .getChildren(alphabet.getRef(), DialectTypesConstants.FV_CHARACTER, new NotTrashedFilter(),
+        .getChildren(alphabet.getRef(), FV_CHARACTER, new NotTrashedFilter(),
             null);
 
     if (event.getName().equals(DocumentEventTypes.BEFORE_DOC_UPDATE) && !characters.isEmpty()) {
