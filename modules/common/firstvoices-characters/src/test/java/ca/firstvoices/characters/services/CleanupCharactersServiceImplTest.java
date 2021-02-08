@@ -52,11 +52,15 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 @RunWith(FeaturesRunner.class)
 @Features({FirstVoicesDataFeature.class})
 @Deploy({
+    "FirstVoicesCharacters:OSGI-INF/services/charactersCore-contrib.xml",
     "FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml",
     "FirstVoicesCharacters:OSGI-INF/services/cleanupCharacters-contrib.xml",
     "FirstVoicesCoreTests:OSGI-INF/nuxeo.conf.override.xml"
 })
 public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTest {
+
+  CharactersCoreService charactersCoreService = Framework
+      .getService(CharactersCoreService.class);
 
   CleanupCharactersService cleanupCharactersService = Framework
       .getService(CleanupCharactersService.class);
@@ -213,7 +217,7 @@ public class CleanupCharactersServiceImplTest extends AbstractFirstVoicesDataTes
         alphabetAndConfusableCharacters.get(lowerCaseCharacter),
         alphabetAndConfusableCharacters.get(upperCaseCharacter));
 
-    assertEquals(5, cleanupCharactersService.getCharacters(alphabet).size());
+    assertEquals(5, charactersCoreService.getCharacters(session, alphabet).size());
     assertEquals(17, cleanupCharactersService.getAllConfusables(alphabet).size());
   }
 

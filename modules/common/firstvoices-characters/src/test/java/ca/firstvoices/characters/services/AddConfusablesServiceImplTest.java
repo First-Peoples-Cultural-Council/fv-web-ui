@@ -39,7 +39,8 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 @RunWith(FeaturesRunner.class)
 @Features({FirstVoicesCoreTestsFeature.class})
-@Deploy({"FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml",
+@Deploy({"FirstVoicesCharacters:OSGI-INF/services/charactersCore-contrib.xml",
+    "FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml",
     "FirstVoicesCharacters:OSGI-INF/services/addConfusables-contrib.xml",
     "FirstVoicesCharacters:OSGI-INF/services/cleanupCharacters-contrib.xml"})
 public class AddConfusablesServiceImplTest extends AbstractFirstVoicesDataTest {
