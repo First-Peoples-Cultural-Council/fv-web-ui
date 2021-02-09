@@ -152,7 +152,7 @@ HeroPresentation.propTypes = {
   uid: string,
   background: string,
   foreground: node,
-  foregroundIcon: string,
+  foregroundIcon: node,
   variant: oneOf([WIDGET_HERO_LEFT, WIDGET_HERO_CENTER, WIDGET_HERO_SEARCH]),
   search: node,
 }

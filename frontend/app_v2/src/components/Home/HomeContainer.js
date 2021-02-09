@@ -15,7 +15,7 @@ import HomeData from 'components/Home/HomeData'
  */
 function HomeContainer() {
   const { isLoading, error, data, dataOriginal } = HomeData()
-  const { title, uid, path } = useGetSections()
+  const { title, uid, path, logoUrl } = useGetSections()
   return (
     <HomePresentation
       isLoading={isLoading}
@@ -26,6 +26,7 @@ function HomeContainer() {
         title,
         uid,
         path,
+        logoUrl,
       }}
     />
   )

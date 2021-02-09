@@ -1,6 +1,6 @@
 // Let us begin!
 // ==================================================
-import { adaptor } from 'common/UpdateAppStateProvider'
+import { getSectionsAdaptor } from 'common/UpdateAppStateProvider'
 const input = {
   path: '/FV/sections/Data/Test/Test/ÜgwÛ',
   uid: '5210e2d1-9074-4cef-8d3a-20a88bace75c',
@@ -23,7 +23,7 @@ const expectedOutput = {
 
 describe('UpdateAppStateProvider', () => {
   test('Adaptor', () => {
-    const output = adaptor(input)
+    const output = getSectionsAdaptor(input)
     expect(output).toStrictEqual(expectedOutput)
   })
 })

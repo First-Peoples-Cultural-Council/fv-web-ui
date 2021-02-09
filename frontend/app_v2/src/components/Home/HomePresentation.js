@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import WidgetWotd from 'components/WidgetWotd'
 import Topics from 'components/Topics'
 import Hero from 'components/Hero'
+import CircleImage from 'components/CircleImage'
 import useIcon from 'common/useIcon'
 import {
   WIDGET_HERO,
@@ -37,28 +38,38 @@ function HomePresentation({
   language,
 }) {
   const widgets = data ? data.widgets : []
+  // TODO: use a better fallback icon
+  const fallBackIcon = useIcon(
+    'PlayCircle',
+    `
+        fill-current
+        w-56
+        h-56
+        lg:w-72
+        lg:h-72
+      `
+  )
   return (
     <div className="Home">
       {widgets.length > 0 &&
         widgets.map(({ type, ...widgetProps }, index) => {
           if (type === WIDGET_HERO) {
-            const { uid, background, /*foreground, foregroundIcon,*/ variant } = widgetProps
-            const foregroundIconTemp = useIcon(
-              'PlayCircle',
-              `
-                fill-current
-                w-56
-                h-56
-                lg:w-72
-                lg:h-72
-              `
+            const { uid, background, variant } = widgetProps
+            const foregroundIcon = language.logoUrl ? (
+              <CircleImage.Presentation
+                src={language.logoUrl}
+                classNameWidth="w-56 lg:w-72"
+                classNameHeight="h-56 lg:h-72"
+              />
+            ) : (
+              fallBackIcon
             )
             return (
               <Hero.Presentation
                 key={index}
                 background={background}
                 foreground={<h1 className="font-bold text-3xl">{language.title}</h1>}
-                foregroundIcon={foregroundIconTemp}
+                foregroundIcon={foregroundIcon}
                 variant={variant}
                 uid={uid}
                 search={

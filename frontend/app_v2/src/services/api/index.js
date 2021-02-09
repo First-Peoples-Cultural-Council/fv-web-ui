@@ -42,6 +42,21 @@ const get = (path) => {
 
 export default {
   get,
+  rawGetById: (id, dataAdaptor) => {
+    return get(`/nuxeo/api/v1/id/${id}?properties=*`)
+      .then(handleSuccessAndError)
+      .then(
+        (response) => {
+          if (dataAdaptor) {
+            return { isLoading: false, data: dataAdaptor(response), dataOriginal: response }
+          }
+          return { isLoading: false, data: response, dataOriginal: response }
+        },
+        (error) => {
+          return { isLoading: false, error }
+        }
+      )
+  },
   getById: (id, dataAdaptor) => {
     const { isLoading, error, data } = useQuery(
       ['id', id],
