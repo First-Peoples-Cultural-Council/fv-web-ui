@@ -1,5 +1,6 @@
 import {
   WIDGET_HERO,
+  WIDGET_HERO_SEARCH,
   WIDGET_SCHEDULE,
   WIDGET_LIST,
   WIDGET_LIST_WORD,
@@ -21,6 +22,7 @@ function homeAdaptor(response) {
       const searchSettings = settings.find(({ category, key }) => {
         return category === 'presentation' && key === 'search'
       })
+      const hasSearch = searchSettings ? searchSettings.value : false
       const img = {}
       content.find(({ image }) => {
         if (image) {
@@ -41,10 +43,9 @@ function homeAdaptor(response) {
         type: WIDGET_HERO,
         uid: widget.uid,
         background: img.url,
-        foreground: 'TODO', // TODO: get from api.getSections
-        foregroundIcon: 'TODO', // TODO: get from api.getSections
-        hasSearch: searchSettings ? searchSettings.value : false,
-        // variant,
+        // foreground: 'TODO', // TODO: get from api.getSections
+        // foregroundIcon: 'TODO', // TODO: get from api.getSections
+        variant: hasSearch ? WIDGET_HERO_SEARCH : undefined,
       }
     }
     if (type === 'ScheduleWidget') {

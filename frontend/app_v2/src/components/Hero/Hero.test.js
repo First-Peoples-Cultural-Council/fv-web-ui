@@ -1,24 +1,9 @@
-// // Mock: react-redux
-// // --------------------------------------------------
-// jest.mock('react-redux', () => ({
-//     ...jest.requireActual('react-redux'),
-//     useSelector: jest.fn(),
-//     useDispatch: jest.fn(),
-//   }))
-
-//   // Mock: @material-ui/core/styles
-//   // --------------------------------------------------
-//   jest.mock('@material-ui/core/styles', () => ({
-//     /* eslint-disable-next-line */
-//     withStyles: (styles) => (component) => component,
-//   }))
-
-// Let us begin!
-// ==================================================
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import HeroPresentation from 'components/Hero/HeroPresentation'
 import HeroBackground from 'images/hero-background.jpg'
+
+import { WIDGET_HERO_LEFT } from 'common/constants'
 
 // Presentation
 describe('HeroPresentation', () => {
@@ -54,7 +39,14 @@ describe('HeroPresentation', () => {
     ).toBeInTheDocument()
   })
   test('Renders "left" variant', () => {
-    render(<HeroPresentation background={HeroBackground} foreground={str} foregroundIcon={strIcon} variant="left" />)
+    render(
+      <HeroPresentation
+        background={HeroBackground}
+        foreground={str}
+        foregroundIcon={strIcon}
+        variant={WIDGET_HERO_LEFT}
+      />
+    )
     expect(screen.getByTestId('HeroPresentation')).toMatchSnapshot()
   })
 })

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import WidgetWotd from 'components/WidgetWotd'
 import Topics from 'components/Topics'
 import Hero from 'components/Hero'
-
+import useIcon from 'common/useIcon'
 import {
   WIDGET_HERO,
   WIDGET_SCHEDULE,
@@ -42,16 +42,59 @@ function HomePresentation({
       {widgets.length > 0 &&
         widgets.map(({ type, ...widgetProps }, index) => {
           if (type === WIDGET_HERO) {
-            const { uid, background, /*foreground,*/ foregroundIcon, hasSearch, variant } = widgetProps
+            const { uid, background, /*foreground, foregroundIcon,*/ variant } = widgetProps
+            const foregroundIconTemp = useIcon(
+              'PlayCircle',
+              `
+                fill-current
+                w-56
+                h-56
+                lg:w-72
+                lg:h-72
+              `
+            )
             return (
               <Hero.Presentation
                 key={index}
                 background={background}
-                foreground={<h1 className="font-bold text-5xl">{language.title}</h1>}
-                foregroundIcon={foregroundIcon}
+                foreground={<h1 className="font-bold text-3xl">{language.title}</h1>}
+                foregroundIcon={foregroundIconTemp}
                 variant={variant}
-                hasSearch={hasSearch}
                 uid={uid}
+                search={
+                  <div
+                    className={`
+                    bg-white
+                    flex
+                    px-12
+                    py-6
+                    rounded-25
+                    w-3/4
+                  `}
+                  >
+                    <button type="button">
+                      {useIcon(
+                        'Search',
+                        `
+                          fill-current
+                          h-12
+                          text-black
+                          w-12
+                        `
+                      )}
+                    </button>
+                    <input
+                      className={`
+                        ml-8
+                        text-black
+                        w-full
+                        text-4xl
+                      `}
+                      type="text"
+                      placeholder={`Search ${language.title}`}
+                    />
+                  </div>
+                }
               />
             )
           }

@@ -3,7 +3,7 @@ import React from 'react'
 import Hero from 'components/Hero'
 import Content from 'components/Content'
 import AboutData from 'components/About/AboutData'
-
+import { WIDGET_HERO_LEFT } from 'common/constants'
 /**
  * @summary AboutContainer
  * @version 1.0.1
@@ -22,7 +22,7 @@ function AboutContainer({ language }) {
         return (
           <>
             <Hero.Presentation
-              // variant="left"
+              variant={WIDGET_HERO_LEFT}
               background={heroBackground}
               foreground={<h1 className="font-bold text-5xl">{heroForeground}</h1>}
               foregroundIcon={heroIcon}
