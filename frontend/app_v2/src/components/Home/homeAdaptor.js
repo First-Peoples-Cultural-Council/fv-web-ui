@@ -17,7 +17,7 @@ function homeAdaptor(response) {
   const widgets = widgetsActive.map((widget) => {
     const content = widget['widget:content'] || []
     const settings = widget['settings:settings'] || []
-    const type = widget.type || widget.properties['widget:type']
+    const type = widget?.['widget:type']
     if (type === 'HeroWidget') {
       const searchSettings = settings.find(({ category, key }) => {
         return category === 'presentation' && key === 'search'
@@ -145,7 +145,7 @@ function homeAdaptor(response) {
         type: WIDGET_LIST,
         uid: widget.uid,
         languageUid: properties['widget:dialect'],
-        title: widget.properties['dc:title'],
+        title: widget['dc:title'],
         listUid: listId,
         content: _content,
       }
