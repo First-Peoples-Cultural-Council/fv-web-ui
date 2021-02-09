@@ -123,8 +123,9 @@ public class CharacterListener implements EventListener {
         validateCharacter(event, doc, alphabet, characters);
         break;
       case BEFORE_DOC_UPDATE:
-        if (titleOrUppercaseChanged(doc)) {
+        if (titleOrUppercaseChanged(doc) || confusablePropertyChanged(doc)) {
           // Validate character ensuring only valid character entries are added
+          // also validate confusables - ensuring no duplicates are entered
           validateCharacter(event, doc, alphabet, characters);
         }
 

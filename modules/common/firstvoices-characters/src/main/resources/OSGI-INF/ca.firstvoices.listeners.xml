@@ -9,6 +9,7 @@
     <listener class="ca.firstvoices.characters.listeners.CharacterListener"
       name="character_listener" priority="150">
       <event>documentCreated</event>
+      <event>aboutToCreate</event>
       <event>beforeDocumentModification</event>
       <event>documentTrashed</event>
       <event>documentUntrashed</event>

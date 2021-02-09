@@ -16,10 +16,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.trash.TrashService;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.test.CapturingEventListener;
@@ -67,8 +69,12 @@ public class CharacterListenerTest extends AbstractTestDataCreatorTest {
 
     // Create one character (but don't trigger listener)
     char1 = createCharacterModel("char1");
+    char1.setPropertyValue("dc:title", "Z");
+    char1.setPropertyValue(CleanupCharactersServiceImpl.LC_CONFUSABLES, new String[]{"5"});
     char1.putContextData(CharacterListener.DISABLE_CHARACTER_LISTENER, true);
     session.createDocument(char1);
+
+    session.save();
 
     assertFalse("Should not have compute order job",
         CharactersTestUtils.requiredJobFired(capturingEvents, Constants.COMPUTE_ORDER_JOB_ID));
@@ -105,6 +111,41 @@ public class CharacterListenerTest extends AbstractTestDataCreatorTest {
 
     assertTrue("Should have clean confusables job",
         CharactersTestUtils.requiredJobFired(capturingEvents, Constants.CLEAN_CONFUSABLES_JOB_ID));
+  }
+
+  @Test
+  public void shouldRejectCharacterEvent() {
+    // Create a character with confusables
+    char1.putContextData(CharacterListener.DISABLE_CHARACTER_LISTENER, false);
+
+    // Test for adding a LC confusable that exists as a char
+    char1.setPropertyValue(CleanupCharactersServiceImpl.LC_CONFUSABLES, new String[]{"Z"});
+
+    Assertions.assertThrows(NuxeoException.class, () -> {
+      session.saveDocument(char1);
+    });
+
+    // Test for adding a UC confusable that exists as a char
+    char1.setPropertyValue(CleanupCharactersServiceImpl.UC_CONFUSABLES, new String[]{"Z"});
+
+    Assertions.assertThrows(NuxeoException.class, () -> {
+      session.saveDocument(char1);
+    });
+
+    // Test for adding a char that exists already
+    DocumentModel char2 = createCharacterModel("char2");
+    char2.setPropertyValue("dc:title", "Z");
+
+    Assertions.assertThrows(NuxeoException.class, () -> {
+      session.createDocument(char2);
+    });
+
+    // Test for updating a char to a confusable that exists already
+    char1.setPropertyValue("dc:title", "5");
+
+    Assertions.assertThrows(NuxeoException.class, () -> {
+      session.createDocument(char1);
+    });
   }
 
   @Test

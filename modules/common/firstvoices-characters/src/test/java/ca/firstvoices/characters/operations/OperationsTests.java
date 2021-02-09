@@ -185,6 +185,7 @@ public class OperationsTests extends AbstractFirstVoicesDataTest {
 
     assertEquals(1, ((LinkedHashMap<?, ?>) jsonMap.get(chars.get(0))).get("Words/Phrases"));
     assertEquals(0, ((LinkedHashMap<?, ?>) jsonMap.get(chars.get(1))).get("Words/Phrases"));
+    assertEquals(1, ((LinkedHashMap<?, ?>) jsonMap.get(chars.get(1))).get("Occurrences"));
   }
 
   @SuppressWarnings("unchecked")
