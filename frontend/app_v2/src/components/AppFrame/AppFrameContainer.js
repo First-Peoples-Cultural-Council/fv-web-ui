@@ -21,8 +21,8 @@ import DialectHeader from 'components/DialectHeader'
 function AppFrameContainer() {
   return (
     <div className="AppFrame">
-      <DialectHeader.Container />
-      <main role="main">
+      <DialectHeader.Container className="relative z-10" />
+      <main role="main" className="relative z-0">
         <Suspender>
           <Switch>
             <Route path="/:language/about">
