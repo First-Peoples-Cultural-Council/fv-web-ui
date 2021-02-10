@@ -1,6 +1,7 @@
 import {
   WIDGET_CONTACT,
   WIDGET_HERO,
+  WIDGET_HERO_SEARCH,
   WIDGET_SCHEDULE,
   WIDGET_LIST,
   WIDGET_LIST_WORD,
@@ -22,6 +23,7 @@ function homeAdaptor(response) {
       const searchSettings = settings.find(({ category, key }) => {
         return category === 'presentation' && key === 'search'
       })
+      const hasSearch = searchSettings ? searchSettings.value : false
       const img = {}
       content.find(({ image }) => {
         if (image) {
@@ -42,22 +44,21 @@ function homeAdaptor(response) {
         type: WIDGET_HERO,
         uid: widget.uid,
         background: img.url,
-        foreground: 'TODO', // TODO: get from api.getSections
-        foregroundIcon: 'TODO', // TODO: get from api.getSections
-        hasSearch: searchSettings ? searchSettings.value : false,
-        // variant,
+        // foreground: 'TODO', // TODO: get from api.getSections
+        // foregroundIcon: 'TODO', // TODO: get from api.getSections
+        variant: hasSearch ? WIDGET_HERO_SEARCH : undefined,
       }
     }
     /*
      * Contact Widget
      */
     if (type === 'ContactWidget') {
-      let email = ''
+      let contactEmail = ''
       let links = []
       let contactText = ''
       settings.forEach(function assignValues({ category, key, value }) {
-        if (category === 'general' && key === 'email') {
-          email = value
+        if (category === 'general' && key === 'contact_email') {
+          contactEmail = value
         }
         if (category === 'general' && key === 'social_links') {
           links = value
@@ -71,7 +72,8 @@ function homeAdaptor(response) {
         type: WIDGET_CONTACT,
         uid: widget.uid,
         title: widget['dc:title'],
-        email: email,
+        dialectId: widget['widget:dialect'],
+        contactEmail: contactEmail,
         links: links,
         contactText: contactText,
       }
