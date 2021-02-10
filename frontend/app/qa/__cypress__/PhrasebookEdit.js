@@ -11,68 +11,33 @@ const editPhraseBook = () => {
   cy.findByText(copy.edit.requiredNotice).should('exist')
 
   //Test error validation
-  cy.wait(2000)
   cy.findByLabelText(copy.edit.name).clear()
   cy.findByText(copy.edit.submit).click()
   cy.findByLabelText(copy.validation.name).should('exist')
-  cy.wait(2000)
   cy.findByText(copy.edit.submit).click()
   cy.findByLabelText(copy.validation.name).should('exist')
 
   // Test proper phrase book editing
   cy.findByLabelText(copy.edit.name).type('[CY] Updated Phrase book name')
   cy.findByText(copy.edit.submit).click()
-  cy.wait(2000)
 
   //Assert that confirmation screen appears
   cy.findByText(copy.edit.success.title).should('exist')
   cy.findByText(copy.edit.success.thanks).should('exist')
-  cy.wait(2000)
 }
 
-describe('PhrasebookCreate.js > Phrasebook', () => {
-  it('Edit a Phrasebook After Creation', () => {
+describe('PhrasebookEdit.js > Phrasebook', () => {
+  it('Edit a Phrasebook', () => {
     cy.login({
       userName: 'TestDialectPublic_recorders',
       userPassword: 'TestDialectPublic_recorders',
     })
 
-    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestDialectPublic/create/phrasebook')
-    cy.wait(2000)
+    // Visit browse view
+    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestDialectPublic/phrasebooks')
 
-    // Create a Phrasebook
-    cy.findByLabelText(copy.create.name).type('[CY] Phrase book name')
-    cy.findByText(copy.create.submit).click()
-
-    cy.findByText(copy.create.success.editView).click()
-    cy.wait(2000)
-    editPhraseBook()
-    cy.findByText(copy.create.success.editView).click()
-    cy.wait(2000)
-    editPhraseBook()
-  })
-
-  it('Edit a Phrasebook From The Browse List', () => {
-    cy.login({
-      userName: 'TestDialectPublic_recorders',
-      userPassword: 'TestDialectPublic_recorders',
-    })
-
-    // Create a Phrasebook
-    cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestDialectPublic/create/phrasebook')
-    cy.wait(2000)
-    cy.findByLabelText(copy.create.name).type('[CY] Phrase book name')
-    cy.findByText(copy.create.submit).click()
-    cy.wait(2000)
-
-    // Edit from Browse List
-    cy.findByText(copy.create.success.browseView).click()
-    cy.findByText('[CY] Phrase book name')
-      .parent()
-      .parent()
-      .contains('Edit')
-      .click()
-    cy.wait(2000)
+    // Edit phrase book
+    cy.findByText('Phrase Book C').parent().parent().contains('Edit').click()
 
     editPhraseBook()
   })
