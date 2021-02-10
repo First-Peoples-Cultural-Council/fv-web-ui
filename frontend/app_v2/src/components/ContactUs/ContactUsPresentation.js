@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import useIcon from 'common/useIcon'
@@ -12,7 +11,7 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function ContactUsPresentation({ title, contactText, links }) {
+function ContactUsPresentation({ title, contactText, links, handleSubmit }) {
   const getIconName = (link) => {
     if (link.includes('facebook')) {
       return 'Facebook'
@@ -32,9 +31,14 @@ function ContactUsPresentation({ title, contactText, links }) {
   const socialIcons = links
     ? links.map((link) => (
         <li key={getIconName(link)} className="mr-3 h-9 w-9 inline-flex align-center rounded text-fv-turquoise">
-          <Link to={link} className="py-1 flex items-start rounded-lg hover:bg-gray-50">
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="py-1 flex items-start rounded-lg hover:bg-gray-50"
+          >
             {useIcon(getIconName(link), 'fill-current h-8 w-8')}
-          </Link>
+          </a>
         </li>
       ))
     : null
@@ -44,7 +48,7 @@ function ContactUsPresentation({ title, contactText, links }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-center mb-12 text-4xl text-fv-blue font-bold uppercase sm:text-5xl">{title}</h2>
         <div className="grid grid-cols-6">
-          <form className="col-span-6 sm:col-span-3">
+          <form className="col-span-6 sm:col-span-3" onSubmit={handleSubmit}>
             <div className="grid grid-cols-7 gap-3">
               <label className="col-span-2 uppercase tracking-wide text-fv-blue text-xl font-bold mb-2" htmlFor="name">
                 Name:
@@ -79,7 +83,7 @@ function ContactUsPresentation({ title, contactText, links }) {
             </div>
             <button
               className="flex items-center shadow bg-fv-blue hover:bg-fv-blue-dark focus:shadow-outline focus:outline-none text-white font-bold ml-3 py-2 px-4 rounded-3xl"
-              type="button"
+              type="submit"
             >
               Submit
             </button>
@@ -96,11 +100,12 @@ function ContactUsPresentation({ title, contactText, links }) {
   )
 }
 // PROPTYPES
-const { array, string } = PropTypes
+const { array, func, string } = PropTypes
 ContactUsPresentation.propTypes = {
-  title: string,
   contactText: string,
+  handleSubmit: func,
   links: array,
+  title: string,
 }
 
 export default ContactUsPresentation

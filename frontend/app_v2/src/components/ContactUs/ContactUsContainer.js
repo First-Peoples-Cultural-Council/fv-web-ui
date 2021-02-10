@@ -1,7 +1,7 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
 import ContactUsPresentation from 'components/ContactUs/ContactUsPresentation'
-// import ContactUsData from 'components/ContactUs/ContactUsData'
+import ContactUsData from 'components/ContactUs/ContactUsData'
 
 /**
  * @summary ContactUsContainer
@@ -13,8 +13,8 @@ import ContactUsPresentation from 'components/ContactUs/ContactUsPresentation'
  * @returns {node} jsx markup
  */
 function ContactUsContainer({ contactText, title, email, links }) {
-  //   const { exampleOutput } = ContactUsData({ exampleInput: 'passedInToData' })
-  return <ContactUsPresentation contactText={contactText} title={title} email={email} links={links} />
+  const { handleSubmit } = ContactUsData({ recipientEmail: email })
+  return <ContactUsPresentation contactText={contactText} title={title} handleSubmit={handleSubmit} links={links} />
 }
 // PROPTYPES
 // const { string } = PropTypes

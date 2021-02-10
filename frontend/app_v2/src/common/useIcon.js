@@ -15,6 +15,7 @@ import Instagram from 'common/icons/Instagram'
 import Kids from 'common/icons/KidsIcon'
 import Learn from 'common/icons/LearnIcon'
 import Lessons from 'common/icons/Lessons'
+import Link from 'common/icons/Link'
 import LinkedIn from 'common/icons/LinkedIn'
 import Login from 'common/icons/LoginIcon'
 import Logo from 'common/icons/Logo'
@@ -50,6 +51,7 @@ function useIcon(iconName, iconStyling) {
     Kids,
     Learn,
     Lessons,
+    Link,
     LinkedIn,
     Login,
     Logo,
