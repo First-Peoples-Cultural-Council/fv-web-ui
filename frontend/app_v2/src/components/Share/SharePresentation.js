@@ -14,7 +14,7 @@ function SharePresentation({ url, title }) {
   return (
     <ul>
       {navigator.share ? (
-        <li className="m-2 h-9 w-9 inline-flex items-center align-center text-white rounded bg-fv-purple">
+        <li className="m-2 h-9 w-9 inline-flex align-center text-white rounded bg-fv-purple">
           <button
             onClick={() =>
               navigator.share({
@@ -23,27 +23,27 @@ function SharePresentation({ url, title }) {
               })
             }
           >
-            {useIcon('WebShare', 'fill-current h-6 w-6 ml-1.5')}
+            {useIcon('WebShare', 'fill-current h-6 w-6 m-1.5')}
           </button>
         </li>
       ) : null}
-      <li className="m-2 h-9 w-9 inline-flex items-center align-center text-white rounded bg-blue-300">
+      <li className="m-2 h-9 w-9 inline-flex align-center rounded text-blue-300">
         <a href={`https://twitter.com/intent/tweet?url=${url}&text=${title}`}>
-          {useIcon('Twitter', 'fill-current h-6 w-6 ml-1.5')}
+          {useIcon('Twitter', 'fill-current h-9 w-9 ml-1.5')}
         </a>
       </li>
-      <li className="m-2 h-9 w-9 inline-flex items-center align-center text-white rounded bg-blue-900">
+      <li className="m-2 h-9 w-9 inline-flex items-center align-center rounded text-blue-900">
         <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}`}>
-          {useIcon('Facebook', 'fill-current h-6 w-6 ml-1.5')}
+          {useIcon('Facebook', 'fill-current h-9 w-9 ml-1.5')}
         </a>
       </li>
-      <li className="m-2 h-9 w-9 inline-flex items-center align-center text-white rounded bg-blue-700">
+      <li className="m-2 h-9 w-9 inline-flex align-center rounded text-blue-700">
         <a href={`https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${title}`}>
-          {useIcon('LinkedIn', 'fill-current h-6 w-6 ml-1.5')}
+          {useIcon('LinkedIn', 'fill-current h-9 w-9 ml-1.5')}
         </a>
       </li>
-      <li className="m-2 h-9 w-9 inline-flex items-center align-center text-white rounded bg-fv-red">
-        <a href={`mailto:?subject=${title}&body=${url}`}>{useIcon('Mail', 'fill-current h-6 w-6 ml-1.5')}</a>
+      <li className="m-2 h-9 w-9 inline-flex align-center text-white rounded bg-fv-red">
+        <a href={`mailto:?subject=${title}&body=${url}`}>{useIcon('Mail', 'fill-current h-6 w-6 m-1.5')}</a>
       </li>
     </ul>
   )
