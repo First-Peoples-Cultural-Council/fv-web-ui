@@ -16,6 +16,12 @@ services:
       - CYPRESS_FV_PASSWORD
       - CYPRESS_PROJECT_ID
       - CYPRESS_RECORD_KEY
+      - COMMIT_INFO_BRANCH
+      - COMMIT_INFO_MESSAGE
+      - COMMIT_INFO_EMAIL
+      - COMMIT_INFO_AUTHOR
+      - COMMIT_INFO_SHA
+      - COMMIT_INFO_REMOTE
     volumes:
       - '${PWD}/../frontend:/e2e'
       - '${PWD}/../frontend/cypress_CI.json:/e2e/cypress.json'

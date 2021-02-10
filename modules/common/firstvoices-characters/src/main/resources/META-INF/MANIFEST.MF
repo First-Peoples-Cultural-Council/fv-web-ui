@@ -8,6 +8,7 @@ Bundle-Name: FirstVoicesCharacters
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: FirstVoicesCharacters
 Nuxeo-Component: OSGI-INF/ca.firstvoices.listeners.xml,
+ OSGI-INF/services/charactersCore-contrib.xml,
  OSGI-INF/services/addConfusables-contrib.xml,
  OSGI-INF/services/cleanupCharacters-contrib.xml,
  OSGI-INF/services/customOrderCompute-contrib.xml,

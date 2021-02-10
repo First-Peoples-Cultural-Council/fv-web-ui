@@ -14,6 +14,9 @@ import withToggle from 'components/withToggle'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import FormHelpers from 'common/FormHelpers'
+
+import FVLabel from 'components/FVLabel'
+
 import './withFilter.css'
 
 const intl = IntlService.instance
@@ -120,7 +123,7 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
             >
               <form>
                 <FiltersWithToggle
-                  label={intl.trans('views.pages.search.filter_items', 'Filter items', 'first')}
+                  label={<FVLabel transKey="views.pages.search.filter_items" defaultStr="Filter Items" />}
                   mobileOnly
                 >
                   <t.form.Form

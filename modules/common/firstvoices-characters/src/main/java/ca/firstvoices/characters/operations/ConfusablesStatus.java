@@ -58,6 +58,8 @@ public class ConfusablesStatus {
                   confusablesJson.put("Top 20 Matches", dictionaryItems.stream()
                       .map(doc -> Collections.singletonMap(doc.getId(), doc.getTitle()))
                       .collect(Collectors.toList()));
+                  confusablesJson.put("Occurrences",
+                      allConfusables.stream().filter(char1 -> char1.equals(confusable)).count());
 
                   json.put(confusable, confusablesJson);
                 }

@@ -341,7 +341,7 @@ export class Preview extends Component {
             />
           )
 
-          if (pictureResponse['mime-type'] === 'image/gif') {
+          if (selectn('mime-type', pictureResponse) === 'image/gif') {
             pictureTag = (
               <img
                 style={{ maxWidth: '100%', width: 'inherit', minWidth: 'inherit' }}
@@ -351,10 +351,7 @@ export class Preview extends Component {
             )
           }
 
-          if (
-            Object.prototype.hasOwnProperty.call(pictureResponse, 'properties') &&
-            pictureResponse.properties['file:content']['mime-type'] === 'image/gif'
-          ) {
+          if (selectn('properties.file:content.mime-type', pictureResponse) === 'image/gif') {
             pictureTag = (
               <img
                 style={{ maxWidth: '100%', width: 'inherit', minWidth: 'inherit' }}
@@ -366,7 +363,7 @@ export class Preview extends Component {
 
           if (this.props.crop) {
             pictureTag =
-              pictureResponse['mime-type'] === 'image/gif' ? (
+              selectn('mime-type', pictureResponse) === 'image/gif' ? (
                 <div
                   style={{
                     width: '100%',

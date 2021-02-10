@@ -126,6 +126,8 @@ class LabelModal extends Component {
       if (isPublishing) {
         this.handlePublish(output, 'Publish')
       } else {
+        this.setState({ loading: false })
+
         updateIntl(
           selectn('response.properties.dc:title', output),
           selectn('response.properties.fvlabel:labelKey', output),
