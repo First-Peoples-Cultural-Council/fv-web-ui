@@ -37,6 +37,11 @@ function AppFrameContainer() {
               </Helmet>
               <WordsListContainer />
             </Route>
+            <Route path="/:language/*">
+              <div className="flex justify-center items-center min-h-screen">
+                <img src="/assets/images/under-construction.gif" alt="TODO" />
+              </div>
+            </Route>
             <Route path="/:language">
               <Helmet>
                 <title>Home</title>
