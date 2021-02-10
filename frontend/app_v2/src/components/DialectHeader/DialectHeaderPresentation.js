@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import DialectHeaderPresentationMenu from './DialectHeaderPresentationMenu'
 import DialectHeaderPresentationMobile from './DialectHeaderPresentationMobile'
@@ -15,7 +16,7 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function DialectHeaderPresentation({ currentUser, menuData }) {
+function DialectHeaderPresentation({ title, currentUser, menuData, className }) {
   const [mobileNavbarOpen, setMobileNavbarOpen] = useState(false)
   const [workspaceMode, setWorkspaceMode] = useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
@@ -59,17 +60,18 @@ function DialectHeaderPresentation({ currentUser, menuData }) {
   ))
 
   return (
-    <header id="Dialect_header" className="relative bg-fv-charcoal">
+    <header id="Dialect_header" className={`relative bg-fv-charcoal ${className}`}>
       <nav className="max-w-screen-2xl mx-auto px-4 sm:px-6 xl:px-20">
         <div className="flex justify-between items-center py-6 md:justify-start md:space-x-10">
           <div className="justify-start lg:w-0 lg:flex-1">
-            <a href="/home">
+            <Link to={`/${title}`}>
               <span className="sr-only">FirstVoices Logo</span>
               {useIcon('Logo', 'fill-current text-white h-10')}
-            </a>
+            </Link>
           </div>
 
           <div className="hidden md:flex space-x-6">{menus}</div>
+
           {!currentUser ? (
             <div className="ml-8 hidden md:flex items-center justify-end md:flex-1 lg:w-0">
               <a
@@ -145,10 +147,15 @@ function DialectHeaderPresentation({ currentUser, menuData }) {
   )
 }
 // PROPTYPES
-const { array, object } = PropTypes
+const { array, object, string } = PropTypes
 DialectHeaderPresentation.propTypes = {
   currentUser: object,
   menuData: array,
+  title: string,
+  className: string,
+}
+DialectHeaderPresentation.defaultProps = {
+  title: '/',
 }
 
 export default DialectHeaderPresentation

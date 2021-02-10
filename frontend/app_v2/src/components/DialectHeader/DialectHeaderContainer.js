@@ -1,5 +1,5 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import DialectHeaderPresentation from 'components/DialectHeader/DialectHeaderPresentation'
 import DialectHeaderData from 'components/DialectHeader/DialectHeaderData'
 
@@ -12,19 +12,14 @@ import DialectHeaderData from 'components/DialectHeader/DialectHeaderData'
  *
  * @returns {node} jsx markup
  */
-function DialectHeaderContainer() {
-  return (
-    <DialectHeaderData>
-      {({ currentUser, menuData }) => {
-        return <DialectHeaderPresentation currentUser={currentUser} menuData={menuData} />
-      }}
-    </DialectHeaderData>
-  )
+function DialectHeaderContainer({ className }) {
+  const { currentUser, menuData, title } = DialectHeaderData()
+  return <DialectHeaderPresentation className={className} title={title} currentUser={currentUser} menuData={menuData} />
 }
 // PROPTYPES
-// const { string } = PropTypes
+const { string } = PropTypes
 DialectHeaderContainer.propTypes = {
-  //   something: string,
+  className: string,
 }
 
 export default DialectHeaderContainer
