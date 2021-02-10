@@ -105,6 +105,7 @@
       <artifactId>junit</artifactId>
       <groupId>junit</groupId>
       <scope>test</scope>
+      <version>4.13</version>
     </dependency>
     <dependency>
       <artifactId>nuxeo-elasticsearch-core</artifactId>

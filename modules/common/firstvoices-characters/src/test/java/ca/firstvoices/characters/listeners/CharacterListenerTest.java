@@ -13,10 +13,10 @@ import ca.firstvoices.testUtil.AbstractTestDataCreatorTest;
 import ca.firstvoices.testUtil.annotations.TestDataConfiguration;
 import javax.inject.Inject;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -121,14 +121,14 @@ public class CharacterListenerTest extends AbstractTestDataCreatorTest {
     // Test for adding a LC confusable that exists as a char
     char1.setPropertyValue(CleanupCharactersServiceImpl.LC_CONFUSABLES, new String[]{"Z"});
 
-    Assertions.assertThrows(NuxeoException.class, () -> {
+    Assert.assertThrows(NuxeoException.class, () -> {
       session.saveDocument(char1);
     });
 
     // Test for adding a UC confusable that exists as a char
     char1.setPropertyValue(CleanupCharactersServiceImpl.UC_CONFUSABLES, new String[]{"Z"});
 
-    Assertions.assertThrows(NuxeoException.class, () -> {
+    Assert.assertThrows(NuxeoException.class, () -> {
       session.saveDocument(char1);
     });
 
@@ -136,14 +136,14 @@ public class CharacterListenerTest extends AbstractTestDataCreatorTest {
     DocumentModel char2 = createCharacterModel("char2");
     char2.setPropertyValue("dc:title", "Z");
 
-    Assertions.assertThrows(NuxeoException.class, () -> {
+    Assert.assertThrows(NuxeoException.class, () -> {
       session.createDocument(char2);
     });
 
     // Test for updating a char to a confusable that exists already
     char1.setPropertyValue("dc:title", "5");
 
-    Assertions.assertThrows(NuxeoException.class, () -> {
+    Assert.assertThrows(NuxeoException.class, () -> {
       session.createDocument(char1);
     });
   }
