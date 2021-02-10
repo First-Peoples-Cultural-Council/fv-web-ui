@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types'
 import useRoute from 'app_v1/useRoute'
-import React, { useReducer, useEffect, useState } from 'react'
+import React, { useReducer, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import AppStateContext from 'common/AppStateContext'
 import AudioMachineData from 'components/AudioMachine/AudioMachineData'
 import api from 'services/api'
+import { useQueryClient } from 'react-query'
 
 export function getSectionsAdaptor(response) {
   const {
@@ -30,15 +31,22 @@ export function rawGetByIdAdaptor(response) {
   }
 }
 
+const reducerInitialState = {
+  api: {
+    getSections: {
+      idLogo: undefined,
+      path: undefined,
+      title: undefined,
+      uid: undefined,
+      logoUrl: undefined,
+    },
+  },
+}
 function reducer(state, action) {
   if (action.type === 'api.getSections') {
-    // NOTE: logoUrl is added via api.getSections.logo
-    // If we don't do the following test the logoUrl will be lost
-    if (state.api.getSections.uid === action.payload.uid) {
-      state.api.getSections = { ...state.api.getSections, ...action.payload }
-    } else {
-      state.api.getSections = action.payload
-    }
+    const oldLogoUrl = state.api.getSections.logoUrl
+    state.api.getSections = action.payload
+    state.api.getSections.logoUrl = oldLogoUrl
   }
   if (action.type === 'api.getSections.logo') {
     const { logoUrl, uid } = action.payload
@@ -46,6 +54,7 @@ function reducer(state, action) {
       state.api.getSections = { ...state.api.getSections, logoUrl }
     }
   }
+
   return state
 
   // switch (action.type) {
@@ -58,20 +67,10 @@ function reducer(state, action) {
   // }
 }
 function AppStateProvider({ children }) {
-  const [getLogoUrl, setGetLogoUrl] = useState(false)
+  const queryClient = useQueryClient()
   const { language } = useParams()
   const { machine, send } = AudioMachineData()
-  const [state, dispatch] = useReducer(reducer, {
-    api: {
-      getSections: {},
-    },
-  })
-  // NOTE: using getLogoUrl flag because I was having troubles getting
-  // useEffect to respond to changes within state.api.getSections.idLogo
-  useEffect(() => {
-    setGetLogoUrl(false)
-  }, [language])
-
+  const [state, dispatch] = useReducer(reducer, reducerInitialState)
   // Get language data
   const { isLoading: sectionsIsLoading, error: sectionsError, data: sectionsData } = api.getSections(
     language,
@@ -80,23 +79,25 @@ function AppStateProvider({ children }) {
   useEffect(() => {
     if (sectionsIsLoading === false && sectionsError === null) {
       dispatch({ type: 'api.getSections', payload: sectionsData })
-      // toggle getLogoUrl flag
-      setGetLogoUrl(true)
     }
   }, [sectionsIsLoading, sectionsError])
 
   // Get language logo
   const logoId = state.api.getSections.idLogo
   useEffect(() => {
-    if (logoId) {
+    if (state.api.getSections.idLogo) {
       api.rawGetById(logoId, rawGetByIdAdaptor).then(({ error: rawGetByIdError, data: rawGetByIdData }) => {
         if (rawGetByIdError === undefined) {
           const { url } = rawGetByIdData
+          // IMPORTANT: have to invalidate sections cache since
+          // react-query will suppress a rerender
+          // and child components will not get the updated data
+          queryClient.invalidateQueries(['sections', sectionsData.title])
           dispatch({ type: 'api.getSections.logo', payload: { logoUrl: url, uid: sectionsData.uid } })
         }
       })
     }
-  }, [getLogoUrl])
+  }, [state.api.getSections.idLogo])
 
   // Set routeParams over in V1 (eg: used for displaying words)
   const path = sectionsData?.path
