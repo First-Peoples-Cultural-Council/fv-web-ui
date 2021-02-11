@@ -21,8 +21,6 @@ function TopicsPresentationStory({ heading, image, subheading, url }) {
     <div
       style={styles}
       className={`
-        Topic
-  
         bg-fv-purple
         bg-center
         bg-cover

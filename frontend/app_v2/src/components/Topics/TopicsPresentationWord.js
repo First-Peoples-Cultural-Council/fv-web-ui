@@ -22,8 +22,6 @@ function TopicsPresentationWord({ audio, heading, image, subheading, url }) {
     <div
       style={styles}
       className={`
-        Topic
-  
         bg-fv-turquoise
         bg-center
         bg-cover
@@ -35,6 +33,7 @@ function TopicsPresentationWord({ audio, heading, image, subheading, url }) {
         xl:rounded-50
         py-6
         text-white
+        w-full
       `}
     >
       {/* <img style={{position: 'absolute', top: 0, left: 0, opacity: 0.5}} src={dev} /> */}

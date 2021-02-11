@@ -10,8 +10,6 @@ import {
   // WIDGET_LIST_GENERIC,
 } from 'common/constants'
 
-import './Topics.css'
-
 import TopicsPresentationWord from 'components/Topics/TopicsPresentationWord'
 import TopicsPresentationPhrase from 'components/Topics/TopicsPresentationPhrase'
 import TopicsPresentationSong from 'components/Topics/TopicsPresentationSong'
@@ -61,9 +59,36 @@ function TopicsPresentation({ title, topics }) {
     }
   })
   return (
-    <div className="Topics flex flex-wrap">
-      <h2 className="mb-12 text-4xl text-fv-blue font-bold uppercase sm:text-5xl">{title}</h2>
-      {topicComponents}
+    <div className="Topics bg-white">
+      <div className="relative">
+        <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-blue font-bold uppercase sm:text-5xl">
+          <span
+            className={`
+            inline-block
+            px-4
+            sm:px-8
+            XXmd:px-16
+            lg:px-20
+
+            bg-white
+          `}
+          >
+            {title}
+          </span>
+        </h2>
+        <hr className="absolute z-0 w-full" style={{ top: '50%' }} />
+      </div>
+      <div
+        className={`
+        grid
+        gap-3
+        grid-cols-2
+        sm:grid-cols-3
+        md:grid-cols-4
+      `}
+      >
+        {topicComponents}
+      </div>
     </div>
   )
 }

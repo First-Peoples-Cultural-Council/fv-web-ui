@@ -21,8 +21,6 @@ function TopicsPresentationPhrase({ heading, image, subheading, listCount, url }
     <div
       style={styles}
       className={`
-        Topic
-  
         bg-fv-orange
         bg-center
         bg-cover
