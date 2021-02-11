@@ -11,7 +11,7 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function ContactUsPresentation({ title, contactFormRef, contactText, errorMessage, links, handleSubmit }) {
+function ContactUsPresentation({ title, contactFormRef, contactText, formErrors, links, handleSubmit }) {
   const getIconName = (link) => {
     if (link.includes('facebook')) {
       return 'Facebook'
@@ -43,9 +43,13 @@ function ContactUsPresentation({ title, contactFormRef, contactText, errorMessag
       ))
     : null
 
-  const errorMessageElement = errorMessage && (
-    <p className="col-start-3 col-span-4 text-red-500 italic">{errorMessage}</p>
-  )
+  const errorListItems = formErrors
+    ? formErrors.map((formError, index) => (
+        <li key={index} className="text-red-500 italic">
+          {formError.message}
+        </li>
+      ))
+    : null
 
   return (
     <section className="py-12 bg-white">
@@ -54,42 +58,33 @@ function ContactUsPresentation({ title, contactFormRef, contactText, errorMessag
         <div className="grid grid-cols-6">
           <form ref={contactFormRef} className="col-span-6 sm:col-span-3" onSubmit={handleSubmit}>
             <div className="grid grid-cols-7 gap-3">
-              {errorMessageElement}
-              <label
-                className="col-span-2 uppercase tracking-wide text-fv-blue text-xl font-bold mb-2"
-                htmlFor="contactName"
-              >
+              {errorListItems && <ul className="col-start-3 col-span-4">{errorListItems}</ul>}
+              <label className="col-span-2 uppercase tracking-wide text-fv-blue text-xl font-bold mb-2" htmlFor="Name">
                 Name:
               </label>
               <input
                 className="col-span-5 bg-white border border-gray-500 rounded-xl py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                id="contactName"
-                name="contactName"
+                id="Name"
+                name="Name"
                 type="text"
               />
-              <label
-                className="col-span-2 uppercase tracking-wide text-fv-blue text-xl font-bold mb-2"
-                htmlFor="contactEmail"
-              >
+              <label className="col-span-2 uppercase tracking-wide text-fv-blue text-xl font-bold mb-2" htmlFor="Email">
                 E-mail:
               </label>
               <input
                 className="col-span-5 inline bg-white border border-gray-500 rounded-xl py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                id="contactEmail"
-                name="contactEmail"
+                id="Email"
+                name="Email"
                 type="email"
               />
               <div className="col-span-7">
-                <label
-                  className="block uppercase tracking-wide text-fv-blue text-xl font-bold mb-2"
-                  htmlFor="contactMessage"
-                >
+                <label className="block uppercase tracking-wide text-fv-blue text-xl font-bold mb-2" htmlFor="Message">
                   Message:
                 </label>
                 <textarea
                   className=" no-resize appearance-none block w-full bg-white border border-gray-500 rounded-xl py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 h-48 resize-none"
-                  id="contactMessage"
-                  name="contactMessage"
+                  id="Message"
+                  name="Message"
                   defaultValue={''}
                 />
               </div>
@@ -113,9 +108,11 @@ function ContactUsPresentation({ title, contactFormRef, contactText, errorMessag
   )
 }
 // PROPTYPES
-const { array, func, string } = PropTypes
+const { array, func, object, string } = PropTypes
 ContactUsPresentation.propTypes = {
+  contactFormRef: object,
   contactText: string,
+  formErrors: array,
   handleSubmit: func,
   links: array,
   title: string,

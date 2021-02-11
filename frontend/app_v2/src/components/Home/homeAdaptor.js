@@ -53,12 +53,12 @@ function homeAdaptor(response) {
      * Contact Widget
      */
     if (type === 'ContactWidget') {
-      let siteEmail = ''
+      let contactEmail = ''
       let links = []
       let contactText = ''
       settings.forEach(function assignValues({ category, key, value }) {
         if (category === 'general' && key === 'contact_email') {
-          siteEmail = value
+          contactEmail = value
         }
         if (category === 'general' && key === 'social_links') {
           links = value
@@ -73,7 +73,7 @@ function homeAdaptor(response) {
         uid: widget.uid,
         title: widget['dc:title'],
         dialectId: widget['widget:dialect'],
-        siteEmail: siteEmail,
+        contactEmail: contactEmail,
         links: links,
         contactText: contactText,
       }

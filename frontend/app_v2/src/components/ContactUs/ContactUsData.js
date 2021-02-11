@@ -12,16 +12,18 @@ import { getFormData, validateForm } from 'common/FormHelpers'
  *
  */
 function ContactUsData({ dialectId, siteEmail }) {
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [formErrors, setFormErrors] = useState([])
   const contactFormRef = useRef()
   const validator = yup.object().shape({
-    contactName: yup.string().min(3).required('A name is required'),
-    contactEmail: yup.string().email().required('A valid email is required'),
-    contactMessage: yup.string().min(3).required('A message is required'),
+    Name: yup.string().min(3).required('A name is required'),
+    Email: yup.string().email().required('A valid email is required'),
+    Message: yup.string().min(3).required('A message is required'),
   })
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+    // Clear out any previous errors
+    setFormErrors([])
 
     const formData = getFormData({ formReference: contactFormRef })
     const validationResults = await validateForm({ formData, validator })
@@ -29,18 +31,18 @@ function ContactUsData({ dialectId, siteEmail }) {
     if (validationResults.valid) {
       api.postMail({
         docId: dialectId,
-        name: formData.contactName,
-        email: formData.contactEmail,
-        message: formData.contactMessage,
+        name: formData.Name,
+        email: formData.Email,
+        message: formData.Message,
         recipientEmail: siteEmail,
       })
     } else {
-      setErrorMessage(validationResults.errors[0].message)
+      setFormErrors(validationResults.errors)
     }
   }
   return {
     contactFormRef,
-    errorMessage,
+    formErrors,
     handleSubmit,
   }
 }
