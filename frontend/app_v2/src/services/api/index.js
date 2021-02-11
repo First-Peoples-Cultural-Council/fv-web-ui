@@ -107,10 +107,10 @@ export default {
     return { isLoading, error, data, dataOriginal: data }
   },
   post,
-  postMail: ({ docId, message, email, name, recipientEmail }) => {
+  postMail: ({ docId, from, message, name, to }) => {
     const params = {
-      from: email,
-      message: message,
+      from,
+      message,
       subject: 'FirstVoices Language enquiry from ' + name,
       HTML: 'false',
       rollbackOnError: 'true',
@@ -118,8 +118,8 @@ export default {
       bcc: 'hello@firstvoices.com',
       cc: '',
       files: '',
-      replyto: email,
-      to: recipientEmail,
+      replyto: from,
+      to,
     }
 
     // TODO: Update this path when BE ready and handle success response in UI

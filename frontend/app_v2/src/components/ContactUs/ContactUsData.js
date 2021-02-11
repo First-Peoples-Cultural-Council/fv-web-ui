@@ -32,9 +32,9 @@ function ContactUsData({ dialectId, contactEmail }) {
       api.postMail({
         docId: dialectId,
         name: formData.Name,
-        email: formData.Email,
+        from: formData.Email,
         message: formData.Message,
-        recipientEmail: contactEmail,
+        to: contactEmail,
       })
     } else {
       setFormErrors(validationResults.errors)
