@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import api from 'services/api'
 /**
  * @summary ContactUsData
@@ -7,26 +8,52 @@ import api from 'services/api'
  * @param {object} props
  *
  */
-function ContactUsData({ dialectId, contactEmail }) {
+function ContactUsData({ dialectId, siteEmail }) {
+  const [errorMessage, setErrorMessage] = useState(null)
+
+  const emailValidation = (email) => {
+    if (/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
+      return true
+    }
+    if (email.trim() === '') {
+      setErrorMessage('Email is required')
+      return false
+    }
+    setErrorMessage('Please enter a valid email')
+    return false
+  }
+
+  const textValidation = (fieldName, fieldValue) => {
+    if (fieldValue === undefined || fieldValue.trim() === '') {
+      setErrorMessage(`${fieldName} is required`)
+      return false
+    }
+    if (fieldValue.trim().length < 3) {
+      setErrorMessage(`${fieldName} needs to be at least three characters`)
+      return false
+    }
+    return true
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault()
-    const { name, email, message } = event.target.elements
+    const { contactName, contactEmail, contactMessage } = event.target.elements
     const params = {
       docId: dialectId,
-      name: name.value,
-      email: email.value,
-      message: message.value,
-      recipientEmail: contactEmail,
+      name: contactName.value,
+      email: contactEmail.value,
+      message: contactMessage.value,
+      recipientEmail: siteEmail,
     }
-    if (name.value === '' || email.value === '' || message.value === '') {
-      //   console.log('Missing!!!!', params)
-      return
+    const validEmail = emailValidation(contactEmail.value)
+    const validName = textValidation('Name', contactName.value)
+    const validMessage = textValidation('Message', contactMessage.value)
+    if (validEmail && validName && validMessage) {
+      api.postMail(params)
     }
-
-    api.postMail(params)
-    // console.log('Submit', params)
   }
   return {
+    errorMessage,
     handleSubmit,
   }
 }
