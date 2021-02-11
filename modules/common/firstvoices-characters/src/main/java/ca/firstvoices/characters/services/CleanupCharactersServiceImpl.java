@@ -20,17 +20,14 @@
 
 package ca.firstvoices.characters.services;
 
-import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_ALPHABET;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_PHRASE;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_WORD;
 
 import ca.firstvoices.characters.exceptions.FVCharacterInvalidException;
 import ca.firstvoices.characters.listeners.AssetListener;
-import ca.firstvoices.core.io.utils.DialectUtils;
 import ca.firstvoices.core.io.utils.PropertyUtils;
 import ca.firstvoices.core.io.utils.SessionUtils;
-import ca.firstvoices.core.io.utils.filters.NotTrashedFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -74,7 +71,10 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
     DocumentModel dictionary = session.getDocument(document.getParentRef());
     DocumentModel dialect = session.getDocument(dictionary.getParentRef());
 
-    List<DocumentModel> characters = getCharacters(dialect);
+    CharactersCoreService cs =
+        Framework.getService(CharactersCoreService.class);
+
+    List<DocumentModel> characters = cs.getCharacters(session, dialect);
 
     if (characters.isEmpty()) {
       return document;
@@ -241,8 +241,11 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
 
   @Override
   public Set<String> getCharactersToSkipForDialect(DocumentModel dialect) {
-    DocumentModelList characters = getCharacters(dialect);
-    DocumentModel alphabet = getAlphabet(dialect);
+    CharactersCoreService cs =
+        Framework.getService(CharactersCoreService.class);
+
+    DocumentModelList characters = cs.getCharacters(dialect.getCoreSession(), dialect);
+    DocumentModel alphabet = cs.getAlphabet(dialect.getCoreSession(), dialect);
     //Alphabet must not be null.
     assert alphabet != null;
 
@@ -327,37 +330,18 @@ public class CleanupCharactersServiceImpl implements CleanupCharactersService {
     return replaceConfusables(confusables, current + charAt, updatedPropertyValue.substring(1));
   }
 
-  public DocumentModel getAlphabet(DocumentModel doc) {
-    if (FV_ALPHABET.equals(doc.getType())) {
-      return doc;
-    }
-    DocumentModel dialect = DialectUtils.getDialect(doc);
-    if (dialect == null) {
-      return null;
-    }
-    String alphabetQuery = "SELECT * FROM FVAlphabet WHERE ecm:ancestorId='" + dialect.getId()
-        + "' AND ecm:isProxy = 0 AND ecm:isVersion = 0 AND ecm:isTrashed = 0";
-
-    DocumentModelList results = doc.getCoreSession().query(alphabetQuery);
-
-    return results.get(0);
-  }
-
-  public DocumentModelList getCharacters(DocumentModel doc) {
-    DocumentModel alphabet = getAlphabet(doc);
-    //Alphabet must not be null
-    assert alphabet != null;
-    return doc.getCoreSession()
-        .getChildren(alphabet.getRef(), FV_CHARACTER, new NotTrashedFilter(), null);
-  }
-
   public DocumentModelList getCharactersWithConfusables(DocumentModel doc) {
-    DocumentModel alphabet = getAlphabet(doc);
+    CharactersCoreService cs =
+        Framework.getService(CharactersCoreService.class);
+
+    DocumentModel alphabet = cs.getAlphabet(doc.getCoreSession(), doc);
     assert alphabet != null;
-    Filter hasConfusableFilter = docModel -> !docModel.isTrashed() && hasConfusableCharacters(
-        docModel);
+
+    Filter hasConfusableNotTrashedFilter = docModel ->
+        !docModel.isTrashed() && hasConfusableCharacters(docModel);
+
     return doc.getCoreSession()
-        .getChildren(alphabet.getRef(), FV_CHARACTER, hasConfusableFilter, null);
+        .getChildren(alphabet.getRef(), FV_CHARACTER, hasConfusableNotTrashedFilter, null);
   }
 
   private List<String> getAllLCConfusables(DocumentModel doc) {

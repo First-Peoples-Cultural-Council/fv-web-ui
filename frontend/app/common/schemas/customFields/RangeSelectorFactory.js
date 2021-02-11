@@ -9,7 +9,7 @@ function renderInput(locals) {
   return (
     <div>
       {locals.value}
-      <input id="slider1" onChange={onChange} value={locals.value} type="range" min="10" max="4000" step="10" />
+      <input onChange={onChange} value={locals.value} type="range" min="10" max="4000" step="10" />
     </div>
   )
 }

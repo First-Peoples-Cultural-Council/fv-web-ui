@@ -59,6 +59,7 @@ children:
           - type: FVContributors
             name: "Contributors"
           - type: FVCategories
+            name: "Categories"
             children:
               - type: FVCategory
                 name: "Category 1"

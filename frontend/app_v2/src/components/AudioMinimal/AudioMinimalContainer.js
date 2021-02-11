@@ -4,7 +4,7 @@ import AudioMinimalPresentation from './AudioMinimalPresentation'
 import AudioMinimalData from './AudioMinimalData'
 /**
  * @summary AudioMinimalContainer
- * @version 1.0.1
+ * @version 1.0.0
  * @component
  *
  * @param {object} props
@@ -12,7 +12,7 @@ import AudioMinimalData from './AudioMinimalData'
  * @returns {node} jsx markup
  */
 function AudioMinimalContainer({ src, icons }) {
-  const { isPlaying, isLoading, isErrored, hasErrored, onClick } = AudioMinimalData({ src })
+  const { isPlaying, isLoading, isErrored, hasErrored, onClick, onKeyPress } = AudioMinimalData({ src })
   return (
     <AudioMinimalPresentation
       hasErrored={hasErrored}
@@ -20,6 +20,7 @@ function AudioMinimalContainer({ src, icons }) {
       isLoading={isLoading}
       isPlaying={isPlaying}
       onClick={onClick}
+      onKeyPress={onKeyPress}
       icons={icons}
     />
   )

@@ -21,6 +21,7 @@
 package ca.firstvoices.characters.operations;
 
 import ca.firstvoices.characters.Constants;
+import ca.firstvoices.characters.services.CharactersCoreService;
 import ca.firstvoices.characters.services.CustomOrderComputeService;
 import ca.firstvoices.characters.workers.ComputeCustomOrderWorker;
 import ca.firstvoices.core.io.utils.DialectUtils;
@@ -35,6 +36,7 @@ import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.work.api.WorkManager;
 import org.nuxeo.runtime.api.Framework;
 
@@ -49,6 +51,12 @@ public class ComputeCustomOrder extends AbstractMaintenanceOperation {
   public static final String ID = Constants.COMPUTE_ORDER_ACTION_ID;
 
   private static final Logger log = Logger.getLogger(ComputeCustomOrder.class.getCanonicalName());
+
+  private final CustomOrderComputeService customOrderComputeService = Framework
+      .getService(CustomOrderComputeService.class);
+
+  private final CharactersCoreService cs = Framework
+      .getService(CharactersCoreService.class);
 
   @Param(name = "phase", values = {"init", "work"})
   protected String phase = "init";
@@ -84,11 +92,26 @@ public class ComputeCustomOrder extends AbstractMaintenanceOperation {
   @Override
   protected void executeWorkPhase(DocumentModel doc) {
     if (DialectUtils.isDialect(doc)) {
-      // Run worker to do computation for dialect
-      WorkManager workManager = Framework.getService(WorkManager.class);
-      ComputeCustomOrderWorker worker = new ComputeCustomOrderWorker(doc.getRef(),
-          batchSize);
-      workManager.schedule(worker);
+
+      DocumentModelList characters =
+          cs.getCharacters(session, doc);
+      DocumentModel alphabet =
+          cs.getAlphabet(session, doc);
+
+      customOrderComputeService.updateCustomOrderCharacters(
+          session, alphabet, characters);
+
+      session.save();
+
+      if (customOrderComputeService.validateAlphabetOrder(session, alphabet)) {
+        // Run worker to do computation for dialect
+        WorkManager workManager = Framework.getService(WorkManager.class);
+        ComputeCustomOrderWorker worker = new ComputeCustomOrderWorker(doc.getRef(),
+            batchSize);
+        workManager.schedule(worker);
+      } else {
+        log.severe("Alphabet out of order for dialect `" + doc.getTitle() + "`");
+      }
     } else {
       try {
         // compute for asset
@@ -107,9 +130,6 @@ public class ComputeCustomOrder extends AbstractMaintenanceOperation {
    */
   private void computeForAsset(DocumentModel doc) throws OperationException {
     if (doc.hasSchema("fvcore")) {
-      CustomOrderComputeService customOrderComputeService = Framework
-          .getService(CustomOrderComputeService.class);
-
       // Will compute, save and update proxy if needed
       customOrderComputeService.computeAssetNativeOrderTranslation(session, doc, true, true);
     } else {

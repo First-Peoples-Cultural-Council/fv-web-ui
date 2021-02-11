@@ -24,6 +24,7 @@ import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CHARACTER;
 import static ca.firstvoices.testUtil.helpers.DocumentTestHelpers.createDocument;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 import ca.firstvoices.characters.services.CustomOrderComputeService;
 import ca.firstvoices.characters.services.CustomOrderComputeServiceImpl;
 import ca.firstvoices.enrichers.operations.DocumentEnrichedQuery;
@@ -48,13 +49,15 @@ import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Deploy;
-import org.nuxeo.runtime.test.runner.Deploys;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 
 @RunWith(FeaturesRunner.class)
 @Features({FirstVoicesCoreTestsFeature.class})
-@Deploys(@Deploy("FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml"))
+@Deploy({
+    "FirstVoicesCharacters:OSGI-INF/services/charactersCore-contrib.xml",
+    "FirstVoicesCharacters:OSGI-INF/services/customOrderCompute-contrib.xml"
+})
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
 public class EnricherUtilsTest extends AbstractFirstVoicesDataTest {
 

@@ -1,14 +1,12 @@
-import React, { useEffect } from 'react'
-import { Switch, Route, Link } from 'react-router-dom'
+import React from 'react'
+import { Switch, Route } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 import './AppFrame.css'
 import About from 'components/About'
+import Home from 'components/Home'
 import Suspender from 'components/Suspender'
-import useRoute from 'app_v1/useRoute'
 import WordsListContainer from 'app_v1/WordsListContainer'
-import useSearchParams from 'common/useSearchParams'
 import DialectHeader from 'components/DialectHeader'
-import Topics from 'components/Topics'
-import WidgetWotd from 'components/WidgetWotd'
 
 /**
  * @summary AppFrameContainer
@@ -20,78 +18,40 @@ import WidgetWotd from 'components/WidgetWotd'
  * @returns {node} jsx markup
  */
 function AppFrameContainer() {
-  /*
-  Note: the following values should match what's in your Nuxeo backend
-
-  You can hardcode changes below or override them using url query params, eg:
-  http://0.0.0.0:3002/?language=somethingElse&dialect_path=/garden/the/down
-  */
-  const { dialect_path, language } = useSearchParams({
-    defaultValues: {
-      language: "k'w",
-      // uid: '7ef2204c-f2d9-4904-b9bd-745e5ad01706',
-      dialect_path: "/FV/Workspaces/Data/Test/Test/k'w",
-    },
-    decode: [
-      // { name: 'uid', type: 'uri' },
-      { name: 'language', type: 'uri' },
-      { name: 'dialect_path', type: 'uri' },
-    ],
-  })
-  const { setRouteParams } = useRoute()
-  useEffect(() => {
-    setRouteParams({
-      matchedRouteParams: {
-        dialect_path,
-      },
-    })
-  }, [])
   return (
     <div className="AppFrame">
-      <nav>
-        <DialectHeader.Container />
-        <ul className="p-0 flex flex-row w-full justify-evenly">
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-          <li>
-            <Link to="/words">Words</Link>
-          </li>
-          <li>
-            <Link to="/topics">Topics</Link>
-          </li>
-        </ul>
-      </nav>
-      <main role="main">
+      <DialectHeader.Container className="relative z-10" />
+      <main role="main" className="relative z-0">
         <Suspender>
           <Switch>
-            <Route path="/about">
-              <About.Container language={language} />
+            <Route path="/:language/about">
+              <Helmet>
+                <title>About</title>
+              </Helmet>
+              <About.Container />
             </Route>
-            <Route path="/words">
+            <Route path="/:language/words">
+              <Helmet>
+                <title>Words</title>
+              </Helmet>
               <WordsListContainer />
             </Route>
-            <Route path="/topics">
-              <Topics.Container />
+            <Route path="/:language/*">
+              <div className="flex justify-center items-center min-h-screen">
+                <img src="/assets/images/under-construction.gif" alt="TODO" />
+              </div>
             </Route>
-            <Route path="/">
-              <Home />
-              <WidgetWotd.Container />
+            <Route path="/:language">
+              <Helmet>
+                <title>Home</title>
+              </Helmet>
+              <Home.Container />
             </Route>
           </Switch>
         </Suspender>
       </main>
     </div>
   )
-}
-
-// Example sub-pages that would be imported/lazy loaded
-// ============================================================
-function Home() {
-  return <h2>[Showing Home page]</h2>
 }
 
 export default AppFrameContainer

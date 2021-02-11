@@ -2,35 +2,47 @@
 
 <component name="ca.firstvoices.pageproviders.categories">
 
-    <require>org.nuxeo.runtime.started</require>
+  <require>org.nuxeo.runtime.started</require>
 
-    <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
-               point="providers">
-
-        <coreQueryPageProvider name="CATEGORIES_LIST_PP">
-            <pattern>
-                SELECT * FROM FVCategory where ecm:isTrashed = 0 and ecm:isVersion = 0
-            </pattern>
-            <sort column="dc:title" ascending="true"/>
-            <pageSize>50</pageSize>
-        </coreQueryPageProvider>
-        <coreQueryPageProvider name="CATEGORIES_LIST_PUBLIC_ONLY_PP">
-            <pattern>
-                SELECT * FROM FVCategory where ecm:isTrashed = 0 and ecm:isVersion = 0 and
-                ecm:isProxy = 1 and ecm:path STARTSWITH '/FV/sections/'
-            </pattern>
-            <sort column="dc:title" ascending="true"/>
-            <pageSize>50</pageSize>
-        </coreQueryPageProvider>
-        <coreQueryPageProvider name="CATEGORY_CHILDREN_PP">
-            <pattern>
-                SELECT * FROM Document where ecm:isTrashed = 0 and ecm:isVersion = 0 and
-                ecm:ancestorId = ?
-            </pattern>
-            <sort column="dc:title" ascending="true"/>
-            <pageSize>50</pageSize>
-        </coreQueryPageProvider>
+  <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
+             point="providers">
 
 
-    </extension>
+    <coreQueryPageProvider name="FIND_CATEGORIES_PP">
+      <pattern>
+        SELECT * from FVCategories where ecm:ancestorId=? and ecm:name='Categories' and ecm:isVersion=0 and
+        ecm:isTrashed=0
+      </pattern>
+      <sort column="dc:title" ascending="true"/>
+      <pageSize>1000</pageSize>
+    </coreQueryPageProvider>
+
+
+    <coreQueryPageProvider name="FIND_CATEGORY_IN_CATEGORIES_PP">
+      <pattern>
+        SELECT * from FVCategory where ecm:ancestorId=? and ecm:isVersion=0 and ecm:isTrashed=0
+      </pattern>
+      <sort column="dc:title" ascending="true"/>
+      <pageSize>1000</pageSize>
+    </coreQueryPageProvider>
+
+
+    <coreQueryPageProvider name="FIND_WORDS_WITH_CATEGORY_PP">
+      <pattern>
+        select * from FVWord where fv-word:categories = ? and ecm:isVersion=0 and ecm:isTrashed=0
+      </pattern>
+      <sort column="dc:title" ascending="true"/>
+      <pageSize>1000</pageSize>
+    </coreQueryPageProvider>
+
+    <coreQueryPageProvider name="FIND_WORDS_WITH_CATEGORY_PROXIED_PP">
+      <pattern>
+        select * from FVWord where fvproxy:proxied_categories = ? and ecm:isVersion=0 and ecm:isTrashed=0
+      </pattern>
+      <sort column="dc:title" ascending="true"/>
+      <pageSize>1000</pageSize>
+    </coreQueryPageProvider>
+
+
+  </extension>
 </component>

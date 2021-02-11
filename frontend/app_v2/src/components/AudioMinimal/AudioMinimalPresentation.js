@@ -1,16 +1,22 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import useIcon from 'common/useIcon'
 /**
  * @summary AudioMinimalPresentation
- * @version 1.0.1
+ * @version 1.0.0
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function AudioMinimalPresentation({ hasErrored, icons, isErrored, isLoading, isPlaying, onClick }) {
+function AudioMinimalPresentation({ hasErrored, icons, isErrored, isLoading, isPlaying, onClick, onKeyPress }) {
+  const buttonRef = useRef()
+  useEffect(() => {
+    if (isPlaying) {
+      buttonRef.current.focus()
+    }
+  }, [isPlaying])
   const iconsDefault = {
     Play: useIcon(
       'PlayCircle',
@@ -53,47 +59,56 @@ function AudioMinimalPresentation({ hasErrored, icons, isErrored, isLoading, isP
 
   if (isErrored || hasErrored) {
     return (
-      <button type="button" disabled>
+      <button type="button" disabled aria-live="off">
+        <div className="sr-only">Error loading audio</div>
         {Icons.Error}
       </button>
     )
   }
   if (isLoading) {
     return (
-      <button type="button" disabled>
+      <button type="button" disabled aria-live="off">
+        <div className="sr-only">Loading audio</div>
         {Icons.Play}
       </button>
     )
   }
-  if (isPlaying) {
-    return (
-      <button type="button" onClick={onClick}>
-        {Icons.Pause}
-      </button>
-    )
-  }
+
   return (
-    <button type="button" onClick={onClick}>
-      {Icons.Play}
+    <button type="button" onClick={onClick} onKeyDown={onKeyPress} ref={buttonRef} aria-live="off">
+      {isPlaying === true && (
+        <>
+          <div className="sr-only">Pause audio</div>
+          {Icons.Pause}
+        </>
+      )}
+      {isPlaying === false && (
+        <>
+          <div className="sr-only">Play audio</div>
+          {Icons.Play}
+        </>
+      )}
     </button>
   )
 }
 // PROPTYPES
 const { func, bool, object } = PropTypes
 AudioMinimalPresentation.propTypes = {
-  isPlaying: bool,
-  isLoading: bool,
-  isErrored: bool,
   hasErrored: bool,
-  onClick: func,
   icons: object,
+  isErrored: bool,
+  isLoading: bool,
+  isPlaying: bool,
+  onClick: func,
+  onKeyPress: func,
 }
 AudioMinimalPresentation.defaultProps = {
-  isPlaying: false,
-  isLoading: false,
-  isErrored: false,
   hasErrored: false,
+  isErrored: false,
+  isLoading: false,
+  isPlaying: false,
   onClick: () => {},
+  onKeyPress: () => {},
 }
 
 export default AudioMinimalPresentation

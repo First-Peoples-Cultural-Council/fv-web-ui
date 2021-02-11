@@ -35,6 +35,17 @@ const stopAudio = ({ player }) => {
   player.pause()
   player.currentTime = 0
 }
+const rwdAudio = ({ player, scrubMs }) => {
+  const curMs = Math.floor(player.currentTime * 1000)
+  const newTimeSec = (curMs - scrubMs) / 1000
+  player.currentTime = newTimeSec < 0 ? 0 : newTimeSec
+}
+const ffwdAudio = ({ player, scrubMs }) => {
+  const curMs = Math.floor(player.currentTime * 1000)
+  const durationMs = Math.floor(player.duration * 1000)
+  const newTimeMs = curMs + scrubMs
+  player.currentTime = newTimeMs > durationMs ? durationMs : newTimeMs / 1000
+}
 const isSameSrc = ({ src: oldSrc }, { src: newSrc }) => {
   return oldSrc === newSrc
 }
@@ -44,6 +55,7 @@ const audioMachine = Machine({
     player: new Audio(),
     src: undefined,
     errored: [],
+    scrubMs: 500,
   },
   states: {
     [AUDIO_ERRORED]: {
@@ -57,6 +69,9 @@ const audioMachine = Machine({
     [AUDIO_UNLOADED]: {
       on: {
         CLICK: {
+          target: AUDIO_LOADING,
+        },
+        ARROWRIGHT: {
           target: AUDIO_LOADING,
         },
         [AUDIO_ERRORED]: { target: AUDIO_ERRORED },
@@ -75,6 +90,16 @@ const audioMachine = Machine({
     [AUDIO_STOPPED]: {
       on: {
         CLICK: [
+          {
+            target: AUDIO_PLAYING,
+            cond: isSameSrc,
+            actions: playAudio,
+          },
+          {
+            target: AUDIO_LOADING,
+          },
+        ],
+        ARROWRIGHT: [
           {
             target: AUDIO_PLAYING,
             cond: isSameSrc,
@@ -111,6 +136,26 @@ const audioMachine = Machine({
           },
           {
             target: AUDIO_LOADING,
+          },
+        ],
+        ESCAPE: [
+          {
+            target: AUDIO_STOPPED,
+            cond: isSameSrc,
+            actions: pauseAudio,
+          },
+          {
+            target: AUDIO_LOADING,
+          },
+        ],
+        ARROWLEFT: [
+          {
+            actions: rwdAudio,
+          },
+        ],
+        ARROWRIGHT: [
+          {
+            actions: ffwdAudio,
           },
         ],
         [AUDIO_ERRORED]: { target: AUDIO_ERRORED },

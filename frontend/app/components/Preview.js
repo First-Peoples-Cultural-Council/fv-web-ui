@@ -341,19 +341,51 @@ export class Preview extends Component {
             />
           )
 
-          if (this.props.crop) {
+          if (selectn('mime-type', pictureResponse) === 'image/gif') {
             pictureTag = (
-              <div
-                style={{
-                  width: '100%',
-                  backgroundImage: "url('" + UIHelpers.getThumbnail(pictureResponse, 'Medium') + "')",
-                  backgroundSize: 'contain',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPositionX: '50%',
-                  ...this.props.tagStyles,
-                }}
+              <img
+                style={{ maxWidth: '100%', width: 'inherit', minWidth: 'inherit' }}
+                src={NavigationHelpers.getBaseURL() + pictureResponse.path}
+                alt={selectn('title', pictureResponse)}
               />
             )
+          }
+
+          if (selectn('properties.file:content.mime-type', pictureResponse) === 'image/gif') {
+            pictureTag = (
+              <img
+                style={{ maxWidth: '100%', width: 'inherit', minWidth: 'inherit' }}
+                src={pictureResponse.properties['file:content'].data}
+                alt={selectn('title', pictureResponse)}
+              />
+            )
+          }
+
+          if (this.props.crop) {
+            pictureTag =
+              selectn('mime-type', pictureResponse) === 'image/gif' ? (
+                <div
+                  style={{
+                    width: '100%',
+                    backgroundImage: "url('" + NavigationHelpers.getBaseURL() + pictureResponse.path + "')",
+                    backgroundSize: 'contain',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPositionX: '50%',
+                    ...this.props.tagStyles,
+                  }}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: '100%',
+                    backgroundImage: "url('" + UIHelpers.getThumbnail(pictureResponse, 'Medium') + "')",
+                    backgroundSize: 'contain',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPositionX: '50%',
+                    ...this.props.tagStyles,
+                  }}
+                />
+              )
           }
 
           if (this.props.minimal) {

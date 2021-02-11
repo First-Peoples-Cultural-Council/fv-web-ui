@@ -103,7 +103,7 @@ export default function withPagination(ComposedFilter, pageSize = 10, pageRange 
             </div>
           </div>
 
-          <div className="row PrintHide" style={{ marginTop: '15px' }}>
+          <div data-testid="Pagination" className="row PrintHide" style={{ marginTop: '15px' }}>
             <div className={classNames('col-md-7', 'col-xs-12')} style={{ paddingBottom: '15px' }}>
               <ReactPaginate
                 activeClassName={'active'}
@@ -192,7 +192,9 @@ export default function withPagination(ComposedFilter, pageSize = 10, pageRange 
           >
             <FVLabel transKey="results" defaultStr="Results" transform="first" />
           </label>
-          <span style={{ verticalAlign: '4px' }}>{selectn('resultsCount', this.props.metadata)}</span>
+          <span data-testid="Pagination__resultCount" style={{ verticalAlign: '4px' }}>
+            {selectn('resultsCount', this.props.metadata)}
+          </span>
         </div>
       )
     }

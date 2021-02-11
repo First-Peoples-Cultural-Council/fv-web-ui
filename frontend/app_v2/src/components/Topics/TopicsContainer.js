@@ -13,13 +13,8 @@ import TopicsData from 'components/Topics/TopicsData'
  * @returns {node} jsx markup
  */
 function TopicsContainer() {
-  return (
-    <TopicsData>
-      {({ topics }) => {
-        return <TopicsPresentation topics={topics} />
-      }}
-    </TopicsData>
-  )
+  const { topics } = TopicsData()
+  return <TopicsPresentation topics={topics} />
 }
 // PROPTYPES
 // const { string } = PropTypes

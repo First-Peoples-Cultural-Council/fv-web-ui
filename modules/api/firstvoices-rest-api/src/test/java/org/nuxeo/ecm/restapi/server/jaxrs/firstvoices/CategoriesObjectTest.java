@@ -48,48 +48,28 @@ public class CategoriesObjectTest extends AbstractTestDataCreatorTest {
   ObjectMapper mapper = new ObjectMapper();
 
   String categoryID;
+  String dialectId;
 
   @Before
   public void setup() {
     categoryID = dataCreator.getReference(session, "testCategory_proxy").getId();
-  }
+    dialectId = dataCreator.getReference(session, "testArchive").getId();
 
+  }
 
   @Test
   public void testCategoryDetails() throws IOException {
-    final String url = String.format("http://localhost:%s/api/v1/category/%s",
+    final String url = String.format("http://localhost:%s/api/v1/category/%s?inUseOnly=false",
         servletContainerFeature.getPort(),
-        categoryID);
+        dialectId);
 
     validateRESTResponse(url, (node, response) -> {
+
       assertEquals("Unexpected status code", 200, response.getStatusLine().getStatusCode());
-      assertEquals("Expect one result", 1, node.get("entries").size());
+      assertEquals("Expect 2 results", 2, node.get("categories").size());
     });
   }
 
-  @Test
-  public void testPublicCategories() throws IOException {
-    final String url =
-        String.format("http://localhost:%s/api/v1/category", servletContainerFeature.getPort());
-
-    validateRESTResponse(url, (node, response) -> {
-      assertEquals("Unexpected status code", 200, response.getStatusLine().getStatusCode());
-      assertEquals("Expect two results", 2, node.get("entries").size());
-    });
-  }
-
-
-  @Test
-  public void testNonPublicCategories() throws IOException {
-    final String url = String.format("http://localhost:%s/api/v1/category?publicOnly=false",
-        servletContainerFeature.getPort());
-
-    validateRESTResponse(url, (node, response) -> {
-      assertEquals("Unexpected status code", 200, response.getStatusLine().getStatusCode());
-      assertEquals("Expect four results", 4, node.get("entries").size());
-    });
-
-  }
 
   private void validateRESTResponse(String url, RESTRequestValidator validator) throws IOException {
     HttpClient client = new HttpAutomationClient(url).http();
