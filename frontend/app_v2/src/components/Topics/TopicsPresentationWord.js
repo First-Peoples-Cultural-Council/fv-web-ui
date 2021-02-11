@@ -54,6 +54,7 @@ function TopicsPresentationWord({ audio, heading, image, subheading, url }) {
         <h1
           className={`
           text-xl
+          text-center
           lg:text-2xl
           xl:text-5xl
           font-medium

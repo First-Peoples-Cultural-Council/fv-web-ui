@@ -5,8 +5,8 @@ import {
   WIDGET_LIST,
   WIDGET_LIST_WORD,
   WIDGET_LIST_PHRASE,
+  WIDGET_LIST_STORY,
   // WIDGET_LIST_SONG,
-  // WIDGET_LIST_STORY,
   // WIDGET_LIST_MIXED,
   WIDGET_LIST_GENERIC,
 } from 'common/constants'
@@ -106,7 +106,7 @@ function homeAdaptor(response) {
         return false
       })
       const _content = content.map(
-        ({ audio: audioObj, count, heading, id, image: imageObj, subheading, title, type: contentType }) => {
+        ({ audio: audioObj, count, heading, id, image: imageObj, subheading, type: contentType }) => {
           let image
           if (imageObj) {
             image = imageObj.path
@@ -129,11 +129,21 @@ function homeAdaptor(response) {
           if (contentType === 'PhraseBook') {
             return {
               type: WIDGET_LIST_PHRASE,
-              id, // TODO: DROP?
-              heading: title,
+              id,
+              heading,
               image,
               listCount: count,
               url: `phrases/${id}`,
+            }
+          }
+          if (contentType === 'FVBook') {
+            return {
+              type: WIDGET_LIST_STORY,
+              id,
+              heading,
+              subheading,
+              image,
+              url: `stories/${id}`,
             }
           }
           return {
@@ -146,7 +156,6 @@ function homeAdaptor(response) {
             listCount: count,
             listType: undefined,
             subheading,
-            title,
             url: undefined, // TODO ?
           }
         }

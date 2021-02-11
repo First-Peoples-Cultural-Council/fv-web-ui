@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-// import dev from './dev.png'
 import {
   WIDGET_LIST_WORD,
   WIDGET_LIST_PHRASE,
@@ -26,7 +25,7 @@ import TopicsPresentationStory from 'components/Topics/TopicsPresentationStory'
  *
  * @returns {node} jsx markup
  */
-function TopicsPresentation({ topics }) {
+function TopicsPresentation({ title, topics }) {
   const topicComponents = topics.map(({ audio, heading, image, listCount, subheading, type, url }, index) => {
     const key = `topic${index}`
     switch (type) {
@@ -61,12 +60,18 @@ function TopicsPresentation({ topics }) {
         return null
     }
   })
-  return <div className="Topics flex flex-wrap">{topicComponents}</div>
+  return (
+    <div className="Topics flex flex-wrap">
+      <h2 className="mb-12 text-4xl text-fv-blue font-bold uppercase sm:text-5xl">{title}</h2>
+      {topicComponents}
+    </div>
+  )
 }
 // PROPTYPES
-const { array } = PropTypes
+const { array, string } = PropTypes
 TopicsPresentation.propTypes = {
   topics: array,
+  title: string,
 }
 
 export default TopicsPresentation
