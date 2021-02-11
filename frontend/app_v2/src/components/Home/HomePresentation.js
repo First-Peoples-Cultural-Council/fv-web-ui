@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import WidgetWotd from 'components/WidgetWotd'
+import ContactUs from 'components/ContactUs'
 import Topics from 'components/Topics'
+import WidgetWotd from 'components/WidgetWotd'
 import Hero from 'components/Hero'
 import CircleImage from 'components/CircleImage'
 import useIcon from 'common/useIcon'
@@ -163,8 +164,19 @@ function HomePresentation({
           }
 
           if (type === WIDGET_CONTACT) {
+            const { contactText, contactEmail, dialectId, links, title } = widgetProps
             // console.log('WIDGET_CONTACT', widgetProps)
-            return <div key={index}>WIDGET_CONTACT</div>
+            return (
+              <div key={index}>
+                <ContactUs.Container
+                  contactText={contactText}
+                  contactEmail={contactEmail}
+                  dialectId={dialectId}
+                  links={links}
+                  title={title}
+                />
+              </div>
+            )
           }
 
           return <div key={index}>Widget: {type}</div>
