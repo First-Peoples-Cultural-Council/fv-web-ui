@@ -31,10 +31,21 @@ const get = (path) => {
     }
   )
 }
-const post = (path, bodyObject) => {
-  return api.post(path, { json: bodyObject }).then(() => {
-    return
-  })
+const post = (path, bodyObject, dataAdaptor) => {
+  return api
+    .post(path, { json: bodyObject })
+    .then(handleSuccessAndError)
+    .then(
+      (response) => {
+        if (dataAdaptor) {
+          return { isLoading: false, data: dataAdaptor(response), dataOriginal: response }
+        }
+        return { isLoading: false, data: response, dataOriginal: response }
+      },
+      (error) => {
+        return { isLoading: false, error }
+      }
+    )
 }
 
 export default {
@@ -111,6 +122,7 @@ export default {
       to: recipientEmail,
     }
 
+    // TODO: Update this path when BE ready and handle success response in UI
     return post('/nuxeo/site/automation/Document.Mail', { params: params, input: docId })
   },
 }
