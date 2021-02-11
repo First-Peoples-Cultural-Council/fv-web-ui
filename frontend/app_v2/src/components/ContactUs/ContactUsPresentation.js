@@ -11,7 +11,7 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function ContactUsPresentation({ title, contactText, errorMessage, links, handleSubmit }) {
+function ContactUsPresentation({ title, contactFormRef, contactText, errorMessage, links, handleSubmit }) {
   const getIconName = (link) => {
     if (link.includes('facebook')) {
       return 'Facebook'
@@ -52,7 +52,7 @@ function ContactUsPresentation({ title, contactText, errorMessage, links, handle
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-center mb-12 text-4xl text-fv-blue font-bold uppercase sm:text-5xl">{title}</h2>
         <div className="grid grid-cols-6">
-          <form className="col-span-6 sm:col-span-3" onSubmit={handleSubmit}>
+          <form ref={contactFormRef} className="col-span-6 sm:col-span-3" onSubmit={handleSubmit}>
             <div className="grid grid-cols-7 gap-3">
               {errorMessageElement}
               <label
@@ -64,6 +64,7 @@ function ContactUsPresentation({ title, contactText, errorMessage, links, handle
               <input
                 className="col-span-5 bg-white border border-gray-500 rounded-xl py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                 id="contactName"
+                name="contactName"
                 type="text"
               />
               <label
@@ -75,6 +76,7 @@ function ContactUsPresentation({ title, contactText, errorMessage, links, handle
               <input
                 className="col-span-5 inline bg-white border border-gray-500 rounded-xl py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                 id="contactEmail"
+                name="contactEmail"
                 type="email"
               />
               <div className="col-span-7">
@@ -87,6 +89,7 @@ function ContactUsPresentation({ title, contactText, errorMessage, links, handle
                 <textarea
                   className=" no-resize appearance-none block w-full bg-white border border-gray-500 rounded-xl py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 h-48 resize-none"
                   id="contactMessage"
+                  name="contactMessage"
                   defaultValue={''}
                 />
               </div>

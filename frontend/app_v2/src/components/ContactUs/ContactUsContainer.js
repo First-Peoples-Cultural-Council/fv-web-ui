@@ -13,9 +13,10 @@ import ContactUsData from 'components/ContactUs/ContactUsData'
  * @returns {node} jsx markup
  */
 function ContactUsContainer({ contactText, dialectId, links, siteEmail, title }) {
-  const { handleSubmit, errorMessage } = ContactUsData({ siteEmail, dialectId })
+  const { contactFormRef, handleSubmit, errorMessage } = ContactUsData({ siteEmail, dialectId })
   return (
     <ContactUsPresentation
+      contactFormRef={contactFormRef}
       contactText={contactText}
       errorMessage={errorMessage}
       title={title}

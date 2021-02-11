@@ -1,5 +1,8 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import * as yup from 'yup'
+
 import api from 'services/api'
+import { getFormData, validateForm } from 'common/FormHelpers'
 /**
  * @summary ContactUsData
  * @version 1.0.0
@@ -10,49 +13,33 @@ import api from 'services/api'
  */
 function ContactUsData({ dialectId, siteEmail }) {
   const [errorMessage, setErrorMessage] = useState(null)
+  const contactFormRef = useRef()
+  const validator = yup.object().shape({
+    contactName: yup.string().min(3).required('A name is required'),
+    contactEmail: yup.string().email().required('A valid email is required'),
+    contactMessage: yup.string().min(3).required('A message is required'),
+  })
 
-  const emailValidation = (email) => {
-    if (/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
-      return true
-    }
-    if (email.trim() === '') {
-      setErrorMessage('Email is required')
-      return false
-    }
-    setErrorMessage('Please enter a valid email')
-    return false
-  }
-
-  const textValidation = (fieldName, fieldValue) => {
-    if (fieldValue === undefined || fieldValue.trim() === '') {
-      setErrorMessage(`${fieldName} is required`)
-      return false
-    }
-    if (fieldValue.trim().length < 3) {
-      setErrorMessage(`${fieldName} needs to be at least three characters`)
-      return false
-    }
-    return true
-  }
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    const { contactName, contactEmail, contactMessage } = event.target.elements
-    const params = {
-      docId: dialectId,
-      name: contactName.value,
-      email: contactEmail.value,
-      message: contactMessage.value,
-      recipientEmail: siteEmail,
-    }
-    const validEmail = emailValidation(contactEmail.value)
-    const validName = textValidation('Name', contactName.value)
-    const validMessage = textValidation('Message', contactMessage.value)
-    if (validEmail && validName && validMessage) {
-      api.postMail(params)
+
+    const formData = getFormData({ formReference: contactFormRef })
+    const validationResults = await validateForm({ formData, validator })
+
+    if (validationResults.valid) {
+      api.postMail({
+        docId: dialectId,
+        name: formData.contactName,
+        email: formData.contactEmail,
+        message: formData.contactMessage,
+        recipientEmail: siteEmail,
+      })
+    } else {
+      setErrorMessage(validationResults.errors[0].message)
     }
   }
   return {
+    contactFormRef,
     errorMessage,
     handleSubmit,
   }
