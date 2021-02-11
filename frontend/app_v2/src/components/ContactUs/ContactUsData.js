@@ -11,7 +11,7 @@ import { getFormData, validateForm } from 'common/FormHelpers'
  * @param {object} props
  *
  */
-function ContactUsData({ dialectId, siteEmail }) {
+function ContactUsData({ dialectId, contactEmail }) {
   const [formErrors, setFormErrors] = useState([])
   const contactFormRef = useRef()
   const validator = yup.object().shape({
@@ -22,7 +22,7 @@ function ContactUsData({ dialectId, siteEmail }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    // Clear out any previous errors
+    // Clear out errors from any previous submits
     setFormErrors([])
 
     const formData = getFormData({ formReference: contactFormRef })
@@ -34,7 +34,7 @@ function ContactUsData({ dialectId, siteEmail }) {
         name: formData.Name,
         email: formData.Email,
         message: formData.Message,
-        recipientEmail: siteEmail,
+        recipientEmail: contactEmail,
       })
     } else {
       setFormErrors(validationResults.errors)
