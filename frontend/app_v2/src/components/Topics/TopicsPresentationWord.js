@@ -13,11 +13,16 @@ import { Link } from 'react-router-dom'
  * @returns {node} jsx markup
  */
 function TopicsPresentationWord({ audio, heading, image, subheading, url }) {
-  const styles = image
-    ? {
-        backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)), url(${image})`,
-      }
-    : {}
+  const styles = Object.assign(
+    {
+      aspectRatio: '545/403',
+    },
+    image
+      ? {
+          backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)), url(${image})`,
+        }
+      : {}
+  )
   return (
     <div
       style={styles}

@@ -12,11 +12,16 @@ import { Link } from 'react-router-dom'
  * @returns {node} jsx markup
  */
 function TopicsPresentationPhrase({ heading, image, subheading, listCount, url }) {
-  const styles = image
-    ? {
-        backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)), url(${image})`,
-      }
-    : {}
+  const styles = Object.assign(
+    {
+      aspectRatio: '545/403',
+    },
+    image
+      ? {
+          backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)), url(${image})`,
+        }
+      : {}
+  )
   return (
     <div
       style={styles}
@@ -32,6 +37,7 @@ function TopicsPresentationPhrase({ heading, image, subheading, listCount, url }
         xl:rounded-50
         py-6
         text-white
+        w-full
       `}
     >
       {/* <img style={{position: 'absolute', top: 0, left: 0, opacity: 0.5}} src={dev} /> */}
