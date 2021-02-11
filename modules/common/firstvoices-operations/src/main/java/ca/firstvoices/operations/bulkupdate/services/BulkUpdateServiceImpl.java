@@ -41,6 +41,8 @@ public class BulkUpdateServiceImpl implements BulkUpdateService {
         }
       }
     }
+
+    session.save();
   }
 }
 

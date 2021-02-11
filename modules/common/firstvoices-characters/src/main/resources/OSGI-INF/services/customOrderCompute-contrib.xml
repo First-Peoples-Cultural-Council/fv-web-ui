@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
+<component name="ca.firstvoices.characters.services.customOrderCompute.contrib">
 
-<component
-  name="ca.firstvoices.characters.services.customOrderComputeServiceImpl">
+  <require>ca.firstvoices.characters.services.charactersCore.contrib</require>
 
   <implementation
     class="ca.firstvoices.characters.services.CustomOrderComputeServiceImpl"/>

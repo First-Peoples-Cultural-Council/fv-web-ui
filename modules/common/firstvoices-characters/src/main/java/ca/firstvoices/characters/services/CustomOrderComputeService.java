@@ -29,8 +29,23 @@ public interface CustomOrderComputeService {
   DocumentModel computeAssetNativeOrderTranslation(CoreSession session, DocumentModel asset,
       boolean save, boolean publish);
 
+  /**
+   * Method will update the mapping on FVCharacter to ASCII mapping based on order
+   *
+   * @param session
+   * @param alphabet
+   * @param chars
+   */
   void updateCustomOrderCharacters(CoreSession session,
       DocumentModel alphabet, DocumentModelList chars);
+
+  /**
+   * Method will update the mapping on FVCharacter to ASCII mapping based on order
+   *
+   * @param session
+   * @param alphabet
+   */
+  void updateCustomOrderCharacters(CoreSession session, DocumentModel alphabet);
 
   /**
    * Generates the custom order string and applies it to the element Core logic of custom order
@@ -42,14 +57,32 @@ public interface CustomOrderComputeService {
    * @return
    */
   DocumentModel computeCustomOrder(DocumentModel element, DocumentModel alphabet,
-      DocumentModel[] chars);
+      DocumentModelList chars);
 
   /**
-   * Returns characters in order
+   * Validate alphabet order
    *
    * @param session
-   * @param asset
+   * @param alphabet
    * @return
    */
-  DocumentModel[] loadCharacters(CoreSession session, DocumentModel asset);
+  boolean validateAlphabetOrder(CoreSession session, DocumentModel alphabet);
+
+  /**
+   * Checks if all characters in the alphabet have custom order assigned
+   *
+   * @param session
+   * @param alphabet
+   * @return
+   */
+  boolean isAlphabetComputed(CoreSession session, DocumentModel alphabet);
+
+  /**
+   * Checks if all characters in the alphabet have custom order assigned
+   *
+   * @param session
+   * @param characters
+   * @return
+   */
+  boolean isAlphabetComputed(CoreSession session, DocumentModelList characters);
 }

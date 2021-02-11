@@ -6,6 +6,7 @@
     <operation class="ca.firstvoices.characters.operations.CleanConfusables"/>
     <operation class="ca.firstvoices.characters.operations.AddConfusables"/>
     <operation class="ca.firstvoices.characters.operations.ConfusablesStatus"/>
+    <operation class="ca.firstvoices.characters.operations.CustomOrderStatus"/>
     <operation class="ca.firstvoices.characters.operations.ComputeCustomOrder"/>
   </extension>
 
@@ -18,6 +19,9 @@
       <administrator>true</administrator>
     </binding>
     <binding name="Alphabet.ConfusablesStatus">
+      <administrator>true</administrator>
+    </binding>
+    <binding name="Alphabet.CustomOrderStatus">
       <administrator>true</administrator>
     </binding>
     <binding name="Alphabet.ComputeCustomOrder">

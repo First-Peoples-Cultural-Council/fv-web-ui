@@ -29,11 +29,6 @@ beforeEach(() => {
 
 afterEach(() => {
   cy.log('Test complete')
-  // TODO: could we...
-  // TODO: a) not need to wait?
-  // TODO: b) if we do need to wait, only wait when we are recording?
-  // Wait to ensure video recording is not cut early on failed test.
-  cy.wait(1000)
 })
 
 // Login
@@ -88,7 +83,6 @@ Cypress.Commands.add('login', (obj = {}) => {
     form: true, // we are submitting a regular form body
     body,
   })
-  cy.wait(2000)
   cy.reload(true)
   cy.log('--- SHOULD BE LOGGED IN ---')
 })
@@ -98,7 +92,6 @@ Cypress.Commands.add('logout', () => {
   cy.log('--- LOGGING OUT ---')
   cy.request({ method: 'GET', url: Cypress.env('FRONTEND') + '/nuxeo/logout', failOnStatusCode: false })
   cy.visit('')
-  cy.wait(2000)
   cy.log('--- SHOULD BE LOGGED OUT ---')
 })
 
@@ -152,7 +145,6 @@ Cypress.Commands.add('AlphabetCharacters', (obj) => {
   cy.findByTestId('AlphabetCharacters').within(() => {
     cy.findByText(_obj.letter).click()
   })
-  cy.wait(500)
 
   if (_obj.confirmData) {
     cy.log('--- AlphabetCharacters: Confirm data  ---')
@@ -163,14 +155,11 @@ Cypress.Commands.add('AlphabetCharacters', (obj) => {
   if (_obj.shouldPaginate) {
     cy.log('--- AlphabetCharacters: Navigate to next page  ---')
     // Navigate to next page
-    cy.wait(500)
     cy.findByTestId('pagination__next').click()
-    cy.wait(500)
 
     if (_obj.confirmData) {
       cy.log('--- AlphabetCharacters: Confirm data  ---')
       // Confirm data
-      cy.wait(500)
       cy.findByTestId('DictionaryList__row').should('exist')
     }
   }
@@ -178,7 +167,6 @@ Cypress.Commands.add('AlphabetCharacters', (obj) => {
     cy.log('--- AlphabetCharacters: Clear filter ---')
     cy.findByText(/stop browsing alphabetically/i).click()
   }
-  cy.wait(3000)
 })
 
 // DialectFilterList
@@ -215,11 +203,9 @@ Cypress.Commands.add('DialectFilterList', (obj) => {
   cy.log('--- Running cypress/support/commands.js > DialectFilterList ---')
   cy.log('--- DialectFilterList: Filter by category  ---')
   // Filter by category
-  cy.wait(1500)
   cy.findByTestId('DialectFilterList').within(() => {
     cy.findByText(_obj.category).click()
   })
-  cy.wait(500)
   if (_obj.confirmActiveClass) {
     cy.findByTestId('DialectFilterList').within(() => {
       cy.findByText(_obj.category).should('have.class', _obj.activeClassName)
@@ -235,14 +221,13 @@ Cypress.Commands.add('DialectFilterList', (obj) => {
   if (_obj.shouldPaginate) {
     cy.log('--- DialectFilterList: Navigate to next page  ---')
     // Navigate to next page
-    cy.wait(500)
+
     cy.findByTestId('pagination__next').click()
-    cy.wait(500)
 
     if (_obj.confirmData) {
       cy.log('--- DialectFilterList: Confirm data  ---')
       // Confirm data
-      cy.wait(500)
+
       cy.findByTestId('DictionaryList__row').should('exist')
     }
   }
@@ -280,7 +265,6 @@ Cypress.Commands.add('FlashcardList', (obj) => {
 
   cy.log('--- FlashcardList: Enter flashcard mode  ---')
   cy.findByText(/Flashcard view/i).click()
-  cy.wait(500)
 
   if (_obj.confirmData) {
     cy.log('--- FlashcardList: Confirm flashcard  ---')
@@ -289,12 +273,11 @@ Cypress.Commands.add('FlashcardList', (obj) => {
 
   if (_obj.shouldPaginate) {
     cy.log('--- FlashcardList: Paginate  ---')
-    cy.wait(500)
     cy.findByTestId('pagination__next').click()
 
     if (_obj.confirmData) {
       cy.log('--- FlashcardList: Confirm flashcard  ---')
-      cy.wait(500)
+
       cy.findByTestId('Flashcard').should('exist')
     }
   }
@@ -396,12 +379,11 @@ Cypress.Commands.add('browseSearch', (obj) => {
 
   if (_obj.shouldPaginate) {
     cy.log('--- browseSearch: Paginate  ---')
-    cy.wait(500)
     cy.findByTestId('pagination__next').click()
 
     if (_obj.confirmData) {
       cy.log('--- browseSearch: Confirm data  ---')
-      cy.wait(500)
+
       cy.findByTestId('DictionaryList__row').should('exist')
     }
     if (_obj.confirmNoData) {
@@ -560,13 +542,11 @@ Cypress.Commands.add(
 
         cy.findByText(browseButtonText, { exact: false }).click()
       })
-    cy.wait(1000)
     cy.findByText('select existing', { exact: false }).should('exist')
     cy.findByTestId('withFilter').within(() => {
       cy.findByTestId('properties.dc-title').type(mediaTitle, { timeout: 8000 })
       cy.findByText('Filter').click()
     })
-    cy.wait(500)
     cy.findByTestId('MediaList').within(() => {
       cy.findByLabelText(`${mediaTitle}`, { exact: false }).click()
     })
@@ -587,7 +567,6 @@ Cypress.Commands.add(
 
         cy.findByText(browseButtonText, { exact: false }).click()
       })
-    cy.wait(1000)
     cy.findByTestId('BrowseComponent__dialogContent').within(() => {
       cy.findByText(`${itemTitle}`, { exact: false })
         .parent('[data-testid=DictionaryList__row]')
@@ -664,22 +643,3 @@ Cypress.Commands.add('formPopulateCulturalNotes', ({ prefix }) => {
       cy.get('input.form-control[type=text]:first').invoke('val').should('be.eq', `${prefix} cultural note 1`)
     })
 })
-
-Cypress.Commands.add(
-  'clickandwait',
-  {
-    prevSubject: true,
-  },
-  (subject, amount) => {
-    cy.wrap(subject).click()
-    if (RegExp('[0-9]{1,4}').test(amount)) {
-      cy.wait(amount)
-    } else if (amount === 'long') {
-      cy.wait(2000)
-    } else if (amount === 'medium') {
-      cy.wait(1000)
-    } else {
-      cy.wait(500)
-    }
-  }
-)

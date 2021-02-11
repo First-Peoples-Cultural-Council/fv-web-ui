@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<component name="ca.firstvoices.pageproviders.categories">
+<component name="ca.firstvoices.pageproviders.phrasebooks">
 
   <require>org.nuxeo.runtime.started</require>
 
   <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
              point="providers">
 
-
-    <coreQueryPageProvider name="FIND_CATEGORIES_PP">
+    <coreQueryPageProvider name="FIND_PHRASEBOOKS_PP">
       <pattern>
-        SELECT * from FVCategories where ecm:ancestorId=? and ecm:name='Categories' and ecm:isVersion=0 and
+        SELECT * from FVCategories where ecm:ancestorId=? and ecm:name='Phrase Books' and ecm:isVersion=0 and
         ecm:isTrashed=0
       </pattern>
       <sort column="dc:title" ascending="true"/>
@@ -18,7 +17,7 @@
     </coreQueryPageProvider>
 
 
-    <coreQueryPageProvider name="FIND_CATEGORY_IN_CATEGORIES_PP">
+    <coreQueryPageProvider name="FIND_PHRASEBOOKS_IN_PHRASEBOOK_PP">
       <pattern>
         SELECT * from FVCategory where ecm:ancestorId=? and ecm:isVersion=0 and ecm:isTrashed=0
       </pattern>
@@ -27,21 +26,22 @@
     </coreQueryPageProvider>
 
 
-    <coreQueryPageProvider name="FIND_WORDS_WITH_CATEGORY_PP">
+    <coreQueryPageProvider name="FIND_PHRASES_WITH_PHRASEBOOK_PP">
       <pattern>
-        select * from FVWord where fv-word:categories = ? and ecm:isVersion=0 and ecm:isTrashed=0
+        select * from FVPhrase where fv-phrase:phrase_books = ? and ecm:isVersion=0 and ecm:isTrashed=0
       </pattern>
       <sort column="dc:title" ascending="true"/>
       <pageSize>1000</pageSize>
     </coreQueryPageProvider>
 
-    <coreQueryPageProvider name="FIND_WORDS_WITH_CATEGORY_PROXIED_PP">
+    <coreQueryPageProvider name="FIND_PHRASES_WITH_PHRASEBOOK_PROXIED_PP">
       <pattern>
-        select * from FVWord where fvproxy:proxied_categories = ? and ecm:isVersion=0 and ecm:isTrashed=0
+        select * from FVPhrase where fvproxy:proxied_categories = ? and ecm:isVersion=0 and ecm:isTrashed=0
       </pattern>
       <sort column="dc:title" ascending="true"/>
       <pageSize>1000</pageSize>
     </coreQueryPageProvider>
+
 
 
   </extension>

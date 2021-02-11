@@ -20,7 +20,7 @@ const copy = {
       linkCreateAnother: 'Create a new phrase book',
       detailView: 'Detail page',
       browseView: 'Browse all phrase books',
-      editView: 'Edit',
+      editView: 'Edit Phrasebook',
       noName: '(No name)',
       thanks: 'Thanks for creating a phrase book. Your contributions help make the site better!',
       title: 'We created a new phrase book',
