@@ -2,7 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import WidgetWotd from 'components/WidgetWotd'
 import Topics from 'components/Topics'
-
+import Hero from 'components/Hero'
+import CircleImage from 'components/CircleImage'
+import useIcon from 'common/useIcon'
 import {
   WIDGET_HERO,
   WIDGET_SCHEDULE,
@@ -33,17 +35,79 @@ function HomePresentation({
   // isLoading,
   // error,
   data,
-  // dataOriginal,
+  language,
 }) {
   const widgets = data ? data.widgets : []
-
+  // TODO: use a better fallback icon
+  const fallBackIcon = useIcon(
+    'PlayCircle',
+    `
+        fill-current
+        w-56
+        h-56
+        lg:w-72
+        lg:h-72
+      `
+  )
   return (
     <div className="Home">
       {widgets.length > 0 &&
         widgets.map(({ type, ...widgetProps }, index) => {
           if (type === WIDGET_HERO) {
-            // console.log('WIDGET_HERO props', widgetProps)
-            return <div key={index}>WIDGET_HERO</div>
+            const { uid, background, variant } = widgetProps
+            const foregroundIcon = language.logoUrl ? (
+              <CircleImage.Presentation
+                src={language.logoUrl}
+                classNameWidth="w-56 lg:w-72"
+                classNameHeight="h-56 lg:h-72"
+              />
+            ) : (
+              fallBackIcon
+            )
+            return (
+              <Hero.Presentation
+                key={index}
+                background={background}
+                foreground={<h1 className="font-bold text-3xl">{language.title}</h1>}
+                foregroundIcon={foregroundIcon}
+                variant={variant}
+                uid={uid}
+                search={
+                  <div
+                    className={`
+                    bg-white
+                    flex
+                    px-12
+                    py-6
+                    rounded-25
+                    w-3/4
+                  `}
+                  >
+                    <button type="button">
+                      {useIcon(
+                        'Search',
+                        `
+                          fill-current
+                          h-12
+                          text-black
+                          w-12
+                        `
+                      )}
+                    </button>
+                    <input
+                      className={`
+                        ml-8
+                        text-black
+                        w-full
+                        text-4xl
+                      `}
+                      type="text"
+                      placeholder={`Search ${language.title}`}
+                    />
+                  </div>
+                }
+              />
+            )
           }
 
           if (type === WIDGET_WELCOME) {
@@ -112,6 +176,7 @@ function HomePresentation({
 const { object } = PropTypes
 HomePresentation.propTypes = {
   data: object,
+  language: object,
 }
 
 export default HomePresentation

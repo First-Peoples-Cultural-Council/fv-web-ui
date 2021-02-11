@@ -13,9 +13,9 @@ import PropTypes from 'prop-types'
  * @returns {node} jsx markup
  */
 
-function TopicsPresentationStory({ heading, image, subheading, url }) {
+function TopicsPresentationStory(/*{ heading, image, subheading, url }*/) {
   // eslint-disable-next-line
-  console.log('TopicsPresentationStory', { heading, image, subheading, url })
+  // console.log('TopicsPresentationStory', { heading, image, subheading, url })
   return <div className="Topic">TopicsPresentationStory</div>
 }
 // PROPTYPES

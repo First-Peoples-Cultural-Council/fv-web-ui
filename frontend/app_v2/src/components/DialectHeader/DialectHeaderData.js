@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import useGetSections from 'common/useGetSections'
 
 /**
  * @summary DialectHeaderData
@@ -9,55 +9,52 @@ import PropTypes from 'prop-types'
  * @param {function} props.children
  *
  */
-function DialectHeaderData({ children }) {
-  const dialectPath = '/DIALECT_PATH_GOES_HERE'
-  // Note: change dialectName variable to a language name on your local docker
-  const dialectName = 'ÜgwÛ'
+function DialectHeaderData() {
+  // TODO: INVESTIGATE WHY logoUrl DOESN'T UPDATE!
+  const { title /*, logoUrl*/ } = useGetSections()
+  // console.log('testing', logoUrl)
+
   const currentUser = { userInitials: 'TU' }
   const menuData = [
     {
       title: 'Dictionary',
       itemsData: [
-        { title: 'Words', href: `${dialectPath}/words` },
-        { title: 'Phrases', href: `${dialectPath}/phrases` },
-        { title: 'Alphabet', href: `${dialectPath}/alphabet` },
-        { title: 'Browse by Topic', href: `${dialectPath}/topics` },
+        { title: 'Words', href: `/${title}/words` },
+        { title: 'Phrases', href: `/${title}/phrases` },
+        { title: 'Alphabet', href: `/${title}/alphabet` },
+        { title: 'Browse by Topic', href: `/${title}/topics` },
       ],
     },
     {
       title: 'Learn',
       itemsData: [
-        { title: 'Songs', href: `${dialectPath}/songs` },
-        { title: 'Stories', href: `${dialectPath}/stories` },
-        { title: 'Games', href: `${dialectPath}/games` },
+        { title: 'Songs', href: `/${title}/songs` },
+        { title: 'Stories', href: `/${title}/stories` },
+        { title: 'Games', href: `/${title}/games` },
       ],
     },
     {
       title: 'Resources',
       itemsData: [
-        { title: 'Kids Site', href: `${dialectPath}/kids` },
-        { title: 'Mobile App', href: `${dialectPath}/app` },
-        { title: 'Keyboard App', href: `${dialectPath}/keyboard` },
+        { title: 'Kids Site', href: `/${title}/kids` },
+        { title: 'Mobile App', href: `/${title}/app` },
+        { title: 'Keyboard App', href: `/${title}/keyboard` },
       ],
     },
     {
       title: 'About',
       itemsData: [
-        { title: 'Our Language', href: `${dialectPath}/ourlanguage` },
-        { title: 'Our People', href: `/about?language=${dialectName}` },
+        { title: 'Our Language', href: `/${title}/ourlanguage` },
+        { title: 'Our People', href: `/${title}/about` },
       ],
     },
-    { title: 'Kids', href: `${dialectPath}/kids` },
+    { title: 'Kids', href: `/${title}/kids` },
   ]
-  return children({
+  return {
+    title,
     currentUser,
     menuData,
-  })
-}
-// PROPTYPES
-const { func } = PropTypes
-DialectHeaderData.propTypes = {
-  children: func,
+  }
 }
 
 export default DialectHeaderData

@@ -1,5 +1,6 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
+import useGetSections from 'common/useGetSections'
 import HomePresentation from 'components/Home/HomePresentation'
 import HomeData from 'components/Home/HomeData'
 
@@ -14,7 +15,21 @@ import HomeData from 'components/Home/HomeData'
  */
 function HomeContainer() {
   const { isLoading, error, data, dataOriginal } = HomeData()
-  return <HomePresentation isLoading={isLoading} error={error} data={data} dataOriginal={dataOriginal} />
+  const { title, uid, path, logoUrl } = useGetSections()
+  return (
+    <HomePresentation
+      isLoading={isLoading}
+      error={error}
+      data={data}
+      dataOriginal={dataOriginal}
+      language={{
+        title,
+        uid,
+        path,
+        logoUrl,
+      }}
+    />
+  )
 }
 // PROPTYPES
 // const { string } = PropTypes

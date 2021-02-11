@@ -25,6 +25,7 @@ import PauseCircle from 'common/icons/PauseCircle'
 import PlaceHolder from 'common/icons/PlaceHolderIcon'
 import PlayCircle from 'common/icons/PlayCircle'
 import Quote from 'common/icons/Quote'
+import Search from 'common/icons/Search'
 import Resources from 'common/icons/ResourcesIcon'
 import TimesCircle from 'common/icons/TimesCircle'
 import Twitter from 'common/icons/Twitter'
@@ -62,6 +63,7 @@ function useIcon(iconName, iconStyling) {
     PlayCircle,
     Quote,
     Resources,
+    Search,
     TimesCircle,
     Twitter,
     WebShare,

@@ -12,15 +12,15 @@ import PropTypes from 'prop-types'
  *
  * @returns {node} jsx markup
  */
-function TopicsPresentationSong({ audio, heading, image, subheading, url }) {
+function TopicsPresentationSong(/*{ audio, heading, image, subheading, url }*/) {
   // eslint-disable-next-line
-  console.log('TopicsPresentationSong', {
-    audio,
-    heading,
-    image,
-    subheading,
-    url,
-  })
+  // console.log('TopicsPresentationSong', {
+  //   audio,
+  //   heading,
+  //   image,
+  //   subheading,
+  //   url,
+  // })
   return <div className="Topic">TopicsPresentationSong</div>
 }
 // PROPTYPES
