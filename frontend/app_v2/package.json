@@ -31,7 +31,8 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "tailwindcss": "^2.0.2",
-    "xstate": "^4.16.0"
+    "xstate": "^4.16.0",
+    "yup": "^0.32.8"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
