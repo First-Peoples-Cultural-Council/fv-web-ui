@@ -119,10 +119,10 @@ function HomePresentation({
           }
 
           if (type === WIDGET_LIST) {
-            // console.log('WIDGET_LIST', widgetProps)
+            const { title, content } = widgetProps
             return (
               <div key={index} className="px-6">
-                <Topics.Container key={index} />
+                <Topics.Presentation key={index} topics={content} title={title} />
               </div>
             )
           }
