@@ -39,7 +39,7 @@ function PaginationPresentation({
   showPageSize,
 }) {
   return (
-    <div className="Pagination">
+    <div data-testid="Pagination" className="Pagination">
       <div className="row">
         <div className="col-xs-12">{children}</div>
       </div>
@@ -90,7 +90,9 @@ function PaginationPresentation({
               <label className="Pagination__resultsLabel">
                 <FVLabel transKey="results" defaultStr="Results" transform="first" />
               </label>
-              <span className="Pagination__resultsCount">{resultsCount}</span>
+              <span data-testid="Pagination__resultCount" className="Pagination__resultsCount">
+                {resultsCount}
+              </span>
             </>
           )}
           {childrenUnderPageSize}
