@@ -167,7 +167,14 @@ function HomePresentation({
             return <div key={index}>WIDGET_CONTACT</div>
           }
 
-          return <div key={index}>Widget: {type}</div>
+          return (
+            <div key={index}>
+              <h2>Widget of unknown type</h2>
+              <code>
+                <pre>{JSON.stringify(widgetProps, null, 4)}</pre>
+              </code>
+            </div>
+          )
         })}
     </div>
   )
