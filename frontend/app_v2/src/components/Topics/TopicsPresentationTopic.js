@@ -50,6 +50,7 @@ function TopicsPresentationTopic({ audio, heading, image, listCount, subheading,
   }
   return (
     <div
+      data-testid="TopicsPresentationTopic"
       style={
         image
           ? {
