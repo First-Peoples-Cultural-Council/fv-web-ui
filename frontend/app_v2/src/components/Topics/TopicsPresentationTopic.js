@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import useIcon from 'common/useIcon'
 import AudioMinimal from 'components/AudioMinimal'
 import { Link } from 'react-router-dom'
-
+import { useParams } from 'react-router-dom'
 import {
   WIDGET_LIST_WORD,
   WIDGET_LIST_PHRASE,
@@ -21,7 +21,9 @@ import {
  *
  * @returns {node} jsx markup
  */
-function TopicsPresentationTopic({ audio, heading, image, listCount, subheading, type, url }) {
+function TopicsPresentationTopic({ audio, heading, image, listCount, subheading, type, url: _url }) {
+  const { language } = useParams()
+  const url = `${language}/${_url}`
   let bgColor
   let icon
   switch (type) {
