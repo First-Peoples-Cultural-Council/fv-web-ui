@@ -180,7 +180,7 @@ function HomePresentation({
           }
 
           return (
-            <div key={index}>
+            <div key={index} className="text-xs">
               <h2>Widget of unknown type</h2>
               <code>
                 <pre>{JSON.stringify(widgetProps, null, 4)}</pre>
