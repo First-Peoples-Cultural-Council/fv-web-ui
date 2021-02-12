@@ -1,4 +1,5 @@
 import {
+  WIDGET_CONTACT,
   WIDGET_HERO,
   WIDGET_HERO_SEARCH,
   WIDGET_SCHEDULE,
@@ -46,6 +47,35 @@ function homeAdaptor(response) {
         // foreground: 'TODO', // TODO: get from api.getSections
         // foregroundIcon: 'TODO', // TODO: get from api.getSections
         variant: hasSearch ? WIDGET_HERO_SEARCH : undefined,
+      }
+    }
+    /*
+     * Contact Widget
+     */
+    if (type === 'ContactWidget') {
+      let contactEmail = ''
+      let links = []
+      let contactText = ''
+      settings.forEach(function assignValues({ category, key, value }) {
+        if (category === 'general' && key === 'contact_email') {
+          contactEmail = value
+        }
+        if (category === 'general' && key === 'social_links') {
+          links = value
+        }
+        if (category === 'general' && key === 'contact_text') {
+          contactText = value
+        }
+        return
+      })
+      return {
+        type: WIDGET_CONTACT,
+        uid: widget.uid,
+        title: widget['dc:title'],
+        dialectId: widget['widget:dialect'],
+        contactEmail: contactEmail,
+        links: links,
+        contactText: contactText,
       }
     }
     if (type === 'ScheduleWidget') {

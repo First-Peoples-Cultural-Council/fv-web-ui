@@ -31,14 +31,22 @@ const get = (path) => {
     }
   )
 }
-// const post = (path, bodyObject) => {
-//   const api = ky.create({
-//     timeout: TIMEOUT,
-//   })
-//   return api.post(path, { json: bodyObject }).then(() => {
-//     return
-//   })
-// }
+const post = (path, bodyObject, dataAdaptor) => {
+  return api
+    .post(path, { json: bodyObject })
+    .then(handleSuccessAndError)
+    .then(
+      (response) => {
+        if (dataAdaptor) {
+          return { isLoading: false, data: dataAdaptor(response), dataOriginal: response }
+        }
+        return { isLoading: false, data: response, dataOriginal: response }
+      },
+      (error) => {
+        return { isLoading: false, error }
+      }
+    )
+}
 
 export default {
   get,
@@ -97,5 +105,24 @@ export default {
       return { isLoading, error, data: transformedData, dataOriginal: data }
     }
     return { isLoading, error, data, dataOriginal: data }
+  },
+  post,
+  postMail: ({ docId, from, message, name, to }) => {
+    const params = {
+      from,
+      message,
+      subject: 'FirstVoices Language enquiry from ' + name,
+      HTML: 'false',
+      rollbackOnError: 'true',
+      viewId: 'view_documents',
+      bcc: 'hello@firstvoices.com',
+      cc: '',
+      files: '',
+      replyto: from,
+      to,
+    }
+
+    // TODO: Update this path when BE ready and handle success response in UI
+    return post('/nuxeo/site/automation/Document.Mail', { params: params, input: docId })
   },
 }

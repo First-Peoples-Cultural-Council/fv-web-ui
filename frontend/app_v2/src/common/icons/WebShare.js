@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 /**
- * @summary WebShareIcon
+ * @summary WebShare
  * @version 1.0.1
  * @component
  *
@@ -9,7 +9,7 @@ import PropTypes from 'prop-types'
  *
  * @returns {node} jsx markup
  */
-function WebShareIcon({ styling }) {
+function WebShare({ styling }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" className={styling}>
       <path d="M0 0h24v24H0z" fill="none" />
@@ -19,8 +19,8 @@ function WebShareIcon({ styling }) {
 }
 // PROPTYPES
 const { string } = PropTypes
-WebShareIcon.propTypes = {
+WebShare.propTypes = {
   styling: string,
 }
 
-export default WebShareIcon
+export default WebShare

@@ -9,12 +9,14 @@ import ChevronLeft from 'common/icons/ChevronLeftIcon'
 import ChevronRight from 'common/icons/ChevronRightIcon'
 import Close from 'common/icons/CloseIcon'
 import Dictionary from 'common/icons/DictionaryIcon'
-import Facebook from 'common/icons/FacebookIcon'
+import Facebook from 'common/icons/Facebook'
 import HamburgerMenu from 'common/icons/HamburgerMenuIcon'
+import Instagram from 'common/icons/Instagram'
 import Kids from 'common/icons/KidsIcon'
 import Learn from 'common/icons/LearnIcon'
 import Lessons from 'common/icons/Lessons'
-import LinkedIn from 'common/icons/LinkedInIcon'
+import Link from 'common/icons/Link'
+import LinkedIn from 'common/icons/LinkedIn'
 import Login from 'common/icons/LoginIcon'
 import Logo from 'common/icons/Logo'
 import Mail from 'common/icons/MailIcon'
@@ -26,8 +28,9 @@ import Quote from 'common/icons/Quote'
 import Search from 'common/icons/Search'
 import Resources from 'common/icons/ResourcesIcon'
 import TimesCircle from 'common/icons/TimesCircle'
-import Twitter from 'common/icons/TwitterIcon'
-import WebShare from 'common/icons/WebShareIcon'
+import Twitter from 'common/icons/Twitter'
+import WebShare from 'common/icons/WebShare'
+import Youtube from 'common/icons/Youtube'
 
 // a helper function that given a string name returns an icon, if no string is supplied it will return a blank placeholder icon
 
@@ -45,9 +48,11 @@ function useIcon(iconName, iconStyling) {
     Dictionary,
     Facebook,
     HamburgerMenu,
+    Instagram,
     Kids,
     Learn,
     Lessons,
+    Link,
     LinkedIn,
     Login,
     Logo,
@@ -62,6 +67,7 @@ function useIcon(iconName, iconStyling) {
     TimesCircle,
     Twitter,
     WebShare,
+    Youtube,
   }
   const iconFile = icons[iconName]
   const Icon = iconFile ? iconFile : PlaceHolder

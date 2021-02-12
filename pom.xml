@@ -3,13 +3,13 @@
 
   <properties>
     <nuxeo.distribution.version>10.10</nuxeo.distribution.version>
-    <aws.sdk.version>1.11.785</aws.sdk.version>
+    <aws.sdk.version>1.11.903</aws.sdk.version>
     <sonar.organization>first-peoples-cultural-council</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <it.jacoco.destFile>${project.basedir}/../target/jacoco-it.exec</it.jacoco.destFile>
     <sonar.coverage.jacoco.xmlReportPaths>${it.jacoco.destFile}</sonar.coverage.jacoco.xmlReportPaths>
     <sonar.scanner.force-deprecated-java-version-grace-period>true</sonar.scanner.force-deprecated-java-version-grace-period>
-    <it.failsafe.argLine />
+    <it.failsafe.argLine/>
   </properties>
 
   <parent>
