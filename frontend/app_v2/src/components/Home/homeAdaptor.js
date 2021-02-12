@@ -133,7 +133,7 @@ function homeAdaptor(response) {
               heading,
               image,
               listCount: count,
-              url: `phrases/${id}`,
+              url: `phrase/${id}`,
             }
           }
           if (contentType === 'FVBook') {
@@ -143,7 +143,7 @@ function homeAdaptor(response) {
               heading,
               subheading,
               image,
-              url: `stories/${id}`,
+              url: `story/${id}`,
             }
           }
           return {

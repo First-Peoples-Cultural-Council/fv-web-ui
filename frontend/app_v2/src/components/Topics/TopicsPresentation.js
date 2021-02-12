@@ -1,19 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
-import {
-  WIDGET_LIST_WORD,
-  WIDGET_LIST_PHRASE,
-  WIDGET_LIST_SONG,
-  WIDGET_LIST_STORY,
-  // WIDGET_LIST_MIXED,
-  // WIDGET_LIST_GENERIC,
-} from 'common/constants'
-
-import TopicsPresentationWord from 'components/Topics/TopicsPresentationWord'
-import TopicsPresentationPhrase from 'components/Topics/TopicsPresentationPhrase'
-import TopicsPresentationSong from 'components/Topics/TopicsPresentationSong'
-import TopicsPresentationStory from 'components/Topics/TopicsPresentationStory'
+import TopicsPresentationTopic from 'components/Topics/TopicsPresentationTopic'
 /**
  * @summary TopicsPresentation
  * @version 1.0.0
@@ -24,40 +11,6 @@ import TopicsPresentationStory from 'components/Topics/TopicsPresentationStory'
  * @returns {node} jsx markup
  */
 function TopicsPresentation({ title, topics }) {
-  const topicComponents = topics.map(({ audio, heading, image, listCount, subheading, type, url }, index) => {
-    const key = `topic${index}`
-    switch (type) {
-      case WIDGET_LIST_WORD:
-        return (
-          <TopicsPresentationWord
-            key={key}
-            audio={audio}
-            heading={heading}
-            image={image}
-            subheading={subheading}
-            url={url}
-          />
-        )
-      case WIDGET_LIST_PHRASE:
-        return <TopicsPresentationPhrase key={key} heading={heading} image={image} listCount={listCount} url={url} />
-      case WIDGET_LIST_SONG:
-        return (
-          <TopicsPresentationSong
-            key={key}
-            audio={audio}
-            heading={heading}
-            image={image}
-            subheading={subheading}
-            url={url}
-          />
-        )
-      case WIDGET_LIST_STORY:
-        return <TopicsPresentationStory key={key} heading={heading} image={image} subheading={subheading} url={url} />
-
-      default:
-        return null
-    }
-  })
   return (
     <div className="Topics bg-white py-8">
       <div className="relative">
@@ -87,7 +40,21 @@ function TopicsPresentation({ title, topics }) {
         md:grid-cols-4
       `}
       >
-        {topicComponents}
+        {topics.map(({ audio, heading, image, listCount, subheading, type, url }, index) => {
+          const key = `topic${index}`
+          return (
+            <TopicsPresentationTopic
+              key={key}
+              audio={audio}
+              heading={heading}
+              image={image}
+              subheading={subheading}
+              url={url}
+              listCount={listCount}
+              type={type}
+            />
+          )
+        })}
       </div>
     </div>
   )
