@@ -65,6 +65,7 @@
     "postcss": "^8.2.4",
     "postcss-loader": "^4.1.0",
     "postcss-preset-env": "^6.7.0",
+    "react-styleguidist": "^11.1.5",
     "react-test-renderer": "^17.0.1",
     "style-loader": "^2.0.0",
     "terser-webpack-plugin": "^5.1.1",
