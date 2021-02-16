@@ -1,5 +1,4 @@
 const alias = require('./webpack.alias')
-// const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 module.exports = {
   entry: './src/index',
   resolve: {
@@ -30,32 +29,6 @@ module.exports = {
           ],
         },
       },
-      // {
-      //   test: /\.css$/i,
-      //   use: [
-      //     MiniCssExtractPlugin.loader,
-      //     'css-loader',
-      //     {
-      //       loader: 'postcss-loader',
-      //       options: {
-      //         postcssOptions: {
-      //           plugins: [
-      //             [
-      //               'postcss-preset-env',
-      //               {
-      //                 /* See https://github.com/tailwindlabs/tailwindcss/discussions/2462 */
-      //                 stage: 1,
-      //                 features: {
-      //                   'focus-within-pseudo-class': false,
-      //                 },
-      //               },
-      //             ],
-      //           ],
-      //         },
-      //       },
-      //     },
-      //   ],
-      // },
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
