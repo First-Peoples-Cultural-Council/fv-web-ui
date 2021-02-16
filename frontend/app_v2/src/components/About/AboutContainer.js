@@ -24,7 +24,9 @@ function AboutContainer() {
         background={heroBackground}
         foreground={<h1 className="font-bold text-5xl">{heroForeground}</h1>}
         foregroundIcon={
-          heroIcon ? <CircleImage.Presentation src={heroIcon} classNameWidth="w-28" classNameHeight="h-28" /> : null
+          heroIcon ? (
+            <CircleImage.Presentation src={heroIcon} classNameWidth="w-28" classNameHeight="h-28" alt="" />
+          ) : null
         }
       />
       <Content.Presentation heading={contentHeading} body={<>{contentBody}</>} />
