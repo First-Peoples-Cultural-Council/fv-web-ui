@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import AppStateContext from 'common/AppStateContext'
 
-import { AUDIO_ERRORED, AUDIO_LOADING, AUDIO_PLAYING } from 'common/constants'
+import { AUDIO_LOADING, AUDIO_PLAYING } from 'common/constants'
 /**
  * @summary AudioMinimalData
  * @component
@@ -16,10 +16,8 @@ function AudioMinimalData({ src }) {
   const { machine, send } = audio
   const { value, context } = machine
   const playerHasDifferentSrc = context.src !== src
-
   return {
-    hasErrored: context.errored.includes(src),
-    isErrored: playerHasDifferentSrc ? false : value === AUDIO_ERRORED,
+    isErrored: context.errored.includes(src),
     isLoading: playerHasDifferentSrc ? false : value === AUDIO_LOADING,
     isPlaying: playerHasDifferentSrc ? false : value === AUDIO_PLAYING,
     onClick: () => {

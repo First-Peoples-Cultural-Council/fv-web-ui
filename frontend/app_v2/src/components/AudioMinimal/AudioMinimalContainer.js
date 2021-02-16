@@ -11,10 +11,9 @@ import AudioMinimalData from './AudioMinimalData'
  * @returns {node} jsx markup
  */
 function AudioMinimalContainer({ src, icons }) {
-  const { isPlaying, isLoading, isErrored, hasErrored, onClick, onKeyPress } = AudioMinimalData({ src })
+  const { isPlaying, isLoading, isErrored, onClick, onKeyPress } = AudioMinimalData({ src })
   return (
     <AudioMinimalPresentation
-      hasErrored={hasErrored}
       isErrored={isErrored}
       isLoading={isLoading}
       isPlaying={isPlaying}
