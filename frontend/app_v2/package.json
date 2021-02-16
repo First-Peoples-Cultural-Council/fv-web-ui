@@ -12,7 +12,9 @@
     "test:coverage": "jest --coverage",
     "test:update": "jest -u",
     "test:watch": "jest --watch",
-    "test": "jest"
+    "test": "jest",
+    "styleguide:serve": "npx tailwindcss-cli@latest build -o ./dist/tailwind.css; npx styleguidist server",
+    "styleguide:build": "npx tailwindcss-cli@latest build -o ./dist/tailwind.css; npx styleguidist build"
   },
   "keywords": [],
   "author": "",
