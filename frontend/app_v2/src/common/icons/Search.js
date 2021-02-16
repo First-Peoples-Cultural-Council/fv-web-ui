@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 /**
  * @summary Search
- * @version 1.0.0
  * @component
  *
  * @param {object} props

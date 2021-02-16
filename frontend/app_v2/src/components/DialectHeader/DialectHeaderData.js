@@ -2,7 +2,6 @@ import useGetSections from 'common/useGetSections'
 
 /**
  * @summary DialectHeaderData
- * @version 1.0.1
  * @component
  *
  * @param {object} props

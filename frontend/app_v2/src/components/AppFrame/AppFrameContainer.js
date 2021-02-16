@@ -11,7 +11,6 @@ import DialectHeader from 'components/DialectHeader'
 
 /**
  * @summary AppFrameContainer
- * @version 1.0.1
  * @component
  *
  * @param {object} props

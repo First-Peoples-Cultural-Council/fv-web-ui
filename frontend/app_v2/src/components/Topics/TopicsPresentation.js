@@ -19,7 +19,6 @@ import TopicsPresentationSong from 'components/Topics/TopicsPresentationSong'
 import TopicsPresentationStory from 'components/Topics/TopicsPresentationStory'
 /**
  * @summary TopicsPresentation
- * @version 1.0.0
  * @component
  *
  * @param {object} props

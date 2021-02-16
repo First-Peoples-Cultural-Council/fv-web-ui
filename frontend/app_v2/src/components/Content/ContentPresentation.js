@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 
 /**
  * @summary ContentPresentation
- * @version 1.0.1
  * @component
  *
  * @param {object} props

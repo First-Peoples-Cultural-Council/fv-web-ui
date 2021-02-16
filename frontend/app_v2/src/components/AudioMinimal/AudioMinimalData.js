@@ -6,7 +6,6 @@ import AppStateContext from 'common/AppStateContext'
 import { AUDIO_ERRORED, AUDIO_LOADING, AUDIO_PLAYING } from 'common/constants'
 /**
  * @summary AudioMinimalData
- * @version 1.0.0
  * @component
  *
  * @param {object} props

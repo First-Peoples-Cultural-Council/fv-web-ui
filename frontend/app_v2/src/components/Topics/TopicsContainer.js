@@ -5,7 +5,6 @@ import TopicsData from 'components/Topics/TopicsData'
 
 /**
  * @summary TopicsContainer
- * @version 1.0.1
  * @component
  *
  * @param {object} props

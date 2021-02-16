@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 /**
  * @summary Facebook - blue #4460A0
- * @version 1.0.1
  * @component
  *
  * @param {object} props

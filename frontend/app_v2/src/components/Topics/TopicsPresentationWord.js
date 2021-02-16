@@ -5,7 +5,6 @@ import AudioMinimal from 'components/AudioMinimal'
 import { Link } from 'react-router-dom'
 /**
  * @summary TopicsPresentationWord
- * @version 1.0.0
  * @component
  *
  * @param {object} props

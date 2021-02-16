@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 // import { Link } from 'react-router-dom'
 /**
  * @summary TopicsPresentationSong
- * @version 1.0.0
  * @component
  *
  * @param {object} props

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { WIDGET_HERO_CENTER, WIDGET_HERO_LEFT, WIDGET_HERO_SEARCH } from 'common/constants'
 /**
  * @summary HeroPresentation
- * @version 1.0.1
  * @component
  *
  * @param {object} props

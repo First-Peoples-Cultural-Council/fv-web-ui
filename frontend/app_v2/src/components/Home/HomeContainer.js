@@ -6,7 +6,6 @@ import HomeData from 'components/Home/HomeData'
 
 /**
  * @summary HomeContainer
- * @version 1.0.1
  * @component
  *
  * @param {object} props

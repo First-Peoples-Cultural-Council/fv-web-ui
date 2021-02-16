@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import useIcon from 'common/useIcon'
 /**
  * @summary AudioMinimalPresentation
- * @version 1.0.0
  * @component
  *
  * @param {object} props

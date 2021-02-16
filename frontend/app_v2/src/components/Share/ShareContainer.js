@@ -5,7 +5,6 @@ import ShareData from 'components/Share/ShareData'
 
 /**
  * @summary ShareContainer
- * @version 1.0.1
  * @component
  *
  * @param {object} props

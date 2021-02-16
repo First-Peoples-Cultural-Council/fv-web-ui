@@ -4,7 +4,6 @@ import AudioMinimalPresentation from './AudioMinimalPresentation'
 import AudioMinimalData from './AudioMinimalData'
 /**
  * @summary AudioMinimalContainer
- * @version 1.0.0
  * @component
  *
  * @param {object} props
