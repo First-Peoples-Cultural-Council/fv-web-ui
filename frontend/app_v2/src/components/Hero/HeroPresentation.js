@@ -9,14 +9,7 @@ import { WIDGET_HERO_CENTER, WIDGET_HERO_LEFT, WIDGET_HERO_SEARCH } from 'common
  *
  * @returns {node} jsx markup
  */
-function HeroPresentation({
-  // uid,
-  background,
-  foreground,
-  foregroundIcon,
-  variant,
-  search,
-}) {
+function HeroPresentation({ background, foreground, foregroundIcon, search, variant }) {
   if (!background && !foreground && !foregroundIcon) {
     return null
   }
@@ -38,7 +31,7 @@ function HeroPresentation({
       classNamesForegroundIcon = 'mb-5'
       classNamesContainer = background
         ? `${classNamesContainer} ${classNamesWithBackground} h-96`
-        : `${classNamesContainer} ${classNamesWithBackground} py-16`
+        : `${classNamesContainer} ${classNamesWithoutBackground} py-16`
       break
     }
     case WIDGET_HERO_LEFT: {
@@ -148,12 +141,12 @@ function HeroPresentation({
 // PROPTYPES
 const { node, string, oneOf } = PropTypes
 HeroPresentation.propTypes = {
-  uid: string,
   background: string,
   foreground: node,
   foregroundIcon: node,
-  variant: oneOf([WIDGET_HERO_LEFT, WIDGET_HERO_CENTER, WIDGET_HERO_SEARCH]),
   search: node,
+  /** Changes layout of component. Variants are: left aligned, center aligned, or search */
+  variant: oneOf([WIDGET_HERO_LEFT, WIDGET_HERO_CENTER, WIDGET_HERO_SEARCH]),
 }
 HeroPresentation.defaultProps = {
   variant: WIDGET_HERO_CENTER,
