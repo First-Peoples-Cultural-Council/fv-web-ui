@@ -5,7 +5,6 @@ import './AppFrame.css'
 import About from 'components/About'
 import Home from 'components/Home'
 import Suspender from 'components/Suspender'
-
 import WordsListContainer from 'app_v1/WordsListContainer'
 import DialectHeader from 'components/DialectHeader'
 
