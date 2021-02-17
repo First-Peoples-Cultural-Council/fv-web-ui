@@ -49,7 +49,7 @@ const ffwdAudio = ({ player, scrubMs }) => {
 const isSameSrc = ({ src: oldSrc }, { src: newSrc }) => {
   return oldSrc === newSrc
 }
-const audioMachine = Machine({
+export const initialMachineState = {
   initial: AUDIO_UNLOADED,
   context: {
     player: new Audio(),
@@ -162,6 +162,7 @@ const audioMachine = Machine({
       },
     },
   },
-})
+}
+const audioMachine = Machine(initialMachineState)
 
 export default audioMachine
