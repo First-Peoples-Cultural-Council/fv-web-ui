@@ -3,6 +3,7 @@ import React, { useReducer } from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import AppStateContext from 'common/AppStateContext'
 import { reducerInitialState, reducer } from 'common/reducer'
+import { initialMachineState } from 'components/AudioMachine/audioMachine'
 function StyleguideWrapper({ children }) {
   const [state, dispatch] = useReducer(reducer, reducerInitialState)
   return (
@@ -14,7 +15,7 @@ function StyleguideWrapper({ children }) {
             dispatch,
           },
           audio: {
-            machine: {},
+            machine: initialMachineState,
             send: () => {},
           },
         }}
