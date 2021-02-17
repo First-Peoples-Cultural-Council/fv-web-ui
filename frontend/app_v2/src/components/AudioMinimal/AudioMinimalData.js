@@ -15,6 +15,7 @@ function AudioMinimalData({ src }) {
   const { audio } = useContext(AppStateContext)
   const { machine, send } = audio
   const { value, context } = machine
+
   const playerHasDifferentSrc = context.src !== src
   return {
     isErrored: context.errored.includes(src),
