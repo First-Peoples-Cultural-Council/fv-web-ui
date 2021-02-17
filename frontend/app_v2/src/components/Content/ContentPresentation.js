@@ -34,7 +34,9 @@ function ContentPresentation({ heading, body }) {
 // PROPTYPES
 const { node } = PropTypes
 ContentPresentation.propTypes = {
+  /** Heading will be wrapped in an H1 tag */
   heading: node,
+  /** Body is meant to be used with WYSIWYG markup */
   body: node,
 }
 
