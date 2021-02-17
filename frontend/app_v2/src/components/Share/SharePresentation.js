@@ -3,7 +3,6 @@ import useIcon from 'common/useIcon'
 import PropTypes from 'prop-types'
 /**
  * @summary SharePresentation
- * @version 1.0.1
  * @component
  *
  * @param {object} props

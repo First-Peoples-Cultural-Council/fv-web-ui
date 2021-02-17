@@ -6,8 +6,8 @@ import {
   WIDGET_LIST,
   WIDGET_LIST_WORD,
   WIDGET_LIST_PHRASE,
+  WIDGET_LIST_STORY,
   // WIDGET_LIST_SONG,
-  // WIDGET_LIST_STORY,
   // WIDGET_LIST_MIXED,
   WIDGET_LIST_GENERIC,
   WIDGET_WELCOME,
@@ -15,7 +15,7 @@ import {
 
 function homeAdaptor(response) {
   const { properties, uid } = response
-  const widgetsActive = properties['widgets:active'] || []
+  const widgetsActive = properties?.['widgets:active'] || []
   const widgets = widgetsActive.map((widget) => {
     const content = widget['widget:content'] || []
     const settings = widget['settings:settings'] || []
@@ -144,42 +144,61 @@ function homeAdaptor(response) {
         }
         return false
       })
-      const _content = content.map(({ audio, count, heading, id, image, subheading, title, type: contentType }) => {
-        if (contentType === 'FVWord') {
+      const _content = content.map(
+        ({ audio: audioObj, count, heading, id, image: imageObj, subheading, type: contentType }) => {
+          let image
+          if (imageObj) {
+            image = imageObj.path
+          }
+          let audio
+          if (audioObj) {
+            audio = audioObj.path
+          }
+          if (contentType === 'FVWord') {
+            return {
+              type: WIDGET_LIST_WORD,
+              id, // TODO: DROP?
+              audio,
+              heading,
+              image,
+              subheading,
+              url: `word/${id}`,
+            }
+          }
+          if (contentType === 'PhraseBook') {
+            return {
+              type: WIDGET_LIST_PHRASE,
+              id,
+              heading,
+              image,
+              listCount: count,
+              url: `phrase/${id}`,
+            }
+          }
+          if (contentType === 'FVBook') {
+            return {
+              type: WIDGET_LIST_STORY,
+              id,
+              heading,
+              subheading,
+              image,
+              url: `story/${id}`,
+            }
+          }
           return {
-            type: WIDGET_LIST_WORD,
-            id, // TODO: DROP?
+            type: WIDGET_LIST_GENERIC,
+            id,
             audio,
+            contentType,
             heading,
             image,
-            subheading,
-            url: `word/${id}`,
-          }
-        }
-        if (contentType === 'PhraseBook') {
-          return {
-            type: WIDGET_LIST_PHRASE,
-            id, // TODO: DROP?
-            heading: title,
-            image,
             listCount: count,
-            url: `phrases/${id}`,
+            listType: undefined,
+            subheading,
+            url: undefined, // TODO ?
           }
         }
-        return {
-          type: WIDGET_LIST_GENERIC,
-          id,
-          audio,
-          contentType,
-          heading,
-          image,
-          listCount: count,
-          listType: undefined,
-          subheading,
-          title,
-          url: undefined, // TODO ?
-        }
-      })
+      )
       return {
         type: WIDGET_LIST,
         uid: widget.uid,
@@ -217,7 +236,7 @@ function homeAdaptor(response) {
   })
   return {
     uid,
-    pageTitle: properties['dc:title'],
+    pageTitle: properties?.['dc:title'],
     widgets,
   }
 }

@@ -26,7 +26,6 @@ import {
 
 /**
  * @summary HomePresentation
- * @version 1.0.1
  * @component
  *
  * @param {object} props
@@ -62,6 +61,7 @@ function HomePresentation({
                 src={language.logoUrl}
                 classNameWidth="w-56 lg:w-72"
                 classNameHeight="h-56 lg:h-72"
+                alt=""
               />
             ) : (
               fallBackIcon
@@ -122,10 +122,10 @@ function HomePresentation({
           }
 
           if (type === WIDGET_LIST) {
-            // console.log('WIDGET_LIST', widgetProps)
+            const { title, content } = widgetProps
             return (
               <div key={index} className="px-6">
-                <Topics.Container key={index} />
+                <Topics.Presentation key={index} topics={content} title={title} />
               </div>
             )
           }
@@ -181,16 +181,32 @@ function HomePresentation({
             )
           }
 
-          return <div key={index}>Widget: {type}</div>
+          return (
+            <div key={index} className="text-xs">
+              <h2>Widget of unknown type</h2>
+              <code>
+                <pre>{JSON.stringify(widgetProps, null, 4)}</pre>
+              </code>
+            </div>
+          )
         })}
     </div>
   )
 }
 // PROPTYPES
-const { object } = PropTypes
+const { array, string, shape } = PropTypes
 HomePresentation.propTypes = {
-  data: object,
-  language: object,
+  data: shape({
+    uid: string,
+    pageTitle: string,
+    widgets: array,
+  }),
+  language: shape({
+    title: string,
+    uid: string,
+    path: string,
+    logoUrl: string,
+  }),
 }
 
 export default HomePresentation
