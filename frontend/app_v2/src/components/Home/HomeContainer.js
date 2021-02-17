@@ -13,14 +13,13 @@ import HomeData from 'components/Home/HomeData'
  * @returns {node} jsx markup
  */
 function HomeContainer() {
-  const { isLoading, error, data, dataOriginal } = HomeData()
+  const { isLoading, error, data } = HomeData()
   const { title, uid, path, logoUrl } = useGetSections()
   return (
     <HomePresentation
       isLoading={isLoading}
       error={error}
       data={data}
-      dataOriginal={dataOriginal}
       language={{
         title,
         uid,
