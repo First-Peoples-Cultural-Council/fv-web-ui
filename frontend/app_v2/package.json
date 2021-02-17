@@ -7,14 +7,13 @@
   "scripts": {
     "start": "webpack serve --env V1_URL=http://0.0.0.0:3001 --config webpack/webpack.development.js",
     "build:production": "webpack --color --progress --config webpack/webpack.production.js",
-    "serve:production": "cp src/assets/server.js dist/server.js; node dist/server.js",
-    "build:production:serve": "npm run build:production; npm run serve:production",
+    "build:production:serve": "npm run build:production; npx copyfiles src/assets/server.js dist -f; node dist/server.js",
     "test:coverage": "jest --coverage",
     "test:update": "jest -u",
     "test:watch": "jest --watch",
     "test": "jest",
-    "styleguide:serve": "npx tailwindcss-cli@latest build -o ./dist/tailwind.css; npx styleguidist server",
-    "styleguide:build": "npx tailwindcss-cli@latest build -o ./dist/tailwind.css; npx styleguidist build"
+    "styleguide:assets": "npx tailwindcss-cli@latest build -o ./dist/styleguide/tailwind.css; npx copyfiles src/assets/images/TestPhoto.jpg dist/styleguide -f",
+    "styleguide:serve": "npm run styleguide:assets; npx styleguidist server"
   },
   "keywords": [],
   "author": "",
@@ -50,6 +49,7 @@
     "bundle-loader": "^0.5.6",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^7.0.0",
+    "copyfiles": "^2.4.1",
     "core-js": "^3.8.3",
     "css-loader": "^5.0.1",
     "css-minimizer-webpack-plugin": "^1.2.0",
