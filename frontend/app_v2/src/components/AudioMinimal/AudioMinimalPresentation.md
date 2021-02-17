@@ -1,3 +1,5 @@
+Setting the different states:
+
 ```jsx padded
     <AudioMinimalPresentation
       isErrored={true}
@@ -10,7 +12,7 @@
     />
 ```
 
-Override Icons:
+Overriding the default icons:
 
 ```jsx padded
     <AudioMinimalPresentation
