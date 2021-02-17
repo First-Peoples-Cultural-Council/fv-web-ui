@@ -14,7 +14,6 @@ import {
 } from 'common/constants'
 /**
  * @summary TopicsPresentationTopic
- * @version 1.0.0
  * @component
  *
  * @param {object} props
@@ -36,7 +35,7 @@ function TopicsPresentationTopic({ audio, heading, image, listCount, subheading,
       icon = 'Quote'
       break
     case WIDGET_LIST_SONG:
-      bgColor = 'fv-red'
+      bgColor = 'bg-fv-red'
       icon = 'MusicNote'
       break
     case WIDGET_LIST_STORY:
