@@ -5,7 +5,6 @@ import ContentData from 'components/Content/ContentData'
 
 /**
  * @summary ContentContainer
- * @version 1.0.1
  * @component
  *
  * @param {object} props
