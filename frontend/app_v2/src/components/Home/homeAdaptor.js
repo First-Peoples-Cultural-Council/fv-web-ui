@@ -228,8 +228,8 @@ function homeAdaptor(response) {
         uid: widget.uid,
         title: widget['dc:title'],
         dialectId: widget['widget:dialect'],
-        subheading: welcomeText,
-        links: welcomeAudio,
+        heading: welcomeText,
+        audio: welcomeAudio,
       }
     }
     return widget

@@ -113,10 +113,10 @@ function HomePresentation({
           }
 
           if (type === WIDGET_WELCOME) {
-            const { audio, heading, subheading, title, url } = widgetProps
+            const { audio, heading, title } = widgetProps
             return (
               <div key={index} className="px-6">
-                <Welcome.Presentation audio={audio} heading={heading} subheading={subheading} title={title} url={url} />
+                <Welcome.Presentation audio={audio} heading={heading} title={title} />
               </div>
             )
           }
