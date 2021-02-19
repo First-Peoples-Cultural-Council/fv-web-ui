@@ -10,31 +10,25 @@ import {
   NATIVE_AUDIO_PLAYING,
 } from 'common/constants'
 
-const handleAudioError = assign(({ src, errored }) => {
-  return {
-    player: new Audio(),
-    src: undefined,
-    errored: errored.includes(src) ? errored : [...errored, src],
-  }
-})
-const loadAudio = assign(({ player, nativePlayer, nativeIsPlaying }, { src }) => {
-  pauseAllAudio({ player, nativePlayer, nativeIsPlaying })
-  return {
-    player: new Audio(src),
-    src,
-    nativeIsPlaying: false,
-  }
-})
-const playAudio = ({ player }) => {
-  player.play()
-}
-const pauseAllAudio = ({ player, nativePlayer, nativeIsPlaying }) => {
-  if (nativeIsPlaying) {
+// All players
+// ----------------------------
+const pauseAllAudio = ({ player, nativePlayer, incomingNativePlayer }) => {
+  if (
+    nativePlayer?.current &&
+    nativePlayer?.current.paused === false &&
+    nativePlayer?.current !== incomingNativePlayer?.current
+  ) {
     nativePlayer.current.pause()
   }
   if (player) {
     player.pause()
   }
+}
+// JS Audio Player
+// ----------------------------
+const playAudio = ({ player, nativePlayer }) => {
+  pauseAllAudio({ player, nativePlayer })
+  player.play()
 }
 const stopAudio = ({ player }) => {
   player.pause()
@@ -51,23 +45,38 @@ const ffwdAudio = ({ player, scrubMs }) => {
   const newTimeMs = curMs + scrubMs
   player.currentTime = newTimeMs > durationMs ? durationMs : newTimeMs / 1000
 }
-const isSameSrc = ({ src: oldSrc }, { src: newSrc }) => {
-  return oldSrc === newSrc
-}
-const onNativeAudioPlaying = assign(({ player, nativePlayer, nativeIsPlaying }, { src, ref }) => {
-  pauseAllAudio({ player, nativePlayer, nativeIsPlaying })
+// Entry
+// ----------------------------
+const entryAudioLoading = assign(({ player, nativePlayer }, { src }) => {
+  pauseAllAudio({ player, nativePlayer })
+  return {
+    player: new Audio(src),
+    src,
+  }
+})
+const entryNativeAudioPlaying = assign(({ player, nativePlayer }, { src, ref }) => {
+  pauseAllAudio({ player, nativePlayer, incomingNativePlayer: ref })
   return {
     player: new Audio(),
     src,
     nativePlayer: ref,
-    nativeIsPlaying: true,
   }
 })
-const setNativeIsPlaying = assign(() => {
+const entryAudioErrored = assign(({ src, errored }) => {
   return {
-    nativeIsPlaying: false,
+    player: new Audio(),
+    src: undefined,
+    // Note: Native players are disabled with a malformed url so
+    // they can't be played and don't need to be added to the errored array
+    errored: errored.includes(src) ? errored : [...errored, src],
   }
 })
+// Helper
+// ----------------------------
+const isSameSrc = ({ src: oldSrc }, { src: newSrc }) => {
+  return oldSrc === newSrc
+}
+
 export const initialMachineState = {
   initial: AUDIO_UNLOADED,
   context: {
@@ -76,32 +85,32 @@ export const initialMachineState = {
     errored: [],
     scrubMs: 500,
     nativePlayer: undefined, // ref
-    nativeIsPlaying: false,
   },
   states: {
     [NATIVE_AUDIO_PLAYING]: {
-      entry: onNativeAudioPlaying,
+      entry: entryNativeAudioPlaying,
       on: {
         CLICK: {
           target: AUDIO_LOADING,
-          //   actions: pauseAllAudio,
         },
         ARROWRIGHT: {
           target: AUDIO_LOADING,
-          //   actions: pauseAllAudio,
         },
         [AUDIO_ERRORED]: { target: AUDIO_ERRORED },
-        NATIVE_AUDIO_PAUSED: {
-          action: setNativeIsPlaying,
+        [NATIVE_AUDIO_PLAYING]: {
+          target: NATIVE_AUDIO_PLAYING,
         },
       },
     },
     [AUDIO_ERRORED]: {
-      entry: handleAudioError,
+      entry: entryAudioErrored,
       on: {
         CLICK: {
           target: AUDIO_LOADING,
         },
+      },
+      [NATIVE_AUDIO_PLAYING]: {
+        target: NATIVE_AUDIO_PLAYING,
       },
     },
     [AUDIO_UNLOADED]: {
@@ -119,7 +128,7 @@ export const initialMachineState = {
       },
     },
     [AUDIO_LOADING]: {
-      entry: loadAudio,
+      entry: entryAudioLoading,
       on: {
         [AUDIO_LOADED]: {
           target: AUDIO_PLAYING,
@@ -151,6 +160,9 @@ export const initialMachineState = {
           },
         ],
         [AUDIO_ERRORED]: { target: AUDIO_ERRORED },
+        [NATIVE_AUDIO_PLAYING]: {
+          target: NATIVE_AUDIO_PLAYING,
+        },
       },
     },
     [AUDIO_PLAYING]: {
