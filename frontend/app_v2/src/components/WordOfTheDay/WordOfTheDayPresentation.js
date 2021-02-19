@@ -4,7 +4,7 @@ import useIcon from 'common/useIcon'
 import AudioMinimal from 'components/AudioMinimal'
 import Share from 'components/Share'
 /**
- * @summary WidgetWotdPresentation
+ * @summary WordOfTheDayPresentation
  * @component
  *
  * @param {object} props
@@ -13,7 +13,7 @@ import Share from 'components/Share'
  *
  * @returns {node} jsx markup
  */
-function WidgetWotdPresentation({ audio, hasShare, heading, subheading, title, url }) {
+function WordOfTheDayPresentation({ audio, hasShare, heading, subheading, title, url }) {
   return (
     <section className="py-12 bg-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -46,7 +46,7 @@ function WidgetWotdPresentation({ audio, hasShare, heading, subheading, title, u
 }
 // PROPTYPES
 const { bool, string, node } = PropTypes
-WidgetWotdPresentation.propTypes = {
+WordOfTheDayPresentation.propTypes = {
   audio: node,
   hasShare: bool,
   heading: string,
@@ -55,4 +55,4 @@ WidgetWotdPresentation.propTypes = {
   url: string,
 }
 
-export default WidgetWotdPresentation
+export default WordOfTheDayPresentation
