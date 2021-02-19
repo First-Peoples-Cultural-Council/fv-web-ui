@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import AudioNative from 'components/AudioNative'
+
 /**
  * @summary WelcomePresentation
- * @version 1.0.1
  * @component
  *
  * @param {object} props
@@ -18,7 +19,7 @@ function WelcomePresentation({ audio, heading, title }) {
     <section key={title} className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="mb-12 text-3xl text-fv-blue font-bold sm:text-4xl">{heading}</h2>
-        {audio && <audio className="w-7/12 text-black mx-auto" src={audio} controls />}
+        {audio && <AudioNative.Container className="w-7/12 text-black mx-auto" src={audio} />}
       </div>
     </section>
   )

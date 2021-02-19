@@ -7,29 +7,28 @@ import {
   AUDIO_STOPPED,
   AUDIO_PLAYING,
   PAGE_NAVIGATION,
+  NATIVE_AUDIO_PLAYING,
 } from 'common/constants'
 
-const handleAudioError = assign(({ src, errored }) => {
-  return {
-    player: new Audio(),
-    src: undefined,
-    errored: errored.includes(src) ? errored : [...errored, src],
+// All players
+// ----------------------------
+const pauseAllAudio = ({ player, nativePlayer, incomingNativePlayer }) => {
+  if (
+    nativePlayer?.current &&
+    nativePlayer?.current.paused === false &&
+    nativePlayer?.current !== incomingNativePlayer?.current
+  ) {
+    nativePlayer.current.pause()
   }
-})
-const loadAudio = assign(({ player }, { src }) => {
   if (player) {
     player.pause()
   }
-  return {
-    player: new Audio(src),
-    src,
-  }
-})
-const playAudio = ({ player }) => {
-  player.play()
 }
-const pauseAudio = ({ player }) => {
-  player.pause()
+// JS Audio Player
+// ----------------------------
+const playAudio = ({ player, nativePlayer }) => {
+  pauseAllAudio({ player, nativePlayer })
+  player.play()
 }
 const stopAudio = ({ player }) => {
   player.pause()
@@ -46,9 +45,38 @@ const ffwdAudio = ({ player, scrubMs }) => {
   const newTimeMs = curMs + scrubMs
   player.currentTime = newTimeMs > durationMs ? durationMs : newTimeMs / 1000
 }
+// Entry
+// ----------------------------
+const entryAudioLoading = assign(({ player, nativePlayer }, { src }) => {
+  pauseAllAudio({ player, nativePlayer })
+  return {
+    player: new Audio(src),
+    src,
+  }
+})
+const entryNativeAudioPlaying = assign(({ player, nativePlayer }, { src, ref }) => {
+  pauseAllAudio({ player, nativePlayer, incomingNativePlayer: ref })
+  return {
+    player: new Audio(),
+    src,
+    nativePlayer: ref,
+  }
+})
+const entryAudioErrored = assign(({ src, errored }) => {
+  return {
+    player: new Audio(),
+    src: undefined,
+    // Note: Native players are disabled with a malformed url so
+    // they can't be played and don't need to be added to the errored array
+    errored: errored.includes(src) ? errored : [...errored, src],
+  }
+})
+// Helper
+// ----------------------------
 const isSameSrc = ({ src: oldSrc }, { src: newSrc }) => {
   return oldSrc === newSrc
 }
+
 export const initialMachineState = {
   initial: AUDIO_UNLOADED,
   context: {
@@ -56,14 +84,33 @@ export const initialMachineState = {
     src: undefined,
     errored: [],
     scrubMs: 500,
+    nativePlayer: undefined, // ref
   },
   states: {
-    [AUDIO_ERRORED]: {
-      entry: handleAudioError,
+    [NATIVE_AUDIO_PLAYING]: {
+      entry: entryNativeAudioPlaying,
       on: {
         CLICK: {
           target: AUDIO_LOADING,
         },
+        ARROWRIGHT: {
+          target: AUDIO_LOADING,
+        },
+        [AUDIO_ERRORED]: { target: AUDIO_ERRORED },
+        [NATIVE_AUDIO_PLAYING]: {
+          target: NATIVE_AUDIO_PLAYING,
+        },
+      },
+    },
+    [AUDIO_ERRORED]: {
+      entry: entryAudioErrored,
+      on: {
+        CLICK: {
+          target: AUDIO_LOADING,
+        },
+      },
+      [NATIVE_AUDIO_PLAYING]: {
+        target: NATIVE_AUDIO_PLAYING,
       },
     },
     [AUDIO_UNLOADED]: {
@@ -75,10 +122,13 @@ export const initialMachineState = {
           target: AUDIO_LOADING,
         },
         [AUDIO_ERRORED]: { target: AUDIO_ERRORED },
+        NATIVE_AUDIO_PLAYING: {
+          target: NATIVE_AUDIO_PLAYING,
+        },
       },
     },
     [AUDIO_LOADING]: {
-      entry: loadAudio,
+      entry: entryAudioLoading,
       on: {
         [AUDIO_LOADED]: {
           target: AUDIO_PLAYING,
@@ -110,6 +160,9 @@ export const initialMachineState = {
           },
         ],
         [AUDIO_ERRORED]: { target: AUDIO_ERRORED },
+        [NATIVE_AUDIO_PLAYING]: {
+          target: NATIVE_AUDIO_PLAYING,
+        },
       },
     },
     [AUDIO_PLAYING]: {
@@ -122,7 +175,7 @@ export const initialMachineState = {
           {
             target: AUDIO_STOPPED,
             cond: isSameSrc,
-            actions: pauseAudio,
+            actions: pauseAllAudio,
           },
           {
             target: AUDIO_LOADING,
@@ -132,7 +185,7 @@ export const initialMachineState = {
           {
             target: AUDIO_STOPPED,
             cond: isSameSrc,
-            actions: pauseAudio,
+            actions: pauseAllAudio,
           },
           {
             target: AUDIO_LOADING,
@@ -142,7 +195,7 @@ export const initialMachineState = {
           {
             target: AUDIO_STOPPED,
             cond: isSameSrc,
-            actions: pauseAudio,
+            actions: pauseAllAudio,
           },
           {
             target: AUDIO_LOADING,
@@ -159,6 +212,9 @@ export const initialMachineState = {
           },
         ],
         [AUDIO_ERRORED]: { target: AUDIO_ERRORED },
+        [NATIVE_AUDIO_PLAYING]: {
+          target: NATIVE_AUDIO_PLAYING,
+        },
       },
     },
   },
