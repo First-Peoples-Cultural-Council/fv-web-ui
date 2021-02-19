@@ -7,6 +7,7 @@ import {
   AUDIO_STOPPED,
   AUDIO_PLAYING,
   PAGE_NAVIGATION,
+  NATIVE_AUDIO_PLAYING,
 } from 'common/constants'
 
 const handleAudioError = assign(({ src, errored }) => {
@@ -16,20 +17,24 @@ const handleAudioError = assign(({ src, errored }) => {
     errored: errored.includes(src) ? errored : [...errored, src],
   }
 })
-const loadAudio = assign(({ player }, { src }) => {
-  if (player) {
-    player.pause()
-  }
+const loadAudio = assign(({ player, nativePlayer, nativeIsPlaying }, { src }) => {
+  pauseAllAudio({ player, nativePlayer, nativeIsPlaying })
   return {
     player: new Audio(src),
     src,
+    nativeIsPlaying: false,
   }
 })
 const playAudio = ({ player }) => {
   player.play()
 }
-const pauseAudio = ({ player }) => {
-  player.pause()
+const pauseAllAudio = ({ player, nativePlayer, nativeIsPlaying }) => {
+  if (nativeIsPlaying) {
+    nativePlayer.current.pause()
+  }
+  if (player) {
+    player.pause()
+  }
 }
 const stopAudio = ({ player }) => {
   player.pause()
@@ -49,6 +54,20 @@ const ffwdAudio = ({ player, scrubMs }) => {
 const isSameSrc = ({ src: oldSrc }, { src: newSrc }) => {
   return oldSrc === newSrc
 }
+const onNativeAudioPlaying = assign(({ player, nativePlayer, nativeIsPlaying }, { src, ref }) => {
+  pauseAllAudio({ player, nativePlayer, nativeIsPlaying })
+  return {
+    player: new Audio(),
+    src,
+    nativePlayer: ref,
+    nativeIsPlaying: true,
+  }
+})
+const setNativeIsPlaying = assign(() => {
+  return {
+    nativeIsPlaying: false,
+  }
+})
 export const initialMachineState = {
   initial: AUDIO_UNLOADED,
   context: {
@@ -56,8 +75,27 @@ export const initialMachineState = {
     src: undefined,
     errored: [],
     scrubMs: 500,
+    nativePlayer: undefined, // ref
+    nativeIsPlaying: false,
   },
   states: {
+    [NATIVE_AUDIO_PLAYING]: {
+      entry: onNativeAudioPlaying,
+      on: {
+        CLICK: {
+          target: AUDIO_LOADING,
+          //   actions: pauseAllAudio,
+        },
+        ARROWRIGHT: {
+          target: AUDIO_LOADING,
+          //   actions: pauseAllAudio,
+        },
+        [AUDIO_ERRORED]: { target: AUDIO_ERRORED },
+        NATIVE_AUDIO_PAUSED: {
+          action: setNativeIsPlaying,
+        },
+      },
+    },
     [AUDIO_ERRORED]: {
       entry: handleAudioError,
       on: {
@@ -75,6 +113,9 @@ export const initialMachineState = {
           target: AUDIO_LOADING,
         },
         [AUDIO_ERRORED]: { target: AUDIO_ERRORED },
+        NATIVE_AUDIO_PLAYING: {
+          target: NATIVE_AUDIO_PLAYING,
+        },
       },
     },
     [AUDIO_LOADING]: {
@@ -122,7 +163,7 @@ export const initialMachineState = {
           {
             target: AUDIO_STOPPED,
             cond: isSameSrc,
-            actions: pauseAudio,
+            actions: pauseAllAudio,
           },
           {
             target: AUDIO_LOADING,
@@ -132,7 +173,7 @@ export const initialMachineState = {
           {
             target: AUDIO_STOPPED,
             cond: isSameSrc,
-            actions: pauseAudio,
+            actions: pauseAllAudio,
           },
           {
             target: AUDIO_LOADING,
@@ -142,7 +183,7 @@ export const initialMachineState = {
           {
             target: AUDIO_STOPPED,
             cond: isSameSrc,
-            actions: pauseAudio,
+            actions: pauseAllAudio,
           },
           {
             target: AUDIO_LOADING,
@@ -159,6 +200,9 @@ export const initialMachineState = {
           },
         ],
         [AUDIO_ERRORED]: { target: AUDIO_ERRORED },
+        [NATIVE_AUDIO_PLAYING]: {
+          target: NATIVE_AUDIO_PLAYING,
+        },
       },
     },
   },
