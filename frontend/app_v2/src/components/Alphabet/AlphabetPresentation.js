@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
+// import AudioMinimal from 'components/AudioMinimal'
 /**
  * @summary AlphabetPresentation
  * @component
@@ -8,7 +10,8 @@ import PropTypes from 'prop-types'
  *
  * @returns {node} jsx markup
  */
-function AlphabetPresentation({ isLoading, error, data }) {
+function AlphabetPresentation({ language, isLoading, error, data /*, selectedData*/ }) {
+  // console.log('Pres', selectedData)
   if (isLoading) {
     return <div>some spinner if you want</div>
   }
@@ -19,12 +22,25 @@ function AlphabetPresentation({ isLoading, error, data }) {
     <section>
       <div>
         {data &&
-          data.map(({ title, uid, src /*, relatedEntries*/ }) => {
+          data.map(({ title, uid /*, src*/ }) => {
             return (
-              <div key={uid}>
-                <div>{title}</div>
-                <div>{src}</div>
-              </div>
+              <Link key={uid} to={`/${language}/alphabet/${title}`}>
+                {title}
+                {/* {src && <AudioMinimal.Container src={src} />} */}
+                {/* <div>{src}</div>
+                {relatedEntries.map(({ uid: relatedUid, title: relatedTitle, definitions, src: relatedSrc }) => {
+                  return (
+                    <>
+                      <div>{relatedUid}</div>
+                      <div>{relatedTitle}</div>
+                      <div>{definitions.map((definition, index)=>{
+                        return <span key={index}>{definition}</span>
+                      })}</div>
+                      <div>{relatedSrc}</div>
+                    </>
+                  )
+                })} */}
+              </Link>
             )
           })}
       </div>
@@ -33,7 +49,7 @@ function AlphabetPresentation({ isLoading, error, data }) {
   )
 }
 // PROPTYPES
-const { bool, array, string, shape, arrayOf } = PropTypes
+const { bool, array, string, shape, arrayOf, object } = PropTypes
 AlphabetPresentation.propTypes = {
   isLoading: bool,
   error: array, // TODO: CONFIRM?
@@ -45,6 +61,11 @@ AlphabetPresentation.propTypes = {
       relatedEntries: array,
     })
   ),
+  language: string,
+  selectedData: object,
 }
+// AlphabetPresentation.defaultProps = {
+//   onCharacterClick: ()=>{},
+// }
 
 export default AlphabetPresentation

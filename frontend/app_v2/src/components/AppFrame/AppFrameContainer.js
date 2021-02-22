@@ -30,6 +30,12 @@ function AppFrameContainer() {
               </Helmet>
               <About.Container />
             </Route>
+            <Route path="/:language/alphabet/:character">
+              <Helmet>
+                <title>Alphabet</title>
+              </Helmet>
+              <Alphabet.Container />
+            </Route>
             <Route path="/:language/alphabet">
               <Helmet>
                 <title>Alphabet</title>
