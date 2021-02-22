@@ -1,19 +1,19 @@
 export const alphabetDataAdaptor = (response) => {
   const _entries = response?.entries || []
-  /*
-  title
-  uid
-  contextParameters.character.related_audio[0].path
-  contextParameters.character.related_entries [] -> uid, title, definitions, audio.path
-  */
   const characters = _entries.map(({ title, uid, contextParameters }) => {
     const { character } = contextParameters
-    const { related_audio: relatedAudio /*, related_entries: relatedEntries*/ } = character
+    const { related_audio: relatedAudio, related_video: relatedVideo /*, related_entries: relatedEntries*/ } = character
+    // TODO: AUDIO Drop '/nuxeo/', it's only for dev/localhost
+    const src = relatedAudio?.[0].path ? '/nuxeo/' + relatedAudio?.[0].path : undefined
+    // TODO: VIDEO Drop '/nuxeo/', it's only for dev/localhost
+    const videoSrc = relatedVideo?.[0].path ? '/nuxeo/' + relatedVideo?.[0].path : undefined
     return {
+      videoSrc,
       title,
       uid,
-      src: relatedAudio?.[0].path,
+      src,
       relatedEntries: [
+        // TODO: Pull from related_entries
         {
           uid: '1-2-3',
           title: 'RelatedWord',
@@ -24,6 +24,5 @@ export const alphabetDataAdaptor = (response) => {
       ],
     }
   })
-  // console.log('alphabetDataAdaptor', {response, characters})
   return characters
 }
