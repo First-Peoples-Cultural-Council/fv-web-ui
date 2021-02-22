@@ -11,15 +11,6 @@ import AudioMinimal from 'components/AudioMinimal'
  * @returns {node} jsx markup
  */
 const AlphabetPresentationSelectedData = ({ /*uid,*/ title, src, relatedEntries, /*url,*/ videoSrc }) => {
-  /*
-   {
-        uid: '1-2-3',
-        title: 'RelatedWord',
-        definitions: ['defn1', 'defn2'],
-        src:
-          'https://dev.firstvoices.com/nuxeo/nxfile/default/15761975-8249-400c-a9e2-4a5357ca7ce9/file:content/sample1.mp3',
-      },
-      */
   return (
     <>
       <h1
@@ -27,8 +18,8 @@ const AlphabetPresentationSelectedData = ({ /*uid,*/ title, src, relatedEntries,
           flex
           font-bold
           justify-center
-          sm:text-5xl
-          text-4xl
+          sm:text-4xl
+          text-3xl
           text-center
           text-fv-blue
         `}
@@ -43,7 +34,7 @@ const AlphabetPresentationSelectedData = ({ /*uid,*/ title, src, relatedEntries,
           text-fv-blue
         `}
       >
-        Example words for <strong>{title}</strong>
+        Example words
       </h2>
       {relatedEntries && (
         <ul>
@@ -80,31 +71,32 @@ function AlphabetPresentation({ language, isLoading, error, data, selectedData }
     return <div>some error if you want</div>
   }
   return (
-    <section>
-      <div>
-        {data &&
-          data.map(({ title, uid /*, src*/ }) => {
-            return (
-              <Link key={uid} to={`/${language}/alphabet/${title}`}>
-                {title}
-                {/* <div>{src}</div>
-                {relatedEntries.map(({ uid: relatedUid, title: relatedTitle, definitions, src: relatedSrc }) => {
+    <section className="py-12 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-center mb-12 text-4xl text-fv-blue font-bold uppercase sm:text-5xl">Alphabet</h2>
+        <div className="grid grid-cols-6">
+          <div className="col-span-6 sm:col-span-3">
+            <div clasName="flex">
+              {data &&
+                data.map(({ title, uid /*, src*/ }) => {
                   return (
-                    <>
-                      <div>{relatedUid}</div>
-                      <div>{relatedTitle}</div>
-                      <div>{definitions.map((definition, index)=>{
-                        return <span key={index}>{definition}</span>
-                      })}</div>
-                      <div>{relatedSrc}</div>
-                    </>
+                    <Link
+                      className="m-1 p-5 w-20 font-medium text-2xl inline-flex border rounded shadow"
+                      key={uid}
+                      to={`/${language}/alphabet/${title}`}
+                    >
+                      <div>{title}</div>
+                      {/* <div>{src}</div>*/}
+                    </Link>
                   )
-                })} */}
-              </Link>
-            )
-          })}
+                })}
+            </div>
+          </div>
+          <div className="col-span-6 sm:col-span-3 mt-8 sm:mt-0">
+            {selectedData && AlphabetPresentationSelectedData(selectedData)}
+          </div>
+        </div>
       </div>
-      {selectedData && AlphabetPresentationSelectedData(selectedData)}
     </section>
   )
 }
