@@ -76,7 +76,7 @@ function AlphabetPresentation({ language, isLoading, error, data, selectedData }
         <h2 className="text-center mb-12 text-4xl text-fv-blue font-bold uppercase sm:text-5xl">Alphabet</h2>
         <div className="grid grid-cols-6">
           <div className="col-span-6 sm:col-span-3">
-            <div clasName="flex">
+            <div>
               {data &&
                 data.map(({ title, uid /*, src*/ }) => {
                   return (
