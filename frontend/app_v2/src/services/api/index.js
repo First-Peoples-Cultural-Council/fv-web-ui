@@ -6,6 +6,13 @@ const api = ky.create({
   timeout: TIMEOUT,
 })
 
+const formatResponse = ({ isLoading, error, data, dataAdaptor }) => {
+  if (isLoading === false && error === null && data && dataAdaptor) {
+    const transformedData = dataAdaptor(Object.assign({}, data))
+    return { isLoading, error, data: transformedData, dataOriginal: data }
+  }
+  return { isLoading, error, data, dataOriginal: data }
+}
 // const getNuxeoURL = () => {
 //   if (ENV_NUXEO_URL !== null && typeof ENV_NUXEO_URL !== 'undefined') {
 //     return ENV_NUXEO_URL
@@ -21,29 +28,33 @@ const handleSuccessAndError = (response) => {
   }
   return response
 }
+// TODO: CONVERT TO SINGLE ARG TO MATCH POST
 const get = (path) => {
-  return api.get(path).then(
-    (response) => {
-      return response.json()
-    },
-    ({ response }) => {
-      return response
-    }
+  return (
+    api
+      .get(path)
+      //.then(handleSuccessAndError) // TODO?
+      // TODO: CHECK IF NEEDED, POSSIBLY REMOVE BELOW
+      .then(
+        (response) => {
+          return response.json()
+        },
+        ({ response }) => {
+          return response
+        }
+      )
   )
 }
-const post = (path, bodyObject, dataAdaptor) => {
+const post = ({ path, bodyObject, headers }) => {
   return api
-    .post(path, { json: bodyObject })
+    .post(path, { json: bodyObject, headers })
     .then(handleSuccessAndError)
     .then(
       (response) => {
-        if (dataAdaptor) {
-          return { isLoading: false, data: dataAdaptor(response), dataOriginal: response }
-        }
-        return { isLoading: false, data: response, dataOriginal: response }
+        return response.json()
       },
-      (error) => {
-        return { isLoading: false, error }
+      ({ response }) => {
+        return response
       }
     )
 }
@@ -65,6 +76,31 @@ export default {
         }
       )
   },
+  postAlphabet: (language, dataAdaptor) => {
+    const { isLoading, error, data } = useQuery(
+      ['getAlphabet', language],
+      () => {
+        if (language) {
+          const _language = language.replace(/'/g, "\\'")
+          return post({
+            path: '/nuxeo/api/v1/automation/Document.EnrichedQuery',
+            bodyObject: {
+              params: {
+                language: 'NXQL',
+                sortBy: 'fvcharacter:alphabet_order',
+                sortOrder: 'asc',
+                query: `SELECT * FROM FVCharacter WHERE ecm:path STARTSWITH '/FV/sections/Data/Test/Test/${_language}/Alphabet' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 `,
+              },
+              context: {},
+            },
+            headers: { 'enrichers.document': 'character' },
+          })
+        }
+      },
+      queryOptions
+    )
+    return formatResponse({ isLoading, error, data, dataAdaptor })
+  },
   getById: (id, dataAdaptor) => {
     const { isLoading, error, data } = useQuery(
       ['getById', id],
@@ -73,11 +109,7 @@ export default {
       },
       queryOptions
     )
-    if (isLoading === false && error === null && data && dataAdaptor) {
-      const transformedData = dataAdaptor(Object.assign({}, data))
-      return { isLoading, error, data: transformedData, dataOriginal: data }
-    }
-    return { isLoading, error, data, dataOriginal: data }
+    return formatResponse({ isLoading, error, data, dataAdaptor })
   },
   getSections: (sitename, dataAdaptor) => {
     const { isLoading, error, data } = useQuery(
@@ -87,11 +119,7 @@ export default {
       },
       queryOptions
     )
-    if (isLoading === false && error === null && data && dataAdaptor) {
-      const transformedData = dataAdaptor(Object.assign({}, data))
-      return { isLoading, error, data: transformedData, dataOriginal: data }
-    }
-    return { isLoading, error, data, dataOriginal: data }
+    return formatResponse({ isLoading, error, data, dataAdaptor })
   },
   // TODO: remove postman example server url
   getCommunityHome: (sitename, dataAdaptor) => {
@@ -100,11 +128,7 @@ export default {
         `https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`
       )
     })
-    if (isLoading === false && error === null && data && dataAdaptor) {
-      const transformedData = dataAdaptor(Object.assign({}, data))
-      return { isLoading, error, data: transformedData, dataOriginal: data }
-    }
-    return { isLoading, error, data, dataOriginal: data }
+    return formatResponse({ isLoading, error, data, dataAdaptor })
   },
   post,
   postMail: ({ docId, from, message, name, to }) => {
@@ -121,8 +145,7 @@ export default {
       replyto: from,
       to,
     }
-
     // TODO: Update this path when BE ready and handle success response in UI
-    return post('/nuxeo/site/automation/Document.Mail', { params: params, input: docId })
+    return post({ path: '/nuxeo/site/automation/Document.Mail', bodyObject: { params: params, input: docId } })
   },
 }

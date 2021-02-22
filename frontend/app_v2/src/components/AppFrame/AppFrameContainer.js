@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import './AppFrame.css'
 import About from 'components/About'
+import Alphabet from 'components/Alphabet'
 import Home from 'components/Home'
 import Suspender from 'components/Suspender'
 import WordsListContainer from 'app_v1/WordsListContainer'
@@ -28,6 +29,12 @@ function AppFrameContainer() {
                 <title>About</title>
               </Helmet>
               <About.Container />
+            </Route>
+            <Route path="/:language/alphabet">
+              <Helmet>
+                <title>Alphabet</title>
+              </Helmet>
+              <Alphabet.Container />
             </Route>
             <Route path="/:language/words">
               <Helmet>
