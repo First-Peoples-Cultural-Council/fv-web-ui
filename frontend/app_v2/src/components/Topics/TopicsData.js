@@ -8,7 +8,6 @@ import {
 } from 'common/constants'
 /**
  * @summary TopicsData
- * @version 1.0.1
  * @component
  *
  * @param {object} props

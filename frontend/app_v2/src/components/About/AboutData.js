@@ -4,7 +4,6 @@ import HeroBackground from 'images/hero-background.jpg'
 import useGetSections from 'common/useGetSections'
 /**
  * @summary AboutData
- * @version 1.0.1
  * @component
  *
  * @param {object} props
