@@ -328,6 +328,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.nuxeo.elasticsearch</groupId>
+      <artifactId>nuxeo-elasticsearch-core</artifactId>
+    </dependency>
+    <dependency>
       <artifactId>nuxeo-dam</artifactId>
       <groupId>org.nuxeo.dam</groupId>
       <scope>test</scope>
