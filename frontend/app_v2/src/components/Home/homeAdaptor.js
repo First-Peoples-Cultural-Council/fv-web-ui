@@ -10,6 +10,7 @@ import {
   // WIDGET_LIST_SONG,
   // WIDGET_LIST_MIXED,
   WIDGET_LIST_GENERIC,
+  WIDGET_WELCOME,
 } from 'common/constants'
 
 function homeAdaptor(response) {
@@ -19,6 +20,9 @@ function homeAdaptor(response) {
     const content = widget['widget:content'] || []
     const settings = widget['settings:settings'] || []
     const type = widget?.['widget:type']
+    /*
+     * Hero Widget
+     */
     if (type === 'HeroWidget') {
       const searchSettings = settings.find(({ category, key }) => {
         return category === 'presentation' && key === 'search'
@@ -78,9 +82,12 @@ function homeAdaptor(response) {
         contactText: contactText,
       }
     }
+    /*
+     * Schedule Widget - e.g. Word of the Day
+     */
     if (type === 'ScheduleWidget') {
       let hasShare = false
-      settings.every(({ category, key, value }) => {
+      settings.forEach(function assignValues({ category, key, value }) {
         if (category === 'presentation' && key === 'share') {
           hasShare = value
         }
@@ -119,12 +126,14 @@ function homeAdaptor(response) {
         hasShare,
         heading,
         subheading,
-        title: widget.title,
+        title: widget['dc:title'],
         type: WIDGET_SCHEDULE,
         url,
       }
     }
-
+    /*
+     * List Widget - e.g. Topics
+     */
     if (type === 'ListWidget') {
       let listId
       settings.some(({ category, key, value }) => {
@@ -197,6 +206,30 @@ function homeAdaptor(response) {
         title: widget['dc:title'],
         listUid: listId,
         content: _content,
+      }
+    }
+    /*
+     * Contact Widget
+     */
+    if (type === 'WelcomeWidget') {
+      let welcomeText = ''
+      let welcomeAudio
+      settings.forEach(function assignValues({ category, key, value }) {
+        if (category === 'general' && key === 'welcome_text') {
+          welcomeText = value
+        }
+        if (category === 'general' && key === 'welcome_audio') {
+          welcomeAudio = value
+        }
+        return
+      })
+      return {
+        type: WIDGET_WELCOME,
+        uid: widget.uid,
+        title: widget['dc:title'],
+        dialectId: widget['widget:dialect'],
+        heading: welcomeText,
+        audio: welcomeAudio,
       }
     }
     return widget

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ContactUs from 'components/ContactUs'
 import Topics from 'components/Topics'
+import Welcome from 'components/Welcome'
 import WidgetWotd from 'components/WidgetWotd'
 import Hero from 'components/Hero'
 import CircleImage from 'components/CircleImage'
@@ -112,9 +113,10 @@ function HomePresentation({
           }
 
           if (type === WIDGET_WELCOME) {
+            const { audio, heading, title } = widgetProps
             return (
               <div key={index} className="px-6">
-                <div key={index}>WIDGET_WELCOME</div>
+                <Welcome.Presentation audio={audio} heading={heading} title={title} />
               </div>
             )
           }
@@ -131,7 +133,7 @@ function HomePresentation({
           if (type === WIDGET_SCHEDULE) {
             const { audio, hasShare, heading, subheading, title, url } = widgetProps
             return (
-              <div key={index} className="px-6">
+              <div key={index} className="px-6 mb-8">
                 <WidgetWotd.Presentation
                   audio={audio}
                   hasShare={hasShare}
