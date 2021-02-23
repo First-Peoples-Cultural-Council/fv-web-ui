@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types'
-import useRoute from 'app_v1/useRoute'
 import React, { useReducer, useEffect } from 'react'
+import { useQueryClient } from 'react-query'
 import { useParams } from 'react-router-dom'
+import useRoute from 'app_v1/useRoute'
 import AppStateContext from 'common/AppStateContext'
 import AudioMachineData from 'components/AudioMachine/AudioMachineData'
 import api from 'services/api'
-import { useQueryClient } from 'react-query'
-
+import { reducerInitialState, reducer } from 'common/reducer'
 export function getSectionsAdaptor(response) {
   const {
     title,
@@ -31,41 +31,6 @@ export function rawGetByIdAdaptor(response) {
   }
 }
 
-const reducerInitialState = {
-  api: {
-    getSections: {
-      idLogo: undefined,
-      path: undefined,
-      title: undefined,
-      uid: undefined,
-      logoUrl: undefined,
-    },
-  },
-}
-function reducer(state, action) {
-  if (action.type === 'api.getSections') {
-    const oldLogoUrl = state.api.getSections.logoUrl
-    state.api.getSections = action.payload
-    state.api.getSections.logoUrl = oldLogoUrl
-  }
-  if (action.type === 'api.getSections.logo') {
-    const { logoUrl, uid } = action.payload
-    if (state.api.getSections.uid === uid) {
-      state.api.getSections = { ...state.api.getSections, logoUrl }
-    }
-  }
-
-  return state
-
-  // switch (action.type) {
-  //   case 'api.getSections': {
-  //     state.api.getSections = action.payload
-  //     return state
-  //   }
-  //   default:
-  //     return state
-  // }
-}
 function AppStateProvider({ children }) {
   const queryClient = useQueryClient()
   const { language } = useParams()

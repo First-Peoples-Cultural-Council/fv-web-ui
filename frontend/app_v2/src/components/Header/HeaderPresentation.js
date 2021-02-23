@@ -1,10 +1,9 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
 
-import './Header.css'
+import 'components/Header/Header.css'
 /**
  * @summary HeaderPresentation
- * @version 1.0.1
  * @component
  *
  * @param {object} props
@@ -58,8 +57,8 @@ function HeaderPresentation({ children }) {
 }
 // PROPTYPES
 // const { string } = PropTypes
-HeaderPresentation.propTypes = {
-  //   something: string,
-}
+// HeaderPresentation.propTypes = {
+//   something: string,
+// }
 
 export default HeaderPresentation

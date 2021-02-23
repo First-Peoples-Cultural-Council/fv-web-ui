@@ -5,7 +5,6 @@ import DialectHeaderData from 'components/DialectHeader/DialectHeaderData'
 
 /**
  * @summary DialectHeaderContainer
- * @version 1.0.1
  * @component
  *
  * @param {object} props
