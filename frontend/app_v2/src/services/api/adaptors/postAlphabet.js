@@ -1,4 +1,4 @@
-export const alphabetDataAdaptor = (response) => {
+const postAlphabet = (response) => {
   const _entries = response?.entries || []
   const characters = _entries.map(({ title, uid, contextParameters }) => {
     const { character } = contextParameters
@@ -26,3 +26,5 @@ export const alphabetDataAdaptor = (response) => {
   })
   return characters
 }
+
+export default postAlphabet

@@ -1,6 +1,4 @@
-// Let us begin!
-// ==================================================
-import { getSectionsAdaptor } from 'common/AppStateProvider'
+import getSectionsAdaptor from 'services/api/adaptors/getSections'
 const input = {
   path: '/FV/sections/Data/Test/Test/ÜgwÛ',
   uid: '5210e2d1-9074-4cef-8d3a-20a88bace75c',
@@ -19,10 +17,11 @@ const expectedOutput = {
   path: '/FV/sections/Data/Test/Test/ÜgwÛ',
   title: 'ÜgwÛ',
   uid: '5210e2d1-9074-4cef-8d3a-20a88bace75c',
+  idLogo: null,
 }
 
-describe('AppStateProvider', () => {
-  test('Adaptor', () => {
+describe('getSectionsAdaptor', () => {
+  test('works', () => {
     const output = getSectionsAdaptor(input)
     expect(output).toStrictEqual(expectedOutput)
   })

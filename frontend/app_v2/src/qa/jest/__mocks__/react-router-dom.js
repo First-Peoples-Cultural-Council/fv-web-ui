@@ -8,7 +8,8 @@ module.exports = {
   },
   useParams: ()=>{
     return {
-      language: 'testLanguage',
+      language: "k'w",
+      character: "k'",
     }
   },
   Link: ({children}) => {

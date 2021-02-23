@@ -6,22 +6,9 @@ import useRoute from 'app_v1/useRoute'
 import AppStateContext from 'common/AppStateContext'
 import AudioMachineData from 'components/AudioMachine/AudioMachineData'
 import api from 'services/api'
+import getSectionsAdaptor from 'services/api/adaptors/getSections'
 import { reducerInitialState, reducer } from 'common/reducer'
-export function getSectionsAdaptor(response) {
-  const {
-    title,
-    uid,
-    path,
-    logoId: idLogo,
-    // parentLanguageTitle,
-  } = response
-  return {
-    title,
-    uid,
-    path,
-    idLogo,
-  }
-}
+
 export function rawGetByIdAdaptor(response) {
   const fileContent = response?.properties?.['file:content'] || {}
   return {
