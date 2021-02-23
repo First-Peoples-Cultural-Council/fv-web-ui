@@ -3,7 +3,7 @@
 
   <properties>
     <nuxeo.distribution.version>10.10</nuxeo.distribution.version>
-    <aws.sdk.version>1.11.903</aws.sdk.version>
+    <aws.sdk.version>1.11.955</aws.sdk.version>
     <sonar.organization>first-peoples-cultural-council</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <it.jacoco.destFile>${project.basedir}/../target/jacoco-it.exec</it.jacoco.destFile>
