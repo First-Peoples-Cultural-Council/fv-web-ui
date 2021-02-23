@@ -12,9 +12,16 @@ import HomeData from 'components/Home/HomeData'
  * @returns {node} jsx markup
  */
 function HomeContainer() {
-  const { isLoading, error, data, language, dataOriginal } = HomeData()
+  const { isLoading, error, data, language, dataOriginal, isWorkspaceOn } = HomeData()
   return (
-    <HomePresentation isLoading={isLoading} error={error} data={data} dataOriginal={dataOriginal} language={language} />
+    <HomePresentation
+      isWorkspaceOn={isWorkspaceOn}
+      isLoading={isLoading}
+      error={error}
+      data={data}
+      dataOriginal={dataOriginal}
+      language={language}
+    />
   )
 }
 // PROPTYPES
