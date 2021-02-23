@@ -1,5 +1,6 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
+import { BrowserRouter as Router } from 'react-router-dom'
 import TopicsPresentationTopic from 'components/Topics/TopicsPresentationTopic'
 import AppStateContext from 'qa/jest/AppStateContext'
 
@@ -24,16 +25,18 @@ describe('TopicsPresentation', () => {
   // ------------------------------------------
   test('WIDGET_LIST_WORD', () => {
     render(
-      <AppStateContext.Provider>
-        <TopicsPresentationTopic
-          audio={audio}
-          heading={heading}
-          image={image}
-          subheading={suheading}
-          url={url}
-          type={WIDGET_LIST_WORD}
-        />
-      </AppStateContext.Provider>
+      <Router>
+        <AppStateContext.Provider>
+          <TopicsPresentationTopic
+            audio={audio}
+            heading={heading}
+            image={image}
+            subheading={suheading}
+            url={url}
+            type={WIDGET_LIST_WORD}
+          />
+        </AppStateContext.Provider>
+      </Router>
     )
 
     // Heading
@@ -67,15 +70,17 @@ describe('TopicsPresentation', () => {
   // ------------------------------------------
   test('WIDGET_LIST_PHRASE', () => {
     render(
-      <AppStateContext.Provider>
-        <TopicsPresentationTopic
-          heading={heading}
-          image={image}
-          url={url}
-          listCount={count}
-          type={WIDGET_LIST_PHRASE}
-        />
-      </AppStateContext.Provider>
+      <Router>
+        <AppStateContext.Provider>
+          <TopicsPresentationTopic
+            heading={heading}
+            image={image}
+            url={url}
+            listCount={count}
+            type={WIDGET_LIST_PHRASE}
+          />
+        </AppStateContext.Provider>
+      </Router>
     )
 
     // Heading
@@ -102,15 +107,17 @@ describe('TopicsPresentation', () => {
   // ------------------------------------------
   test('WIDGET_LIST_STORY', () => {
     render(
-      <AppStateContext.Provider>
-        <TopicsPresentationTopic
-          heading={heading}
-          subheading={suheading}
-          image={image}
-          url={url}
-          type={WIDGET_LIST_STORY}
-        />
-      </AppStateContext.Provider>
+      <Router>
+        <AppStateContext.Provider>
+          <TopicsPresentationTopic
+            heading={heading}
+            subheading={suheading}
+            image={image}
+            url={url}
+            type={WIDGET_LIST_STORY}
+          />
+        </AppStateContext.Provider>
+      </Router>
     )
 
     // Heading
