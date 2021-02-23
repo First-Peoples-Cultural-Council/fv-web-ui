@@ -3,6 +3,7 @@ const path = require('path')
 // Sources
 const appV2 = path.resolve(__dirname, '..')
 const src = path.resolve(appV2, 'src')
+const qa = path.resolve(src, 'qa')
 const components = path.resolve(src, 'components')
 const common = path.resolve(src, 'common')
 const services = path.resolve(src, 'services')
@@ -35,6 +36,7 @@ module.exports = {
   favicons,
   fonts,
   images,
+  qa,
   services,
   src,
 }

@@ -5,7 +5,6 @@ import ContactUsData from 'components/ContactUs/ContactUsData'
 
 /**
  * @summary ContactUsContainer
- * @version 1.0.0
  * @component
  *
  * @param {object} props

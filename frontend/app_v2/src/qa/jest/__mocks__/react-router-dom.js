@@ -6,4 +6,12 @@ module.exports = {
       hash: '',
     }
   },
+  useParams: ()=>{
+    return {
+      language: 'testLanguage',
+    }
+  },
+  Link: ({children}) => {
+    return children
+  },
 }

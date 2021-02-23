@@ -5,7 +5,6 @@ import TEMPLATEData from 'components/TEMPLATE/TEMPLATEData'
 
 /**
  * @summary TEMPLATEContainer
- * @version 1.0.0
  * @component
  *
  * @param {object} props

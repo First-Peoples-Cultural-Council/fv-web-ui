@@ -96,6 +96,7 @@ module.exports = {
     //
     '^components/(.*)$': alias.components + '/$1',
     '^src/(.*)$': alias.src + '/$1',
+    '^qa/(.*)$': alias.qa + '/$1',
     '^common/(.*)$': alias.common + '/$1',
     '^services/(.*)$': alias.services + '/$1',
   },

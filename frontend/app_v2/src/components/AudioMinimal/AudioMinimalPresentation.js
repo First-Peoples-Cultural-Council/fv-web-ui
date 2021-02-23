@@ -3,14 +3,9 @@ import PropTypes from 'prop-types'
 import useIcon from 'common/useIcon'
 /**
  * @summary AudioMinimalPresentation
- * @version 1.0.0
  * @component
- *
- * @param {object} props
- *
- * @returns {node} jsx markup
  */
-function AudioMinimalPresentation({ hasErrored, icons, isErrored, isLoading, isPlaying, onClick, onKeyPress }) {
+function AudioMinimalPresentation({ icons, isErrored, isLoading, isPlaying, onClick, onKeyPress }) {
   const buttonRef = useRef()
   useEffect(() => {
     if (isPlaying) {
@@ -57,7 +52,7 @@ function AudioMinimalPresentation({ hasErrored, icons, isErrored, isLoading, isP
   }
   const Icons = Object.assign({}, iconsDefault, icons)
 
-  if (isErrored || hasErrored) {
+  if (isErrored) {
     return (
       <button type="button" disabled aria-live="off">
         <div className="sr-only">Error loading audio</div>
@@ -94,16 +89,20 @@ function AudioMinimalPresentation({ hasErrored, icons, isErrored, isLoading, isP
 // PROPTYPES
 const { func, bool, object } = PropTypes
 AudioMinimalPresentation.propTypes = {
-  hasErrored: bool,
+  /** Use to override the default icons. Eg: icons={{Play: jsx, Pause: jsx, Error: jsx}}  */
   icons: object,
+  /** Set to true if Audio player encounters an error. Displays the erorred icon */
   isErrored: bool,
+  /** Set to true when audio is loading. Changes screen reader text  */
   isLoading: bool,
+  /** Set to true while audio is playing. Changes screen reader text & icon  */
   isPlaying: bool,
+  /** Event handler for button click. The handler provided by AudioMinimalData issues a send call to the state machine */
   onClick: func,
+  /** Event handler for keyboard support. The handler provided by AudioMinimalData issues a send call to the state machine */
   onKeyPress: func,
 }
 AudioMinimalPresentation.defaultProps = {
-  hasErrored: false,
   isErrored: false,
   isLoading: false,
   isPlaying: false,

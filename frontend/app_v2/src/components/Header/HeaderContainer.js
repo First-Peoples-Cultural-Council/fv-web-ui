@@ -5,7 +5,6 @@ import HeaderData from 'components/Header/HeaderData'
 
 /**
  * @summary HeaderContainer
- * @version 1.0.1
  * @component
  *
  * @param {object} props

@@ -67,7 +67,7 @@ export default {
   },
   getById: (id, dataAdaptor) => {
     const { isLoading, error, data } = useQuery(
-      ['id', id],
+      ['getById', id],
       () => {
         return get(`/nuxeo/api/v1/id/${id}?properties=*`).then(handleSuccessAndError)
       },
@@ -81,7 +81,7 @@ export default {
   },
   getSections: (sitename, dataAdaptor) => {
     const { isLoading, error, data } = useQuery(
-      ['sections', sitename],
+      ['getSections', sitename],
       () => {
         return get(`/nuxeo/api/v1/site/sections/${sitename}`).then(handleSuccessAndError)
       },
@@ -95,7 +95,7 @@ export default {
   },
   // TODO: remove postman example server url
   getCommunityHome: (sitename, dataAdaptor) => {
-    const { isLoading, error, data } = useQuery(['sections', sitename], () => {
+    const { isLoading, error, data } = useQuery(['getCommunityHome', sitename], () => {
       return get(
         `https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`
       )
