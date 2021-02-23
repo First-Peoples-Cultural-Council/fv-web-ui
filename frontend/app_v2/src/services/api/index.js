@@ -158,4 +158,14 @@ export default {
     })
     return formatResponse({ isLoading, error, data, dataAdaptor })
   },
+  // TODO: remove postman example server url
+  postWorkspaceSetting: (workpaceValue, dataAdaptor) => {
+    return post({
+      path: 'https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/nuxeo/api/v1/automation/User.Workspace',
+      bodyObject: { params: { value: workpaceValue }, context: {} },
+      // headers: { properties: '*' },
+    }).then((response) => {
+      return formatResponse({ isLoading: false, error: [], data: response, dataAdaptor })
+    })
+  },
 }

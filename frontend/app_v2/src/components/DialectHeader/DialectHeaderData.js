@@ -1,5 +1,6 @@
 import useGetSections from 'common/useGetSections'
-
+import useUserGet from 'common/useUserGet'
+import api from 'services/api'
 /**
  * @summary DialectHeaderData
  * @component
@@ -11,9 +12,20 @@ import useGetSections from 'common/useGetSections'
 function DialectHeaderData() {
   // TODO: INVESTIGATE WHY logoUrl DOESN'T UPDATE!
   const { title /*, logoUrl*/ } = useGetSections()
-  // console.log('testing', logoUrl)
+  const { firstName, lastName, userName = '', isWorkspaceOn } = useUserGet()
 
-  const currentUser = { userInitials: 'TU' }
+  const onWorkspaceModeClick = () => {
+    const { isLoading, error, data } = api.postWorkspaceSetting(!isWorkspaceOn)
+    // TODO: REMOVE CONSOLE LOG
+    // eslint-disable-next-line
+    console.log('onclick debug', { isLoading, error, data })
+  }
+
+  const currentUser = {
+    userInitials: firstName || lastName ? `${firstName}${lastName}` : userName.charAt(0),
+    isWorkspaceOn,
+  }
+
   const menuData = [
     {
       title: 'Dictionary',
@@ -49,10 +61,12 @@ function DialectHeaderData() {
     },
     { title: 'Kids', href: `/${title}/kids` },
   ]
+
   return {
     title,
     currentUser,
     menuData,
+    onWorkspaceModeClick,
   }
 }
 

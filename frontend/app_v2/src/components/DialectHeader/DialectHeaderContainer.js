@@ -12,8 +12,16 @@ import DialectHeaderData from 'components/DialectHeader/DialectHeaderData'
  * @returns {node} jsx markup
  */
 function DialectHeaderContainer({ className }) {
-  const { currentUser, menuData, title } = DialectHeaderData()
-  return <DialectHeaderPresentation className={className} title={title} currentUser={currentUser} menuData={menuData} />
+  const { currentUser, menuData, title, onWorkspaceModeClick } = DialectHeaderData()
+  return (
+    <DialectHeaderPresentation
+      className={className}
+      onWorkspaceModeClick={onWorkspaceModeClick}
+      title={title}
+      currentUser={currentUser}
+      menuData={menuData}
+    />
+  )
 }
 // PROPTYPES
 const { string } = PropTypes
