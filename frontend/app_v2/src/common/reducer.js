@@ -7,29 +7,29 @@ export const reducerInitialState = {
       uid: undefined,
       logoUrl: undefined,
     },
+    postUserGet: {},
   },
 }
-export const reducer = (state, action) => {
-  if (action.type === 'api.getSections') {
-    const oldLogoUrl = state.api.getSections.logoUrl
-    state.api.getSections = action.payload
-    state.api.getSections.logoUrl = oldLogoUrl
-  }
-  if (action.type === 'api.getSections.logo') {
-    const { logoUrl, uid } = action.payload
-    if (state.api.getSections.uid === uid) {
-      state.api.getSections = { ...state.api.getSections, logoUrl }
+export const reducer = (state, { type, payload }) => {
+  switch (type) {
+    case 'api.getSections': {
+      const oldLogoUrl = state.api.getSections.logoUrl
+      state.api.getSections = payload
+      state.api.getSections.logoUrl = oldLogoUrl
+      return state
     }
+    case 'api.getSections.logo': {
+      const { logoUrl, uid } = payload
+      if (state.api.getSections.uid === uid) {
+        state.api.getSections = { ...state.api.getSections, logoUrl }
+      }
+      return state
+    }
+    case 'api.postUserGet': {
+      state.api.postUserGet = payload
+      return state
+    }
+    default:
+      return state
   }
-
-  return state
-
-  // switch (action.type) {
-  //   case 'api.getSections': {
-  //     state.api.getSections = action.payload
-  //     return state
-  //   }
-  //   default:
-  //     return state
-  // }
 }
