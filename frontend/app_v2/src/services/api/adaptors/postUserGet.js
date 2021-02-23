@@ -2,7 +2,7 @@ const postUserGet = (response) => {
   const { properties } = response
   const userPreferences = [
     { type: 'display', value: 'dark' },
-    { type: 'workspaceToggle', value: true },
+    { type: 'workspaceToggle', value: false },
   ]
   const workspacePreferences = userPreferences.find(({ type }) => type === 'workspaceToggle')
   const isWorkspaceOn = workspacePreferences ? workspacePreferences.value : false
