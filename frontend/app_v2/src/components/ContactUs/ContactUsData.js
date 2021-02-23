@@ -5,7 +5,6 @@ import api from 'services/api'
 import { getFormData, validateForm } from 'common/FormHelpers'
 /**
  * @summary ContactUsData
- * @version 1.0.0
  * @component
  *
  * @param {object} props

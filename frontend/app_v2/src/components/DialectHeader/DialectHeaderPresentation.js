@@ -9,7 +9,6 @@ import useIcon from 'common/useIcon'
 
 /**
  * @summary DialectHeaderPresentation
- * @version 1.0.1
  * @component
  *
  * @param {object} props

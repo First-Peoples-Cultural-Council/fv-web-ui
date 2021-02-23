@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ContactUs from 'components/ContactUs'
 import Topics from 'components/Topics'
+import Welcome from 'components/Welcome'
 import WidgetWotd from 'components/WidgetWotd'
 import Hero from 'components/Hero'
 import CircleImage from 'components/CircleImage'
@@ -25,7 +26,6 @@ import {
 
 /**
  * @summary HomePresentation
- * @version 1.0.1
  * @component
  *
  * @param {object} props
@@ -61,6 +61,7 @@ function HomePresentation({
                 src={language.logoUrl}
                 classNameWidth="w-56 lg:w-72"
                 classNameHeight="h-56 lg:h-72"
+                alt=""
               />
             ) : (
               fallBackIcon
@@ -112,18 +113,19 @@ function HomePresentation({
           }
 
           if (type === WIDGET_WELCOME) {
+            const { audio, heading, title } = widgetProps
             return (
               <div key={index} className="px-6">
-                <div key={index}>WIDGET_WELCOME</div>
+                <Welcome.Presentation audio={audio} heading={heading} title={title} />
               </div>
             )
           }
 
           if (type === WIDGET_LIST) {
-            // console.log('WIDGET_LIST', widgetProps)
+            const { title, content } = widgetProps
             return (
               <div key={index} className="px-6">
-                <Topics.Container key={index} />
+                <Topics.Presentation key={index} topics={content} title={title} />
               </div>
             )
           }
@@ -131,7 +133,7 @@ function HomePresentation({
           if (type === WIDGET_SCHEDULE) {
             const { audio, hasShare, heading, subheading, title, url } = widgetProps
             return (
-              <div key={index} className="px-6">
+              <div key={index} className="px-6 mb-8">
                 <WidgetWotd.Presentation
                   audio={audio}
                   hasShare={hasShare}
@@ -179,16 +181,32 @@ function HomePresentation({
             )
           }
 
-          return <div key={index}>Widget: {type}</div>
+          return (
+            <div key={index} className="text-xs">
+              <h2>Widget of unknown type</h2>
+              <code>
+                <pre>{JSON.stringify(widgetProps, null, 4)}</pre>
+              </code>
+            </div>
+          )
         })}
     </div>
   )
 }
 // PROPTYPES
-const { object } = PropTypes
+const { array, string, shape } = PropTypes
 HomePresentation.propTypes = {
-  data: object,
-  language: object,
+  data: shape({
+    uid: string,
+    pageTitle: string,
+    widgets: array,
+  }),
+  language: shape({
+    title: string,
+    uid: string,
+    path: string,
+    logoUrl: string,
+  }),
 }
 
 export default HomePresentation

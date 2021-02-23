@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 /**
  * @summary FirstVoices Logo
- * @version 1.0.1
  * @component
  *
  * @param {object} props
