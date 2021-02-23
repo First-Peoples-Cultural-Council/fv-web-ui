@@ -11,7 +11,7 @@ import AlphabetData from 'components/Alphabet/AlphabetData'
  * @returns {node} jsx markup
  */
 function AlphabetContainer() {
-  const { isLoading, error, data, language, selectedData } = AlphabetData()
+  const { isLoading, error, data, language, selectedData, links } = AlphabetData()
   return (
     <AlphabetPresentation
       isLoading={isLoading}
@@ -19,6 +19,7 @@ function AlphabetContainer() {
       data={data}
       language={language}
       selectedData={selectedData}
+      links={links}
     />
   )
 }

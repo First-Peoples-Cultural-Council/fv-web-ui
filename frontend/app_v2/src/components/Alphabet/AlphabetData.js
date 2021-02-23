@@ -33,7 +33,15 @@ const AlphabetData = () => {
       }
     }
   }, [character, data, selectedData])
+
   return {
+    links: [
+      {
+        url: '/url/1',
+        title: 'Download Alphabet Pronunciation Guide',
+      },
+      { url: '/url/2', title: 'Other links tbd' },
+    ],
     data,
     error,
     isLoading,

@@ -63,7 +63,7 @@ AlphabetPresentationSelectedData.propTypes = {
   url: string,
   videoSrc: string,
 }
-function AlphabetPresentation({ language, isLoading, error, data, selectedData }) {
+function AlphabetPresentation({ language, isLoading, error, data, selectedData, links }) {
   if (isLoading) {
     return <div>some spinner if you want</div>
   }
@@ -73,27 +73,70 @@ function AlphabetPresentation({ language, isLoading, error, data, selectedData }
   return (
     <section className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center mb-12 text-4xl text-fv-blue font-bold uppercase sm:text-5xl">Alphabet</h2>
+        <div className="relative">
+          <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-blue font-bold sm:text-5xl">
+            <span
+              className={`
+            inline-block
+            px-4
+            sm:px-8
+            lg:px-20
+
+            bg-white
+          `}
+            >
+              Alphabet
+            </span>
+          </h2>
+          <hr className="absolute z-0 w-full" style={{ top: '50%' }} />
+        </div>
+
         <div className="grid grid-cols-6">
           <div className="col-span-6 sm:col-span-3">
             <div>
+              {/* Characters */}
               {data &&
                 data.map(({ title, uid /*, src*/ }) => {
                   return (
                     <Link
-                      className="m-1 p-5 w-20 font-medium text-2xl inline-flex border rounded shadow"
+                      className={`
+                        border 
+                        font-medium 
+                        inline-flex 
+                        justify-center 
+                        m-1
+                        p-5
+                        rounded 
+                        shadow 
+                        text-2xl 
+                        w-20 
+                        ${selectedData?.title === title ? 'bg-fv-blue text-white' : ''}
+                        `}
                       key={uid}
                       to={`/${language}/alphabet/${title}`}
                     >
-                      <div>{title}</div>
-                      {/* <div>{src}</div>*/}
+                      {title}
                     </Link>
                   )
                 })}
             </div>
           </div>
           <div className="col-span-6 sm:col-span-3 mt-8 sm:mt-0">
+            {selectedData?.title === undefined && (
+              <div data-testid="AlphabetPresentation__noCharacter">Please select a character</div>
+            )}
             {selectedData && AlphabetPresentationSelectedData(selectedData)}
+            {links && (
+              <div className="">
+                {links.map(({ url, title }, index) => {
+                  return (
+                    <Link key={index} to={url}>
+                      {title}
+                    </Link>
+                  )
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -115,6 +158,7 @@ AlphabetPresentation.propTypes = {
   ),
   language: string,
   selectedData: object,
+  links: array,
 }
 // AlphabetPresentation.defaultProps = {
 //   onCharacterClick: ()=>{},
