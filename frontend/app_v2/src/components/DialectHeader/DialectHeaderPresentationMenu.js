@@ -6,7 +6,6 @@ import useIcon from 'common/useIcon'
 
 /**
  * @summary DialectHeaderMenu
- * @version 1.0.1
  * @component
  *
  * @param {object} props
