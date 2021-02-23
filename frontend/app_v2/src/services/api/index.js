@@ -148,4 +148,14 @@ export default {
     // TODO: Update this path when BE ready and handle success response in UI
     return post({ path: '/nuxeo/site/automation/Document.Mail', bodyObject: { params: params, input: docId } })
   },
+  postUserGet: (dataAdaptor) => {
+    const { isLoading, error, data } = useQuery('postUserGet', () => {
+      return post({
+        path: '/nuxeo/api/v1/automation/User.Get',
+        bodyObject: { params: {}, context: {} },
+        headers: { properties: '*' },
+      })
+    })
+    return formatResponse({ isLoading, error, data, dataAdaptor })
+  },
 }
