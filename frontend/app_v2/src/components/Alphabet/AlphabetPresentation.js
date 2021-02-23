@@ -37,19 +37,23 @@ const AlphabetPresentationSelectedData = ({ /*uid,*/ title, src, relatedEntries,
         Example words
       </h2>
       {relatedEntries && (
-        <ul>
+        <tbody className="table-fixed">
           {relatedEntries.map(({ title: relatedTitle, definitions, src: relatedSrc, url: relatedUrl }, index) => {
             return (
-              <li key={index}>
-                <Link to={relatedUrl}>{relatedTitle}</Link>
-                {relatedSrc && <AudioMinimal.Container src={relatedSrc} />}
-                {definitions.map((definition, indexInner) => (
-                  <span key={indexInner}>{definition}</span>
-                ))}
-              </li>
+              <tr key={index}>
+                <td className="w-1/2">
+                  <Link to={relatedUrl}>{relatedTitle}</Link>
+                  {relatedSrc && <AudioMinimal.Container src={relatedSrc} />}
+                </td>
+                <td>
+                  {definitions.map((definition, indexInner) => (
+                    <span key={indexInner}>{definition}</span>
+                  ))}
+                </td>
+              </tr>
             )
           })}
-        </ul>
+        </tbody>
       )}
       {videoSrc && <Link to={videoSrc}>Video</Link>}
     </>
@@ -74,7 +78,7 @@ function AlphabetPresentation({ language, isLoading, error, data, selectedData, 
     <section className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative">
-          <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-blue font-bold sm:text-5xl">
+          <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-blue font-bold sm:text-5xl uppercase">
             <span
               className={`
             inline-block
@@ -90,28 +94,26 @@ function AlphabetPresentation({ language, isLoading, error, data, selectedData, 
           </h2>
           <hr className="absolute z-0 w-full" style={{ top: '50%' }} />
         </div>
-
-        <div className="grid grid-cols-6">
+        <div className="grid grid-cols-6 gap-8 ">
           <div className="col-span-6 sm:col-span-3">
-            <div>
-              {/* Characters */}
+            <div className="grid grid-cols-7 sm:grid-cols-5 lg:grid-cols-7">
               {data &&
-                data.map(({ title, uid /*, src*/ }) => {
+                data.map(({ title, uid }) => {
                   return (
                     <Link
                       className={`
-                        border 
-                        font-medium 
-                        inline-flex 
-                        justify-center 
-                        m-1
-                        p-5
-                        rounded 
-                        shadow 
-                        text-2xl 
-                        w-20 
-                        ${selectedData?.title === title ? 'bg-fv-blue text-white' : ''}
-                        `}
+                      border
+                      col-span-1
+                      font-medium
+                      inline-flex
+                      justify-center
+                      m-1
+                      p-5
+                      rounded
+                      shadow
+                      text-2xl
+                      ${selectedData?.title === title ? 'bg-fv-blue text-white' : null}
+                      `}
                       key={uid}
                       to={`/${language}/alphabet/${title}`}
                     >
