@@ -19,11 +19,13 @@ export const findSelectedCharacterData = ({ character, data, language }) => {
   }
   return found
 }
-
+// NOTE: `testingChar` is only for Jest tests and shouldn't influence the website experience
 const AlphabetData = (testingChar) => {
   const { title } = useGetSections()
   const { character, language } = useParams()
   const { isLoading, error, data } = api.postAlphabet(title, postAlphabetAdaptor)
+
+  // NOTE: `defaultSelectedData` is here for Jest testing
   const defaultSelectedData = testingChar
     ? findSelectedCharacterData({ character: testingChar, data, language })
     : undefined
