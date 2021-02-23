@@ -10,63 +10,6 @@ import AudioMinimal from 'components/AudioMinimal'
  *
  * @returns {node} jsx markup
  */
-const AlphabetPresentationSelectedData = ({ /*uid,*/ title, src, relatedEntries, /*url,*/ videoSrc }) => {
-  return (
-    <>
-      <h1
-        className={`
-          flex
-          font-bold
-          justify-center
-          sm:text-4xl
-          text-3xl
-          text-center
-          text-fv-blue
-        `}
-      >
-        {title} {src && <AudioMinimal.Container src={src} />}
-      </h1>
-      <h2
-        className={`
-          sm:text-3xl
-          text-2xl
-          text-center
-          text-fv-blue
-        `}
-      >
-        Example words
-      </h2>
-      {relatedEntries && (
-        <tbody className="table-fixed">
-          {relatedEntries.map(({ title: relatedTitle, definitions, src: relatedSrc, url: relatedUrl }, index) => {
-            return (
-              <tr key={index}>
-                <td className="w-1/2">
-                  <Link to={relatedUrl}>{relatedTitle}</Link>
-                  {relatedSrc && <AudioMinimal.Container src={relatedSrc} />}
-                </td>
-                <td>
-                  {definitions.map((definition, indexInner) => (
-                    <span key={indexInner}>{definition}</span>
-                  ))}
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      )}
-      {videoSrc && <Link to={videoSrc}>Video</Link>}
-    </>
-  )
-}
-AlphabetPresentationSelectedData.propTypes = {
-  uid: string,
-  title: string,
-  src: string,
-  relatedEntries: string,
-  url: string,
-  videoSrc: string,
-}
 function AlphabetPresentation({ language, isLoading, error, data, selectedData, links }) {
   if (isLoading) {
     return <div>some spinner if you want</div>
@@ -75,7 +18,7 @@ function AlphabetPresentation({ language, isLoading, error, data, selectedData, 
     return <div>some error if you want</div>
   }
   return (
-    <section className="py-12 bg-white">
+    <section className="py-12 bg-white" data-testid="AlphabetPresentation">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative">
           <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-blue font-bold sm:text-5xl uppercase">
@@ -101,6 +44,9 @@ function AlphabetPresentation({ language, isLoading, error, data, selectedData, 
                 data.map(({ title, uid }) => {
                   return (
                     <Link
+                      data-testid={
+                        selectedData?.title === title ? 'AlphabetPresentation__selectedCharacter' : undefined
+                      }
                       className={`
                       border
                       col-span-1
@@ -112,7 +58,7 @@ function AlphabetPresentation({ language, isLoading, error, data, selectedData, 
                       rounded
                       shadow
                       text-2xl
-                      ${selectedData?.title === title ? 'bg-fv-blue text-white' : null}
+                      ${selectedData?.title === title ? 'bg-fv-blue text-white' : ''}
                       `}
                       key={uid}
                       to={`/${language}/alphabet/${title}`}
@@ -165,5 +111,66 @@ AlphabetPresentation.propTypes = {
 // AlphabetPresentation.defaultProps = {
 //   onCharacterClick: ()=>{},
 // }
+
+const AlphabetPresentationSelectedData = ({ /*uid,*/ title, src, relatedEntries, /*url,*/ videoSrc }) => {
+  return (
+    <>
+      <h1
+        data-testid="AlphabetPresentationSelectedData__header"
+        className={`
+          flex
+          font-bold
+          justify-center
+          sm:text-4xl
+          text-3xl
+          text-center
+          text-fv-blue
+        `}
+      >
+        {title} {src && <AudioMinimal.Container src={src} />}
+      </h1>
+      <h2
+        className={`
+          sm:text-3xl
+          text-2xl
+          text-center
+          text-fv-blue
+        `}
+      >
+        Example words
+      </h2>
+      {relatedEntries && (
+        <table>
+          <tbody className="table-fixed">
+            {relatedEntries.map(({ title: relatedTitle, definitions, src: relatedSrc, url: relatedUrl }, index) => {
+              return (
+                <tr key={index}>
+                  <td className="w-1/2">
+                    <Link to={relatedUrl}>{relatedTitle}</Link>
+                    {relatedSrc && <AudioMinimal.Container src={relatedSrc} />}
+                  </td>
+                  <td>
+                    {definitions.map((definition, indexInner) => (
+                      <span key={indexInner}>{definition}</span>
+                    ))}
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      )}
+      {videoSrc && <Link to={videoSrc}>Video</Link>}
+    </>
+  )
+}
+AlphabetPresentationSelectedData.propTypes = {
+  uid: string,
+  title: string,
+  src: string,
+  relatedEntries: string,
+  url: string,
+  videoSrc: string,
+}
 
 export default AlphabetPresentation
