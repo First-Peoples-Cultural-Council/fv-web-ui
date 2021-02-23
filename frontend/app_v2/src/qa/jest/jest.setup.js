@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom'
 import { useState as useStateMock } from 'react'
-// jest.mock('components/AudioMinimal/AudioMinimalContainer')
+
 jest.mock('common/useGetSections')
 jest.mock('services/api')
 jest.mock('react', () => ({
