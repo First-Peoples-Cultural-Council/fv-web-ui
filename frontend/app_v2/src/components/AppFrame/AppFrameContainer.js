@@ -1,7 +1,6 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
-import './AppFrame.css'
 import About from 'components/About'
 import Alphabet from 'components/Alphabet'
 import Home from 'components/Home'
