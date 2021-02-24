@@ -1,6 +1,8 @@
+import { useContext, useEffect } from 'react'
 import useGetSections from 'common/useGetSections'
 import useUserGet from 'common/useUserGet'
-import api from 'services/api'
+// import api from 'services/api'
+import AppStateContext from 'common/AppStateContext'
 /**
  * @summary DialectHeaderData
  * @component
@@ -10,25 +12,61 @@ import api from 'services/api'
  *
  */
 function DialectHeaderData() {
+  const { menu } = useContext(AppStateContext)
+  const { machine, send } = menu
+  const { value, context } = machine
+  // console.log('DialectHeaderData', { value, context })
+  const { openMenu } = context
   // TODO: INVESTIGATE WHY logoUrl DOESN'T UPDATE!
   const { title /*, logoUrl*/ } = useGetSections()
   const { firstName, lastName, userName = '', isWorkspaceOn } = useUserGet()
 
   const onWorkspaceModeClick = () => {
-    const { isLoading, error, data } = api.postWorkspaceSetting(!isWorkspaceOn)
-    // TODO: REMOVE CONSOLE LOG
-    // eslint-disable-next-line
-    console.log('onclick debug', { isLoading, error, data })
+    // const { isLoading, error, data } = api.postWorkspaceSetting(!isWorkspaceOn)
+    // console.log('onclick debug TODO: HARDCODED VALUE')
+    send('CLICK_TOGGLE', { value: true })
+  }
+  const onMenuClick = (menuId) => {
+    send('OPEN', { menuId })
   }
 
+  const onKeyPress = ({ code, menuId }) => {
+    const keyCode = code.toLowerCase()
+    if (keyCode === 'escape') {
+      console.log('DEBUG onKeyPress')
+      send('CLOSE')
+    }
+    if (menuId && keyCode === 'enter') {
+      onMenuClick(menuId)
+    }
+  }
+
+  const onClickOutside = (event, menuId) => {
+    if (openMenu && openMenu !== menuId) {
+      console.log('DEBUG onClickOutside')
+      send('CLOSE')
+    }
+  }
+
+  useEffect(() => {
+    if (openMenu) {
+      document.addEventListener('mousedown', onClickOutside)
+    } else {
+      document.removeEventListener('mousedown', onClickOutside)
+    }
+    return () => {
+      document.removeEventListener('mousedown', onClickOutside)
+    }
+  }, [openMenu])
   const currentUser = {
-    userInitials: firstName || lastName ? `${firstName}${lastName}` : userName.charAt(0),
+    userInitials: firstName || lastName ? firstName?.charAt(0) + lastName?.charAt(0) : userName.charAt(0),
     isWorkspaceOn,
   }
 
   const menuData = [
     {
       title: 'Dictionary',
+      id: 'dictionary',
       itemsData: [
         { title: 'Words', href: `/${title}/words` },
         { title: 'Phrases', href: `/${title}/phrases` },
@@ -38,6 +76,7 @@ function DialectHeaderData() {
     },
     {
       title: 'Learn',
+      id: 'learn',
       itemsData: [
         { title: 'Songs', href: `/${title}/songs` },
         { title: 'Stories', href: `/${title}/stories` },
@@ -46,6 +85,7 @@ function DialectHeaderData() {
     },
     {
       title: 'Resources',
+      id: 'resources',
       itemsData: [
         { title: 'Kids Site', href: `/${title}/kids` },
         { title: 'Mobile App', href: `/${title}/app` },
@@ -54,12 +94,13 @@ function DialectHeaderData() {
     },
     {
       title: 'About',
+      id: 'about',
       itemsData: [
         { title: 'Our Language', href: `/${title}/ourlanguage` },
         { title: 'Our People', href: `/${title}/about` },
       ],
     },
-    { title: 'Kids', href: `/${title}/kids` },
+    { title: 'Kids', id: 'kids', href: `/${title}/kids` },
   ]
 
   return {
@@ -67,6 +108,10 @@ function DialectHeaderData() {
     currentUser,
     menuData,
     onWorkspaceModeClick,
+    onMenuClick,
+    openMenu,
+    onKeyPress,
+    onClickOutside,
   }
 }
 

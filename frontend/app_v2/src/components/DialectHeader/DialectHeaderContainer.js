@@ -12,7 +12,7 @@ import DialectHeaderData from 'components/DialectHeader/DialectHeaderData'
  * @returns {node} jsx markup
  */
 function DialectHeaderContainer({ className }) {
-  const { currentUser, menuData, title, onWorkspaceModeClick } = DialectHeaderData()
+  const { currentUser, menuData, title, onWorkspaceModeClick, onMenuClick, openMenu, onKeyPress, onClickOutside } = DialectHeaderData()
   return (
     <DialectHeaderPresentation
       className={className}
@@ -20,6 +20,10 @@ function DialectHeaderContainer({ className }) {
       title={title}
       currentUser={currentUser}
       menuData={menuData}
+      onMenuClick={onMenuClick}
+      openMenu={openMenu}
+      onKeyPress={onKeyPress}
+      onClickOutside={onClickOutside}
     />
   )
 }

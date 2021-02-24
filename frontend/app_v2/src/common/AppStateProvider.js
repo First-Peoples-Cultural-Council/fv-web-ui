@@ -13,11 +13,12 @@ import getSectionsAdaptor from 'services/api/adaptors/getSections'
 import rawGetByIdAdaptor from 'services/api/adaptors/rawGetById'
 import postUserGetAdaptor from 'services/api/adaptors/postUserGet'
 import AudioMachineData from 'components/AudioMachine/AudioMachineData'
-
+import MenuMachineData from 'components/MenuMachine/MenuMachineData'
 function AppStateProvider({ children }) {
   const queryClient = useQueryClient()
   const { language } = useParams()
   const { machine, send } = AudioMachineData()
+  const { machine: menuMachine, send: menuSend } = MenuMachineData()
   const [state, dispatch] = useReducer(reducer, reducerInitialState)
 
   // Get language data
@@ -87,6 +88,10 @@ function AppStateProvider({ children }) {
         audio: {
           machine,
           send,
+        },
+        menu: {
+          machine: menuMachine,
+          send: menuSend,
         },
       }}
     >

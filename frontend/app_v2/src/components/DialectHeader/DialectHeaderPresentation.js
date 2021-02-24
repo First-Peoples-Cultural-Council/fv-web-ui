@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import DialectHeaderPresentationMenu from './DialectHeaderPresentationMenu'
@@ -15,47 +15,39 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function DialectHeaderPresentation({ title, currentUser, menuData, className, onWorkspaceModeClick }) {
+function DialectHeaderPresentation({
+  title,
+  currentUser,
+  menuData,
+  className,
+  onWorkspaceModeClick,
+  onMenuClick,
+  openMenu,
+  onKeyPress,
+  onClickOutside,
+}) {
   const [mobileNavbarOpen, setMobileNavbarOpen] = useState(false)
-
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
 
   const openCloseMobileNavbar = () => {
     setMobileNavbarOpen(!mobileNavbarOpen)
   }
-
-  // Logic to close menu on click away
-  const userMenu = useRef()
-  const handleClickOutside = (event) => {
-    if (userMenu.current.contains(event.target)) {
-      // inside click
-      return
-    }
-    // outside click
-    setIsUserMenuOpen(false)
-  }
-  useEffect(() => {
-    if (isUserMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isUserMenuOpen])
+  const userMenuId = 'user'
 
   const menus = menuData.map((menu) => (
     <DialectHeaderPresentationMenu
       key={`DialectHeaderMenu_${menu.title}`}
       title={menu.title}
       itemsData={menu.itemsData}
-      href={menu.href ? menu.href : null}
+      href={menu.href ? menu.href : null} // TODO: MIGHT NOT NEED TERNARY
+      onMenuClick={onMenuClick}
+      id={menu.id}
+      openMenu={openMenu}
+      onClickOutside={onClickOutside}
     />
   ))
 
   return (
-    <header id="Dialect_header" className={`relative bg-fv-charcoal ${className}`}>
+    <header id="Dialect_header" className={`relative bg-fv-charcoal ${className}`} onKeyUp={onKeyPress}>
       <nav className="max-w-screen-2xl mx-auto px-4 sm:px-6 xl:px-20">
         <div className="flex justify-between items-center py-6 md:justify-start md:space-x-10">
           <div className="justify-start lg:w-0 lg:flex-1">
@@ -83,25 +75,43 @@ function DialectHeaderPresentation({ title, currentUser, menuData, className, on
               </a>
             </div>
           ) : (
-            <div ref={userMenu} className="relative ml-8 flex justify-end flex-1 lg:w-0">
+            <div
+              className="relative ml-8 flex justify-end flex-1 lg:w-0"
+              onClick={(event) => {
+                onClickOutside(event, userMenuId)
+              }}
+              onMouseDown={(event) => {
+                if (openMenu === userMenuId) {
+                  event.stopPropagation()
+                }
+              }}
+            >
               {/* User Avatar */}
               <div className="ml-4 flex items-center md:ml-6">
                 <button
-                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className="max-w-xs p-3 bg-fv-orange hover:bg-fv-orange-dark text-white text-xl rounded-full h-12 w-12 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
                   id="user-menu"
+                  onClick={() => {
+                    onMenuClick(userMenuId)
+                  }}
+                  onKeyPress={(event) => {
+                    if (event.code.toLowerCase() !== 'escape') {
+                      event.stopPropagation()
+                      onMenuClick(userMenuId)
+                    }
+                  }}
                 >
                   <span className="sr-only">Open user menu</span>
                   {currentUser.userInitials}
                 </button>
               </div>
               {/* User Menu dropdown */}
-              {isUserMenuOpen ? (
+              {openMenu === userMenuId ? (
                 <div className="absolute mt-8 w-72 py-8 transform lg:-translate-x-0" role="menu">
                   <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
                     <ul className="text-base text-fv-charcoal font-medium grid bg-white gap-12 p-8 md:gap-8">
                       <li className="-m-3 py-1  hover:bg-gray-100" role="menuitem">
-                        <a href="/dashboard">Dashboard</a>
+                        <Link to="/dashboard">Dashboard</Link>
                       </li>
                       <li className="whitespace-nowrap -m-3 py-1 hover:bg-gray-100">
                         <label htmlFor="toggle" className="inline-block">
@@ -149,10 +159,17 @@ DialectHeaderPresentation.propTypes = {
   title: string,
   className: string,
   onWorkspaceModeClick: func,
+  onMenuClick: func,
+  onKeyPress: func,
+  onClickOutside: func,
+  openMenu: string,
 }
 DialectHeaderPresentation.defaultProps = {
   title: '/',
   onWorkspaceModeClick: () => {},
+  onMenuClick: () => {},
+  onKeyPress: () => {},
+  onClickOutside: () => {},
 }
 
 export default DialectHeaderPresentation
