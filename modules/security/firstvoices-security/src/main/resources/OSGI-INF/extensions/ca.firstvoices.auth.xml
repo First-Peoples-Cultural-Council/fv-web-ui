@@ -9,6 +9,9 @@
 	    target="org.nuxeo.ecm.platform.ui.web.auth.service.PluggableAuthenticationService"
 	    point="specificChains">
 
+    <!-- Override OSGI-INF/auth-contrib.xml @ nuxeo-automation-server-10.10 -->
+    <!-- Some end-points are disabled in bindings or using document permissions -->
+    <!-- Once Automation end-points are converted to REST, we can disable Anon access -->
     <specificAuthenticationChain name="Automation">
 
       <urlPatterns>
@@ -17,12 +20,15 @@
       <replacementChain>
         <plugin>AUTOMATION_BASIC_AUTH</plugin>
         <plugin>TOKEN_AUTH</plugin>
+        <plugin>ANONYMOUS_AUTH</plugin>
       </replacementChain>
     </specificAuthenticationChain>
 
+    <!-- Override OSGI-INF/auth-contrib.xml @ nuxeo-rest-api-server-10.10 -->
+    <!-- Allow anonymous access for all API URLs except for user, users, group, etc. -->
     <specificAuthenticationChain name="RestAPI">
       <urlPatterns>
-        <url>(.*)/api/v.*</url>
+        <url>(.*)/api/(v[0-9]+)/(?!user|users|group|groups|workflow|task|upload).*</url>
       </urlPatterns>
       <replacementChain>
         <plugin>AUTOMATION_BASIC_AUTH</plugin>
@@ -30,14 +36,41 @@
         <plugin>ANONYMOUS_AUTH</plugin>
       </replacementChain>
     </specificAuthenticationChain>
-    
+
+    <!-- For those specific requests, required Basic or Token auth -->
+    <specificAuthenticationChain name="RestAPIAuth">
+      <urlPatterns>
+        <url>(.*)/api/(v[0-9]+)/(user|users|group|groups|workflow|task|upload).*</url>
+      </urlPatterns>
+      <replacementChain>
+        <plugin>AUTOMATION_BASIC_AUTH</plugin>
+        <plugin>TOKEN_AUTH</plugin>
+      </replacementChain>
+    </specificAuthenticationChain>
+
 	</extension>
 
 	<extension target="org.nuxeo.ecm.automation.server.AutomationServer" point="bindings">
+
 	  <binding name="UserGroup.Suggestion">
 	    <administrator>true</administrator>
 	    <groups>language_administrators,administrators</groups>
 	  </binding>
+
+    <binding name="Event.Fire">
+      <administrator>true</administrator>
+    </binding>
+
+    <!-- Disable some automation end-points -->
+    <binding name="RunScript" disabled="true"/>
+    <binding name="RunInputScript" disabled="true"/>
+    <binding name="Log" disabled="true"/>
+    <binding name="Group.CreateOrUpdate" disabled="true"/>
+    <binding name="User.CreateOrUpdate" disabled="true"/>
+    <binding name="User.Get" disabled="true"/>
+    <binding name="Context.GetUsersGroupIdsWithPermissionOnDoc" disabled="true"/>
+    <binding name="User.Query" disabled="true"/>
+
 	</extension>
   	
 </component>
