@@ -4,8 +4,6 @@ const postUserGet = (response) => {
     { type: 'display', value: 'dark' },
     { type: 'workspaceToggle', value: false },
   ]
-  const workspacePreferences = userPreferences.find(({ type }) => type === 'workspaceToggle')
-  const isWorkspaceOn = workspacePreferences ? workspacePreferences.value : false
   return {
     userPreferences,
     // userPreferences: properties?.['user:preferences'], // TODO: ENABLE WHEN ENDPOINT UPDATED
@@ -13,7 +11,6 @@ const postUserGet = (response) => {
     lastName: properties?.['user:lastName'],
     groups: properties?.['user:groups'],
     userName: properties?.['user:username'],
-    isWorkspaceOn,
   }
 }
 export default postUserGet

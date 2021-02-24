@@ -37,7 +37,6 @@ function HomePresentation({
   // error,
   data,
   language,
-  isWorkspaceOn,
 }) {
   const widgets = data ? data.widgets : []
   // TODO: use a better fallback icon
@@ -117,7 +116,7 @@ function HomePresentation({
             const { audio, heading, title } = widgetProps
             return (
               <div key={index} className="px-6">
-                <Welcome.Presentation audio={audio} heading={heading} title={title} isWorkspaceOn={isWorkspaceOn} />
+                <Welcome.Presentation audio={audio} heading={heading} title={title} />
               </div>
             )
           }
@@ -195,7 +194,7 @@ function HomePresentation({
   )
 }
 // PROPTYPES
-const { array, string, shape, bool } = PropTypes
+const { array, string, shape } = PropTypes
 HomePresentation.propTypes = {
   data: shape({
     uid: string,
@@ -208,7 +207,6 @@ HomePresentation.propTypes = {
     path: string,
     logoUrl: string,
   }),
-  isWorkspaceOn: bool,
 }
 
 export default HomePresentation

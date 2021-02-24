@@ -1,6 +1,5 @@
 import api from 'services/api'
 import useGetSections from 'common/useGetSections'
-import useUserGet from 'common/useUserGet'
 import getCommunityHomeAdaptor from 'services/api/adaptors/getCommunityHome'
 /**
  * @summary HomeData
@@ -13,7 +12,6 @@ import getCommunityHomeAdaptor from 'services/api/adaptors/getCommunityHome'
 function HomeData() {
   const { title, uid, path, logoUrl } = useGetSections()
   const { isLoading, error, data, dataOriginal } = api.getCommunityHome(title, getCommunityHomeAdaptor)
-  const { isWorkspaceOn } = useUserGet()
   return {
     isLoading,
     error,
@@ -25,7 +23,6 @@ function HomeData() {
       path,
       logoUrl,
     },
-    isWorkspaceOn,
   }
 }
 
