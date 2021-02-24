@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, { useReducer, useEffect } from 'react'
 import { useQueryClient } from 'react-query'
 import { useParams } from 'react-router-dom'
-
+import useLocalStorage from 'react-use-localstorage'
 import useRoute from 'app_v1/useRoute'
 
 import AppStateContext from 'common/AppStateContext'
@@ -15,6 +15,7 @@ import postUserGetAdaptor from 'services/api/adaptors/postUserGet'
 import AudioMachineData from 'components/AudioMachine/AudioMachineData'
 import MenuMachineData from 'components/MenuMachine/MenuMachineData'
 function AppStateProvider({ children }) {
+  const [workspaceToggle, setWorkspaceToggle] = useLocalStorage('fpcc:workspaceToggle', false)
   const queryClient = useQueryClient()
   const { language } = useParams()
   const { machine, send } = AudioMachineData()
@@ -92,6 +93,10 @@ function AppStateProvider({ children }) {
         menu: {
           machine: menuMachine,
           send: menuSend,
+        },
+        workspaceToggle: {
+          value: workspaceToggle === 'true',
+          set: setWorkspaceToggle,
         },
       }}
     >

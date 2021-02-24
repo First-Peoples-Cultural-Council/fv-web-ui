@@ -16,16 +16,8 @@ const menuMachine = Machine(
       open: {
         entry: ['openMenu'],
         on: {
-          CLICK_TOGGLE: 'request',
           CLOSE: 'idle',
           OPEN: { target: 'open' },
-        },
-      },
-      request: {
-        on: {
-          REQUEST_SUCCESS: 'open',
-          REQUEST_ERROR: 'open',
-          CLOSE: 'idle',
         },
       },
     },

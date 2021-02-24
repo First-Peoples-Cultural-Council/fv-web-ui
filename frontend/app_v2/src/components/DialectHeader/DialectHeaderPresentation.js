@@ -18,7 +18,7 @@ import useIcon from 'common/useIcon'
 function DialectHeaderPresentation({
   className,
   currentUser,
-  isWorkspaceOn,
+  workspaceToggleValue,
   menuData,
   onClickOutside,
   onKeyPress,
@@ -46,7 +46,6 @@ function DialectHeaderPresentation({
       onClickOutside={onClickOutside}
     />
   ))
-
   return (
     <header id="Dialect_header" className={`relative bg-fv-charcoal ${className}`} onKeyUp={onKeyPress}>
       <nav className="max-w-screen-2xl mx-auto px-4 sm:px-6 xl:px-20">
@@ -119,7 +118,7 @@ function DialectHeaderPresentation({
                           Workspace Mode
                         </label>
                         <FVToggle
-                          toggled={isWorkspaceOn}
+                          toggled={workspaceToggleValue}
                           toggleCallback={onWorkspaceModeClick}
                           styling={'ml-6 inline-block align-middle'}
                         />
@@ -159,7 +158,7 @@ DialectHeaderPresentation.propTypes = {
   menuData: array,
   title: string,
   className: string,
-  isWorkspaceOn: bool,
+  workspaceToggleValue: bool,
   onWorkspaceModeClick: func,
   onMenuClick: func,
   onKeyPress: func,
@@ -168,7 +167,7 @@ DialectHeaderPresentation.propTypes = {
 }
 DialectHeaderPresentation.defaultProps = {
   title: '/',
-  isWorkspaceOn: false,
+  workspaceToggleValue: false,
   onWorkspaceModeClick: () => {},
   onMenuClick: () => {},
   onKeyPress: () => {},

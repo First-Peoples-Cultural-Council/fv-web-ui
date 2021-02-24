@@ -1,6 +1,7 @@
 import { useContext, useEffect } from 'react'
 import useGetSections from 'common/useGetSections'
 import useUserGet from 'common/useUserGet'
+import useWorkspaceToggle from 'common/useWorkspaceToggle'
 import AppStateContext from 'common/AppStateContext'
 /**
  * @summary DialectHeaderData
@@ -15,12 +16,14 @@ function DialectHeaderData() {
   const { machine, send } = menu
   const { context } = machine
   const { openMenu } = context
+
   // TODO: INVESTIGATE WHY logoUrl DOESN'T UPDATE!
   const { title /*, logoUrl*/ } = useGetSections()
-  const { firstName, lastName, userName = '', isWorkspaceOn } = useUserGet()
+  const { value: workspaceToggleValue, set } = useWorkspaceToggle()
+  const { firstName, lastName, userName = '' } = useUserGet()
 
   const onWorkspaceModeClick = () => {
-    send('CLICK_TOGGLE', { value: !isWorkspaceOn })
+    set(!workspaceToggleValue)
   }
   const onMenuClick = (menuId) => {
     send('OPEN', { menuId })
@@ -54,7 +57,6 @@ function DialectHeaderData() {
   }, [openMenu])
   const currentUser = {
     userInitials: firstName || lastName ? firstName?.charAt(0) + lastName?.charAt(0) : userName.charAt(0),
-    isWorkspaceOn,
   }
 
   const menuData = [
@@ -99,7 +101,6 @@ function DialectHeaderData() {
 
   return {
     currentUser,
-    isWorkspaceOn,
     menuData,
     onClickOutside,
     onKeyPress,
@@ -107,6 +108,7 @@ function DialectHeaderData() {
     onWorkspaceModeClick,
     openMenu,
     title,
+    workspaceToggleValue,
   }
 }
 
