@@ -32,12 +32,10 @@ const menuMachine = Machine(
   },
   {
     actions: {
-      closeMenu: assign((context, event) => {
-        console.log('closeMenu!', context, event)
+      closeMenu: assign(() => {
         return { openMenu: undefined }
       }),
       openMenu: assign((context, { menuId }) => {
-        console.log('openMenu!', context, menuId)
         return { openMenu: menuId }
       }),
     },

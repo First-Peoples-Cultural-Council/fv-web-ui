@@ -1,7 +1,6 @@
 import { useContext, useEffect } from 'react'
 import useGetSections from 'common/useGetSections'
 import useUserGet from 'common/useUserGet'
-// import api from 'services/api'
 import AppStateContext from 'common/AppStateContext'
 /**
  * @summary DialectHeaderData
@@ -14,17 +13,14 @@ import AppStateContext from 'common/AppStateContext'
 function DialectHeaderData() {
   const { menu } = useContext(AppStateContext)
   const { machine, send } = menu
-  const { value, context } = machine
-  // console.log('DialectHeaderData', { value, context })
+  const { context } = machine
   const { openMenu } = context
   // TODO: INVESTIGATE WHY logoUrl DOESN'T UPDATE!
   const { title /*, logoUrl*/ } = useGetSections()
   const { firstName, lastName, userName = '', isWorkspaceOn } = useUserGet()
 
   const onWorkspaceModeClick = () => {
-    // const { isLoading, error, data } = api.postWorkspaceSetting(!isWorkspaceOn)
-    // console.log('onclick debug TODO: HARDCODED VALUE')
-    send('CLICK_TOGGLE', { value: true })
+    send('CLICK_TOGGLE', { value: !isWorkspaceOn })
   }
   const onMenuClick = (menuId) => {
     send('OPEN', { menuId })
@@ -33,7 +29,6 @@ function DialectHeaderData() {
   const onKeyPress = ({ code, menuId }) => {
     const keyCode = code.toLowerCase()
     if (keyCode === 'escape') {
-      console.log('DEBUG onKeyPress')
       send('CLOSE')
     }
     if (menuId && keyCode === 'enter') {
@@ -43,7 +38,6 @@ function DialectHeaderData() {
 
   const onClickOutside = (event, menuId) => {
     if (openMenu && openMenu !== menuId) {
-      console.log('DEBUG onClickOutside')
       send('CLOSE')
     }
   }
@@ -104,14 +98,15 @@ function DialectHeaderData() {
   ]
 
   return {
-    title,
     currentUser,
+    isWorkspaceOn,
     menuData,
-    onWorkspaceModeClick,
-    onMenuClick,
-    openMenu,
-    onKeyPress,
     onClickOutside,
+    onKeyPress,
+    onMenuClick,
+    onWorkspaceModeClick,
+    openMenu,
+    title,
   }
 }
 

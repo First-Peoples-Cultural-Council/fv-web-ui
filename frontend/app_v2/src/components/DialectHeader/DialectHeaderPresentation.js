@@ -16,15 +16,16 @@ import useIcon from 'common/useIcon'
  * @returns {node} jsx markup
  */
 function DialectHeaderPresentation({
-  title,
-  currentUser,
-  menuData,
   className,
-  onWorkspaceModeClick,
-  onMenuClick,
-  openMenu,
-  onKeyPress,
+  currentUser,
+  isWorkspaceOn,
+  menuData,
   onClickOutside,
+  onKeyPress,
+  onMenuClick,
+  onWorkspaceModeClick,
+  openMenu,
+  title,
 }) {
   const [mobileNavbarOpen, setMobileNavbarOpen] = useState(false)
 
@@ -118,7 +119,7 @@ function DialectHeaderPresentation({
                           Workspace Mode
                         </label>
                         <FVToggle
-                          toggled={currentUser?.isWorkspaceOn}
+                          toggled={isWorkspaceOn}
                           toggleCallback={onWorkspaceModeClick}
                           styling={'ml-6 inline-block align-middle'}
                         />
@@ -152,12 +153,13 @@ function DialectHeaderPresentation({
   )
 }
 // PROPTYPES
-const { array, object, string, func } = PropTypes
+const { array, bool, object, string, func } = PropTypes
 DialectHeaderPresentation.propTypes = {
   currentUser: object,
   menuData: array,
   title: string,
   className: string,
+  isWorkspaceOn: bool,
   onWorkspaceModeClick: func,
   onMenuClick: func,
   onKeyPress: func,
@@ -166,6 +168,7 @@ DialectHeaderPresentation.propTypes = {
 }
 DialectHeaderPresentation.defaultProps = {
   title: '/',
+  isWorkspaceOn: false,
   onWorkspaceModeClick: () => {},
   onMenuClick: () => {},
   onKeyPress: () => {},

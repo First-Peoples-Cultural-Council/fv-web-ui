@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import React from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import useIcon from 'common/useIcon'
@@ -13,7 +13,6 @@ import useIcon from 'common/useIcon'
  * @returns {node} jsx markup
  */
 function DialectHeaderMenu({ id, title, itemsData, href, onMenuClick, openMenu, onClickOutside }) {
-  // const [isOpen, setIsOpen] = useState(false)
   const hasItems = !Array.isArray(itemsData) || !itemsData.length ? false : true
 
   const menuItems = itemsData
@@ -28,46 +27,9 @@ function DialectHeaderMenu({ id, title, itemsData, href, onMenuClick, openMenu, 
       ))
     : null
 
-  // const onMenuClick = () => {
-  //   if (href) {
-  //     window.location.href = href
-  //   } else if (hasItems) {
-  //     setIsOpen(!isOpen)
-  //   }
-  // }
-
-  // Logic to close menu on click away
-  const dialectHeaderMenu = useRef()
-  // const handleClickOutside = (event) => {
-  //   if (dialectHeaderMenu.current.contains(event.target)) {
-  //     // inside click
-  //     return
-  //   }
-  //   // outside click
-  //   setIsOpen(false)
-  // }
-  // useEffect(() => {
-  //   if (isOpen) {
-  //     document.addEventListener('mousedown', handleClickOutside)
-  //   } else {
-  //     document.removeEventListener('mousedown', handleClickOutside)
-  //   }
-  //   return () => {
-  //     document.removeEventListener('mousedown', handleClickOutside)
-  //   }
-  // }, [isOpen])
-
-  // Logic to close menu on location change
-  // const location = useLocation()
-
-  // useEffect(() => {
-  //   setIsOpen(false)
-  // }, [location])
-
   return (
     <div
       id={`HeaderMenu_${title}`}
-      ref={dialectHeaderMenu}
       className="relative"
       onClick={(event) => {
         onClickOutside(event, id)
