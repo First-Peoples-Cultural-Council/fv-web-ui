@@ -70,6 +70,7 @@ export class Preview extends Component {
     type: string.isRequired,
     theme: object,
     intl: object,
+    handlePlay: func,
     // REDUX: reducers/state
     computeAudio: object.isRequired,
     computeCategory: object.isRequired,
@@ -638,6 +639,8 @@ export class Preview extends Component {
                 selectn('properties.file:content.data', videoResponse) ||
                 NavigationHelpers.getBaseURL() + selectn('path', videoResponse)
               }
+              onPlay={this.props.handlePlay ? this.props.handlePlay.bind(this) : null}
+              style={this.props.tagStyles}
               alt={selectn('title', videoResponse)}
               controls
             />

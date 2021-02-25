@@ -26,6 +26,7 @@ import static org.nuxeo.ecm.core.io.registry.reflect.Instantiations.SINGLETON;
 import static org.nuxeo.ecm.core.io.registry.reflect.Priorities.REFERENCE;
 import ca.firstvoices.enrichers.utils.EnricherUtils;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -148,6 +149,11 @@ public class BookEnricher extends AbstractJsonEnricher<DocumentModel> {
         }
         jsonObj.set("related_videos", videoJsonArray);
       }
+
+      // Check if empty book
+      jsonObj.set("isEmpty",
+          mapper.convertValue(!session.hasChildren(doc.getRef()), JsonNode.class));
+
     }
 
     return jsonObj;
