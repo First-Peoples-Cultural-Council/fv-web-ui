@@ -57,6 +57,8 @@ function DialectHeaderData() {
   }, [openMenu])
   const currentUser = {
     userInitials: firstName || lastName ? firstName?.charAt(0) + lastName?.charAt(0) : userName.charAt(0),
+    firstName,
+    userName,
   }
 
   const menuData = [
