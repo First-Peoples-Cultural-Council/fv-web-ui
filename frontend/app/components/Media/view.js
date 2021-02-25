@@ -55,8 +55,6 @@ import FVLabel from 'components/FVLabel'
 
 import { WORKSPACES } from 'common/Constants'
 
-import 'react-image-gallery/styles/css/image-gallery.css'
-
 /**
  * View word entry
  */

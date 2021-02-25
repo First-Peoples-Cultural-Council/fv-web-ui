@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ContactUs from 'components/ContactUs'
 import Topics from 'components/Topics'
 import Welcome from 'components/Welcome'
-import WidgetWotd from 'components/WidgetWotd'
+import WordOfTheDay from 'components/WordOfTheDay'
 import Hero from 'components/Hero'
 import CircleImage from 'components/CircleImage'
 import useIcon from 'common/useIcon'
@@ -134,7 +134,7 @@ function HomePresentation({
             const { audio, hasShare, heading, subheading, title, url } = widgetProps
             return (
               <div key={index} className="px-6 mb-8">
-                <WidgetWotd.Presentation
+                <WordOfTheDay.Presentation
                   audio={audio}
                   hasShare={hasShare}
                   heading={heading}
