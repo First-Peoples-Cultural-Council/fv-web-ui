@@ -639,7 +639,7 @@ export class Preview extends Component {
                 selectn('properties.file:content.data', videoResponse) ||
                 NavigationHelpers.getBaseURL() + selectn('path', videoResponse)
               }
-              onPlay={this.props.handlePlay.bind(this)}
+              onPlay={this.props.handlePlay ? this.props.handlePlay.bind(this) : null}
               style={this.props.tagStyles}
               alt={selectn('title', videoResponse)}
               controls
