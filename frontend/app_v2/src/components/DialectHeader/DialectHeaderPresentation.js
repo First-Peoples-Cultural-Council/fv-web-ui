@@ -59,7 +59,7 @@ function DialectHeaderPresentation({
 
           <div className="hidden md:flex space-x-6">{menus}</div>
 
-          {!currentUser ? (
+          {!currentUser || currentUser?.userName === 'Guest' ? (
             <div className="ml-8 hidden md:flex items-center justify-end md:flex-1 lg:w-0">
               <a
                 href="/nuxeo/logout?requestedUrl=login.jsp"
