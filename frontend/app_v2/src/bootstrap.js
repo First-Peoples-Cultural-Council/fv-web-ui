@@ -15,9 +15,11 @@ ReactDOM.render(
       <Router>
         <Switch>
           <Route path="/:language">
-            <AppStateProvider>
-              <AppFrameContainer />
-            </AppStateProvider>
+            <Route path="/:language/:itemType/:wordId">
+              <AppStateProvider>
+                <AppFrameContainer />
+              </AppStateProvider>
+            </Route>
           </Route>
 
           <div className="grid h-screen">

@@ -33,7 +33,7 @@ export function rawGetByIdAdaptor(response) {
 
 function AppStateProvider({ children }) {
   const queryClient = useQueryClient()
-  const { language } = useParams()
+  const { language, wordId } = useParams()
   const { machine, send } = AudioMachineData()
   const [state, dispatch] = useReducer(reducer, reducerInitialState)
   // Get language data
@@ -72,6 +72,7 @@ function AppStateProvider({ children }) {
       setRouteParams({
         matchedRouteParams: {
           dialect_path: path,
+          word: wordId,
         },
       })
     }

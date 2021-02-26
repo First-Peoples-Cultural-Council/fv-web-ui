@@ -6,6 +6,7 @@ import About from 'components/About'
 import Home from 'components/Home'
 import Suspender from 'components/Suspender'
 import WordsListContainer from 'app_v1/WordsListContainer'
+import Word from 'components/Word'
 import DialectHeader from 'components/DialectHeader'
 
 /**
@@ -34,6 +35,12 @@ function AppFrameContainer() {
                 <title>Words</title>
               </Helmet>
               <WordsListContainer />
+            </Route>
+            <Route path="/:language/word/:wordId">
+              <Helmet>
+                <title>Word</title>
+              </Helmet>
+              <Word.Container />
             </Route>
             <Route path="/:language/*">
               <div className="flex justify-center items-center min-h-screen">
