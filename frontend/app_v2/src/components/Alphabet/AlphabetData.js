@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import api from 'services/api'
-import postAlphabetAdaptor from 'services/api/adaptors/postAlphabet'
+import getAlphabetAdaptor from 'services/api/adaptors/getAlphabet'
 import useGetSections from 'common/useGetSections'
 import { useParams } from 'react-router-dom'
 /**
@@ -23,7 +23,7 @@ export const findSelectedCharacterData = ({ character, data, language }) => {
 const AlphabetData = (testingChar) => {
   const { title } = useGetSections()
   const { character, language } = useParams()
-  const { isLoading, error, data } = api.postAlphabet(title, postAlphabetAdaptor)
+  const { isLoading, error, data } = api.getAlphabet(title, getAlphabetAdaptor)
 
   // NOTE: `defaultSelectedData` is here for Jest testing
   const defaultSelectedData = testingChar

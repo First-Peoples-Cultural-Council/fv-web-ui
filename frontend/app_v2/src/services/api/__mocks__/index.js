@@ -5,7 +5,7 @@ const api = {
   rawGetById: () => {
     return { isLoading: false, data: {}, dataOriginal: {} }
   },
-  postAlphabet: () => {
+  getAlphabet: () => {
     return {
       isLoading: false,
       error: null,

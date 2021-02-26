@@ -76,7 +76,7 @@ export default {
         }
       )
   },
-  postAlphabet: (language, dataAdaptor) => {
+  getAlphabet: (language, dataAdaptor) => {
     const { isLoading, error, data } = useQuery(
       ['getAlphabet', language],
       () => {

@@ -1,4 +1,4 @@
-const postAlphabet = (response) => {
+const getAlphabet = (response) => {
   const _entries = response?.entries || []
   const characters = _entries.map(({ title, uid, contextParameters }) => {
     const { character } = contextParameters
@@ -27,4 +27,4 @@ const postAlphabet = (response) => {
   return characters
 }
 
-export default postAlphabet
+export default getAlphabet
