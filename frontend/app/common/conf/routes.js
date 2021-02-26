@@ -913,35 +913,6 @@ const routes = [
       ANYTHING_BUT_SLASH,
       ANYTHING_BUT_SLASH,
       'play',
-      'colouringbook',
-    ],
-    title:
-      intl.translate({
-        key: 'coloring_book',
-        default: 'Coloring Book',
-        case: 'words',
-      }) +
-      ' | ' +
-      intl.translate({
-        key: 'games',
-        default: 'Games',
-        case: 'words',
-      }) +
-      ' | {$dialect_name}',
-    page: <Pages.PageColouringBook />,
-    redirects: [WORKSPACE_TO_SECTION_REDIRECT],
-    extractPaths: true,
-  },
-  {
-    path: [
-      KIDS_OR_DEFAULT,
-      'FV',
-      new paramMatch('area', WORKSPACE_OR_SECTION),
-      'Data',
-      ANYTHING_BUT_SLASH,
-      ANYTHING_BUT_SLASH,
-      ANYTHING_BUT_SLASH,
-      'play',
       'concentration',
     ],
     title:
@@ -958,35 +929,6 @@ const routes = [
       }) +
       ' | {$dialect_name}',
     page: <Pages.PageConcentration />,
-    redirects: [WORKSPACE_TO_SECTION_REDIRECT],
-    extractPaths: true,
-  },
-  {
-    path: [
-      KIDS_OR_DEFAULT,
-      'FV',
-      new paramMatch('area', WORKSPACE_OR_SECTION),
-      'Data',
-      ANYTHING_BUT_SLASH,
-      ANYTHING_BUT_SLASH,
-      ANYTHING_BUT_SLASH,
-      'play',
-      'picturethis',
-    ],
-    title:
-      intl.translate({
-        key: 'picture_this',
-        default: 'Picture This',
-        case: 'words',
-      }) +
-      ' | ' +
-      intl.translate({
-        key: 'games',
-        default: 'Games',
-        case: 'words',
-      }) +
-      ' | {$dialect_name}',
-    page: <Pages.PagePictureThis />,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
     extractPaths: true,
   },
