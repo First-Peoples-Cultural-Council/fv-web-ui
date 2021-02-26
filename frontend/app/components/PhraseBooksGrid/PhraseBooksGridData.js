@@ -49,13 +49,14 @@ function PhraseBooksGridData({ children }) {
   const categories = (selectn('response.entries', computedCategories) || []).map((category) => {
     return {
       title: category.title,
-      href: `/kids${routeParams.dialect_path}/learn/phrases/book/${category.uid}`,
+      href: `/kids${routeParams.dialect_path}/learn/phrases/book/${category.uid}/9/1`,
     }
   })
 
   // Render
   // ----------------------------------------
   return children({
+    routeParams,
     categories,
     computeEntities: Immutable.fromJS([
       {

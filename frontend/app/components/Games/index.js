@@ -68,11 +68,6 @@ export class Play extends Component {
                     <img src="assets/games/fv-games-jigsaw/images/preview.png" className="responsive-image" />
                   </a>
                 </div>
-                {/* <div className="cell" style={cellStyle}>
-                                <a href="colouringbook" onClick={this.navigate}><img
-                                    src="assets/games/fv-games-colouring-book/images/preview.png"
-                                    className="responsive-image" /></a>
-                            </div> */}
                 <div className="cell" style={cellStyle}>
                   <a href="wordsearch" onClick={this.navigate}>
                     <img src="assets/games/fv-games-wordsearch/images/preview.png" className="responsive-image" />
@@ -83,11 +78,6 @@ export class Play extends Component {
                     <img src="assets/games/fv-games-wordscramble/images/preview.png" className="responsive-image" />
                   </a>
                 </div>
-                {/* <div className="cell" style={cellStyle}>
-                                <a href="picturethis" onClick={this.navigate}><img
-                                    src="assets/games/fv-games-picture-this/images/preview.png"
-                                    className="responsive-image"/></a>
-                            </div> */}
                 <div className="cell" style={cellStyle}>
                   <a href="parachute" onClick={this.navigate}>
                     <img src="assets/games/fv-games-hangman/images/preview.png" className="responsive-image" />
