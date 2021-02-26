@@ -205,6 +205,18 @@ const DIALECT_LEARN_PHRASES = {
   redirects: [WORKSPACE_TO_SECTION_REDIRECT],
 }
 
+const DIALECT_LEARN_PHRASES_ONLY_KIDS = {
+  path: [...DIALECT_PATH_ONLY_KIDS, 'learn', 'phrases'],
+  title:
+    intl.translate({
+      key: 'words',
+      default: 'Phrases',
+    }) + ' | {$dialect_name}',
+  page: <Pages.KidsPhrasesByPhrasebook />,
+  extractPaths: true,
+  redirects: [WORKSPACE_TO_SECTION_REDIRECT],
+}
+
 const DIALECT_IMMERSION_WORDS = {
   path: [...DIALECT_PATH_KIDS_OR_DEFAULT, 'immersion'],
   title: 'Immersion', // TODOSL add locale for this
@@ -1837,6 +1849,8 @@ const routes = [
     page: <Pages.PageDialectWordEdit />,
     extractPaths: true,
   },
+  DIALECT_LEARN_PHRASES_ONLY_KIDS,
+  addPagination(DIALECT_LEARN_PHRASES_ONLY_KIDS),
   DIALECT_LEARN_PHRASES,
   addPagination(DIALECT_LEARN_PHRASES),
   // Phrase by Alphabet, eg: /[kids|explore]/.../learn/phrases/alphabet/b

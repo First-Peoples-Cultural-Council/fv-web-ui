@@ -39,7 +39,7 @@ function WordsCategoriesGridData({ children }) {
   const categories = (_categories || []).map((category) => {
     return {
       title: category.title,
-      href: `/kids${routeParams.dialect_path}/learn/words/categories/${category.uid}`,
+      href: `/kids${routeParams.dialect_path}/learn/words/categories/${category.uid}/12/1`,
       image: selectn(['properties', 'file:content', 'data'], category),
     }
   })
