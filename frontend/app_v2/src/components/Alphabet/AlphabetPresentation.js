@@ -151,7 +151,7 @@ const AlphabetPresentationSelectedData = ({ /*uid,*/ title, src, relatedEntries,
                   </td>
                   <td>
                     {definitions.map((definition, indexInner) => (
-                      <span key={indexInner}>{definition}</span>
+                      <span key={indexInner}>{definition.translation}</span>
                     ))}
                   </td>
                 </tr>
