@@ -29,10 +29,10 @@ const handleSuccessAndError = (response) => {
   return response
 }
 // TODO: CONVERT TO SINGLE ARG TO MATCH POST
-const get = (path) => {
+const get = (path, headers) => {
   return (
     api
-      .get(path)
+      .get(path, headers)
       //.then(handleSuccessAndError) // TODO?
       // TODO: CHECK IF NEEDED, POSSIBLY REMOVE BELOW
       .then(
@@ -81,6 +81,7 @@ export default {
       ['getAlphabet', language],
       () => {
         if (language) {
+          // TODO handle all variations of 'language' - url friendly
           const _language = language.replace(/'/g, "\\'")
           return post({
             path: '/nuxeo/api/v1/automation/Document.EnrichedQuery',
@@ -95,6 +96,21 @@ export default {
             },
             headers: { 'enrichers.document': 'character' },
           })
+        }
+      },
+      queryOptions
+    )
+    return formatResponse({ isLoading, error, data, dataAdaptor })
+  },
+  getCharacter: (character, language, dataAdaptor) => {
+    const { isLoading, error, data } = useQuery(
+      ['character', character],
+      () => {
+        if (language && character) {
+          const _language = language.replace(/'/g, "\\'")
+          return get(`/nuxeo/api/v1/path/FV/sections/Data/Test/Test/${_language}/Alphabet/${character}`, {
+            headers: { 'enrichers.document': 'ancestry, character, permissions', properties: '*' },
+          }).then(handleSuccessAndError)
         }
       },
       queryOptions
