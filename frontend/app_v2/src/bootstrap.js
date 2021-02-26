@@ -9,10 +9,17 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import AppStateProvider from 'common/AppStateProvider'
 const queryClient = new QueryClient()
 
+/*
+The `ReactDOM.render` call "bootstraps" the app into place
+Also using this file for any app providers
+*/
 ReactDOM.render(
   <AppV1Provider>
+    {/* <- Federated from V1. Contains Redux & Mat-UI providers  */}
     <QueryClientProvider client={queryClient}>
+      {/* <- React-Query  */}
       <Router>
+        {/* <- React Router  */}
         <Switch>
           <Route path="/:language">
             <AppStateProvider>

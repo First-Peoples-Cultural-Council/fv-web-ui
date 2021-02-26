@@ -48,6 +48,7 @@ function AppStateProvider({ children }) {
   }, [sectionsIsLoading, sectionsError])
 
   // Get language logo
+  // TODO: Daniel says there's an easier way we can get the language's icon
   const logoId = state.api.getSections.idLogo
   useEffect(() => {
     if (state.api.getSections.idLogo) {

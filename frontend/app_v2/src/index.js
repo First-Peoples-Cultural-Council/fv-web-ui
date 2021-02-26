@@ -1,2 +1,2 @@
-import 'core-js'
+import 'core-js' // <- Babel polyfills
 import('./bootstrap')

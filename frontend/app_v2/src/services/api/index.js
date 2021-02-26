@@ -15,6 +15,9 @@ const api = ky.create({
 const queryOptions = {
   retry: (count, { message: status }) => status !== '404' && status !== '401',
 }
+// NOTE: react-query will populate the `error` property
+// only when it encounters an error.
+// react-query does not consider 404s & 401s to be errors
 const handleSuccessAndError = (response) => {
   if (response.ok === false) {
     throw new Error(response.status)

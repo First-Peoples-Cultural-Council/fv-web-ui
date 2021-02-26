@@ -1,3 +1,4 @@
+// TODO: Lazy load the icon files
 import React from 'react'
 
 import About from 'common/icons/AboutIcon'
