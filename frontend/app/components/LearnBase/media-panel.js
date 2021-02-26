@@ -19,7 +19,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import selectn from 'selectn'
 
-import ImageGallery from 'react-image-gallery'
+import Carousel from 'react-material-ui-carousel'
 import Preview from 'components/Preview'
 
 /**
@@ -31,6 +31,7 @@ export default class MediaPanel extends Component {
     type: PropTypes.string.isRequired,
     items: PropTypes.array.isRequired,
     minimal: PropTypes.bool,
+    autoPlay: PropTypes.bool,
   }
 
   constructor(props, context) {
@@ -38,7 +39,7 @@ export default class MediaPanel extends Component {
   }
 
   render() {
-    const { label, items, type, minimal } = this.props
+    const { label, items, type, minimal, autoPlay } = this.props
 
     return items.length === 0 ? null : (
       <div className={classNames('row', 'media-panel', 'media-panel-' + type)}>
@@ -52,20 +53,19 @@ export default class MediaPanel extends Component {
               minimal={minimal}
             />
           ) : (
-            <ImageGallery
-              items={items}
-              renderItem={function createPreview(item) {
-                return (
-                  <div className="image-gallery-image">
-                    <Preview key={item.id} expandedValue={item.object} type={type} minimal={minimal} />
-                  </div>
-                )
-              }}
-              showNav={false}
-            />
+            <Carousel autoPlay={autoPlay}>
+              {items.map((item, index) => (
+                <Preview key={item.id + index} expandedValue={item.object} type={type} minimal={minimal} />
+              ))}
+            </Carousel>
           )}
         </div>
       </div>
     )
   }
+}
+
+MediaPanel.defaultProps = {
+  autoPlay: false,
+  minimal: false,
 }

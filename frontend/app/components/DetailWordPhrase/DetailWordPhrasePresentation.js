@@ -9,8 +9,6 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import FVButton from 'components/FVButton'
 import sanitize from 'common/Sanitize'
 
-import 'react-image-gallery/styles/css/image-gallery.css'
-
 /**
  * @summary DetailWordPhrasePresentation
  * @version 1.0.1
@@ -262,8 +260,8 @@ function DetailWordPhrasePresentation({
         </h4>
         <div className="row media-panel media-panel-FVPicture">
           <div className="col-xs-12">
-            {_photos.map((photo) => (
-              <Preview key={photo.id} expandedValue={photo.object} type="FVPicture" />
+            {_photos.map((photo, key) => (
+              <Preview key={key} expandedValue={photo.object} type="FVPicture" />
             ))}
           </div>
         </div>
@@ -390,8 +388,8 @@ function DetailWordPhrasePresentation({
         </h4>
         <div className="row media-panel media-panel-FVVideo">
           <div className="col-xs-12">
-            {_videos.map((video) => (
-              <Preview key={video.id} expandedValue={video.object} type="FVVideo" />
+            {_videos.map((video, key) => (
+              <Preview key={key} expandedValue={video.object} type="FVVideo" />
             ))}
           </div>
         </div>

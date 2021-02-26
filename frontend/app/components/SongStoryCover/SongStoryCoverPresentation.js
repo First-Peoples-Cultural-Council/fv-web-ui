@@ -42,7 +42,7 @@ function SongStoryCoverPresentation({
     videos.length > 0 || pictures.length > 0 ? (
       <Grid key={'media-' + book.uid} item xs={5}>
         <div className={classes.media}>
-          <MediaPanels.Presentation pictures={pictures} videos={videos} />
+          <MediaPanels.Presentation pictures={pictures} videos={videos} minimal />
         </div>
       </Grid>
     ) : null

@@ -61,7 +61,10 @@ export class ReportsView extends PageDialectLearnBase {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.routeParams.reportName !== this.props.routeParams.reportName) {
+    if (
+      this.props.routeParams.reportName != undefined &&
+      prevProps.routeParams.reportName !== this.props.routeParams.reportName
+    ) {
       this.setState(this.getReports())
     }
   }

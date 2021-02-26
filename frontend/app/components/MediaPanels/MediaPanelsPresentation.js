@@ -20,11 +20,11 @@ import { MediaPanelsStyles } from './MediaPanelsStyles'
  * @returns {node} jsx markup
  */
 
-function MediaPanelsPresentation({ pictures, videos }) {
+function MediaPanelsPresentation({ pictures, videos, minimal }) {
   function _getMediaPanels() {
     const [tabValue, setTabValue] = useState(0)
-    const pictureMediaPanel = <MediaPanel minimal label="" type="FVPicture" items={pictures} />
-    const videoMediaPanel = <MediaPanel minimal label="" type="FVVideo" items={videos} />
+    const pictureMediaPanel = <MediaPanel minimal={minimal} label="" type="FVPicture" items={pictures} />
+    const videoMediaPanel = <MediaPanel minimal={minimal} label="" type="FVVideo" items={videos} />
 
     if (pictures.length > 0 && videos.length > 0) {
       return (
@@ -77,10 +77,15 @@ function MediaTab(props) {
   )
 }
 // PROPTYPES
-const { array } = PropTypes
+const { array, bool } = PropTypes
 MediaPanelsPresentation.propTypes = {
   pictures: array,
   videos: array,
+  minimal: bool,
+}
+
+MediaPanelsPresentation.defaultProps = {
+  minimal: false,
 }
 
 export default MediaPanelsPresentation

@@ -1048,13 +1048,6 @@ export const labelMap = [
     templateStrings: [],
   },
   {
-    key: 'general.colouring_book',
-    isUsed: true,
-    category: 'general',
-    type: 'phrase',
-    templateStrings: [],
-  },
-  {
     key: 'general.column',
     isUsed: true,
     category: 'general',
