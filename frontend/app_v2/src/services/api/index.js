@@ -13,6 +13,7 @@ const formatResponse = ({ isLoading, error, data, dataAdaptor }) => {
   }
   return { isLoading, error, data, dataOriginal: data }
 }
+
 // const getNuxeoURL = () => {
 //   if (ENV_NUXEO_URL !== null && typeof ENV_NUXEO_URL !== 'undefined') {
 //     return ENV_NUXEO_URL
@@ -22,14 +23,15 @@ const formatResponse = ({ isLoading, error, data, dataAdaptor }) => {
 const queryOptions = {
   retry: (count, { message: status }) => status !== '404' && status !== '401',
 }
+
 const handleSuccessAndError = (response) => {
   if (response.ok === false) {
     throw new Error(response.status)
   }
   return response
 }
-// TODO: CONVERT TO SINGLE ARG TO MATCH POST
-const get = (path, headers) => {
+
+const get = ({ path, headers }) => {
   return (
     api
       .get(path, headers)
@@ -45,6 +47,7 @@ const get = (path, headers) => {
       )
   )
 }
+
 const post = ({ path, bodyObject, headers }) => {
   return api
     .post(path, { json: bodyObject, headers })
@@ -62,7 +65,7 @@ const post = ({ path, bodyObject, headers }) => {
 export default {
   get,
   rawGetById: (id, dataAdaptor) => {
-    return get(`/nuxeo/api/v1/id/${id}?properties=*`)
+    return get({ path: `/nuxeo/api/v1/id/${id}?properties=*` })
       .then(handleSuccessAndError)
       .then(
         (response) => {
@@ -108,7 +111,8 @@ export default {
       () => {
         if (language && character) {
           const _language = language.replace(/'/g, "\\'")
-          return get(`/nuxeo/api/v1/path/FV/sections/Data/Test/Test/${_language}/Alphabet/${character}`, {
+          return get({
+            path: `/nuxeo/api/v1/path/FV/sections/Data/Test/Test/${_language}/Alphabet/${character}`,
             headers: { 'enrichers.document': 'ancestry, character, permissions', properties: '*' },
           }).then(handleSuccessAndError)
         }
@@ -121,7 +125,7 @@ export default {
     const { isLoading, error, data } = useQuery(
       ['getById', id],
       () => {
-        return get(`/nuxeo/api/v1/id/${id}?properties=*`).then(handleSuccessAndError)
+        return get({ path: `/nuxeo/api/v1/id/${id}?properties=*` }).then(handleSuccessAndError)
       },
       queryOptions
     )
@@ -131,7 +135,7 @@ export default {
     const { isLoading, error, data } = useQuery(
       ['getSections', sitename],
       () => {
-        return get(`/nuxeo/api/v1/site/sections/${sitename}`).then(handleSuccessAndError)
+        return get({ path: `/nuxeo/api/v1/site/sections/${sitename}` }).then(handleSuccessAndError)
       },
       queryOptions
     )
@@ -140,9 +144,9 @@ export default {
   // TODO: remove postman example server url
   getCommunityHome: (sitename, dataAdaptor) => {
     const { isLoading, error, data } = useQuery(['getCommunityHome', sitename], () => {
-      return get(
-        `https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`
-      )
+      return get({
+        path: `https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`,
+      })
     })
     return formatResponse({ isLoading, error, data, dataAdaptor })
   },

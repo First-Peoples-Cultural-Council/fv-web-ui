@@ -12,7 +12,7 @@ import { useParams } from 'react-router-dom'
  */
 export const findSelectedCharacterData = ({ character, data, language }) => {
   const found = data.find(({ title }) => title === character)
-  if (found) {
+  if (found?.relatedEntries) {
     found.relatedEntries.forEach((entry) => {
       entry.url = `/${language}/word/${entry.uid}`
     })
