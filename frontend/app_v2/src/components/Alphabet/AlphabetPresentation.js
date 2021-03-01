@@ -75,15 +75,15 @@ function AlphabetPresentation({ language, isLoading, error, data, selectedData, 
             )}
             {selectedData && AlphabetPresentationSelected({ selectedData, onVideoClick, videoIsOpen })}
             {links && (
-              <div className="">
+              <ul className="text-center">
                 {links.map(({ url, title }, index) => {
                   return (
-                    <Link key={index} to={url}>
-                      {title}
-                    </Link>
+                    <li key={index} className="m-5">
+                      <Link to={url}>{title}</Link>
+                    </li>
                   )
                 })}
-              </div>
+              </ul>
             )}
           </div>
         </div>
