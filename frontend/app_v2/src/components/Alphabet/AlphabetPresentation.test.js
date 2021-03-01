@@ -85,7 +85,7 @@ describe('AlphabetPresentation', () => {
         <AlphabetPresentation isLoading={false} data={data} language="k'w" selectedData={selectedData} />
       </Router>
     )
-    const heading = screen.getByTestId('AlphabetPresentationSelectedData__header')
+    const heading = screen.getByTestId('AlphabetPresentationSelected__header')
     expect(heading).toHaveTextContent(character)
   })
 })

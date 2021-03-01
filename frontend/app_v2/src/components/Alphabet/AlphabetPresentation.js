@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import AudioMinimal from 'components/AudioMinimal'
+import AlphabetPresentationSelected from 'components/Alphabet/AlphabetPresentationSelected'
 /**
  * @summary AlphabetPresentation
  * @component
@@ -10,7 +10,7 @@ import AudioMinimal from 'components/AudioMinimal'
  *
  * @returns {node} jsx markup
  */
-function AlphabetPresentation({ language, isLoading, error, data, selectedData, links }) {
+function AlphabetPresentation({ language, isLoading, error, data, selectedData, onVideoClick, links, videoIsOpen }) {
   if (isLoading) {
     return <div>some spinner if you want</div>
   }
@@ -73,7 +73,7 @@ function AlphabetPresentation({ language, isLoading, error, data, selectedData, 
             {selectedData?.title === undefined && (
               <div data-testid="AlphabetPresentation__noCharacter">Please select a character</div>
             )}
-            {selectedData && AlphabetPresentationSelectedData(selectedData)}
+            {selectedData && AlphabetPresentationSelected({ selectedData, onVideoClick, videoIsOpen })}
             {links && (
               <div className="">
                 {links.map(({ url, title }, index) => {
@@ -92,7 +92,7 @@ function AlphabetPresentation({ language, isLoading, error, data, selectedData, 
   )
 }
 // PROPTYPES
-const { bool, array, string, shape, arrayOf, object } = PropTypes
+const { bool, array, func, string, shape, arrayOf, object } = PropTypes
 AlphabetPresentation.propTypes = {
   isLoading: bool,
   error: array, // TODO: CONFIRM?
@@ -107,70 +107,12 @@ AlphabetPresentation.propTypes = {
   language: string,
   selectedData: object,
   links: array,
+  videoIsOpen: bool,
+  onVideoClick: func,
 }
-// AlphabetPresentation.defaultProps = {
-//   onCharacterClick: ()=>{},
-// }
 
-const AlphabetPresentationSelectedData = ({ /*uid,*/ title, src, relatedEntries, /*url,*/ videoSrc }) => {
-  return (
-    <>
-      <h1
-        data-testid="AlphabetPresentationSelectedData__header"
-        className={`
-          flex
-          font-bold
-          justify-center
-          sm:text-4xl
-          text-3xl
-          text-center
-          text-fv-blue
-        `}
-      >
-        {title} {src && <AudioMinimal.Container src={src} />}
-      </h1>
-      <h2
-        className={`
-          sm:text-3xl
-          text-2xl
-          text-center
-          text-fv-blue
-        `}
-      >
-        Example words
-      </h2>
-      {relatedEntries && (
-        <table>
-          <tbody className="table-fixed">
-            {relatedEntries.map(({ title: relatedTitle, definitions, src: relatedSrc, url: relatedUrl }, index) => {
-              return (
-                <tr key={index}>
-                  <td className="w-1/2">
-                    <Link to={relatedUrl}>{relatedTitle}</Link>
-                    {relatedSrc && <AudioMinimal.Container src={relatedSrc} />}
-                  </td>
-                  <td>
-                    {definitions.map((definition, indexInner) => (
-                      <span key={indexInner}>{definition.translation}</span>
-                    ))}
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      )}
-      {videoSrc && <Link to={videoSrc}>Video</Link>}
-    </>
-  )
-}
-AlphabetPresentationSelectedData.propTypes = {
-  uid: string,
-  title: string,
-  src: string,
-  relatedEntries: string,
-  url: string,
-  videoSrc: string,
+AlphabetPresentation.defaultProps = {
+  onVideoClick: () => {},
 }
 
 export default AlphabetPresentation

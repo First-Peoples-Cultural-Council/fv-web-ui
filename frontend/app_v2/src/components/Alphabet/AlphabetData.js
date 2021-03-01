@@ -40,6 +40,13 @@ const AlphabetData = (testingChar) => {
     }
   }, [character, data, selectedData])
 
+  // Video Modal
+  const [videoIsOpen, setVideoIsOpen] = useState(false)
+
+  const onVideoClick = () => {
+    setVideoIsOpen(!videoIsOpen)
+  }
+
   return {
     links: [
       {
@@ -52,7 +59,9 @@ const AlphabetData = (testingChar) => {
     error,
     isLoading,
     language,
+    onVideoClick,
     selectedData,
+    videoIsOpen,
   }
 }
 
