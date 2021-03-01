@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import WidgetWotd from 'components/WidgetWotd'
 import Topics from 'components/Topics'
+import WordOfTheDay from 'components/WordOfTheDay'
 import Hero from 'components/Hero'
 import CircleImage from 'components/CircleImage'
 import useIcon from 'common/useIcon'
@@ -130,8 +130,8 @@ function HomePresentation({
           if (type === WIDGET_SCHEDULE) {
             const { audio, hasShare, heading, subheading, title, url } = widgetProps
             return (
-              <div key={index} className="px-6">
-                <WidgetWotd.Presentation
+              <div key={index} className="px-6 mb-8">
+                <WordOfTheDay.Presentation
                   audio={audio}
                   hasShare={hasShare}
                   heading={heading}
