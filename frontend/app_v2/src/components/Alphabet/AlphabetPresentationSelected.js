@@ -21,67 +21,99 @@ const AlphabetPresentationSelected = ({ selectedData, onVideoClick, videoIsOpen 
         className={`
             flex
             font-bold
+            items-center
             justify-center
             sm:text-4xl
             text-3xl
             text-center
             text-fv-blue
+            mb-5
           `}
       >
-        {title} {src && <AudioMinimal.Container src={src} />}
+        {title}
+        {src && (
+          <div className="ml-2">
+            <AudioMinimal.Container
+              src={src}
+              icons={{
+                Play: useIcon('Audio', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
+                Pause: useIcon('PauseCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
+                Error: useIcon('TimesCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
+              }}
+            />
+          </div>
+        )}
       </h1>
-      <h2
-        className={`
-            sm:text-3xl
-            text-2xl
-            text-center
-            text-fv-blue
-          `}
-      >
-        Example words
-      </h2>
       {relatedEntries && (
-        <table>
-          <tbody className="table-fixed">
-            {relatedEntries.map(({ title: relatedTitle, definitions, src: relatedSrc, url: relatedUrl }, index) => {
-              return (
-                <tr key={index}>
-                  <td className="w-1/2">
-                    <Link to={relatedUrl}>{relatedTitle}</Link>
-                    {relatedSrc && <AudioMinimal.Container src={relatedSrc} />}
-                  </td>
-                  <td>
-                    {definitions.map((definition, indexInner) => (
-                      <span key={indexInner}>{definition.translation}</span>
-                    ))}
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+        <>
+          <h2 className="sm:text-2xl font-medium text-xl text-center text-fv-blue">Example words</h2>
+          <table className="table-auto mx-auto mb-8 mt-5 w-3/4">
+            <thead>
+              <th className=" hidden">Title</th>
+              <th className="hidden">Audio</th>
+              <th className="hidden">Definitions</th>
+            </thead>
+            <tbody>
+              {relatedEntries.map(({ title: relatedTitle, definitions, src: relatedSrc, url: relatedUrl }, index) => {
+                const zebraStripe = index % 2 === 0 ? 'bg-gray-100' : ''
+
+                return (
+                  <tr key={index} className={zebraStripe}>
+                    <td className="p-2">
+                      <Link to={relatedUrl}>{relatedTitle}</Link>
+                    </td>
+                    <td className="p-2">
+                      {relatedSrc && <AudioMinimal.Container src={relatedSrc} iconStyling="h-8 w-8 fill-current" />}
+                    </td>
+                    <td className="p-2">
+                      {definitions.map((definition, indexInner) => (
+                        <span key={indexInner}>{definition.translation}</span>
+                      ))}
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </>
       )}
       {videoSrc && (
-        <div>
+        <div className="flex justify-center">
           <button
             onClick={onVideoClick}
-            className="ml-4 whitespace-nowrap inline-flex items-center justify-center py-2 px-4 border border-transparent rounded-3xl  shadow-sm text-base font-medium text-white bg-fv-orange hover:bg-fv-orange-dark"
+            className={`
+            bg-fv-orange
+            hover:bg-fv-orange-dark
+            border
+            border-transparent
+            flex
+            font-medium
+            items-center
+            justify-center
+            px-5
+            py-2
+            rounded-3xl 
+            shadow-sm
+            text-base
+            text-center
+            text-white
+            `}
           >
-            {useIcon('PlayCircle', 'fill-current mr-2')}
+            {useIcon('PlayArrow', 'fill-current mr-2 -ml-1 h-8 w-8')}
             Play Video
           </button>
-          {/*Modal*/}
-          {videoIsOpen ? (
-            <div className="fixed w-full h-full top-0 left-0 flex items-center justify-center">
-              <div className="absolute w-full h-full bg-gray-500 opacity-50" />
-              <div className=" bg-white mx-auto rounded shadow-lg z-50 overflow-y-auto p-5 inline-flex justify-center">
-                <video height={100} src={videoSrc} preload="none" controls>
-                  Your browser does not support the video tag.
-                </video>
-                <div onClick={onVideoClick}>{useIcon('Close', 'h-8 w-8 fill-current text-black')}</div>
-              </div>
-            </div>
-          ) : null}
+        </div>
+      )}
+      {/*Modal*/}
+      {videoIsOpen && (
+        <div className="fixed w-full h-full top-0 left-0 flex items-center justify-center">
+          <div className="absolute w-full h-full bg-gray-500 opacity-50" />
+          <div className=" bg-white mx-auto rounded shadow-lg z-50 overflow-y-auto p-5 inline-flex justify-center">
+            <video height={100} src={videoSrc} preload="none" controls>
+              Your browser does not support the video tag.
+            </video>
+            <div onClick={onVideoClick}>{useIcon('Close', 'h-6 w-6 fill-current text-black')}</div>
+          </div>
         </div>
       )}
     </>
