@@ -289,7 +289,7 @@ class _SongsStoriesCardView extends Component {
                 tagStyles={{ height: '296px', objectFit: 'cover' }}
               />
               <Link className="CardViewVideoLink" href={href}>
-                <LinkIcon title={this.props.intl.trans('link', 'Link', 'first')} />
+                <LinkIcon title={this.props.intl.trans('link', 'Link', 'first')} /> {title}
               </Link>
             </CardContent>
           </Card>
