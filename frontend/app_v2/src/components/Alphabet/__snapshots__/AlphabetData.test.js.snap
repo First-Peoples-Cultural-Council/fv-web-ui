@@ -465,10 +465,11 @@ Object {
       "url": "/url/1",
     },
     Object {
-      "title": "Other links tbd",
+      "title": "Another potential related link",
       "url": "/url/2",
     },
   ],
+  "onVideoClick": [Function],
   "selectedData": Object {
     "relatedEntries": Array [
       Object {
@@ -486,5 +487,6 @@ Object {
     "title": "k'",
     "uid": "e1134fc0-e4c4-4684-89d8-fb7ee1bd9bff",
   },
+  "videoIsOpen": false,
 }
 `;

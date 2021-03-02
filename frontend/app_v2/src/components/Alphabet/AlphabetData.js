@@ -49,11 +49,12 @@ const AlphabetData = (testingChar) => {
 
   return {
     links: [
+      // TODO Links hardcoded
       {
         url: '/url/1',
         title: 'Download Alphabet Pronunciation Guide',
       },
-      { url: '/url/2', title: 'Other links tbd' },
+      { url: '/url/2', title: 'Another potential related link' },
     ],
     data,
     error,
