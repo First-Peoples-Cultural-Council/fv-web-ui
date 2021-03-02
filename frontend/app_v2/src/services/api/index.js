@@ -84,7 +84,7 @@ export default {
       ['getAlphabet', language],
       () => {
         if (language) {
-          // TODO handle all variations of 'language' - url friendly
+          // TODO handle all variations of 'language' i.e. ensure language name is url friendly / matches path
           const _language = language.replace(/'/g, "\\'")
           return post({
             path: '/nuxeo/api/v1/automation/Document.EnrichedQuery',
@@ -105,9 +105,10 @@ export default {
     )
     return formatResponse({ isLoading, error, data, dataAdaptor })
   },
+  // getCharacter is currently not being used - drop if not needed in v2
   getCharacter: (character, language, dataAdaptor) => {
     const { isLoading, error, data } = useQuery(
-      ['character', character],
+      ['getCharacter', character],
       () => {
         if (language && character) {
           const _language = language.replace(/'/g, "\\'")
