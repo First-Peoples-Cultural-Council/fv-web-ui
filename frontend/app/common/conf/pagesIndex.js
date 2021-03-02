@@ -26,8 +26,6 @@ const PageDialectPlay = React.lazy(() => import('components/Games'))
 
 const PageJigsawGame = React.lazy(() => import('components/Games/jigsaw'))
 const PageWordSearch = React.lazy(() => import('components/Games/wordsearch'))
-const PageColouringBook = React.lazy(() => import('components/Games/colouringbook'))
-const PagePictureThis = React.lazy(() => import('components/Games/picturethis'))
 const PageHangman = React.lazy(() => import('components/Games/hangman'))
 const PageWordscramble = React.lazy(() => import('components/Games/wordscramble'))
 const PageQuiz = React.lazy(() => import('components/Games/quiz'))
@@ -176,9 +174,7 @@ export {
   PageDialectImmersionList,
   //GAMES
   PageJigsawGame,
-  PageColouringBook,
   PageWordSearch,
-  PagePictureThis,
   PageConcentration,
   PageHangman,
   PageWordscramble,

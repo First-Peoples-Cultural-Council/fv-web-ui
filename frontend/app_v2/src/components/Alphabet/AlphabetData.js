@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import api from 'services/api'
-import postAlphabetAdaptor from 'services/api/adaptors/postAlphabet'
+import getAlphabetAdaptor from 'services/api/adaptors/getAlphabet'
 import useGetSections from 'common/useGetSections'
 import { useParams } from 'react-router-dom'
 /**
@@ -12,7 +12,7 @@ import { useParams } from 'react-router-dom'
  */
 export const findSelectedCharacterData = ({ character, data, language }) => {
   const found = data.find(({ title }) => title === character)
-  if (found) {
+  if (found?.relatedEntries) {
     found.relatedEntries.forEach((entry) => {
       entry.url = `/${language}/word/${entry.uid}`
     })
@@ -23,7 +23,7 @@ export const findSelectedCharacterData = ({ character, data, language }) => {
 const AlphabetData = (testingChar) => {
   const { title } = useGetSections()
   const { character, language } = useParams()
-  const { isLoading, error, data } = api.postAlphabet(title, postAlphabetAdaptor)
+  const { isLoading, error, data } = api.getAlphabet(title, getAlphabetAdaptor)
 
   // NOTE: `defaultSelectedData` is here for Jest testing
   const defaultSelectedData = testingChar
@@ -40,19 +40,29 @@ const AlphabetData = (testingChar) => {
     }
   }, [character, data, selectedData])
 
+  // Video Modal
+  const [videoIsOpen, setVideoIsOpen] = useState(false)
+
+  const onVideoClick = () => {
+    setVideoIsOpen(!videoIsOpen)
+  }
+
   return {
     links: [
+      // TODO Links hardcoded
       {
         url: '/url/1',
         title: 'Download Alphabet Pronunciation Guide',
       },
-      { url: '/url/2', title: 'Other links tbd' },
+      { url: '/url/2', title: 'Another potential related link' },
     ],
     data,
     error,
     isLoading,
     language,
+    onVideoClick,
     selectedData,
+    videoIsOpen,
   }
 }
 

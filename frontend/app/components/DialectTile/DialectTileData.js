@@ -19,9 +19,14 @@ function DialectTileData({ children, dialectGroups, dialectTitle, href, isWorksp
   const { pushWindowPath } = useWindowPath()
 
   // Check if user is a member of the dialect
+  let userIsMember = false
+
   const userGroups = selectn('response.properties.groups', computeLogin)
-  const arrayIntersection = userGroups.filter((value) => dialectGroups.indexOf('group:' + value) > -1)
-  const userIsMember = arrayIntersection.length >= 1
+
+  if (userGroups && userGroups.length > 0) {
+    const arrayIntersection = userGroups.filter((value) => dialectGroups.indexOf('group:' + value) > -1)
+    userIsMember = arrayIntersection.length >= 1
+  }
 
   // Only set to private if it is a Workspaces href, or not in Workspaces, or the user is not a member of the dialect
   const isPrivate = !(href.indexOf('Workspaces') === -1 || isWorkspaces || userIsMember)

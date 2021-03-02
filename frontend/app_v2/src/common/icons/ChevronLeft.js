@@ -1,24 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 /**
- * @summary PlaceHolderIcon
+ * @summary ChevronLeft
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function PlaceHolderIcon({ styling }) {
+function ChevronLeft({ styling }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" className={styling}>
-      <rect width="100" height="100" rx="10" ry="10" fill="none" />
+      <path d="M0 0h24v24H0z" fill="none" />
+      <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
     </svg>
   )
 }
 // PROPTYPES
 const { string } = PropTypes
-PlaceHolderIcon.propTypes = {
+ChevronLeft.propTypes = {
   styling: string,
 }
 
-export default PlaceHolderIcon
+export default ChevronLeft

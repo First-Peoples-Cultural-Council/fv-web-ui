@@ -1,25 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 /**
- * @summary CloseIcon
+ * @summary HamburgerMenu
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function CloseIcon({ styling }) {
+function HamburgerMenu({ styling }) {
   return (
     <svg className={styling} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <title>Close</title>
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+      <title>Open menu</title>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
     </svg>
   )
 }
 // PROPTYPES
 const { string } = PropTypes
-CloseIcon.propTypes = {
+HamburgerMenu.propTypes = {
   styling: string,
 }
 
-export default CloseIcon
+export default HamburgerMenu

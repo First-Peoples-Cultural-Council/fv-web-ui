@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 /**
- * @summary LoginIcon
+ * @summary Login
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function LoginIcon({ styling }) {
+function Login({ styling }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -29,8 +29,8 @@ function LoginIcon({ styling }) {
 }
 // PROPTYPES
 const { string } = PropTypes
-LoginIcon.propTypes = {
+Login.propTypes = {
   styling: string,
 }
 
-export default LoginIcon
+export default Login

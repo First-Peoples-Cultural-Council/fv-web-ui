@@ -13,6 +13,7 @@ const formatResponse = ({ isLoading, error, data, dataAdaptor }) => {
   }
   return { isLoading, error, data, dataOriginal: data }
 }
+
 // const getNuxeoURL = () => {
 //   if (ENV_NUXEO_URL !== null && typeof ENV_NUXEO_URL !== 'undefined') {
 //     return ENV_NUXEO_URL
@@ -22,17 +23,18 @@ const formatResponse = ({ isLoading, error, data, dataAdaptor }) => {
 const queryOptions = {
   retry: (count, { message: status }) => status !== '404' && status !== '401',
 }
+
 const handleSuccessAndError = (response) => {
   if (response.ok === false) {
     throw new Error(response.status)
   }
   return response
 }
-// TODO: CONVERT TO SINGLE ARG TO MATCH POST
-const get = (path) => {
+
+const get = ({ path, headers }) => {
   return (
     api
-      .get(path)
+      .get(path, headers)
       //.then(handleSuccessAndError) // TODO?
       // TODO: CHECK IF NEEDED, POSSIBLY REMOVE BELOW
       .then(
@@ -45,6 +47,7 @@ const get = (path) => {
       )
   )
 }
+
 const post = ({ path, bodyObject, headers }) => {
   return api
     .post(path, { json: bodyObject, headers })
@@ -62,7 +65,7 @@ const post = ({ path, bodyObject, headers }) => {
 export default {
   get,
   rawGetById: (id, dataAdaptor) => {
-    return get(`/nuxeo/api/v1/id/${id}?properties=*`)
+    return get({ path: `/nuxeo/api/v1/id/${id}?properties=*` })
       .then(handleSuccessAndError)
       .then(
         (response) => {
@@ -76,11 +79,12 @@ export default {
         }
       )
   },
-  postAlphabet: (language, dataAdaptor) => {
+  getAlphabet: (language, dataAdaptor) => {
     const { isLoading, error, data } = useQuery(
       ['getAlphabet', language],
       () => {
         if (language) {
+          // TODO handle all variations of 'language' i.e. ensure language name is url friendly / matches path
           const _language = language.replace(/'/g, "\\'")
           return post({
             path: '/nuxeo/api/v1/automation/Document.EnrichedQuery',
@@ -101,11 +105,28 @@ export default {
     )
     return formatResponse({ isLoading, error, data, dataAdaptor })
   },
+  // getCharacter is currently not being used - drop if not needed in v2
+  getCharacter: (character, language, dataAdaptor) => {
+    const { isLoading, error, data } = useQuery(
+      ['getCharacter', character],
+      () => {
+        if (language && character) {
+          const _language = language.replace(/'/g, "\\'")
+          return get({
+            path: `/nuxeo/api/v1/path/FV/sections/Data/Test/Test/${_language}/Alphabet/${character}`,
+            headers: { 'enrichers.document': 'ancestry, character, permissions', properties: '*' },
+          }).then(handleSuccessAndError)
+        }
+      },
+      queryOptions
+    )
+    return formatResponse({ isLoading, error, data, dataAdaptor })
+  },
   getById: (id, dataAdaptor) => {
     const { isLoading, error, data } = useQuery(
       ['getById', id],
       () => {
-        return get(`/nuxeo/api/v1/id/${id}?properties=*`).then(handleSuccessAndError)
+        return get({ path: `/nuxeo/api/v1/id/${id}?properties=*` }).then(handleSuccessAndError)
       },
       queryOptions
     )
@@ -115,7 +136,7 @@ export default {
     const { isLoading, error, data } = useQuery(
       ['getSections', sitename],
       () => {
-        return get(`/nuxeo/api/v1/site/sections/${sitename}`).then(handleSuccessAndError)
+        return get({ path: `/nuxeo/api/v1/site/sections/${sitename}` }).then(handleSuccessAndError)
       },
       queryOptions
     )
@@ -124,9 +145,9 @@ export default {
   // TODO: remove postman example server url
   getCommunityHome: (sitename, dataAdaptor) => {
     const { isLoading, error, data } = useQuery(['getCommunityHome', sitename], () => {
-      return get(
-        `https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`
-      )
+      return get({
+        path: `https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`,
+      })
     })
     return formatResponse({ isLoading, error, data, dataAdaptor })
   },
