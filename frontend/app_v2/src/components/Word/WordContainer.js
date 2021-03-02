@@ -11,9 +11,9 @@ import WordContainerV1 from 'app_v1/WordContainer'
  * @returns {node} jsx markup
  */
 function WordContainer() {
-  const { hasSectionData } = WordData()
+  const { hasSectionData, wordId } = WordData()
   // Wait for getSections call to finish before we render WordContainerV1
-  return hasSectionData ? <WordContainerV1 /> : <div>waiting</div>
+  return hasSectionData && wordId ? <WordContainerV1 wordId={wordId} /> : <div>waiting</div>
 }
 
 export default WordContainer

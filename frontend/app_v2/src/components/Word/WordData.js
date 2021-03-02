@@ -1,4 +1,5 @@
 import useGetSections from 'common/useGetSections'
+import { useParams } from 'react-router-dom'
 /**
  * @summary WordData
  * @component
@@ -8,8 +9,11 @@ import useGetSections from 'common/useGetSections'
  */
 function WordData() {
   const sections = useGetSections()
+  const { wordId } = useParams()
+
   return {
     hasSectionData: sections?.title !== undefined,
+    wordId,
   }
 }
 

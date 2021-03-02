@@ -17,7 +17,7 @@ import MenuMachineData from 'components/MenuMachine/MenuMachineData'
 function AppStateProvider({ children }) {
   const [workspaceToggle, setWorkspaceToggle] = useLocalStorage('fpcc:workspaceToggle', false)
   const queryClient = useQueryClient()
-  const { language, wordId } = useParams()
+  const { language } = useParams()
   const { machine, send } = AudioMachineData()
   const { machine: menuMachine, send: menuSend } = MenuMachineData()
   const [state, dispatch] = useReducer(reducer, reducerInitialState)
@@ -74,7 +74,6 @@ function AppStateProvider({ children }) {
       setRouteParams({
         matchedRouteParams: {
           dialect_path: path,
-          word: wordId,
         },
       })
     }
