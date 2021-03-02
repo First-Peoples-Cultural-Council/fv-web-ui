@@ -205,6 +205,18 @@ const DIALECT_LEARN_PHRASES = {
   redirects: [WORKSPACE_TO_SECTION_REDIRECT],
 }
 
+const DIALECT_LEARN_PHRASES_ONLY_KIDS = {
+  path: [...DIALECT_PATH_ONLY_KIDS, 'learn', 'phrases'],
+  title:
+    intl.translate({
+      key: 'words',
+      default: 'Phrases',
+    }) + ' | {$dialect_name}',
+  page: <Pages.KidsPhrasesByPhrasebook />,
+  extractPaths: true,
+  redirects: [WORKSPACE_TO_SECTION_REDIRECT],
+}
+
 const DIALECT_IMMERSION_WORDS = {
   path: [...DIALECT_PATH_KIDS_OR_DEFAULT, 'immersion'],
   title: 'Immersion', // TODOSL add locale for this
@@ -901,35 +913,6 @@ const routes = [
       ANYTHING_BUT_SLASH,
       ANYTHING_BUT_SLASH,
       'play',
-      'colouringbook',
-    ],
-    title:
-      intl.translate({
-        key: 'coloring_book',
-        default: 'Coloring Book',
-        case: 'words',
-      }) +
-      ' | ' +
-      intl.translate({
-        key: 'games',
-        default: 'Games',
-        case: 'words',
-      }) +
-      ' | {$dialect_name}',
-    page: <Pages.PageColouringBook />,
-    redirects: [WORKSPACE_TO_SECTION_REDIRECT],
-    extractPaths: true,
-  },
-  {
-    path: [
-      KIDS_OR_DEFAULT,
-      'FV',
-      new paramMatch('area', WORKSPACE_OR_SECTION),
-      'Data',
-      ANYTHING_BUT_SLASH,
-      ANYTHING_BUT_SLASH,
-      ANYTHING_BUT_SLASH,
-      'play',
       'concentration',
     ],
     title:
@@ -946,35 +929,6 @@ const routes = [
       }) +
       ' | {$dialect_name}',
     page: <Pages.PageConcentration />,
-    redirects: [WORKSPACE_TO_SECTION_REDIRECT],
-    extractPaths: true,
-  },
-  {
-    path: [
-      KIDS_OR_DEFAULT,
-      'FV',
-      new paramMatch('area', WORKSPACE_OR_SECTION),
-      'Data',
-      ANYTHING_BUT_SLASH,
-      ANYTHING_BUT_SLASH,
-      ANYTHING_BUT_SLASH,
-      'play',
-      'picturethis',
-    ],
-    title:
-      intl.translate({
-        key: 'picture_this',
-        default: 'Picture This',
-        case: 'words',
-      }) +
-      ' | ' +
-      intl.translate({
-        key: 'games',
-        default: 'Games',
-        case: 'words',
-      }) +
-      ' | {$dialect_name}',
-    page: <Pages.PagePictureThis />,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
     extractPaths: true,
   },
@@ -1837,6 +1791,8 @@ const routes = [
     page: <Pages.PageDialectWordEdit />,
     extractPaths: true,
   },
+  DIALECT_LEARN_PHRASES_ONLY_KIDS,
+  addPagination(DIALECT_LEARN_PHRASES_ONLY_KIDS),
   DIALECT_LEARN_PHRASES,
   addPagination(DIALECT_LEARN_PHRASES),
   // Phrase by Alphabet, eg: /[kids|explore]/.../learn/phrases/alphabet/b

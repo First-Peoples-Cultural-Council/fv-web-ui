@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 /**
- * @summary DictionaryIcon
+ * @summary Dictionary
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function DictionaryIcon({ styling }) {
+function Dictionary({ styling }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" className={styling}>
       <path
@@ -24,8 +24,8 @@ function DictionaryIcon({ styling }) {
 }
 // PROPTYPES
 const { string } = PropTypes
-DictionaryIcon.propTypes = {
+Dictionary.propTypes = {
   styling: string,
 }
 
-export default DictionaryIcon
+export default Dictionary

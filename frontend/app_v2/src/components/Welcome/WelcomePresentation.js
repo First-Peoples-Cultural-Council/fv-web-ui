@@ -31,5 +31,4 @@ WelcomePresentation.propTypes = {
   heading: string,
   title: string,
 }
-
 export default WelcomePresentation

@@ -13,7 +13,7 @@ import {
   WIDGET_WELCOME,
 } from 'common/constants'
 
-function homeAdaptor(response) {
+const getCommunityHome = (response) => {
   const { properties, uid } = response
   const widgetsActive = properties?.['widgets:active'] || []
   const widgets = widgetsActive.map((widget) => {
@@ -241,4 +241,4 @@ function homeAdaptor(response) {
   }
 }
 
-export default homeAdaptor
+export default getCommunityHome

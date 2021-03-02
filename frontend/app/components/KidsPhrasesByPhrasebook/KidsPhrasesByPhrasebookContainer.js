@@ -44,7 +44,7 @@ function KidsPhrasesByPhrasebookContainer() {
                       onPaginationUpdate(pagePageSize)
                     }}
                   >
-                    {hasItems ? <PhraseBooksGrid.Presentation categories={items} /> : <div>No results</div>}
+                    {hasItems ? <PhraseBooksGrid.Presentation cols={3} categories={items} /> : <div>No results</div>}
                   </Pagination.Container>
                 )}
               </div>

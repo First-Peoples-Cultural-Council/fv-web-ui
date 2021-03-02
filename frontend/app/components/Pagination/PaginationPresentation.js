@@ -49,7 +49,7 @@ function PaginationPresentation({
           <ReactPaginate
             activeClassName={'active'}
             breakClassName={'pagination-page'}
-            breakLabel={<a style={{ paddingBottom: '7px' }}>...</a>}
+            breakLabel={<span style={{ paddingBottom: '7px' }}>...</span>}
             containerClassName={'pagination'}
             forcePage={page - 1}
             marginPagesDisplayed={0}

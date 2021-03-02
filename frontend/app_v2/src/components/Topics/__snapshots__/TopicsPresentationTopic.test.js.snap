@@ -51,7 +51,11 @@ exports[`TopicsPresentation WIDGET_LIST_PHRASE 1`] = `
           font-medium
         "
   >
-    lorem
+    <a
+      href="/k'w/url"
+    >
+      lorem
+    </a>
   </h1>
   <div>
     99 phrases
@@ -109,7 +113,11 @@ exports[`TopicsPresentation WIDGET_LIST_STORY 1`] = `
           font-medium
         "
   >
-    lorem
+    <a
+      href="/k'w/url"
+    >
+      lorem
+    </a>
   </h1>
   <h2
     class="
@@ -174,7 +182,11 @@ exports[`TopicsPresentation WIDGET_LIST_WORD 1`] = `
           font-medium
         "
   >
-    lorem
+    <a
+      href="/k'w/url"
+    >
+      lorem
+    </a>
   </h1>
   <h2
     class="

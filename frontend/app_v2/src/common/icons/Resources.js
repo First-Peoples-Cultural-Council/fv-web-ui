@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 /**
- * @summary ResourcesIcon
+ * @summary Resources
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function ResourcesIcon({ styling }) {
+function Resources({ styling }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -27,8 +27,8 @@ function ResourcesIcon({ styling }) {
 }
 // PROPTYPES
 const { string } = PropTypes
-ResourcesIcon.propTypes = {
+Resources.propTypes = {
   styling: string,
 }
 
-export default ResourcesIcon
+export default Resources

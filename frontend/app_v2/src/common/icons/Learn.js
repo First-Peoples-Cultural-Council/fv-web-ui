@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 /**
- * @summary LearnIcon
+ * @summary Learn
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function LearnIcon({ styling }) {
+function Learn({ styling }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -29,8 +29,8 @@ function LearnIcon({ styling }) {
 }
 // PROPTYPES
 const { string } = PropTypes
-LearnIcon.propTypes = {
+Learn.propTypes = {
   styling: string,
 }
 
-export default LearnIcon
+export default Learn
