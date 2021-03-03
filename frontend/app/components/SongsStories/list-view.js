@@ -261,7 +261,7 @@ class _SongsStoriesCardView extends Component {
       selectn('properties.fvbook:type', item) === 'story' ? 'stories' : 'songs'
     )
 
-    const bookMedia = Object.keys(selectn('contextParameters.book', item))
+    const bookMedia = Object.keys(selectn('contextParameters.book', item) || [])
     if (
       bookMedia.length === 2 &&
       bookMedia.indexOf('related_videos') != 1 &&
