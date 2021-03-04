@@ -32,16 +32,10 @@ import {
  *
  * @returns {node} jsx markup
  */
-function HomePresentation({
-  // isLoading,
-  // error,
-  data,
-  language,
-}) {
+function HomePresentation({ isLoading, error, data, language }) {
   const widgets = data ? data.widgets : []
-  // TODO: use a better fallback icon
   const fallBackIcon = useIcon(
-    'PlayCircle',
+    'Spinner',
     `
         fill-current
         w-56
@@ -50,6 +44,30 @@ function HomePresentation({
         lg:h-72
       `
   )
+  if (isLoading) {
+    return (
+      <div className="flex justify-around p-10">
+        <button
+          type="button"
+          className="bg-fv-orange border border-transparent items-center inline-flex px-5 py-2 rounded-md shadow-sm text-base text-white ease-in-out"
+          disabled
+        >
+          {useIcon('Spinner', 'animate-spin h-5 w-5 mr-3 fill-current')}
+          Loading
+        </button>
+      </div>
+    )
+  }
+  if (error) {
+    return (
+      <div>
+        <h1>Sorry, something went wrong!</h1>
+        <p>Please check the url or report this error by emailing hello@firstvoices.com so that we can fix it.</p>
+        <p>Include the link or action you took to get to this page.</p>
+        <p>Thank You!</p>
+      </div>
+    )
+  }
   return (
     <div className="Home">
       {widgets.length > 0 &&

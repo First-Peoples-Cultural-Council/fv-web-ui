@@ -52,7 +52,7 @@ exports[`TopicsPresentation WIDGET_LIST_PHRASE 1`] = `
         "
   >
     <a
-      href="/k'w/url"
+      href="/jestLanguage/url"
     >
       lorem
     </a>
@@ -114,7 +114,7 @@ exports[`TopicsPresentation WIDGET_LIST_STORY 1`] = `
         "
   >
     <a
-      href="/k'w/url"
+      href="/jestLanguage/url"
     >
       lorem
     </a>
@@ -183,7 +183,7 @@ exports[`TopicsPresentation WIDGET_LIST_WORD 1`] = `
         "
   >
     <a
-      href="/k'w/url"
+      href="/jestLanguage/url"
     >
       lorem
     </a>
@@ -207,15 +207,7 @@ exports[`TopicsPresentation WIDGET_LIST_WORD 1`] = `
       Play audio
     </div>
     <svg
-      class="
-        fill-current
-        w-7
-        h-7
-        lg:w-8
-        lg:h-8
-        xl:w-12
-        xl:h-12
-      "
+      class="fill-current w-7 h-7 lg:w-8 lg:h-8 xl:w-12 xl:h-12"
       height="24"
       viewBox="0 0 512 512"
       width="24"

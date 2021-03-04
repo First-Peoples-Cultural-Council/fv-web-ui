@@ -8,13 +8,12 @@ import getCommunityHomeAdaptor from 'services/api/adaptors/getCommunityHome'
  * @param {object} props
  *
  */
-// TODO: REMOVE HARDCODED LANGUAGE DEFAULT
 function HomeData() {
   const { title, uid, path, logoUrl } = useGetSections()
   const { isLoading, error, data, dataOriginal } = api.getCommunityHome(title, getCommunityHomeAdaptor)
   return {
     isLoading,
-    error,
+    error: title === undefined || error,
     data,
     dataOriginal,
     language: {

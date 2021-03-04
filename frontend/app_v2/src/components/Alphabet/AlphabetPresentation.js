@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import AlphabetPresentationSelected from 'components/Alphabet/AlphabetPresentationSelected'
+import useIcon from 'common/useIcon'
 /**
  * @summary AlphabetPresentation
  * @component
@@ -10,37 +11,54 @@ import AlphabetPresentationSelected from 'components/Alphabet/AlphabetPresentati
  *
  * @returns {node} jsx markup
  */
-function AlphabetPresentation({ language, isLoading, error, data, selectedData, onVideoClick, links, videoIsOpen }) {
+function AlphabetPresentation({
+  language,
+  isLoading,
+  error,
+  characters,
+  selectedData,
+  onVideoClick,
+  links,
+  videoIsOpen,
+}) {
   if (isLoading) {
-    return <div>some spinner if you want</div>
+    return (
+      <div className="flex justify-around p-10">
+        <button
+          type="button"
+          className="bg-fv-orange border border-transparent items-center inline-flex px-5 py-2 rounded-md shadow-sm text-base text-white ease-in-out"
+          disabled
+        >
+          {useIcon('Spinner', 'animate-spin h-5 w-5 mr-3 fill-current')}
+          Loading
+        </button>
+      </div>
+    )
   }
   if (error) {
-    return <div>some error if you want</div>
+    return (
+      <div className="p-10">
+        <h1>Sorry, something went wrong!</h1>
+        <p>Please report this error by emailing hello@firstvoices.com so that we can fix it.</p>
+        <p>Include the link or action you took to get to this page.</p>
+        <p>Thank You!</p>
+      </div>
+    )
   }
   return (
     <section className="py-12 bg-white" data-testid="AlphabetPresentation">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative">
           <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-blue font-bold sm:text-5xl uppercase">
-            <span
-              className={`
-            inline-block
-            px-4
-            sm:px-8
-            lg:px-20
-            bg-white
-          `}
-            >
-              Alphabet
-            </span>
+            <span className="inline-block bg-white px-4 sm:px-8 lg:px-20">Alphabet</span>
           </h2>
           <hr className="absolute z-0 w-full border-gray-300" style={{ top: '50%' }} />
         </div>
         <div className="grid grid-cols-7 gap-8 divide-x-2 divide-gray-300">
           <div className="col-span-7 sm:col-span-4">
             <div className="grid grid-cols-7 sm:grid-cols-5 lg:grid-cols-7">
-              {data &&
-                data.map(({ title, uid }) => {
+              {characters &&
+                characters.map(({ title, uid }) => {
                   return (
                     <Link
                       data-testid={
@@ -70,14 +88,19 @@ function AlphabetPresentation({ language, isLoading, error, data, selectedData, 
           </div>
           <div className="col-span-7 sm:col-span-3 mt-8 sm:mt-0">
             {selectedData?.title === undefined && (
-              <div data-testid="AlphabetPresentation__noCharacter">Please select a character</div>
+              <div
+                data-testid="AlphabetPresentation__noCharacter"
+                className="text-center font-bold sm:text-3xl text-2xl text-fv-blue m-10"
+              >
+                Please select a character
+              </div>
             )}
             {selectedData && AlphabetPresentationSelected({ selectedData, onVideoClick, videoIsOpen })}
             {links && (
-              <ul className="text-center">
+              <ul className="text-center mt-10">
                 {links.map(({ url, title }, index) => {
                   return (
-                    <li key={index} className="m-5">
+                    <li key={index} className="m-3">
                       <Link to={url}>{title}</Link>
                     </li>
                   )
@@ -94,8 +117,8 @@ function AlphabetPresentation({ language, isLoading, error, data, selectedData, 
 const { bool, array, func, string, shape, arrayOf, object } = PropTypes
 AlphabetPresentation.propTypes = {
   isLoading: bool,
-  error: array, // TODO: CONFIRM?
-  data: arrayOf(
+  error: array,
+  characters: arrayOf(
     shape({
       title: string,
       uid: string,

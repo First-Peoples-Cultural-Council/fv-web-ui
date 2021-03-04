@@ -49,7 +49,7 @@ function AppFrameContainer() {
             </Route>
             <Route path="/:language/*">
               <div className="flex justify-center items-center min-h-screen">
-                <img src="/assets/images/under-construction.gif" alt="TODO" />
+                <img src="/assets/images/under-construction.gif" alt="This page is under construction" />
               </div>
             </Route>
             <Route path="/:language">

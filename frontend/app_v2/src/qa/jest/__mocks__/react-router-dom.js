@@ -9,7 +9,7 @@ module.exports = {
   },
   useParams: ()=>{
     return {
-      language: "k'w",
+      language: "jestLanguage",
       character: "k'",
     }
   },

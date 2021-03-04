@@ -29,12 +29,6 @@ module.exports = (env) => {
     output: {
       filename: 'assets/js/[name].[contenthash].js',
       chunkFilename: 'assets/js/[name].[contenthash].js',
-      // filename: (pathData) => {
-      //   return 'assets/js/[name].[contenthash].js'
-      // },
-      // chunkFilename: (pathData) => {
-      //   return 'assets/js/[name].[contenthash].js'
-      // },
       publicPath: 'auto',
       path: alias.dist,
     },
@@ -119,7 +113,6 @@ module.exports = (env) => {
       }),
       new HtmlWebpackPlugin({
         template: './index.html',
-        //inject: false,
         templateParameters: {
           VERSION: gitRevisionPlugin.version(),
           COMMIT: gitRevisionPlugin.commithash(),
@@ -127,7 +120,6 @@ module.exports = (env) => {
           DATE: new Date().toLocaleString('en-CA', { timeZone: 'America/Vancouver' }),
           V1_URL: env.V1_URL || '',
         },
-        // scriptLoading: 'defer', // TODO: INVESTIGATE THIS SETTING FOR PERFORMANCE
         minify: {
           collapseWhitespace: true,
           minifyCSS: true,
@@ -139,7 +131,6 @@ module.exports = (env) => {
       }),
       new CopyPlugin({
         patterns: [
-          // { from: alias.assetsServer, to: alias.distServer },
           { from: alias.fonts, to: alias.distFonts },
           { from: alias.images, to: alias.distImages },
           { from: alias.favicons, to: alias.dist },

@@ -51,7 +51,7 @@ function AppStateProvider({ children }) {
   const logoId = state.api.getSections.idLogo
   useEffect(() => {
     if (state.api.getSections.idLogo) {
-      api.rawGetById(logoId, rawGetByIdAdaptor).then(({ error: rawGetByIdError, data: rawGetByIdData }) => {
+      api.rawGetById(logoId, rawGetByIdAdaptor, 'file').then(({ error: rawGetByIdError, data: rawGetByIdData }) => {
         if (rawGetByIdError === undefined) {
           const { url } = rawGetByIdData
           // IMPORTANT: have to invalidate sections cache since

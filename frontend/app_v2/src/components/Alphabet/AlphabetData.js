@@ -11,7 +11,8 @@ import { useParams } from 'react-router-dom'
  *
  */
 export const findSelectedCharacterData = ({ character, data, language }) => {
-  const found = data.find(({ title }) => title === character)
+  const characters = data?.characters
+  const found = characters.find(({ title }) => title === character)
   if (found?.relatedEntries) {
     found.relatedEntries.forEach((entry) => {
       entry.url = `/${language}/word/${entry.uid}`
@@ -19,23 +20,18 @@ export const findSelectedCharacterData = ({ character, data, language }) => {
   }
   return found
 }
-// NOTE: `testingChar` is only for Jest tests and shouldn't influence the website experience
-const AlphabetData = (testingChar) => {
+
+const AlphabetData = () => {
   const { title } = useGetSections()
   const { character, language } = useParams()
   const { isLoading, error, data } = api.getAlphabet(title, getAlphabetAdaptor)
-
-  // NOTE: `defaultSelectedData` is here for Jest testing
-  const defaultSelectedData = testingChar
-    ? findSelectedCharacterData({ character: testingChar, data, language })
-    : undefined
-  const [selectedData, setSelectedData] = useState(defaultSelectedData)
+  const [selectedData, setSelectedData] = useState()
 
   useEffect(() => {
     if (character && data) {
-      const relatedEntries = findSelectedCharacterData({ character, data, language })
-      if (relatedEntries && selectedData?.title !== character) {
-        setSelectedData(relatedEntries)
+      const _selectedData = findSelectedCharacterData({ character, data, language })
+      if (_selectedData !== undefined) {
+        setSelectedData(_selectedData)
       }
     }
   }, [character, data, selectedData])
@@ -48,15 +44,8 @@ const AlphabetData = (testingChar) => {
   }
 
   return {
-    links: [
-      // TODO Links hardcoded
-      {
-        url: '/url/1',
-        title: 'Download Alphabet Pronunciation Guide',
-      },
-      { url: '/url/2', title: 'Another potential related link' },
-    ],
-    data,
+    characters: data?.characters,
+    links: data?.links,
     error,
     isLoading,
     language,
