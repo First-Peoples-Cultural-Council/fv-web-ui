@@ -114,7 +114,7 @@ export default {
       replyto: from,
       to,
     }
-    // TODO: Update this path when BE ready and handle success response in UI
+    // TODO: Confirm this path and params when FW-2106 BE is complete and handle success response in UI
     return post({ path: '/nuxeo/site/automation/Document.Mail', bodyObject: { params: params, input: docId } })
   },
 }

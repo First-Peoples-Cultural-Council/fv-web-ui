@@ -5,7 +5,7 @@ import AlphabetPresentation from 'components/Alphabet/AlphabetPresentation'
 jest.mock('components/AudioMinimal/AudioMinimalContainer')
 
 // Data
-const data = [
+const characters = [
   {
     title: 'v',
     uid: 'c6fa2b99-4076-43bb-adf9-9271ae7363d7',
@@ -47,6 +47,13 @@ const data = [
     ],
   },
 ]
+const links = [
+  {
+    url: '/url/1',
+    title: 'Download Alphabet Pronunciation Guide',
+  },
+  { url: '/url/2', title: 'Another potential related link' },
+]
 const character = "k'"
 const selectedData = {
   title: "k'",
@@ -59,7 +66,7 @@ const selectedData = {
       definitions: ['defn1', 'defn2'],
       src:
         'https://dev.firstvoices.com/nuxeo/nxfile/default/15761975-8249-400c-a9e2-4a5357ca7ce9/file:content/sample1.mp3',
-      url: "/k'w/word/1-2-3",
+      url: '/jestLanguage/word/1-2-3',
     },
   ],
 }
@@ -73,7 +80,13 @@ describe('AlphabetPresentation', () => {
   test('Selected character has testid and is the correct text content', () => {
     render(
       <Router>
-        <AlphabetPresentation isLoading={false} data={data} language="k'w" selectedData={selectedData} />
+        <AlphabetPresentation
+          isLoading={false}
+          characters={characters}
+          language="jestLanguage"
+          selectedData={selectedData}
+          links={links}
+        />
       </Router>
     )
     const element = screen.getByTestId('AlphabetPresentation__selectedCharacter')
@@ -82,7 +95,13 @@ describe('AlphabetPresentation', () => {
   test('Selected sidebar heading has correct text', () => {
     render(
       <Router>
-        <AlphabetPresentation isLoading={false} data={data} language="k'w" selectedData={selectedData} />
+        <AlphabetPresentation
+          isLoading={false}
+          characters={characters}
+          language="jestLanguage"
+          selectedData={selectedData}
+          links={links}
+        />
       </Router>
     )
     const heading = screen.getByTestId('AlphabetPresentationSelected__header')

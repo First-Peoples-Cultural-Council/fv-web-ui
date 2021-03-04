@@ -2,7 +2,7 @@
 
 exports[`AlphabetData Ensure output is consistent 1`] = `
 Object {
-  "data": Array [
+  "characters": Array [
     Object {
       "relatedEntries": Array [
         Object {
@@ -13,7 +13,6 @@ Object {
           "src": "https://dev.firstvoices.com/nuxeo/nxfile/default/15761975-8249-400c-a9e2-4a5357ca7ce9/file:content/sample1.mp3",
           "title": "RelatedWord",
           "uid": "1-2-3",
-          "url": "/k'w/word/1-2-3",
         },
       ],
       "src": "/nuxeo/nxfile/default/b762405b-f98a-4b04-bbd2-1f710eaca9a0/file:content/En-us-river.ogg.mp3",
@@ -458,7 +457,7 @@ Object {
   ],
   "error": null,
   "isLoading": false,
-  "language": "k'w",
+  "language": "jestLanguage",
   "links": Array [
     Object {
       "title": "Download Alphabet Pronunciation Guide",
@@ -470,23 +469,7 @@ Object {
     },
   ],
   "onVideoClick": [Function],
-  "selectedData": Object {
-    "relatedEntries": Array [
-      Object {
-        "definitions": Array [
-          "defn1",
-          "defn2",
-        ],
-        "src": "https://dev.firstvoices.com/nuxeo/nxfile/default/15761975-8249-400c-a9e2-4a5357ca7ce9/file:content/sample1.mp3",
-        "title": "RelatedWord",
-        "uid": "1-2-3",
-        "url": "/k'w/word/1-2-3",
-      },
-    ],
-    "src": "/nuxeo/nxfile/default/b762405b-f98a-4b04-bbd2-1f710eaca9a0/file:content/En-us-river.ogg.mp3",
-    "title": "k'",
-    "uid": "e1134fc0-e4c4-4684-89d8-fb7ee1bd9bff",
-  },
+  "selectedData": undefined,
   "videoIsOpen": false,
 }
 `;
