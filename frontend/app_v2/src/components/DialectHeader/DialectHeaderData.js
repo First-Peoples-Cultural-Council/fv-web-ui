@@ -9,9 +9,7 @@ import useGetSections from 'common/useGetSections'
  *
  */
 function DialectHeaderData() {
-  // TODO: INVESTIGATE WHY logoUrl DOESN'T UPDATE!
-  const { title /*, logoUrl*/ } = useGetSections()
-  // console.log('testing', logoUrl)
+  const { title } = useGetSections()
 
   const currentUser = { userInitials: 'TU' }
   const menuData = [

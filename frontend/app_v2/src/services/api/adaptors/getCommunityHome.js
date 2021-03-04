@@ -7,8 +7,6 @@ import {
   WIDGET_LIST_WORD,
   WIDGET_LIST_PHRASE,
   WIDGET_LIST_STORY,
-  // WIDGET_LIST_SONG,
-  // WIDGET_LIST_MIXED,
   WIDGET_LIST_GENERIC,
   WIDGET_WELCOME,
 } from 'common/constants'
@@ -31,11 +29,6 @@ const getCommunityHome = (response) => {
       const img = {}
       content.find(({ image }) => {
         if (image) {
-          // console.log(image)
-          // Or could use original image:
-          // views[0].url
-          // views[0].height
-          // views[0].width
           img.title = image['dc:title']
           img.url = image.path
           // break out of loop
@@ -48,8 +41,6 @@ const getCommunityHome = (response) => {
         type: WIDGET_HERO,
         uid: widget.uid,
         background: img.url,
-        // foreground: 'TODO', // TODO: get from api.getSections
-        // foregroundIcon: 'TODO', // TODO: get from api.getSections
         variant: hasSearch ? WIDGET_HERO_SEARCH : undefined,
       }
     }
@@ -157,7 +148,7 @@ const getCommunityHome = (response) => {
           if (contentType === 'FVWord') {
             return {
               type: WIDGET_LIST_WORD,
-              id, // TODO: DROP?
+              id,
               audio,
               heading,
               image,
@@ -195,7 +186,7 @@ const getCommunityHome = (response) => {
             listCount: count,
             listType: undefined,
             subheading,
-            url: undefined, // TODO ?
+            url: undefined,
           }
         }
       )

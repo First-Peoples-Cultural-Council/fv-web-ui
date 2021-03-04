@@ -39,9 +39,8 @@ function HomePresentation({
   language,
 }) {
   const widgets = data ? data.widgets : []
-  // TODO: use a better fallback icon
   const fallBackIcon = useIcon(
-    'PlayCircle',
+    'Spinner',
     `
         fill-current
         w-56
