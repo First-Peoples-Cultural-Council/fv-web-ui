@@ -65,8 +65,8 @@ const post = ({ path, bodyObject, headers }) => {
 export default {
   get,
   // rawGetById is getById without useQuery - bypasses cache
-  rawGetById: (id, dataAdaptor) => {
-    return get({ path: `/nuxeo/api/v1/id/${id}?properties=*` })
+  rawGetById: (id, dataAdaptor, properties = '*') => {
+    return get({ path: `/nuxeo/api/v1/id/${id}?properties=${properties}` })
       .then(handleSuccessAndError)
       .then(
         (response) => {
@@ -104,11 +104,11 @@ export default {
     )
     return formatResponse({ isLoading, error, data, dataAdaptor })
   },
-  getById: (id, dataAdaptor) => {
+  getById: (id, dataAdaptor, properties = '*') => {
     const { isLoading, error, data } = useQuery(
       ['getById', id],
       () => {
-        return get({ path: `/nuxeo/api/v1/id/${id}?properties=*` }).then(handleSuccessAndError)
+        return get({ path: `/nuxeo/api/v1/id/${id}?properties=${properties}` }).then(handleSuccessAndError)
       },
       queryOptions
     )
