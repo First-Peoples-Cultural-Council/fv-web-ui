@@ -27,6 +27,7 @@ import PlayArrow from 'common/icons/PlayArrow'
 import PlayCircle from 'common/icons/PlayCircle'
 import Quote from 'common/icons/Quote'
 import Search from 'common/icons/Search'
+import Spinner from 'common/icons/Spinner'
 import Resources from 'common/icons/Resources'
 import TimesCircle from 'common/icons/TimesCircle'
 import Twitter from 'common/icons/Twitter'
@@ -66,6 +67,7 @@ function useIcon(iconName, iconStyling) {
     Quote,
     Resources,
     Search,
+    Spinner,
     TimesCircle,
     Twitter,
     WebShare,

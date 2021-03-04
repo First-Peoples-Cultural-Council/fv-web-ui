@@ -11,7 +11,8 @@ import { useParams } from 'react-router-dom'
  *
  */
 export const findSelectedCharacterData = ({ character, data, language }) => {
-  const found = data.find(({ title }) => title === character)
+  const characters = data?.characters
+  const found = characters.find(({ title }) => title === character)
   if (found?.relatedEntries) {
     found.relatedEntries.forEach((entry) => {
       entry.url = `/${language}/word/${entry.uid}`
@@ -48,15 +49,8 @@ const AlphabetData = (testingChar) => {
   }
 
   return {
-    links: [
-      // TODO Links hardcoded
-      {
-        url: '/url/1',
-        title: 'Download Alphabet Pronunciation Guide',
-      },
-      { url: '/url/2', title: 'Another potential related link' },
-    ],
-    data,
+    characters: data?.characters,
+    links: data?.links,
     error,
     isLoading,
     language,

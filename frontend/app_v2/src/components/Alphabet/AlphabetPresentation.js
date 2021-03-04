@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import AlphabetPresentationSelected from 'components/Alphabet/AlphabetPresentationSelected'
+import useIcon from 'common/useIcon'
 /**
  * @summary AlphabetPresentation
  * @component
@@ -10,12 +11,40 @@ import AlphabetPresentationSelected from 'components/Alphabet/AlphabetPresentati
  *
  * @returns {node} jsx markup
  */
-function AlphabetPresentation({ language, isLoading, error, data, selectedData, onVideoClick, links, videoIsOpen }) {
+function AlphabetPresentation({
+  language,
+  //   isLoading,
+  error,
+  characters,
+  selectedData,
+  onVideoClick,
+  links,
+  videoIsOpen,
+}) {
+  const isLoading = true
   if (isLoading) {
-    return <div>some spinner if you want</div>
+    return (
+      <div className="flex justify-around p-10">
+        <button
+          type="button"
+          className="bg-fv-orange border border-transparent items-center inline-flex px-5 py-2 rounded-md shadow-sm text-base text-white ease-in-out"
+          disabled
+        >
+          {useIcon('Spinner', 'animate-spin h-5 w-5 mr-3 fill-current')}
+          Loading
+        </button>
+      </div>
+    )
   }
   if (error) {
-    return <div>some error if you want</div>
+    return (
+      <div>
+        <h1>Sorry, something went wrong!</h1>
+        <p>Please report this error by emailing hello@firstvoices.com so that we can fix it.</p>
+        <p>Include the link or action you took to get to this page.</p>
+        <p>Thank You!</p>
+      </div>
+    )
   }
   return (
     <section className="py-12 bg-white" data-testid="AlphabetPresentation">
@@ -39,8 +68,8 @@ function AlphabetPresentation({ language, isLoading, error, data, selectedData, 
         <div className="grid grid-cols-7 gap-8 divide-x-2 divide-gray-300">
           <div className="col-span-7 sm:col-span-4">
             <div className="grid grid-cols-7 sm:grid-cols-5 lg:grid-cols-7">
-              {data &&
-                data.map(({ title, uid }) => {
+              {characters &&
+                characters.map(({ title, uid }) => {
                   return (
                     <Link
                       data-testid={
@@ -70,7 +99,9 @@ function AlphabetPresentation({ language, isLoading, error, data, selectedData, 
           </div>
           <div className="col-span-7 sm:col-span-3 mt-8 sm:mt-0">
             {selectedData?.title === undefined && (
-              <div data-testid="AlphabetPresentation__noCharacter">Please select a character</div>
+              <div data-testid="AlphabetPresentation__noCharacter" className="text-center">
+                Please select a character
+              </div>
             )}
             {selectedData && AlphabetPresentationSelected({ selectedData, onVideoClick, videoIsOpen })}
             {links && (
@@ -95,7 +126,7 @@ const { bool, array, func, string, shape, arrayOf, object } = PropTypes
 AlphabetPresentation.propTypes = {
   isLoading: bool,
   error: array, // TODO: CONFIRM?
-  data: arrayOf(
+  characters: arrayOf(
     shape({
       title: string,
       uid: string,
