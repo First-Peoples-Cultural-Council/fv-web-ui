@@ -64,6 +64,7 @@ const post = ({ path, bodyObject, headers }) => {
 
 export default {
   get,
+  // rawGetById is getById without useQuery - bypasses cache
   rawGetById: (id, dataAdaptor) => {
     return get({ path: `/nuxeo/api/v1/id/${id}?properties=*` })
       .then(handleSuccessAndError)
@@ -84,8 +85,6 @@ export default {
       ['getAlphabet', language],
       () => {
         if (language) {
-          // TODO handle all variations of 'language' i.e. ensure language name is url friendly / matches path
-          const _language = language.replace(/'/g, "\\'")
           return post({
             path: '/nuxeo/api/v1/automation/Document.EnrichedQuery',
             bodyObject: {
@@ -93,29 +92,12 @@ export default {
                 language: 'NXQL',
                 sortBy: 'fvcharacter:alphabet_order',
                 sortOrder: 'asc',
-                query: `SELECT * FROM FVCharacter WHERE ecm:path STARTSWITH '/FV/sections/Data/Test/Test/${_language}/Alphabet' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 `,
+                query: `SELECT * FROM FVCharacter WHERE ecm:path STARTSWITH '/FV/sections/Data/Test/Test/${language}/Alphabet' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 `,
               },
               context: {},
             },
             headers: { 'enrichers.document': 'character' },
           })
-        }
-      },
-      queryOptions
-    )
-    return formatResponse({ isLoading, error, data, dataAdaptor })
-  },
-  // getCharacter is currently not being used - drop if not needed in v2
-  getCharacter: (character, language, dataAdaptor) => {
-    const { isLoading, error, data } = useQuery(
-      ['getCharacter', character],
-      () => {
-        if (language && character) {
-          const _language = language.replace(/'/g, "\\'")
-          return get({
-            path: `/nuxeo/api/v1/path/FV/sections/Data/Test/Test/${_language}/Alphabet/${character}`,
-            headers: { 'enrichers.document': 'ancestry, character, permissions', properties: '*' },
-          }).then(handleSuccessAndError)
         }
       },
       queryOptions
