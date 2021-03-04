@@ -37,7 +37,7 @@ function AlphabetPresentation({
   }
   if (error) {
     return (
-      <div>
+      <div className="p-10">
         <h1>Sorry, something went wrong!</h1>
         <p>Please report this error by emailing hello@firstvoices.com so that we can fix it.</p>
         <p>Include the link or action you took to get to this page.</p>
@@ -88,16 +88,19 @@ function AlphabetPresentation({
           </div>
           <div className="col-span-7 sm:col-span-3 mt-8 sm:mt-0">
             {selectedData?.title === undefined && (
-              <div data-testid="AlphabetPresentation__noCharacter" className="text-center">
+              <div
+                data-testid="AlphabetPresentation__noCharacter"
+                className="text-center font-bold sm:text-3xl text-2xl text-fv-blue m-10"
+              >
                 Please select a character
               </div>
             )}
             {selectedData && AlphabetPresentationSelected({ selectedData, onVideoClick, videoIsOpen })}
             {links && (
-              <ul className="text-center">
+              <ul className="text-center mt-10">
                 {links.map(({ url, title }, index) => {
                   return (
-                    <li key={index} className="m-5">
+                    <li key={index} className="m-3">
                       <Link to={url}>{title}</Link>
                     </li>
                   )

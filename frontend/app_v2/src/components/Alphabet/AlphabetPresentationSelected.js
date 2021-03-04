@@ -45,7 +45,7 @@ const AlphabetPresentationSelected = ({ selectedData, onVideoClick, videoIsOpen 
       </h1>
       {relatedEntries && (
         <>
-          <table className="table-auto mx-auto mb-8 mt-5 w-3/4">
+          <table className="table-auto mx-auto my-5 w-3/4">
             <thead>
               <tr>
                 <th colSpan="3" className="sm:text-2xl font-medium text-xl text-center text-fv-blue p-3">

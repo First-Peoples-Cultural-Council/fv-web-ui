@@ -29,9 +29,9 @@ const AlphabetData = () => {
 
   useEffect(() => {
     if (character && data) {
-      const relatedEntries = findSelectedCharacterData({ character, data, language })
-      if (relatedEntries && selectedData?.title !== character) {
-        setSelectedData(relatedEntries)
+      const _selectedData = findSelectedCharacterData({ character, data, language })
+      if (_selectedData !== undefined) {
+        setSelectedData(_selectedData)
       }
     }
   }, [character, data, selectedData])
