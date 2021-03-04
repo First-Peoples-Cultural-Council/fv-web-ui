@@ -13,7 +13,7 @@ import useIcon from 'common/useIcon'
  */
 function AlphabetPresentation({
   language,
-  //   isLoading,
+  isLoading,
   error,
   characters,
   selectedData,
@@ -21,7 +21,6 @@ function AlphabetPresentation({
   links,
   videoIsOpen,
 }) {
-  const isLoading = true
   if (isLoading) {
     return (
       <div className="flex justify-around p-10">
@@ -51,17 +50,7 @@ function AlphabetPresentation({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative">
           <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-blue font-bold sm:text-5xl uppercase">
-            <span
-              className={`
-            inline-block
-            px-4
-            sm:px-8
-            lg:px-20
-            bg-white
-          `}
-            >
-              Alphabet
-            </span>
+            <span className="inline-block bg-white px-4 sm:px-8 lg:px-20">Alphabet</span>
           </h2>
           <hr className="absolute z-0 w-full border-gray-300" style={{ top: '50%' }} />
         </div>
@@ -125,7 +114,7 @@ function AlphabetPresentation({
 const { bool, array, func, string, shape, arrayOf, object } = PropTypes
 AlphabetPresentation.propTypes = {
   isLoading: bool,
-  error: array, // TODO: CONFIRM?
+  error: array,
   characters: arrayOf(
     shape({
       title: string,

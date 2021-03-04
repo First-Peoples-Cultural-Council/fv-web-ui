@@ -18,7 +18,7 @@ const AlphabetPresentationSelected = ({ selectedData, onVideoClick, videoIsOpen 
     <>
       <h1
         data-testid="AlphabetPresentationSelected__header"
-        className={`
+        className="
             flex
             font-bold
             items-center
@@ -27,8 +27,7 @@ const AlphabetPresentationSelected = ({ selectedData, onVideoClick, videoIsOpen 
             text-3xl
             text-center
             text-fv-blue
-            mb-5
-          `}
+            mb-5"
       >
         {title}
         {src && (
@@ -96,7 +95,7 @@ const AlphabetPresentationSelected = ({ selectedData, onVideoClick, videoIsOpen 
         <div className="flex justify-center">
           <button
             onClick={onVideoClick}
-            className={`
+            className="
             bg-fv-orange
             hover:bg-fv-orange-dark
             border
@@ -107,12 +106,11 @@ const AlphabetPresentationSelected = ({ selectedData, onVideoClick, videoIsOpen 
             justify-center
             px-5
             py-2
-            rounded-3xl 
+            rounded-3xl
             shadow-sm
             text-base
             text-center
-            text-white
-            `}
+            text-white"
           >
             {useIcon('PlayArrow', 'fill-current mr-2 -ml-1 h-8 w-8')}
             Play Video
