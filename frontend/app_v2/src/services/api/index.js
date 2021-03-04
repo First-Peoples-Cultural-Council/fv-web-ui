@@ -6,7 +6,8 @@ const api = ky.create({
   timeout: TIMEOUT,
 })
 
-const formatResponse = ({ isLoading, error, data, dataAdaptor }) => {
+const formatResponse = (response, dataAdaptor) => {
+  const { isLoading, error, data } = response
   if (isLoading === false && error === null && data && dataAdaptor) {
     const transformedData = dataAdaptor(Object.assign({}, data))
     return { isLoading, error, data: transformedData, dataOriginal: data }
@@ -14,124 +15,89 @@ const formatResponse = ({ isLoading, error, data, dataAdaptor }) => {
   return { isLoading, error, data, dataOriginal: data }
 }
 
-// const getNuxeoURL = () => {
-//   if (ENV_NUXEO_URL !== null && typeof ENV_NUXEO_URL !== 'undefined') {
-//     return ENV_NUXEO_URL
-//   }
-//   return '/nuxeo'
-// }
 const queryOptions = {
-  retry: (count, { message: status }) => status !== '404' && status !== '401',
-}
-
-const handleSuccessAndError = (response) => {
-  if (response.ok === false) {
-    throw new Error(response.status)
-  }
-  return response
+  retry: (failureCount, { message: status }) => {
+    if (status !== '404' && status !== '401') {
+      return false
+    }
+    return failureCount > 2
+  },
 }
 
 const get = ({ path, headers }) => {
-  return (
-    api
-      .get(path, headers)
-      //.then(handleSuccessAndError) // TODO?
-      // TODO: CHECK IF NEEDED, POSSIBLY REMOVE BELOW
-      .then(
-        (response) => {
-          return response.json()
-        },
-        ({ response }) => {
-          return response
-        }
-      )
-  )
+  return api.get(path, headers).json()
 }
 
 const post = ({ path, bodyObject, headers }) => {
-  return api
-    .post(path, { json: bodyObject, headers })
-    .then(handleSuccessAndError)
-    .then(
-      (response) => {
-        return response.json()
-      },
-      ({ response }) => {
-        return response
-      }
-    )
+  return api.post(path, { json: bodyObject, headers }).json()
 }
 
 export default {
   get,
   // rawGetById is getById without useQuery - bypasses cache
   rawGetById: (id, dataAdaptor, properties = '*') => {
-    return get({ path: `/nuxeo/api/v1/id/${id}?properties=${properties}` })
-      .then(handleSuccessAndError)
-      .then(
-        (response) => {
-          if (dataAdaptor) {
-            return { isLoading: false, data: dataAdaptor(response), dataOriginal: response }
-          }
-          return { isLoading: false, data: response, dataOriginal: response }
-        },
-        (error) => {
-          return { isLoading: false, error }
+    return get({ path: `/nuxeo/api/v1/id/${id}?properties=${properties}` }).then(
+      (response) => {
+        if (dataAdaptor) {
+          return { isLoading: false, data: dataAdaptor(response), dataOriginal: response }
         }
-      )
+        return { isLoading: false, data: response, dataOriginal: response }
+      },
+      (error) => {
+        return { isLoading: false, error }
+      }
+    )
   },
   getAlphabet: (language, dataAdaptor) => {
-    const { isLoading, error, data } = useQuery(
+    const response = useQuery(
       ['getAlphabet', language],
-      () => {
-        if (language) {
-          return post({
-            path: '/nuxeo/api/v1/automation/Document.EnrichedQuery',
-            bodyObject: {
-              params: {
-                language: 'NXQL',
-                sortBy: 'fvcharacter:alphabet_order',
-                sortOrder: 'asc',
-                query: `SELECT * FROM FVCharacter WHERE ecm:path STARTSWITH '/FV/sections/Data/Test/Test/${language}/Alphabet' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 `,
-              },
-              context: {},
+      async () => {
+        return await post({
+          path: '/nuxeo/api/v1/automation/Document.EnrichedQuery',
+          bodyObject: {
+            params: {
+              language: 'NXQL',
+              sortBy: 'fvcharacter:alphabet_order',
+              sortOrder: 'asc',
+              query: `SELECT * FROM FVCharacter WHERE ecm:path STARTSWITH '/FV/sections/Data/Test/Test/${language}/Alphabet' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 `,
             },
-            headers: { 'enrichers.document': 'character' },
-          })
-        }
+            context: {},
+          },
+          headers: { 'enrichers.document': 'character' },
+        })
       },
       queryOptions
     )
-    return formatResponse({ isLoading, error, data, dataAdaptor })
+    return formatResponse(response, dataAdaptor)
   },
   getById: (id, dataAdaptor, properties = '*') => {
-    const { isLoading, error, data } = useQuery(
+    const response = useQuery(
       ['getById', id],
-      () => {
-        return get({ path: `/nuxeo/api/v1/id/${id}?properties=${properties}` }).then(handleSuccessAndError)
+      async () => {
+        return await get({ path: `/nuxeo/api/v1/id/${id}?properties=${properties}` })
       },
       queryOptions
     )
-    return formatResponse({ isLoading, error, data, dataAdaptor })
+    return formatResponse(response, dataAdaptor)
   },
   getSections: (sitename, dataAdaptor) => {
-    const { isLoading, error, data } = useQuery(
+    const response = useQuery(
       ['getSections', sitename],
-      () => {
-        return get({ path: `/nuxeo/api/v1/site/sections/${sitename}` }).then(handleSuccessAndError)
+      async () => {
+        return await get({ path: `/nuxeo/api/v1/site/sections/${sitename}` })
       },
       queryOptions
     )
-    return formatResponse({ isLoading, error, data, dataAdaptor })
+    return formatResponse(response, dataAdaptor)
   },
   // TODO: remove postman example server url
   getCommunityHome: (sitename, dataAdaptor) => {
-    const { isLoading, error, data } = useQuery(['getCommunityHome', sitename], () => {
-      return get({
+    const response = useQuery(['getCommunityHome', sitename], async () => {
+      return await get({
         path: `https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`,
       })
     })
-    return formatResponse({ isLoading, error, data, dataAdaptor })
+    return formatResponse(response, dataAdaptor)
   },
   post,
   postMail: ({ docId, from, message, name, to }) => {

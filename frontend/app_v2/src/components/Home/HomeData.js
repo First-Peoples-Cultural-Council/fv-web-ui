@@ -14,7 +14,7 @@ function HomeData() {
 
   return {
     isLoading,
-    error,
+    error: title === undefined || error,
     data,
     dataOriginal,
     language: {
