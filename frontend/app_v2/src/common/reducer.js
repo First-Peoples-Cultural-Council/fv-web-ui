@@ -7,7 +7,7 @@ export const reducerInitialState = {
       uid: undefined,
       logoUrl: undefined,
     },
-    postUserGet: {},
+    getUser: {},
   },
 }
 export const reducer = (state, { type, payload }) => {
@@ -25,8 +25,8 @@ export const reducer = (state, { type, payload }) => {
       }
       return state
     }
-    case 'api.postUserGet': {
-      state.api.postUserGet = payload
+    case 'api.getUser': {
+      state.api.getUser = payload
       return state
     }
     default:

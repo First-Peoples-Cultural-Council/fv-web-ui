@@ -11,7 +11,7 @@ import { reducerInitialState, reducer } from 'common/reducer'
 import api from 'services/api'
 import getSectionsAdaptor from 'services/api/adaptors/getSections'
 import rawGetByIdAdaptor from 'services/api/adaptors/rawGetById'
-import postUserGetAdaptor from 'services/api/adaptors/postUserGet'
+import getUserAdaptor from 'services/api/adaptors/getUser'
 import AudioMachineData from 'components/AudioMachine/AudioMachineData'
 import MenuMachineData from 'components/MenuMachine/MenuMachineData'
 function AppStateProvider({ children }) {
@@ -36,16 +36,13 @@ function AppStateProvider({ children }) {
 
   // Get user data
   // --------------------------------
-  const { isLoading: isLoadingPostUserGet, error: errorPostUserGet, data: dataPostUserGet } = api.postUserGet(
-    postUserGetAdaptor
-  )
+  const { isLoading: isLoadingGetUser, error: errorGetUser, data: dataGetUser } = api.getUser(getUserAdaptor)
   useEffect(() => {
-    if (isLoadingPostUserGet === false && errorPostUserGet === null) {
-      dispatch({ type: 'api.postUserGet', payload: dataPostUserGet })
+    if (isLoadingGetUser === false && errorGetUser === null) {
+      dispatch({ type: 'api.getUser', payload: dataGetUser })
     }
-  }, [isLoadingPostUserGet, errorPostUserGet])
+  }, [isLoadingGetUser, errorGetUser])
 
-  // TODO: Don't think we need to call getById to get logo image
   // Get language logo
   // --------------------------------
   const logoId = state.api.getSections.idLogo

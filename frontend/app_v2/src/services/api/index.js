@@ -1,7 +1,6 @@
-/* DISABLEglobals ENV_NUXEO_URL */
 import { useQuery } from 'react-query'
 import ky from 'ky'
-import { /*BASE_URL,*/ TIMEOUT } from 'services/api/config'
+import { TIMEOUT } from 'services/api/config'
 const api = ky.create({
   timeout: TIMEOUT,
 })
@@ -117,24 +116,14 @@ export default {
     // TODO: Confirm this path and params when FW-2106 BE is complete and handle success response in UI
     return post({ path: '/nuxeo/site/automation/Document.Mail', bodyObject: { params: params, input: docId } })
   },
-  postUserGet: (dataAdaptor) => {
-    const { isLoading, error, data } = useQuery('postUserGet', () => {
-      return post({
+  getUser: (dataAdaptor) => {
+    const response = useQuery('getUser', async () => {
+      return await post({
         path: '/nuxeo/api/v1/automation/User.Get',
         bodyObject: { params: {}, context: {} },
         headers: { properties: '*' },
       })
     })
-    return formatResponse({ isLoading, error, data, dataAdaptor })
-  },
-  // TODO: remove postman example server url
-  postWorkspaceSetting: (workpaceValue, dataAdaptor) => {
-    return post({
-      path: 'https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/nuxeo/api/v1/automation/User.Workspace',
-      bodyObject: { params: { value: workpaceValue }, context: {} },
-      // headers: { properties: '*' },
-    }).then((response) => {
-      return formatResponse({ isLoading: false, error: [], data: response, dataAdaptor })
-    })
+    return formatResponse(response, dataAdaptor)
   },
 }

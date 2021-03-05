@@ -39,7 +39,7 @@ function DialectHeaderPresentation({
       key={`DialectHeaderMenu_${menu.title}`}
       title={menu.title}
       itemsData={menu.itemsData}
-      href={menu.href ? menu.href : null} // TODO: MIGHT NOT NEED TERNARY
+      href={menu.href}
       onMenuClick={onMenuClick}
       id={menu.id}
       openMenu={openMenu}

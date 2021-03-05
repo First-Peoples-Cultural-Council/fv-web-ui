@@ -17,8 +17,7 @@ function DialectHeaderData() {
   const { context } = machine
   const { openMenu } = context
 
-  // TODO: INVESTIGATE WHY logoUrl DOESN'T UPDATE!
-  const { title /*, logoUrl*/ } = useGetSections()
+  const { title } = useGetSections()
   const { value: workspaceToggleValue, set } = useWorkspaceToggle()
   const { firstName, lastName, userName = '' } = useUserGet()
 
