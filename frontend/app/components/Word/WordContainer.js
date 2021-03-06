@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import WordData from 'components/Word/WordData'
 
 import DetailWordPhrase from 'components/DetailWordPhrase'
@@ -15,9 +16,9 @@ const DetailsViewWithActions = withActions(PromiseWrapper, true)
  *
  * @returns {node} jsx markup
  */
-function WordContainer() {
+function WordContainer({ wordId }) {
   return (
-    <WordData>
+    <WordData wordId={wordId}>
       {({
         // Actions
         computeEntities,
@@ -95,6 +96,13 @@ function WordContainer() {
       }}
     </WordData>
   )
+}
+
+// PROPTYPES
+const { string } = PropTypes
+WordContainer.propTypes = {
+  // Prop from v2
+  wordId: string,
 }
 
 export default WordContainer
