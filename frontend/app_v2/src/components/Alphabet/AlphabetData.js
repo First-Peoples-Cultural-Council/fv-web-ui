@@ -25,7 +25,7 @@ const AlphabetData = () => {
   const { title } = useGetSections()
   const { character, language } = useParams()
   const { isLoading, error, data } = api.getAlphabet(title, getAlphabetAdaptor)
-  const [selectedData, setSelectedData] = useState()
+  const [selectedData, setSelectedData] = useState({})
 
   useEffect(() => {
     if (character && data) {
