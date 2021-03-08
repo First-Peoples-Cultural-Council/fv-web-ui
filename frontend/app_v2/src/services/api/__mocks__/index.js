@@ -2,9 +2,6 @@ const api = {
   get: () => {
     return { isLoading: false, error: null, data: {}, dataOriginal: {} }
   },
-  rawGetById: () => {
-    return { isLoading: false, data: {}, dataOriginal: {} }
-  },
   getAlphabet: () => {
     return {
       isLoading: false,

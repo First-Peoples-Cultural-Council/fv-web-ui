@@ -13,16 +13,7 @@ export const reducerInitialState = {
 export const reducer = (state, { type, payload }) => {
   switch (type) {
     case 'api.getSections': {
-      const oldLogoUrl = state.api.getSections.logoUrl
       state.api.getSections = payload
-      state.api.getSections.logoUrl = oldLogoUrl
-      return state
-    }
-    case 'api.getSections.logo': {
-      const { logoUrl, uid } = payload
-      if (state.api.getSections.uid === uid) {
-        state.api.getSections = { ...state.api.getSections, logoUrl }
-      }
       return state
     }
     case 'api.getUser': {

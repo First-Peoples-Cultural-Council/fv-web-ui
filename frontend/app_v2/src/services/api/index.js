@@ -33,20 +33,6 @@ const post = ({ path, bodyObject, headers }) => {
 
 export default {
   get,
-  // rawGetById is getById without useQuery - bypasses cache
-  rawGetById: (id, dataAdaptor, properties = '*') => {
-    return get({ path: `/nuxeo/api/v1/id/${id}?properties=${properties}` }).then(
-      (response) => {
-        if (dataAdaptor) {
-          return { isLoading: false, data: dataAdaptor(response), dataOriginal: response }
-        }
-        return { isLoading: false, data: response, dataOriginal: response }
-      },
-      (error) => {
-        return { isLoading: false, error }
-      }
-    )
-  },
   getAlphabet: (language, dataAdaptor) => {
     const response = useQuery(
       ['getAlphabet', language],
@@ -69,9 +55,9 @@ export default {
     )
     return formatResponse(response, dataAdaptor)
   },
-  getById: (id, dataAdaptor, properties = '*') => {
+  getById: (id, queryKey, dataAdaptor, properties = '*') => {
     const response = useQuery(
-      ['getById', id],
+      [queryKey, id],
       async () => {
         return await get({ path: `/nuxeo/api/v1/id/${id}?properties=${properties}` })
       },
