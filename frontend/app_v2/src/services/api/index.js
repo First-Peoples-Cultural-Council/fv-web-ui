@@ -33,9 +33,9 @@ const post = ({ path, bodyObject, headers }) => {
 
 export default {
   get,
-  getAlphabet: (language, dataAdaptor) => {
+  getAlphabet: (sitename, dataAdaptor) => {
     const response = useQuery(
-      ['getAlphabet', language],
+      ['getAlphabet', sitename],
       async () => {
         return await post({
           path: '/nuxeo/api/v1/automation/Document.EnrichedQuery',
@@ -44,7 +44,7 @@ export default {
               language: 'NXQL',
               sortBy: 'fvcharacter:alphabet_order',
               sortOrder: 'asc',
-              query: `SELECT * FROM FVCharacter WHERE ecm:path STARTSWITH '/FV/sections/Data/Test/Test/${language}/Alphabet' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 `,
+              query: `SELECT * FROM FVCharacter WHERE ecm:path STARTSWITH '/FV/sections/Data/Test/Test/${sitename}/Alphabet' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 `,
             },
             context: {},
           },
@@ -77,11 +77,15 @@ export default {
   },
   // TODO: remove postman example server url
   getCommunityHome: (sitename, dataAdaptor) => {
-    const response = useQuery(['getCommunityHome', sitename], async () => {
-      return await get({
-        path: `https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`,
-      })
-    })
+    const response = useQuery(
+      ['getCommunityHome', sitename],
+      async () => {
+        return await get({
+          path: `https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`,
+        })
+      },
+      queryOptions
+    )
     return formatResponse(response, dataAdaptor)
   },
   post,
