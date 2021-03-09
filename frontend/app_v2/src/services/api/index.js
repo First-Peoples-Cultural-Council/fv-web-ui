@@ -118,10 +118,8 @@ export default {
   },
   getUser: (dataAdaptor) => {
     const response = useQuery('getUser', async () => {
-      return await post({
-        path: '/nuxeo/api/v1/automation/User.Get',
-        bodyObject: { params: {}, context: {} },
-        headers: { properties: '*' },
+      return await get({
+        path: '/nuxeo/api/v1/me/',
       })
     })
     return formatResponse(response, dataAdaptor)
