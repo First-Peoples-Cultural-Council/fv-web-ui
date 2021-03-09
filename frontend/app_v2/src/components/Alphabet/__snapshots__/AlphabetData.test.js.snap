@@ -469,7 +469,7 @@ Object {
     },
   ],
   "onVideoClick": [Function],
-  "selectedData": undefined,
+  "selectedData": Object {},
   "videoIsOpen": false,
 }
 `;
