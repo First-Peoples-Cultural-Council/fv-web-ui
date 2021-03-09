@@ -14,15 +14,6 @@ const formatResponse = (response, dataAdaptor) => {
   return { isLoading, error, data, dataOriginal: data }
 }
 
-const queryOptions = {
-  retry: (failureCount, { message: status }) => {
-    if (status !== '404' && status !== '401') {
-      return false
-    }
-    return failureCount > 2
-  },
-}
-
 const get = ({ path, headers }) => {
   return api.get(path, headers).json()
 }
@@ -34,58 +25,42 @@ const post = ({ path, bodyObject, headers }) => {
 export default {
   get,
   getAlphabet: (sitename, dataAdaptor) => {
-    const response = useQuery(
-      ['getAlphabet', sitename],
-      async () => {
-        return await post({
-          path: '/nuxeo/api/v1/automation/Document.EnrichedQuery',
-          bodyObject: {
-            params: {
-              language: 'NXQL',
-              sortBy: 'fvcharacter:alphabet_order',
-              sortOrder: 'asc',
-              query: `SELECT * FROM FVCharacter WHERE ecm:path STARTSWITH '/FV/sections/Data/Test/Test/${sitename}/Alphabet' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 `,
-            },
-            context: {},
+    const response = useQuery(['getAlphabet', sitename], async () => {
+      return await post({
+        path: '/nuxeo/api/v1/automation/Document.EnrichedQuery',
+        bodyObject: {
+          params: {
+            language: 'NXQL',
+            sortBy: 'fvcharacter:alphabet_order',
+            sortOrder: 'asc',
+            query: `SELECT * FROM FVCharacter WHERE ecm:path STARTSWITH '/FV/sections/Data/Test/Test/${sitename}/Alphabet' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 `,
           },
-          headers: { 'enrichers.document': 'character' },
-        })
-      },
-      queryOptions
-    )
+          context: {},
+        },
+        headers: { 'enrichers.document': 'character' },
+      })
+    })
     return formatResponse(response, dataAdaptor)
   },
   getById: (id, queryKey, dataAdaptor, properties = '*') => {
-    const response = useQuery(
-      [queryKey, id],
-      async () => {
-        return await get({ path: `/nuxeo/api/v1/id/${id}?properties=${properties}` })
-      },
-      queryOptions
-    )
+    const response = useQuery([queryKey, id], async () => {
+      return await get({ path: `/nuxeo/api/v1/id/${id}?properties=${properties}` })
+    })
     return formatResponse(response, dataAdaptor)
   },
   getSections: (sitename, dataAdaptor) => {
-    const response = useQuery(
-      ['getSections', sitename],
-      async () => {
-        return await get({ path: `/nuxeo/api/v1/site/sections/${sitename}` })
-      },
-      queryOptions
-    )
+    const response = useQuery(['getSections', sitename], async () => {
+      return await get({ path: `/nuxeo/api/v1/site/sections/${sitename}` })
+    })
     return formatResponse(response, dataAdaptor)
   },
   // TODO: remove postman example server url
   getCommunityHome: (sitename, dataAdaptor) => {
-    const response = useQuery(
-      ['getCommunityHome', sitename],
-      async () => {
-        return await get({
-          path: `https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`,
-        })
-      },
-      queryOptions
-    )
+    const response = useQuery(['getCommunityHome', sitename], async () => {
+      return await get({
+        path: `https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`,
+      })
+    })
     return formatResponse(response, dataAdaptor)
   },
   post,
