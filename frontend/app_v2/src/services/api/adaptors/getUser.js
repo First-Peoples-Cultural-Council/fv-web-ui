@@ -1,10 +1,11 @@
 const getUser = (response) => {
   const { properties } = response
-  return {
-    firstName: properties?.['user:firstName'],
-    lastName: properties?.['user:lastName'],
-    groups: properties?.['user:groups'],
-    userName: properties?.['user:username'],
+  const user = {
+    firstName: properties?.firstName,
+    lastName: properties?.lastName,
+    groups: properties?.groups,
+    userName: properties?.username,
   }
+  return user
 }
 export default getUser
