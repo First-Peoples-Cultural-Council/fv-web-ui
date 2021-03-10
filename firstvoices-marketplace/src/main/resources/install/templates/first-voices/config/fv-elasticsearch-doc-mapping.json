@@ -41,6 +41,25 @@
       "type": "text",
       "analyzer": "fulltext"
     },
+    "exact_matches_language": {
+      "type": "text",
+      "analyzer": "standard",
+      "boost": 10
+    },
+    "exact_matches_translations": {
+      "type": "text",
+      "analyzer": "standard",
+      "boost": 10
+    },
+    "secondary_search_terms": {
+      "type": "text",
+      "analyzer": "fulltext"
+    },
+    "dictionary_titles": {
+      "type": "text",
+      "analyzer": "standard",
+      "boost": 10
+    },
     "all_field": {
       "type": "text",
       "analyzer": "fulltext"
@@ -95,7 +114,11 @@
     },
     "dc:title": {
       "type": "text",
-      "copy_to": [ "all_field", "dictionary_all_field" ],
+      "copy_to": [
+        "all_field",
+        "dictionary_all_field",
+        "exact_matches_language"
+      ],
       "fielddata": true,
       "fields": {
         "fulltext": {
@@ -103,15 +126,18 @@
           "type": "text",
           "boost": 3
         },
-        "lowercase" : {
-            "type": "text",
-            "analyzer" : "lowercase_analyzer"
+        "lowercase": {
+          "type": "text",
+          "analyzer": "lowercase_analyzer"
         }
       }
     },
     "dc:description": {
       "type": "keyword",
-      "copy_to": "all_field",
+      "copy_to": [
+        "all_field",
+        "secondary_search_terms"
+      ],
       "ignore_above": 32765,
       "fields": {
         "fulltext": {
@@ -160,11 +186,15 @@
     },
     "ecm:title": {
       "type": "keyword",
+      "copy_to": "exact_matches_language",
       "ignore_above": 256
     },
     "note:note": {
       "type": "keyword",
-      "copy_to": "all_field",
+      "copy_to": [
+        "all_field",
+        "secondary_search_terms"
+      ],
       "ignore_above": 256,
       "fields": {
         "fulltext": {
@@ -173,62 +203,72 @@
         }
       }
     },
-    "fv:definitions" : {
+    "fv:definitions": {
       "properties": {
-         "translation":{
+        "translation": {
           "type": "text",
-             "copy_to": [ "all_field", "dictionary_all_field" ],
-             "fields" : {
-                "fulltext": {
-                  "analyzer": "fulltext",
-                  "type": "text",
-                  "boost": 2
-                },
-                "lowercase" : {
-                "type": "text",
-                "analyzer" : "lowercase_analyzer",
-                "boost": 2
-              }
-            }
-          }
-       }
-    },
-    "fv:literal_translation" : {
-        "properties": {
-           "translation":{
-            "type": "text",
-               "copy_to": "all_field",
-               "fields" : {
-                  "lowercase" : {
-                  "type": "text",
-                  "analyzer" : "lowercase_analyzer",
-                  "boost": 1.25
-                }
-              }
-            }
-         }
-      },
-      "fv:cultural_note" : {
-          "type" : "keyword",
-          "copy_to" : "all_field",
-          "fields" : {
-            "lowercase" : {
+          "copy_to": [
+            "all_field",
+            "dictionary_all_field",
+            "exact_matches_translations"
+          ],
+          "fields": {
+            "fulltext": {
+              "analyzer": "fulltext",
               "type": "text",
-              "analyzer" : "lowercase_analyzer",
-              "boost": 1
+              "boost": 2
+            },
+            "lowercase": {
+              "type": "text",
+              "analyzer": "lowercase_analyzer",
+              "boost": 2
             }
           }
-       },
-       "fv-word:part_of_speech" : {
-           "type" : "keyword",
-           "copy_to" : "all_field",
-           "fields" : {
-             "lowercase" : {
-               "type": "text",
-               "analyzer" : "fulltext",
-               "boost": 2
-             }
-           }
         }
+      }
+    },
+    "fv:literal_translation": {
+      "properties": {
+        "translation": {
+          "type": "text",
+          "copy_to": [
+            "all_field",
+            "exact_matches_translations"
+          ],
+          "fields": {
+            "lowercase": {
+              "type": "text",
+              "analyzer": "lowercase_analyzer",
+              "boost": 1.25
+            }
+          }
+        }
+      }
+    },
+    "fv:cultural_note": {
+      "type": "keyword",
+      "copy_to": [
+        "all_field",
+        "secondary_search_terms"
+      ],
+      "fields": {
+        "lowercase": {
+          "type": "text",
+          "analyzer": "lowercase_analyzer",
+          "boost": 1
+        }
+      }
+    },
+    "fv-word:part_of_speech": {
+      "type": "keyword",
+      "copy_to": "all_field",
+      "fields": {
+        "lowercase": {
+          "type": "text",
+          "analyzer": "fulltext",
+          "boost": 2
+        }
+      }
     }
+  }
 }
