@@ -48,6 +48,9 @@ module.exports = {
         'fv-warning-red': {
           DEFAULT: '#D64A4A',
         },
+        'fv-yellow': {
+          DEFAULT: '#F4E31E',
+        },
       },
       borderRadius: {
         50: '3.13rem',
