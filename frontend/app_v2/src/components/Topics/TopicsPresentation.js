@@ -11,7 +11,7 @@ import TopicsPresentationTopic from 'components/Topics/TopicsPresentationTopic'
  */
 function TopicsPresentation({ title, topics }) {
   return (
-    <div className="Topics bg-white py-8">
+    <div className="Topics bg-white py-12 mx-10">
       <div className="relative">
         <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-blue font-bold sm:text-5xl">
           <span
