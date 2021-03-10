@@ -11,12 +11,6 @@ import {
   WIDGET_HERO,
   WIDGET_SCHEDULE,
   WIDGET_LIST,
-  // WIDGET_LIST_WORD,
-  // WIDGET_LIST_PHRASE,
-  // WIDGET_LIST_SONG,
-  // WIDGET_LIST_STORY,
-  // WIDGET_LIST_MIXED,
-  // WIDGET_LIST_GENERIC,
   WIDGET_WELCOME,
   WIDGET_ALPHABET,
   WIDGET_STATS,
@@ -34,16 +28,7 @@ import {
  */
 function HomePresentation({ isLoading, error, data, language }) {
   const widgets = data ? data.widgets : []
-  const fallBackIcon = useIcon(
-    'Spinner',
-    `
-        fill-current
-        w-56
-        h-56
-        lg:w-72
-        lg:h-72
-      `
-  )
+  const fallBackIcon = useIcon('Spinner', 'fill-current w-56 h-56 lg:w-72 lg:h-72')
   if (isLoading) {
     return (
       <div className="flex justify-around p-10">
@@ -69,7 +54,7 @@ function HomePresentation({ isLoading, error, data, language }) {
     )
   }
   return (
-    <div className="Home">
+    <div>
       {widgets.length > 0 &&
         widgets.map(({ type, ...widgetProps }, index) => {
           if (type === WIDGET_HERO) {
@@ -77,8 +62,8 @@ function HomePresentation({ isLoading, error, data, language }) {
             const foregroundIcon = language.logoUrl ? (
               <CircleImage.Presentation
                 src={language.logoUrl}
-                classNameWidth="w-56 lg:w-72"
-                classNameHeight="h-56 lg:h-72"
+                classNameWidth="w-40 lg:w-52"
+                classNameHeight="h-40 lg:h-52"
                 alt=""
               />
             ) : (
@@ -88,44 +73,22 @@ function HomePresentation({ isLoading, error, data, language }) {
               <Hero.Presentation
                 key={index}
                 background={background}
-                foreground={<h1 className="font-bold text-3xl">{language.title}</h1>}
+                foreground={<h1 className="font-medium text-2xl">{language.title}</h1>}
                 foregroundIcon={foregroundIcon}
-                variant={variant}
-                uid={uid}
                 search={
-                  <div
-                    className={`
-                    bg-white
-                    flex
-                    px-12
-                    py-6
-                    rounded-25
-                    w-3/4
-                  `}
-                  >
-                    <button type="button">
-                      {useIcon(
-                        'Search',
-                        `
-                          fill-current
-                          h-12
-                          text-black
-                          w-12
-                        `
-                      )}
-                    </button>
+                  <div className="bg-white flex rounded-2xl w-3/5 text-fv-charcoal-light p-1 divide-x-2 divide-gray-300">
                     <input
-                      className={`
-                        ml-8
-                        text-black
-                        w-full
-                        text-4xl
-                      `}
+                      className="w-full foucus text-2xl px-4 py-2 "
                       type="text"
                       placeholder={`Search ${language.title}`}
                     />
+                    <button type="button " className="p-2">
+                      {useIcon('Search', 'fill-current h-8 w-8 ')}
+                    </button>
                   </div>
                 }
+                variant={variant}
+                uid={uid}
               />
             )
           }

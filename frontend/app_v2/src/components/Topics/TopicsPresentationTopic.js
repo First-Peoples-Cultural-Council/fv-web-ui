@@ -25,22 +25,27 @@ function TopicsPresentationTopic({ audio, heading, image, listCount, subheading,
   const url = `${language}/${_url}`
   let bgColor
   let icon
+  let textSize
   switch (type) {
     case WIDGET_LIST_WORD:
       bgColor = 'bg-fv-turquoise'
       icon = 'ChatBubble'
+      textSize = 'text-4xl lg:text-5xl'
       break
     case WIDGET_LIST_PHRASE:
       bgColor = 'bg-fv-orange'
       icon = 'Quote'
+      textSize = 'text-3xl lg:text-4xl'
       break
     case WIDGET_LIST_SONG:
       bgColor = 'bg-fv-red'
       icon = 'MusicNote'
+      textSize = 'text-3xl lg:text-4xl'
       break
     case WIDGET_LIST_STORY:
       bgColor = 'bg-fv-purple'
       icon = 'Book'
+      textSize = 'text-3xl lg:text-4xl'
       break
 
     default:
@@ -67,51 +72,22 @@ function TopicsPresentationTopic({ audio, heading, image, listCount, subheading,
         justify-between
         rounded-25
         xl:rounded-50
-        py-6
+        p-8
         text-white
         w-full
       `}
     >
-      {useIcon(
-        icon,
-        `
-        ${image ? 'fill-current' : 'opacity-30'}
-        w-7
-        h-7
-        lg:w-8
-        lg:h-8
-        xl:w-12
-        xl:h-12
-      `
-      )}
+      {useIcon(icon, `${image ? 'fill-current' : 'opacity-30'} w-7 h-7 lg:w-10 lg:h-10 xl:w-14 xl:h-14`)}
       {heading && (
-        <h1
-          className={`
-          text-xl
-          text-center
-          lg:text-2xl
-          xl:text-5xl
-          font-medium
-        `}
-        >
+        <h1 className={`${textSize} text-center font-medium my-3`}>
           <Link to={url}>{heading}</Link>
         </h1>
       )}
-      {subheading && (
-        <h2
-          className={`
-          text-base
-          lg:text-xl
-          xl:text-3xl
-        `}
-        >
-          {subheading}
-        </h2>
-      )}
-      {audio && <AudioMinimal.Container src={audio} />}
+      {subheading && <h2 className="text-xl lg:text-2xl text-center">{subheading}</h2>}
+      {audio && <AudioMinimal.Container src={audio} iconStyling="fill-current w-7 h-7 lg:w-8 lg:h-8 mt-3" />}
 
       {listCount > 0 && (
-        <div>
+        <div className="text-lg lg:text-xl text-center text-fv-yellow">
           {listCount === 1 && `${listCount} phrase`}
           {listCount > 1 && `${listCount} phrases`}
         </div>
