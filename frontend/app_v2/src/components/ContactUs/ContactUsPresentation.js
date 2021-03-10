@@ -89,7 +89,7 @@ function ContactUsPresentation({ title, contactFormRef, contactText, formErrors,
               </div>
             </div>
             <button
-              className="flex items-center shadow bg-fv-blue hover:bg-fv-blue-dark focus:shadow-outline focus:outline-none text-white font-bold ml-3 py-2 px-4 rounded-3xl"
+              className="flex items-center shadow bg-fv-blue hover:bg-fv-blue-dark focus:shadow-outline text-white font-bold ml-3 py-2 px-4 rounded-3xl"
               type="submit"
             >
               Submit
