@@ -14,9 +14,7 @@ function HeroPresentation({ background, foreground, foregroundIcon, search, vari
     return null
   }
   let containerStyles = background
-    ? {
-        backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.67), rgba(0, 0, 0, 0.67)), url(${background})`,
-      }
+    ? { backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.67), rgba(0, 0, 0, 0.67)), url(${background})` }
     : {}
 
   const classNamesWithBackground = 'text-white bg-no-repeat bg-cover bg-center'
@@ -28,44 +26,29 @@ function HeroPresentation({ background, foreground, foregroundIcon, search, vari
   switch (variant) {
     case WIDGET_HERO_CENTER: {
       classNamesForeground = 'flex-col justify-center px-8'
-      classNamesForegroundIcon = 'mb-5'
+      classNamesForegroundIcon = 'mb-1'
       classNamesContainer = background
         ? `${classNamesContainer} ${classNamesWithBackground} h-96`
         : `${classNamesContainer} ${classNamesWithoutBackground} py-16`
       break
     }
     case WIDGET_HERO_LEFT: {
-      classNamesForeground = 'flex-row justify-start px-8'
-      classNamesForegroundIcon = 'mr-5'
+      classNamesForeground = 'flex-row justify-start px-5'
+      classNamesForegroundIcon = 'mr-1'
       classNamesContainer = `${classNamesContainer} ${classNamesWithoutBackground} py-8`
       break
     }
     case WIDGET_HERO_SEARCH: {
-      classNamesForeground = `
-        flex-col
-        justify-center
-        md:justify-end
-        pb-10
-      `
-      classNamesForegroundIcon = 'mb-5'
+      classNamesForeground = 'flex-col justify-center md:justify-end pb-7'
+      classNamesForegroundIcon = 'mb-2'
       classNamesContainer = `
         ${classNamesContainer}
-        ${
-          background
-            ? `${classNamesWithBackground} h-96`
-            : 'text-white bg-gradient-to-r from-gray-600 to-gray-700 py-16'
-        }
-
-        grid
-        gap-3
-        grid-cols-none
-        
-        md:grid-cols-3
-      `
+        ${background ? `${classNamesWithBackground}` : 'text-white bg-gradient-to-r from-gray-600 to-gray-700 py-16'}
+        grid gap-3 grid-cols-none md:grid-cols-3`
       if (background) {
         containerStyles = Object.assign({}, containerStyles, {
           backgroundImage: `url(${background})`,
-          minHeight: '695px',
+          minHeight: '500px',
         })
       }
       break
@@ -94,42 +77,22 @@ function HeroPresentation({ background, foreground, foregroundIcon, search, vari
       )}
       {variant === WIDGET_HERO_SEARCH && search && (
         <div
-          className={`
-          absolute
+          className="absolute
           inset-x-0
           bottom-0
           z-0
-          bg-gradient-to-r 
-          to-green-600
-          from-blue-600
-
-          h-2/4
+          bg-gradient-to-r
+          to-fv-turquoise
+          from-fv-blue-light
+          h-1/2
           md:h-1/4
-
           grid
           gap-3
           grid-cols-none
-          md:grid-cols-3
-        `}
+          md:grid-cols-3"
         >
-          <div
-            className={`
-            md:col-start-2
-            md:col-span-2
-            grid
-          `}
-          >
-            <div
-              className={`
-            place-self-center
-            md:place-self-auto
-
-            flex
-            items-center
-            justify-center
-            md:justify-start
-            `}
-            >
+          <div className="md:col-start-2 md:col-span-2 grid">
+            <div className=" place-self-center md:place-self-auto flex items-center justify-center md:justify-start">
               {search}
             </div>
           </div>
@@ -139,8 +102,10 @@ function HeroPresentation({ background, foreground, foregroundIcon, search, vari
   )
 }
 // PROPTYPES
-const { node, string, oneOf } = PropTypes
+const { array, bool, node, string, oneOf } = PropTypes
 HeroPresentation.propTypes = {
+  isLoading: bool,
+  error: array,
   background: string,
   foreground: node,
   foregroundIcon: node,

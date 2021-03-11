@@ -11,35 +11,14 @@ import TopicsPresentationTopic from 'components/Topics/TopicsPresentationTopic'
  */
 function TopicsPresentation({ title, topics }) {
   return (
-    <div className="Topics bg-white py-8">
-      <div className="relative">
+    <section className="Topics bg-white py-12 mx-10">
+      <div className="relative mx-10">
         <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-blue font-bold sm:text-5xl">
-          <span
-            className={`
-            inline-block
-            px-4
-            sm:px-8
-            lg:px-20
-
-            bg-white
-          `}
-          >
-            {title}
-          </span>
+          <span className="inline-block px-4 sm:px-8 lg:px-20 bg-white">{title}</span>
         </h2>
         <hr className="absolute z-0 w-full" style={{ top: '50%' }} />
       </div>
-      <div
-        className={`
-        grid
-        gap-3
-        grid-cols-2
-        grid-rows-3
-        sm:grid-rows-2
-        sm:grid-cols-3
-        md:grid-cols-4
-      `}
-      >
+      <div className="grid gap-y-5 gap-x-8 md:gap-y-10 md:gap-x-14 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-fr">
         {topics.map(({ audio, heading, image, listCount, subheading, type, url }, index) => {
           const key = `topic${index}`
           return (
@@ -56,7 +35,7 @@ function TopicsPresentation({ title, topics }) {
           )
         })}
       </div>
-    </div>
+    </section>
   )
 }
 // PROPTYPES

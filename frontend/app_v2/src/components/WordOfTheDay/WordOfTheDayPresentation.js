@@ -15,9 +15,15 @@ import Share from 'components/Share'
  */
 function WordOfTheDayPresentation({ audio, hasShare, heading, subheading, title, url }) {
   return (
-    <section className="py-12 bg-gray-100">
+    <section className="py-12 bg-gray-100 mx-10">
+      <div className="relative mx-10">
+        <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-blue font-bold uppercase sm:text-5xl">
+          <span className="inline-block px-4 sm:px-8 lg:px-20 bg-gray-100">{title}</span>
+        </h2>
+        <hr className="absolute z-0 w-full" style={{ top: '50%' }} />
+      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="mb-12 text-4xl text-fv-blue font-bold uppercase sm:text-5xl">{title}</h2>
+        {/* <h2 className="mb-12 text-4xl text-fv-blue font-bold uppercase sm:text-5xl">{title}</h2> */}
         <div className="mt-2 max-w-2xl inline-flex items-center text-4xl font-bold text-black md:mx-auto sm:text-5xl">
           <a href={url}>{heading}</a>
           {audio && (
