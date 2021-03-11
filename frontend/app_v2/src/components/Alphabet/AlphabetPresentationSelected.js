@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import AudioMinimal from 'components/AudioMinimal'
 import useIcon from 'common/useIcon'
@@ -12,8 +13,8 @@ import AlphabetData from 'components/Alphabet/AlphabetData'
  * @returns {node} jsx markup
  */
 
-const AlphabetPresentationSelected = () => {
-  const { selectedData, onVideoClick, videoIsOpen } = AlphabetData()
+const AlphabetPresentationSelected = ({ selectedData }) => {
+  const { onVideoClick, videoIsOpen } = AlphabetData()
   const { title, src, relatedEntries, videoSrc } = selectedData
   return (
     <>
@@ -152,6 +153,20 @@ const AlphabetPresentationSelected = () => {
       )}
     </>
   )
+}
+
+// PROPTYPES
+const { shape, string } = PropTypes
+
+AlphabetPresentationSelected.propTypes = {
+  selectedData: shape({
+    uid: string,
+    title: string,
+    src: string,
+    relatedEntries: string,
+    url: string,
+    videoSrc: string,
+  }),
 }
 
 export default AlphabetPresentationSelected

@@ -39,6 +39,13 @@ const AlphabetData = () => {
   // Video Modal
   const [videoIsOpen, setVideoIsOpen] = useState(false)
 
+  const onCharacterClick = (clickedCharacter) => {
+    const _selectedData = findSelectedCharacterData({ character: clickedCharacter, data, language })
+    if (_selectedData !== undefined && _selectedData?.title !== selectedData?.title) {
+      setSelectedData(_selectedData)
+    }
+  }
+
   const onVideoClick = () => {
     setVideoIsOpen(!videoIsOpen)
   }
@@ -49,6 +56,7 @@ const AlphabetData = () => {
     error,
     isLoading,
     language,
+    onCharacterClick,
     onVideoClick,
     selectedData,
     videoIsOpen,

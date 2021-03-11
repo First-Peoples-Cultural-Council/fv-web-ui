@@ -86,7 +86,7 @@ function AlphabetPresentation({ language, isLoading, error, characters, selected
                 Please select a character
               </div>
             )}
-            {selectedData && AlphabetPresentationSelected()}
+            {selectedData && AlphabetPresentationSelected({ selectedData })}
             {links && (
               <ul className="text-center mt-10">
                 {links.map(({ url, title }, index) => {
@@ -105,7 +105,7 @@ function AlphabetPresentation({ language, isLoading, error, characters, selected
   )
 }
 // PROPTYPES
-const { bool, array, func, string, shape, arrayOf, object } = PropTypes
+const { bool, array, string, shape, arrayOf, object } = PropTypes
 AlphabetPresentation.propTypes = {
   isLoading: bool,
   error: array,
@@ -120,12 +120,6 @@ AlphabetPresentation.propTypes = {
   language: string,
   selectedData: object,
   links: array,
-  videoIsOpen: bool,
-  onVideoClick: func,
-}
-
-AlphabetPresentation.defaultProps = {
-  onVideoClick: () => {},
 }
 
 export default AlphabetPresentation

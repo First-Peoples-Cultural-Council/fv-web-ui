@@ -14,12 +14,13 @@ import AlphabetPresentationWidget from 'components/Alphabet/AlphabetPresentation
  * @returns {node} jsx markup
  */
 function AlphabetContainer({ widgetView }) {
-  const { isLoading, error, characters, language, selectedData, links } = AlphabetData()
+  const { characters, error, isLoading, language, links, onCharacterClick, selectedData } = AlphabetData()
   return widgetView ? (
     <AlphabetPresentationWidget
       isLoading={isLoading}
       error={error}
       characters={characters}
+      onCharacterClick={onCharacterClick}
       language={language}
       selectedData={selectedData}
       links={links}
