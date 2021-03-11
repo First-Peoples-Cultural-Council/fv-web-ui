@@ -19,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/runtime": "^7.12.5",
+    "@babel/runtime": "^7.12.13",
     "@tailwindcss/typography": "^0.4.0",
     "@xstate/react": "^1.2.2",
     "ky": "^0.26.0",
