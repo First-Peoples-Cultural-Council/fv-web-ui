@@ -120,6 +120,11 @@ public class CreateProxiesWorker extends AbstractWork {
 
   private void createProxies(CoreSession session, DocumentModelList docs) {
     for (DocumentModel doc : docs) {
+    //      // Created a major version so that doc is forced to publish
+    //      doc.putContextData(VersioningService.VERSIONING_OPTION,
+    //          VersioningOption.MAJOR);
+    //      session.saveDocument(doc);
+
       fvPublisherService.publish(session, doc);
     }
   }

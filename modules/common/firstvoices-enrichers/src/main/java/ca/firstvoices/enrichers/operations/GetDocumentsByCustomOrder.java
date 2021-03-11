@@ -119,7 +119,8 @@ public class GetDocumentsByCustomOrder {
     PageProvider<DocumentModel> pp =
         (PageProvider<DocumentModel>) PageProviderHelper.getPageProvider(
         session, def, null, sortBy, sortOrder, targetPageSize, targetPage, (Object[]) null);
-
+    //// Just a global job that should handle these weird cases?!?! Find proxies that should be trashed?
+    /// session.query(query).stream().filter(doc -> doc.isTrashed()).findAny()
     PaginableDocumentModelListImpl res = new PaginableDocumentModelListImpl(pp);
     if (res.hasError()) {
       throw new OperationException(res.getErrorMessage());

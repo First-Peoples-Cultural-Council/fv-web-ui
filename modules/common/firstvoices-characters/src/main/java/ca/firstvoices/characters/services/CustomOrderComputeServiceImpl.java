@@ -35,6 +35,8 @@ import org.jetbrains.annotations.Nullable;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.VersioningOption;
+import org.nuxeo.ecm.core.api.versioning.VersioningService;
 import org.nuxeo.runtime.api.Framework;
 
 public class CustomOrderComputeServiceImpl implements CustomOrderComputeService {
@@ -62,6 +64,11 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
       if (isAlphabetComputed(session, characters)) {
         // Only process custom order if the alphabet is fully computed
         asset = computeCustomOrder(asset, alphabet, characters);
+
+        // Ensure version is incremented so publishing takes effect
+        // Test me on preprod
+        asset.putContextData(VersioningService.VERSIONING_OPTION,
+            VersioningOption.MAJOR);
 
         if (Boolean.TRUE.equals(save) && asset.isDirty()) {
           SessionUtils.saveDocumentWithoutEvents(session, asset, true,
