@@ -7,7 +7,19 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import AppFrameContainer from './components/AppFrame/AppFrameContainer'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import AppStateProvider from 'common/AppStateProvider'
-const queryClient = new QueryClient()
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, { message: status }) => {
+        if (status !== '404' && status !== '401') {
+          return false
+        }
+        return failureCount > 2
+      },
+    },
+  },
+})
 
 ReactDOM.render(
   <AppV1Provider>

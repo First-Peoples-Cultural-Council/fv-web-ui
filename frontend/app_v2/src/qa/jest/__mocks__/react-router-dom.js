@@ -1,4 +1,5 @@
 module.exports = {
+  ...jest.requireActual('react-router-dom'),
   useLocation: ()=>{
     return {
       pathname: '/src/qa/jest/__mocks__/react-router-dom',
@@ -8,10 +9,8 @@ module.exports = {
   },
   useParams: ()=>{
     return {
-      language: 'testLanguage',
+      language: "jestLanguage",
+      character: "k'",
     }
-  },
-  Link: ({children}) => {
-    return children
   },
 }

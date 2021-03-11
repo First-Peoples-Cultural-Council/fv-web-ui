@@ -1,110 +1,67 @@
-/* DISABLEglobals ENV_NUXEO_URL */
 import { useQuery } from 'react-query'
 import ky from 'ky'
-import { /*BASE_URL,*/ TIMEOUT } from 'services/api/config'
+import { TIMEOUT } from 'services/api/config'
 const api = ky.create({
   timeout: TIMEOUT,
 })
 
-// const getNuxeoURL = () => {
-//   if (ENV_NUXEO_URL !== null && typeof ENV_NUXEO_URL !== 'undefined') {
-//     return ENV_NUXEO_URL
-//   }
-//   return '/nuxeo'
-// }
-const queryOptions = {
-  retry: (count, { message: status }) => status !== '404' && status !== '401',
-}
-const handleSuccessAndError = (response) => {
-  if (response.ok === false) {
-    throw new Error(response.status)
+const formatResponse = (response, dataAdaptor) => {
+  const { isLoading, error, data } = response
+  if (isLoading === false && error === null && data && dataAdaptor) {
+    const transformedData = dataAdaptor(Object.assign({}, data))
+    return { isLoading, error, data: transformedData, dataOriginal: data }
   }
-  return response
+  return { isLoading, error, data, dataOriginal: data }
 }
-const get = (path) => {
-  return api.get(path).then(
-    (response) => {
-      return response.json()
-    },
-    ({ response }) => {
-      return response
-    }
-  )
+
+const get = ({ path, headers }) => {
+  return api.get(path, headers).json()
 }
-const post = (path, bodyObject, dataAdaptor) => {
-  return api
-    .post(path, { json: bodyObject })
-    .then(handleSuccessAndError)
-    .then(
-      (response) => {
-        if (dataAdaptor) {
-          return { isLoading: false, data: dataAdaptor(response), dataOriginal: response }
-        }
-        return { isLoading: false, data: response, dataOriginal: response }
-      },
-      (error) => {
-        return { isLoading: false, error }
-      }
-    )
+
+const post = ({ path, bodyObject, headers }) => {
+  return api.post(path, { json: bodyObject, headers }).json()
 }
 
 export default {
   get,
-  rawGetById: (id, dataAdaptor) => {
-    return get(`/nuxeo/api/v1/id/${id}?properties=*`)
-      .then(handleSuccessAndError)
-      .then(
-        (response) => {
-          if (dataAdaptor) {
-            return { isLoading: false, data: dataAdaptor(response), dataOriginal: response }
-          }
-          return { isLoading: false, data: response, dataOriginal: response }
+  getAlphabet: (sitename, dataAdaptor) => {
+    const response = useQuery(['getAlphabet', sitename], async () => {
+      return await post({
+        path: '/nuxeo/api/v1/automation/Document.EnrichedQuery',
+        bodyObject: {
+          params: {
+            language: 'NXQL',
+            sortBy: 'fvcharacter:alphabet_order',
+            sortOrder: 'asc',
+            query: `SELECT * FROM FVCharacter WHERE ecm:path STARTSWITH '/FV/sections/Data/Test/Test/${sitename}/Alphabet' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 `,
+          },
+          context: {},
         },
-        (error) => {
-          return { isLoading: false, error }
-        }
-      )
+        headers: { 'enrichers.document': 'character' },
+      })
+    })
+    return formatResponse(response, dataAdaptor)
   },
-  getById: (id, dataAdaptor) => {
-    const { isLoading, error, data } = useQuery(
-      ['getById', id],
-      () => {
-        return get(`/nuxeo/api/v1/id/${id}?properties=*`).then(handleSuccessAndError)
-      },
-      queryOptions
-    )
-    if (isLoading === false && error === null && data && dataAdaptor) {
-      const transformedData = dataAdaptor(Object.assign({}, data))
-      return { isLoading, error, data: transformedData, dataOriginal: data }
-    }
-    return { isLoading, error, data, dataOriginal: data }
+  getById: (id, queryKey, dataAdaptor, properties = '*') => {
+    const response = useQuery([queryKey, id], async () => {
+      return await get({ path: `/nuxeo/api/v1/id/${id}?properties=${properties}` })
+    })
+    return formatResponse(response, dataAdaptor)
   },
   getSections: (sitename, dataAdaptor) => {
-    const { isLoading, error, data } = useQuery(
-      ['getSections', sitename],
-      () => {
-        return get(`/nuxeo/api/v1/site/sections/${sitename}`).then(handleSuccessAndError)
-      },
-      queryOptions
-    )
-    if (isLoading === false && error === null && data && dataAdaptor) {
-      const transformedData = dataAdaptor(Object.assign({}, data))
-      return { isLoading, error, data: transformedData, dataOriginal: data }
-    }
-    return { isLoading, error, data, dataOriginal: data }
+    const response = useQuery(['getSections', sitename], async () => {
+      return await get({ path: `/nuxeo/api/v1/site/sections/${sitename}` })
+    })
+    return formatResponse(response, dataAdaptor)
   },
   // TODO: remove postman example server url
   getCommunityHome: (sitename, dataAdaptor) => {
-    const { isLoading, error, data } = useQuery(['getCommunityHome', sitename], () => {
-      return get(
-        `https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`
-      )
+    const response = useQuery(['getCommunityHome', sitename], async () => {
+      return await get({
+        path: `https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`,
+      })
     })
-    if (isLoading === false && error === null && data && dataAdaptor) {
-      const transformedData = dataAdaptor(Object.assign({}, data))
-      return { isLoading, error, data: transformedData, dataOriginal: data }
-    }
-    return { isLoading, error, data, dataOriginal: data }
+    return formatResponse(response, dataAdaptor)
   },
   post,
   postMail: ({ docId, from, message, name, to }) => {
@@ -121,8 +78,15 @@ export default {
       replyto: from,
       to,
     }
-
-    // TODO: Update this path when BE ready and handle success response in UI
-    return post('/nuxeo/site/automation/Document.Mail', { params: params, input: docId })
+    // TODO: Confirm this path and params when FW-2106 BE is complete and handle success response in UI
+    return post({ path: '/nuxeo/site/automation/Document.Mail', bodyObject: { params: params, input: docId } })
+  },
+  getUser: (dataAdaptor) => {
+    const response = useQuery('getUser', async () => {
+      return await get({
+        path: '/nuxeo/api/v1/me/',
+      })
+    })
+    return formatResponse(response, dataAdaptor)
   },
 }

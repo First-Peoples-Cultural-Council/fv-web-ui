@@ -130,9 +130,6 @@ export class Wordscramble extends Component {
       props.routeParams.dialect_path + '/Dictionary',
       ' AND fv:available_in_childrens_archive = 1' +
         ' AND ' +
-        ProviderHelpers.switchWorkspaceSectionKeys('fv:related_pictures', this.props.routeParams.area) +
-        '/* IS NOT NULL' +
-        ' AND ' +
         ProviderHelpers.switchWorkspaceSectionKeys('fv:related_audio', this.props.routeParams.area) +
         '/* IS NOT NULL' +
         //' AND fv-word:available_in_games = 1' +
@@ -312,10 +309,12 @@ export class Scramble extends Component {
               color: '#3f8b53',
             }}
           >
-            <img
-              style={{ marginRight: '10px' }}
-              src={UIHelpers.getThumbnail(this.props.sentence.picture, 'Thumbnail')}
-            />{' '}
+            {this.props.sentence.picture ? (
+              <img
+                style={{ marginRight: '10px' }}
+                src={UIHelpers.getThumbnail(this.props.sentence.picture, 'Thumbnail')}
+              />
+            ) : null}
             {this.props.sentence.translation}{' '}
             {this.state.complete ? <IconButton onClick={audioCallback}>{audioIcon}</IconButton> : ''}
           </div>

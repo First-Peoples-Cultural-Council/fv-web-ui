@@ -24,6 +24,7 @@ import AVPlayArrow from '@material-ui/icons/PlayArrow'
 import AVStop from '@material-ui/icons/Stop'
 import ClearIcon from '@material-ui/icons/Clear'
 import FlipToFrontIcon from '@material-ui/icons/FlipToFront'
+import LinkIcon from '@material-ui/icons/Link'
 
 import { withTheme } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
@@ -33,6 +34,7 @@ import CardContent from '@material-ui/core/CardContent'
 // import GridListTileBar from '@material-ui/core/GridListTileBar'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
+import Preview from 'components/Preview'
 import Link from 'components/Link'
 import FVTab from 'components/FVTab'
 import UIHelpers from 'common/UIHelpers'
@@ -258,6 +260,43 @@ class _SongsStoriesCardView extends Component {
       item,
       selectn('properties.fvbook:type', item) === 'story' ? 'stories' : 'songs'
     )
+
+    const bookMedia = Object.keys(selectn('contextParameters.book', item))
+    if (
+      bookMedia.length === 2 &&
+      bookMedia.indexOf('related_videos') != 1 &&
+      selectn('contextParameters.book.isEmpty', item)
+    ) {
+      // If only a video, and one video is available - just show that video
+      return (
+        <div key={item.uid} className={CardClasses} style={this.props.style}>
+          <Card className="CardViewCard CardViewVideo">
+            <CardContent style={{ padding: '4px' }}>
+              <Preview
+                key={selectn('uid', item)}
+                expandedValue={selectn('contextParameters.book.related_videos[0]', item)}
+                type={'FVVideo'}
+                minimal
+                handlePlay={(e) => {
+                  // Automatic full screen in supported browsers
+                  // For video aspect ratios that cut off
+                  const elem = e.currentTarget
+                  const fullscreen =
+                    elem.webkitRequestFullscreen || elem.mozRequestFullScreen || elem.msRequestFullscreen
+                  fullscreen.call(elem)
+                }}
+                styles={{ padding: '0', height: '296px' }}
+                tagStyles={{ height: '296px', objectFit: 'cover' }}
+              />
+              <Link className="CardViewVideoLink" href={href}>
+                <LinkIcon title={this.props.intl.trans('link', 'Link', 'first')} /> {title}
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
+      )
+    }
+
     return (
       <div key={item.uid} className={CardClasses} style={this.props.style}>
         <Card className="CardViewCard">

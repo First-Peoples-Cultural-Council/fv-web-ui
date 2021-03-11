@@ -1,5 +1,8 @@
+import { useContext, useEffect } from 'react'
 import useGetSections from 'common/useGetSections'
-
+import useUserGet from 'common/useUserGet'
+import useWorkspaceToggle from 'common/useWorkspaceToggle'
+import AppStateContext from 'common/AppStateContext'
 /**
  * @summary DialectHeaderData
  * @component
@@ -9,14 +12,58 @@ import useGetSections from 'common/useGetSections'
  *
  */
 function DialectHeaderData() {
-  // TODO: INVESTIGATE WHY logoUrl DOESN'T UPDATE!
-  const { title /*, logoUrl*/ } = useGetSections()
-  // console.log('testing', logoUrl)
+  const { menu } = useContext(AppStateContext)
+  const { machine, send } = menu
+  const { context } = machine
+  const { openMenu } = context
 
-  const currentUser = { userInitials: 'TU' }
+  const { title } = useGetSections()
+  const { value: workspaceToggleValue, set } = useWorkspaceToggle()
+  const { firstName, lastName, userName = '' } = useUserGet()
+
+  const onWorkspaceModeClick = () => {
+    set(!workspaceToggleValue)
+  }
+  const onMenuClick = (menuId) => {
+    send('OPEN', { menuId })
+  }
+
+  const onKeyPress = ({ code, menuId }) => {
+    const keyCode = code.toLowerCase()
+    if (keyCode === 'escape') {
+      send('CLOSE')
+    }
+    if (menuId && keyCode === 'enter') {
+      onMenuClick(menuId)
+    }
+  }
+
+  const onClickOutside = (event, menuId) => {
+    if (openMenu && openMenu !== menuId) {
+      send('CLOSE')
+    }
+  }
+
+  useEffect(() => {
+    if (openMenu) {
+      document.addEventListener('mousedown', onClickOutside)
+    } else {
+      document.removeEventListener('mousedown', onClickOutside)
+    }
+    return () => {
+      document.removeEventListener('mousedown', onClickOutside)
+    }
+  }, [openMenu])
+  const currentUser = {
+    userInitials: firstName || lastName ? firstName?.charAt(0) + lastName?.charAt(0) : userName.charAt(0),
+    firstName,
+    userName,
+  }
+
   const menuData = [
     {
       title: 'Dictionary',
+      id: 'dictionary',
       itemsData: [
         { title: 'Words', href: `/${title}/words` },
         { title: 'Phrases', href: `/${title}/phrases` },
@@ -26,6 +73,7 @@ function DialectHeaderData() {
     },
     {
       title: 'Learn',
+      id: 'learn',
       itemsData: [
         { title: 'Songs', href: `/${title}/songs` },
         { title: 'Stories', href: `/${title}/stories` },
@@ -34,6 +82,7 @@ function DialectHeaderData() {
     },
     {
       title: 'Resources',
+      id: 'resources',
       itemsData: [
         { title: 'Kids Site', href: `/${title}/kids` },
         { title: 'Mobile App', href: `/${title}/app` },
@@ -42,17 +91,25 @@ function DialectHeaderData() {
     },
     {
       title: 'About',
+      id: 'about',
       itemsData: [
         { title: 'Our Language', href: `/${title}/ourlanguage` },
         { title: 'Our People', href: `/${title}/about` },
       ],
     },
-    { title: 'Kids', href: `/${title}/kids` },
+    { title: 'Kids', id: 'kids', href: `/${title}/kids` },
   ]
+
   return {
-    title,
     currentUser,
     menuData,
+    onClickOutside,
+    onKeyPress,
+    onMenuClick,
+    onWorkspaceModeClick,
+    openMenu,
+    title,
+    workspaceToggleValue,
   }
 }
 
