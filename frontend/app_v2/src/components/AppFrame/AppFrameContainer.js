@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet'
 import About from 'components/About'
 import Alphabet from 'components/Alphabet'
 import Home from 'components/Home'
+import Search from 'components/Search'
 import Suspender from 'components/Suspender'
 import WordsListContainer from 'app_v1/WordsListContainer'
 import Word from 'components/Word'
@@ -41,6 +42,12 @@ function AppFrameContainer() {
                 <title>Alphabet</title>
               </Helmet>
               <Alphabet.Container />
+            </Route>
+            <Route path="/:language/search">
+              <Helmet>
+                <title>Search</title>
+              </Helmet>
+              <Search.Container />
             </Route>
             <Route path="/:language/words">
               <Helmet>
