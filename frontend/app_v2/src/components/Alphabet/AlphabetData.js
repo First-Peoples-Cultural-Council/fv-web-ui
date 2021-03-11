@@ -5,7 +5,7 @@ import useGetSections from 'common/useGetSections'
 import { useParams } from 'react-router-dom'
 /**
  * @summary AlphabetData
- * @component
+ * @component NB: This component is used by multiple Presentation layers
  *
  * @param {object} props
  *

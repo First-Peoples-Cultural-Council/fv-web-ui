@@ -1,21 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+
+import Alphabet from 'components/Alphabet'
 import ContactUs from 'components/ContactUs'
+import Hero from 'components/Hero'
 import Topics from 'components/Topics'
 import Welcome from 'components/Welcome'
 import WordOfTheDay from 'components/WordOfTheDay'
-import Hero from 'components/Hero'
+
 import CircleImage from 'components/CircleImage'
 import useIcon from 'common/useIcon'
 import {
-  WIDGET_HERO,
-  WIDGET_SCHEDULE,
-  WIDGET_LIST,
-  WIDGET_WELCOME,
   WIDGET_ALPHABET,
-  WIDGET_STATS,
-  WIDGET_GALLERY,
   WIDGET_CONTACT,
+  WIDGET_GALLERY,
+  WIDGET_HERO,
+  WIDGET_LIST,
+  WIDGET_SCHEDULE,
+  WIDGET_STATS,
+  WIDGET_WELCOME,
 } from 'common/constants'
 
 /**
@@ -128,10 +131,9 @@ function HomePresentation({ isLoading, error, data, language }) {
           }
 
           if (type === WIDGET_ALPHABET) {
-            // console.log('WIDGET_ALPHABET', widgetProps)
             return (
               <div key={index} className="px-6">
-                <div>WIDGET_ALPHABET</div>
+                <Alphabet.Container widgetView />
               </div>
             )
           }
@@ -175,8 +177,10 @@ function HomePresentation({ isLoading, error, data, language }) {
   )
 }
 // PROPTYPES
-const { array, string, shape } = PropTypes
+const { array, bool, oneOfType, string, shape } = PropTypes
 HomePresentation.propTypes = {
+  isLoading: bool,
+  error: oneOfType([bool, array]),
   data: shape({
     uid: string,
     pageTitle: string,

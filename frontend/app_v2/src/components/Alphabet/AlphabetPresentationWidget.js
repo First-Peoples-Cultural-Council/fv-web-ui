@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom'
 import AlphabetPresentationSelected from 'components/Alphabet/AlphabetPresentationSelected'
 import useIcon from 'common/useIcon'
 /**
- * @summary AlphabetPresentation
+ * @summary AlphabetPresentationWidget
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function AlphabetPresentation({ language, isLoading, error, characters, selectedData, links }) {
+function AlphabetPresentationWidget({ language, isLoading, error, characters, selectedData, links }) {
   if (isLoading) {
     return (
       <div className="flex justify-around p-10">
@@ -37,7 +37,7 @@ function AlphabetPresentation({ language, isLoading, error, characters, selected
     )
   }
   return (
-    <section className="py-12 bg-white" data-testid="AlphabetPresentation">
+    <section className="py-12 bg-white" data-testid="AlphabetPresentationWidget">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative">
           <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-blue font-bold sm:text-5xl uppercase">
@@ -53,7 +53,7 @@ function AlphabetPresentation({ language, isLoading, error, characters, selected
                   return (
                     <Link
                       data-testid={
-                        selectedData?.title === title ? 'AlphabetPresentation__selectedCharacter' : undefined
+                        selectedData?.title === title ? 'AlphabetPresentationWidget__selectedCharacter' : undefined
                       }
                       className={`
                       border
@@ -80,7 +80,7 @@ function AlphabetPresentation({ language, isLoading, error, characters, selected
           <div className="col-span-7 sm:col-span-3 mt-8 sm:mt-0">
             {selectedData?.title === undefined && (
               <div
-                data-testid="AlphabetPresentation__noCharacter"
+                data-testid="AlphabetPresentationWidget__noCharacter"
                 className="text-center font-bold sm:text-3xl text-2xl text-fv-blue m-10"
               >
                 Please select a character
@@ -105,8 +105,8 @@ function AlphabetPresentation({ language, isLoading, error, characters, selected
   )
 }
 // PROPTYPES
-const { bool, array, func, string, shape, arrayOf, object } = PropTypes
-AlphabetPresentation.propTypes = {
+const { bool, array, string, shape, arrayOf, object } = PropTypes
+AlphabetPresentationWidget.propTypes = {
   isLoading: bool,
   error: array,
   characters: arrayOf(
@@ -120,12 +120,10 @@ AlphabetPresentation.propTypes = {
   language: string,
   selectedData: object,
   links: array,
-  videoIsOpen: bool,
-  onVideoClick: func,
 }
 
-AlphabetPresentation.defaultProps = {
+AlphabetPresentationWidget.defaultProps = {
   onVideoClick: () => {},
 }
 
-export default AlphabetPresentation
+export default AlphabetPresentationWidget
