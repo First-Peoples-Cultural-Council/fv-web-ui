@@ -51,9 +51,14 @@ function ContactUsPresentation({ title, contactFormRef, contactText, formErrors,
     : null
 
   return (
-    <section className="py-12 bg-white">
+    <section className="bg-white py-12 mx-10">
+      <div className="relative mx-10">
+        <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-blue font-bold sm:text-5xl">
+          <span className="inline-block px-4 sm:px-8 lg:px-20 bg-white">{title}</span>
+        </h2>
+        <hr className="absolute z-0 w-full" style={{ top: '50%' }} />
+      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center mb-12 text-4xl text-fv-blue font-bold uppercase sm:text-5xl">{title}</h2>
         <div className="grid grid-cols-6">
           <form ref={contactFormRef} className="col-span-6 sm:col-span-3" onSubmit={handleSubmit}>
             <div className="grid grid-cols-7 gap-3">
@@ -89,7 +94,7 @@ function ContactUsPresentation({ title, contactFormRef, contactText, formErrors,
               </div>
             </div>
             <button
-              className="flex items-center shadow bg-fv-blue hover:bg-fv-blue-dark focus:shadow-outline focus:outline-none text-white font-bold ml-3 py-2 px-4 rounded-3xl"
+              className="flex items-center shadow bg-fv-blue hover:bg-fv-blue-dark focus:shadow-outline text-white font-bold ml-3 py-2 px-4 rounded-3xl"
               type="submit"
             >
               Submit

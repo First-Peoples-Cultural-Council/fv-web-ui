@@ -49,7 +49,7 @@ function DialectHeaderPresentation({
   return (
     <header id="Dialect_header" className={`relative bg-fv-charcoal ${className}`} onKeyUp={onKeyPress}>
       <nav className="max-w-screen-2xl mx-auto px-4 sm:px-6 xl:px-20">
-        <div className="flex justify-between items-center py-6 md:justify-start md:space-x-10">
+        <div className="flex justify-between items-center py-2 md:justify-start md:space-x-10">
           <div className="justify-start lg:w-0 lg:flex-1">
             <Link to={`/${title}`}>
               <span className="sr-only">FirstVoices Logo</span>
@@ -60,7 +60,7 @@ function DialectHeaderPresentation({
           <div className="hidden md:flex space-x-6">{menus}</div>
 
           {!currentUser || currentUser?.userName === 'Guest' ? (
-            <div className="ml-8 hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+            <div className="ml-8 hidden lg:flex items-center justify-end lg:flex-1">
               <a
                 href="/nuxeo/logout?requestedUrl=login.jsp"
                 className="whitespace-nowrap text-lg font-medium text-white hover:text-gray-100"
@@ -89,7 +89,7 @@ function DialectHeaderPresentation({
               {/* User Avatar */}
               <div className="ml-4 flex items-center md:ml-6">
                 <button
-                  className="max-w-xs p-3 bg-fv-orange hover:bg-fv-orange-dark text-white text-xl rounded-full h-12 w-12 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  className="max-w-xs p-3 bg-fv-orange hover:bg-fv-orange-dark text-white text-xl rounded-full h-12 w-12 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-fv-turquoise"
                   id="user-menu"
                   onClick={() => {
                     onMenuClick(userMenuId)
