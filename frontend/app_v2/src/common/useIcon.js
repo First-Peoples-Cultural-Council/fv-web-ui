@@ -1,32 +1,34 @@
 import React from 'react'
 
-import About from 'common/icons/AboutIcon'
-import Audio from 'common/icons/AudioIcon'
+import About from 'common/icons/About'
+import Audio from 'common/icons/Audio'
 import Book from 'common/icons/Book'
 import ChatBubble from 'common/icons/ChatBubble'
-import ChevronDown from 'common/icons/ChevronDownIcon'
-import ChevronLeft from 'common/icons/ChevronLeftIcon'
-import ChevronRight from 'common/icons/ChevronRightIcon'
-import Close from 'common/icons/CloseIcon'
-import Dictionary from 'common/icons/DictionaryIcon'
+import ChevronDown from 'common/icons/ChevronDown'
+import ChevronLeft from 'common/icons/ChevronLeft'
+import ChevronRight from 'common/icons/ChevronRight'
+import Close from 'common/icons/Close'
+import Dictionary from 'common/icons/Dictionary'
 import Facebook from 'common/icons/Facebook'
-import HamburgerMenu from 'common/icons/HamburgerMenuIcon'
+import HamburgerMenu from 'common/icons/HamburgerMenu'
 import Instagram from 'common/icons/Instagram'
-import Kids from 'common/icons/KidsIcon'
-import Learn from 'common/icons/LearnIcon'
+import Kids from 'common/icons/Kids'
+import Learn from 'common/icons/Learn'
 import Lessons from 'common/icons/Lessons'
 import Link from 'common/icons/Link'
 import LinkedIn from 'common/icons/LinkedIn'
-import Login from 'common/icons/LoginIcon'
+import Login from 'common/icons/Login'
 import Logo from 'common/icons/Logo'
-import Mail from 'common/icons/MailIcon'
+import Mail from 'common/icons/Mail'
 import MusicNote from 'common/icons/MusicNote'
 import PauseCircle from 'common/icons/PauseCircle'
-import PlaceHolder from 'common/icons/PlaceHolderIcon'
+import PlaceHolder from 'common/icons/PlaceHolder'
+import PlayArrow from 'common/icons/PlayArrow'
 import PlayCircle from 'common/icons/PlayCircle'
 import Quote from 'common/icons/Quote'
 import Search from 'common/icons/Search'
-import Resources from 'common/icons/ResourcesIcon'
+import Spinner from 'common/icons/Spinner'
+import Resources from 'common/icons/Resources'
 import TimesCircle from 'common/icons/TimesCircle'
 import Twitter from 'common/icons/Twitter'
 import WebShare from 'common/icons/WebShare'
@@ -58,12 +60,14 @@ function useIcon(iconName, iconStyling) {
     Logo,
     Mail,
     MusicNote,
+    PlayArrow,
     PauseCircle,
     PlaceHolder,
     PlayCircle,
     Quote,
     Resources,
     Search,
+    Spinner,
     TimesCircle,
     Twitter,
     WebShare,

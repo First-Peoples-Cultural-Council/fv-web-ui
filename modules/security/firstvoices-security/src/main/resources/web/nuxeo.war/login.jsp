@@ -21,6 +21,9 @@
 <%@ page import="org.nuxeo.ecm.platform.web.common.vh.VirtualHostHelper" %>
 <%@ page import="ca.firstvoices.security.lockout.LockoutUserManager" %>
 <%@ page import="org.nuxeo.ecm.platform.usermanager.UserManager" %>
+<%@ page import="java.lang.reflect.Method" %>
+<%@ page import="org.aopalliance.intercept.Invocation" %>
+<%@ page import="java.lang.reflect.InvocationTargetException" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -80,12 +83,17 @@ UserManager userManager = Framework.getService(UserManager.class);
 boolean isUserLocked = false;
 
 if (userManager != null) {
-  if (userManager.getClass().isAssignableFrom(LockoutUserManager.class)) {
-    String username = request.getParameter("user_name");
-    if (username != null) {
-         isUserLocked = ((LockoutUserManager)userManager).isUserLocked(username);
+  String username = request.getParameter("user_name");
+
+  if (username != null) {
+    try {
+      Method lockedMethod = userManager.getClass().getMethod("isUserLocked", String.class);
+      isUserLocked = (boolean) lockedMethod.invoke(userManager, username);
+    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+      // we don't really care
     }
   }
+
 }
 request.setAttribute("isUserLocked", isUserLocked ? "true":"false");
 

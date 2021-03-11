@@ -201,7 +201,14 @@ export class PageDialectLearnStoriesAndSongs extends Component {
             <h1 className={classNames(dialectClassName, { hidden: isKidsTheme })}>
               {selectn('response.title', computeDialect2)} {StringHelpers.toTitleCase(this.props.typePlural)}
             </h1>
-            {listView}
+            {this.state.filteredList?.size === 0 ? (
+              <div>
+                Currently there are no uploaded {this.props.typePlural.toLowerCase()} for{' '}
+                {selectn('response.title', computeDialect2)}.
+              </div>
+            ) : (
+              listView
+            )}
           </div>
         </div>
       </PromiseWrapper>

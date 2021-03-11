@@ -5,7 +5,7 @@ import useIcon from 'common/useIcon'
  * @summary AudioMinimalPresentation
  * @component
  */
-function AudioMinimalPresentation({ icons, isErrored, isLoading, isPlaying, onClick, onKeyPress }) {
+function AudioMinimalPresentation({ icons, iconStyling, isErrored, isLoading, isPlaying, onClick, onKeyPress }) {
   const buttonRef = useRef()
   useEffect(() => {
     if (isPlaying) {
@@ -13,42 +13,9 @@ function AudioMinimalPresentation({ icons, isErrored, isLoading, isPlaying, onCl
     }
   }, [isPlaying])
   const iconsDefault = {
-    Play: useIcon(
-      'PlayCircle',
-      `
-        fill-current
-        w-7
-        h-7
-        lg:w-8
-        lg:h-8
-        xl:w-12
-        xl:h-12
-      `
-    ),
-    Pause: useIcon(
-      'PauseCircle',
-      `
-        fill-current
-        w-7
-        h-7
-        lg:w-8
-        lg:h-8
-        xl:w-12
-        xl:h-12
-      `
-    ),
-    Error: useIcon(
-      'TimesCircle',
-      `
-        fill-current
-        w-7
-        h-7
-        lg:w-8
-        lg:h-8
-        xl:w-12
-        xl:h-12
-      `
-    ),
+    Play: useIcon('PlayCircle', iconStyling),
+    Pause: useIcon('PauseCircle', iconStyling),
+    Error: useIcon('TimesCircle', iconStyling),
   }
   const Icons = Object.assign({}, iconsDefault, icons)
 
@@ -87,10 +54,12 @@ function AudioMinimalPresentation({ icons, isErrored, isLoading, isPlaying, onCl
   )
 }
 // PROPTYPES
-const { func, bool, object } = PropTypes
+const { func, bool, object, string } = PropTypes
 AudioMinimalPresentation.propTypes = {
   /** Use to override the default icons. Eg: icons={{Play: jsx, Pause: jsx, Error: jsx}}  */
   icons: object,
+  /** Use to style icons */
+  iconStyling: string,
   /** Set to true if Audio player encounters an error. Displays the erorred icon */
   isErrored: bool,
   /** Set to true when audio is loading. Changes screen reader text  */
@@ -103,6 +72,7 @@ AudioMinimalPresentation.propTypes = {
   onKeyPress: func,
 }
 AudioMinimalPresentation.defaultProps = {
+  iconStyling: 'fill-current w-7 h-7 lg:w-8 lg:h-8 xl:w-12 xl:h-12',
   isErrored: false,
   isLoading: false,
   isPlaying: false,

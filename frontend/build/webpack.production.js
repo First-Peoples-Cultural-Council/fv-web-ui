@@ -12,7 +12,6 @@ module.exports = env => merge(common(env), {
   // TODO: configure server to disallow access to the Source Map file for normal users
   devtool: 'source-map',
   optimization: {
-    // emitOnErrors: false,
     minimizer: [
       new TerserPlugin({
         parallel: true,

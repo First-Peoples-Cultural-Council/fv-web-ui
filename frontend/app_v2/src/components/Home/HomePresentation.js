@@ -11,12 +11,6 @@ import {
   WIDGET_HERO,
   WIDGET_SCHEDULE,
   WIDGET_LIST,
-  // WIDGET_LIST_WORD,
-  // WIDGET_LIST_PHRASE,
-  // WIDGET_LIST_SONG,
-  // WIDGET_LIST_STORY,
-  // WIDGET_LIST_MIXED,
-  // WIDGET_LIST_GENERIC,
   WIDGET_WELCOME,
   WIDGET_ALPHABET,
   WIDGET_STATS,
@@ -32,26 +26,35 @@ import {
  *
  * @returns {node} jsx markup
  */
-function HomePresentation({
-  // isLoading,
-  // error,
-  data,
-  language,
-}) {
+function HomePresentation({ isLoading, error, data, language }) {
   const widgets = data ? data.widgets : []
-  // TODO: use a better fallback icon
-  const fallBackIcon = useIcon(
-    'PlayCircle',
-    `
-        fill-current
-        w-56
-        h-56
-        lg:w-72
-        lg:h-72
-      `
-  )
+  const fallBackIcon = useIcon('Spinner', 'fill-current w-56 h-56 lg:w-72 lg:h-72')
+  if (isLoading) {
+    return (
+      <div className="flex justify-around p-10">
+        <button
+          type="button"
+          className="bg-fv-orange border border-transparent items-center inline-flex px-5 py-2 rounded-md shadow-sm text-base text-white ease-in-out"
+          disabled
+        >
+          {useIcon('Spinner', 'animate-spin h-5 w-5 mr-3 fill-current')}
+          Loading
+        </button>
+      </div>
+    )
+  }
+  if (error) {
+    return (
+      <div>
+        <h1>Sorry, something went wrong!</h1>
+        <p>Please check the url or report this error by emailing hello@firstvoices.com so that we can fix it.</p>
+        <p>Include the link or action you took to get to this page.</p>
+        <p>Thank You!</p>
+      </div>
+    )
+  }
   return (
-    <div className="Home">
+    <div>
       {widgets.length > 0 &&
         widgets.map(({ type, ...widgetProps }, index) => {
           if (type === WIDGET_HERO) {
@@ -59,8 +62,8 @@ function HomePresentation({
             const foregroundIcon = language.logoUrl ? (
               <CircleImage.Presentation
                 src={language.logoUrl}
-                classNameWidth="w-56 lg:w-72"
-                classNameHeight="h-56 lg:h-72"
+                classNameWidth="w-40 lg:w-52"
+                classNameHeight="h-40 lg:h-52"
                 alt=""
               />
             ) : (
@@ -70,44 +73,22 @@ function HomePresentation({
               <Hero.Presentation
                 key={index}
                 background={background}
-                foreground={<h1 className="font-bold text-3xl">{language.title}</h1>}
+                foreground={<h1 className="font-medium text-2xl">{language.title}</h1>}
                 foregroundIcon={foregroundIcon}
-                variant={variant}
-                uid={uid}
                 search={
-                  <div
-                    className={`
-                    bg-white
-                    flex
-                    px-12
-                    py-6
-                    rounded-25
-                    w-3/4
-                  `}
-                  >
-                    <button type="button">
-                      {useIcon(
-                        'Search',
-                        `
-                          fill-current
-                          h-12
-                          text-black
-                          w-12
-                        `
-                      )}
-                    </button>
+                  <div className="bg-white flex rounded-2xl w-3/5 text-fv-charcoal-light p-1 divide-x-2 divide-gray-300">
                     <input
-                      className={`
-                        ml-8
-                        text-black
-                        w-full
-                        text-4xl
-                      `}
+                      className="w-full foucus text-2xl px-4 py-2 "
                       type="text"
                       placeholder={`Search ${language.title}`}
                     />
+                    <button type="button " className="p-2">
+                      {useIcon('Search', 'fill-current h-8 w-8 ')}
+                    </button>
                   </div>
                 }
+                variant={variant}
+                uid={uid}
               />
             )
           }

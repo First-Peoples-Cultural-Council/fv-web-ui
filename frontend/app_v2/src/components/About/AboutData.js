@@ -10,14 +10,6 @@ import useGetSections from 'common/useGetSections'
  * @param {function} props.children
  *
  */
-export function adaptor(response) {
-  const { title, uid, path } = response
-  return {
-    title,
-    uid,
-    path,
-  }
-}
 function AboutData() {
   const { title, logoUrl } = useGetSections()
   return {

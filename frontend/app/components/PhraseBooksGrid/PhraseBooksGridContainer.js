@@ -29,13 +29,16 @@ function PhraseBooksGridContainer() {
   // ----------------------------------------
   return (
     <PhraseBooksGridData>
-      {({ categories, computeEntities, onClickTile }) => {
+      {({ routeParams, categories, computeEntities, onClickTile }) => {
         return (
           <PromiseWrapper renderOnError computeEntities={computeEntities}>
             {categories && categories.length > 0 ? (
               <PhraseBooksGridPresentation categories={categories} onClickTile={onClickTile} />
             ) : (
-              <div>No results</div>
+              <div>
+                No phrase books found.{' '}
+                <a href={'/kids' + routeParams.dialect_path + '/learn/phrases/9/1'}>Click here to view all phrases</a>.
+              </div>
             )}
           </PromiseWrapper>
         )

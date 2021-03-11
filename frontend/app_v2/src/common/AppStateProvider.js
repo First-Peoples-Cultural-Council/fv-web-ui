@@ -1,42 +1,26 @@
 import PropTypes from 'prop-types'
 import React, { useReducer, useEffect } from 'react'
-import { useQueryClient } from 'react-query'
 import { useParams } from 'react-router-dom'
+import useLocalStorage from 'react-use-localstorage'
 import useRoute from 'app_v1/useRoute'
-import AppStateContext from 'common/AppStateContext'
-import AudioMachineData from 'components/AudioMachine/AudioMachineData'
-import api from 'services/api'
-import { reducerInitialState, reducer } from 'common/reducer'
-export function getSectionsAdaptor(response) {
-  const {
-    title,
-    uid,
-    path,
-    logoId: idLogo,
-    // parentLanguageTitle,
-  } = response
-  return {
-    title,
-    uid,
-    path,
-    idLogo,
-  }
-}
-export function rawGetByIdAdaptor(response) {
-  const fileContent = response?.properties?.['file:content'] || {}
-  return {
-    url: fileContent.data,
-    mimeType: fileContent['mime-type'],
-    name: fileContent.name,
-  }
-}
 
+import AppStateContext from 'common/AppStateContext'
+import { reducerInitialState, reducer } from 'common/reducer'
+
+import api from 'services/api'
+import getSectionsAdaptor from 'services/api/adaptors/getSections'
+import getUserAdaptor from 'services/api/adaptors/getUser'
+import AudioMachineData from 'components/AudioMachine/AudioMachineData'
+import MenuMachineData from 'components/MenuMachine/MenuMachineData'
 function AppStateProvider({ children }) {
-  const queryClient = useQueryClient()
+  const [workspaceToggle, setWorkspaceToggle] = useLocalStorage('fpcc:workspaceToggle', false)
   const { language } = useParams()
   const { machine, send } = AudioMachineData()
+  const { machine: menuMachine, send: menuSend } = MenuMachineData()
   const [state, dispatch] = useReducer(reducer, reducerInitialState)
+
   // Get language data
+  // --------------------------------
   const { isLoading: sectionsIsLoading, error: sectionsError, data: sectionsData } = api.getSections(
     language,
     getSectionsAdaptor
@@ -47,24 +31,18 @@ function AppStateProvider({ children }) {
     }
   }, [sectionsIsLoading, sectionsError])
 
-  // Get language logo
-  const logoId = state.api.getSections.idLogo
+  // Get user data
+  // --------------------------------
+  const { isLoading: isLoadingGetUser, error: errorGetUser, data: dataGetUser } = api.getUser(getUserAdaptor)
   useEffect(() => {
-    if (state.api.getSections.idLogo) {
-      api.rawGetById(logoId, rawGetByIdAdaptor).then(({ error: rawGetByIdError, data: rawGetByIdData }) => {
-        if (rawGetByIdError === undefined) {
-          const { url } = rawGetByIdData
-          // IMPORTANT: have to invalidate sections cache since
-          // react-query will suppress a rerender
-          // and child components will not get the updated data
-          queryClient.invalidateQueries(['sections', sectionsData.title])
-          dispatch({ type: 'api.getSections.logo', payload: { logoUrl: url, uid: sectionsData.uid } })
-        }
-      })
+    if (isLoadingGetUser === false && errorGetUser === null) {
+      dispatch({ type: 'api.getUser', payload: dataGetUser })
     }
-  }, [state.api.getSections.idLogo])
+  }, [isLoadingGetUser, errorGetUser])
 
-  // Set routeParams over in V1 (eg: used for displaying words)
+  // Sets internal Redux > routeParams value over in V1
+  // (eg: used for displaying words)
+  // --------------------------------
   const path = sectionsData?.path
   const { setRouteParams } = useRoute()
   useEffect(() => {
@@ -87,6 +65,14 @@ function AppStateProvider({ children }) {
         audio: {
           machine,
           send,
+        },
+        menu: {
+          machine: menuMachine,
+          send: menuSend,
+        },
+        workspaceToggle: {
+          value: workspaceToggle === 'true',
+          set: setWorkspaceToggle,
         },
       }}
     >
