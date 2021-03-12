@@ -1,8 +1,8 @@
 import { useContext } from 'react'
 import AppStateContext from 'common/AppStateContext'
 
-const useGetSections = () => {
+const useGetSite = () => {
   const { reducer } = useContext(AppStateContext)
-  return reducer.state.api.getSections
+  return reducer.state.api.getSite
 }
-export default useGetSections
+export default useGetSite

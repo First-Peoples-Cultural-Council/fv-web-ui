@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack serve --env V1_URL=http://0.0.0.0:3001 --config webpack/webpack.development.js",
+    "startDev": "webpack serve --env V1_URL=http://0.0.0.0:3001 API_URL=https://dev.firstvoices.com/nuxeo/api/v1/ --config webpack/webpack.development.js",
     "build:production": "webpack --color --progress --config webpack/webpack.production.js",
     "build:production:serve": "npm run build:production; npx copyfiles src/assets/server.js dist -f; node dist/server.js",
     "test:coverage": "jest --coverage",

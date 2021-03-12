@@ -8,28 +8,25 @@ import AppStateContext from 'common/AppStateContext'
 import { reducerInitialState, reducer } from 'common/reducer'
 
 import api from 'services/api'
-import getSectionsAdaptor from 'services/api/adaptors/getSections'
+import getSiteAdaptor from 'services/api/adaptors/getSite'
 import getUserAdaptor from 'services/api/adaptors/getUser'
 import AudioMachineData from 'components/AudioMachine/AudioMachineData'
 import MenuMachineData from 'components/MenuMachine/MenuMachineData'
 function AppStateProvider({ children }) {
   const [workspaceToggle, setWorkspaceToggle] = useLocalStorage('fpcc:workspaceToggle', false)
-  const { language } = useParams()
+  const { sitename } = useParams()
   const { machine, send } = AudioMachineData()
   const { machine: menuMachine, send: menuSend } = MenuMachineData()
   const [state, dispatch] = useReducer(reducer, reducerInitialState)
 
   // Get language data
   // --------------------------------
-  const { isLoading: sectionsIsLoading, error: sectionsError, data: sectionsData } = api.getSections(
-    language,
-    getSectionsAdaptor
-  )
+  const { isLoading: siteIsLoading, error: siteError, data: siteData } = api.getSite(sitename, getSiteAdaptor)
   useEffect(() => {
-    if (sectionsIsLoading === false && sectionsError === null) {
-      dispatch({ type: 'api.getSections', payload: sectionsData })
+    if (siteIsLoading === false && siteError === null) {
+      dispatch({ type: 'api.getSite', payload: siteData })
     }
-  }, [sectionsIsLoading, sectionsError])
+  }, [siteIsLoading, siteError])
 
   // Get user data
   // --------------------------------
@@ -43,7 +40,7 @@ function AppStateProvider({ children }) {
   // Sets internal Redux > routeParams value over in V1
   // (eg: used for displaying words)
   // --------------------------------
-  const path = sectionsData?.path
+  const path = siteData?.path
   const { setRouteParams } = useRoute()
   useEffect(() => {
     if (path) {

@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 import { useState as useStateMock } from 'react'
 
-jest.mock('common/useGetSections')
+jest.mock('common/useGetSite')
 jest.mock('services/api')
 jest.mock('react', () => ({
   ...jest.requireActual('react'),

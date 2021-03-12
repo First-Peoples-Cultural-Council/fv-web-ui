@@ -21,8 +21,8 @@ import {
  * @returns {node} jsx markup
  */
 function TopicsPresentationTopic({ audio, heading, image, listCount, subheading, type, url: _url }) {
-  const { language } = useParams()
-  const url = `${language}/${_url}`
+  const { sitename } = useParams()
+  const url = `${sitename}/${_url}`
   let bgColor
   let icon
   let textSize

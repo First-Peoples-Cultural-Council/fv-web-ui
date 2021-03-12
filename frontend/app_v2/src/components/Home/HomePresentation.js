@@ -79,9 +79,9 @@ function HomePresentation({ isLoading, error, data, language }) {
                 foreground={<h1 className="font-medium text-2xl">{language.title}</h1>}
                 foregroundIcon={foregroundIcon}
                 search={
-                  <div className="bg-white flex rounded-2xl w-3/5 text-fv-charcoal-light p-1 divide-x-2 divide-gray-300">
+                  <div className="bg-white flex rounded-2xl w-3/5 text-fv-charcoal-light p-2 divide-x-2 divide-gray-300">
                     <input
-                      className="w-full foucus text-2xl px-4 py-2 "
+                      className="w-full focus text-2xl px-4 py-2 "
                       type="text"
                       placeholder={`Search ${language.title}`}
                     />

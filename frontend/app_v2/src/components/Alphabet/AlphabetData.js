@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import api from 'services/api'
 import getAlphabetAdaptor from 'services/api/adaptors/getAlphabet'
-import useGetSections from 'common/useGetSections'
+import useGetSite from 'common/useGetSite'
 import { useParams } from 'react-router-dom'
 /**
  * @summary AlphabetData
@@ -22,14 +22,14 @@ export const findSelectedCharacterData = ({ character, data, language }) => {
 }
 
 const AlphabetData = () => {
-  const { title } = useGetSections()
-  const { character, language } = useParams()
+  const { title } = useGetSite()
+  const { character, sitename } = useParams()
   const { isLoading, error, data } = api.getAlphabet(title, getAlphabetAdaptor)
   const [selectedData, setSelectedData] = useState({})
 
   useEffect(() => {
     if (character && data) {
-      const _selectedData = findSelectedCharacterData({ character, data, language })
+      const _selectedData = findSelectedCharacterData({ character, data, sitename })
       if (_selectedData !== undefined && _selectedData?.title !== selectedData?.title) {
         setSelectedData(_selectedData)
       }
@@ -40,7 +40,7 @@ const AlphabetData = () => {
   const [videoIsOpen, setVideoIsOpen] = useState(false)
 
   const onCharacterClick = (clickedCharacter) => {
-    const _selectedData = findSelectedCharacterData({ character: clickedCharacter, data, language })
+    const _selectedData = findSelectedCharacterData({ character: clickedCharacter, data, sitename })
     if (_selectedData !== undefined && _selectedData?.title !== selectedData?.title) {
       setSelectedData(_selectedData)
     }
@@ -55,7 +55,7 @@ const AlphabetData = () => {
     links: data?.links,
     error,
     isLoading,
-    language,
+    sitename,
     onCharacterClick,
     onVideoClick,
     selectedData,

@@ -1,4 +1,4 @@
-import useGetSections from 'common/useGetSections'
+import useGetSite from 'common/useGetSite'
 import { useParams } from 'react-router-dom'
 /**
  * @summary WordData
@@ -8,11 +8,11 @@ import { useParams } from 'react-router-dom'
  *
  */
 function WordData() {
-  const sections = useGetSections()
+  const site = useGetSite()
   const { wordId } = useParams()
 
   return {
-    hasSectionData: sections?.title !== undefined,
+    hasSiteData: site?.title !== undefined,
     wordId,
   }
 }

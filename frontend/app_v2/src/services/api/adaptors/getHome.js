@@ -12,7 +12,7 @@ import {
   WIDGET_WELCOME,
 } from 'common/constants'
 
-const getCommunityHome = (response) => {
+const getHome = (response) => {
   const { properties, uid } = response
   const widgetsActive = properties?.['widgets:active'] || []
   const widgets = widgetsActive.map((widget) => {
@@ -241,4 +241,4 @@ const getCommunityHome = (response) => {
   }
 }
 
-export default getCommunityHome
+export default getHome

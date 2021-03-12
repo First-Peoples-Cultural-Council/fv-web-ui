@@ -24,42 +24,42 @@ function AppFrameContainer() {
       <main role="main" className="relative z-0">
         <Suspender>
           <Switch>
-            <Route path="/:language/about">
+            <Route path="/:sitename/about">
               <Helmet>
                 <title>About</title>
               </Helmet>
               <About.Container />
             </Route>
-            <Route path="/:language/alphabet/:character">
+            <Route path="/:sitename/alphabet/:character">
               <Helmet>
                 <title>Alphabet</title>
               </Helmet>
               <Alphabet.Container />
             </Route>
-            <Route path="/:language/alphabet">
+            <Route path="/:sitename/alphabet">
               <Helmet>
                 <title>Alphabet</title>
               </Helmet>
               <Alphabet.Container />
             </Route>
-            <Route path="/:language/words">
+            <Route path="/:sitename/words">
               <Helmet>
                 <title>Words</title>
               </Helmet>
               <WordsListContainer />
             </Route>
-            <Route path="/:language/word/:wordId">
+            <Route path="/:sitename/word/:wordId">
               <Helmet>
                 <title>Word</title>
               </Helmet>
               <Word.Container />
             </Route>
-            <Route path="/:language/*">
+            <Route path="/:sitename/*">
               <div className="flex justify-center items-center min-h-screen">
                 <img src="/assets/images/under-construction.gif" alt="This page is under construction" />
               </div>
             </Route>
-            <Route path="/:language">
+            <Route path="/:sitename">
               <Helmet>
                 <title>Home</title>
               </Helmet>

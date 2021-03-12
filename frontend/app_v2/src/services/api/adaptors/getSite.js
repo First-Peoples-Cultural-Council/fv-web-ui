@@ -1,4 +1,4 @@
-const getSections = (response) => {
+const getSite = (response) => {
   const { title, uid, path, logoId: idLogo } = response
 
   return {
@@ -9,4 +9,4 @@ const getSections = (response) => {
     logoUrl: `/nuxeo/nxpicsfile/default/${idLogo}/Small:content/`,
   }
 }
-export default getSections
+export default getSite

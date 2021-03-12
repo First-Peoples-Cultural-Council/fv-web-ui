@@ -1,2 +1,7 @@
-export const BASE_URL = 'BASE_URL'
-export const TIMEOUT = 60000
+/* global ENV_API_URL */
+import ky from 'ky'
+
+export const api = ky.create({
+  prefixUrl: ENV_API_URL,
+  timeout: 60000,
+})

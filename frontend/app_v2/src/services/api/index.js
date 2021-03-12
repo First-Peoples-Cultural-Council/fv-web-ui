@@ -1,9 +1,5 @@
 import { useQuery } from 'react-query'
-import ky from 'ky'
-import { TIMEOUT } from 'services/api/config'
-const api = ky.create({
-  timeout: TIMEOUT,
-})
+import { api } from 'services/api/config'
 
 const formatResponse = (response, dataAdaptor) => {
   const { isLoading, error, data } = response
@@ -14,56 +10,49 @@ const formatResponse = (response, dataAdaptor) => {
   return { isLoading, error, data, dataOriginal: data }
 }
 
-const get = ({ path, headers }) => {
-  return api.get(path, headers).json()
-}
-
-const post = ({ path, bodyObject, headers }) => {
-  return api.post(path, { json: bodyObject, headers }).json()
-}
-
 export default {
-  get,
   getAlphabet: (sitename, dataAdaptor) => {
     const response = useQuery(['getAlphabet', sitename], async () => {
-      return await post({
-        path: '/nuxeo/api/v1/automation/Document.EnrichedQuery',
-        bodyObject: {
-          params: {
-            language: 'NXQL',
-            sortBy: 'fvcharacter:alphabet_order',
-            sortOrder: 'asc',
-            query: `SELECT * FROM FVCharacter WHERE ecm:path STARTSWITH '/FV/sections/Data/Test/Test/${sitename}/Alphabet' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 `,
+      return await api
+        .post('automation/Document.EnrichedQuery', {
+          json: {
+            params: {
+              language: 'NXQL',
+              sortBy: 'fvcharacter:alphabet_order',
+              sortOrder: 'asc',
+              query: `SELECT * FROM FVCharacter WHERE ecm:path STARTSWITH '/FV/sections/Data/Test/Test/${sitename}/Alphabet' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 `,
+            },
+            context: {},
           },
-          context: {},
-        },
-        headers: { 'enrichers.document': 'character' },
-      })
+          headers: { 'enrichers.document': 'character' },
+        })
+        .json()
     })
     return formatResponse(response, dataAdaptor)
   },
   getById: (id, queryKey, dataAdaptor, properties = '*') => {
     const response = useQuery([queryKey, id], async () => {
-      return await get({ path: `/nuxeo/api/v1/id/${id}?properties=${properties}` })
+      return await api.get(`id/${id}?properties=${properties}`).json()
     })
     return formatResponse(response, dataAdaptor)
   },
-  getSections: (sitename, dataAdaptor) => {
-    const response = useQuery(['getSections', sitename], async () => {
-      return await get({ path: `/nuxeo/api/v1/site/sections/${sitename}` })
+  getSite: (sitename, dataAdaptor) => {
+    const response = useQuery(['getSite', sitename], async () => {
+      return await api.get(`site/sections/${sitename}`).json()
     })
     return formatResponse(response, dataAdaptor)
   },
   // TODO: remove postman example server url
-  getCommunityHome: (sitename, dataAdaptor) => {
-    const response = useQuery(['getCommunityHome', sitename], async () => {
-      return await get({
-        path: `https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`,
-      })
+  getHome: (sitename, dataAdaptor) => {
+    const response = useQuery(['getHome', sitename], async () => {
+      return await api
+        .get(`https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`, {
+          prefixUrl: '',
+        })
+        .json()
     })
     return formatResponse(response, dataAdaptor)
   },
-  post,
   postMail: ({ docId, from, message, name, to }) => {
     const params = {
       from,
@@ -79,13 +68,11 @@ export default {
       to,
     }
     // TODO: Confirm this path and params when FW-2106 BE is complete and handle success response in UI
-    return post({ path: '/nuxeo/site/automation/Document.Mail', bodyObject: { params: params, input: docId } })
+    return api.post('nuxeo/site/automation/Document.Mail', { json: { params: params, input: docId } }).json()
   },
   getUser: (dataAdaptor) => {
     const response = useQuery('getUser', async () => {
-      return await get({
-        path: '/nuxeo/api/v1/me/',
-      })
+      return await api.get('me/').json()
     })
     return formatResponse(response, dataAdaptor)
   },
