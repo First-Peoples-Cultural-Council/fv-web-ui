@@ -26,14 +26,14 @@ ReactDOM.render(
     <QueryClientProvider client={queryClient}>
       <Router>
         <Switch>
-          <Route path="/:language">
+          <Route path="/:sitename">
             <AppStateProvider>
               <AppFrameContainer />
             </AppStateProvider>
           </Route>
 
           <div className="grid h-screen">
-            <h1 className="place-self-center font-bold text-3xl">Missing language in url</h1>
+            <h1 className="place-self-center font-bold text-3xl">Missing site name in url</h1>
           </div>
         </Switch>
       </Router>

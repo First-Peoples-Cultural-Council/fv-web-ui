@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react'
-import useGetSections from 'common/useGetSections'
+import { useParams } from 'react-router-dom'
+import useGetSite from 'common/useGetSite'
 import useUserGet from 'common/useUserGet'
 import useWorkspaceToggle from 'common/useWorkspaceToggle'
 import AppStateContext from 'common/AppStateContext'
@@ -13,11 +14,12 @@ import AppStateContext from 'common/AppStateContext'
  */
 function DialectHeaderData() {
   const { menu } = useContext(AppStateContext)
+  const { sitename } = useParams()
   const { machine, send } = menu
   const { context } = machine
   const { openMenu } = context
 
-  const { title } = useGetSections()
+  const { title } = useGetSite()
   const { value: workspaceToggleValue, set } = useWorkspaceToggle()
   const { firstName, lastName, userName = '' } = useUserGet()
 
@@ -65,39 +67,39 @@ function DialectHeaderData() {
       title: 'Dictionary',
       id: 'dictionary',
       itemsData: [
-        { title: 'Words', href: `/${title}/words` },
-        { title: 'Phrases', href: `/${title}/phrases` },
-        { title: 'Alphabet', href: `/${title}/alphabet` },
-        { title: 'Browse by Topic', href: `/${title}/topics` },
+        { title: 'Words', href: `/${sitename}/words` },
+        { title: 'Phrases', href: `/${sitename}/phrases` },
+        { title: 'Alphabet', href: `/${sitename}/alphabet` },
+        { title: 'Topics', href: `/${sitename}/topics` },
       ],
     },
     {
       title: 'Learn',
       id: 'learn',
       itemsData: [
-        { title: 'Songs', href: `/${title}/songs` },
-        { title: 'Stories', href: `/${title}/stories` },
-        { title: 'Games', href: `/${title}/games` },
+        { title: 'Songs', href: `/${sitename}/songs` },
+        { title: 'Stories', href: `/${sitename}/stories` },
+        { title: 'Games', href: `/${sitename}/games` },
       ],
     },
     {
       title: 'Resources',
       id: 'resources',
       itemsData: [
-        { title: 'Kids Site', href: `/${title}/kids` },
-        { title: 'Mobile App', href: `/${title}/app` },
-        { title: 'Keyboard App', href: `/${title}/keyboard` },
+        { title: 'Kids Site', href: `/${sitename}/kids` },
+        { title: 'Mobile App', href: `/${sitename}/app` },
+        { title: 'Keyboard App', href: `/${sitename}/keyboard` },
       ],
     },
     {
       title: 'About',
       id: 'about',
       itemsData: [
-        { title: 'Our Language', href: `/${title}/ourlanguage` },
-        { title: 'Our People', href: `/${title}/about` },
+        { title: 'Our Language', href: `/${sitename}/ourlanguage` },
+        { title: 'Our People', href: `/${sitename}/about` },
       ],
     },
-    { title: 'Kids', id: 'kids', href: `/${title}/kids` },
+    { title: 'Kids', id: 'kids', href: `/${sitename}/kids` },
   ]
 
   return {

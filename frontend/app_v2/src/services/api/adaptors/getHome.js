@@ -1,4 +1,5 @@
 import {
+  WIDGET_ALPHABET,
   WIDGET_CONTACT,
   WIDGET_HERO,
   WIDGET_HERO_SEARCH,
@@ -11,7 +12,7 @@ import {
   WIDGET_WELCOME,
 } from 'common/constants'
 
-const getCommunityHome = (response) => {
+const getHome = (response) => {
   const { properties, uid } = response
   const widgetsActive = properties?.['widgets:active'] || []
   const widgets = widgetsActive.map((widget) => {
@@ -19,29 +20,11 @@ const getCommunityHome = (response) => {
     const settings = widget['settings:settings'] || []
     const type = widget?.['widget:type']
     /*
-     * Hero Widget
+     * Alphabet Widget
      */
-    if (type === 'HeroWidget') {
-      const searchSettings = settings.find(({ category, key }) => {
-        return category === 'presentation' && key === 'search'
-      })
-      const hasSearch = searchSettings ? searchSettings.value : false
-      const img = {}
-      content.find(({ image }) => {
-        if (image) {
-          img.title = image['dc:title']
-          img.url = image.path
-          // break out of loop
-          return true
-        }
-        return false
-      })
-
+    if (type === 'AlphabetWidget') {
       return {
-        type: WIDGET_HERO,
-        uid: widget.uid,
-        background: img.url,
-        variant: hasSearch ? WIDGET_HERO_SEARCH : undefined,
+        type: WIDGET_ALPHABET,
       }
     }
     /*
@@ -71,6 +54,32 @@ const getCommunityHome = (response) => {
         contactEmail: contactEmail,
         links: links,
         contactText: contactText,
+      }
+    }
+    /*
+     * Hero Widget
+     */
+    if (type === 'HeroWidget') {
+      const searchSettings = settings.find(({ category, key }) => {
+        return category === 'presentation' && key === 'search'
+      })
+      const hasSearch = searchSettings ? searchSettings.value : false
+      const img = {}
+      content.find(({ image }) => {
+        if (image) {
+          img.title = image['dc:title']
+          img.url = image.path
+          // break out of loop
+          return true
+        }
+        return false
+      })
+
+      return {
+        type: WIDGET_HERO,
+        uid: widget.uid,
+        background: img.url,
+        variant: hasSearch ? WIDGET_HERO_SEARCH : undefined,
       }
     }
     /*
@@ -232,4 +241,4 @@ const getCommunityHome = (response) => {
   }
 }
 
-export default getCommunityHome
+export default getHome

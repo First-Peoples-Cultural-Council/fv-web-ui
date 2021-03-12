@@ -1,7 +1,7 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
 import HeroBackground from 'images/hero-background.jpg'
-import useGetSections from 'common/useGetSections'
+import useGetSite from 'common/useGetSite'
 /**
  * @summary AboutData
  * @component
@@ -11,7 +11,7 @@ import useGetSections from 'common/useGetSections'
  *
  */
 function AboutData() {
-  const { title, logoUrl } = useGetSections()
+  const { title, logoUrl } = useGetSite()
   return {
     hero: {
       background: HeroBackground,

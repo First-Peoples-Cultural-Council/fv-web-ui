@@ -17,10 +17,5 @@ function HomeContainer() {
     <HomePresentation isLoading={isLoading} error={error} data={data} dataOriginal={dataOriginal} language={language} />
   )
 }
-// PROPTYPES
-// const { string } = PropTypes
-HomeContainer.propTypes = {
-  //   something: string,
-}
 
 export default HomeContainer

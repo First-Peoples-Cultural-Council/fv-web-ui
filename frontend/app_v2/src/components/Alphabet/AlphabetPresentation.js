@@ -11,16 +11,7 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function AlphabetPresentation({
-  language,
-  isLoading,
-  error,
-  characters,
-  selectedData,
-  onVideoClick,
-  links,
-  videoIsOpen,
-}) {
+function AlphabetPresentation({ language, isLoading, error, characters, selectedData, links }) {
   if (isLoading) {
     return (
       <div className="flex justify-around p-10">
@@ -49,22 +40,40 @@ function AlphabetPresentation({
     <section className="py-12 bg-white" data-testid="AlphabetPresentation">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative">
-          <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-blue font-bold sm:text-5xl uppercase">
+          <h2 className="mb-5 relative z-10 text-center text-4xl text-fv-blue font-bold sm:text-5xl uppercase">
             <span className="inline-block bg-white px-4 sm:px-8 lg:px-20">Alphabet</span>
           </h2>
           <hr className="absolute z-0 w-full border-gray-300" style={{ top: '50%' }} />
         </div>
-        <div className="grid grid-cols-7 gap-8 divide-x-2 divide-gray-300">
-          <div className="col-span-7 sm:col-span-4">
-            <div className="grid grid-cols-7 sm:grid-cols-5 lg:grid-cols-7">
-              {characters &&
-                characters.map(({ title, uid }) => {
-                  return (
-                    <Link
-                      data-testid={
-                        selectedData?.title === title ? 'AlphabetPresentation__selectedCharacter' : undefined
-                      }
-                      className={`
+        <div
+          className="
+            flex
+            font-bold
+            items-center
+            justify-center
+            text-center
+            text-fv-blue
+            mb-5"
+        >
+          {links && (
+            <ul className="flex text-center">
+              {links.map(({ url, title }, index) => {
+                return (
+                  <li key={index} className="m-3 inline-flex">
+                    <Link to={url}>{title}</Link>
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </div>
+        <div className="mb-5 grid grid-cols-4 md:grid-cols-7 lg:grid-cols-10 max-w-screen-lg mx-auto">
+          {characters &&
+            characters.map(({ title, uid }) => {
+              return (
+                <Link
+                  data-testid={selectedData?.title === title ? 'AlphabetPresentation__selectedCharacter' : undefined}
+                  className={`
                       border
                       col-span-1
                       font-medium
@@ -77,44 +86,31 @@ function AlphabetPresentation({
                       text-2xl
                       ${selectedData?.title === title ? 'bg-fv-blue text-white' : ''}
                       `}
-                      key={uid}
-                      to={`/${language}/alphabet/${title}`}
-                    >
-                      {title}
-                    </Link>
-                  )
-                })}
+                  key={uid}
+                  to={`/${language}/alphabet/${title}`}
+                >
+                  {title}
+                </Link>
+              )
+            })}
+        </div>
+        <div className="p-2">
+          {selectedData?.title === undefined && (
+            <div
+              data-testid="AlphabetPresentation__noCharacter"
+              className="text-center font-bold sm:text-3xl text-2xl text-fv-blue m-10"
+            >
+              Please select a character
             </div>
-          </div>
-          <div className="col-span-7 sm:col-span-3 mt-8 sm:mt-0">
-            {selectedData?.title === undefined && (
-              <div
-                data-testid="AlphabetPresentation__noCharacter"
-                className="text-center font-bold sm:text-3xl text-2xl text-fv-blue m-10"
-              >
-                Please select a character
-              </div>
-            )}
-            {selectedData && AlphabetPresentationSelected({ selectedData, onVideoClick, videoIsOpen })}
-            {links && (
-              <ul className="text-center mt-10">
-                {links.map(({ url, title }, index) => {
-                  return (
-                    <li key={index} className="m-3">
-                      <Link to={url}>{title}</Link>
-                    </li>
-                  )
-                })}
-              </ul>
-            )}
-          </div>
+          )}
+          {selectedData && AlphabetPresentationSelected({ selectedData })}
         </div>
       </div>
     </section>
   )
 }
 // PROPTYPES
-const { bool, array, func, string, shape, arrayOf, object } = PropTypes
+const { bool, array, string, shape, arrayOf, object } = PropTypes
 AlphabetPresentation.propTypes = {
   isLoading: bool,
   error: array,
@@ -129,12 +125,6 @@ AlphabetPresentation.propTypes = {
   language: string,
   selectedData: object,
   links: array,
-  videoIsOpen: bool,
-  onVideoClick: func,
-}
-
-AlphabetPresentation.defaultProps = {
-  onVideoClick: () => {},
 }
 
 export default AlphabetPresentation

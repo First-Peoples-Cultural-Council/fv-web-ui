@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import DialectHeaderPresentationMenu from './DialectHeaderPresentationMenu'
 import DialectHeaderPresentationMobile from './DialectHeaderPresentationMobile'
@@ -25,9 +25,10 @@ function DialectHeaderPresentation({
   onMenuClick,
   onWorkspaceModeClick,
   openMenu,
-  title,
 }) {
   const [mobileNavbarOpen, setMobileNavbarOpen] = useState(false)
+
+  const { sitename } = useParams()
 
   const openCloseMobileNavbar = () => {
     setMobileNavbarOpen(!mobileNavbarOpen)
@@ -51,7 +52,7 @@ function DialectHeaderPresentation({
       <nav className="max-w-screen-2xl mx-auto px-4 sm:px-6 xl:px-20">
         <div className="flex justify-between items-center py-2 md:justify-start md:space-x-10">
           <div className="justify-start lg:w-0 lg:flex-1">
-            <Link to={`/${title}`}>
+            <Link to={`/${sitename}`}>
               <span className="sr-only">FirstVoices Logo</span>
               {useIcon('Logo', 'fill-current text-white h-10')}
             </Link>
