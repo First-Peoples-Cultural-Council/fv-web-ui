@@ -91,7 +91,7 @@ module.exports = (env) => {
       new webpack.DefinePlugin({
         ENV_NUXEO_URL: env && env.NUXEO_URL ? JSON.stringify(env.NUXEO_URL) : null,
         ENV_WEB_URL: env && env.WEB_URL ? JSON.stringify(env.WEB_URL) : null,
-        ENV_API_URL: env && env.API_URL ? JSON.stringify(env.API_URL) : JSON.stringify('nuxeo/api/v1/'),
+        ENV_API_URL: env && env.API_URL ? JSON.stringify(env.API_URL) : JSON.stringify('/nuxeo/api/v1/'),
         ENV_CONTEXT_PATH: env && env.CONTEXT_PATH ? JSON.stringify(env.CONTEXT_PATH) : null,
       }),
       new ModuleFederationPlugin({
