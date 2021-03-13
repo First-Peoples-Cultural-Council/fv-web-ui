@@ -14,13 +14,13 @@ import SearchListLargeScreen from 'components/Search/SearchListLargeScreen'
  */
 function SearchPresentation({
   currentFilter,
-  dialectName,
+  sitename,
   filters,
   handleFilter,
   handleSearchSubmit,
   handleTextFieldChange,
   hasItems,
-  isDialect,
+  isSite,
   items,
   newSearchValue,
   searchTerm,
@@ -50,7 +50,7 @@ function SearchPresentation({
 
       <div className="min-h-220 col-span-6 sm:col-span-5 ml-5">
         <h1 className="text-3xl text-medium">
-          <em>{searchTerm}</em> search results from {isDialect ? dialectName : 'FirstVoices'}
+          <em>{searchTerm}</em> search results from {isSite ? sitename : 'FirstVoices'}
         </h1>
         <div className="mb-5">
           <div className="flex mb-5">
@@ -85,13 +85,13 @@ function SearchPresentation({
 const { array, bool, func, string } = PropTypes
 SearchPresentation.propTypes = {
   currentFilter: string,
-  dialectName: string,
+  sitename: string,
   filters: array,
   handleFilter: func,
   handleSearchSubmit: func,
   handleTextFieldChange: func,
   hasItems: bool,
-  isDialect: bool,
+  isSite: bool,
   items: array,
   newSearchValue: string,
   searchTerm: string,

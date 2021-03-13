@@ -1,5 +1,10 @@
 import { useState } from 'react'
+import { useQuery } from 'react-query'
+import { useParams, useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
+
+import useGetSite from 'common/useGetSite'
+import searchApi from 'services/api/search'
 
 /**
  * @summary SearchData
@@ -11,67 +16,52 @@ import PropTypes from 'prop-types'
  *
  */
 function SearchData({ children }) {
-  //DataSources
+  const { title, uid } = useGetSite()
+  const { query } = useParams()
+  const history = useHistory()
+  let results = []
 
   // Local State
-  const [newSearchValue, setNewSearchValue] = useState()
-  const [currentFilter, setCurrentFilter] = useState("FVWord','FVPhrase','FVBook")
+  const [newSearchValue, setNewSearchValue] = useState(query)
+  const [currentFilter, setCurrentFilter] = useState('ALL')
+
+  const { data, refetch } = useQuery(['search', query], () => searchApi.get({ query, siteId: uid, currentFilter }))
+  results = data?.results
 
   // Filters
   const filters = [
-    { type: "FVWord','FVPhrase','FVBook", label: 'All' },
-    { type: 'FVWord', label: 'Words' },
-    { type: 'FVPhrase', label: 'Phrases' },
-    { type: 'FVBook', label: 'Songs/Stories' },
+    { type: 'ALL', label: 'All' },
+    { type: 'WORD', label: 'Words' },
+    { type: 'PHRASE', label: 'Phrases' },
+    { type: 'BOOK', label: 'Songs/Stories' },
   ]
 
   const handleTextFieldChange = (event) => {
-    // console.log('handleTextFieldChange FIRED')
     setNewSearchValue(event.target.value)
   }
 
   const handleSearchSubmit = () => {
-    if (newSearchValue && newSearchValue !== '') {
-      //   console.log('handleSearchSubmit FIRED')
+    if (newSearchValue && newSearchValue !== query) {
+      history.push(newSearchValue)
     }
   }
 
   const handleFilter = (type) => {
     setCurrentFilter(type)
+    refetch()
   }
 
   return children({
     currentFilter,
-    dialectName: 'testDialect',
+    sitename: title,
     filters,
     handleFilter,
     handleSearchSubmit,
     handleTextFieldChange,
-    hasItems: true,
-    isDialect: true,
-    items: [
-      {
-        uid: '12345',
-        title: 'firstword',
-        href: 'url',
-        translation: 'Firstword means blah blah blah',
-        audio: 'audioSrc',
-        picture: 'picture url',
-        type: 'word',
-        dialect: 'TestDialect1',
-      },
-      {
-        uid: '65432',
-        title: 'secondword',
-        href: 'url',
-        translation: 'secondword means blah blah blah',
-        audio: 'audioSrc',
-        picture: 'picture url',
-        type: 'phrase',
-        dialect: 'TestDialect2',
-      },
-    ],
-    searchTerm: 'defaultSearchTerm',
+    hasItems: results ? true : false,
+    isSite: title ? true : false,
+    items: results ? results : [],
+    searchTerm: query,
     newSearchValue,
   })
 }

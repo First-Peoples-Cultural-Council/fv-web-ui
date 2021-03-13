@@ -1,14 +1,7 @@
 import { useQuery } from 'react-query'
 import { api } from 'services/api/config'
 
-const formatResponse = (response, dataAdaptor) => {
-  const { isLoading, error, data } = response
-  if (isLoading === false && error === null && data && dataAdaptor) {
-    const transformedData = dataAdaptor(Object.assign({}, data))
-    return { isLoading, error, data: transformedData, dataOriginal: data }
-  }
-  return { isLoading, error, data, dataOriginal: data }
-}
+import responseFormatter from 'services/api/helpers/responseFormatter'
 
 export default {
   getAlphabet: (sitename, dataAdaptor) => {
@@ -28,19 +21,19 @@ export default {
         })
         .json()
     })
-    return formatResponse(response, dataAdaptor)
+    return responseFormatter(response, dataAdaptor)
   },
   getById: (id, queryKey, dataAdaptor, properties = '*') => {
     const response = useQuery([queryKey, id], async () => {
       return await api.get(`id/${id}?properties=${properties}`).json()
     })
-    return formatResponse(response, dataAdaptor)
+    return responseFormatter(response, dataAdaptor)
   },
   getSite: (sitename, dataAdaptor) => {
     const response = useQuery(['getSite', sitename], async () => {
       return await api.get(`site/sections/${sitename}`).json()
     })
-    return formatResponse(response, dataAdaptor)
+    return responseFormatter(response, dataAdaptor)
   },
   // TODO: remove postman example server url
   getHome: (sitename, dataAdaptor) => {
@@ -51,7 +44,7 @@ export default {
         })
         .json()
     })
-    return formatResponse(response, dataAdaptor)
+    return responseFormatter(response, dataAdaptor)
   },
   postMail: ({ docId, from, message, name, to }) => {
     const params = {
@@ -74,6 +67,6 @@ export default {
     const response = useQuery('getUser', async () => {
       return await api.get('me/').json()
     })
-    return formatResponse(response, dataAdaptor)
+    return responseFormatter(response, dataAdaptor)
   },
 }

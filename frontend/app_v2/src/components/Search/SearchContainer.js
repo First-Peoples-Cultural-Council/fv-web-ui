@@ -15,13 +15,13 @@ function SearchContainer() {
     <SearchData>
       {({
         currentFilter,
-        dialectName,
+        sitename,
         filters,
         handleFilter,
         handleSearchSubmit,
         handleTextFieldChange,
         hasItems,
-        isDialect,
+        isSite,
         items,
         newSearchValue,
         searchTerm,
@@ -29,13 +29,13 @@ function SearchContainer() {
         return (
           <SearchPresentation
             currentFilter={currentFilter}
-            dialectName={dialectName}
+            sitename={sitename}
             filters={filters}
             handleFilter={handleFilter}
             handleSearchSubmit={handleSearchSubmit}
             handleTextFieldChange={handleTextFieldChange}
             hasItems={hasItems}
-            isDialect={isDialect}
+            isSite={isSite}
             items={items}
             newSearchValue={newSearchValue}
             searchTerm={searchTerm}

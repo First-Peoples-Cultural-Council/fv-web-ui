@@ -17,7 +17,7 @@ function SearchListLargeScreen({ items }) {
     <div className="p-2">
       <table>
         <thead>
-          <tr className="bg-gray-300 text-lg text-bold">
+          <tr className="bg-gray-300 text-lg text-bold text-left">
             <th>
               <div className="p-5">Entry</div>
             </th>
@@ -28,9 +28,6 @@ function SearchListLargeScreen({ items }) {
               <div className="p-5">Audio</div>
             </th>
             <th>
-              <div className="p-5">Picture</div>
-            </th>
-            <th>
               <div className="p-5">Type</div>
             </th>
             <th>
@@ -39,26 +36,25 @@ function SearchListLargeScreen({ items }) {
           </tr>
         </thead>
         <tbody>
-          {items.map(({ uid, title, href, translation, audio, picture, type, dialect }, index) => (
-            <tr key={uid} className={`border-b-2 border-dotted ${index % 2 ? 'bg-gray-300' : 'bg-white'}`}>
+          {items.map(({ id, title, path, translations, audio, type, sitename }, index) => (
+            <tr key={id} className={`border-b-2 border-dotted ${index % 2 ? 'bg-gray-300' : 'bg-white'}`}>
               <td component="th" scope="row">
-                <Link className="p-5 text-lg" to={href}>
+                <Link className="p-5 text-lg" to={path}>
                   {title}
                 </Link>
               </td>
-              <td>{translation}</td>
+              <td className="p-5">{translations?.translation}</td>
               <td className="p-5">
-                {audio ? (
+                {audio[0] ? (
                   <AudioMinimal.Container
                     className="p-5"
                     iconStyling="fill-current h-6 w-6 sm:w-8 sm:h-8"
-                    src={audio}
+                    src={audio[0]}
                   />
                 ) : null}
               </td>
-              <td className="p-5">{picture ? <img src={picture} alt={title} /> : null}</td>
               <td className="p-5">{type}</td>
-              <td className="p-5">{dialect}</td>
+              <td className="p-5">{sitename ? sitename : '-'}</td>
             </tr>
           ))}
         </tbody>
