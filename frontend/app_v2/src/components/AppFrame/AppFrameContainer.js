@@ -54,16 +54,18 @@ function AppFrameContainer() {
               </Helmet>
               <Word.Container />
             </Route>
-            <Route path="/:sitename/*">
-              <div className="flex justify-center items-center min-h-screen">
-                <img src="/assets/images/under-construction.gif" alt="This page is under construction" />
-              </div>
-            </Route>
             <Route path="/:sitename">
               <Helmet>
                 <title>Home</title>
               </Helmet>
               <Home.Container />
+            </Route>
+
+            {/* Catch all for all other pages */}
+            <Route path="*">
+              <div className="flex justify-center items-center min-h-screen">
+                <img src="/assets/images/under-construction.gif" alt="This page is under construction" />
+              </div>
             </Route>
           </Switch>
         </Suspender>
