@@ -24,9 +24,7 @@ function SearchData({ children }) {
   // Local State
   const [newSearchValue, setNewSearchValue] = useState(query)
   const [currentFilter, setCurrentFilter] = useState('ALL')
-  const { data, refetch } = useQuery(['search', query], () =>
-    searchApi.get({ query, siteId: uid, type: currentFilter })
-  )
+  const { data } = useQuery(['search', query], () => searchApi.get({ query, siteId: uid }))
   results = data?.results
 
   // Filters
@@ -47,9 +45,11 @@ function SearchData({ children }) {
     }
   }
 
-  const handleFilter = (type) => {
-    setCurrentFilter(type)
-    refetch()
+  const handleFilter = (filter) => {
+    if (newSearchValue && filter && filter !== currentFilter) {
+      history.push(newSearchValue + '&docType=' + filter)
+    }
+    setCurrentFilter(filter)
   }
 
   const tools = [
