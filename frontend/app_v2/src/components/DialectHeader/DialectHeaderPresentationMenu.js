@@ -52,7 +52,7 @@ function DialectHeaderMenu({ id, title, itemsData, href, onMenuClick, openMenu, 
               onMenuClick(id)
             }
           }}
-          className="group p-2 bg-fv-charcoal rounded-md  inline-flex items-center text-lg font-medium text-white hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-fv-turquoise"
+          className="group p-1 bg-fv-charcoal rounded-md  inline-flex items-center text-lg font-medium text-white hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-fv-turquoise"
         >
           {useIcon(title, 'fill-current h-12 w-8')}
           <p className="ml-3 mr-2">{title}</p>
@@ -62,7 +62,7 @@ function DialectHeaderMenu({ id, title, itemsData, href, onMenuClick, openMenu, 
       {hasItems === false && (
         <Link
           to={href}
-          className="group p-2 bg-fv-charcoal rounded-md  inline-flex items-center text-lg font-medium text-white hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-fv-turquoise"
+          className="group p-1 bg-fv-charcoal rounded-md  inline-flex items-center text-lg font-medium text-white hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-fv-turquoise"
         >
           {useIcon(title, 'fill-current h-12 w-8')}
           <p className="ml-3 mr-2">{title}</p>
