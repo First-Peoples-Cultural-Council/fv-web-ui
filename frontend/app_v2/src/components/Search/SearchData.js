@@ -24,8 +24,9 @@ function SearchData({ children }) {
   // Local State
   const [newSearchValue, setNewSearchValue] = useState(query)
   const [currentFilter, setCurrentFilter] = useState('ALL')
-
-  const { data, refetch } = useQuery(['search', query], () => searchApi.get({ query, siteId: uid, currentFilter }))
+  const { data, refetch } = useQuery(['search', query], () =>
+    searchApi.get({ query, siteId: uid, type: currentFilter })
+  )
   results = data?.results
 
   // Filters
@@ -51,6 +52,29 @@ function SearchData({ children }) {
     refetch()
   }
 
+  const tools = [
+    {
+      toolTitle: 'copy',
+      iconName: 'WebShare',
+      clickHandler: function clickCopyHandler(str) {
+        // Create new element
+        const el = document.createElement('textarea')
+        // Set value (string to be copied)
+        el.value = str
+        // Set non-editable to avoid focus and move outside of view
+        el.setAttribute('readonly', '')
+        el.style = { position: 'absolute', left: '-9999px' }
+        document.body.appendChild(el)
+        // Select text inside element
+        el.select()
+        // Copy text to clipboard
+        document.execCommand('copy')
+        // Remove temporary element
+        document.body.removeChild(el)
+      },
+    },
+  ]
+
   return children({
     currentFilter,
     sitename: title,
@@ -63,6 +87,7 @@ function SearchData({ children }) {
     items: results ? results : [],
     searchTerm: query,
     newSearchValue,
+    tools,
   })
 }
 // PROPTYPES

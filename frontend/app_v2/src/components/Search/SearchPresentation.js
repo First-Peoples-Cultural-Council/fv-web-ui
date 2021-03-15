@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import SearchListLargeScreen from 'components/Search/SearchListLargeScreen'
+import DictionaryListPresentation from 'components/Search/DictionaryListPresentation'
 
 /**
  * @summary SearchPresentation
@@ -24,6 +24,7 @@ function SearchPresentation({
   items,
   newSearchValue,
   searchTerm,
+  tools,
 }) {
   const filterListItems = filters.map((filter) => {
     const filterIsActiveClass =
@@ -75,7 +76,7 @@ function SearchPresentation({
             </button>
           </div>
         </div>
-        {hasItems === true && <SearchListLargeScreen items={items} />}
+        {hasItems === true && <DictionaryListPresentation items={items} tools={tools} />}
         {hasItems === false && <div className="m-10">Sorry, no results were found for this search.</div>}
       </div>
     </div>
@@ -95,6 +96,7 @@ SearchPresentation.propTypes = {
   items: array,
   newSearchValue: string,
   searchTerm: string,
+  tools: array,
 }
 
 export default SearchPresentation

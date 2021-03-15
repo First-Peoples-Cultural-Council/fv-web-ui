@@ -25,6 +25,7 @@ function SearchContainer() {
         items,
         newSearchValue,
         searchTerm,
+        tools,
       }) => {
         return (
           <SearchPresentation
@@ -39,6 +40,7 @@ function SearchContainer() {
             items={items}
             newSearchValue={newSearchValue}
             searchTerm={searchTerm}
+            tools={tools}
           />
         )
       }}
