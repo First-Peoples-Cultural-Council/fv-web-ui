@@ -54,8 +54,9 @@ function SearchData({ children }) {
 
   const actions = [
     {
-      toolTitle: 'copy',
+      actionTitle: 'copy',
       iconName: 'WebShare',
+      confirmationMessage: 'Copied!',
       clickHandler: function clickCopyHandler(str) {
         // Create new element
         const el = document.createElement('textarea')
@@ -71,6 +72,11 @@ function SearchData({ children }) {
         document.execCommand('copy')
         // Remove temporary element
         document.body.removeChild(el)
+        //Set tooltip confirmation with timeout
+        document.getElementById(`copy-message-${str}`).style.display = 'contents'
+        setTimeout(function timeout() {
+          document.getElementById(`copy-message-${str}`).style.display = 'none'
+        }, 1000)
       },
     },
   ]

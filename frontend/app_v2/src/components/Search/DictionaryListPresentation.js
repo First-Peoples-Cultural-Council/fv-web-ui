@@ -53,7 +53,7 @@ function DictionaryListPresentation({ items, wholeDomain, actions }) {
                     </th>
                   ) : null}
                   <th scope="col" className="relative px-6 py-3">
-                    <span className="sr-only">Tools</span>
+                    <span className="sr-only">Actions</span>
                   </th>
                 </tr>
               </thead>
@@ -93,11 +93,20 @@ function DictionaryListPresentation({ items, wholeDomain, actions }) {
                     {wholeDomain ? (
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{sitename}</td>
                     ) : null}
-                    {actions.map(({ toolTitle, iconName, clickHandler }, toolIndex) => (
-                      <td key={toolIndex} className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-fv-charcoal hover:text-indigo-900" onClick={() => clickHandler(title)}>
-                          <span className="sr-only">{toolTitle}</span>
-                          {useIcon(iconName)}
+                    {/* Action buttons */}
+                    {actions.map(({ actionTitle, iconName, clickHandler, confirmationMessage }, toolIndex) => (
+                      <td key={toolIndex} className=" px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button
+                          className="relative text-fv-blue hover:text-fv-blue-dark"
+                          onClick={() => clickHandler(title)}
+                        >
+                          <span className="sr-only">{actionTitle}</span>
+                          {useIcon(iconName, 'fill-current w-6 h-6')}
+                          <span id={`${actionTitle}-message-${title}`} className="hidden">
+                            <div className="absolute bottom-0 right-0 w-auto p-1 text-xs bg-fv-purple text-white text-center rounded-lg shadow-lg ">
+                              {confirmationMessage}
+                            </div>
+                          </span>
                         </button>
                       </td>
                     ))}
@@ -119,16 +128,17 @@ DictionaryListPresentation.propTypes = {
   items: array,
   actions: arrayOf(
     shape({
-      toolTitle: string,
+      actionTitle: string,
       iconName: string,
       clickHandler: func,
+      confirmationMessage: string,
     })
   ),
 }
 
 DictionaryListPresentation.defaultProps = {
   wholeDomain: false,
-  tools: [],
+  actions: [],
 }
 
 export default DictionaryListPresentation

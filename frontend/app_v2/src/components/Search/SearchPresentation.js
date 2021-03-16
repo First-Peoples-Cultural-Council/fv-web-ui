@@ -24,7 +24,7 @@ function SearchPresentation({
   items,
   newSearchValue,
   searchTerm,
-  tools,
+  actions,
 }) {
   const filterListItems = filters.map((filter) => {
     const filterIsActiveClass =
@@ -76,7 +76,7 @@ function SearchPresentation({
             </button>
           </div>
         </div>
-        {hasItems === true && <DictionaryListPresentation items={items} tools={tools} />}
+        {hasItems === true && <DictionaryListPresentation items={items} actions={actions} />}
         {hasItems === false && <div className="m-10">Sorry, no results were found for this search.</div>}
       </div>
     </div>
@@ -96,7 +96,7 @@ SearchPresentation.propTypes = {
   items: array,
   newSearchValue: string,
   searchTerm: string,
-  tools: array,
+  actions: array,
 }
 
 export default SearchPresentation
