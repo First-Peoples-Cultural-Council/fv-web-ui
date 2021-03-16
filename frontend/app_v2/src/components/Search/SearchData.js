@@ -21,9 +21,15 @@ function SearchData({ children }) {
   const history = useHistory()
   let results = []
 
+  // Extract search term from query for ui display
+  const separatedQuery = query.split('&')
+  const searchTermForDisplay = separatedQuery[0]
+
   // Local State
-  const [newSearchValue, setNewSearchValue] = useState(query)
+  const [newSearchValue, setNewSearchValue] = useState(searchTermForDisplay)
   const [currentFilter, setCurrentFilter] = useState('ALL')
+
+  // Data fetch
   const { data } = useQuery(['search', query], () => searchApi.get({ query, siteId: uid }))
   results = data?.results
 
@@ -91,7 +97,7 @@ function SearchData({ children }) {
     hasItems: results ? true : false,
     isSite: title ? true : false,
     items: results ? results : [],
-    searchTerm: query,
+    searchTerm: searchTermForDisplay,
     newSearchValue,
     actions,
   })
