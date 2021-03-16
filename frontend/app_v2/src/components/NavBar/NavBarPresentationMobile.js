@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-// import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import useIcon from 'common/useIcon'
 
 /**
- * @summary DialectHeaderMobile
+ * @summary NavBarPresentationMobile
  * @component
  *
  * @param {object} props
@@ -13,7 +12,7 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function DialectHeaderMobile({ menuData }) {
+function NavBarPresentationMobile({ menuData }) {
   const [selectedMenu, setSelectedMenu] = useState(null)
 
   const onMenuClick = (menuObject) => {
@@ -88,8 +87,8 @@ function DialectHeaderMobile({ menuData }) {
 }
 // PROPTYPES
 const { array } = PropTypes
-DialectHeaderMobile.propTypes = {
+NavBarPresentationMobile.propTypes = {
   menuData: array,
 }
 
-export default DialectHeaderMobile
+export default NavBarPresentationMobile

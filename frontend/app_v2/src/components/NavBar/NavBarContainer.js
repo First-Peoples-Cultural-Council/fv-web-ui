@@ -1,17 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DialectHeaderPresentation from 'components/DialectHeader/DialectHeaderPresentation'
-import DialectHeaderData from 'components/DialectHeader/DialectHeaderData'
+import NavBarPresentation from 'components/NavBar/NavBarPresentation'
+import NavBarData from 'components/NavBar/NavBarData'
 
 /**
- * @summary DialectHeaderContainer
+ * @summary NavBarContainer
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function DialectHeaderContainer({ className }) {
+function NavBarContainer({ className }) {
   const {
     currentUser,
     menuData,
@@ -22,9 +22,9 @@ function DialectHeaderContainer({ className }) {
     onKeyPress,
     onClickOutside,
     workspaceToggleValue,
-  } = DialectHeaderData()
+  } = NavBarData()
   return (
-    <DialectHeaderPresentation
+    <NavBarPresentation
       className={className}
       onWorkspaceModeClick={onWorkspaceModeClick}
       title={title}
@@ -40,8 +40,8 @@ function DialectHeaderContainer({ className }) {
 }
 // PROPTYPES
 const { string } = PropTypes
-DialectHeaderContainer.propTypes = {
+NavBarContainer.propTypes = {
   className: string,
 }
 
-export default DialectHeaderContainer
+export default NavBarContainer

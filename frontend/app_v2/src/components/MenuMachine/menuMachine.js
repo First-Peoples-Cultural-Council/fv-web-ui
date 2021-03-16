@@ -1,7 +1,7 @@
 import { Machine, assign } from 'xstate'
 const menuMachine = Machine(
   {
-    id: 'DialectHeader',
+    id: 'NavBar',
     initial: 'idle',
     context: {
       openMenu: undefined,

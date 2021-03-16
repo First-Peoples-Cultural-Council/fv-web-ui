@@ -8,7 +8,7 @@ import Search from 'components/Search'
 import Suspender from 'components/Suspender'
 import WordsListContainer from 'app_v1/WordsListContainer'
 import Word from 'components/Word'
-import DialectHeader from 'components/DialectHeader'
+import NavBar from 'components/NavBar'
 
 /**
  * @summary AppFrameContainer
@@ -21,7 +21,7 @@ import DialectHeader from 'components/DialectHeader'
 function AppFrameContainer() {
   return (
     <div className="AppFrame">
-      <DialectHeader.Container className="relative z-10" />
+      <NavBar.Container className="relative z-10" />
       <main role="main" className="relative z-0">
         <Suspender>
           <Switch>

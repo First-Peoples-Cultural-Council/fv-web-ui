@@ -5,14 +5,14 @@ import PropTypes from 'prop-types'
 import useIcon from 'common/useIcon'
 
 /**
- * @summary DialectHeaderMenu
+ * @summary NavBarPresentationMenu
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function DialectHeaderMenu({ id, title, itemsData, href, onMenuClick, openMenu, onClickOutside }) {
+function NavBarPresentationMenu({ id, title, itemsData, href, onMenuClick, openMenu, onClickOutside }) {
   const hasItems = !Array.isArray(itemsData) || !itemsData.length ? false : true
 
   const menuItems = itemsData
@@ -81,7 +81,7 @@ function DialectHeaderMenu({ id, title, itemsData, href, onMenuClick, openMenu, 
 
 // PROPTYPES
 const { array, string, func } = PropTypes
-DialectHeaderMenu.propTypes = {
+NavBarPresentationMenu.propTypes = {
   title: string,
   href: string,
   itemsData: array,
@@ -90,9 +90,9 @@ DialectHeaderMenu.propTypes = {
   openMenu: string,
   onClickOutside: func,
 }
-DialectHeaderMenu.defaultProps = {
+NavBarPresentationMenu.defaultProps = {
   onMenuClick: () => {},
   onClickOutside: () => {},
 }
 
-export default DialectHeaderMenu
+export default NavBarPresentationMenu
