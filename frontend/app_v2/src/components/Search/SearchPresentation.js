@@ -33,9 +33,9 @@ function SearchPresentation({
       currentFilter == filter.type ? 'border-l-4 border-fv-turquoise bg-fv-turquoise text-white' : 'text-fv-charcoal'
     return (
       <li
-        key={filter.type}
+        key={filter.label}
         id={'SearchFilter' + filter.label}
-        className={`inline-block md:block m-1 md:m-5 uppercase p-2  flex-grow rounded-xl ${filterIsActiveClass}`}
+        className={`inline-block md:block m-1 md:m-5 p-2 flex-grow rounded-xl ${filterIsActiveClass}`}
         onClick={() => {
           handleFilter(filter.type)
         }}

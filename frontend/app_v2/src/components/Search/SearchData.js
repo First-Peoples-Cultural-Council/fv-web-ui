@@ -35,11 +35,11 @@ function SearchData({ children }) {
 
   // Filters
   const filters = [
-    { type: 'ALL', label: 'All' },
-    { type: 'WORD', label: 'Words' },
-    { type: 'PHRASE', label: 'Phrases' },
-    { type: 'BOOK', label: 'Songs' },
-    { type: 'BOOK', label: 'Stories' },
+    { type: 'ALL', label: 'ALL' },
+    { type: 'WORD', label: 'WORDS' },
+    { type: 'PHRASE', label: 'PHRASES' },
+    { type: 'BOOK', label: 'SONGS' },
+    { type: 'BOOK', label: 'STORIES' },
   ]
 
   const handleTextFieldChange = (event) => {

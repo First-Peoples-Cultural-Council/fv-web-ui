@@ -46,7 +46,7 @@ function AlphabetPresentationWidget({ characters, error, isLoading, onCharacterC
           </h2>
           <hr className="absolute z-0 w-full border-gray-300" style={{ top: '50%' }} />
         </div>
-        <div className="grid grid-cols-7 gap-8 divide-x-2 divide-gray-300">
+        <div className="grid grid-cols-7 gap-8 md:divide-x-2 divide-gray-300">
           <div className="col-span-7 md:col-span-4">
             <div className="grid grid-cols-7 md:grid-cols-5 lg:grid-cols-7">
               {characters &&
