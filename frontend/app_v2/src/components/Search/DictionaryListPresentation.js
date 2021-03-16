@@ -60,10 +60,10 @@ function DictionaryListPresentation({ items, wholeDomain, actions }) {
               <tbody className="bg-white divide-y divide-gray-200">
                 {items.map(({ id, title, path, translations, audio, type, sitename }, index) => (
                   <tr key={id + index}>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4">
                       <div className="flex items-center">
                         <div className="ml-4 mr-2">
-                          <Link className="text-sm font-medium text-gray-900" to={path}>
+                          <Link className="font-medium text-gray-900" to={path}>
                             {title}
                           </Link>
                         </div>
@@ -79,11 +79,10 @@ function DictionaryListPresentation({ items, wholeDomain, actions }) {
                         ) : null}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{translations?.translation}</div>
+                    <td className="px-6 py-4">
+                      <div className="text-gray-900">{translations?.translation}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {' '}
                       <span
                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${typeColor[type]} text-white`}
                       >

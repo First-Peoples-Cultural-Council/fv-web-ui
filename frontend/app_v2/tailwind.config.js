@@ -29,7 +29,7 @@ module.exports = {
           dark: '#2e5366',
         },
         'fv-turquoise': {
-          light: '#5da8a1',
+          light: '#c2dedc',
           DEFAULT: '#35928A',
           dark: '#2a756e',
         },

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import useIcon from 'common/useIcon'
 import DictionaryListPresentation from 'components/Search/DictionaryListPresentation'
 
 /**
@@ -28,12 +29,12 @@ function SearchPresentation({
 }) {
   const filterListItems = filters.map((filter) => {
     const filterIsActiveClass =
-      currentFilter == filter.type ? 'border-l-4 border-fv-turquoise bg-green-100 text-fv-turquoise' : ''
+      currentFilter == filter.type ? 'border-l-4 border-fv-turquoise bg-fv-turquoise text-white' : 'text-fv-charcoal'
     return (
       <li
         key={filter.type}
         id={'SearchFilter' + filter.label}
-        className={`p-5 flex-grow ${filterIsActiveClass}`}
+        className={`inline-block md:block m-1 md:m-5 uppercase p-2  flex-grow rounded-xl ${filterIsActiveClass}`}
         onClick={() => {
           handleFilter(filter.type)
         }}
@@ -43,43 +44,43 @@ function SearchPresentation({
     )
   })
   return (
-    <div className="mx-10 my-5 grid grid-cols-6">
-      <div className="col-span-6 sm:col-span-1">
-        <h2 className="text-2xl">Filters</h2>
-        <ul className="text-lg list-none">{filterListItems}</ul>
-      </div>
-
-      <div className="min-h-220 col-span-6 sm:col-span-5 ml-5">
-        <h1 className="text-3xl text-medium">
-          <em>{searchTerm}</em> search results from {isSite ? sitename : 'FirstVoices'}
-        </h1>
-        <div className="mb-5">
-          <div className="flex mb-5">
-            <input
-              data-testid="SearchInput"
-              className="m-2 border-gray-500 min-w-230 p-2"
-              type="text"
-              onChange={handleTextFieldChange}
-              onKeyDown={(e) => {
-                if (e.keyCode === 13) {
-                  handleSearchSubmit(e)
-                }
-              }}
-              value={newSearchValue}
-            />
-            <button
-              variant="contained"
-              onClick={handleSearchSubmit}
-              className="ml-4 whitespace-nowrap inline-flex items-center justify-center px-4 border border-transparent rounded-3xl  shadow-sm text-base font-medium text-white bg-fv-turquoise hover:bg-fv-turquoise-dark"
-            >
-              Search
-            </button>
-          </div>
+    <>
+      <section className="bg-gradient-to-b to-fv-turquoise from-fv-blue-light p-5">
+        <div className="bg-white flex rounded-2xl w-3/5 text-fv-charcoal-light p-2 divide-x-2 divide-gray-300 mx-auto">
+          <input
+            data-testid="SearchInput"
+            className="w-full focus text-2xl px-4 py-2 "
+            type="text"
+            placeholder={`Search ${isSite ? sitename : 'FirstVoices'}`}
+            onChange={handleTextFieldChange}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSearchSubmit(e)
+              }
+            }}
+            value={newSearchValue}
+          />
+          <button type="button " onClick={handleSearchSubmit} className="p-2">
+            {useIcon('Search', 'fill-current h-8 w-8 ')}
+          </button>
         </div>
-        {hasItems === true && <DictionaryListPresentation items={items} actions={actions} />}
-        {hasItems === false && <div className="m-10">Sorry, no results were found for this search.</div>}
+      </section>
+      <div className="grid grid-cols-7">
+        <div className="min-h-220 col-span-7 md:col-start-2 md:col-span-6">
+          <h1 className="text-2xl md:text-3xl text-medium ml-8 my-2 md:m-5">
+            <em>{searchTerm}</em> search results from {isSite ? sitename : 'FirstVoices'}
+          </h1>
+        </div>
+        <div className="col-span-7 md:col-span-1">
+          <h2 className="hidden md:block text-2xl ml-8">Filters</h2>
+          <ul className="inline-block md:block list-none mx-5 mb-2 md:m-0 md:space-y-4 ">{filterListItems}</ul>
+        </div>
+        <div className="min-h-220 col-span-7 md:col-span-6">
+          {hasItems === true && <DictionaryListPresentation items={items} actions={actions} />}
+          {hasItems === false && <div className="m-10">Sorry, no results were found for this search.</div>}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 // PROPTYPES
