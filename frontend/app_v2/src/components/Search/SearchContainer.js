@@ -14,33 +14,35 @@ function SearchContainer() {
   return (
     <SearchData>
       {({
+        actions,
         currentFilter,
-        sitename,
+        error,
         filters,
         handleFilter,
         handleSearchSubmit,
         handleTextFieldChange,
-        hasItems,
+        isLoading,
         isSite,
         items,
         newSearchValue,
         searchTerm,
-        actions,
+        sitename,
       }) => {
         return (
           <SearchPresentation
+            actions={actions}
             currentFilter={currentFilter}
-            sitename={sitename}
+            error={error}
             filters={filters}
             handleFilter={handleFilter}
             handleSearchSubmit={handleSearchSubmit}
             handleTextFieldChange={handleTextFieldChange}
-            hasItems={hasItems}
+            isLoading={isLoading}
             isSite={isSite}
             items={items}
             newSearchValue={newSearchValue}
             searchTerm={searchTerm}
-            actions={actions}
+            sitename={sitename}
           />
         )
       }}

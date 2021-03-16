@@ -30,7 +30,7 @@ function SearchData({ children }) {
   const [currentFilter, setCurrentFilter] = useState('ALL')
 
   // Data fetch
-  const { data } = useQuery(['search', query], () => searchApi.get({ query, siteId: uid }))
+  const { data, isLoading, error } = useQuery(['search', query], () => searchApi.get({ query, siteId: uid }))
   results = data?.results
 
   // Filters
@@ -38,7 +38,8 @@ function SearchData({ children }) {
     { type: 'ALL', label: 'All' },
     { type: 'WORD', label: 'Words' },
     { type: 'PHRASE', label: 'Phrases' },
-    { type: 'BOOK', label: 'Songs/Stories' },
+    { type: 'BOOK', label: 'Songs' },
+    { type: 'BOOK', label: 'Stories' },
   ]
 
   const handleTextFieldChange = (event) => {
@@ -90,11 +91,12 @@ function SearchData({ children }) {
   return children({
     currentFilter,
     sitename: title,
+    error,
     filters,
     handleFilter,
     handleSearchSubmit,
     handleTextFieldChange,
-    hasItems: results ? true : false,
+    isLoading,
     isSite: title ? true : false,
     items: results ? results : [],
     searchTerm: searchTermForDisplay,

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import useIcon from 'common/useIcon'
-import DictionaryListPresentation from 'components/Search/DictionaryListPresentation'
+import DictionaryListPresentation from 'components/DictionaryList/DictionaryListPresentation'
 
 /**
  * @summary SearchPresentation
@@ -16,11 +16,12 @@ import DictionaryListPresentation from 'components/Search/DictionaryListPresenta
 function SearchPresentation({
   currentFilter,
   sitename,
+  error,
   filters,
   handleFilter,
   handleSearchSubmit,
   handleTextFieldChange,
-  hasItems,
+  isLoading,
   isSite,
   items,
   newSearchValue,
@@ -65,7 +66,7 @@ function SearchPresentation({
           </button>
         </div>
       </section>
-      <div className="grid grid-cols-7">
+      <div className="grid grid-cols-7 md:divide-x-2 divide-gray-300">
         <div className="min-h-220 col-span-7 md:col-start-2 md:col-span-6">
           <h1 className="text-2xl md:text-3xl text-medium ml-8 my-2 md:m-5">
             <em>{searchTerm}</em> search results from {isSite ? sitename : 'FirstVoices'}
@@ -76,8 +77,7 @@ function SearchPresentation({
           <ul className="inline-block md:block list-none mx-5 mb-2 md:m-0 md:space-y-4 ">{filterListItems}</ul>
         </div>
         <div className="min-h-220 col-span-7 md:col-span-6">
-          {hasItems === true && <DictionaryListPresentation items={items} actions={actions} />}
-          {hasItems === false && <div className="m-10">Sorry, no results were found for this search.</div>}
+          <DictionaryListPresentation items={items} actions={actions} isLoading={isLoading} error={error} />
         </div>
       </div>
     </>
@@ -86,18 +86,19 @@ function SearchPresentation({
 // PROPTYPES
 const { array, bool, func, string } = PropTypes
 SearchPresentation.propTypes = {
+  actions: array,
   currentFilter: string,
-  sitename: string,
+  error: array,
   filters: array,
   handleFilter: func,
   handleSearchSubmit: func,
   handleTextFieldChange: func,
-  hasItems: bool,
+  isLoading: bool,
   isSite: bool,
   items: array,
   newSearchValue: string,
   searchTerm: string,
-  actions: array,
+  sitename: string,
 }
 
 export default SearchPresentation

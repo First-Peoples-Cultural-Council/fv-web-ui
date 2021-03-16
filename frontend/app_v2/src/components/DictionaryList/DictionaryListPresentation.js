@@ -13,8 +13,36 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function DictionaryListPresentation({ items, wholeDomain, actions }) {
+function DictionaryListPresentation({ error, isLoading, items, wholeDomain, actions }) {
   const typeColor = { FVWord: 'fv-turquoise', FVPhrase: 'fv-orange', FVBook: 'fv-red', story: 'fv-purple' }
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-around p-10">
+        <button
+          type="button"
+          className="bg-fv-orange border border-transparent items-center inline-flex px-5 py-2 rounded-md shadow-sm text-base text-white ease-in-out"
+          disabled
+        >
+          {useIcon('Spinner', 'animate-spin h-5 w-5 mr-3 fill-current')}
+          Loading
+        </button>
+      </div>
+    )
+  }
+  if (error) {
+    return (
+      <div className="p-10">
+        <h1>Sorry, something went wrong!</h1>
+        <p>Please report this error by emailing hello@firstvoices.com so that we can fix it.</p>
+        <p>Include the link or action you took to get to this page.</p>
+        <p>Thank You!</p>
+      </div>
+    )
+  }
+  if (items === undefined || items?.length === 0) {
+    return <div className="m-5 md:mx-20 md:my-10">Sorry, no results were found for this search.</div>
+  }
 
   return (
     <div className="flex flex-col">
@@ -102,7 +130,7 @@ function DictionaryListPresentation({ items, wholeDomain, actions }) {
                           <span className="sr-only">{actionTitle}</span>
                           {useIcon(iconName, 'fill-current w-6 h-6')}
                           <span id={`${actionTitle}-message-${title}`} className="hidden">
-                            <div className="absolute bottom-0 right-0 w-auto p-1 text-xs bg-fv-purple text-white text-center rounded-lg shadow-lg ">
+                            <div className="absolute bottom-0 right-0 w-auto p-1 text-xs bg-fv-blue-dark text-white text-center rounded-lg shadow-lg ">
                               {confirmationMessage}
                             </div>
                           </span>
@@ -123,8 +151,6 @@ function DictionaryListPresentation({ items, wholeDomain, actions }) {
 // PROPTYPES
 const { array, bool, func, shape, arrayOf, string } = PropTypes
 DictionaryListPresentation.propTypes = {
-  wholeDomain: bool,
-  items: array,
   actions: arrayOf(
     shape({
       actionTitle: string,
@@ -133,6 +159,11 @@ DictionaryListPresentation.propTypes = {
       confirmationMessage: string,
     })
   ),
+  error: array,
+  isLoading: bool,
+  items: array,
+
+  wholeDomain: bool,
 }
 
 DictionaryListPresentation.defaultProps = {
