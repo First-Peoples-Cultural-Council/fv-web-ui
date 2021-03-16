@@ -52,7 +52,7 @@ function SearchData({ children }) {
     setCurrentFilter(filter)
   }
 
-  const tools = [
+  const actions = [
     {
       toolTitle: 'copy',
       iconName: 'WebShare',
@@ -87,7 +87,7 @@ function SearchData({ children }) {
     items: results ? results : [],
     searchTerm: query,
     newSearchValue,
-    tools,
+    actions,
   })
 }
 // PROPTYPES

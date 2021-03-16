@@ -13,7 +13,9 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function DictionaryListPresentation({ items, wholeDomain, tools }) {
+function DictionaryListPresentation({ items, wholeDomain, actions }) {
+  const typeColor = { FVWord: 'fv-turquoise', FVPhrase: 'fv-orange', FVBook: 'fv-red', story: 'fv-purple' }
+
   return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -33,12 +35,6 @@ function DictionaryListPresentation({ items, wholeDomain, tools }) {
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Translation
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Audio
                   </th>
                   <th
                     scope="col"
@@ -66,42 +62,40 @@ function DictionaryListPresentation({ items, wholeDomain, tools }) {
                   <tr key={id + index}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10">
-                          <div className="max-w-xs p-3 bg-fv-orange hover:bg-fv-orange-dark text-white text-xl rounded-full h-10 w-10 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-fv-turquoise">
-                            {type.charAt(2)}
-                          </div>
-                        </div>
-                        <div className="ml-4">
+                        <div className="ml-4 mr-2">
                           <Link className="text-sm font-medium text-gray-900" to={path}>
                             {title}
                           </Link>
                         </div>
+                        {audio[0] ? (
+                          <AudioMinimal.Container
+                            src={audio[0]}
+                            icons={{
+                              Play: useIcon('Audio', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
+                              Pause: useIcon('PauseCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
+                              Error: useIcon('TimesCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
+                            }}
+                          />
+                        ) : null}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">{translations?.translation}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {audio[0] ? (
-                        <AudioMinimal.Container
-                          className="p-5"
-                          iconStyling="fill-current h-6 w-6 sm:w-8 sm:h-8"
-                          src={audio[0]}
-                        />
-                      ) : null}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
                       {' '}
-                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                      <span
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${typeColor[type]} text-white`}
+                      >
                         {type}
                       </span>
                     </td>
                     {wholeDomain ? (
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{sitename}</td>
                     ) : null}
-                    {tools.map(({ toolTitle, iconName, clickHandler }, toolIndex) => (
+                    {actions.map(({ toolTitle, iconName, clickHandler }, toolIndex) => (
                       <td key={toolIndex} className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-indigo-600 hover:text-indigo-900" onClick={() => clickHandler(title)}>
+                        <button className="text-fv-charcoal hover:text-indigo-900" onClick={() => clickHandler(title)}>
                           <span className="sr-only">{toolTitle}</span>
                           {useIcon(iconName)}
                         </button>
@@ -117,12 +111,13 @@ function DictionaryListPresentation({ items, wholeDomain, tools }) {
     </div>
   )
 }
+
 // PROPTYPES
 const { array, bool, func, shape, arrayOf, string } = PropTypes
 DictionaryListPresentation.propTypes = {
   wholeDomain: bool,
   items: array,
-  tools: arrayOf(
+  actions: arrayOf(
     shape({
       toolTitle: string,
       iconName: string,
