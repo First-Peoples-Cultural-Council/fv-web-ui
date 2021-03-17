@@ -139,14 +139,14 @@ function HomePresentation({ isLoading, error, data, language }) {
           }
 
           if (type === WIDGET_CONTACT) {
-            const { contactText, contactEmail, dialectId, links, title } = widgetProps
+            const { contactText, contactEmail, siteId, links, title } = widgetProps
             // console.log('WIDGET_CONTACT', widgetProps)
             return (
               <div key={index}>
                 <ContactUs.Container
                   contactText={contactText}
                   contactEmail={contactEmail}
-                  dialectId={dialectId}
+                  siteId={siteId}
                   links={links}
                   title={title}
                 />

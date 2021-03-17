@@ -24,24 +24,47 @@ function SearchData() {
     ? new URLSearchParams(location.search).get('docType')
     : 'ALL'
 
+  const siteId = uid ? `&siteId=${uid}` : ''
+
   // Local State
   const [currentFilter, setCurrentFilter] = useState(docTypeFilter)
-
-  const siteId = uid ? `&siteId=${uid}` : ''
 
   // Data fetch
   const response = useQuery(['search', location.search], () => searchApi.get(location.search + siteId))
   const { data, isLoading, error } = response
-  const results = data?.results ? data?.results : []
 
-  // Filters
-  const filters = [
-    { type: 'ALL', label: 'ALL' },
-    { type: 'WORD', label: 'WORDS' },
-    { type: 'PHRASE', label: 'PHRASES' },
-    { type: 'BOOK', label: 'SONGS' },
-    { type: 'BOOK', label: 'STORIES' },
-  ]
+  // DataAdaptor
+  const items = data?.results
+    ? data?.results.map((result) => {
+        if (!Array.isArray(result.translations)) {
+          const modifiedResult = Object.assign({}, result)
+          modifiedResult.translations = result.translations.translation ? [result.translations] : []
+          return modifiedResult
+        }
+        return result
+      })
+    : []
+
+  // Get Filters
+  const filters =
+    currentFilter !== 'ALL'
+      ? [{ type: 'ALL', label: 'Back to ALL', count: null }]
+      : [{ type: 'ALL', label: 'ALL', count: data?.statistics.resultCount }]
+  const countsByType = data?.statistics.countsByType ? data.statistics.countsByType : {}
+
+  for (const [key, value] of Object.entries(countsByType)) {
+    filters.push({ type: getType(key), label: key, count: value })
+  }
+
+  function getType(countKey) {
+    if (countKey === 'word' || countKey === 'phrase') {
+      return countKey.toUpperCase()
+    }
+    if (countKey === 'song' || countKey === 'story') {
+      return 'BOOK'
+    }
+    return 'ALL'
+  }
 
   const handleFilter = (filter) => {
     if (searchTerm && filter && filter !== currentFilter) {
@@ -86,7 +109,7 @@ function SearchData() {
     filters,
     handleFilter,
     isLoading,
-    items: results,
+    items,
     searchTerm,
     actions,
   }

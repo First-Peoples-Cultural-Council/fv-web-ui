@@ -24,22 +24,27 @@ function SearchPresentation({
   searchTerm,
   actions,
 }) {
-  const filterListItems = filters.map((filter) => {
-    const filterIsActiveClass =
-      currentFilter === filter.type ? 'border-l-4 border-fv-turquoise bg-fv-turquoise text-white' : 'text-fv-charcoal'
-    return (
-      <li
-        key={filter.label}
-        id={'SearchFilter' + filter.label}
-        className={`inline-block md:block md:m-5 p-2 flex-grow rounded-xl ${filterIsActiveClass}`}
-        onClick={() => {
-          handleFilter(filter.type)
-        }}
-      >
-        {filter.label}
-      </li>
-    )
-  })
+  const wholeDomain = sitename === 'FirstVoices'
+
+  const getFilterListItems = () => {
+    return filters.map((filter) => {
+      const filterIsActiveClass =
+        currentFilter === filter.type ? 'border-l-4 border-fv-turquoise bg-fv-turquoise text-white' : 'text-fv-charcoal'
+      return (
+        <li
+          key={filter.label}
+          id={'SearchFilter' + filter.label}
+          className={`inline-block md:block md:m-5 p-2 flex-grow rounded-xl ${filterIsActiveClass}`}
+          onClick={() => {
+            handleFilter(filter.type)
+          }}
+        >
+          {filter.label} {filter.count ? `(${filter.count})` : null}
+        </li>
+      )
+    })
+  }
+
   return (
     <>
       <section className="bg-gradient-to-b to-fv-turquoise from-fv-blue-light p-5">
@@ -53,10 +58,16 @@ function SearchPresentation({
         </div>
         <div className="col-span-7 md:col-span-1 mt-2">
           <h2 className="hidden md:block text-2xl ml-8">Filters</h2>
-          <ul className="inline-block md:block list-none m-2 md:m-0 md:space-y-4 ">{filterListItems}</ul>
+          <ul className="inline-block md:block list-none m-2 md:m-0 md:space-y-4 ">{getFilterListItems()}</ul>
         </div>
         <div className="min-h-220 col-span-7 md:col-span-6">
-          <DictionaryListPresentation items={items} actions={actions} isLoading={isLoading} error={error} />
+          <DictionaryListPresentation
+            items={items}
+            actions={actions}
+            isLoading={isLoading}
+            error={error}
+            wholeDomain={wholeDomain}
+          />
         </div>
       </div>
     </>
