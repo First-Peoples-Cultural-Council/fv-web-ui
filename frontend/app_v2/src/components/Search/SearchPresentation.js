@@ -34,7 +34,7 @@ function SearchPresentation({
       <li
         key={filter.label}
         id={'SearchFilter' + filter.label}
-        className={`inline-block md:block m-1 md:m-5 p-2  flex-grow rounded-xl ${filterIsActiveClass}`}
+        className={`inline-block md:block md:m-5 p-2 flex-grow rounded-xl ${filterIsActiveClass}`}
         onClick={() => {
           handleFilter(filter.type)
         }}
@@ -66,14 +66,14 @@ function SearchPresentation({
         </div>
       </section>
       <div className="grid grid-cols-7 md:divide-x-2 divide-gray-300">
-        <div className="min-h-220 col-span-7 md:col-start-2 md:col-span-6">
-          <h1 className="text-2xl md:text-3xl text-medium ml-8 my-2 md:m-5">
+        <div className="hidden md:block min-h-220 col-start-2 col-span-6">
+          <h1 className="text-3xl text-medium mx-6 my-4">
             <em>{searchTerm}</em> search results from {sitename}
           </h1>
         </div>
         <div className="col-span-7 md:col-span-1 mt-2">
           <h2 className="hidden md:block text-2xl ml-8">Filters</h2>
-          <ul className="inline-block md:block list-none mx-5 mb-2 md:m-0 md:space-y-4 ">{filterListItems}</ul>
+          <ul className="inline-block md:block list-none m-2 md:m-0 md:space-y-4 ">{filterListItems}</ul>
         </div>
         <div className="min-h-220 col-span-7 md:col-span-6">
           <DictionaryListPresentation items={items} actions={actions} isLoading={isLoading} error={error} />
