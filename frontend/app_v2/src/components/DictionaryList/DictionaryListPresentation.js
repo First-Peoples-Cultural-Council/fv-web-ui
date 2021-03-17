@@ -120,7 +120,7 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                     {actions.map(({ actionTitle, iconName, clickHandler, confirmationMessage }, toolIndex) => (
                       <td key={toolIndex} className=" px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
-                          className="relative text-fv-blue hover:text-fv-blue-dark"
+                          className="relative text-fv-blue-dark hover:text-fv-blue-light"
                           onClick={() => clickHandler(title)}
                         >
                           <span className="sr-only">{actionTitle}</span>

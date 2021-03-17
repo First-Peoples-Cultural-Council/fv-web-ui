@@ -67,7 +67,7 @@ function SearchData({ children }) {
   const actions = [
     {
       actionTitle: 'copy',
-      iconName: 'WebShare',
+      iconName: 'Copy',
       confirmationMessage: 'Copied!',
       clickHandler: function clickCopyHandler(str) {
         // Create new element

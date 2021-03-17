@@ -8,6 +8,7 @@ import ChevronDown from 'common/icons/ChevronDown'
 import ChevronLeft from 'common/icons/ChevronLeft'
 import ChevronRight from 'common/icons/ChevronRight'
 import Close from 'common/icons/Close'
+import Copy from 'common/icons/Copy'
 import Dictionary from 'common/icons/Dictionary'
 import Facebook from 'common/icons/Facebook'
 import HamburgerMenu from 'common/icons/HamburgerMenu'
@@ -47,6 +48,7 @@ function useIcon(iconName, iconStyling) {
     ChevronLeft,
     ChevronRight,
     Close,
+    Copy,
     Dictionary,
     Facebook,
     HamburgerMenu,
