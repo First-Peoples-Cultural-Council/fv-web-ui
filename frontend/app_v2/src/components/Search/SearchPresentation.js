@@ -22,7 +22,6 @@ function SearchPresentation({
   handleSearchSubmit,
   handleTextFieldChange,
   isLoading,
-  isSite,
   items,
   newSearchValue,
   searchTerm,
@@ -52,7 +51,7 @@ function SearchPresentation({
             data-testid="SearchInput"
             className="w-full focus text-2xl px-4 py-2 "
             type="text"
-            placeholder={`Search ${isSite ? sitename : 'FirstVoices'}`}
+            placeholder={`Search ${sitename}`}
             onChange={handleTextFieldChange}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
@@ -69,7 +68,7 @@ function SearchPresentation({
       <div className="grid grid-cols-7 md:divide-x-2 divide-gray-300">
         <div className="min-h-220 col-span-7 md:col-start-2 md:col-span-6">
           <h1 className="text-2xl md:text-3xl text-medium ml-8 my-2 md:m-5">
-            <em>{searchTerm}</em> search results from {isSite ? sitename : 'FirstVoices'}
+            <em>{searchTerm}</em> search results from {sitename}
           </h1>
         </div>
         <div className="col-span-7 md:col-span-1">
@@ -94,7 +93,6 @@ SearchPresentation.propTypes = {
   handleSearchSubmit: func,
   handleTextFieldChange: func,
   isLoading: bool,
-  isSite: bool,
   items: array,
   newSearchValue: string,
   searchTerm: string,

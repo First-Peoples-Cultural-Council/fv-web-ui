@@ -102,7 +102,6 @@ function SearchData({ children }) {
     handleSearchSubmit,
     handleTextFieldChange,
     isLoading,
-    isSite: title ? true : false,
     items: results,
     searchTerm,
     newSearchValue,

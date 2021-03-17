@@ -22,7 +22,6 @@ function SearchContainer() {
         handleSearchSubmit,
         handleTextFieldChange,
         isLoading,
-        isSite,
         items,
         newSearchValue,
         searchTerm,
@@ -38,7 +37,6 @@ function SearchContainer() {
             handleSearchSubmit={handleSearchSubmit}
             handleTextFieldChange={handleTextFieldChange}
             isLoading={isLoading}
-            isSite={isSite}
             items={items}
             newSearchValue={newSearchValue}
             searchTerm={searchTerm}
