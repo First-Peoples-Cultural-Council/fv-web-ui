@@ -10,7 +10,7 @@ import { getFormData, validateForm } from 'common/FormHelpers'
  * @param {object} props
  *
  */
-function ContactUsData({ dialectId, contactEmail }) {
+function ContactUsData({ siteId, contactEmail }) {
   const [formErrors, setFormErrors] = useState([])
   const contactFormRef = useRef()
   const validator = yup.object().shape({
@@ -29,7 +29,7 @@ function ContactUsData({ dialectId, contactEmail }) {
 
     if (validationResults.valid) {
       api.postMail({
-        docId: dialectId,
+        docId: siteId,
         name: formData.Name,
         from: formData.Email,
         message: formData.Message,

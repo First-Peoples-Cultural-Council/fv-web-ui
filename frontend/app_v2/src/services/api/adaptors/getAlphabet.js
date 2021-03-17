@@ -2,10 +2,13 @@ const getAlphabet = (response) => {
   const _entries = response?.entries || []
   const characters = _entries.map(({ title, uid, contextParameters }) => {
     const { character } = contextParameters
-    const { related_audio: relatedAudio, related_videos: relatedVideo, related_words: relatedWords } = character
 
-    const src = relatedAudio?.[0].path ? '/nuxeo/' + relatedAudio?.[0].path : undefined
-    const videoSrc = relatedVideo?.[0].transcodedVideos[0].url ? relatedVideo?.[0].transcodedVideos[0].url : undefined
+    const relatedAudio = character?.related_audio ? character.related_audio : []
+    const relatedVideo = character?.related_videos ? character.related_videos : []
+    const relatedWords = character?.relatedWords ? character.relatedWords : []
+
+    const src = relatedAudio?.[0]?.path ? '/nuxeo/' + relatedAudio?.[0].path : undefined
+    const videoSrc = relatedVideo?.[0]?.transcodedVideos[0].url ? relatedVideo?.[0].transcodedVideos[0].url : undefined
     const relatedEntries = relatedWords?.map((word) => {
       return {
         uid: word.uid,

@@ -5,7 +5,7 @@ useSearchParams({
         pageSize: 1
     },
     decode: [{
-        name: 'dialectName',
+        name: 'sitename',
         type: 'uri'
     },{
         name: 'shouldSearch',

@@ -14,14 +14,13 @@ import AlphabetPresentationWidget from 'components/Alphabet/AlphabetPresentation
  * @returns {node} jsx markup
  */
 function AlphabetContainer({ widgetView }) {
-  const { characters, error, isLoading, language, links, onCharacterClick, selectedData } = AlphabetData()
+  const { characters, error, isLoading, sitename, links, onCharacterClick, selectedData } = AlphabetData()
   return widgetView ? (
     <AlphabetPresentationWidget
       isLoading={isLoading}
       error={error}
       characters={characters}
       onCharacterClick={onCharacterClick}
-      language={language}
       selectedData={selectedData}
       links={links}
     />
@@ -30,7 +29,7 @@ function AlphabetContainer({ widgetView }) {
       isLoading={isLoading}
       error={error}
       characters={characters}
-      language={language}
+      sitename={sitename}
       selectedData={selectedData}
       links={links}
     />

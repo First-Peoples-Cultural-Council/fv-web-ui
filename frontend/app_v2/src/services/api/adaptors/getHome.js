@@ -50,7 +50,7 @@ const getHome = (response) => {
         type: WIDGET_CONTACT,
         uid: widget.uid,
         title: widget['dc:title'],
-        dialectId: widget['widget:dialect'],
+        siteId: widget['widget:dialect'],
         contactEmail: contactEmail,
         links: links,
         contactText: contactText,
@@ -202,7 +202,7 @@ const getHome = (response) => {
       return {
         type: WIDGET_LIST,
         uid: widget.uid,
-        languageUid: properties['widget:dialect'],
+        siteId: properties['widget:dialect'],
         title: widget['dc:title'],
         listUid: listId,
         content: _content,
@@ -227,7 +227,7 @@ const getHome = (response) => {
         type: WIDGET_WELCOME,
         uid: widget.uid,
         title: widget['dc:title'],
-        dialectId: widget['widget:dialect'],
+        siteId: widget['widget:dialect'],
         heading: welcomeText,
         audio: welcomeAudio,
       }

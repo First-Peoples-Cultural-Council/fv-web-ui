@@ -10,12 +10,12 @@ import { useParams } from 'react-router-dom'
  * @param {object} props
  *
  */
-export const findSelectedCharacterData = ({ character, data, language }) => {
+export const findSelectedCharacterData = ({ character, data, sitename }) => {
   const characters = data?.characters
   const found = characters.find(({ title }) => title === character)
   if (found?.relatedEntries) {
     found.relatedEntries.forEach((entry) => {
-      entry.url = `/${language}/word/${entry.uid}`
+      entry.url = `/${sitename}/word/${entry.uid}`
     })
   }
   return found

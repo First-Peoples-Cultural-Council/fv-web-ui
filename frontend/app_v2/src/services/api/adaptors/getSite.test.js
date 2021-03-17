@@ -10,7 +10,6 @@ const input = {
     'group:members',
   ],
   title: 'ÜgwÛ',
-  parentLanguageTitle: null,
   logoId: null,
 }
 const expectedOutput = {

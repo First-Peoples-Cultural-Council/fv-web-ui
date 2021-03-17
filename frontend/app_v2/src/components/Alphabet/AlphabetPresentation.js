@@ -11,7 +11,7 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function AlphabetPresentation({ language, isLoading, error, characters, selectedData, links }) {
+function AlphabetPresentation({ sitename, isLoading, error, characters, selectedData, links }) {
   if (isLoading) {
     return (
       <div className="flex justify-around p-10">
@@ -87,7 +87,7 @@ function AlphabetPresentation({ language, isLoading, error, characters, selected
                       ${selectedData?.title === title ? 'bg-fv-blue text-white' : ''}
                       `}
                   key={uid}
-                  to={`/${language}/alphabet/${title}`}
+                  to={`/${sitename}/alphabet/${title}`}
                 >
                   {title}
                 </Link>
@@ -122,7 +122,7 @@ AlphabetPresentation.propTypes = {
       relatedEntries: array,
     })
   ),
-  language: string,
+  sitename: string,
   selectedData: object,
   links: array,
 }

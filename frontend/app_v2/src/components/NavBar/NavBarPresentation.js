@@ -48,7 +48,7 @@ function NavBarPresentation({
     />
   ))
   return (
-    <header id="Dialect_header" className={`relative bg-fv-charcoal ${className}`} onKeyUp={onKeyPress}>
+    <header id="NavBar" className={`relative bg-fv-charcoal ${className}`} onKeyUp={onKeyPress}>
       <nav className="max-w-screen-2xl mx-auto px-4 sm:px-6 xl:px-20">
         <div className="flex justify-between items-center py-1 md:justify-start md:space-x-10">
           <div className="justify-start lg:w-0 lg:flex-1">
