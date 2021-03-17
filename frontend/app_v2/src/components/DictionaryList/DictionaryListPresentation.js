@@ -118,13 +118,13 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                     ) : null}
                     {/* Action buttons */}
                     {actions.map(({ actionTitle, iconName, clickHandler, confirmationMessage }, toolIndex) => (
-                      <td key={toolIndex} className=" px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <td key={toolIndex} className=" px-6 pt-4 text-right">
                         <button
                           className="relative text-fv-blue-dark hover:text-fv-blue-light"
                           onClick={() => clickHandler(title)}
                         >
                           <span className="sr-only">{actionTitle}</span>
-                          {useIcon(iconName, 'fill-current w-6 h-6')}
+                          {useIcon(iconName, 'fill-current w-7 h-7')}
                           <span id={`${actionTitle}-message-${title}`} className="hidden">
                             <div className="absolute bottom-0 right-0 w-auto p-1 text-xs bg-fv-blue-dark text-white text-center rounded-lg shadow-lg ">
                               {confirmationMessage}
@@ -145,7 +145,7 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
 }
 
 // PROPTYPES
-const { array, arrayOf, bool, func, object, shape, string } = PropTypes
+const { any, arrayOf, bool, func, object, shape, string } = PropTypes
 DictionaryListPresentation.propTypes = {
   actions: arrayOf(
     shape({
@@ -157,7 +157,17 @@ DictionaryListPresentation.propTypes = {
   ),
   error: object,
   isLoading: bool,
-  items: array,
+  items: arrayOf(
+    shape({
+      id: string,
+      title: string,
+      path: string,
+      translations: any,
+      audio: any,
+      type: string,
+      sitename: string,
+    })
+  ),
   wholeDomain: bool,
 }
 

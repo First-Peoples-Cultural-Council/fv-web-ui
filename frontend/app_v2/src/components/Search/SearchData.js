@@ -1,21 +1,19 @@
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { useHistory, useLocation } from 'react-router-dom'
-import PropTypes from 'prop-types'
 
 import useGetSite from 'common/useGetSite'
 import searchApi from 'services/api/search'
 
 /**
  * @summary SearchData
- * @version 1.0.1
  * @component
  *
  * @param {object} props
  * @param {function} props.children
  *
  */
-function SearchData({ children }) {
+function SearchData() {
   const { title, uid } = useGetSite()
   const history = useHistory()
   const location = useLocation()
@@ -27,7 +25,6 @@ function SearchData({ children }) {
     : 'ALL'
 
   // Local State
-  const [newSearchValue, setNewSearchValue] = useState(searchTerm)
   const [currentFilter, setCurrentFilter] = useState(docTypeFilter)
 
   const siteId = uid ? `&siteId=${uid}` : ''
@@ -46,20 +43,9 @@ function SearchData({ children }) {
     { type: 'BOOK', label: 'STORIES' },
   ]
 
-  const handleTextFieldChange = (event) => {
-    setNewSearchValue(event.target.value)
-  }
-
-  const handleSearchSubmit = () => {
-    if (newSearchValue && newSearchValue !== searchTerm) {
-      history.push({ pathname: 'search', search: '?q=' + newSearchValue })
-      setCurrentFilter('ALL')
-    }
-  }
-
   const handleFilter = (filter) => {
-    if (newSearchValue && filter && filter !== currentFilter) {
-      history.push({ pathname: 'search', search: `?q=${newSearchValue}&docType=${filter}` })
+    if (searchTerm && filter && filter !== currentFilter) {
+      history.push({ pathname: 'search', search: `?q=${searchTerm}&docType=${filter}` })
     }
     setCurrentFilter(filter)
   }
@@ -93,25 +79,17 @@ function SearchData({ children }) {
     },
   ]
 
-  return children({
+  return {
     currentFilter,
     sitename: title ? title : 'FirstVoices',
     error,
     filters,
     handleFilter,
-    handleSearchSubmit,
-    handleTextFieldChange,
     isLoading,
     items: results,
     searchTerm,
-    newSearchValue,
     actions,
-  })
-}
-// PROPTYPES
-const { func } = PropTypes
-SearchData.propTypes = {
-  children: func,
+  }
 }
 
 export default SearchData

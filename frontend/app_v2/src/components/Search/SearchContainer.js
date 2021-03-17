@@ -11,40 +11,35 @@ import SearchData from 'components/Search/SearchData'
  * @returns {node} jsx markup
  */
 function SearchContainer() {
+  const {
+    actions,
+    currentFilter,
+    error,
+    filters,
+    handleFilter,
+    handleSearchSubmit,
+    handleTextFieldChange,
+    isLoading,
+    items,
+    newSearchValue,
+    searchTerm,
+    sitename,
+  } = SearchData()
   return (
-    <SearchData>
-      {({
-        actions,
-        currentFilter,
-        error,
-        filters,
-        handleFilter,
-        handleSearchSubmit,
-        handleTextFieldChange,
-        isLoading,
-        items,
-        newSearchValue,
-        searchTerm,
-        sitename,
-      }) => {
-        return (
-          <SearchPresentation
-            actions={actions}
-            currentFilter={currentFilter}
-            error={error}
-            filters={filters}
-            handleFilter={handleFilter}
-            handleSearchSubmit={handleSearchSubmit}
-            handleTextFieldChange={handleTextFieldChange}
-            isLoading={isLoading}
-            items={items}
-            newSearchValue={newSearchValue}
-            searchTerm={searchTerm}
-            sitename={sitename}
-          />
-        )
-      }}
-    </SearchData>
+    <SearchPresentation
+      actions={actions}
+      currentFilter={currentFilter}
+      error={error}
+      filters={filters}
+      handleFilter={handleFilter}
+      handleSearchSubmit={handleSearchSubmit}
+      handleTextFieldChange={handleTextFieldChange}
+      isLoading={isLoading}
+      items={items}
+      newSearchValue={newSearchValue}
+      searchTerm={searchTerm}
+      sitename={sitename}
+    />
   )
 }
 
