@@ -88,24 +88,20 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
               <tbody className="bg-white divide-y divide-gray-200">
                 {items.map(({ id, title, path, translations, audio, type, sitename }, index) => (
                   <tr key={id + index}>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center">
-                        <div className="ml-4 mr-2">
-                          <Link className="font-medium text-gray-900" to={path}>
-                            {title}
-                          </Link>
-                        </div>
-                        {audio[0] ? (
-                          <AudioMinimal.Container
-                            src={audio[0]}
-                            icons={{
-                              Play: useIcon('Audio', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
-                              Pause: useIcon('PauseCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
-                              Error: useIcon('TimesCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
-                            }}
-                          />
-                        ) : null}
-                      </div>
+                    <td className="px-6 py-4 align-center">
+                      <Link className="font-medium text-gray-900" to={path}>
+                        {title}
+                      </Link>
+                      {audio[0] ? (
+                        <AudioMinimal.Container
+                          src={audio[0]}
+                          icons={{
+                            Play: useIcon('Audio', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
+                            Pause: useIcon('PauseCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
+                            Error: useIcon('TimesCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
+                          }}
+                        />
+                      ) : null}
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-gray-900">{translations?.translation}</div>

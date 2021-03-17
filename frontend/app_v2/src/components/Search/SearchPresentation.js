@@ -71,7 +71,7 @@ function SearchPresentation({
             <em>{searchTerm}</em> search results from {sitename}
           </h1>
         </div>
-        <div className="col-span-7 md:col-span-1">
+        <div className="col-span-7 md:col-span-1 mt-2">
           <h2 className="hidden md:block text-2xl ml-8">Filters</h2>
           <ul className="inline-block md:block list-none mx-5 mb-2 md:m-0 md:space-y-4 ">{filterListItems}</ul>
         </div>
