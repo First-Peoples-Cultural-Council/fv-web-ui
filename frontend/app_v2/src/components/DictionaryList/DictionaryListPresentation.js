@@ -14,8 +14,7 @@ import useIcon from 'common/useIcon'
  * @returns {node} jsx markup
  */
 function DictionaryListPresentation({ error, isLoading, items, wholeDomain, actions }) {
-  const typeColor = { FVWord: 'fv-turquoise', FVPhrase: 'fv-orange', FVBook: 'fv-red', story: 'fv-purple' }
-
+  const typeColor = { word: 'fv-turquoise', phrase: 'fv-orange', song: 'fv-red', story: 'fv-purple' }
   if (isLoading) {
     return (
       <div className="flex justify-around p-10">
@@ -71,13 +70,11 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                     Type
                   </th>
                   {wholeDomain ? (
-                    <th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Language Site
-                      </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Language Site
                     </th>
                   ) : null}
                   <th scope="col" className="relative px-6 py-3">
@@ -86,10 +83,10 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {items.map(({ id, title, path, translations, audio, type, sitename }, index) => (
+                {items.map(({ id, title, translations, audio, type, parentDialect }, index) => (
                   <tr key={id + index}>
                     <td className="px-6 py-4 align-center">
-                      <Link className="font-medium text-gray-900" to={path}>
+                      <Link className="font-medium text-gray-900" to={`/${parentDialect.name}/${type}/${id}`}>
                         {title}
                       </Link>
                       {audio[0] ? (
@@ -104,7 +101,15 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                       ) : null}
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-gray-900">{translations?.translation}</div>
+                      {translations ? (
+                        <ol className="text-gray-900">
+                          {translations.map(({ translation }, i) => (
+                            <li key={i}>
+                              {translations.length > 1 ? `${i + 1}. ` : null} {translation}
+                            </li>
+                          ))}
+                        </ol>
+                      ) : null}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
@@ -114,7 +119,7 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                       </span>
                     </td>
                     {wholeDomain ? (
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{sitename}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{parentDialect.name}</td>
                     ) : null}
                     {/* Action buttons */}
                     {actions.map(({ actionTitle, iconName, clickHandler, confirmationMessage }, toolIndex) => (
@@ -126,7 +131,7 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                           <span className="sr-only">{actionTitle}</span>
                           {useIcon(iconName, 'fill-current w-7 h-7')}
                           <span id={`${actionTitle}-message-${title}`} className="hidden">
-                            <div className="absolute bottom-0 right-0 w-auto p-1 text-xs bg-fv-blue-dark text-white text-center rounded-lg shadow-lg ">
+                            <div className="absolute bottom-0 right-0 w-auto p-1 text-sm bg-fv-blue-dark text-white text-center rounded-lg shadow-lg ">
                               {confirmationMessage}
                             </div>
                           </span>
@@ -145,7 +150,7 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
 }
 
 // PROPTYPES
-const { any, arrayOf, bool, func, object, shape, string } = PropTypes
+const { array, arrayOf, bool, func, object, shape, string } = PropTypes
 DictionaryListPresentation.propTypes = {
   actions: arrayOf(
     shape({
@@ -162,8 +167,8 @@ DictionaryListPresentation.propTypes = {
       id: string,
       title: string,
       path: string,
-      translations: any,
-      audio: any,
+      translations: array,
+      audio: array,
       type: string,
       sitename: string,
     })
