@@ -70,7 +70,7 @@ function NavBarData() {
         { title: 'Words', href: `/${sitename}/words` },
         { title: 'Phrases', href: `/${sitename}/phrases` },
         { title: 'Alphabet', href: `/${sitename}/alphabet` },
-        { title: 'Topics', href: `/${sitename}/topics` },
+        { title: 'Categories', href: `/${sitename}/categories` },
       ],
     },
     {
