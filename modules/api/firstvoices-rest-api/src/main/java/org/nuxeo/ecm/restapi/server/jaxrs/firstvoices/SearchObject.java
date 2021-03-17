@@ -3,9 +3,16 @@ package org.nuxeo.ecm.restapi.server.jaxrs.firstvoices;
 import static ca.firstvoices.rest.data.SearchResults.SearchDomain;
 import ca.firstvoices.rest.data.SearchResult;
 import ca.firstvoices.rest.data.SearchResults;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import javax.print.Doc;
+import javax.swing.text.Document;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -112,8 +119,6 @@ public class SearchObject extends DefaultObject {
       basicConstraints.must(QueryBuilders.wildcardQuery("ecm:path", parent + "*"));
     }
 
-
-
     QueryBuilder englishQuery = QueryBuilders
         .fuzzyQuery("exact_matches_translations", query)
         .fuzziness(Fuzziness.fromEdits(1))
@@ -152,22 +157,37 @@ public class SearchObject extends DefaultObject {
     nxQueryBuilder.limit(100);
     nxQueryBuilder.fetchFromElasticsearch();
     nxQueryBuilder.addSort(new SortInfo("_score", false));
-    ElasticSearchResultConsumer consumer = new ElasticSearchResultConsumer(session);
+    ElasticSearchResultConsumer consumer = new ElasticSearchResultConsumer(session,
+        d -> query.equals(d.getTitle()));
     nxQueryBuilder.hitDocConsumer(consumer);
 
     ess.query(nxQueryBuilder);
 
     searchResults.getResults().addAll(consumer.getResults());
-    searchResults.setResultCount(searchResults.getResults().size());
+
+    searchResults.getStatistics().setResultCount(searchResults.getResults().size());
+
+    searchResults
+        .getStatistics()
+        .getCountsByType()
+        .putAll(
+        consumer
+        .getResults()
+        .stream()
+        .collect(Collectors.groupingBy(SearchResult::getType, Collectors.counting()))
+        );
+
     return Response.ok(searchResults).build();
   }
 
   public static class ElasticSearchResultConsumer implements EsFetcher.HitDocConsumer {
 
     private CoreSession session;
+    private Predicate<DocumentModel> exactMatchP;
 
-    public ElasticSearchResultConsumer(CoreSession session) {
+    public ElasticSearchResultConsumer(CoreSession session, Predicate<DocumentModel> exactMatchP) {
       this.session = session;
+      this.exactMatchP = exactMatchP;
     }
 
     private List<SearchResult> rez = new LinkedList<>();
@@ -183,11 +203,19 @@ public class SearchObject extends DefaultObject {
       SearchResult sr = new SearchResult();
       sr.setId(d.getId());
       sr.setTitle(d.getTitle());
-      sr.setType(d.getType());
       sr.setPath(d.getPathAsString());
+
+
+      // find the parent dialect, if there is one
+      List<DocumentModel> parents = session.getParentDocuments(d.getRef());
+
+      Optional.ofNullable(parents).orElse(new ArrayList<>()).stream()
+              .filter(p -> p.getType().equalsIgnoreCase("FVDialect"))
+              .findFirst().ifPresent(p -> sr.setParentDialect(p.getId(), p.getName()));
 
       // need to load it from the DB to get the required fields
       DocumentModel dbDoc = session.getDocument(d.getRef());
+      sr.setType(getFriendlyType(dbDoc));
 
       Object pictures = dbDoc.getPropertyValue("fv:related_pictures");
       if (pictures != null) {
@@ -236,12 +264,32 @@ public class SearchObject extends DefaultObject {
         sr.setScore(fields.getScore());
       }
 
+      if (this.exactMatchP != null) {
+        sr.setExactMatch(this.exactMatchP.test(dbDoc));
+      }
+
       rez.add(sr);
     }
 
     public List<SearchResult> getResults() {
       return rez;
     }
+  }
+
+  private static String getFriendlyType(DocumentModel dm) {
+
+    switch (dm.getType()) {
+      case "FVBook":
+        return Optional.ofNullable(dm.getPropertyValue("fvbook:type"))
+                       .orElse("book").toString();
+      case "FVPhrase":
+        return "phrase";
+      case "FVWord":
+        return "word";
+      default:
+        return "unknown";
+    }
+
   }
 
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
+
 
 public class SearchResult implements Serializable {
 
@@ -20,6 +22,10 @@ public class SearchResult implements Serializable {
 
   private float score;
   private String path;
+
+  private boolean exactMatch = false;
+
+  private ParentDialect parentDialect = null;
 
   public float getScore() {
     return score;
@@ -71,6 +77,42 @@ public class SearchResult implements Serializable {
 
   public List<String> getPictures() {
     return pictures;
+  }
+
+  @Nullable
+  public ParentDialect getParentDialect() {
+    return parentDialect;
+  }
+
+  public boolean isExactMatch() {
+    return exactMatch;
+  }
+
+  public void setExactMatch(final boolean exactMatch) {
+    this.exactMatch = exactMatch;
+  }
+
+  public void setParentDialect(String id, String name) {
+    this.parentDialect = new ParentDialect(id, name);
+  }
+
+  public class ParentDialect implements Serializable {
+    private final String name;
+    private final String id;
+
+    public ParentDialect(String id, String name) {
+      this.id = id;
+      this.name = name;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public String getId() {
+      return id;
+    }
+
   }
 
 }

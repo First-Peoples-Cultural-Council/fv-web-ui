@@ -1,26 +1,22 @@
 package ca.firstvoices.rest.data;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class SearchResults implements Serializable {
 
-  private int resultCount;
   private String query;
   private SearchDomain domain;
   private DocumentTypes documentTypes;
 
+  private final ResultStatistics statistics = new ResultStatistics();
 
   private final List<SearchResult> results = new LinkedList<>();
 
-  public int getResultCount() {
-    return resultCount;
-  }
 
-  public void setResultCount(final int resultCount) {
-    this.resultCount = resultCount;
-  }
 
   public String getQuery() {
     return query;
@@ -50,6 +46,11 @@ public class SearchResults implements Serializable {
     this.documentTypes = documentTypes;
   }
 
+  public ResultStatistics getStatistics() {
+    return statistics;
+  }
+
+
   public enum SearchDomain {
     BOTH("both"),
     ENGLISH("english"),
@@ -73,6 +74,24 @@ public class SearchResults implements Serializable {
     }
 
     private String value;
+  }
+
+  public class ResultStatistics implements Serializable {
+    private long resultCount;
+
+    public long getResultCount() {
+      return resultCount;
+    }
+
+    public void setResultCount(final long resultCount) {
+      this.resultCount = resultCount;
+    }
+
+    private final Map<String, Long> countsByType = new HashMap<>();
+
+    public Map<String, Long> getCountsByType() {
+      return countsByType;
+    }
   }
 
 }
