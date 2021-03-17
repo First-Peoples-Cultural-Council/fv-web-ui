@@ -43,12 +43,6 @@ function AppFrameContainer() {
               </Helmet>
               <Alphabet.Container />
             </Route>
-            <Route path="/:sitename/search/:query">
-              <Helmet>
-                <title>Search</title>
-              </Helmet>
-              <Search.Container />
-            </Route>
             <Route path="/:sitename/search">
               <Helmet>
                 <title>Search</title>

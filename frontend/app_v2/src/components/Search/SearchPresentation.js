@@ -30,12 +30,12 @@ function SearchPresentation({
 }) {
   const filterListItems = filters.map((filter) => {
     const filterIsActiveClass =
-      currentFilter == filter.type ? 'border-l-4 border-fv-turquoise bg-fv-turquoise text-white' : 'text-fv-charcoal'
+      currentFilter === filter.type ? 'border-l-4 border-fv-turquoise bg-fv-turquoise text-white' : 'text-fv-charcoal'
     return (
       <li
         key={filter.label}
         id={'SearchFilter' + filter.label}
-        className={`inline-block md:block m-1 md:m-5 p-2 flex-grow rounded-xl ${filterIsActiveClass}`}
+        className={`inline-block md:block m-1 md:m-5 p-2  flex-grow rounded-xl ${filterIsActiveClass}`}
         onClick={() => {
           handleFilter(filter.type)
         }}
@@ -84,11 +84,11 @@ function SearchPresentation({
   )
 }
 // PROPTYPES
-const { array, bool, func, string } = PropTypes
+const { array, bool, func, object, string } = PropTypes
 SearchPresentation.propTypes = {
   actions: array,
   currentFilter: string,
-  error: array,
+  error: object,
   filters: array,
   handleFilter: func,
   handleSearchSubmit: func,

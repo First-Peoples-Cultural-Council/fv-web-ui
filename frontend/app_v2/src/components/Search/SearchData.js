@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { useParams, useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import useGetSite from 'common/useGetSite'
@@ -17,21 +17,25 @@ import searchApi from 'services/api/search'
  */
 function SearchData({ children }) {
   const { title, uid } = useGetSite()
-  const { query } = useParams()
   const history = useHistory()
-  let results = []
+  const location = useLocation()
 
-  // Extract search term from query for ui display
-  const separatedQuery = query.split('&')
-  const searchTermForDisplay = separatedQuery[0]
+  // Extract search term from URL search params
+  const searchTerm = new URLSearchParams(location.search).get('q') ? new URLSearchParams(location.search).get('q') : ''
+  const docTypeFilter = new URLSearchParams(location.search).get('docType')
+    ? new URLSearchParams(location.search).get('docType')
+    : 'ALL'
 
   // Local State
-  const [newSearchValue, setNewSearchValue] = useState(searchTermForDisplay)
-  const [currentFilter, setCurrentFilter] = useState('ALL')
+  const [newSearchValue, setNewSearchValue] = useState(searchTerm)
+  const [currentFilter, setCurrentFilter] = useState(docTypeFilter)
+
+  const siteId = uid ? `&siteId=${uid}` : ''
 
   // Data fetch
-  const { data, isLoading, error } = useQuery(['search', query], () => searchApi.get({ query, siteId: uid }))
-  results = data?.results
+  const response = useQuery(['search', location.search], () => searchApi.get(location.search + siteId))
+  const { data, isLoading, error } = response
+  const results = data?.results ? data?.results : []
 
   // Filters
   const filters = [
@@ -47,14 +51,15 @@ function SearchData({ children }) {
   }
 
   const handleSearchSubmit = () => {
-    if (newSearchValue && newSearchValue !== query) {
-      history.push(newSearchValue)
+    if (newSearchValue && newSearchValue !== searchTerm) {
+      history.push({ pathname: 'search', search: '?q=' + newSearchValue })
+      setCurrentFilter('ALL')
     }
   }
 
   const handleFilter = (filter) => {
     if (newSearchValue && filter && filter !== currentFilter) {
-      history.push(newSearchValue + '&docType=' + filter)
+      history.push({ pathname: 'search', search: `?q=${newSearchValue}&docType=${filter}` })
     }
     setCurrentFilter(filter)
   }
@@ -90,7 +95,7 @@ function SearchData({ children }) {
 
   return children({
     currentFilter,
-    sitename: title,
+    sitename: title ? title : 'FirstVoices',
     error,
     filters,
     handleFilter,
@@ -98,8 +103,8 @@ function SearchData({ children }) {
     handleTextFieldChange,
     isLoading,
     isSite: title ? true : false,
-    items: results ? results : [],
-    searchTerm: searchTermForDisplay,
+    items: results,
+    searchTerm,
     newSearchValue,
     actions,
   })

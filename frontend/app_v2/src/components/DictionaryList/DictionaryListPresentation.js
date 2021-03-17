@@ -149,7 +149,7 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
 }
 
 // PROPTYPES
-const { array, bool, func, shape, arrayOf, string } = PropTypes
+const { array, arrayOf, bool, func, object, shape, string } = PropTypes
 DictionaryListPresentation.propTypes = {
   actions: arrayOf(
     shape({
@@ -159,10 +159,9 @@ DictionaryListPresentation.propTypes = {
       confirmationMessage: string,
     })
   ),
-  error: array,
+  error: object,
   isLoading: bool,
   items: array,
-
   wholeDomain: bool,
 }
 
