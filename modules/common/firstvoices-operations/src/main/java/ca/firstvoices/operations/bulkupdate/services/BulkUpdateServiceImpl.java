@@ -30,6 +30,7 @@ public class BulkUpdateServiceImpl implements BulkUpdateService {
 
       if (mode == BulkUpdateMode.UPDATE_PROPERTY) {
         doc.setPropertyValue(field, value);
+        session.saveDocument(doc);
       } else if (mode == BulkUpdateMode.ADD_TO_ARRAY_PROPERTY) {
         Serializable[] currentValue = (Serializable[]) doc.getProperty(field).getValue();
         if (currentValue == null) {
@@ -41,8 +42,6 @@ public class BulkUpdateServiceImpl implements BulkUpdateService {
         }
       }
     }
-
-    session.save();
   }
 }
 
