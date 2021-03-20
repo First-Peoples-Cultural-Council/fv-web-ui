@@ -11,13 +11,13 @@ import SearchInputData from 'components/SearchInput/SearchInputData'
  * @returns {node} jsx markup
  */
 function SearchInputContainer() {
-  const { handleSearchSubmit, handleTextFieldChange, searchValue, sitename } = SearchInputData()
+  const { handleSearchSubmit, handleTextFieldChange, searchValue, siteTitle } = SearchInputData()
   return (
     <SearchInputPresentation
       handleSearchSubmit={handleSearchSubmit}
       handleTextFieldChange={handleTextFieldChange}
       searchValue={searchValue}
-      sitename={sitename}
+      siteTitle={siteTitle}
     />
   )
 }
