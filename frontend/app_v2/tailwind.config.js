@@ -24,12 +24,12 @@ module.exports = {
           dark: '#ad6605',
         },
         'fv-blue': {
-          light: '#618699',
+          light: '#1870A7',
           DEFAULT: '#3A6880',
           dark: '#2e5366',
         },
         'fv-turquoise': {
-          light: '#5da8a1',
+          light: '#c2dedc',
           DEFAULT: '#35928A',
           dark: '#2a756e',
         },
@@ -39,6 +39,7 @@ module.exports = {
           dark: '#452a3f',
         },
         'fv-charcoal': {
+          light: '#5D5858',
           DEFAULT: '#313133',
         },
         'fv-green': {
@@ -46,6 +47,9 @@ module.exports = {
         },
         'fv-warning-red': {
           DEFAULT: '#D64A4A',
+        },
+        'fv-yellow': {
+          DEFAULT: '#F4E31E',
         },
       },
       borderRadius: {

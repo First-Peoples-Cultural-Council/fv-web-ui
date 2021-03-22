@@ -1,72 +1,48 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
-// import dev from './dev.png'
-import {
-  WIDGET_LIST_WORD,
-  WIDGET_LIST_PHRASE,
-  WIDGET_LIST_SONG,
-  WIDGET_LIST_STORY,
-  // WIDGET_LIST_MIXED,
-  // WIDGET_LIST_GENERIC,
-} from 'common/constants'
-
-import './Topics.css'
-
-import TopicsPresentationWord from 'components/Topics/TopicsPresentationWord'
-import TopicsPresentationPhrase from 'components/Topics/TopicsPresentationPhrase'
-import TopicsPresentationSong from 'components/Topics/TopicsPresentationSong'
-import TopicsPresentationStory from 'components/Topics/TopicsPresentationStory'
+import TopicsPresentationTopic from 'components/Topics/TopicsPresentationTopic'
 /**
  * @summary TopicsPresentation
- * @version 1.0.0
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function TopicsPresentation({ topics }) {
-  const topicComponents = topics.map(({ audio, heading, image, listCount, subheading, type, url }, index) => {
-    const key = `topic${index}`
-    switch (type) {
-      case WIDGET_LIST_WORD:
-        return (
-          <TopicsPresentationWord
-            key={key}
-            audio={audio}
-            heading={heading}
-            image={image}
-            subheading={subheading}
-            url={url}
-          />
-        )
-      case WIDGET_LIST_PHRASE:
-        return <TopicsPresentationPhrase key={key} heading={heading} image={image} listCount={listCount} url={url} />
-      case WIDGET_LIST_SONG:
-        return (
-          <TopicsPresentationSong
-            key={key}
-            audio={audio}
-            heading={heading}
-            image={image}
-            subheading={subheading}
-            url={url}
-          />
-        )
-      case WIDGET_LIST_STORY:
-        return <TopicsPresentationStory key={key} heading={heading} image={image} subheading={subheading} url={url} />
-
-      default:
-        return null
-    }
-  })
-  return <div className="Topics flex flex-wrap">{topicComponents}</div>
+function TopicsPresentation({ title, topics }) {
+  return (
+    <section className="Topics bg-white py-12 mx-10">
+      <div className="relative mx-10">
+        <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-blue font-bold sm:text-5xl">
+          <span className="inline-block px-4 sm:px-8 lg:px-20 bg-white">{title}</span>
+        </h2>
+        <hr className="absolute z-0 w-full" style={{ top: '50%' }} />
+      </div>
+      <div className="grid gap-y-5 gap-x-8 md:gap-y-10 md:gap-x-14 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-fr">
+        {topics.map(({ audio, heading, image, listCount, subheading, type, url }, index) => {
+          const key = `topic${index}`
+          return (
+            <TopicsPresentationTopic
+              key={key}
+              audio={audio}
+              heading={heading}
+              image={image}
+              subheading={subheading}
+              url={url}
+              listCount={listCount}
+              type={type}
+            />
+          )
+        })}
+      </div>
+    </section>
+  )
 }
 // PROPTYPES
-const { array } = PropTypes
+const { array, string } = PropTypes
 TopicsPresentation.propTypes = {
   topics: array,
+  title: string,
 }
 
 export default TopicsPresentation

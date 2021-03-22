@@ -1,5 +1,3 @@
-// Let us begin!
-// ==================================================
 import useSearchParams from 'common/useSearchParams'
 
 describe('useSearchParams', () => {

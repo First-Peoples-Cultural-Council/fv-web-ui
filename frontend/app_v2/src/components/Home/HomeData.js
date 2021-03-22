@@ -1,21 +1,30 @@
 import api from 'services/api'
-import homeAdaptor from 'components/Home/homeAdaptor'
+import { useParams } from 'react-router-dom'
+import useGetSite from 'common/useGetSite'
+import getHomeAdaptor from 'services/api/adaptors/getHome'
 /**
  * @summary HomeData
- * @version 1.0.1
  * @component
  *
  * @param {object} props
  *
  */
-// TODO: REMOVE HARDCODED LANGUAGE DEFAULT
-function HomeData({ language = 'bÍẕ' } = {}) {
-  const { isLoading, error, data, dataOriginal } = api.getCommunityHome(language, homeAdaptor)
+function HomeData() {
+  const { sitename } = useParams()
+  const { title, uid, path, logoUrl } = useGetSite()
+
+  const { isLoading, error, data, dataOriginal } = api.getHome(sitename, getHomeAdaptor)
   return {
     isLoading,
-    error,
+    error: title === undefined || error,
     data,
     dataOriginal,
+    language: {
+      title,
+      uid,
+      path,
+      logoUrl,
+    },
   }
 }
 

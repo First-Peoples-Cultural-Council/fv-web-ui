@@ -39,7 +39,7 @@ function PaginationPresentation({
   showPageSize,
 }) {
   return (
-    <div className="Pagination">
+    <div data-testid="Pagination" className="Pagination">
       <div className="row">
         <div className="col-xs-12">{children}</div>
       </div>
@@ -49,7 +49,7 @@ function PaginationPresentation({
           <ReactPaginate
             activeClassName={'active'}
             breakClassName={'pagination-page'}
-            breakLabel={<a style={{ paddingBottom: '7px' }}>...</a>}
+            breakLabel={<span style={{ paddingBottom: '7px' }}>...</span>}
             containerClassName={'pagination'}
             forcePage={page - 1}
             marginPagesDisplayed={0}
@@ -90,7 +90,9 @@ function PaginationPresentation({
               <label className="Pagination__resultsLabel">
                 <FVLabel transKey="results" defaultStr="Results" transform="first" />
               </label>
-              <span className="Pagination__resultsCount">{resultsCount}</span>
+              <span data-testid="Pagination__resultCount" className="Pagination__resultsCount">
+                {resultsCount}
+              </span>
             </>
           )}
           {childrenUnderPageSize}

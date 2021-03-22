@@ -29,12 +29,6 @@ module.exports = (env) => {
     output: {
       filename: 'assets/js/[name].[contenthash].js',
       chunkFilename: 'assets/js/[name].[contenthash].js',
-      // filename: (pathData) => {
-      //   return 'assets/js/[name].[contenthash].js'
-      // },
-      // chunkFilename: (pathData) => {
-      //   return 'assets/js/[name].[contenthash].js'
-      // },
       publicPath: 'auto',
       path: alias.dist,
     },
@@ -97,6 +91,7 @@ module.exports = (env) => {
       new webpack.DefinePlugin({
         ENV_NUXEO_URL: env && env.NUXEO_URL ? JSON.stringify(env.NUXEO_URL) : null,
         ENV_WEB_URL: env && env.WEB_URL ? JSON.stringify(env.WEB_URL) : null,
+        ENV_API_URL: env && env.API_URL ? JSON.stringify(env.API_URL) : JSON.stringify('/nuxeo/api/v1/'),
         ENV_CONTEXT_PATH: env && env.CONTEXT_PATH ? JSON.stringify(env.CONTEXT_PATH) : null,
       }),
       new ModuleFederationPlugin({
@@ -119,7 +114,6 @@ module.exports = (env) => {
       }),
       new HtmlWebpackPlugin({
         template: './index.html',
-        //inject: false,
         templateParameters: {
           VERSION: gitRevisionPlugin.version(),
           COMMIT: gitRevisionPlugin.commithash(),
@@ -127,7 +121,6 @@ module.exports = (env) => {
           DATE: new Date().toLocaleString('en-CA', { timeZone: 'America/Vancouver' }),
           V1_URL: env.V1_URL || '',
         },
-        // scriptLoading: 'defer', // TODO: INVESTIGATE THIS SETTING FOR PERFORMANCE
         minify: {
           collapseWhitespace: true,
           minifyCSS: true,
@@ -139,7 +132,6 @@ module.exports = (env) => {
       }),
       new CopyPlugin({
         patterns: [
-          // { from: alias.assetsServer, to: alias.distServer },
           { from: alias.fonts, to: alias.distFonts },
           { from: alias.images, to: alias.distImages },
           { from: alias.favicons, to: alias.dist },

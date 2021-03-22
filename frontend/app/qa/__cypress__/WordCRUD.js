@@ -1,6 +1,3 @@
-const waitMedium = 1000
-const waitShort = 50
-
 // ===============================================
 // WordCRUD
 // ===============================================
@@ -13,7 +10,7 @@ describe('WordCRUD.js > PageDialectWordsCreate', () => {
     })
 
     cy.visit('/explore/FV/Workspaces/Data/Test/Test/TestDialectPublic/learn/words')
-    cy.wait(waitMedium)
+
     cy.findByText('TestDialectPublic Words', { exact: false }).should('exist')
     cy.findByText('Create New Word', { exact: false }).click()
     cy.findByText('Add New Word to TestDialectPublic').should('exist')
@@ -43,7 +40,6 @@ describe('WordCRUD.js > PageDialectWordsCreate', () => {
     cy.findByTestId('PageDialectWordsCreate__form').within(() => {
       cy.findByText('save', { exact: false }).click()
     })
-    cy.wait(waitMedium)
 
     // Read
     cy.logger({ text: 'READ' })
@@ -68,7 +64,7 @@ describe('WordCRUD.js > PageDialectWordsCreate', () => {
     // Update
     cy.logger({ text: 'UPDATE' })
     cy.findByText('Edit', { exact: false }).click()
-    cy.wait(waitMedium)
+
     clearWordForm()
     const updatedContent = getContent('[UPDATE]')
     populateWordForm(updatedContent)
@@ -78,8 +74,6 @@ describe('WordCRUD.js > PageDialectWordsCreate', () => {
     cy.findByTestId('withForm__btnGroup2').within(() => {
       cy.findByText('save', { exact: false }).click()
     })
-
-    cy.wait(waitMedium)
 
     // UPDATE: verify
     cy.logger({ type: 'subheader', text: '[CREATE] VERIFY' })
@@ -96,7 +90,6 @@ describe('WordCRUD.js > PageDialectWordsCreate', () => {
     cy.findByTestId('ViewWithActions__dialog').within(() => {
       cy.findByText('delete').click()
     })
-    cy.wait(waitShort)
     cy.findByText('Delete word success', { exact: false }).should('exist')
   })
 })
@@ -180,8 +173,7 @@ function populateWordForm({
     name: titleAudio,
     description: descriptionAudio,
   })
-  cy.wait(waitMedium)
-  cy.findByText('Insert into entry').click()
+  cy.findByTestId('Dialog__AddMediaComponentInsert').click()
 
   // [POPULATE] picture
   cy.logger({ type: 'subheader', text: `${prefix} Picture` })
@@ -189,8 +181,7 @@ function populateWordForm({
     name: titlePicture,
     description: descriptionPicture,
   })
-  cy.wait(waitMedium)
-  cy.findByText('Insert into entry').click()
+  cy.findByTestId('Dialog__AddMediaComponentInsert').click()
 
   // [POPULATE] phrases
   cy.logger({ type: 'subheader', text: `${prefix} Phrases` })

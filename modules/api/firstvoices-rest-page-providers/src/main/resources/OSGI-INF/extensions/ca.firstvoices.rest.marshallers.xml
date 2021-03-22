@@ -12,5 +12,14 @@
     <register class="ca.firstvoices.rest.marshallers.CategoryWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.PhraseListWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.PhraseWriter" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.SearchResultsWriter" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.SearchResultWriter" enable="true"/>
+
+
+    <register class="ca.firstvoices.rest.marshallers.AlphabetWriter" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.CharacterWriter" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.LinkWriter" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.RelatedMediaWriter" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.WordWriter" enable="true"/>
   </extension>
 </component>

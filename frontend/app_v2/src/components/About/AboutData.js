@@ -1,35 +1,25 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import api from 'services/api'
+// import PropTypes from 'prop-types'
 import HeroBackground from 'images/hero-background.jpg'
-
+import useGetSite from 'common/useGetSite'
 /**
  * @summary AboutData
- * @version 1.0.1
  * @component
  *
  * @param {object} props
  * @param {function} props.children
  *
  */
-export function adaptor(response) {
-  const { title, uid, path } = response
+function AboutData() {
+  const { title, logoUrl } = useGetSite()
   return {
-    title,
-    uid,
-    path,
-  }
-}
-function AboutData({ children, language }) {
-  const { data } = api.getSections(language, adaptor)
-  return children({
     hero: {
       background: HeroBackground,
-      foreground: data ? data.title : 'OUR PEOPLE',
-      foregroundIcon: '"icon"',
+      foreground: title ? title : '',
+      foregroundIcon: logoUrl ? logoUrl : '',
     },
     content: {
-      heading: "Kwak'wala-speaking peoples",
+      heading: `${title} peoples`,
       body: (
         <>
           <p>
@@ -66,12 +56,12 @@ function AboutData({ children, language }) {
         </>
       ),
     },
-  })
+  }
 }
 // PROPTYPES
-const { func } = PropTypes
-AboutData.propTypes = {
-  children: func,
-}
+// const { func } = PropTypes
+// AboutData.propTypes = {
+//   children: func,
+// }
 
 export default AboutData

@@ -4,24 +4,23 @@ import AudioMinimalPresentation from './AudioMinimalPresentation'
 import AudioMinimalData from './AudioMinimalData'
 /**
  * @summary AudioMinimalContainer
- * @version 1.0.0
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function AudioMinimalContainer({ src, icons }) {
-  const { isPlaying, isLoading, isErrored, hasErrored, onClick, onKeyPress } = AudioMinimalData({ src })
+function AudioMinimalContainer({ src, icons, iconStyling }) {
+  const { isPlaying, isLoading, isErrored, onClick, onKeyPress } = AudioMinimalData({ src })
   return (
     <AudioMinimalPresentation
-      hasErrored={hasErrored}
       isErrored={isErrored}
       isLoading={isLoading}
       isPlaying={isPlaying}
       onClick={onClick}
       onKeyPress={onKeyPress}
       icons={icons}
+      iconStyling={iconStyling}
     />
   )
 }
@@ -33,6 +32,7 @@ AudioMinimalContainer.propTypes = {
   onPlayCallback: func,
   shouldStopPropagation: bool,
   icons: object,
+  iconStyling: string,
 }
 
 export default AudioMinimalContainer

@@ -1,72 +1,72 @@
-/* DISABLEglobals ENV_NUXEO_URL */
-import apiErrorHandler from 'services/api/apiErrorHandler'
 import { useQuery } from 'react-query'
-import ky from 'ky'
-import { /*BASE_URL,*/ TIMEOUT } from 'services/api/config'
-const api = ky.create({
-  timeout: TIMEOUT,
-})
+import { api } from 'services/api/config'
 
-// const getNuxeoURL = () => {
-//   if (ENV_NUXEO_URL !== null && typeof ENV_NUXEO_URL !== 'undefined') {
-//     return ENV_NUXEO_URL
-//   }
-//   return '/nuxeo'
-// }
-
-const get = (path) => {
-  return (
-    api
-      // .get(`${BASE_URL}${path}`)
-      .get(path)
-      .then((response) => {
-        return response.json()
-      })
-      .catch(apiErrorHandler)
-  )
-}
-// const post = (path, bodyObject) => {
-//   const api = ky.create({
-//     timeout: TIMEOUT,
-//   })
-//   return api.post(path, { json: bodyObject }).then(() => {
-//     return
-//   }, apiErrorHandler)
-// }
+import responseFormatter from 'services/api/helpers/responseFormatter'
 
 export default {
-  get,
-  getById: (id, dataAdaptor) => {
-    const { isLoading, error, data } = useQuery(['id', id], () => {
-      return get(`/nuxeo/api/v1/id/${id}?properties=*`)
+  getAlphabet: (sitename, dataAdaptor) => {
+    const response = useQuery(['getAlphabet', sitename], async () => {
+      return await api
+        .post('automation/Document.EnrichedQuery', {
+          json: {
+            params: {
+              language: 'NXQL',
+              sortBy: 'fvcharacter:alphabet_order',
+              sortOrder: 'asc',
+              query: `SELECT * FROM FVCharacter WHERE ecm:path STARTSWITH '/FV/sections/Data/Test/Test/${sitename}/Alphabet' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 `,
+            },
+            context: {},
+          },
+          headers: { 'enrichers.document': 'character' },
+        })
+        .json()
     })
-    if (isLoading === false && error === null && data && dataAdaptor) {
-      const transformedData = dataAdaptor(Object.assign({}, data))
-      return { isLoading, error, data: transformedData, dataOriginal: data }
-    }
-    return { isLoading, error, data, dataOriginal: data }
+    return responseFormatter(response, dataAdaptor)
   },
-  getSections: (sitename, dataAdaptor) => {
-    const { isLoading, error, data } = useQuery(['sections', sitename], () => {
-      return get(`/nuxeo/api/v1/site/sections/${sitename}`)
+  getById: (id, queryKey, dataAdaptor, properties = '*') => {
+    const response = useQuery([queryKey, id], async () => {
+      return await api.get(`id/${id}?properties=${properties}`).json()
     })
-    if (isLoading === false && error === null && data && dataAdaptor) {
-      const transformedData = dataAdaptor(Object.assign({}, data))
-      return { isLoading, error, data: transformedData, dataOriginal: data }
-    }
-    return { isLoading, error, data, dataOriginal: data }
+    return responseFormatter(response, dataAdaptor)
+  },
+  getSite: (sitename, dataAdaptor) => {
+    const response = useQuery(['getSite', sitename], async () => {
+      return await api.get(`site/sections/${sitename}`).json()
+    })
+    return responseFormatter(response, dataAdaptor)
   },
   // TODO: remove postman example server url
-  getCommunityHome: (sitename, dataAdaptor) => {
-    const { isLoading, error, data } = useQuery(['sections', sitename], () => {
-      return get(
-        `https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`
-      )
+  getHome: (sitename, dataAdaptor) => {
+    const response = useQuery(['getHome', sitename], async () => {
+      return await api
+        .get(`https://55a3e5b9-4aac-4955-aa51-4ab821d4e3a1.mock.pstmn.io/api/v1/site/sections/${sitename}/pages/home`, {
+          prefixUrl: '',
+        })
+        .json()
     })
-    if (isLoading === false && error === null && data && dataAdaptor) {
-      const transformedData = dataAdaptor(Object.assign({}, data))
-      return { isLoading, error, data: transformedData, dataOriginal: data }
+    return responseFormatter(response, dataAdaptor)
+  },
+  postMail: ({ docId, from, message, name, to }) => {
+    const params = {
+      from,
+      message,
+      subject: 'FirstVoices Language enquiry from ' + name,
+      HTML: 'false',
+      rollbackOnError: 'true',
+      viewId: 'view_documents',
+      bcc: 'hello@firstvoices.com',
+      cc: '',
+      files: '',
+      replyto: from,
+      to,
     }
-    return { isLoading, error, data, dataOriginal: data }
+    // TODO: Confirm this path and params when FW-2106 BE is complete and handle success response in UI
+    return api.post('nuxeo/site/automation/Document.Mail', { json: { params: params, input: docId } }).json()
+  },
+  getUser: (dataAdaptor) => {
+    const response = useQuery('getUser', async () => {
+      return await api.get('me/').json()
+    })
+    return responseFormatter(response, dataAdaptor)
   },
 }

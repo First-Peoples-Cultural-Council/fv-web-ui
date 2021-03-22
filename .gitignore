@@ -36,3 +36,6 @@ nashorn_code_cache
 /docker/nuxeo_dev_docker/
 /docker/database/*
 /docker/frontend/
+
+# Skaffold (for now)
+skaffold

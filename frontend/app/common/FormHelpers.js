@@ -95,6 +95,16 @@ getFormData({
   ],
   checkboxes: ['idNameOfCheckbox', 'secondIdNameOfCheckbox', ...]
 })
+
+TODO: try to get rid of `toParse` & `checkboxes` by using either:
+ - the yup validation object (assuming we can figure out what needs to be `JSON.parse`d or converted into a boolean (checkboxes))
+ - or by providing a form object that's similar to the yup obj that will help us figure out the `toParse`/`checkboxes`
+ eg:
+  const parallelFormValidationObject = {
+    'dc:title': {type: 'text'},
+    'fv:literal_translation': {type: 'text', parse: true},
+    'fv:available_in_childrens_archive': {type: 'checkbox'},
+  }
 */
 export const getFormData = ({ formReference, toParse = [], checkboxes = [] }) => {
   const formDataFormatted = {}
@@ -267,6 +277,8 @@ export const getError = ({ errors = [], fieldName }) => {
   return {}
 }
 
+// TODO: valid/invalid aren't super clear on their purpose.
+// perhaps: onValid & onInvalid
 export const handleSubmit = async ({ validator, formData, valid, invalid }) => {
   const formValidation = await validateForm({ formData, validator })
 
@@ -279,6 +291,9 @@ export const handleSubmit = async ({ validator, formData, valid, invalid }) => {
   }
 }
 
+// TODO: don't construct jsx in here. Either:
+// - return a conveniently formatted object
+// - or pass in a template prop
 export const getErrorFeedback = ({ errors = [] }) => {
   let errorFeedback = null
   if (errors.length !== 0) {

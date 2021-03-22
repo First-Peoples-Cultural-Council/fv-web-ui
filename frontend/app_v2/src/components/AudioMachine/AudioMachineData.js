@@ -5,7 +5,6 @@ import { AUDIO_ERRORED, AUDIO_LOADED, AUDIO_STOPPED, PAGE_NAVIGATION } from 'com
 import audioMachine from 'components/AudioMachine/audioMachine'
 /**
  * @summary AudioMachineData
- * @version 1.0.1
  * @component
  *
  * @param {object} props

@@ -5,6 +5,9 @@
     <require>ca.firstvoices.studio.extensions</require>
     <require>ca.firstvoices.cognito.usermanager</require>
 
+    <!-- require lockout usermanager to load first so it can be superseded -->
+    <require>ca.firstvoices.auth.lockout</require>
+
     <extension point="userManager" target="org.nuxeo.ecm.platform.usermanager.UserService">
         <userManager class="ca.firstvoices.cognito.AWSAwareUserManager">
         </userManager>

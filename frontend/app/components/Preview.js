@@ -70,6 +70,7 @@ export class Preview extends Component {
     type: string.isRequired,
     theme: object,
     intl: object,
+    handlePlay: func,
     // REDUX: reducers/state
     computeAudio: object.isRequired,
     computeCategory: object.isRequired,
@@ -341,7 +342,7 @@ export class Preview extends Component {
             />
           )
 
-          if (pictureResponse['mime-type'] === 'image/gif') {
+          if (selectn('mime-type', pictureResponse) === 'image/gif') {
             pictureTag = (
               <img
                 style={{ maxWidth: '100%', width: 'inherit', minWidth: 'inherit' }}
@@ -351,10 +352,7 @@ export class Preview extends Component {
             )
           }
 
-          if (
-            Object.prototype.hasOwnProperty.call(pictureResponse, 'properties') &&
-            pictureResponse.properties['file:content']['mime-type'] === 'image/gif'
-          ) {
+          if (selectn('properties.file:content.mime-type', pictureResponse) === 'image/gif') {
             pictureTag = (
               <img
                 style={{ maxWidth: '100%', width: 'inherit', minWidth: 'inherit' }}
@@ -366,7 +364,7 @@ export class Preview extends Component {
 
           if (this.props.crop) {
             pictureTag =
-              pictureResponse['mime-type'] === 'image/gif' ? (
+              selectn('mime-type', pictureResponse) === 'image/gif' ? (
                 <div
                   style={{
                     width: '100%',
@@ -641,6 +639,8 @@ export class Preview extends Component {
                 selectn('properties.file:content.data', videoResponse) ||
                 NavigationHelpers.getBaseURL() + selectn('path', videoResponse)
               }
+              onPlay={this.props.handlePlay ? this.props.handlePlay.bind(this) : null}
+              style={this.props.tagStyles}
               alt={selectn('title', videoResponse)}
               controls
             />

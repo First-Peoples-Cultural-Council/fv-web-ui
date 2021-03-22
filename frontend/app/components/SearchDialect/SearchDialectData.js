@@ -40,7 +40,17 @@ function SearchDialectData({ children, incrementResetCount, checkboxNames }) {
 
     navigate(
       `${window.location.pathname}?${convertObjToUrlQuery(
-        Object.assign({}, getSearchAsObject(), { page: 1 }, formData)
+        Object.assign(
+          {},
+          getSearchAsObject(),
+          {
+            page: 1,
+            pageSize: 25,
+            sortBy: 'ecm:fulltextScore',
+            sortOrder: 'desc',
+          },
+          formData
+        )
       )}`
     )
   }
