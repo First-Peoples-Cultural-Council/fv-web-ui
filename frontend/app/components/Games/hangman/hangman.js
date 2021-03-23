@@ -50,44 +50,29 @@ const spotStyle = {
   position: 'relative',
   overflow: 'hidden',
 }
-
-/**
- * Play games
- */
 export default class HangmanGame extends Component {
-  /**
-   * Constructor
-   */
   constructor(props, context) {
     super(props, context)
-
     this.audio = React.createRef()
-
     //Get default start
     this.state = this.getDefaultState()
-
     //Prebind functions
     this.restart = this.restart.bind(this)
   }
 
-  /**
-   * Get Default State
-   */
   getDefaultState(props = this.props) {
     return {
-      puzzle: this.preparePuzzle(props),
+      puzzle: this.preparePuzzle(props.puzzleParts),
       guessesLeft: 7,
       alphabet: props.alphabet,
-      guessedLetters: [],
+      guessedCharacters: [],
       succeeded: false,
       failed: false,
       startTime: Date.now(),
     }
   }
 
-  /**
-   * Retart with same puzzle
-   */
+  /* Restart with same puzzle */
   restart() {
     this.setState(this.getDefaultState())
   }
@@ -98,81 +83,47 @@ export default class HangmanGame extends Component {
     }
   }
 
-  /**
-   * Prepare puzzle
-   * breaks up puzzle into letters
-   */
-  escapeRegExp(str) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
-  }
-  preparePuzzle(props) {
-    const puzzle = props.puzzle
-    const letters = props.alphabet
-    const letterCount = letters.length
-    let letterRegexStr = ''
+  /* Prepare puzzle - creates array of characters with an initial value for 'found' */
+  preparePuzzle(puzzleParts) {
+    let character = []
+    const characters = []
 
-    for (let i = 0; i < letterCount; i++) {
-      letterRegexStr += '(' + this.escapeRegExp(letters[i]) + ')|'
-    }
-
-    const letterRegex = new RegExp(letterRegexStr, 'g')
-
-    const puzzleParts = puzzle.split(letterRegex).filter((l) => {
-      return l !== undefined && l.length !== 0
-    })
-
-    let word = []
-
-    const words = []
-
-    puzzleParts.map((letter, index, parts) => {
-      if (letter === ' ') {
-        words.push(word)
-        word = []
+    puzzleParts.map((part, index, parts) => {
+      if (part === ' ') {
+        characters.push(character)
+        character = []
       } else {
-        word.push({ letter, found: false })
+        character.push({ character: part, found: false })
       }
       if (index === parts.length - 1) {
-        words.push(word)
+        characters.push(character)
       }
     })
-
-    return words
+    return characters
   }
 
-  /**
-   * Prepare Alphabet
-   */
-  prepareAlphabet(props) {
-    return props.alphabet.map((letter) => {
-      return letter.toUpperCase()
-    })
-  }
-
-  /**
-   * Guess letter
-   */
-  guessLetter = (letter) => {
+  /* Guess character */
+  guessCharacter = (character) => {
     let guessesLeft = this.state.guessesLeft
 
-    const guessedLetters = this.state.guessedLetters
+    const guessedCharacters = this.state.guessedCharacters
 
     let succeeded = this.state.succeeded
 
     if (guessesLeft > 0 && succeeded === false) {
       const puzzle = this.state.puzzle
 
-      if (guessedLetters.indexOf(letter) === -1) {
-        guessedLetters.push(letter)
+      if (guessedCharacters.indexOf(character) === -1) {
+        guessedCharacters.push(character)
 
-        let letterFound = false
+        let characterFound = false
 
         succeeded = true
 
         puzzle.forEach((word) => {
           word.forEach((part) => {
-            if (part.letter === letter) {
-              letterFound = true
+            if (part.character === character) {
+              characterFound = true
               part.found = true
             }
             if (part.found === false) {
@@ -181,7 +132,7 @@ export default class HangmanGame extends Component {
           })
         })
 
-        if (letterFound === false) {
+        if (characterFound === false) {
           guessesLeft = guessesLeft - 1
         }
 
@@ -194,30 +145,29 @@ export default class HangmanGame extends Component {
         if (succeeded) {
           this.audio.current.play()
         }
-        this.setState({ guessedLetters, puzzle, guessesLeft, succeeded, failed })
+        this.setState({ guessedCharacters, puzzle, guessesLeft, succeeded, failed })
       }
     }
   }
 
   renderKeyboard() {
-    const guessedLetters = this.state.guessedLetters
-
+    const guessedCharacters = this.state.guessedCharacters
     return (
       <div className="keyboard" style={{ width: '100%', maxWidth: '530px', margin: 'auto' }}>
-        {this.state.alphabet.map((letter, index) => {
+        {this.state.alphabet.map((character, index) => {
           let guessed = false
 
-          if (guessedLetters.indexOf(letter) !== -1) {
+          if (guessedCharacters.indexOf(character.title) !== -1) {
             guessed = true
           }
 
           return (
-            <Letter
+            <Character
               key={index}
               guessed={guessed}
-              letter={letter}
+              character={character.title}
               onClick={() => {
-                this.guessLetter(letter)
+                this.guessCharacter(character.title)
               }}
             />
           )
@@ -254,10 +204,7 @@ export default class HangmanGame extends Component {
       </div>
     )
   }
-
-  /**
-   * Render
-   */
+  // Render for HangmanGame
   render() {
     return (
       <div className="hangman-game" style={{ textAlign: 'center' }}>
@@ -290,10 +237,10 @@ export default class HangmanGame extends Component {
             }
             return (
               <div style={wordStyle} key={index}>
-                {word.map((letter, index2) => {
+                {word.map((character, index2) => {
                   return (
                     <div key={index2} className="spot" style={{ ...spotStyle, ...borderStyle }}>
-                      <div className="letter">{letter.found ? letter.letter : false}</div>
+                      <div className="character">{character.found ? character.character : false}</div>
                     </div>
                   )
                 })}
@@ -338,7 +285,7 @@ export default class HangmanGame extends Component {
   }
 }
 
-const letterStyle = {
+const characterStyle = {
   backgroundColor: 'WhiteSmoke',
   textAlign: 'center',
   fontSize: '25px',
@@ -352,7 +299,7 @@ const letterStyle = {
   margin: '5px',
 }
 
-const letterHoverStyle = {
+const characterHoverStyle = {
   backgroundColor: '#CCCCCC',
   cursor: 'pointer',
 }
@@ -363,7 +310,7 @@ const guessedStyle = {
   backgroundColor: '#FFFFFF',
 }
 
-class Letter extends Component {
+class Character extends Component {
   constructor(props, context) {
     super(props, context)
 
@@ -387,25 +334,27 @@ class Letter extends Component {
   onOut() {
     this.setState({ hovering: false })
   }
-
+  // Render for Character
   render() {
-    let style = { ...letterStyle }
-
-    let action = false
+    let style = { ...characterStyle }
 
     if (this.state.hovering) {
-      style = { ...style, ...letterHoverStyle }
+      style = { ...style, ...characterHoverStyle }
     }
 
-    if (this.props.guessed === false) {
-      action = this.onClick
-    } else {
+    if (this.props.guessed === true) {
       style = { ...style, ...guessedStyle }
     }
 
     return (
-      <div className="letter" onMouseOver={this.onOver} onMouseOut={this.onOut} onClick={action} style={style}>
-        {this.props.letter}
+      <div
+        className="character"
+        onMouseOver={this.onOver}
+        onMouseOut={this.onOut}
+        onClick={this.props.guessed === false ? this.onClick : undefined}
+        style={style}
+      >
+        {this.props.character}
       </div>
     )
   }
@@ -441,8 +390,8 @@ HangmanGame.propTypes = {
   newPuzzle: func,
 }
 
-Letter.propTypes = {
+Character.propTypes = {
   onClick: func,
   guessed: bool,
-  letter: string,
+  character: string,
 }
