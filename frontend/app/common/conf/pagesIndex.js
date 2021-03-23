@@ -26,7 +26,7 @@ const PageDialectPlay = React.lazy(() => import('components/Games'))
 
 const PageJigsawGame = React.lazy(() => import('components/Games/jigsaw'))
 const PageWordSearch = React.lazy(() => import('components/Games/wordsearch'))
-const PageHangman = React.lazy(() => import('components/Games/hangman'))
+const PageParachute = React.lazy(() => import('components/Games/parachute'))
 const PageWordscramble = React.lazy(() => import('components/Games/wordscramble'))
 const PageQuiz = React.lazy(() => import('components/Games/quiz'))
 const PageConcentration = React.lazy(() => import('components/Games/concentration'))
@@ -176,7 +176,7 @@ export {
   PageJigsawGame,
   PageWordSearch,
   PageConcentration,
-  PageHangman,
+  PageParachute,
   PageWordscramble,
   PageQuiz,
   // KIDS

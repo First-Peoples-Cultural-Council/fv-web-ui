@@ -957,7 +957,7 @@ const routes = [
         case: 'words',
       }) +
       ' | {$dialect_name}',
-    page: <Pages.PageHangman />,
+    page: <Pages.PageParachute />,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
     extractPaths: true,
   },

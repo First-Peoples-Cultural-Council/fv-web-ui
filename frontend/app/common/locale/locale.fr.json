@@ -340,7 +340,7 @@
     "guest": "Invit\u00e9",
     "guest_account_with_access_rights": "<B>Compte visiteur seulement</B> (peut consulter toutes les archives publiques)",
     "guide": "guide",
-    "hangman": "Pendu",
+    "parachute": "Pendu",
     "headline": "Vedette",
     "hear_welcome_greet": "pour entendre un message de bienvenue en",
     "help": "AIDE",
@@ -1264,11 +1264,11 @@
             "archive_contains": "L\u2019archive contient",
             "coloring_book": [],
             "concentration": [],
-            "hangman": {
+            "parachute": {
               "guess_puzzle_to_make_it_to_the_beach": "Trouvez la solution pour vous rendre \u00e0 la plage.",
               "new_puzzle": "Nouveau casse-t\u00eate",
               "oh_no": "Oh non! Vous n\u2019avez plus d\u2019essais. N\u2019abandonnez pas maintenant. R\u00e9essayez!",
-              "parachute": "parachute",
+              "parachute": "Parachute",
               "restart": "Recommencer",
               "you_win": "Vous avez gagn\u00e9! Vous avez r\u00e9ussi en"
             },

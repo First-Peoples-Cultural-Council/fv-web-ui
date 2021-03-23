@@ -80,7 +80,7 @@ export class Play extends Component {
                 </div>
                 <div className="cell" style={cellStyle}>
                   <a href="parachute" onClick={this.navigate}>
-                    <img src="assets/games/fv-games-hangman/images/preview.png" className="responsive-image" />
+                    <img src="assets/games/fv-games-parachute/images/preview.png" className="responsive-image" />
                   </a>
                 </div>
                 <div className="cell" style={cellStyle}>

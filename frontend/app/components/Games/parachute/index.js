@@ -24,14 +24,14 @@ import { fetchCharacters } from 'reducers/fvCharacter'
 import { fetchWords } from 'reducers/fvWord'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import HangManGame from 'components/Games/hangman/hangman'
+import ParachuteGame from 'components/Games/parachute/parachute'
 import PromiseWrapper from 'components/PromiseWrapper'
 
 const PUZZLES = 25
 const MIN_REQ_WORDS = 5
 
 const { func, object } = PropTypes
-export class Hangman extends Component {
+export class Parachute extends Component {
   static propTypes = {
     routeParams: object.isRequired,
     // REDUX: reducers/state
@@ -201,12 +201,12 @@ export class Hangman extends Component {
 
     if (words.length > 0 && alphabetArray.length > 0) {
       words[this.state.currentPuzzleIndex].alphabet = alphabetArray.length > 0 ? alphabetArray : []
-      game = <HangManGame newPuzzle={this.newPuzzle} {...words[this.state.currentPuzzleIndex]} />
+      game = <ParachuteGame newPuzzle={this.newPuzzle} {...words[this.state.currentPuzzleIndex]} />
     }
 
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        <div className="hangman-game">{game}</div>
+        <div className="parachute-game">{game}</div>
       </PromiseWrapper>
     )
   }
@@ -231,4 +231,4 @@ const mapDispatchToProps = {
   fetchWords,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Hangman)
+export default connect(mapStateToProps, mapDispatchToProps)(Parachute)

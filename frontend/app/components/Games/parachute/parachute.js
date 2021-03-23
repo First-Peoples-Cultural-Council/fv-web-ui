@@ -50,7 +50,7 @@ const spotStyle = {
   position: 'relative',
   overflow: 'hidden',
 }
-export default class HangmanGame extends Component {
+export default class ParachuteGame extends Component {
   constructor(props, context) {
     super(props, context)
     this.audio = React.createRef()
@@ -183,7 +183,7 @@ export default class HangmanGame extends Component {
       <div className="success">
         <h3>
           <FVLabel
-            transKey="views.pages.explore.dialect.play.hangman.you_win"
+            transKey="views.pages.explore.dialect.play.parachute.you_win"
             defaultStr="You win!, You solved it in"
           />
           {timeToSolve}
@@ -197,20 +197,20 @@ export default class HangmanGame extends Component {
       <div className="failure">
         <h4>
           <FVLabel
-            transKey="views.pages.explore.dialect.play.hangman.oh_no"
+            transKey="views.pages.explore.dialect.play.parachute.oh_no"
             defaultStr="Oh no! You're out of guesses. Don't quit now! Try again!"
           />
         </h4>
       </div>
     )
   }
-  // Render for HangmanGame
+  // Render for ParachuteGame
   render() {
     return (
-      <div className="hangman-game" style={{ textAlign: 'center' }}>
+      <div className="parachute-game" style={{ textAlign: 'center' }}>
         <h1>
           <FVLabel
-            transKey="views.pages.explore.dialect.play.hangman.parachute"
+            transKey="views.pages.explore.dialect.play.parachute.parachute"
             defaultStr="Parachute"
             transform="first"
           />
@@ -218,14 +218,14 @@ export default class HangmanGame extends Component {
 
         <div>
           <FVLabel
-            transKey="views.pages.explore.dialect.play.hangman.guess_puzzle_to_make_it_to_the_beach"
+            transKey="views.pages.explore.dialect.play.parachute.guess_puzzle_to_make_it_to_the_beach"
             defaultStr="Guess the puzzle to make it to the beach"
             transform="first"
           />
         </div>
 
         <img
-          src={`/assets/games/fv-games-hangman/images/${this.state.guessesLeft}.png`}
+          src={`/assets/games/fv-games-parachute/images/${this.state.guessesLeft}.png`}
           style={{ width: '100%', maxWidth: '750px' }}
         />
 
@@ -248,13 +248,9 @@ export default class HangmanGame extends Component {
             )
           })}
         </div>
-
         <div>Hint: {this.props.translation} </div>
-
-        <audio style={{ maxWidth: '350px' }} ref={this.audio} src={this.props.audio} controls />
-
+        <audio style={{ margin: '5px', maxWidth: '350px' }} ref={this.audio} src={this.props.audio} controls />
         <div />
-
         {this.state.succeeded || this.state.failed ? false : this.renderKeyboard()}
         {this.state.succeeded ? this.renderSuccess() : false}
         {this.state.failed ? this.renderFailure() : false}
@@ -267,14 +263,14 @@ export default class HangmanGame extends Component {
             style={{ marginRight: '10px' }}
           >
             <FVLabel
-              transKey="views.pages.explore.dialect.play.hangman.new_puzzle"
+              transKey="views.pages.explore.dialect.play.parachute.new_puzzle"
               defaultStr="New Puzzle"
               transform="words"
             />
           </FVButton>
           <FVButton variant="contained" color="primary" onMouseDown={this.restart}>
             <FVLabel
-              transKey="views.pages.explore.dialect.play.hangman.restart"
+              transKey="views.pages.explore.dialect.play.parachute.restart"
               defaultStr="Restart"
               transform="words"
             />
@@ -383,7 +379,7 @@ const seconds2time = (seconds) => {
 
 // PROPTYPES
 const { any, bool, func, string } = PropTypes
-HangmanGame.propTypes = {
+ParachuteGame.propTypes = {
   puzzle: string,
   translation: any,
   audio: string,

@@ -354,7 +354,7 @@
     "guest": "Guest",
     "guest_account_with_access_rights": "<B>Guest Account Only</B> (can view all public archives)",
     "guide": "guide",
-    "hangman": "Hangman",
+    "parachute": "Parachute",
     "headline": "Headline",
     "hear_welcome_greet": "to hear a welcome greeting in the",
     "help": "HELP",
@@ -1293,11 +1293,11 @@
             "archive_contains": "Archive contains",
             "coloring_book": [],
             "concentration": [],
-            "hangman": {
+            "parachute": {
               "guess_puzzle_to_make_it_to_the_beach": "Guess the puzzle to make it to the beach",
               "new_puzzle": "New Puzzle",
               "oh_no": "Oh no! You're out of guesses. Don't quit now. Try again!",
-              "parachute": "parachute",
+              "parachute": "Parachute",
               "restart": "Restart",
               "you_win": "You Win! You solved it in"
             },
