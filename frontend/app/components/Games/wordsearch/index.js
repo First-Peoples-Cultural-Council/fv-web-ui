@@ -16,28 +16,21 @@ limitations under the License.
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Immutable from 'immutable'
-
-// REDUX
+import selectn from 'selectn'
 import { connect } from 'react-redux'
-// REDUX: actions/dispatch/func
+
+// FPCC
 import { fetchCharacters } from 'reducers/fvCharacter'
 import { fetchWords } from 'reducers/fvWord'
-
-import selectn from 'selectn'
-
-import PromiseWrapper from 'components/PromiseWrapper'
-import FVLabel from 'components/FVLabel'
-
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-
-import GameWrapper from './GameWrapper'
-
-/**
- * Play games
- */
+import PromiseWrapper from 'components/PromiseWrapper'
+import FVLabel from 'components/FVLabel'
+import GameWrapper from 'components/Games/wordsearch/GameWrapper'
 
 const { func, object } = PropTypes
+
+const MIN_REQ_WORDS = 5
 export class Wordsearch extends Component {
   static propTypes = {
     routeParams: object.isRequired,
@@ -48,58 +41,41 @@ export class Wordsearch extends Component {
     fetchCharacters: func.isRequired,
     fetchWords: func.isRequired,
   }
-
-  /**
-   * Constructor
-   */
   constructor(props, context) {
     super(props, context)
 
     this._changeContent = this._changeContent.bind(this)
   }
-
-  /**
-   * componentDidMount
-   */
   componentDidMount() {
-    // Fetch fetch data
     this.fetchData(this.props, 0)
   }
 
   _changeContent(pageIndex, pageCount) {
     let nextPage = pageIndex + 1
-
-    if (pageIndex == pageCount - 1) {
+    if (pageIndex === pageCount - 1) {
       nextPage = 0
     }
-
     this.fetchData(this.props, nextPage)
   }
 
-  /**
-   * Fetch list of characters
-   */
+  /* Fetch list of characters */
   fetchData(props, pageIndex /*, pageSize, sortOrder, sortBy*/) {
     props.fetchCharacters(
       props.routeParams.dialect_path + '/Alphabet',
-      '&currentPageIndex=0' + '&pageSize=100' + '&sortOrder=asc' + '&sortBy=fvcharacter:alphabet_order'
+      'AND fv:custom_order IS NOT NULL' +
+        '&currentPageIndex=0&pageSize=100&sortOrder=asc&sortBy=fvcharacter:alphabet_order'
     )
 
     props.fetchWords(
       props.routeParams.dialect_path + '/Dictionary',
-      ' AND fv:available_in_childrens_archive = 1' +
-        ' AND ' +
+      ' AND fv:available_in_childrens_archive = 1 AND fv:custom_order IS NOT NULL AND ' +
         ProviderHelpers.switchWorkspaceSectionKeys('fv:related_pictures', this.props.routeParams.area) +
-        '/* IS NOT NULL' +
-        ' AND ' +
+        '/* IS NOT NULL AND ' +
         ProviderHelpers.switchWorkspaceSectionKeys('fv:related_audio', this.props.routeParams.area) +
         '/* IS NOT NULL' +
-        //' AND fv-word:available_in_games = 1' +
         '&currentPageIndex=' +
         pageIndex +
-        '&pageSize=10' +
-        '&sortBy=dc:created' +
-        '&sortOrder=DESC'
+        '&pageSize=10&sortBy=dc:created&sortOrder=DESC'
     )
   }
 
@@ -129,36 +105,61 @@ export class Wordsearch extends Component {
       this.props.routeParams.dialect_path + '/Dictionary'
     )
 
-    const alphabet_array = (selectn('response.entries', computeCharacters) || []).map((char) => {
+    if (selectn('response.resultsCount', computeWords) < MIN_REQ_WORDS) {
+      return (
+        <div>
+          Game not available: At least 5 words that meet the requirements with audio and an image are required for this
+          game... Found <strong>{selectn('response.resultsCount', computeWords)}</strong> words.
+        </div>
+      )
+    }
+
+    if ((selectn('response.entries', computeCharacters) || []).length < 5) {
+      return <div>Game not available: An alphabet needs to be uploaded to FirstVoices for this game to function.</div>
+    }
+
+    const characterArray = (selectn('response.entries', computeCharacters) || []).map((char) => {
       return selectn('properties.dc:title', char)
     })
-    const word_array = (selectn('response.entries', computeWords) || [])
+
+    const customOrderValues = (selectn('response.entries', computeCharacters) || []).map((char) => {
+      const title = selectn('properties.dc:title', char)
+      const customOrder = selectn('properties.fv:custom_order', char)
+      return { customOrder, title }
+    })
+
+    const wordArray = (selectn('response.entries', computeWords) || [])
       .map(function wordArrayMap(word) {
+        // Create array of characters for word
+        const customOrderArray = (selectn('properties.fv:custom_order', word) || '').split('')
+        const characters = customOrderArray.map((customOrder) => {
+          const character = customOrderValues.find((obj) => {
+            return obj.customOrder === customOrder
+          })
+          return character.title
+        })
+
+        const audio = word.contextParameters?.word.related_audio[0].path
+          ? `${NavigationHelpers.getBaseURL()}${word.contextParameters?.word.related_audio[0].path}?inline=true`
+          : ''
+        const image = word.contextParameters?.word.related_pictures[0].path
+          ? `${NavigationHelpers.getBaseURL()}${word.contextParameters?.word.related_pictures[0].path}?inline=true`
+          : ''
+
         return {
           word: selectn('properties.dc:title', word),
+          characters,
           translation:
             selectn('properties.fv:literal_translation[0].translation', word) ||
             selectn('properties.fv:definitions[0].translation', word),
-          audio:
-            NavigationHelpers.getBaseURL() +
-            selectn('contextParameters.word.related_audio[0].path', word) +
-            '?inline=true',
-          image:
-            NavigationHelpers.getBaseURL() +
-            selectn('contextParameters.word.related_pictures[0].path', word) +
-            '?inline=true',
+          audio,
+          image,
         }
       })
       .filter((v) => v.word.length < 12)
 
-    // const word_obj_array = selectn('response.entries', computeWords)
-
-    //Since the alphabet isn't complete, we need fill in the rest
-    const character_string = word_array.map((word) => word.word).join('')
-    const unique_characters = Array.from(new Set(character_string.split(/(?!$)/u)))
-
-    if (word_array.length > 0) {
-      game = <GameWrapper characters={[...alphabet_array, ...unique_characters]} words={word_array} />
+    if (wordArray.length > 0 && characterArray.length > 5) {
+      game = <GameWrapper characters={[...characterArray]} words={wordArray} />
     }
 
     return (
