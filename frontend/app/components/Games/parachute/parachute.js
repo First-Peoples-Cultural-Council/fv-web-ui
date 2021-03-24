@@ -62,7 +62,7 @@ export default class ParachuteGame extends Component {
 
   getDefaultState(props = this.props) {
     return {
-      puzzle: this.preparePuzzle(props.puzzleParts),
+      puzzle: this.preparePuzzle(props.word.puzzleParts),
       guessesLeft: 7,
       alphabet: props.alphabet,
       guessedCharacters: [],
@@ -78,7 +78,7 @@ export default class ParachuteGame extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.puzzle !== this.props.puzzle) {
+    if (nextProps.word.puzzle !== this.props.word.puzzle) {
       this.setState(this.getDefaultState(nextProps))
     }
   }
@@ -248,8 +248,8 @@ export default class ParachuteGame extends Component {
             )
           })}
         </div>
-        <div>Hint: {this.props.translation} </div>
-        <audio style={{ margin: '5px', maxWidth: '350px' }} ref={this.audio} src={this.props.audio} controls />
+        <div>Hint: {this.props.word.translation} </div>
+        <audio style={{ margin: '5px', maxWidth: '350px' }} ref={this.audio} src={this.props.word.audio} controls />
         <div />
         {this.state.succeeded || this.state.failed ? false : this.renderKeyboard()}
         {this.state.succeeded ? this.renderSuccess() : false}
@@ -378,12 +378,11 @@ const seconds2time = (seconds) => {
 }
 
 // PROPTYPES
-const { any, bool, func, string } = PropTypes
+const { array, any, bool, func, shape, string } = PropTypes
 ParachuteGame.propTypes = {
-  puzzle: string,
-  translation: any,
-  audio: string,
+  alphabet: array,
   newPuzzle: func,
+  word: shape({ puzzle: string, translation: any, audio: string }),
 }
 
 Character.propTypes = {

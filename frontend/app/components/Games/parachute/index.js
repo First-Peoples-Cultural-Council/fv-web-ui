@@ -135,8 +135,6 @@ export class Parachute extends Component {
   }
 
   render() {
-    let game = ''
-
     const computeEntities = Immutable.fromJS([
       {
         id: this.props.routeParams.dialect_path + '/Alphabet',
@@ -158,19 +156,6 @@ export class Parachute extends Component {
       this.props.routeParams.dialect_path + '/Dictionary'
     )
 
-    if (selectn('response.resultsCount', computeWords) < MIN_REQ_WORDS) {
-      return (
-        <div>
-          Game not available: At least 5 child-friendly words with audio are required for this game... Found{' '}
-          <strong>{selectn('response.resultsCount', computeWords)}</strong> words.
-        </div>
-      )
-    }
-
-    if ((selectn('response.entries', computeCharacters) || []).length < 5) {
-      return <div>Game not available: An alphabet needs to be uploaded to FirstVoices for this game to function.</div>
-    }
-
     const alphabetArray = (selectn('response.entries', computeCharacters) || []).map((char) => {
       const title = selectn('properties.dc:title', char)
       const customOrder = selectn('properties.fv:custom_order', char)
@@ -183,6 +168,9 @@ export class Parachute extends Component {
         const character = alphabetArray.find((obj) => {
           return obj.customOrder === customOrder
         })
+        if (!character?.title) {
+          return null
+        }
         return character.title
       })
       const audio = selectn('contextParameters.word.related_audio[0].path', word)
@@ -199,14 +187,37 @@ export class Parachute extends Component {
       }
     })
 
-    if (words.length > 0 && alphabetArray.length > 0) {
-      words[this.state.currentPuzzleIndex].alphabet = alphabetArray.length > 0 ? alphabetArray : []
-      game = <ParachuteGame newPuzzle={this.newPuzzle} {...words[this.state.currentPuzzleIndex]} />
+    if (alphabetArray?.length < 1 || words?.length < 1) {
+      return (
+        <PromiseWrapper renderOnError computeEntities={computeEntities}>
+          <div className="parachute-game" style={{ textAlign: 'center', padding: '10px' }}>
+            <h1>Parachute</h1>
+            <h3>Game not available</h3>
+            {alphabetArray?.length < 5 ? (
+              <p>An alphabet needs to be uploaded to FirstVoices for this game to function.</p>
+            ) : null}
+            {words?.length < MIN_REQ_WORDS ? (
+              <p>
+                At least 5 words that meet the requirements with audio and an image are required for this game... Found{' '}
+                <strong>{selectn('response.resultsCount', computeWords)}</strong> words.
+              </p>
+            ) : null}
+          </div>
+        </PromiseWrapper>
+      )
     }
+
+    // words[this.state.currentPuzzleIndex].alphabet = alphabetArray
 
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        <div className="parachute-game">{game}</div>
+        <div className="parachute-game">
+          <ParachuteGame
+            newPuzzle={this.newPuzzle}
+            alphabet={alphabetArray}
+            word={words[this.state.currentPuzzleIndex]}
+          />
+        </div>
       </PromiseWrapper>
     )
   }
