@@ -24,7 +24,7 @@ import { fetchCharacters } from 'reducers/fvCharacter'
 import { fetchWords } from 'reducers/fvWord'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import ParachuteGame from 'components/Games/parachute/parachute'
+import ParachuteGame from 'components/Games/parachute/ParachuteGame'
 import PromiseWrapper from 'components/PromiseWrapper'
 
 const PUZZLES = 25
