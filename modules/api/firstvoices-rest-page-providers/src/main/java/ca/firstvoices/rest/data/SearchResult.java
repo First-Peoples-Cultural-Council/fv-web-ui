@@ -11,11 +11,10 @@ import javax.annotation.Nullable;
 public class SearchResult implements Serializable {
 
   private List<String> audio = new LinkedList<>();
-  private List<String> pictures = new LinkedList<>();
 
   private String type;
 
-  private Map<String, String> translations = new HashMap<>();
+  private List<String> translations = new LinkedList<>();
 
   private String title;
   private String id;
@@ -67,16 +66,12 @@ public class SearchResult implements Serializable {
     this.id = id;
   }
 
-  public Map<String, String> getTranslations() {
+  public List<String> getTranslations() {
     return translations;
   }
 
   public List<String> getAudio() {
     return audio;
-  }
-
-  public List<String> getPictures() {
-    return pictures;
   }
 
   @Nullable
@@ -92,17 +87,19 @@ public class SearchResult implements Serializable {
     this.exactMatch = exactMatch;
   }
 
-  public void setParentDialect(String id, String name) {
-    this.parentDialect = new ParentDialect(id, name);
+  public void setParentDialect(String id, String name, String shortUrl) {
+    this.parentDialect = new ParentDialect(id, name, shortUrl);
   }
 
   public class ParentDialect implements Serializable {
     private final String name;
     private final String id;
+    private final String shortUrl;
 
-    public ParentDialect(String id, String name) {
+    public ParentDialect(String id, String name, String shortUrl) {
       this.id = id;
       this.name = name;
+      this.shortUrl = shortUrl;
     }
 
     public String getName() {
@@ -113,6 +110,9 @@ public class SearchResult implements Serializable {
       return id;
     }
 
+    public String getShortUrl() {
+      return shortUrl;
+    }
   }
 
 }

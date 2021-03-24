@@ -28,26 +28,10 @@ export default class UserOperations {
 
     return new Promise((resolve, reject) => {
       properties.client
-        .operation('User.Get')
-        .params(params)
-        .input()
-        .execute()
-        .then((user) => {
-          properties.client
-            .request('/user/' + user.uid, params)
-            .get(headers)
-            .then((userObj) => {
-              resolve(userObj)
-            })
-            .catch((/*error*/) => {
-              reject(
-                IntlService.instance.translate({
-                  key: 'operations.could_not_retrieve_current_user',
-                  default: 'Could not retrieve current user',
-                  case: 'first',
-                }) + '.'
-              )
-            })
+        .request('/me/', params)
+        .get(headers)
+        .then((userObj) => {
+          resolve(userObj)
         })
         .catch((/*error*/) => {
           reject(

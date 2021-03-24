@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component name="ca.firstvoices.pageproviders.alphabet">
+
+  <require>org.nuxeo.runtime.started</require>
+
+  <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
+             point="providers">
+
+
+    <coreQueryPageProvider name="FIND_ALPHABET_PP">
+      <pattern>
+        SELECT * from FVAlphabet where ecm:ancestorId=? and ecm:isVersion=0 and
+        ecm:isTrashed=0
+      </pattern>
+      <sort column="dc:title" ascending="true"/>
+      <pageSize>1000</pageSize>
+    </coreQueryPageProvider>
+
+
+    <coreQueryPageProvider name="FIND_CHARACTERS_IN_ALPHABET_PP">
+      <pattern>
+        SELECT * from FVCharacter where ecm:ancestorId=? and ecm:isVersion=0 and
+        ecm:isTrashed=0
+      </pattern>
+      <sort column="dc:title" ascending="true"/>
+      <pageSize>1000</pageSize>
+    </coreQueryPageProvider>
+
+
+
+  </extension>
+</component>

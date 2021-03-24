@@ -8,11 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import javax.print.Doc;
-import javax.swing.text.Document;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -119,6 +116,8 @@ public class SearchObject extends DefaultObject {
       basicConstraints.must(QueryBuilders.wildcardQuery("ecm:path", parent + "*"));
     }
 
+
+
     QueryBuilder englishQuery = QueryBuilders
         .fuzzyQuery("exact_matches_translations", query)
         .fuzziness(Fuzziness.fromEdits(1))
@@ -205,35 +204,21 @@ public class SearchObject extends DefaultObject {
       sr.setTitle(d.getTitle());
       sr.setPath(d.getPathAsString());
 
-
       // find the parent dialect, if there is one
       List<DocumentModel> parents = session.getParentDocuments(d.getRef());
 
-      Optional.ofNullable(parents).orElse(new ArrayList<>()).stream()
-              .filter(p -> p.getType().equalsIgnoreCase("FVDialect"))
-              .findFirst().ifPresent(p -> sr.setParentDialect(p.getId(), p.getName()));
+      Optional
+          .ofNullable(parents)
+          .orElse(new ArrayList<>())
+          .stream()
+          .filter(p -> p.getType().equalsIgnoreCase("FVDialect"))
+          .findFirst()
+          .ifPresent(p -> sr.setParentDialect(p.getId(), p.getName(),
+              (String)p.getPropertyValue("fvdialect:short_url")));
 
       // need to load it from the DB to get the required fields
       DocumentModel dbDoc = session.getDocument(d.getRef());
       sr.setType(getFriendlyType(dbDoc));
-
-      Object pictures = dbDoc.getPropertyValue("fv:related_pictures");
-      if (pictures != null) {
-        if (pictures instanceof String) {
-          sr.getPictures().add((String) pictures);
-        }
-        if (pictures instanceof List) {
-          for (Object s : (List) pictures) {
-            if (s != null) {
-              if (s instanceof String) {
-                sr.getPictures().add((String) s);
-              } else {
-                sr.getPictures().add(s.toString());
-              }
-            }
-          }
-        }
-      }
 
       Object audio = dbDoc.getPropertyValue("fv:related_audio");
       if (audio != null) {
@@ -251,18 +236,36 @@ public class SearchObject extends DefaultObject {
             }
           }
         }
+        if (audio instanceof Object[]) {
+          for (Object s : (Object[]) audio) {
+            if (s != null) {
+              if (s instanceof String) {
+                sr.getAudio().add((String) s);
+              } else {
+                sr.getAudio().add(s.toString());
+              }
+            }
+          }
+        }
       }
 
       List<Map<String, String>> definitions = (List<Map<String, String>>) dbDoc.getPropertyValue(
           "fv:definitions");
 
       for (Map<String, String> definition : definitions) {
-        sr.getTranslations().putAll(definition);
+        if (definition.containsKey("translation")) {
+          String translation = definition.get("translation");
+          sr.getTranslations().add(translation);
+        }
+      }
+      if (this.exactMatchP != null) {
+        sr.setExactMatch(this.exactMatchP.test(dbDoc));
       }
 
       if (fields != null) {
         sr.setScore(fields.getScore());
       }
+
 
       if (this.exactMatchP != null) {
         sr.setExactMatch(this.exactMatchP.test(dbDoc));

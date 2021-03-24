@@ -15,7 +15,7 @@ import SearchInput from 'components/SearchInput'
  */
 function SearchPresentation({
   currentFilter,
-  sitename,
+  siteTitle,
   error,
   filters,
   handleFilter,
@@ -24,7 +24,7 @@ function SearchPresentation({
   searchTerm,
   actions,
 }) {
-  const wholeDomain = sitename === 'FirstVoices'
+  const wholeDomain = siteTitle === 'FirstVoices'
 
   const getFilterListItems = () => {
     return filters.map((filter) => {
@@ -53,7 +53,7 @@ function SearchPresentation({
       <div className="grid grid-cols-7 md:divide-x-2 divide-gray-300">
         <div className="hidden md:block min-h-220 col-start-2 col-span-6">
           <h1 className="text-3xl text-medium mx-6 my-4">
-            <em>{searchTerm}</em> search results from {sitename}
+            <em>{searchTerm}</em> search results from {siteTitle}
           </h1>
         </div>
         <div className="col-span-7 md:col-span-1 mt-2">
@@ -84,7 +84,7 @@ SearchPresentation.propTypes = {
   isLoading: bool,
   items: array,
   searchTerm: string,
-  sitename: string,
+  siteTitle: string,
 }
 
 export default SearchPresentation

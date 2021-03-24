@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 
 import useGetSite from 'common/useGetSite'
 
@@ -13,6 +13,7 @@ import useGetSite from 'common/useGetSite'
  */
 function SearchInputData() {
   const { title } = useGetSite()
+  const { sitename } = useParams()
   const history = useHistory()
   const location = useLocation()
 
@@ -26,7 +27,7 @@ function SearchInputData() {
     setSearchValue(event.target.value)
   }
 
-  const baseUrl = title ? `/${title}` : ''
+  const baseUrl = sitename ? `/${sitename}` : ''
 
   const handleSearchSubmit = () => {
     if (searchValue && searchValue !== searchTerm) {
@@ -35,7 +36,7 @@ function SearchInputData() {
   }
 
   return {
-    sitename: title ? title : 'FirstVoices',
+    siteTitle: title ? title : 'FirstVoices',
     handleSearchSubmit,
     handleTextFieldChange,
     searchTerm,
