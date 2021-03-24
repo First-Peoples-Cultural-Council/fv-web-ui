@@ -83,8 +83,6 @@ export class Wordsearch extends Component {
    * Render
    */
   render() {
-    let game = ''
-
     const computeEntities = Immutable.fromJS([
       {
         id: this.props.routeParams.dialect_path + '/Alphabet',
@@ -105,19 +103,6 @@ export class Wordsearch extends Component {
       this.props.routeParams.dialect_path + '/Dictionary'
     )
 
-    if (selectn('response.resultsCount', computeWords) < MIN_REQ_WORDS) {
-      return (
-        <div>
-          Game not available: At least 5 words that meet the requirements with audio and an image are required for this
-          game... Found <strong>{selectn('response.resultsCount', computeWords)}</strong> words.
-        </div>
-      )
-    }
-
-    if ((selectn('response.entries', computeCharacters) || []).length < 5) {
-      return <div>Game not available: An alphabet needs to be uploaded to FirstVoices for this game to function.</div>
-    }
-
     const characterArray = (selectn('response.entries', computeCharacters) || []).map((char) => {
       return selectn('properties.dc:title', char)
     })
@@ -128,38 +113,61 @@ export class Wordsearch extends Component {
       return { customOrder, title }
     })
 
+    const formatWord = (word) => {
+      // Create an array of the characters in the word
+      // (done using fv:custom_order to avoid character splitting)
+      let containsCharacterNotInAlphabet = false
+      const customOrderArray = (selectn('properties.fv:custom_order', word) || '').split('')
+      const characters = customOrderArray.map((customOrder) => {
+        const character = customOrderValues.find((obj) => {
+          return obj.customOrder === customOrder
+        })
+        if (!character?.title) {
+          containsCharacterNotInAlphabet = true
+          return null
+        }
+        return character.title
+      })
+      // Don't include any words that contain characters not found in the alphabet
+      if (containsCharacterNotInAlphabet) {
+        return { word: '' }
+      }
+
+      return {
+        word: characters.join(''), // Wordsearch requires that the casing of `characters` and `word` match. Using `.join` ensures this
+        characters,
+        translation:
+          selectn('properties.fv:literal_translation[0].translation', word) ||
+          selectn('properties.fv:definitions[0].translation', word),
+        audio: word.contextParameters?.word.related_audio[0].path
+          ? `${NavigationHelpers.getBaseURL()}${word.contextParameters?.word.related_audio[0].path}?inline=true`
+          : '',
+        image: word.contextParameters?.word.related_pictures[0].path
+          ? `${NavigationHelpers.getBaseURL()}${word.contextParameters?.word.related_pictures[0].path}?inline=true`
+          : '',
+      }
+    }
+
     const wordArray = (selectn('response.entries', computeWords) || [])
       .map(function wordArrayMap(word) {
-        // Create array of characters for word
-        const customOrderArray = (selectn('properties.fv:custom_order', word) || '').split('')
-        const characters = customOrderArray.map((customOrder) => {
-          const character = customOrderValues.find((obj) => {
-            return obj.customOrder === customOrder
-          })
-          return character.title
-        })
-
-        const audio = word.contextParameters?.word.related_audio[0].path
-          ? `${NavigationHelpers.getBaseURL()}${word.contextParameters?.word.related_audio[0].path}?inline=true`
-          : ''
-        const image = word.contextParameters?.word.related_pictures[0].path
-          ? `${NavigationHelpers.getBaseURL()}${word.contextParameters?.word.related_pictures[0].path}?inline=true`
-          : ''
-
-        return {
-          word: selectn('properties.dc:title', word),
-          characters,
-          translation:
-            selectn('properties.fv:literal_translation[0].translation', word) ||
-            selectn('properties.fv:definitions[0].translation', word),
-          audio,
-          image,
-        }
+        return formatWord(word)
       })
-      .filter((v) => v.word.length < 12)
+      .filter((v) => v.word.length < 12 && v.word.length > 0)
 
-    if (wordArray.length > 0 && characterArray.length > 5) {
-      game = <GameWrapper characters={[...characterArray]} words={wordArray} />
+    if (characterArray?.length < 5 || wordArray?.length < MIN_REQ_WORDS) {
+      return (
+        <PromiseWrapper renderOnError computeEntities={computeEntities}>
+          {characterArray?.length < 5 ? (
+            <div>Game not available: An alphabet needs to be uploaded to FirstVoices for this game to function.</div>
+          ) : null}
+          {wordArray?.length < MIN_REQ_WORDS ? (
+            <div>
+              Game not available: At least 5 words that meet the requirements with audio and an image are required for
+              this game... Found <strong>{selectn('response.resultsCount', computeWords)}</strong> words.
+            </div>
+          ) : null}
+        </PromiseWrapper>
+      )
     }
 
     return (
@@ -176,7 +184,7 @@ export class Wordsearch extends Component {
             >
               Load More Words!
             </a>
-            {game}
+            <GameWrapper characters={[...characterArray]} words={wordArray} />
             <small>
               <FVLabel
                 transKey="views.pages.explore.dialect.play.archive_contains"
