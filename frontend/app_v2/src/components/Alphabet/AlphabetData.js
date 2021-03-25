@@ -28,10 +28,11 @@ const AlphabetData = () => {
   const { character, sitename } = useParams()
   const [selectedData, setSelectedData] = useState({})
 
-  const siteId = uid ? uid : sitename
-
   // Data fetch
-  const { isLoading, error, data } = useQuery(['alphabet', siteId], () => alphabetApi.get(siteId))
+  const { isLoading, error, data } = useQuery(['alphabet', uid], () => alphabetApi.get(uid), {
+    // The query will not execute until the siteId exists
+    enabled: !!uid,
+  })
 
   useEffect(() => {
     if (character && data) {
