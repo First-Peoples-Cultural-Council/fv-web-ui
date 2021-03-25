@@ -32,7 +32,7 @@ const AlphabetPresentationSelected = ({ sitename, selectedData }) => {
             mb-5"
       >
         {title}
-        {relatedAudio?.[0].url && (
+        {relatedAudio?.[0] && (
           <div className="ml-2">
             <AudioMinimal.Container
               src={`/nuxeo/${relatedAudio?.[0].url}`}
@@ -45,7 +45,7 @@ const AlphabetPresentationSelected = ({ sitename, selectedData }) => {
           </div>
         )}
       </h1>
-      {relatedWords && (
+      {relatedWords?.[0] && (
         <>
           <table className="table-auto mx-auto my-5 w-3/4">
             <thead>
@@ -63,14 +63,13 @@ const AlphabetPresentationSelected = ({ sitename, selectedData }) => {
             <tbody className="py-2 px-10">
               {relatedWords.map(({ id: wordId, title: wordTitle, translations, relatedAudio: wordAudio }, index) => {
                 const zebraStripe = index % 2 === 0 ? 'bg-gray-100' : ''
-
                 return (
                   <tr key={index} className={zebraStripe}>
                     <td className="py-2 pl-5">
                       <Link to={`/${sitename}/word/${wordId}`}>{wordTitle}</Link>
                     </td>
                     <td className="p-2">
-                      {wordAudio?.[0].id && (
+                      {wordAudio?.[0] && (
                         <AudioMinimal.Container
                           src={`/nuxeo/${wordAudio?.[0].url}`}
                           icons={{
@@ -91,7 +90,7 @@ const AlphabetPresentationSelected = ({ sitename, selectedData }) => {
           </table>
         </>
       )}
-      {relatedVideo?.[0].id && (
+      {relatedVideo?.[0] && (
         <div className="flex justify-center">
           <button
             onClick={onVideoClick}
