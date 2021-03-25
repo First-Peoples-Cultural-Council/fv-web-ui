@@ -57,7 +57,8 @@ function NavBarData() {
     }
   }, [openMenu])
   const currentUser = {
-    userInitials: firstName || lastName ? firstName?.charAt(0) + lastName?.charAt(0) : userName.charAt(0),
+    userInitials:
+      firstName || lastName ? (firstName?.charAt(0) || '') + (lastName?.charAt(0) || '') : userName.charAt(0),
     firstName,
     userName,
   }
@@ -86,7 +87,6 @@ function NavBarData() {
       title: 'Resources',
       id: 'resources',
       itemsData: [
-        { title: 'Kids Site', href: `/${sitename}/kids` },
         { title: 'Mobile App', href: `/${sitename}/app` },
         { title: 'Keyboard App', href: `/${sitename}/keyboard` },
       ],
