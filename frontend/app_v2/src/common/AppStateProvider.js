@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useReducer, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { useQuery } from 'react-query'
 import useLocalStorage from 'react-use-localstorage'
 import useRoute from 'app_v1/useRoute'
 
@@ -8,7 +9,7 @@ import AppStateContext from 'common/AppStateContext'
 import { reducerInitialState, reducer } from 'common/reducer'
 
 import api from 'services/api'
-import getSiteAdaptor from 'services/api/adaptors/getSite'
+import siteApi from 'services/api/site'
 import getUserAdaptor from 'services/api/adaptors/getUser'
 import AudioMachineData from 'components/AudioMachine/AudioMachineData'
 import MenuMachineData from 'components/MenuMachine/MenuMachineData'
@@ -21,10 +22,12 @@ function AppStateProvider({ children }) {
 
   // Get language data
   // --------------------------------
-  const { isLoading: siteIsLoading, error: siteError, data: siteData } = api.getSite(sitename, getSiteAdaptor)
+  const { isLoading: siteIsLoading, error: siteError, data: siteData } = useQuery(['site', sitename], () =>
+    siteApi.get(sitename)
+  )
   useEffect(() => {
     if (siteIsLoading === false && siteError === null) {
-      dispatch({ type: 'api.getSite', payload: siteData })
+      dispatch({ type: 'siteApi.get', payload: siteData })
     }
   }, [siteIsLoading, siteError])
 

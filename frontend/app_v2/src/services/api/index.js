@@ -10,12 +10,6 @@ export default {
     })
     return responseFormatter(response, dataAdaptor)
   },
-  getSite: (sitename, dataAdaptor) => {
-    const response = useQuery(['getSite', sitename], async () => {
-      return await api.get(`site/sections/${sitename}`).json()
-    })
-    return responseFormatter(response, dataAdaptor)
-  },
   // TODO: remove postman example server url
   getHome: (sitename, dataAdaptor) => {
     const response = useQuery(['getHome', sitename], async () => {

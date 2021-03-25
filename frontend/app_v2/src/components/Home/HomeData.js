@@ -11,7 +11,8 @@ import getHomeAdaptor from 'services/api/adaptors/getHome'
  */
 function HomeData() {
   const { sitename } = useParams()
-  const { title, uid, path, logoUrl } = useGetSite()
+  const { title, uid, path, logoId } = useGetSite()
+  const logoUrl = `/nuxeo/nxpicsfile/default/${logoId}/Small:content/`
 
   const { isLoading, error, data, dataOriginal } = api.getHome(sitename, getHomeAdaptor)
   return {

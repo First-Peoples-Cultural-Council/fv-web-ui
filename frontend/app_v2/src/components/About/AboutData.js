@@ -11,7 +11,8 @@ import useGetSite from 'common/useGetSite'
  *
  */
 function AboutData() {
-  const { title, logoUrl } = useGetSite()
+  const { title, logoId } = useGetSite()
+  const logoUrl = `/nuxeo/nxpicsfile/default/${logoId}/Small:content/`
   return {
     hero: {
       background: HeroBackground,

@@ -1,19 +1,21 @@
 export const reducerInitialState = {
-  api: {
-    getSite: {
+  siteApi: {
+    get: {
       idLogo: undefined,
       path: undefined,
       title: undefined,
       uid: undefined,
       logoUrl: undefined,
     },
+  },
+  api: {
     getUser: {},
   },
 }
 export const reducer = (state, { type, payload }) => {
   switch (type) {
-    case 'api.getSite': {
-      state.api.getSite = payload
+    case 'siteApi.get': {
+      state.siteApi.get = payload
       return state
     }
     case 'api.getUser': {
