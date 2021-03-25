@@ -69,7 +69,7 @@ function AlphabetPresentation({ sitename, isLoading, error, characters, selected
         </div>
         <div className="mb-5 grid grid-cols-4 md:grid-cols-7 lg:grid-cols-10 max-w-screen-lg mx-auto">
           {characters &&
-            characters.map(({ title, uid }) => {
+            characters.map(({ title, id }) => {
               return (
                 <Link
                   data-testid={selectedData?.title === title ? 'AlphabetPresentation__selectedCharacter' : undefined}
@@ -86,7 +86,7 @@ function AlphabetPresentation({ sitename, isLoading, error, characters, selected
                       text-2xl
                       ${selectedData?.title === title ? 'bg-fv-blue text-white' : ''}
                       `}
-                  key={uid}
+                  key={id}
                   to={`/${sitename}/alphabet/${title}`}
                 >
                   {title}
@@ -103,7 +103,7 @@ function AlphabetPresentation({ sitename, isLoading, error, characters, selected
               Please select a character
             </div>
           )}
-          {selectedData && AlphabetPresentationSelected({ selectedData })}
+          {selectedData && AlphabetPresentationSelected({ selectedData, sitename })}
         </div>
       </div>
     </section>
@@ -113,13 +113,16 @@ function AlphabetPresentation({ sitename, isLoading, error, characters, selected
 const { bool, array, string, shape, arrayOf, object } = PropTypes
 AlphabetPresentation.propTypes = {
   isLoading: bool,
-  error: array,
+  error: object,
   characters: arrayOf(
     shape({
       title: string,
-      uid: string,
-      src: string,
-      relatedEntries: array,
+      id: string,
+      relatedAudio: array,
+      relatedLinks: array,
+      relatedPictures: array,
+      relatedVideo: array,
+      relatedWords: array,
     })
   ),
   sitename: string,

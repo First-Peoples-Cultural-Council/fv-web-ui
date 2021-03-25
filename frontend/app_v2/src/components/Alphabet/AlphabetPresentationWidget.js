@@ -50,7 +50,7 @@ function AlphabetPresentationWidget({ characters, error, isLoading, onCharacterC
           <div className="col-span-7 md:col-span-4">
             <div className="grid grid-cols-7 md:grid-cols-5 lg:grid-cols-7">
               {characters &&
-                characters.map(({ title, uid }) => {
+                characters.map(({ title, id }) => {
                   return (
                     <button
                       data-testid={
@@ -69,7 +69,7 @@ function AlphabetPresentationWidget({ characters, error, isLoading, onCharacterC
                       text-2xl
                       ${selectedData?.title === title ? 'bg-fv-blue text-white' : ''}
                       `}
-                      key={uid}
+                      key={id}
                       onClick={() => onCharacterClick(title)}
                     >
                       {title}
@@ -109,11 +109,11 @@ function AlphabetPresentationWidget({ characters, error, isLoading, onCharacterC
 const { bool, array, func, string, shape, arrayOf, object } = PropTypes
 AlphabetPresentationWidget.propTypes = {
   isLoading: bool,
-  error: array,
+  error: object,
   characters: arrayOf(
     shape({
       title: string,
-      uid: string,
+      id: string,
       src: string,
       relatedEntries: array,
     })

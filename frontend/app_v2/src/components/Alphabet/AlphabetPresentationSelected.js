@@ -13,9 +13,9 @@ import AlphabetData from 'components/Alphabet/AlphabetData'
  * @returns {node} jsx markup
  */
 
-const AlphabetPresentationSelected = ({ selectedData }) => {
+const AlphabetPresentationSelected = ({ sitename, selectedData }) => {
   const { onVideoClick, videoIsOpen } = AlphabetData()
-  const { title, src, relatedEntries, videoSrc } = selectedData
+  const { title, relatedAudio, relatedVideo, relatedWords } = selectedData
   return (
     <>
       <h1
@@ -32,10 +32,10 @@ const AlphabetPresentationSelected = ({ selectedData }) => {
             mb-5"
       >
         {title}
-        {src && (
+        {relatedAudio?.[0].url && (
           <div className="ml-2">
             <AudioMinimal.Container
-              src={src}
+              src={`/nuxeo/${relatedAudio?.[0].url}`}
               icons={{
                 Play: useIcon('Audio', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
                 Pause: useIcon('PauseCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
@@ -45,7 +45,7 @@ const AlphabetPresentationSelected = ({ selectedData }) => {
           </div>
         )}
       </h1>
-      {relatedEntries && (
+      {relatedWords && (
         <>
           <table className="table-auto mx-auto my-5 w-3/4">
             <thead>
@@ -61,18 +61,18 @@ const AlphabetPresentationSelected = ({ selectedData }) => {
               </tr>
             </thead>
             <tbody className="py-2 px-10">
-              {relatedEntries.map(({ title: relatedTitle, definitions, src: relatedSrc, url: relatedUrl }, index) => {
+              {relatedWords.map(({ id: wordId, title: wordTitle, translations, relatedAudio: wordAudio }, index) => {
                 const zebraStripe = index % 2 === 0 ? 'bg-gray-100' : ''
 
                 return (
                   <tr key={index} className={zebraStripe}>
                     <td className="py-2 pl-5">
-                      <Link to={relatedUrl}>{relatedTitle}</Link>
+                      <Link to={`/${sitename}/word/${wordId}`}>{wordTitle}</Link>
                     </td>
                     <td className="p-2">
-                      {relatedSrc && (
+                      {wordAudio?.[0].id && (
                         <AudioMinimal.Container
-                          src={relatedSrc}
+                          src={`/nuxeo/${wordAudio?.[0].url}`}
                           icons={{
                             Play: useIcon('Audio', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
                             Pause: useIcon('PauseCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
@@ -82,9 +82,7 @@ const AlphabetPresentationSelected = ({ selectedData }) => {
                       )}
                     </td>
                     <td className="py-2 pr-5">
-                      {definitions.map((definition, indexInner) => (
-                        <span key={indexInner}>{definition.translation}</span>
-                      ))}
+                      <span>{translations.english}</span>
                     </td>
                   </tr>
                 )
@@ -93,7 +91,7 @@ const AlphabetPresentationSelected = ({ selectedData }) => {
           </table>
         </>
       )}
-      {videoSrc && (
+      {relatedVideo?.[0].id && (
         <div className="flex justify-center">
           <button
             onClick={onVideoClick}
@@ -141,7 +139,7 @@ const AlphabetPresentationSelected = ({ selectedData }) => {
                 </div>
                 {/*body*/}
                 <div className="relative p-2 flex-auto">
-                  <video height="50" width="auto" src={videoSrc} controls autoPlay>
+                  <video height="50" width="auto" src={`/nuxeo/${relatedVideo?.[0].url}`} controls autoPlay>
                     Your browser does not support the video tag.
                   </video>
                 </div>
@@ -156,16 +154,16 @@ const AlphabetPresentationSelected = ({ selectedData }) => {
 }
 
 // PROPTYPES
-const { shape, string } = PropTypes
+const { array, shape, string } = PropTypes
 
 AlphabetPresentationSelected.propTypes = {
+  sitename: string,
   selectedData: shape({
-    uid: string,
     title: string,
-    src: string,
-    relatedEntries: string,
-    url: string,
-    videoSrc: string,
+    id: string,
+    relatedAudio: array,
+    relatedVideo: array,
+    relatedWords: array,
   }),
 }
 
