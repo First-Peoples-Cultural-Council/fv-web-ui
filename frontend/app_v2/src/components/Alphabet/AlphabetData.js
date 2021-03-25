@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-import api from 'services/api'
-import getAlphabetAdaptor from 'services/api/adaptors/getAlphabet'
-import useGetSite from 'common/useGetSite'
 import { useParams } from 'react-router-dom'
+import { useQuery } from 'react-query'
+
+//FPCC
+import useGetSite from 'common/useGetSite'
+import alphabetApi from 'services/api/alphabet'
 /**
  * @summary AlphabetData
  * @component NB: This component is used by multiple Presentation layers
@@ -22,10 +24,14 @@ export const findSelectedCharacterData = ({ character, data, sitename }) => {
 }
 
 const AlphabetData = () => {
-  const { title } = useGetSite()
+  const { uid } = useGetSite()
   const { character, sitename } = useParams()
-  const { isLoading, error, data } = api.getAlphabet(title, getAlphabetAdaptor)
   const [selectedData, setSelectedData] = useState({})
+
+  const siteId = uid ? uid : sitename
+
+  // Data fetch
+  const { isLoading, error, data } = useQuery(['alphabet', siteId], () => alphabetApi.get(siteId))
 
   useEffect(() => {
     if (character && data) {
@@ -52,7 +58,7 @@ const AlphabetData = () => {
 
   return {
     characters: data?.characters,
-    links: data?.links,
+    links: data?.relatedLinks,
     error,
     isLoading,
     sitename,
