@@ -4,25 +4,6 @@ import { api } from 'services/api/config'
 import responseFormatter from 'services/api/helpers/responseFormatter'
 
 export default {
-  getAlphabet: (sitename, dataAdaptor) => {
-    const response = useQuery(['getAlphabet', sitename], async () => {
-      return await api
-        .post('automation/Document.EnrichedQuery', {
-          json: {
-            params: {
-              language: 'NXQL',
-              sortBy: 'fvcharacter:alphabet_order',
-              sortOrder: 'asc',
-              query: `SELECT * FROM FVCharacter WHERE ecm:path STARTSWITH '/FV/sections/Data/Test/Test/${sitename}/Alphabet' AND ecm:isVersion = 0 AND ecm:isTrashed = 0 `,
-            },
-            context: {},
-          },
-          headers: { 'enrichers.document': 'character' },
-        })
-        .json()
-    })
-    return responseFormatter(response, dataAdaptor)
-  },
   getById: (id, queryKey, dataAdaptor, properties = '*') => {
     const response = useQuery([queryKey, id], async () => {
       return await api.get(`id/${id}?properties=${properties}`).json()
