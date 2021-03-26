@@ -29,7 +29,10 @@ function AlphabetPresentation({ sitename, isLoading, error, characters, selected
   if (error) {
     return (
       <div className="p-10">
-        <h1>Sorry, something went wrong!</h1>
+        <h1 className="m-5 text-2xl text-fv-blue font-bold sm:text-3xl">
+          {error?.response.status || ''} {error?.message || ''}
+        </h1>
+        <p className="mb-5 text-xl text-fv-blue font-bold sm:text-2xl">Sorry, something went wrong!</p>
         <p>Please report this error by emailing hello@firstvoices.com so that we can fix it.</p>
         <p>Include the link or action you took to get to this page.</p>
         <p>Thank You!</p>
