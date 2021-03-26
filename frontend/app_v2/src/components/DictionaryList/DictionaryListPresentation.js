@@ -103,7 +103,7 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                     <td className="px-6 py-4">
                       {translations ? (
                         <ol className="text-gray-900">
-                          {translations.map(({ translation }, i) => (
+                          {translations.map((translation, i) => (
                             <li key={i}>
                               {translations.length > 1 ? `${i + 1}. ` : null} {translation}
                             </li>

@@ -11,7 +11,7 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function SearchInputPresentation({ handleSearchSubmit, handleTextFieldChange, newSearchValue, siteTitle }) {
+function SearchInputPresentation({ handleSearchSubmit, handleTextFieldChange, searchValue, siteTitle }) {
   return (
     <>
       <div className="bg-white flex rounded-2xl w-3/5 text-fv-charcoal-light p-2 divide-x-2 divide-gray-300 mx-auto">
@@ -26,7 +26,7 @@ function SearchInputPresentation({ handleSearchSubmit, handleTextFieldChange, ne
               handleSearchSubmit(e)
             }
           }}
-          value={newSearchValue}
+          value={searchValue}
         />
         <button type="button " onClick={handleSearchSubmit} className="p-2">
           {useIcon('Search', 'fill-current h-8 w-8 ')}
@@ -40,7 +40,7 @@ const { func, string } = PropTypes
 SearchInputPresentation.propTypes = {
   handleSearchSubmit: func,
   handleTextFieldChange: func,
-  newSearchValue: string,
+  searchValue: string,
   siteTitle: string,
 }
 
