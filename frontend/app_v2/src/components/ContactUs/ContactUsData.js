@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import * as yup from 'yup'
 
 import api from 'services/api'
-import { getFormData, validateForm } from 'common/FormHelpers'
+import { getFormData, validateForm } from 'common/formHelpers'
 /**
  * @summary ContactUsData
  * @component

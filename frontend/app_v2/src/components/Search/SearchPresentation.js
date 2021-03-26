@@ -13,17 +13,7 @@ import SearchInput from 'components/SearchInput'
  *
  * @returns {node} jsx markup
  */
-function SearchPresentation({
-  currentFilter,
-  siteTitle,
-  error,
-  filters,
-  handleFilter,
-  isLoading,
-  items,
-  searchTerm,
-  actions,
-}) {
+function SearchPresentation({ currentFilter, siteTitle, error, filters, handleFilter, isLoading, items, actions }) {
   const wholeDomain = siteTitle === 'FirstVoices'
 
   const getFilterListItems = () => {
@@ -50,12 +40,7 @@ function SearchPresentation({
       <section className="bg-gradient-to-b to-fv-turquoise from-fv-blue-light p-5">
         <SearchInput.Container />
       </section>
-      <div className="grid grid-cols-7 md:divide-x-2 divide-gray-300">
-        <div className="hidden md:block min-h-220 col-start-2 col-span-6">
-          <h1 className="text-3xl text-medium mx-6 my-4">
-            <em>{searchTerm}</em> search results from {siteTitle}
-          </h1>
-        </div>
+      <div className="grid grid-cols-7 md:p-2">
         <div className="col-span-7 md:col-span-1 mt-2">
           <h2 className="hidden md:block text-2xl ml-8">Filters</h2>
           <ul className="inline-block md:block list-none m-2 md:m-0 md:space-y-4 ">{getFilterListItems()}</ul>

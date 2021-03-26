@@ -28,7 +28,7 @@ function SearchData() {
   const [currentFilter, setCurrentFilter] = useState(docTypeFilter)
 
   // Data fetch
-  const response = useQuery(['search', location.search], () => searchApi.get(`${location.search}&siteId=${uid}`), {
+  const response = useQuery(['search', location.search], () => searchApi.get(`${location.search}&ancestorId=${uid}`), {
     // The query will not execute until the siteId exists
     enabled: !!uid,
   })
@@ -105,13 +105,12 @@ function SearchData() {
 
   return {
     currentFilter,
-    sitename: title ? title : 'FirstVoices',
+    siteTitle: title ? title : 'FirstVoices',
     error,
     filters,
     handleFilter,
     isLoading,
     items,
-    searchTerm,
     actions,
   }
 }
