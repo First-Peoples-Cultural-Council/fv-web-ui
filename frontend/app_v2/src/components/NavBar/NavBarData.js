@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import useGetSite from 'common/useGetSite'
-import useUserGet from 'common/useUserGet'
+import useGetUser from 'common/useGetUser'
 import useWorkspaceToggle from 'common/useWorkspaceToggle'
 import AppStateContext from 'common/AppStateContext'
 /**
@@ -21,7 +21,7 @@ function NavBarData() {
 
   const { title } = useGetSite()
   const { value: workspaceToggleValue, set } = useWorkspaceToggle()
-  const { firstName, lastName, userName = '' } = useUserGet()
+  const { firstName, lastName, username } = useGetUser()
 
   const onWorkspaceModeClick = () => {
     set(!workspaceToggleValue)
@@ -58,9 +58,9 @@ function NavBarData() {
   }, [openMenu])
   const currentUser = {
     userInitials:
-      firstName || lastName ? (firstName?.charAt(0) || '') + (lastName?.charAt(0) || '') : userName.charAt(0),
+      firstName || lastName ? (firstName?.charAt(0) || '') + (lastName?.charAt(0) || '') : username?.charAt(0) || '',
     firstName,
-    userName,
+    username,
   }
 
   const menuData = [

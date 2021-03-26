@@ -28,7 +28,7 @@ function ContactUsData({ siteId, contactEmail }) {
     const validationResults = await validateForm({ formData, validator })
 
     if (validationResults.valid) {
-      api.postMail({
+      api.mail.post({
         docId: siteId,
         name: formData.Name,
         from: formData.Email,

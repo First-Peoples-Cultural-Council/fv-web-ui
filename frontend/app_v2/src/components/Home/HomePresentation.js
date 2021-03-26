@@ -59,7 +59,7 @@ function HomePresentation({ isLoading, error, data, language }) {
   }
   return (
     <div>
-      {widgets.length > 0 &&
+      {widgets?.length > 0 &&
         widgets.map(({ type, ...widgetProps }, index) => {
           if (type === WIDGET_HERO) {
             const { uid, background, variant } = widgetProps

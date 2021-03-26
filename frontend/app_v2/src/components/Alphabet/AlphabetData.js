@@ -4,7 +4,7 @@ import { useQuery } from 'react-query'
 
 //FPCC
 import useGetSite from 'common/useGetSite'
-import alphabetApi from 'services/api/alphabet'
+import api from 'services/api'
 /**
  * @summary AlphabetData
  * @component NB: This component is used by multiple Presentation layers
@@ -29,7 +29,7 @@ const AlphabetData = () => {
   const [selectedData, setSelectedData] = useState({})
 
   // Data fetch
-  const { isLoading, error, data } = useQuery(['alphabet', uid], () => alphabetApi.get(uid), {
+  const { isLoading, error, data } = useQuery(['alphabet', uid], () => api.alphabet.get(uid), {
     // The query will not execute until the siteId exists
     enabled: !!uid,
   })
