@@ -3,14 +3,14 @@ import React from 'react'
 import HeroBackground from 'images/hero-background.jpg'
 import useGetSite from 'common/useGetSite'
 /**
- * @summary AboutData
+ * @summary ResourceData
  * @component
  *
  * @param {object} props
  * @param {function} props.children
  *
  */
-function AboutData() {
+function ResourceData() {
   const { title, logoUrl } = useGetSite()
   return {
     hero: {
@@ -60,8 +60,8 @@ function AboutData() {
 }
 // PROPTYPES
 // const { func } = PropTypes
-// AboutData.propTypes = {
+// ResourceData.propTypes = {
 //   children: func,
 // }
 
-export default AboutData
+export default ResourceData

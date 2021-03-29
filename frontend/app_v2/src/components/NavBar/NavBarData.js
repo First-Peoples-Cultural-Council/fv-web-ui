@@ -77,6 +77,7 @@ function NavBarData() {
       title: 'Learn',
       id: 'learn',
       itemsData: [
+        { title: 'Lists', href: `/${sitename}/lists` },
         { title: 'Songs', href: `/${sitename}/songs` },
         { title: 'Stories', href: `/${sitename}/stories` },
         { title: 'Games', href: `/${sitename}/games` },
@@ -86,17 +87,16 @@ function NavBarData() {
       title: 'Resources',
       id: 'resources',
       itemsData: [
-        { title: 'Kids Site', href: `/${sitename}/kids` },
-        { title: 'Mobile App', href: `/${sitename}/app` },
-        { title: 'Keyboard App', href: `/${sitename}/keyboard` },
+        { title: 'Mobile App', href: `/${sitename}/apps` },
+        { title: 'Keyboards', href: `/${sitename}/keyboards` },
       ],
     },
     {
       title: 'About',
       id: 'about',
       itemsData: [
-        { title: 'Our Language', href: `/${sitename}/ourlanguage` },
-        { title: 'Our People', href: `/${sitename}/about` },
+        { title: 'Our Language', href: `/${sitename}/our-language` },
+        { title: 'Our People', href: `/${sitename}/our-people` },
       ],
     },
     { title: 'Kids', id: 'kids', href: `/${sitename}/kids` },

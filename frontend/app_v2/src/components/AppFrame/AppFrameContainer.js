@@ -1,13 +1,27 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
-import About from 'components/About'
+import Page from 'components/Page'
+import Resource from 'components/Resource'
 import Alphabet from 'components/Alphabet'
 import Home from 'components/Home'
 import Search from 'components/Search'
 import Suspender from 'components/Suspender'
-import WordsListContainer from 'app_v1/WordsListContainer'
+import Words from 'components/Words'
 import Word from 'components/Word'
+import Phrases from 'components/Phrases'
+import Phrase from 'components/Phrase'
+import Categories from 'components/Categories'
+import Songs from 'components/Songs'
+import Song from 'components/Song'
+import Lists from 'components/Lists'
+import List from 'components/List'
+import Stories from 'components/Stories'
+import Story from 'components/Story'
+import Games from 'components/Games'
+import Game from 'components/Game'
+import Kids from 'components/Kids'
+
 import NavBar from 'components/NavBar'
 
 /**
@@ -25,11 +39,35 @@ function AppFrameContainer() {
       <main role="main" className="relative z-0">
         <Suspender>
           <Switch>
-            <Route path="/:sitename/about">
+            <Route path="/:sitename/search">
               <Helmet>
-                <title>About</title>
+                <title>Search</title>
               </Helmet>
-              <About.Container />
+              <Search.Container />
+            </Route>
+            <Route path="/:sitename/words/:wordId">
+              <Helmet>
+                <title>Words Details View</title>
+              </Helmet>
+              <Word.Container />
+            </Route>
+            <Route path="/:sitename/words">
+              <Helmet>
+                <title>Words</title>
+              </Helmet>
+              <Words.Container />
+            </Route>
+            <Route path="/:sitename/phrases/:phraseId">
+              <Helmet>
+                <title>Phrases Details View</title>
+              </Helmet>
+              <Phrase.Container />
+            </Route>
+            <Route path="/:sitename/phrases">
+              <Helmet>
+                <title>Phrases</title>
+              </Helmet>
+              <Phrases.Container />
             </Route>
             <Route path="/:sitename/alphabet/:character">
               <Helmet>
@@ -43,23 +81,89 @@ function AppFrameContainer() {
               </Helmet>
               <Alphabet.Container />
             </Route>
-            <Route path="/:sitename/search">
+            <Route path="/:sitename/categories">
               <Helmet>
-                <title>Search</title>
+                <title>Categories</title>
               </Helmet>
-              <Search.Container />
+              <Categories.Container />
             </Route>
-            <Route path="/:sitename/words">
+            <Route path="/:sitename/lists/:listId">
               <Helmet>
-                <title>Words</title>
+                <title>Lists Details View</title>
               </Helmet>
-              <WordsListContainer />
+              <List.Container />
             </Route>
-            <Route path="/:sitename/word/:wordId">
+            <Route path="/:sitename/lists">
               <Helmet>
-                <title>Word</title>
+                <title>Lists</title>
               </Helmet>
-              <Word.Container />
+              <Lists.Container />
+            </Route>
+            <Route path="/:sitename/songs/:songId">
+              <Helmet>
+                <title>Songs Details View</title>
+              </Helmet>
+              <Song.Container />
+            </Route>
+            <Route path="/:sitename/songs">
+              <Helmet>
+                <title>Songs</title>
+              </Helmet>
+              <Songs.Container />
+            </Route>
+            <Route path="/:sitename/stories/:storyId">
+              <Helmet>
+                <title>Stories Details View</title>
+              </Helmet>
+              <Story.Container />
+            </Route>
+            <Route path="/:sitename/stories">
+              <Helmet>
+                <title>Stories</title>
+              </Helmet>
+              <Stories.Container />
+            </Route>
+            <Route path="/:sitename/games/:gameId">
+              <Helmet>
+                <title>Games Details View</title>
+              </Helmet>
+              <Game.Container />
+            </Route>
+            <Route path="/:sitename/games">
+              <Helmet>
+                <title>Games</title>
+              </Helmet>
+              <Games.Container />
+            </Route>
+            <Route path="/:sitename/apps">
+              <Helmet>
+                <title>Our Apps</title>
+              </Helmet>
+              <Resource.Container />
+            </Route>
+            <Route path="/:sitename/keyboards">
+              <Helmet>
+                <title>Our Keyboards</title>
+              </Helmet>
+              <Resource.Container />
+            </Route>
+            <Route path="/:sitename/our-people">
+              <Helmet>
+                <title>Our People</title>
+              </Helmet>
+              <Page.Container />
+            </Route>
+            <Route path="/:sitename/our-language">
+              <Helmet>
+                <title>Our Language</title>
+              </Helmet>
+              <Page.Container />
+            </Route>
+            <Route path="/:sitename/kids">
+              <Helmet>
+                <title>Kids</title>
+              </Helmet>
+              <Kids.Container />
             </Route>
             <Route path="/:sitename">
               <Helmet>

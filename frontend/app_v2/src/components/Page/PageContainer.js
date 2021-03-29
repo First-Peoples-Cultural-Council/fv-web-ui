@@ -2,19 +2,19 @@ import React from 'react'
 // import PropTypes from 'prop-types'
 import Hero from 'components/Hero'
 import Content from 'components/Content'
-import AboutData from 'components/About/AboutData'
+import PageData from 'components/Page/PageData'
 import { WIDGET_HERO_CENTER } from 'common/constants'
 import CircleImage from 'components/CircleImage'
 /**
- * @summary AboutContainer
+ * @summary PageContainer
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function AboutContainer() {
-  const { hero, content } = AboutData()
+function PageContainer() {
+  const { hero, content } = PageData()
   const { background: heroBackground, foreground: heroForeground, foregroundIcon: heroIcon } = hero
   const { heading: contentHeading, body: contentBody } = content
   return (
@@ -35,8 +35,8 @@ function AboutContainer() {
 }
 // PROPTYPES
 // const { string } = PropTypes
-AboutContainer.propTypes = {
+PageContainer.propTypes = {
   //   something: string,
 }
 
-export default AboutContainer
+export default PageContainer
