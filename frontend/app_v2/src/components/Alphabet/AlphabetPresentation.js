@@ -11,7 +11,16 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function AlphabetPresentation({ sitename, isLoading, error, characters, selectedData, links }) {
+function AlphabetPresentation({
+  sitename,
+  isLoading,
+  error,
+  characters,
+  selectedData,
+  links,
+  onVideoClick,
+  videoIsOpen,
+}) {
   if (isLoading) {
     return (
       <div className="flex justify-around p-10">
@@ -106,14 +115,14 @@ function AlphabetPresentation({ sitename, isLoading, error, characters, selected
               Please select a character
             </div>
           )}
-          {selectedData && AlphabetPresentationSelected({ selectedData, sitename })}
+          {selectedData?.id && AlphabetPresentationSelected({ selectedData, sitename, onVideoClick, videoIsOpen })}
         </div>
       </div>
     </section>
   )
 }
 // PROPTYPES
-const { bool, array, string, shape, arrayOf, object } = PropTypes
+const { bool, array, func, string, shape, arrayOf, object } = PropTypes
 AlphabetPresentation.propTypes = {
   isLoading: bool,
   error: object,
@@ -131,6 +140,12 @@ AlphabetPresentation.propTypes = {
   sitename: string,
   selectedData: object,
   links: array,
+  onVideoClick: func,
+  videoIsOpen: bool,
+}
+
+AlphabetPresentation.defaultProps = {
+  onVideoClick: () => {},
 }
 
 export default AlphabetPresentation

@@ -12,7 +12,16 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function AlphabetPresentationWidget({ characters, error, isLoading, onCharacterClick, links, selectedData }) {
+function AlphabetPresentationWidget({
+  characters,
+  error,
+  isLoading,
+  onCharacterClick,
+  links,
+  selectedData,
+  onVideoClick,
+  videoIsOpen,
+}) {
   if (isLoading) {
     return (
       <div className="flex justify-around p-10">
@@ -87,7 +96,7 @@ function AlphabetPresentationWidget({ characters, error, isLoading, onCharacterC
                 Please select a character
               </div>
             )}
-            {selectedData && AlphabetPresentationSelected({ selectedData })}
+            {selectedData?.id && AlphabetPresentationSelected({ selectedData, onVideoClick, videoIsOpen })}
             {links && (
               <ul className="text-center mt-10">
                 {links.map(({ url, title }, index) => {
@@ -121,10 +130,13 @@ AlphabetPresentationWidget.propTypes = {
   onCharacterClick: func,
   selectedData: object,
   links: array,
+  onVideoClick: func,
+  videoIsOpen: bool,
 }
 
 AlphabetPresentationWidget.defaultProps = {
   onCharacterClick: () => {},
+  onVideoClick: () => {},
 }
 
 export default AlphabetPresentationWidget

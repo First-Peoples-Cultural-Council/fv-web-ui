@@ -14,7 +14,17 @@ import AlphabetPresentationWidget from 'components/Alphabet/AlphabetPresentation
  * @returns {node} jsx markup
  */
 function AlphabetContainer({ widgetView }) {
-  const { characters, error, isLoading, sitename, links, onCharacterClick, selectedData } = AlphabetData()
+  const {
+    characters,
+    error,
+    isLoading,
+    sitename,
+    links,
+    onCharacterClick,
+    selectedData,
+    onVideoClick,
+    videoIsOpen,
+  } = AlphabetData()
   return widgetView ? (
     <AlphabetPresentationWidget
       isLoading={isLoading}
@@ -23,6 +33,8 @@ function AlphabetContainer({ widgetView }) {
       onCharacterClick={onCharacterClick}
       selectedData={selectedData}
       links={links}
+      onVideoClick={onVideoClick}
+      videoIsOpen={videoIsOpen}
     />
   ) : (
     <AlphabetPresentation
@@ -32,6 +44,8 @@ function AlphabetContainer({ widgetView }) {
       sitename={sitename}
       selectedData={selectedData}
       links={links}
+      onVideoClick={onVideoClick}
+      videoIsOpen={videoIsOpen}
     />
   )
 }
