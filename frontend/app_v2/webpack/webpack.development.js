@@ -5,6 +5,7 @@ module.exports = (env) =>
   merge(common(env), {
     mode: 'development',
     devtool: 'inline-source-map',
+    target: 'web',
     devServer: {
       port: 3002,
       historyApiFallback: true,
