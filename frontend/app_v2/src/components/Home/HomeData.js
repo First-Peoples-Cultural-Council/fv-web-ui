@@ -6,6 +6,7 @@ import { useQuery } from 'react-query'
 import api from 'services/api'
 import useGetSite from 'common/useGetSite'
 import homeDataAdaptor from 'components/Home/homeDataAdaptor'
+import { getMediaUrl } from 'common/urlHelpers'
 /**
  * @summary HomeData
  * @component
@@ -17,7 +18,7 @@ function HomeData() {
   const { sitename } = useParams()
   const { title, uid, path, logoId } = useGetSite()
   const [formattedData, setFormattedData] = useState({})
-  const logoUrl = `/nuxeo/nxpicsfile/default/${logoId}/Small:content/`
+  const logoUrl = getMediaUrl({ type: 'image', id: logoId, viewName: 'Small' })
 
   const { isLoading, error, data } = useQuery(['getHome', sitename], () => api.home.get(sitename))
 

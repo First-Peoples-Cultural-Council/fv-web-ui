@@ -1,5 +1,6 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+
+import { getMediaUrl } from 'common/urlHelpers'
 import HeroBackground from 'images/hero-background.jpg'
 import useGetSite from 'common/useGetSite'
 /**
@@ -12,7 +13,7 @@ import useGetSite from 'common/useGetSite'
  */
 function AboutData() {
   const { title, logoId } = useGetSite()
-  const logoUrl = `/nuxeo/nxpicsfile/default/${logoId}/Small:content/`
+  const logoUrl = getMediaUrl({ type: 'image', id: logoId, viewName: 'Small' })
   return {
     hero: {
       background: HeroBackground,
