@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+
+// FPCC
 import AudioMinimal from 'components/AudioMinimal'
 import useIcon from 'common/useIcon'
-import AlphabetData from 'components/Alphabet/AlphabetData'
+
 /**
  * @summary AlphabetPresentationSelected
  * @component
@@ -13,9 +15,9 @@ import AlphabetData from 'components/Alphabet/AlphabetData'
  * @returns {node} jsx markup
  */
 
-const AlphabetPresentationSelected = ({ sitename, selectedData }) => {
-  const { onVideoClick, videoIsOpen } = AlphabetData()
-  const { title, relatedAudio, relatedVideo, relatedWords } = selectedData
+const AlphabetPresentationSelected = ({ sitename, selectedData, onVideoClick, videoIsOpen }) => {
+  const { title, relatedWords, audioUrl, videoUrl } = selectedData
+
   return (
     <>
       <h1
@@ -32,10 +34,10 @@ const AlphabetPresentationSelected = ({ sitename, selectedData }) => {
             mb-5"
       >
         {title}
-        {relatedAudio?.[0] && (
+        {audioUrl && (
           <div className="ml-2">
             <AudioMinimal.Container
-              src={`/nuxeo/${relatedAudio?.[0].url}`}
+              src={audioUrl}
               icons={{
                 Play: useIcon('Audio', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
                 Pause: useIcon('PauseCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
@@ -45,7 +47,7 @@ const AlphabetPresentationSelected = ({ sitename, selectedData }) => {
           </div>
         )}
       </h1>
-      {relatedWords?.[0] && (
+      {relatedWords?.length > 0 && (
         <>
           <table className="table-auto mx-auto my-5 w-3/4">
             <thead>
@@ -61,7 +63,7 @@ const AlphabetPresentationSelected = ({ sitename, selectedData }) => {
               </tr>
             </thead>
             <tbody className="py-2 px-10">
-              {relatedWords.map(({ id: wordId, title: wordTitle, translations, relatedAudio: wordAudio }, index) => {
+              {relatedWords.map(({ id: wordId, title: wordTitle, translations, audioUrl: wordAudioUrl }, index) => {
                 const zebraStripe = index % 2 === 0 ? 'bg-gray-100' : ''
                 return (
                   <tr key={index} className={zebraStripe}>
@@ -69,9 +71,9 @@ const AlphabetPresentationSelected = ({ sitename, selectedData }) => {
                       <Link to={`/${sitename}/word/${wordId}`}>{wordTitle}</Link>
                     </td>
                     <td className="p-2">
-                      {wordAudio?.[0] && (
+                      {wordAudioUrl && (
                         <AudioMinimal.Container
-                          src={`/nuxeo/${wordAudio?.[0].url}`}
+                          src={wordAudioUrl}
                           icons={{
                             Play: useIcon('Audio', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
                             Pause: useIcon('PauseCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
@@ -90,7 +92,7 @@ const AlphabetPresentationSelected = ({ sitename, selectedData }) => {
           </table>
         </>
       )}
-      {relatedVideo?.[0] && (
+      {videoUrl && (
         <div className="flex justify-center">
           <button
             onClick={onVideoClick}
@@ -138,7 +140,7 @@ const AlphabetPresentationSelected = ({ sitename, selectedData }) => {
                 </div>
                 {/*body*/}
                 <div className="relative p-2 flex-auto">
-                  <video height="50" width="auto" src={`/nuxeo/${relatedVideo?.[0].url}`} controls autoPlay>
+                  <video height="50" width="auto" src={videoUrl} controls autoPlay>
                     Your browser does not support the video tag.
                   </video>
                 </div>
@@ -153,7 +155,7 @@ const AlphabetPresentationSelected = ({ sitename, selectedData }) => {
 }
 
 // PROPTYPES
-const { array, shape, string } = PropTypes
+const { array, bool, func, shape, string } = PropTypes
 
 AlphabetPresentationSelected.propTypes = {
   sitename: string,
@@ -164,6 +166,13 @@ AlphabetPresentationSelected.propTypes = {
     relatedVideo: array,
     relatedWords: array,
   }),
+  onVideoClick: func,
+  videoIsOpen: bool,
+}
+
+AlphabetPresentationSelected.defaultProps = {
+  onVideoClick: () => {},
+  videoIsOpen: false,
 }
 
 export default AlphabetPresentationSelected
