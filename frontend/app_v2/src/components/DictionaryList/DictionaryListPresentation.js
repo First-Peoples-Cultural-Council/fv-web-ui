@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 import AudioMinimal from 'components/AudioMinimal'
 import useIcon from 'common/useIcon'
+import { makePlural } from 'common/urlHelpers'
 
 /**
  * @summary DictionaryListPresentation
@@ -86,7 +87,10 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                 {items.map(({ id, title, translations, audio, type, parentDialect }, index) => (
                   <tr key={id + index}>
                     <td className="px-6 py-4 align-center">
-                      <Link className="font-medium text-gray-900" to={`/${parentDialect.name}/${type}/${id}`}>
+                      <Link
+                        className="font-medium text-gray-900"
+                        to={`/${parentDialect.shortUrl}/${makePlural(type)}/${id}`}
+                      >
                         {title}
                       </Link>
                       {audio[0] ? (

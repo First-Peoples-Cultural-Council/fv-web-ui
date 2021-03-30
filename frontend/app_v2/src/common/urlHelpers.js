@@ -15,3 +15,16 @@ export const getMediaUrl = ({ id, type, viewName = 'Medium' }) => {
       return 'MediaTypeNotRecognised'
   }
 }
+
+// Very basic function for making strings plural - does NOT account for variations in pluralization e.g. mouse -> mice
+export const makePlural = (string) => {
+  const lastCharacter = string.slice(-1)
+  if (lastCharacter === 'y') {
+    const plural = string.slice(0, -1)
+    return plural + 'ies'
+  }
+  if (lastCharacter === 's') {
+    return string + 'es'
+  }
+  return string + 's'
+}
