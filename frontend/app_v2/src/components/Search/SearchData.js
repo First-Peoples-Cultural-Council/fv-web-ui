@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 import useGetSite from 'common/useGetSite'
 import searchApi from 'services/api/search'
@@ -15,7 +15,6 @@ import searchApi from 'services/api/search'
  */
 function SearchData() {
   const { title, uid } = useGetSite()
-  const history = useHistory()
   const location = useLocation()
 
   // Extract search term from URL search params
@@ -29,8 +28,8 @@ function SearchData() {
 
   // Data fetch
   const response = useQuery(['search', location.search], () => searchApi.get(`${location.search}&ancestorId=${uid}`), {
-    // The query will not execute until the siteId exists
-    enabled: !!uid,
+    // The query will not execute until the siteId exists and a search term has been provided
+    enabled: !!uid && !!searchTerm,
   })
   const { data, isLoading, error } = response
 
@@ -68,9 +67,6 @@ function SearchData() {
   }
 
   const handleFilter = (filter) => {
-    if (searchTerm && filter && filter !== currentFilter) {
-      history.push({ pathname: 'search', search: `?q=${searchTerm}&docType=${filter}` })
-    }
     setCurrentFilter(filter)
   }
 
@@ -112,6 +108,7 @@ function SearchData() {
     isLoading,
     items,
     actions,
+    searchTerm,
   }
 }
 

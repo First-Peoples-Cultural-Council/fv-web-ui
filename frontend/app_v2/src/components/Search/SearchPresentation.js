@@ -1,20 +1,31 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useLocation, Link } from 'react-router-dom'
 
 import DictionaryListPresentation from 'components/DictionaryList/DictionaryListPresentation'
 import SearchInput from 'components/SearchInput'
 
 /**
  * @summary SearchPresentation
- * @version 1.0.1
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function SearchPresentation({ currentFilter, siteTitle, error, filters, handleFilter, isLoading, items, actions }) {
+function SearchPresentation({
+  currentFilter,
+  siteTitle,
+  error,
+  filters,
+  handleFilter,
+  isLoading,
+  items,
+  actions,
+  searchTerm,
+}) {
   const wholeDomain = siteTitle === 'FirstVoices'
+  const location = useLocation()
 
   const getFilterListItems = () => {
     return filters.map((filter) => {
@@ -24,12 +35,16 @@ function SearchPresentation({ currentFilter, siteTitle, error, filters, handleFi
         <li
           key={filter.label}
           id={'SearchFilter' + filter.label}
-          className={`inline-block md:block md:m-5 p-2 flex-grow rounded-xl capitalize ${filterIsActiveClass}`}
-          onClick={() => {
-            handleFilter(filter.type)
-          }}
+          className={`inline-block md:block md:m-5 p-2 flex-grow rounded-xl capitalize cursor-pointer ${filterIsActiveClass}`}
         >
-          {filter.label} {filter.count ? `(${filter.count})` : null}
+          <Link
+            to={`${location.pathname}?q=${searchTerm}&docType=${filter.type}`}
+            onClick={() => {
+              handleFilter(filter.type)
+            }}
+          >
+            {filter.label} {filter.count ? `(${filter.count})` : null}
+          </Link>
         </li>
       )
     })

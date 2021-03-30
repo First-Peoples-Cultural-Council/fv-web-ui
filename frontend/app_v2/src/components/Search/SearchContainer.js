@@ -22,6 +22,7 @@ function SearchContainer() {
     isLoading,
     items,
     newSearchValue,
+    searchTerm,
     siteTitle,
   } = SearchData()
   return (
@@ -36,6 +37,7 @@ function SearchContainer() {
       isLoading={isLoading}
       items={items}
       newSearchValue={newSearchValue}
+      searchTerm={searchTerm}
       siteTitle={siteTitle}
     />
   )
