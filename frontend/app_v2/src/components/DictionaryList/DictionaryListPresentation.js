@@ -117,7 +117,7 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${typeColor[type]} text-white`}
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${typeColor[type]} capitalize text-white`}
                       >
                         {type}
                       </span>

@@ -24,7 +24,7 @@ function SearchPresentation({ currentFilter, siteTitle, error, filters, handleFi
         <li
           key={filter.label}
           id={'SearchFilter' + filter.label}
-          className={`inline-block md:block md:m-5 p-2 flex-grow rounded-xl ${filterIsActiveClass}`}
+          className={`inline-block md:block md:m-5 p-2 flex-grow rounded-xl capitalize ${filterIsActiveClass}`}
           onClick={() => {
             handleFilter(filter.type)
           }}
