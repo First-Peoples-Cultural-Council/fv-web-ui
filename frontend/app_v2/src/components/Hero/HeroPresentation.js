@@ -39,12 +39,13 @@ function HeroPresentation({ background, foreground, foregroundIcon, search, vari
       break
     }
     case WIDGET_HERO_SEARCH: {
-      classNamesForeground = 'flex-col justify-center md:justify-end pb-7'
+      // On small devices - community logo in nav is sufficient
+      classNamesForeground = 'hidden lg:flex flex-col justify-center lg:justify-end pb-7'
       classNamesForegroundIcon = 'mb-2'
       classNamesContainer = `
         ${classNamesContainer}
         ${background ? `${classNamesWithBackground}` : 'text-white bg-gradient-to-r from-gray-600 to-gray-700 py-16'}
-        grid gap-3 grid-cols-none md:grid-cols-3`
+        grid gap-3 grid-cols-none lg:grid-cols-4`
       if (background) {
         containerStyles = Object.assign({}, containerStyles, {
           backgroundImage: `url(${background})`,
@@ -84,17 +85,12 @@ function HeroPresentation({ background, foreground, foregroundIcon, search, vari
           bg-gradient-to-r
           to-fv-turquoise
           from-fv-blue-light
-          h-1/2
-          md:h-1/4
-          grid
-          gap-3
-          grid-cols-none
-          md:grid-cols-3"
+          h-1/5
+          lg:h-1/4"
         >
-          <div className="md:col-start-2 md:col-span-2 grid">
-            <div className=" place-self-center md:place-self-auto flex items-center justify-center md:justify-start">
-              {search}
-            </div>
+          <div className="justify-center mt-6 lg:mt-8 lg:w-5/12 mx-auto">
+            {/*place-self-center md:place-self-auto items-center justify-center md:justify-start lg:w-10/12*/}
+            <div className="mr-4 ml-4 lg:mr-audio lg:ml-auto">{search}</div>
           </div>
         </div>
       )}

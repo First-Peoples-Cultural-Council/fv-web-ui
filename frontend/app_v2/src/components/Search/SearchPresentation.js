@@ -48,7 +48,9 @@ function SearchPresentation({
   return (
     <>
       <section className="bg-gradient-to-b to-fv-turquoise from-fv-blue-light p-5">
-        <SearchInput.Container />
+        <div className="mx-auto lg:w-3/5">
+          <SearchInput.Container />
+        </div>
       </section>
       <div className="grid grid-cols-7 md:divide-x-2 divide-gray-300">
         <div className="hidden md:block min-h-220 col-start-2 col-span-6">

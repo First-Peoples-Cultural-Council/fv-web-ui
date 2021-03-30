@@ -11,13 +11,16 @@
     <script src="<%= V1_URL %>/assets/javascripts/remoteEntry.<%= COMMIT %>.js"></script>
     <style>
         /* CRITICAL CSS */
+
         body {
             margin: 0;
             padding: 0;
         }
+
         .root {
             min-height: 100vh;
         }
+
         .tempNav {
             min-height: 112px;
             background-color: rgb(49, 49, 51);
@@ -27,22 +30,15 @@
 
 <body>
     <div id="root" class="root">
-        <div class='tempNav'></div>
+        <div class="tempNav"></div>
     </div>
-    <div>
+    <footer class="bg-fv-charcoal text-white text-right">
         <strong>Version:</strong>
-        <%= VERSION %> (
-            <%= DATE %>)
-                <br/>
-                <span style="color: #0d6c80;">
-                    <strong>Commit</strong>:
-                    <a style="color: #0d6c80;" href="https://github.com/First-Peoples-Cultural-Council/fv-web-ui/commits/<%= COMMIT %>">
-                        <%= COMMIT %>
-                    </a> |
-                    <strong>Branch</strong>:
-                    <%= BRANCH %>
-                </span>
-    </div>
+        <a href="https://github.com/First-Peoples-Cultural-Council/fv-web-ui/commits/<%= COMMIT %>">
+            <%= VERSION %>
+        </a> (
+        <%= DATE %>)
+    </footer>
 </body>
 
 </html>

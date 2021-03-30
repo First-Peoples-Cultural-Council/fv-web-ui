@@ -14,10 +14,10 @@ import useIcon from 'common/useIcon'
 function SearchInputPresentation({ handleSearchSubmit, handleTextFieldChange, newSearchValue, siteTitle }) {
   return (
     <>
-      <div className="bg-white flex rounded-2xl w-3/5 text-fv-charcoal-light p-2 divide-x-2 divide-gray-300 mx-auto">
+      <div className="relative justify-center mx-auto">
         <input
           data-testid="SearchInput"
-          className="w-full focus text-2xl px-4 py-2 "
+          className="w-full focus text-2xl px-4 py-2 text-fv-charcoal-light rounded-md"
           type="text"
           placeholder={`Search ${siteTitle}`}
           onChange={handleTextFieldChange}
@@ -28,7 +28,11 @@ function SearchInputPresentation({ handleSearchSubmit, handleTextFieldChange, ne
           }}
           value={newSearchValue}
         />
-        <button type="button " onClick={handleSearchSubmit} className="p-2">
+        <button
+          type="button"
+          onClick={handleSearchSubmit}
+          className="absolute right-0 top-0 mr-2 mt-2 mb-2 pl-2 text-fv-charcoal-light border-l-2 border-gray-300"
+        >
           {useIcon('Search', 'fill-current h-8 w-8 ')}
         </button>
       </div>

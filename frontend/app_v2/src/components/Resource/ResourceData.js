@@ -1,7 +1,8 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
-import HeroBackground from 'images/hero-background.jpg'
+import PropTypes from 'prop-types'
+
 import useGetSite from 'common/useGetSite'
+
 /**
  * @summary ResourceData
  * @component
@@ -10,58 +11,112 @@ import useGetSite from 'common/useGetSite'
  * @param {function} props.children
  *
  */
-function ResourceData() {
-  const { title, logoUrl } = useGetSite()
+function ResourceData({ resourceId }) {
+  const { title } = useGetSite()
+
   return {
-    hero: {
-      background: HeroBackground,
-      foreground: title ? title : '',
-      foregroundIcon: logoUrl ? logoUrl : '',
-    },
     content: {
-      heading: `${title} peoples`,
-      body: (
-        <>
-          <p>
-            Eiusmod reprehenderit magna laboris do non do do dolore aute ex. Duis dolore sunt non cupidatat duis
-            cupidatat deserunt laboris id amet aliquip velit duis eu. Duis commodo consequat ea irure ea ipsum consequat
-            consectetur do sunt mollit. Id non laborum Lorem fugiat do. Magna aliqua pariatur voluptate qui tempor sit
-            magna aute ut officia laboris. Incididunt eiusmod reprehenderit ullamco dolor est irure ex.
-          </p>
-
-          <h2>Heading</h2>
-
-          <p>
-            Adipisicing tempor sit enim non. Duis sit aliquip ipsum qui enim reprehenderit minim pariatur veniam ea esse
-            nisi ullamco. Eu ullamco sint minim aliquip in excepteur et do anim culpa dolore commodo.
-          </p>
-
-          <p>
-            Sunt ea eiusmod est ipsum enim officia deserunt amet consectetur occaecat tempor esse. Enim id commodo
-            veniam culpa occaecat Lorem enim culpa ex sunt irure deserunt ea. Cupidatat fugiat Lorem dolor consectetur
-            aute excepteur mollit et sit officia magna duis fugiat anim.
-          </p>
-
-          <p>
-            Ut minim dolor eu minim ipsum enim eu sit consectetur labore cillum. Nulla ad incididunt veniam proident
-            dolore labore excepteur velit fugiat. Velit sint culpa qui elit culpa incididunt cillum consectetur cillum.
-            Nisi elit proident elit ut amet sit fugiat consequat eu ullamco ut. Mollit minim ad proident cillum. In id
-            elit officia sunt non cupidatat laborum quis et minim est.
-          </p>
-
-          <p>
-            Culpa eiusmod Lorem consectetur sunt anim laborum nisi fugiat. Lorem deserunt incididunt labore non duis.
-            Mollit aliquip pariatur eu ad sunt.
-          </p>
-        </>
-      ),
+      bannerHeading:
+        resourceId === 'apps' ? `Download the ${title} Dictionary App!` : `Download Keyboards for ${title}!`,
+      heading: resourceId === 'apps' ? 'Our Apps' : 'Our Keyboards',
+      body: [
+        {
+          sectionHeading: 'Overview',
+          sectionText: (
+            <>
+              <p>
+                Eiusmod reprehenderit magna laboris do non do do dolore aute ex. Duis dolore sunt non cupidatat duis
+                cupidatat deserunt laboris id amet aliquip velit duis eu. Duis commodo consequat ea irure ea ipsum
+                consequat consectetur do sunt mollit. <strong>{title}</strong> Id non laborum Lorem fugiat do. Magna
+                aliqua pariatur voluptate qui tempor sit magna aute ut officia laboris. Incididunt eiusmod reprehenderit
+                ullamco dolor est irure ex.
+              </p>
+            </>
+          ),
+        },
+        {
+          sectionHeading: 'Installation Instructions for iOS',
+          sectionText: (
+            <>
+              <p>
+                Sunt ea eiusmod est ipsum enim officia deserunt amet consectetur occaecat tempor esse. Enim id commodo
+                veniam <strong>{title}</strong> occaecat Lorem enim culpa ex sunt irure deserunt ea. Cupidatat fugiat
+                Lorem dolor consectetur aute excepteur mollit et sit officia magna duis fugiat anim.
+              </p>
+            </>
+          ),
+        },
+        {
+          sectionHeading: 'Installation Instructions for Android',
+          sectionText: (
+            <>
+              <p>
+                Sunt ea eiusmod est ipsum enim officia deserunt amet consectetur occaecat tempor esse. Enim id commodo
+                veniam <strong>{title}</strong> occaecat Lorem enim culpa ex sunt irure deserunt ea. Cupidatat fugiat
+                Lorem dolor consectetur aute excepteur mollit et sit officia magna duis fugiat anim.
+              </p>
+            </>
+          ),
+        },
+        {
+          sectionHeading: 'Videos',
+          sectionText: (
+            <>
+              <p className="lg:flex lg:space-x-4">
+                <iframe
+                  className="w-full"
+                  height="315"
+                  src="https://www.youtube-nocookie.com/embed/J46sRuj99Cw"
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+                <br />
+                <iframe
+                  className="w-full"
+                  height="315"
+                  src="https://www.youtube-nocookie.com/embed/J46sRuj99Cw"
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+                <br />
+                <iframe
+                  className="w-full"
+                  height="315"
+                  src="https://www.youtube-nocookie.com/embed/J46sRuj99Cw"
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+                <br />
+              </p>
+            </>
+          ),
+        },
+        {
+          sectionHeading: 'Support',
+          sectionText: (
+            <>
+              <p>
+                Sunt ea eiusmod est ipsum enim officia deserunt amet consectetur occaecat tempor esse. Enim id commodo
+                veniam <strong>{title}</strong> occaecat Lorem enim culpa ex sunt irure deserunt ea. Cupidatat fugiat
+                Lorem dolor consectetur aute excepteur mollit et sit officia magna duis fugiat anim.
+              </p>
+            </>
+          ),
+        },
+      ],
     },
   }
 }
 // PROPTYPES
-// const { func } = PropTypes
-// ResourceData.propTypes = {
-//   children: func,
-// }
+const { string } = PropTypes
+ResourceData.propTypes = {
+  resourceId: string,
+}
 
 export default ResourceData

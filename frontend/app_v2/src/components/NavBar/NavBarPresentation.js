@@ -16,6 +16,7 @@ import useIcon from 'common/useIcon'
  * @returns {node} jsx markup
  */
 function NavBarPresentation({
+  title,
   className,
   currentUser,
   workspaceToggleValue,
@@ -54,7 +55,13 @@ function NavBarPresentation({
           <div className="justify-start lg:w-0 lg:flex-1">
             <Link to={`/${sitename}/`}>
               <span className="sr-only">FirstVoices Logo</span>
-              {useIcon('Logo', 'fill-current text-white h-10')}
+              {useIcon('Logo', 'fill-current text-white h-10 inline')}
+            </Link>
+            <span className="px-2 text-2xl text-gray-600">/</span>
+            <Link className="text-white" to={`/${sitename}/`}>
+              <span className="sr-only">{title}</span>
+              {useIcon('MusicNote', 'fill-current text-white h-10 inline mr-2')}
+              <span className="md:hidden">{title}</span>
             </Link>
           </div>
 

@@ -34,9 +34,9 @@ import NavBar from 'components/NavBar'
  */
 function AppFrameContainer() {
   return (
-    <div className="AppFrame">
+    <div className="AppFrame overflow-hidden">
       <NavBar.Container className="relative z-10" />
-      <main role="main" className="relative z-0">
+      <main role="main" className="relative z-0 min-h-screen">
         <Suspender>
           <Switch>
             <Route path="/:sitename/search">
@@ -139,13 +139,13 @@ function AppFrameContainer() {
               <Helmet>
                 <title>Our Apps</title>
               </Helmet>
-              <Resource.Container />
+              <Resource.Container resourceId="apps" />
             </Route>
             <Route path="/:sitename/keyboards">
               <Helmet>
                 <title>Our Keyboards</title>
               </Helmet>
-              <Resource.Container />
+              <Resource.Container resourceId="keyboards" />
             </Route>
             <Route path="/:sitename/our-people">
               <Helmet>
