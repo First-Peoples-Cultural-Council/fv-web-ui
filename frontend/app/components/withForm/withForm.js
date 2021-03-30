@@ -93,7 +93,6 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
     }
 
     _onRequestCancelForm = (e, force = false) => {
-      const properties = {}
       if (force) {
         if (this.props.cancelMethod) {
           this.props.cancelMethod()
@@ -103,29 +102,10 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
       } else {
         e.preventDefault()
         const formValue = this['form_' + this.props.type].getValue()
-        // Passed validation
-        if (formValue) {
-          for (const key in formValue) {
-            if (Object.prototype.hasOwnProperty.call(formValue, key) && key) {
-              // NOTE: we can encounter checkboxes that have formValue[key] === false.
-              // If we just used `if (formValue[key])` in the following conditional,
-              // we'd toss out unselected checkboxes
-              if (formValue[key] !== undefined && formValue[key] !== '') {
-                // Filter out null values in an array
-                if (formValue[key] instanceof Array) {
-                  const formValueKey = formValue[key].filter((item) => item !== null)
-                  properties[key] = formValueKey
-                } else {
-                  properties[key] = formValue[key]
-                }
-              }
-            }
-          }
-        }
         this.setState({
           cancelButtonEl: e.currentTarget,
           showCancelWarning: true,
-          formValue: properties,
+          formValue: formValue,
         })
       }
     }
