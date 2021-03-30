@@ -1,8 +1,8 @@
 import { useContext } from 'react'
 import AppStateContext from 'common/AppStateContext'
 
-const useUserGet = () => {
+const useGetUser = () => {
   const { reducer } = useContext(AppStateContext)
-  return reducer.state.api.getUser
+  return reducer.state.api.user.get
 }
-export default useUserGet
+export default useGetUser

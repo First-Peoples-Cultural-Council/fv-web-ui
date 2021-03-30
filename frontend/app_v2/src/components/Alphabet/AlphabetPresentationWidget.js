@@ -12,7 +12,16 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function AlphabetPresentationWidget({ characters, error, isLoading, onCharacterClick, links, selectedData }) {
+function AlphabetPresentationWidget({
+  characters,
+  error,
+  isLoading,
+  onCharacterClick,
+  links,
+  selectedData,
+  onVideoClick,
+  videoIsOpen,
+}) {
   if (isLoading) {
     return (
       <div className="flex justify-around p-10">
@@ -50,7 +59,7 @@ function AlphabetPresentationWidget({ characters, error, isLoading, onCharacterC
           <div className="col-span-7 md:col-span-4">
             <div className="grid grid-cols-7 md:grid-cols-5 lg:grid-cols-7">
               {characters &&
-                characters.map(({ title, uid }) => {
+                characters.map(({ title, id }) => {
                   return (
                     <button
                       data-testid={
@@ -69,7 +78,7 @@ function AlphabetPresentationWidget({ characters, error, isLoading, onCharacterC
                       text-2xl
                       ${selectedData?.title === title ? 'bg-fv-blue text-white' : ''}
                       `}
-                      key={uid}
+                      key={id}
                       onClick={() => onCharacterClick(title)}
                     >
                       {title}
@@ -87,7 +96,7 @@ function AlphabetPresentationWidget({ characters, error, isLoading, onCharacterC
                 Please select a character
               </div>
             )}
-            {selectedData && AlphabetPresentationSelected({ selectedData })}
+            {selectedData?.id && AlphabetPresentationSelected({ selectedData, onVideoClick, videoIsOpen })}
             {links && (
               <ul className="text-center mt-10">
                 {links.map(({ url, title }, index) => {
@@ -109,11 +118,11 @@ function AlphabetPresentationWidget({ characters, error, isLoading, onCharacterC
 const { bool, array, func, string, shape, arrayOf, object } = PropTypes
 AlphabetPresentationWidget.propTypes = {
   isLoading: bool,
-  error: array,
+  error: object,
   characters: arrayOf(
     shape({
       title: string,
-      uid: string,
+      id: string,
       src: string,
       relatedEntries: array,
     })
@@ -121,10 +130,13 @@ AlphabetPresentationWidget.propTypes = {
   onCharacterClick: func,
   selectedData: object,
   links: array,
+  onVideoClick: func,
+  videoIsOpen: bool,
 }
 
 AlphabetPresentationWidget.defaultProps = {
   onCharacterClick: () => {},
+  onVideoClick: () => {},
 }
 
 export default AlphabetPresentationWidget

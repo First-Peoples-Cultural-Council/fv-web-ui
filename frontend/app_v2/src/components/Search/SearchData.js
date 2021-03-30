@@ -24,13 +24,14 @@ function SearchData() {
     ? new URLSearchParams(location.search).get('docType')
     : 'ALL'
 
-  const siteId = uid ? `&siteId=${uid}` : ''
-
   // Local State
   const [currentFilter, setCurrentFilter] = useState(docTypeFilter)
 
   // Data fetch
-  const response = useQuery(['search', location.search], () => searchApi.get(location.search + siteId))
+  const response = useQuery(['search', location.search], () => searchApi.get(`${location.search}&ancestorId=${uid}`), {
+    // The query will not execute until the siteId exists
+    enabled: !!uid,
+  })
   const { data, isLoading, error } = response
 
   // DataAdaptor
@@ -104,13 +105,12 @@ function SearchData() {
 
   return {
     currentFilter,
-    sitename: title ? title : 'FirstVoices',
+    siteTitle: title ? title : 'FirstVoices',
     error,
     filters,
     handleFilter,
     isLoading,
     items,
-    searchTerm,
     actions,
   }
 }

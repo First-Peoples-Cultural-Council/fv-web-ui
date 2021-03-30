@@ -1,7 +1,12 @@
-import api from 'services/api'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { useQuery } from 'react-query'
+
+//FPCC
+import api from 'services/api'
 import useGetSite from 'common/useGetSite'
-import getHomeAdaptor from 'services/api/adaptors/getHome'
+import homeDataAdaptor from 'components/Home/homeDataAdaptor'
+import { getMediaUrl } from 'common/urlHelpers'
 /**
  * @summary HomeData
  * @component
@@ -11,14 +16,22 @@ import getHomeAdaptor from 'services/api/adaptors/getHome'
  */
 function HomeData() {
   const { sitename } = useParams()
-  const { title, uid, path, logoUrl } = useGetSite()
+  const { title, uid, path, logoId } = useGetSite()
+  const [formattedData, setFormattedData] = useState({})
+  const logoUrl = getMediaUrl({ type: 'image', id: logoId, viewName: 'Small' })
 
-  const { isLoading, error, data, dataOriginal } = api.getHome(sitename, getHomeAdaptor)
+  const { isLoading, error, data } = useQuery(['getHome', sitename], () => api.home.get(sitename))
+
+  useEffect(() => {
+    if (isLoading === false && error === null) {
+      setFormattedData(homeDataAdaptor(data))
+    }
+  }, [isLoading, error])
+
   return {
     isLoading,
-    error: title === undefined || error,
-    data,
-    dataOriginal,
+    error,
+    data: formattedData,
     language: {
       title,
       uid,

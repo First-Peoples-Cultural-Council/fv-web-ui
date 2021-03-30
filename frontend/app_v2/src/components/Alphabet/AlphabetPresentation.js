@@ -11,7 +11,16 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function AlphabetPresentation({ sitename, isLoading, error, characters, selectedData, links }) {
+function AlphabetPresentation({
+  sitename,
+  isLoading,
+  error,
+  characters,
+  selectedData,
+  links,
+  onVideoClick,
+  videoIsOpen,
+}) {
   if (isLoading) {
     return (
       <div className="flex justify-around p-10">
@@ -29,7 +38,10 @@ function AlphabetPresentation({ sitename, isLoading, error, characters, selected
   if (error) {
     return (
       <div className="p-10">
-        <h1>Sorry, something went wrong!</h1>
+        <h1 className="m-5 text-2xl text-fv-blue font-bold sm:text-3xl">
+          {error?.response.status || ''} {error?.message || ''}
+        </h1>
+        <p className="mb-5 text-xl text-fv-blue font-bold sm:text-2xl">Sorry, something went wrong!</p>
         <p>Please report this error by emailing hello@firstvoices.com so that we can fix it.</p>
         <p>Include the link or action you took to get to this page.</p>
         <p>Thank You!</p>
@@ -69,7 +81,7 @@ function AlphabetPresentation({ sitename, isLoading, error, characters, selected
         </div>
         <div className="mb-5 grid grid-cols-4 md:grid-cols-7 lg:grid-cols-10 max-w-screen-lg mx-auto">
           {characters &&
-            characters.map(({ title, uid }) => {
+            characters.map(({ title, id }) => {
               return (
                 <Link
                   data-testid={selectedData?.title === title ? 'AlphabetPresentation__selectedCharacter' : undefined}
@@ -86,7 +98,7 @@ function AlphabetPresentation({ sitename, isLoading, error, characters, selected
                       text-2xl
                       ${selectedData?.title === title ? 'bg-fv-blue text-white' : ''}
                       `}
-                  key={uid}
+                  key={id}
                   to={`/${sitename}/alphabet/${title}`}
                 >
                   {title}
@@ -103,28 +115,37 @@ function AlphabetPresentation({ sitename, isLoading, error, characters, selected
               Please select a character
             </div>
           )}
-          {selectedData && AlphabetPresentationSelected({ selectedData })}
+          {selectedData?.id && AlphabetPresentationSelected({ selectedData, sitename, onVideoClick, videoIsOpen })}
         </div>
       </div>
     </section>
   )
 }
 // PROPTYPES
-const { bool, array, string, shape, arrayOf, object } = PropTypes
+const { bool, array, func, string, shape, arrayOf, object } = PropTypes
 AlphabetPresentation.propTypes = {
   isLoading: bool,
-  error: array,
+  error: object,
   characters: arrayOf(
     shape({
       title: string,
-      uid: string,
-      src: string,
-      relatedEntries: array,
+      id: string,
+      relatedAudio: array,
+      relatedLinks: array,
+      relatedPictures: array,
+      relatedVideo: array,
+      relatedWords: array,
     })
   ),
   sitename: string,
   selectedData: object,
   links: array,
+  onVideoClick: func,
+  videoIsOpen: bool,
+}
+
+AlphabetPresentation.defaultProps = {
+  onVideoClick: () => {},
 }
 
 export default AlphabetPresentation

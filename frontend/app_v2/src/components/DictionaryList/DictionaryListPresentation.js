@@ -47,8 +47,8 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <table className="min-w-full divide-y divide-gray-200">
+          <div className="shadow-md overflow-hidden border-b border-gray-300 sm:rounded-lg">
+            <table className="min-w-full divide-y divide-gray-300">
               <thead className="bg-gray-50">
                 <tr>
                   <th
@@ -82,7 +82,7 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-white divide-y divide-gray-300">
                 {items.map(({ id, title, translations, audio, type, parentDialect }, index) => (
                   <tr key={id + index}>
                     <td className="px-6 py-4 align-center">
@@ -103,7 +103,7 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                     <td className="px-6 py-4">
                       {translations ? (
                         <ol className="text-gray-900">
-                          {translations.map(({ translation }, i) => (
+                          {translations.map((translation, i) => (
                             <li key={i}>
                               {translations.length > 1 ? `${i + 1}. ` : null} {translation}
                             </li>

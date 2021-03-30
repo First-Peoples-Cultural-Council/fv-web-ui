@@ -11,7 +11,7 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function SearchInputPresentation({ handleSearchSubmit, handleTextFieldChange, newSearchValue, siteTitle }) {
+function SearchInputPresentation({ handleSearchSubmit, handleTextFieldChange, searchValue, siteTitle }) {
   return (
     <>
       <div className="relative justify-center mx-auto">
@@ -26,7 +26,7 @@ function SearchInputPresentation({ handleSearchSubmit, handleTextFieldChange, ne
               handleSearchSubmit(e)
             }
           }}
-          value={newSearchValue}
+          value={searchValue}
         />
         <button
           type="button"
@@ -44,7 +44,7 @@ const { func, string } = PropTypes
 SearchInputPresentation.propTypes = {
   handleSearchSubmit: func,
   handleTextFieldChange: func,
-  newSearchValue: string,
+  searchValue: string,
   siteTitle: string,
 }
 
