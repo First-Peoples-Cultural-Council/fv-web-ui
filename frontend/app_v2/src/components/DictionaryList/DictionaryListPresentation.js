@@ -85,9 +85,9 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
             <tbody className="bg-white divide-y divide-gray-300">
               {items.map(({ id, title, translations, audio, type, parentDialect }, index) => (
                 <tr key={id + index}>
-                  <td className="px-6 py-4 align-center">
+                  <td className="px-6 py-4 flex items-center">
                     <Link
-                      className="font-medium text-gray-900"
+                      className="font-medium text-gray-900 mr-2"
                       to={`/${parentDialect.shortUrl}/${makePlural(type)}/${id}`}
                     >
                       {title}
@@ -96,9 +96,9 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                       <AudioMinimal.Container
                         src={audio[0]}
                         icons={{
-                          Play: useIcon('Audio', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
-                          Pause: useIcon('PauseCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
-                          Error: useIcon('TimesCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
+                          Play: useIcon('Audio', 'fill-current h-7 w-7'),
+                          Pause: useIcon('PauseCircle', 'fill-current h-7 w-7'),
+                          Error: useIcon('TimesCircle', 'fill-current h-7 w-7'),
                         }}
                       />
                     ) : null}
