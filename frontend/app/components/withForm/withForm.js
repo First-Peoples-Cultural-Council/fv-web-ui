@@ -101,12 +101,13 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
         }
       } else {
         e.preventDefault()
+        const formValue = this['form_' + this.props.type].getValue()
+        this.setState({
+          cancelButtonEl: e.currentTarget,
+          showCancelWarning: true,
+          formValue: formValue,
+        })
       }
-
-      this.setState({
-        cancelButtonEl: e.currentTarget,
-        showCancelWarning: true,
-      })
     }
 
     _hasPendingReview = (item) => {
