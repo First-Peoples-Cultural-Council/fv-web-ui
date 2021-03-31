@@ -100,9 +100,18 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                             key={i}
                             src={getMediaUrl({ id: audioId, type: 'audio' })}
                             icons={{
-                              Play: useIcon('Audio', 'fill-current m-1 h-8 w-8 md:h-6 md:w-6'),
-                              Pause: useIcon('PauseCircle', 'fill-current m-1 h-8 w-8 md:h-6 md:w-6'),
-                              Error: useIcon('TimesCircle', 'fill-current m-1 h-8 w-8 md:h-6 md:w-6'),
+                              Play: useIcon(
+                                'Audio',
+                                'fill-current text-fv-blue-dark hover:text-fv-blue-light m-1 h-8 w-8 md:h-6 md:w-6'
+                              ),
+                              Pause: useIcon(
+                                'PauseCircle',
+                                'fill-current text-fv-blue-dark hover:text-fv-blue-light m-1 h-8 w-8 md:h-6 md:w-6'
+                              ),
+                              Error: useIcon(
+                                'TimesCircle',
+                                'fill-current text-fv-blue-dark hover:text-fv-blue-light m-1 h-8 w-8 md:h-6 md:w-6'
+                              ),
                             }}
                           />
                         ))

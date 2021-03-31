@@ -36,7 +36,7 @@ function SearchPresentation({
         <li
           key={filter.label}
           id={'SearchFilter' + filter.label}
-          className={`inline-block md:block md:my-2 md:mx-5 p-2 flex-grow rounded-xl capitalize cursor-pointer ${filterIsActiveClass}`}
+          className={`inline-block transition duration-500 ease-in-out md:block md:my-2 md:mx-5 p-2 flex-grow rounded-xl capitalize cursor-pointer ${filterIsActiveClass}`}
         >
           <Link
             to={`${location.pathname}?q=${searchTerm}&docType=${filter.type}`}
