@@ -123,7 +123,9 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                       </span>
                     </td>
                     {wholeDomain ? (
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{parentDialect.name}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <Link to={`/${parentDialect.shortUrl}`}>{parentDialect.name}</Link>
+                      </td>
                     ) : null}
                     {/* Action buttons */}
                     {actions.map(({ actionTitle, iconName, clickHandler, confirmationMessage }, toolIndex) => (
