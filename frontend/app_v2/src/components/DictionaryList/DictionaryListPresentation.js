@@ -46,109 +46,107 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
 
   return (
     <div className="flex flex-col">
-      <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div className="shadow-md overflow-hidden border-b border-gray-300 sm:rounded-lg">
-            <table className="min-w-full divide-y divide-gray-300">
-              <thead className="bg-gray-50">
-                <tr>
+      <div className="py-2 align-middle inline-block min-w-full">
+        <div className="shadow-md overflow-hidden border-b border-gray-300 sm:rounded-lg">
+          <table className="min-w-full divide-y divide-gray-300">
+            <thead className="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Entry
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Translation
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Type
+                </th>
+                {wholeDomain ? (
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    Entry
+                    Language Site
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Translation
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Type
-                  </th>
-                  {wholeDomain ? (
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                ) : null}
+                <th scope="col" className="relative px-6 py-3">
+                  <span className="sr-only">Actions</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-300">
+              {items.map(({ id, title, translations, audio, type, parentDialect }, index) => (
+                <tr key={id + index}>
+                  <td className="px-6 py-4 align-center">
+                    <Link
+                      className="font-medium text-gray-900"
+                      to={`/${parentDialect.shortUrl}/${makePlural(type)}/${id}`}
                     >
-                      Language Site
-                    </th>
-                  ) : null}
-                  <th scope="col" className="relative px-6 py-3">
-                    <span className="sr-only">Actions</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-300">
-                {items.map(({ id, title, translations, audio, type, parentDialect }, index) => (
-                  <tr key={id + index}>
-                    <td className="px-6 py-4 align-center">
-                      <Link
-                        className="font-medium text-gray-900"
-                        to={`/${parentDialect.shortUrl}/${makePlural(type)}/${id}`}
-                      >
-                        {title}
-                      </Link>
-                      {audio[0] ? (
-                        <AudioMinimal.Container
-                          src={audio[0]}
-                          icons={{
-                            Play: useIcon('Audio', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
-                            Pause: useIcon('PauseCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
-                            Error: useIcon('TimesCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
-                          }}
-                        />
-                      ) : null}
-                    </td>
-                    <td className="px-6 py-4">
-                      {translations ? (
-                        <ol className="text-gray-900">
-                          {translations.map((translation, i) => (
-                            <li key={i}>
-                              {translations.length > 1 ? `${i + 1}. ` : null} {translation}
-                            </li>
-                          ))}
-                        </ol>
-                      ) : null}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${typeColor[type]} capitalize text-white`}
-                      >
-                        {type}
-                      </span>
-                    </td>
-                    {wholeDomain ? (
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <Link to={`/${parentDialect.shortUrl}`}>{parentDialect.name}</Link>
-                      </td>
+                      {title}
+                    </Link>
+                    {audio[0] ? (
+                      <AudioMinimal.Container
+                        src={audio[0]}
+                        icons={{
+                          Play: useIcon('Audio', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
+                          Pause: useIcon('PauseCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
+                          Error: useIcon('TimesCircle', 'fill-current h-6 w-6 sm:w-8 sm:h-8'),
+                        }}
+                      />
                     ) : null}
-                    {/* Action buttons */}
-                    {actions.map(({ actionTitle, iconName, clickHandler, confirmationMessage }, toolIndex) => (
-                      <td key={toolIndex} className=" px-6 pt-4 text-right">
-                        <button
-                          className="relative text-fv-blue-dark hover:text-fv-blue-light"
-                          onClick={() => clickHandler(title)}
-                        >
-                          <span className="sr-only">{actionTitle}</span>
-                          {useIcon(iconName, 'fill-current w-7 h-7')}
-                          <span id={`${actionTitle}-message-${title}`} className="hidden">
-                            <div className="absolute bottom-0 right-0 w-auto p-1 text-sm bg-fv-blue-dark text-white text-center rounded-lg shadow-lg ">
-                              {confirmationMessage}
-                            </div>
-                          </span>
-                        </button>
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    {translations ? (
+                      <ol className="text-gray-900">
+                        {translations.map((translation, i) => (
+                          <li key={i}>
+                            {translations.length > 1 ? `${i + 1}. ` : null} {translation}
+                          </li>
+                        ))}
+                      </ol>
+                    ) : null}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${typeColor[type]} capitalize text-white`}
+                    >
+                      {type}
+                    </span>
+                  </td>
+                  {wholeDomain ? (
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <Link to={`/${parentDialect.shortUrl}`}>{parentDialect.name}</Link>
+                    </td>
+                  ) : null}
+                  {/* Action buttons */}
+                  {actions.map(({ actionTitle, iconName, clickHandler, confirmationMessage }, toolIndex) => (
+                    <td key={toolIndex} className=" px-6 pt-4 text-right">
+                      <button
+                        className="relative text-fv-blue-dark hover:text-fv-blue-light"
+                        onClick={() => clickHandler(title)}
+                      >
+                        <span className="sr-only">{actionTitle}</span>
+                        {useIcon(iconName, 'fill-current w-7 h-7')}
+                        <span id={`${actionTitle}-message-${title}`} className="hidden">
+                          <div className="absolute bottom-0 right-0 w-auto p-1 text-sm bg-fv-blue-dark text-white text-center rounded-lg shadow-lg ">
+                            {confirmationMessage}
+                          </div>
+                        </span>
+                      </button>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
