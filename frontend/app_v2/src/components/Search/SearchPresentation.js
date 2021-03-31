@@ -45,7 +45,7 @@ function SearchPresentation({
             }}
           >
             {currentFilter !== 'ALL' && filter.type === 'ALL' ? (
-              <>{useIcon('BackArrow', 'inline-flex pb-2 h-7 text-fv-turquoise fill-current')} Back to All</>
+              <>{useIcon('BackArrow', 'inline-flex pb-2 h-7 text-fv-turquoise fill-current')} Back to all results</>
             ) : (
               <>
                 {filter.label} {filter.count ? `(${filter.count})` : null}
@@ -64,12 +64,12 @@ function SearchPresentation({
           <SearchInput.Container />
         </div>
       </section>
-      <div className="grid grid-cols-7 md:p-2">
-        <div className="col-span-7 md:col-span-1 mt-2">
+      <div className="grid grid-cols-11 md:p-2">
+        <div className="col-span-11 md:col-span-2 mt-2">
           <h2 className="hidden md:block text-2xl ml-8">Filters</h2>
           <ul className="inline-block md:block list-none m-2 md:m-0 md:space-y-4 ">{getFilterListItems()}</ul>
         </div>
-        <div className="min-h-220 col-span-7 md:col-span-6">
+        <div className="min-h-220 col-span-11 md:col-span-9">
           <DictionaryListPresentation
             items={items}
             actions={actions}
