@@ -2,6 +2,7 @@ import React from 'react'
 
 import About from 'common/icons/About'
 import Audio from 'common/icons/Audio'
+import BackArrow from 'common/icons/BackArrow'
 import Book from 'common/icons/Book'
 import ChatBubble from 'common/icons/ChatBubble'
 import ChevronDown from 'common/icons/ChevronDown'
@@ -42,6 +43,7 @@ function useIcon(iconName, iconStyling) {
   const icons = {
     About,
     Audio,
+    BackArrow,
     Book,
     ChatBubble,
     ChevronDown,

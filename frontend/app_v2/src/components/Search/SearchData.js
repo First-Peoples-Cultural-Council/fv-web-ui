@@ -46,10 +46,7 @@ function SearchData() {
     : []
 
   // Get Filters
-  const filters =
-    currentFilter !== 'ALL'
-      ? [{ type: 'ALL', label: 'Back to ALL', count: null }]
-      : [{ type: 'ALL', label: 'ALL', count: data?.statistics.resultCount }]
+  const filters = [{ type: 'ALL', label: 'ALL', count: data?.statistics.resultCount }]
   const countsByType = data?.statistics.countsByType ? data.statistics.countsByType : {}
 
   for (const [key, value] of Object.entries(countsByType)) {

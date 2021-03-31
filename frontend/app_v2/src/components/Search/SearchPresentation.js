@@ -4,6 +4,7 @@ import { useLocation, Link } from 'react-router-dom'
 
 import DictionaryListPresentation from 'components/DictionaryList/DictionaryListPresentation'
 import SearchInput from 'components/SearchInput'
+import useIcon from 'common/useIcon'
 
 /**
  * @summary SearchPresentation
@@ -35,7 +36,7 @@ function SearchPresentation({
         <li
           key={filter.label}
           id={'SearchFilter' + filter.label}
-          className={`inline-block md:block md:m-5 p-2 flex-grow rounded-xl capitalize cursor-pointer ${filterIsActiveClass}`}
+          className={`inline-block md:block md:my-2 md:mx-5 p-2 flex-grow rounded-xl capitalize cursor-pointer ${filterIsActiveClass}`}
         >
           <Link
             to={`${location.pathname}?q=${searchTerm}&docType=${filter.type}`}
@@ -43,7 +44,13 @@ function SearchPresentation({
               handleFilter(filter.type)
             }}
           >
-            {filter.label} {filter.count ? `(${filter.count})` : null}
+            {currentFilter !== 'ALL' && filter.type === 'ALL' ? (
+              <>{useIcon('BackArrow', 'inline-flex pb-2 h-7 text-fv-turquoise fill-current')} Back to All</>
+            ) : (
+              <>
+                {filter.label} {filter.count ? `(${filter.count})` : null}
+              </>
+            )}
           </Link>
         </li>
       )
