@@ -2,9 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
+//FPCC
 import AudioMinimal from 'components/AudioMinimal'
 import useIcon from 'common/useIcon'
 import { makePlural } from 'common/urlHelpers'
+import { getMediaUrl } from 'common/urlHelpers'
 
 /**
  * @summary DictionaryListPresentation
@@ -92,16 +94,19 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                     >
                       {title}
                     </Link>
-                    {audio[0] ? (
-                      <AudioMinimal.Container
-                        src={audio[0]}
-                        icons={{
-                          Play: useIcon('Audio', 'fill-current h-7 w-7'),
-                          Pause: useIcon('PauseCircle', 'fill-current h-7 w-7'),
-                          Error: useIcon('TimesCircle', 'fill-current h-7 w-7'),
-                        }}
-                      />
-                    ) : null}
+                    {audio.length > 0
+                      ? audio.map((audioId, i) => (
+                          <AudioMinimal.Container
+                            key={i}
+                            src={getMediaUrl({ id: audioId, type: 'audio' })}
+                            icons={{
+                              Play: useIcon('Audio', 'fill-current m-1 h-8 w-8 md:h-6 md:w-6'),
+                              Pause: useIcon('PauseCircle', 'fill-current m-1 h-8 w-8 md:h-6 md:w-6'),
+                              Error: useIcon('TimesCircle', 'fill-current m-1 h-8 w-8 md:h-6 md:w-6'),
+                            }}
+                          />
+                        ))
+                      : null}
                   </td>
                   <td className="px-6 py-4">
                     {translations ? (
@@ -134,7 +139,7 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
                         onClick={() => clickHandler(title)}
                       >
                         <span className="sr-only">{actionTitle}</span>
-                        {useIcon(iconName, 'fill-current w-7 h-7')}
+                        {useIcon(iconName, 'fill-current h-8 w-8 md:h-6 md:w-6')}
                         <span id={`${actionTitle}-message-${title}`} className="hidden">
                           <div className="absolute bottom-0 right-0 w-auto p-1 text-sm bg-fv-blue-dark text-white text-center rounded-lg shadow-lg ">
                             {confirmationMessage}
