@@ -14,7 +14,6 @@ import useIcon from 'common/useIcon'
  */
 function AlphabetPresentationWidget({
   characters,
-  error,
   isLoading,
   onCharacterClick,
   links,
@@ -33,16 +32,6 @@ function AlphabetPresentationWidget({
           {useIcon('Spinner', 'animate-spin h-5 w-5 mr-3 fill-current')}
           Loading
         </button>
-      </div>
-    )
-  }
-  if (error) {
-    return (
-      <div className="p-10">
-        <h1>Sorry, something went wrong!</h1>
-        <p>Please report this error by emailing hello@firstvoices.com so that we can fix it.</p>
-        <p>Include the link or action you took to get to this page.</p>
-        <p>Thank You!</p>
       </div>
     )
   }
@@ -118,7 +107,6 @@ function AlphabetPresentationWidget({
 const { bool, array, func, string, shape, arrayOf, object } = PropTypes
 AlphabetPresentationWidget.propTypes = {
   isLoading: bool,
-  error: object,
   characters: arrayOf(
     shape({
       title: string,

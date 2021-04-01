@@ -11,16 +11,7 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function AlphabetPresentation({
-  sitename,
-  isLoading,
-  error,
-  characters,
-  selectedData,
-  links,
-  onVideoClick,
-  videoIsOpen,
-}) {
+function AlphabetPresentation({ sitename, isLoading, characters, selectedData, links, onVideoClick, videoIsOpen }) {
   if (isLoading) {
     return (
       <div className="flex justify-around p-10">
@@ -32,19 +23,6 @@ function AlphabetPresentation({
           {useIcon('Spinner', 'animate-spin h-5 w-5 mr-3 fill-current')}
           Loading
         </button>
-      </div>
-    )
-  }
-  if (error) {
-    return (
-      <div className="p-10">
-        <h1 className="m-5 text-2xl text-fv-blue font-bold sm:text-3xl">
-          {error?.response.status || ''} {error?.message || ''}
-        </h1>
-        <p className="mb-5 text-xl text-fv-blue font-bold sm:text-2xl">Sorry, something went wrong!</p>
-        <p>Please report this error by emailing hello@firstvoices.com so that we can fix it.</p>
-        <p>Include the link or action you took to get to this page.</p>
-        <p>Thank You!</p>
       </div>
     )
   }
@@ -125,7 +103,6 @@ function AlphabetPresentation({
 const { bool, array, func, string, shape, arrayOf, object } = PropTypes
 AlphabetPresentation.propTypes = {
   isLoading: bool,
-  error: object,
   characters: arrayOf(
     shape({
       title: string,
