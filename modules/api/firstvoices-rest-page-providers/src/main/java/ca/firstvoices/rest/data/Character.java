@@ -15,6 +15,7 @@ public class Character implements Serializable {
   private final List<RelatedMedia> relatedPictures = new LinkedList<>();
   private final List<RelatedMedia> relatedVideo = new LinkedList<>();
   private final List<Word> relatedWords = new LinkedList<>();
+  private String customOrder = "";
 
 
   public List<Link> getRelatedLinks() {
@@ -43,6 +44,14 @@ public class Character implements Serializable {
 
   public List<Word> getRelatedWords() {
     return relatedWords;
+  }
+
+  public String getCustomOrder() {
+    return customOrder;
+  }
+
+  public void setCustomOrder(final String customOrder) {
+    this.customOrder = customOrder;
   }
 
   public Character(final String id, final String title) {
