@@ -60,6 +60,7 @@ function NavBarData() {
     userInitials:
       firstName || lastName ? (firstName?.charAt(0) || '') + (lastName?.charAt(0) || '') : username?.charAt(0) || '',
     firstName,
+    lastName,
     username,
   }
 

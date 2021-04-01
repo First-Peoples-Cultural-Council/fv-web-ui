@@ -67,7 +67,7 @@ function NavBarPresentation({
 
           <div className="hidden md:flex space-x-6">{menus}</div>
 
-          {!currentUser || currentUser?.userName === 'Guest' ? (
+          {currentUser?.username === 'Guest' || currentUser?.username === undefined ? (
             <div className="ml-8 hidden lg:flex items-center justify-end lg:flex-1">
               <a
                 href="/nuxeo/logout?requestedUrl=login.jsp"
