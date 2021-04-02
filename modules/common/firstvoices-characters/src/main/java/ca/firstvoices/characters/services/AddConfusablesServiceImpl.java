@@ -27,7 +27,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.logging.Log;
@@ -36,6 +38,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.core.api.IterableQueryResult;
 import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.api.model.impl.ArrayProperty;
 import org.nuxeo.ecm.directory.Session;
@@ -80,6 +83,97 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
           // Update confusables
           updateConfusableCharacters(session, doc, dialect, character, confusables);
         }
+      }
+    }
+  }
+
+  @Override
+  public HashMap<String, HashSet<String>> getConfusablesFromAllDialects(CoreSession session,
+      DocumentModel dialect) {
+    // Confusable map
+    // key => lowercase or uppercase
+    // value => list of confusables
+    HashMap<String, HashSet<String>> confusables = new HashMap<>();
+
+    // Grab all confusables across the site (except for current dialect)
+    String query = String.format("SELECT "
+        + "dc:title, fvcharacter:upper_case_character, "
+        + "fvcharacter:confusable_characters/*, "
+        + "fvcharacter:upper_case_confusable_characters/* "
+        + "FROM FVCharacter "
+        + "WHERE ecm:isTrashed = 0 "
+        + "AND ecm:isProxy = 0 "
+        + "AND ecm:isVersion = 0 "
+        + "AND fva:dialect <> '%s'", (dialect == null) ? null : dialect.getId());
+
+    try (IterableQueryResult results = session
+        .queryAndFetch(query, "NXQL")) {
+      for (Map<String, Serializable> item : results) {
+        String title =
+            String.valueOf(item.get("dc:title"));
+        String lowerCaseConfusable = StringEscapeUtils.unescapeJava(
+            String.valueOf(item.get("fvcharacter:confusable_characters/*")));
+
+        if (confusables.containsKey(title)) {
+          // Add to existing confusables list
+          confusables.get(title).add(lowerCaseConfusable);
+        } else {
+          // Add to new list
+          confusables.put(title, new HashSet<>(Collections.singletonList(lowerCaseConfusable)));
+        }
+
+        if (item.get("fvcharacter:upper_case_character") != null) {
+          String upperCase =
+              String.valueOf(item.get("fvcharacter:upper_case_character"));
+          String upperCaseConfusable = StringEscapeUtils.unescapeJava(
+              String.valueOf(item.get("fvcharacter:upper_case_confusable_characters/*")));
+
+          if (confusables.containsKey(upperCase)) {
+            // Add to existing confusables list
+            confusables.get(upperCase).add(upperCaseConfusable);
+          } else {
+            // Add to new list
+            confusables.put(upperCase,
+                new HashSet<>(Collections.singletonList(upperCaseConfusable)));
+          }
+        }
+      }
+    }
+
+    return confusables;
+  }
+
+  @Override
+  public void addConfusablesFromAllDialects(CoreSession session, DocumentModel dialect) {
+    HashMap<String, HashSet<String>> confusables =
+        getConfusablesFromAllDialects(session, dialect);
+
+    // Get all alphabet characters for the dialect
+    String allCharactersQuery = String.format(
+        "SELECT * FROM FVCharacter WHERE fva:dialect='%s' "
+        + "AND ecm:isProxy = 0 "
+        + "AND ecm:isVersion = 0 "
+        + "AND ecm:isTrashed = 0", dialect.getId());
+
+    DocumentModelList charactersDocs = session.query(allCharactersQuery);
+
+    // Iterate over each alphabet character returned by the query
+    for (DocumentModel doc : charactersDocs) {
+      String charTitle = String.valueOf(doc.getPropertyValue("dc:title"));
+
+      // Update confusables for lowercase
+      updateConfusableCharacters(session, doc, dialect,
+          StringEscapeUtils.unescapeJava(charTitle),
+          confusables.get(charTitle).toArray(new String[0]));
+
+      String upperCaseTitle =
+          String.valueOf(doc.getPropertyValue("fvcharacter:upper_case_character"));
+
+      // Update confusables for uppercase
+      if (upperCaseTitle != null && !upperCaseTitle.isEmpty()) {
+        updateConfusableCharacters(session, doc, dialect,
+            StringEscapeUtils.unescapeJava(upperCaseTitle),
+            confusables.get(upperCaseTitle).toArray(new String[0]));
       }
     }
   }
