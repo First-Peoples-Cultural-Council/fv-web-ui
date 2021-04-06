@@ -15,7 +15,7 @@ import useIcon from 'common/useIcon'
 function ErrorHandlerPresentation({ status, heading, content }) {
   const history = useHistory()
   return (
-    <div className="min-w-screen min-h-screen bg-fv-turquoise-light flex items-center p-5 lg:p-20 overflow-hidden relative">
+    <div className="min-w-screen min-h-screen bg-gradient-to-r from-fv-turquoise to-fv-blue-light flex items-center p-5 lg:p-20 overflow-hidden relative">
       <div className="w-full flex-1 min-h-full min-w-full rounded-3xl bg-white shadow-xl p-10 lg:p-20 text-gray-800 relative items-center text-center">
         {useIcon('Logo', 'h-24 mb-10 mx-auto')}
         <div className="mb-10 md:mb-20 text-gray-600 font-light">
