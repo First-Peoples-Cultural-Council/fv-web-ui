@@ -14,7 +14,7 @@ import { getMediaUrl } from 'common/urlHelpers'
  *
  */
 
-const AlphabetData = () => {
+const AlphabetData = ({ widgetView }) => {
   const { uid } = useGetSite()
   const { character, sitename } = useParams()
   const [selectedData, setSelectedData] = useState({})
@@ -58,7 +58,8 @@ const AlphabetData = () => {
         setSelectedData(_selectedData)
       }
     }
-    if (isError)
+    if (isError && !widgetView)
+      // Setting the errorStatusCode will trigger the render of the ErrorHandler component
       history.replace(history.location.pathname, {
         errorStatusCode: error?.response?.status,
       })

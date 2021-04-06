@@ -23,7 +23,7 @@ function AlphabetContainer({ widgetView }) {
     selectedData,
     onVideoClick,
     videoIsOpen,
-  } = AlphabetData()
+  } = AlphabetData({ widgetView })
   return widgetView ? (
     <AlphabetPresentationWidget
       isLoading={isLoading}
