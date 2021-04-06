@@ -29,17 +29,17 @@ function ErrorHandlerContainer({ children }) {
         <ErrorHandlerPresentation
           status={errorStatusCode}
           heading={'Not Found'}
-          content="The page you're looking for isn't available."
+          content="Sorry, we couldn't find that page."
         />
       )
+    // Catch any other 4** errors or any 5** errors
     case Math.floor(errorStatusCode / 100) === 4:
-      return <ErrorHandlerPresentation status={errorStatusCode} heading={'Error'} content={'Generic content'} />
     case Math.floor(errorStatusCode / 100) === 5:
       return (
         <ErrorHandlerPresentation
           status={errorStatusCode}
           heading={'Oops, something went wrong.'}
-          content={'Please report this to our team.'}
+          content={'Please try again. If this issue persists please contact our team.'}
         />
       )
     default:
