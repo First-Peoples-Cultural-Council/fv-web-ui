@@ -23,7 +23,7 @@
         SELECT * from FVCharacter where ecm:ancestorId=? and ecm:isVersion=0 and
         ecm:isTrashed=0
       </pattern>
-      <sort column="dc:title" ascending="true"/>
+      <sort column="fvcharacter:alphabet_order" ascending="true"/>
       <pageSize>1000</pageSize>
     </coreQueryPageProvider>
 
