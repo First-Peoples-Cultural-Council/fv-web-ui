@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { useQuery } from 'react-query'
 
 //FPCC
 import useGetSite from 'common/useGetSite'
-import useErrorHandler from 'common/useErrorHandler'
 import api from 'services/api'
 import { getMediaUrl } from 'common/urlHelpers'
 /**
@@ -19,6 +18,7 @@ const AlphabetData = () => {
   const { uid } = useGetSite()
   const { character, sitename } = useParams()
   const [selectedData, setSelectedData] = useState({})
+  const history = useHistory()
 
   // Data fetch
   const response = useQuery(['alphabet', uid], () => api.alphabet.get(uid), {
@@ -58,7 +58,10 @@ const AlphabetData = () => {
         setSelectedData(_selectedData)
       }
     }
-    if (isError) useErrorHandler(error)
+    if (isError)
+      history.replace(history.location.pathname, {
+        errorStatusCode: error?.response?.status,
+      })
   }, [character, status, isError])
 
   // Video Modal
