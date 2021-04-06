@@ -1,5 +1,5 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import ErrorHandlerPresentation from 'components/ErrorHandler/ErrorHandlerPresentation'
 import ErrorHandlerData from 'components/ErrorHandler/ErrorHandlerData'
 
@@ -14,19 +14,42 @@ import ErrorHandlerData from 'components/ErrorHandler/ErrorHandlerData'
 function ErrorHandlerContainer({ children }) {
   const { errorStatusCode } = ErrorHandlerData()
 
-  switch (errorStatusCode) {
-    case 404:
-      return <ErrorHandlerPresentation status={errorStatusCode} />
-    case 403:
-      return <ErrorHandlerPresentation status={errorStatusCode} />
+  switch (true) {
+    case errorStatusCode === 401:
+    case errorStatusCode === 403:
+      return (
+        <ErrorHandlerPresentation
+          status={errorStatusCode}
+          heading={'Unauthorized'}
+          content={'You do not have permission to view this page.'}
+        />
+      )
+    case errorStatusCode === 404:
+      return (
+        <ErrorHandlerPresentation
+          status={errorStatusCode}
+          heading={'Not Found'}
+          content="The page you're looking for isn't available."
+        />
+      )
+    case Math.floor(errorStatusCode / 100) === 4:
+      return <ErrorHandlerPresentation status={errorStatusCode} heading={'Error'} content={'Generic content'} />
+    case Math.floor(errorStatusCode / 100) === 5:
+      return (
+        <ErrorHandlerPresentation
+          status={errorStatusCode}
+          heading={'Oops, something went wrong.'}
+          content={'Please report this to our team.'}
+        />
+      )
     default:
       return children
   }
 }
 // PROPTYPES
-// const { string } = PropTypes
+const { object } = PropTypes
 ErrorHandlerContainer.propTypes = {
-  //   something: string,
+  children: object,
 }
 
 export default ErrorHandlerContainer
