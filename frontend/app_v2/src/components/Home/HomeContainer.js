@@ -12,8 +12,8 @@ import HomeData from 'components/Home/HomeData'
  * @returns {node} jsx markup
  */
 function HomeContainer() {
-  const { isLoading, error, data, language } = HomeData()
-  return <HomePresentation isLoading={isLoading} error={error} data={data} language={language} />
+  const { isLoading, data, language } = HomeData()
+  return <HomePresentation isLoading={isLoading} data={data} language={language} />
 }
 
 export default HomeContainer

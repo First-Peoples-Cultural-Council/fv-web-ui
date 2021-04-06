@@ -16,7 +16,7 @@ import { getMediaUrl } from 'common/urlHelpers'
  *
  * @returns {node} jsx markup
  */
-function DictionaryListPresentation({ error, isLoading, items, wholeDomain, actions }) {
+function DictionaryListPresentation({ isLoading, items, wholeDomain, actions }) {
   const typeColor = { word: 'fv-turquoise', phrase: 'fv-orange', song: 'fv-red', story: 'fv-purple' }
   if (isLoading) {
     return (
@@ -29,16 +29,6 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
           {useIcon('Spinner', 'animate-spin h-5 w-5 mr-3 fill-current')}
           Loading
         </button>
-      </div>
-    )
-  }
-  if (error) {
-    return (
-      <div className="p-10">
-        <h1>Sorry, something went wrong!</h1>
-        <p>Please report this error by emailing hello@firstvoices.com so that we can fix it.</p>
-        <p>Include the link or action you took to get to this page.</p>
-        <p>Thank You!</p>
       </div>
     )
   }
@@ -168,7 +158,7 @@ function DictionaryListPresentation({ error, isLoading, items, wholeDomain, acti
 }
 
 // PROPTYPES
-const { array, arrayOf, bool, func, object, shape, string } = PropTypes
+const { array, arrayOf, bool, func, shape, string } = PropTypes
 DictionaryListPresentation.propTypes = {
   actions: arrayOf(
     shape({
@@ -178,7 +168,6 @@ DictionaryListPresentation.propTypes = {
       confirmationMessage: string,
     })
   ),
-  error: object,
   isLoading: bool,
   items: arrayOf(
     shape({

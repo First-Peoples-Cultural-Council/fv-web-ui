@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { useQuery } from 'react-query'
 
 //FPCC
@@ -16,17 +16,25 @@ import { getMediaUrl } from 'common/urlHelpers'
  */
 function HomeData() {
   const { sitename } = useParams()
+  const history = useHistory()
   const { title, uid, path, logoId } = useGetSite()
   const [formattedData, setFormattedData] = useState({})
   const logoUrl = getMediaUrl({ type: 'image', id: logoId, viewName: 'Small' })
 
-  const { isLoading, error, data } = useQuery(['getHome', sitename], () => api.home.get(sitename))
+  const { data, error, isError, isLoading } = useQuery(['getHome', sitename], () => api.home.get(sitename))
 
   useEffect(() => {
     if (isLoading === false && error === null) {
       setFormattedData(homeDataAdaptor(data))
     }
+    if (isError)
+      // Setting the errorStatusCode will trigger the render of the ErrorHandler component
+      history.replace(history.location.pathname, {
+        errorStatusCode: error?.response?.status,
+      })
   }, [isLoading, error])
+
+  useEffect(() => {}, [isError])
 
   return {
     isLoading,

@@ -30,7 +30,7 @@ import {
  *
  * @returns {node} jsx markup
  */
-function HomePresentation({ isLoading, error, data, language }) {
+function HomePresentation({ isLoading, data, language }) {
   const widgets = data ? data.widgets : []
   const fallBackIcon = useIcon('Spinner', 'fill-current w-56 h-56 lg:w-72 lg:h-72')
   if (isLoading) {
@@ -44,16 +44,6 @@ function HomePresentation({ isLoading, error, data, language }) {
           {useIcon('Spinner', 'animate-spin h-5 w-5 mr-3 fill-current')}
           Loading
         </button>
-      </div>
-    )
-  }
-  if (error) {
-    return (
-      <div>
-        <h1>Sorry, something went wrong!</h1>
-        <p>Please check the url or report this error by emailing hello@firstvoices.com so that we can fix it.</p>
-        <p>Include the link or action you took to get to this page.</p>
-        <p>Thank You!</p>
       </div>
     )
   }
@@ -167,10 +157,9 @@ function HomePresentation({ isLoading, error, data, language }) {
   )
 }
 // PROPTYPES
-const { array, bool, oneOfType, string, shape } = PropTypes
+const { array, bool, string, shape } = PropTypes
 HomePresentation.propTypes = {
   isLoading: bool,
-  error: oneOfType([bool, array]),
   data: shape({
     uid: string,
     pageTitle: string,

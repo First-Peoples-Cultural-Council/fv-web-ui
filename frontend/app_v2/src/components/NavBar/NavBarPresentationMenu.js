@@ -30,6 +30,7 @@ function NavBarPresentationMenu({ id, title, itemsData, href, onMenuClick, openM
   return (
     <div
       id={`HeaderMenu_${title}`}
+      className="relative"
       onClick={(event) => {
         onClickOutside(event, id)
       }}
