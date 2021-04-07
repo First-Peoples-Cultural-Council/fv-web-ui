@@ -17,9 +17,8 @@ import Loading from 'components/Loading'
  *
  * @returns {node} jsx markup
  */
-function DictionaryListPresentation({ items, wholeDomain, actions }) {
+function DictionaryListPresentation({ isLoading, items, wholeDomain, actions }) {
   const typeColor = { word: 'fv-turquoise', phrase: 'fv-orange', song: 'fv-red', story: 'fv-purple' }
-  const isLoading = true
   return (
     <Loading.Container isLoading={isLoading}>
       {items !== undefined && items?.length < 0 ? (
