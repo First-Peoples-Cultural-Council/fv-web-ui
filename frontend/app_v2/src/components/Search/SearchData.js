@@ -5,6 +5,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import useGetSite from 'common/useGetSite'
 import searchApi from 'services/api/search'
 import { copy } from 'common/actionHelpers'
+import { triggerError } from 'common/navigationHelpers'
 
 /**
  * @summary SearchData
@@ -48,11 +49,7 @@ function SearchData() {
     : []
 
   useEffect(() => {
-    if (isError)
-      // Setting the errorStatusCode will trigger the render of the ErrorHandler component
-      history.replace(history.location.pathname, {
-        errorStatusCode: error?.response?.status,
-      })
+    if (isError) triggerError(error, history)
   }, [isError])
 
   // Get Filters

@@ -7,6 +7,7 @@ import api from 'services/api'
 import useGetSite from 'common/useGetSite'
 import homeDataAdaptor from 'components/Home/homeDataAdaptor'
 import { getMediaUrl } from 'common/urlHelpers'
+import { triggerError } from 'common/navigationHelpers'
 /**
  * @summary HomeData
  * @component
@@ -27,11 +28,7 @@ function HomeData() {
     if (isLoading === false && error === null) {
       setFormattedData(homeDataAdaptor(data))
     }
-    if (isError)
-      // Setting the errorStatusCode will trigger the render of the ErrorHandler component
-      history.replace(history.location.pathname, {
-        errorStatusCode: error?.response?.status,
-      })
+    if (isError) triggerError(error, history)
   }, [isLoading, error])
 
   useEffect(() => {}, [isError])

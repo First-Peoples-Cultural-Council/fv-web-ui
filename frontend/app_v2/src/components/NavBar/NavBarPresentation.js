@@ -64,7 +64,7 @@ function NavBarPresentation({
       <nav className="max-w-screen-2xl mx-auto px-2 lg:px-6 xl:px-16">
         <div className="flex justify-between items-center py-1  md:space-x-10">
           <div className="flex items-center">
-            <Link className="text-white flex items-center" to={'/'}>
+            <Link className="text-white flex items-center" to={`/${sitename}/`}>
               <span className="sr-only">FirstVoices Logo</span>
               {useIcon('Logo', 'fill-current h-10')}
             </Link>

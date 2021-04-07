@@ -6,6 +6,7 @@ import { useQuery } from 'react-query'
 import useGetSite from 'common/useGetSite'
 import api from 'services/api'
 import { getMediaUrl } from 'common/urlHelpers'
+import { triggerError } from 'common/navigationHelpers'
 /**
  * @summary AlphabetData
  * @component
@@ -58,11 +59,7 @@ const AlphabetData = ({ widgetView }) => {
         setSelectedData(_selectedData)
       }
     }
-    if (isError && !widgetView)
-      // Setting the errorStatusCode will trigger the render of the ErrorHandler component
-      history.replace(history.location.pathname, {
-        errorStatusCode: error?.response?.status,
-      })
+    if (isError && !widgetView) triggerError(error, history)
   }, [character, status, isError])
 
   // Video Modal
