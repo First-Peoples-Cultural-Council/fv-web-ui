@@ -21,7 +21,7 @@ function DictionaryListPresentation({ isLoading, items, wholeDomain, actions }) 
   const typeColor = { word: 'fv-turquoise', phrase: 'fv-orange', song: 'fv-red', story: 'fv-purple' }
   return (
     <Loading.Container isLoading={isLoading}>
-      {items !== undefined && items?.length < 0 ? (
+      {items !== undefined && items?.length > 0 ? (
         <div className="flex flex-col">
           <div className="py-2 align-middle inline-block min-w-full">
             <div className="shadow-md overflow-hidden border-b border-gray-300 sm:rounded-lg">
