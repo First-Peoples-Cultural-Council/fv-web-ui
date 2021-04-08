@@ -69,10 +69,6 @@ export const publishPhrase = execute('FV_PHRASE_PUBLISH', 'Document.FollowLifecy
   headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
 })
 
-export const unpublishPhrase = execute('FV_PHRASE_UNPUBLISH', 'FVUnpublishDialect', {
-  headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
-})
-
 export const queryModifiedPhrases = query('FV_MODIFIED_PHRASES', 'FVPhrase', {
   queryAppend: '&sortBy=dc:modified&sortOrder=DESC&pageSize=4',
   headers: { properties: 'dublincore' },

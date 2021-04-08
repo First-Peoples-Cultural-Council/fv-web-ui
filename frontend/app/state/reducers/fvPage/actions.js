@@ -18,7 +18,3 @@ export const deletePage = _delete('FV_PAGE', 'FVPage', {})
 export const publishPage = execute('FV_PAGE_PUBLISH', 'Document.FollowLifecycleTransition', {
   headers: { 'enrichers.document': 'ancestry,permissions' },
 })
-
-export const unpublishPage = execute('FV_PAGE_UNPUBLISH', 'FVUnpublishDialect', {
-  headers: { 'enrichers.document': 'ancestry,permissions' },
-})

@@ -1,12 +1,9 @@
 import DirectoryOperations from 'operations/DirectoryOperations'
-import { execute, fetch, update } from 'reducers/rest'
+import { fetch, update } from 'reducers/rest'
 
 import { FV_FETCH_PORTALS_FETCH_ERROR, FV_FETCH_PORTALS_FETCH_SUCCESS, FV_FETCH_PORTALS_START } from './actionTypes'
 
 export const updatePortal = update('FV_PORTAL', 'FVPortal', {
-  headers: { 'enrichers.document': 'ancestry,portal' },
-})
-export const unpublishPortal = execute('FV_PORTAL_UNPUBLISH', 'FVUnpublishDialect', {
   headers: { 'enrichers.document': 'ancestry,portal' },
 })
 export const fetchPortal = fetch('FV_PORTAL', 'FVPortal', {

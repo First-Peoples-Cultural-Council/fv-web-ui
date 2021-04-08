@@ -396,29 +396,6 @@ export default class DocumentOperations {
   }
 
   /*
-   * unpublishDialect
-   * --------------------------------------
-   */
-  static unpublishDialect(pathOrUid) {
-    const properties = BaseOperations.getProperties()
-
-    return new Promise((resolve, reject) => {
-      properties.client
-        .operation('FVUnpublishDialect')
-        .input(pathOrUid)
-        .execute()
-        .then((doc) => {
-          resolve(doc)
-        })
-        .catch((error) => {
-          error.response.json().then((jsonError) => {
-            reject(StringHelpers.extractErrorMessage(jsonError))
-          })
-        })
-    })
-  }
-
-  /*
    * updateDocument
    * --------------------------------------
    */

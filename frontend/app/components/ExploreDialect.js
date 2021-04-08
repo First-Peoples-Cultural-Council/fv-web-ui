@@ -25,8 +25,8 @@ import { WORKSPACES, SECTIONS } from 'common/Constants'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchDialect2, republishDialect, unpublishDialect, updateDialect2 } from 'reducers/fvDialect'
-import { fetchPortal, unpublishPortal, updatePortal } from 'reducers/fvPortal'
+import { fetchDialect2, republishDialect, updateDialect2 } from 'reducers/fvDialect'
+import { fetchPortal, updatePortal } from 'reducers/fvPortal'
 import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 import selectn from 'selectn'
 
@@ -54,7 +54,6 @@ export class ExploreDialect extends Component {
     routeParams: object.isRequired,
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
-    computeDialectUnpublish: object.isRequired,
     computeLogin: object.isRequired,
     computePortal: object.isRequired,
     computePublish: object.isRequired,
@@ -67,8 +66,6 @@ export class ExploreDialect extends Component {
     republishDialect: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
-    unpublishDialect: func.isRequired,
-    unpublishPortal: func.isRequired,
     updateDialect2: func.isRequired,
     updatePortal: func.isRequired,
   }
@@ -505,13 +502,12 @@ const mapStateToProps = (state /*, ownProps*/) => {
   const { computeLogin } = nuxeo
   const { computePortal } = fvPortal
   const { computePublish } = document
-  const { computeDialect2, computeDialectUnpublish } = fvDialect
+  const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
   const { intlService } = locale
 
   return {
     computeDialect2,
-    computeDialectUnpublish,
     computeLogin,
     computePortal,
     computePublish,
@@ -529,8 +525,6 @@ const mapDispatchToProps = {
   republishDialect,
   pushWindowPath,
   replaceWindowPath,
-  unpublishDialect,
-  unpublishPortal,
   updateDialect2,
   updatePortal,
 }

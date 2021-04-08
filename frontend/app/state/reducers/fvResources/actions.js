@@ -17,6 +17,3 @@ export const updateResource = update(
 export const publishResource = execute('FV_RESOURCE_PUBLISH', 'Document.FollowLifecycleTransition', {
   headers: { 'enrichers.document': 'ancestry,media,permissions' },
 })
-export const unpublishResource = execute('FV_RESOURCE_UNPUBLISH', 'FVUnpublishDialect', {
-  headers: { 'enrichers.document': 'ancestry,media,permissions' },
-})

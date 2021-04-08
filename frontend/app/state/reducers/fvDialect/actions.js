@@ -41,7 +41,3 @@ export const fetchDialectList = execute('FV_DIALECT_LIST', 'Document.ListDialect
 export const republishDialect = execute('FV_DIALECT2_REPUBLISH', 'Document.FollowLifecycleTransition', {
   headers: { 'enrichers.document': 'ancestry,dialect,permissions' },
 })
-
-export const unpublishDialect = execute('FV_DIALECT2_UNPUBLISH', 'FVUnpublishDialect', {
-  headers: { 'enrichers.document': 'ancestry,dialect,permissions,acls' },
-})
