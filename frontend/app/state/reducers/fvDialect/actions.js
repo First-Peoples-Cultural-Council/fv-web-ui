@@ -45,11 +45,3 @@ export const republishDialect = execute('FV_DIALECT2_REPUBLISH', 'Document.Follo
 export const unpublishDialect = execute('FV_DIALECT2_UNPUBLISH', 'FVUnpublishDialect', {
   headers: { 'enrichers.document': 'ancestry,dialect,permissions,acls' },
 })
-
-export const enableDialect = execute('FV_DIALECT2_ENABLE', 'FVEnableDocument', {
-  headers: { 'enrichers.document': 'ancestry,dialect,permissions,acls' },
-})
-
-export const disableDialect = execute('FV_DIALECT2_DISABLE', 'FVDisableDocument', {
-  headers: { 'enrichers.document': 'ancestry,dialect,permissions,acls' },
-})

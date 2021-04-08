@@ -20,9 +20,3 @@ export const publishResource = execute('FV_RESOURCE_PUBLISH', 'Document.FollowLi
 export const unpublishResource = execute('FV_RESOURCE_UNPUBLISH', 'FVUnpublishDialect', {
   headers: { 'enrichers.document': 'ancestry,media,permissions' },
 })
-export const enableResource = execute('FV_RESOURCE_ENABLE', 'FVEnableDocument', {
-  headers: { 'enrichers.document': 'ancestry,media,permissions' },
-})
-export const disableResource = execute('FV_RESOURCE_DISABLE', 'FVDisableDocument', {
-  headers: { 'enrichers.document': 'ancestry,media,permissions' },
-})

@@ -151,28 +151,6 @@ export default class DocumentOperations {
   }
 
   /*
-   * enableDocument
-   * --------------------------------------
-   */
-  static enableDocument(pathOrUid) {
-    const properties = BaseOperations.getProperties()
-
-    return new Promise((resolve, reject) => {
-      properties.client
-        .operation('FVEnableDocument')
-        .input(pathOrUid)
-        .execute()
-        .then((doc) => {
-          resolve(doc)
-        })
-        .catch((error) => {
-          error.response.json().then((jsonError) => {
-            reject(StringHelpers.extractErrorMessage(jsonError))
-          })
-        })
-    })
-  }
-  /*
    * executeOperation
    * --------------------------------------
    * Executes an operation on the server
@@ -202,7 +180,7 @@ export default class DocumentOperations {
           resolve(response)
         })
         .catch((error) => {
-          if (error.hasOwnProperty('response')) {
+          if (Object.prototype.hasOwnProperty.call(error, 'response')) {
             error.response.json().then((jsonError) => {
               reject(StringHelpers.extractErrorMessage(jsonError))
             })
@@ -264,10 +242,10 @@ export default class DocumentOperations {
           resolve(doc)
         })
         .catch((error) => {
-          if (error.hasOwnProperty('response')) {
+          if (Object.prototype.hasOwnProperty.call(error, 'response')) {
             error.response.json().then((jsonError) => {
               // Note: Intentional == comparison
-              if (jsonError.hasOwnProperty('status') && jsonError.status == '404') {
+              if (Object.prototype.hasOwnProperty.call(jsonError, 'status') && jsonError.status == '404') {
                 jsonError.message =
                   jsonError.message +
                   ' (404 - ' +
@@ -278,7 +256,7 @@ export default class DocumentOperations {
                   ')'
               }
               // Note: intentional == comparison
-              if (jsonError.hasOwnProperty('status') && jsonError.status == '403') {
+              if (Object.prototype.hasOwnProperty.call(jsonError, 'status') && jsonError.status == '403') {
                 reject(jsonError.status)
               }
 

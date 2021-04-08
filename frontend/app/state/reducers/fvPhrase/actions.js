@@ -73,14 +73,6 @@ export const unpublishPhrase = execute('FV_PHRASE_UNPUBLISH', 'FVUnpublishDialec
   headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
 })
 
-export const enablePhrase = execute('FV_PHRASE_ENABLE', 'FVEnableDocument', {
-  headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
-})
-
-export const disablePhrase = execute('FV_PHRASE_DISABLE', 'FVDisableDocument', {
-  headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
-})
-
 export const queryModifiedPhrases = query('FV_MODIFIED_PHRASES', 'FVPhrase', {
   queryAppend: '&sortBy=dc:modified&sortOrder=DESC&pageSize=4',
   headers: { properties: 'dublincore' },

@@ -52,14 +52,6 @@ export const unpublishWord = execute('FV_WORD_UNPUBLISH', 'FVUnpublishDialect', 
   headers: { 'enrichers.document': 'ancestry,word,permissions' },
 })
 
-export const enableWord = execute('FV_WORD_ENABLE', 'FVEnableDocument', {
-  headers: { 'enrichers.document': 'ancestry,word,permissions' },
-})
-
-export const disableWord = execute('FV_WORD_DISABLE', 'FVDisableDocument', {
-  headers: { 'enrichers.document': 'ancestry,word,permissions' },
-})
-
 export const fetchSharedWords = (page_provider, headers = {}, params = {}) => {
   return (dispatch) => {
     dispatch({ type: FV_WORDS_SHARED_FETCH_START })

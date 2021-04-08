@@ -25,14 +25,7 @@ import { WORKSPACES, SECTIONS } from 'common/Constants'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import {
-  disableDialect,
-  enableDialect,
-  fetchDialect2,
-  republishDialect,
-  unpublishDialect,
-  updateDialect2,
-} from 'reducers/fvDialect'
+import { fetchDialect2, republishDialect, unpublishDialect, updateDialect2 } from 'reducers/fvDialect'
 import { fetchPortal, unpublishPortal, updatePortal } from 'reducers/fvPortal'
 import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 import selectn from 'selectn'
@@ -69,8 +62,6 @@ export class ExploreDialect extends Component {
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
-    disableDialect: func.isRequired,
-    enableDialect: func.isRequired,
     fetchDialect2: func.isRequired,
     fetchPortal: func.isRequired,
     republishDialect: func.isRequired,
@@ -533,8 +524,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  disableDialect,
-  enableDialect,
   fetchDialect2,
   fetchPortal,
   republishDialect,
