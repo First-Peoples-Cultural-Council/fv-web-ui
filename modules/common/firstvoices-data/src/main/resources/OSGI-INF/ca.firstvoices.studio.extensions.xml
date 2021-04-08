@@ -1481,63 +1481,6 @@
         </rule>
       </filter>
     </action>
-    <action id="FVDisable" label="Quick Disable" enabled="true" order="0" type="link" immediate="false"
-            link="#{operationActionBean.doOperation('FVDisableDocument')}">
-      <category>DOCUMENT_SUMMARY_CUSTOM_ACTIONS</category>
-      <filter id="filter@FVDisable">
-        <rule grant="true">
-          <type>FVAlphabet</type>
-          <type>FVAudio</type>
-          <type>FVBook</type>
-          <type>FVCategory</type>
-          <type>FVLabelCategory</type>
-          <type>FVContributor</type>
-          <type>FVDialect</type>
-          <type>FVPhrase</type>
-          <type>FVPicture</type>
-          <type>FVVideo</type>
-          <type>FVWord</type>
-          <condition>
-            #{currentDocument.currentLifeCycleState == 'Enabled' &amp;&amp; (documentManager.hasPermission(currentDocument.ref, 'Everything') || documentManager.hasPermission(currentDocument.ref, 'Approve')) }
-          </condition>
-        </rule>
-        <rule grant="false">
-          <condition>document.isImmutable() || document.isProxy()</condition>
-        </rule>
-        <rule grant="false">
-          <condition>!document.getPathAsString().startsWith("/FV/Workspaces/Data/")</condition>
-        </rule>
-      </filter>
-    </action>
-    <action id="FVEnable" label="Quick Enable" enabled="true" order="0" type="link" immediate="false"
-            link="#{operationActionBean.doOperation('FVEnableDocument')}">
-      <category>DOCUMENT_SUMMARY_CUSTOM_ACTIONS</category>
-      <filter id="filter@FVEnable">
-        <rule grant="true">
-          <type>FVAlphabet</type>
-          <type>FVAudio</type>
-          <type>FVBook</type>
-          <type>FVCategory</type>
-          <type>FVLabelCategory</type>
-          <type>FVContributor</type>
-          <type>FVDialect</type>
-          <type>FVPhrase</type>
-          <type>FVPicture</type>
-          <type>FVVideo</type>
-          <type>FVWord</type>
-          <type>FVLabel</type>
-          <condition>
-            #{(currentDocument.currentLifeCycleState == 'New' || currentDocument.currentLifeCycleState == 'Disabled') &amp;&amp; (documentManager.hasPermission(currentDocument.ref, 'Everything') || documentManager.hasPermission(currentDocument.ref, 'Approve') ) }
-          </condition>
-        </rule>
-        <rule grant="false">
-          <condition>document.isImmutable() || document.isProxy()</condition>
-        </rule>
-        <rule grant="false">
-          <condition>!document.getPathAsString().startsWith("/FV/Workspaces/Data/")</condition>
-        </rule>
-      </filter>
-    </action>
     <action id="FVUnpublish" label="Unpublish" enabled="true" order="0" type="link" immediate="false"
             link="#{operationActionBean.doOperation('FVUnpublishDialect')}">
       <category>DOCUMENT_SUMMARY_CUSTOM_ACTIONS</category>
@@ -18143,30 +18086,6 @@
       <operation id="Context.FetchDocument"/>
       <operation id="FVDialectPublishedDocumentPermissions"/>
       <operation id="Document.Save"/>
-    </chain>
-    <chain id="FVDisableDocument">
-      <operation id="Context.FetchDocument"/>
-      <operation id="Document.FollowLifecycleTransition">
-        <param type="string" name="value">Disable</param>
-      </operation>
-      <operation id="Audit.LogEvent">
-        <param type="string" name="event">expr:Document disabled by @{CurrentUser.firstName}
-          @{CurrentUser.lastName} (@{CurrentUser.name})
-        </param>
-        <param type="string" name="category">Automation</param>
-      </operation>
-    </chain>
-    <chain id="FVEnableDocument">
-      <operation id="Context.FetchDocument"/>
-      <operation id="Document.FollowLifecycleTransition">
-        <param type="string" name="value">Enable</param>
-      </operation>
-      <operation id="Audit.LogEvent">
-        <param type="string" name="event">expr:Document enabled by @{CurrentUser.firstName}
-          @{CurrentUser.lastName} (@{CurrentUser.name})
-        </param>
-        <param type="string" name="category">Automation</param>
-      </operation>
     </chain>
     <chain id="FVEnableLanguageAssetRequested">
       <operation id="Context.FetchDocument"/>
