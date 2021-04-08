@@ -127,28 +127,6 @@ export default class DocumentOperations {
       }
     })
   }
-  /*
-   * disableDocument
-   * --------------------------------------
-   */
-  static disableDocument(pathOrUid) {
-    const properties = BaseOperations.getProperties()
-
-    return new Promise((resolve, reject) => {
-      properties.client
-        .operation('FVDisableDocument')
-        .input(pathOrUid)
-        .execute()
-        .then((doc) => {
-          resolve(doc)
-        })
-        .catch((error) => {
-          error.response.json().then((jsonError) => {
-            reject(StringHelpers.extractErrorMessage(jsonError))
-          })
-        })
-    })
-  }
 
   /*
    * executeOperation
