@@ -6,17 +6,31 @@ import DialectTileData from 'components/DialectTile/DialectTileData'
 
 /**
  * @summary DialectTileContainer
- * @version 1.0.1
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function DialectTileContainer({ dialectGroups, dialectLogo, dialectTitle, actionIcon, isWorkspaces, href }) {
+function DialectTileContainer({
+  actionIcon,
+  dialectGroups,
+  dialectId,
+  dialectLogo,
+  dialectTitle,
+  isWorkspaces,
+  joinText,
+  href,
+}) {
   return (
-    <DialectTileData dialectGroups={dialectGroups} dialectTitle={dialectTitle} isWorkspaces={isWorkspaces} href={href}>
-      {({ isLoggedIn, isPrivate, hrefToUse, onDialectClick }) => {
+    <DialectTileData
+      dialectGroups={dialectGroups}
+      dialectId={dialectId}
+      dialectTitle={dialectTitle}
+      isWorkspaces={isWorkspaces}
+      href={href}
+    >
+      {({ isLoggedIn, isPrivate, hrefToUse, onDialectClick, isDialogOpen, handleDialogCancel, handleDialogOk }) => {
         return (
           <DialectTilePresentation
             actionIcon={actionIcon}
@@ -26,6 +40,10 @@ function DialectTileContainer({ dialectGroups, dialectLogo, dialectTitle, action
             isLoggedIn={isLoggedIn}
             isPrivate={isPrivate}
             onDialectClick={onDialectClick}
+            handleDialogCancel={handleDialogCancel}
+            handleDialogOk={handleDialogOk}
+            isDialogOpen={isDialogOpen}
+            joinText={joinText}
           />
         )
       }}
@@ -36,9 +54,11 @@ function DialectTileContainer({ dialectGroups, dialectLogo, dialectTitle, action
 const { array, bool, object, string } = PropTypes
 DialectTileContainer.propTypes = {
   dialectGroups: array.isRequired,
+  dialectId: string.isRequired,
   dialectLogo: string.isRequired,
   dialectTitle: string.isRequired,
   actionIcon: object,
+  joinText: string.isRequired,
   href: string.isRequired,
   isWorkspaces: bool.isRequired,
 }
