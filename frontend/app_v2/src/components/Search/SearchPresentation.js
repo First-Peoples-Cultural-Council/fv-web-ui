@@ -35,9 +35,10 @@ function SearchPresentation({
         <li
           key={filter.label}
           id={'SearchFilter' + filter.label}
-          className={`inline-block transition duration-500 ease-in-out md:block md:my-2 md:mx-5 p-2 flex-grow rounded-xl capitalize cursor-pointer ${filterIsActiveClass}`}
+          className="inline-block transition duration-500 ease-in-out md:block md:my-2 md:mx-5 flex-grow"
         >
           <Link
+            className={`inline-block transition duration-500 ease-in-out md:block p-3 flex-grow rounded-xl capitalize cursor-pointer ${filterIsActiveClass}`}
             to={`${location.pathname}?q=${searchTerm}&docType=${filter.type}`}
             onClick={() => {
               handleFilter(filter.type)

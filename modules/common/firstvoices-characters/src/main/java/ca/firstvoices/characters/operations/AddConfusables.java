@@ -44,7 +44,7 @@ public class AddConfusables extends AbstractMaintenanceOperation {
   /**
    * Init phase will add the operation`ID`
    */
-  @Param(name = "phase", values = {"init", "work"})
+  @Param(name = "phase", values = {"init", "work", "addFromDialects"})
   protected String phase = "init";
 
   @Context
@@ -54,7 +54,12 @@ public class AddConfusables extends AbstractMaintenanceOperation {
   public void run(DocumentModel dialect) throws OperationException {
     limitToSuperAdmin(session);
     limitToDialect(dialect);
-    executePhases(dialect, phase);
+
+    if ("addFromDialects".equals(phase)) {
+      executeWorkPhaseFromAllDialect(dialect);
+    } else {
+      executePhases(dialect, phase);
+    }
   }
 
   @Override
@@ -64,8 +69,6 @@ public class AddConfusables extends AbstractMaintenanceOperation {
 
   /**
    * Will add and clean confusables for the specified dialect
-   *
-   * @param dialect
    */
   @Override
   protected void executeWorkPhase(DocumentModel dialect) {
@@ -74,7 +77,19 @@ public class AddConfusables extends AbstractMaintenanceOperation {
     // Add confusables to the alphabet
     // Note: AddConfusablesWorker will trigger `init` job to clean confusables
     AddConfusablesWorker worker = new AddConfusablesWorker(dialect.getRef(),
-        Constants.ADD_CONFUSABLES_JOB_ID);
+        Constants.ADD_CONFUSABLES_JOB_ID, false);
+    workManager.schedule(worker);
+  }
+
+  /**
+   * Will add confusables from all other dialects
+   */
+  protected void executeWorkPhaseFromAllDialect(DocumentModel dialect) {
+    WorkManager workManager = Framework.getService(WorkManager.class);
+
+    // Add confusables to the alphabet from other dialects
+    AddConfusablesWorker worker = new AddConfusablesWorker(dialect.getRef(),
+        Constants.ADD_CONFUSABLES_JOB_ID, true);
     workManager.schedule(worker);
   }
 }

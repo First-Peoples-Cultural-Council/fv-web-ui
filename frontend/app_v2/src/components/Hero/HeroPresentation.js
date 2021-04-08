@@ -98,9 +98,8 @@ function HeroPresentation({ background, foreground, foregroundIcon, search, vari
   )
 }
 // PROPTYPES
-const { array, bool, node, string, oneOf } = PropTypes
+const { array, node, string, oneOf } = PropTypes
 HeroPresentation.propTypes = {
-  isLoading: bool,
   error: array,
   background: string,
   foreground: node,

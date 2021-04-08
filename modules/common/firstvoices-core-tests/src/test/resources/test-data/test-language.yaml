@@ -74,6 +74,17 @@ children:
         children:
           - type: FVDictionary
             name: "Dictionary"
-            key: emptyDictionary
+            key: emptyDictionary2
+          - type: FVAlphabet
+            name: "Alphabet"
+            key: testAlphabet2
       - type: FVDialect
         name: "Test Dialect 3"
+        key: testArchive3
+        children:
+          - type: FVDictionary
+            name: "Dictionary"
+            key: emptyDictionary3
+          - type: FVAlphabet
+            name: "Alphabet"
+            key: testAlphabet3

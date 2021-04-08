@@ -21,11 +21,13 @@ public class AddConfusablesWorker extends AbstractWork {
 
   private final DocumentRef jobContainerRef;
   private final String job;
+  private final boolean addFromOtherDialects;
 
-  public AddConfusablesWorker(DocumentRef dialectRef, String job) {
+  public AddConfusablesWorker(DocumentRef dialectRef, String job, boolean addFromOtherDialects) {
     super(Constants.ADD_CONFUSABLES_JOB_ID);
     this.jobContainerRef = dialectRef;
     this.job = job;
+    this.addFromOtherDialects = addFromOtherDialects;
   }
 
   @Override
@@ -35,10 +37,17 @@ public class AddConfusablesWorker extends AbstractWork {
             session -> {
               DocumentModel dialect = session.getDocument(jobContainerRef);
               AddConfusablesService service = Framework.getService(AddConfusablesService.class);
-              service.addConfusables(session, dialect);
 
-              // Remove job from required jobs
-              RequiredJobsUtils.removeFromRequiredJobs(dialect, job, true);
+              if (!addFromOtherDialects) {
+                // Will add confusables from the main directory
+                service.addConfusables(session, dialect);
+
+                // Remove job from required jobs
+                RequiredJobsUtils.removeFromRequiredJobs(dialect, job, true);
+              } else {
+                // Will add confusables from all other dialects
+                service.addConfusablesFromAllDialects(session, dialect);
+              }
             });
   }
 
