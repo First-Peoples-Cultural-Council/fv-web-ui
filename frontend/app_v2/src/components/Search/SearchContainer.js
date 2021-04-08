@@ -14,7 +14,6 @@ function SearchContainer() {
   const {
     actions,
     currentFilter,
-    error,
     filters,
     handleFilter,
     handleSearchSubmit,
@@ -29,7 +28,6 @@ function SearchContainer() {
     <SearchPresentation
       actions={actions}
       currentFilter={currentFilter}
-      error={error}
       filters={filters}
       handleFilter={handleFilter}
       handleSearchSubmit={handleSearchSubmit}

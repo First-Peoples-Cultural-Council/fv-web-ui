@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
+
+// FPCC
 import NavBarPresentationMenu from './NavBarPresentationMenu'
 import NavBarPresentationMobile from './NavBarPresentationMobile'
+import CircleImage from 'components/CircleImage'
 import FVToggle from 'components/FVToggle'
 
 import useIcon from 'common/useIcon'
@@ -20,6 +23,7 @@ function NavBarPresentation({
   className,
   currentUser,
   workspaceToggleValue,
+  logoUrl,
   menuData,
   onClickOutside,
   onKeyPress,
@@ -48,27 +52,34 @@ function NavBarPresentation({
       onClickOutside={onClickOutside}
     />
   ))
+
+  const languageSiteIcon = logoUrl ? (
+    <CircleImage.Presentation src={logoUrl} classNameWidth="w-10" classNameHeight="h-10" alt="" />
+  ) : (
+    useIcon('Spinner', 'fill-current text-white w-10 h-10 inline mr-2')
+  )
+
   return (
     <header id="NavBar" className={`relative bg-fv-charcoal ${className}`} onKeyUp={onKeyPress}>
-      <nav className="max-w-screen-2xl mx-auto px-4 sm:px-6 xl:px-20">
-        <div className="flex justify-between items-center py-1 md:justify-start md:space-x-10">
-          <div className="justify-start lg:w-0 lg:flex-1">
-            <Link to={`/${sitename}/`}>
+      <nav className="max-w-screen-2xl mx-auto px-2 lg:px-6 xl:px-16">
+        <div className="flex justify-between items-center py-1  md:space-x-10">
+          <div className="flex items-center">
+            <Link className="text-white flex items-center" to={`/${sitename}/`}>
               <span className="sr-only">FirstVoices Logo</span>
-              {useIcon('Logo', 'fill-current text-white h-10 inline')}
+              {useIcon('Logo', 'fill-current h-10')}
             </Link>
             <span className="px-2 text-2xl text-gray-600">/</span>
-            <Link className="text-white" to={`/${sitename}/`}>
+            <Link className="text-white flex items-center" to={`/${sitename}/`}>
               <span className="sr-only">{title}</span>
-              {useIcon('MusicNote', 'fill-current text-white h-10 inline mr-2')}
+              {languageSiteIcon}
               <span className="md:hidden">{title}</span>
             </Link>
           </div>
 
-          <div className="hidden md:flex space-x-6">{menus}</div>
+          <div className="hidden lg:flex xl:space-x-6 ">{menus}</div>
 
-          {!currentUser || currentUser?.userName === 'Guest' ? (
-            <div className="ml-8 hidden lg:flex items-center justify-end lg:flex-1">
+          {currentUser?.username === 'Guest' || currentUser?.username === undefined ? (
+            <div className="hidden lg:flex items-center">
               <a
                 href="/nuxeo/logout?requestedUrl=login.jsp"
                 className="whitespace-nowrap text-lg font-medium text-white hover:text-gray-100"
@@ -77,14 +88,14 @@ function NavBarPresentation({
               </a>
               <a
                 href="/register?requestedUrl=/register"
-                className="ml-4 whitespace-nowrap inline-flex items-center justify-center py-2 px-4 border border-transparent rounded-3xl  shadow-sm text-base font-medium text-white bg-fv-orange hover:bg-fv-orange-dark"
+                className="hidden ml-4 whitespace-nowrap xl:inline-flex items-center justify-center py-2 px-4 border border-transparent rounded-3xl  shadow-sm text-base font-medium text-white bg-fv-orange hover:bg-fv-orange-dark"
               >
                 Register
               </a>
             </div>
           ) : (
             <div
-              className="relative ml-8 flex justify-end flex-1 lg:w-0"
+              className="relative ml-8 flex flex-1 lg:w-0"
               onClick={(event) => {
                 onClickOutside(event, userMenuId)
               }}
@@ -140,7 +151,7 @@ function NavBarPresentation({
               ) : null}
             </div>
           )}
-          <div className="-mr-2 -my-2 md:hidden">
+          <div className="-mr-2 -my-2 lg:hidden">
             <button
               type="button"
               onClick={() => openCloseMobileNavbar()}
@@ -163,6 +174,7 @@ function NavBarPresentation({
 const { array, bool, object, string, func } = PropTypes
 NavBarPresentation.propTypes = {
   currentUser: object,
+  logoUrl: string,
   menuData: array,
   title: string,
   className: string,

@@ -17,7 +17,6 @@ import useIcon from 'common/useIcon'
 function SearchPresentation({
   currentFilter,
   siteTitle,
-  error,
   filters,
   handleFilter,
   isLoading,
@@ -36,9 +35,10 @@ function SearchPresentation({
         <li
           key={filter.label}
           id={'SearchFilter' + filter.label}
-          className={`inline-block transition duration-500 ease-in-out md:block md:my-2 md:mx-5 p-2 flex-grow rounded-xl capitalize cursor-pointer ${filterIsActiveClass}`}
+          className="inline-block transition duration-500 ease-in-out md:block md:my-2 md:mx-5 flex-grow"
         >
           <Link
+            className={`inline-block transition duration-500 ease-in-out md:block p-3 flex-grow rounded-xl capitalize cursor-pointer ${filterIsActiveClass}`}
             to={`${location.pathname}?q=${searchTerm}&docType=${filter.type}`}
             onClick={() => {
               handleFilter(filter.type)
@@ -70,24 +70,17 @@ function SearchPresentation({
           <ul className="inline-block md:block list-none m-2 md:m-0 md:space-y-4 ">{getFilterListItems()}</ul>
         </div>
         <div className="min-h-220 col-span-11 md:col-span-9">
-          <DictionaryListPresentation
-            items={items}
-            actions={actions}
-            isLoading={isLoading}
-            error={error}
-            wholeDomain={wholeDomain}
-          />
+          <DictionaryListPresentation items={items} actions={actions} isLoading={isLoading} wholeDomain={wholeDomain} />
         </div>
       </div>
     </>
   )
 }
 // PROPTYPES
-const { array, bool, func, object, string } = PropTypes
+const { array, bool, func, string } = PropTypes
 SearchPresentation.propTypes = {
   actions: array,
   currentFilter: string,
-  error: object,
   filters: array,
   handleFilter: func,
   isLoading: bool,
