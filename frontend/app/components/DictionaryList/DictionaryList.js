@@ -143,7 +143,7 @@ Flashcard
 
 */
 // Libraries
-import React, { Suspense, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 import { List, Map } from 'immutable'
@@ -173,11 +173,9 @@ import withPagination from 'components/withPagination'
 import IntlService from 'common/services/IntlService'
 import FVButton from 'components/FVButton'
 import { dictionaryListSmallScreenColumnDataTemplate } from 'components/DictionaryList/DictionaryListSmallScreen'
-import AuthorizationFilter from 'components/AuthorizationFilter'
 const FlashcardList = React.lazy(() => import('components/FlashcardList'))
 const DictionaryListSmallScreen = React.lazy(() => import('components/DictionaryList/DictionaryListSmallScreen'))
 const DictionaryListLargeScreen = React.lazy(() => import('components/DictionaryList/DictionaryListLargeScreen'))
-const ExportDialect = React.lazy(() => import('components/ExportDialect'))
 import './DictionaryList.css'
 
 // ===============================================================
@@ -313,16 +311,7 @@ const DictionaryList = (props) => {
       {props.childrenSearch}
 
       {generateListButtons({
-        // Export
         dialect: props.dialect,
-        exportDialectColumns: props.exportDialectColumns,
-        exportDialectExportElement: props.exportDialectExportElement,
-        exportDialectLabel: props.exportDialectLabel,
-        exportDialectQuery: props.exportDialectQuery,
-        /*
-        // Commented out until export is fixed
-        hasExportDialect: props.hasExportDialect,
-         */
         // View mode
         clickHandlerViewMode: props.dictionaryListClickHandlerViewMode,
         dictionaryListViewMode: props.dictionaryListViewMode,
@@ -410,38 +399,10 @@ const DictionaryList = (props) => {
 // generateListButtons
 // ------------------------------------
 function generateListButtons({
-  // Export
-  dialect,
-  exportDialectColumns,
-  exportDialectExportElement,
-  exportDialectLabel,
-  exportDialectQuery,
-  hasExportDialect,
   // View mode
   hasViewModeButtons,
 }) {
-  let exportDialect = null
-  if (hasExportDialect) {
-    exportDialect = (
-      <AuthorizationFilter filter={{ permission: 'Write', entity: dialect }}>
-        <Suspense fallback={<div>Loading...</div>}>
-          <ExportDialect
-            exportDialectColumns={exportDialectColumns}
-            exportDialectExportElement={exportDialectExportElement}
-            exportDialectLabel={exportDialectLabel}
-            exportDialectQuery={exportDialectQuery}
-          />
-        </Suspense>
-      </AuthorizationFilter>
-    )
-  }
-
-  return (
-    <div className="DictionaryList__ListButtonsGroup">
-      {hasViewModeButtons && <FlashcardButton.Container />}
-      {exportDialect}
-    </div>
-  )
+  return <div className="DictionaryList__ListButtonsGroup">{hasViewModeButtons && <FlashcardButton.Container />}</div>
 }
 
 // generateSortTitleLargeSmall
@@ -632,12 +593,6 @@ DictionaryList.propTypes = {
   fetcherParams: object, // NOTE: object of paging data: currentPageIndex, pageSize, filters
   hasPagination: bool,
   metadata: object, // TODO
-  // Export
-  hasExportDialect: bool,
-  exportDialectExportElement: string,
-  exportDialectColumns: string,
-  exportDialectLabel: string,
-  exportDialectQuery: string,
   dialect: object, // NOTE: used to determine permissions with export dialect
   // Batch
   batchConfirmationAction: func,
@@ -676,8 +631,6 @@ DictionaryList.propTypes = {
 }
 
 DictionaryList.defaultProps = {
-  // Export
-  hasExportDialect: false,
   // Batch
   batchFooterBtnConfirm: 'Yes, delete the selected items',
   batchFooterBtnDeny: 'No, do not delete the selected items',

@@ -21,11 +21,6 @@ const DictionaryList = React.lazy(() => import('components/DictionaryList/Dictio
 
 const DocumentListView = (props) => {
   const commonProps = {
-    exportDialectColumns: props.exportDialectColumns,
-    exportDialectExportElement: props.exportDialectExportElement,
-    exportDialectLabel: props.exportDialectLabel,
-    exportDialectQuery: props.exportDialectQuery,
-    hasExportDialect: props.hasExportDialect,
     // Listview
     data: props.data,
     hasFlashcard: props.flashcard,
@@ -108,12 +103,6 @@ const DocumentListView = (props) => {
 
 const { any, array, bool, func, number, object, string } = PropTypes
 DocumentListView.propTypes = {
-  // Export
-  hasExportDialect: bool,
-  exportDialectExportElement: string,
-  exportDialectColumns: string,
-  exportDialectLabel: string,
-  exportDialectQuery: string,
   // className,
   columns: array,
   // cssModifier: string,
