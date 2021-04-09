@@ -8,6 +8,13 @@
   "number_of_replicas": "0",
 </#if>
   "analysis": {
+    "normalizer": {
+      "kw_normalizer": {
+        "type": "custom",
+        "char_filter": [],
+        "filter": ["lowercase", "asciifolding"]
+      }
+    },
     "filter": {
       "truncate_filter": {
         "length": 256,

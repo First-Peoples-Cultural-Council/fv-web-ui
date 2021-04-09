@@ -22,6 +22,8 @@ public class SearchResult implements Serializable {
   private float score;
   private String path;
 
+  private String visibility;
+
   private boolean exactMatch = false;
 
   private ParentDialect parentDialect = null;
@@ -86,6 +88,15 @@ public class SearchResult implements Serializable {
   public void setExactMatch(final boolean exactMatch) {
     this.exactMatch = exactMatch;
   }
+
+  public String getVisibility() {
+    return visibility;
+  }
+
+  public void setVisibility(String visibility) {
+    this.visibility = visibility;
+  }
+
 
   public void setParentDialect(String id, String name, String shortUrl) {
     this.parentDialect = new ParentDialect(id, name, shortUrl);
