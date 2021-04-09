@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import AlphabetPresentationSelected from 'components/Alphabet/AlphabetPresentationSelected'
-import useIcon from 'common/useIcon'
 /**
  * @summary AlphabetPresentationWidget
  * @component
@@ -12,40 +11,7 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function AlphabetPresentationWidget({
-  characters,
-  error,
-  isLoading,
-  onCharacterClick,
-  links,
-  selectedData,
-  onVideoClick,
-  videoIsOpen,
-}) {
-  if (isLoading) {
-    return (
-      <div className="flex justify-around p-10">
-        <button
-          type="button"
-          className="bg-fv-orange border border-transparent items-center inline-flex px-5 py-2 rounded-md shadow-sm text-base text-white ease-in-out"
-          disabled
-        >
-          {useIcon('Spinner', 'animate-spin h-5 w-5 mr-3 fill-current')}
-          Loading
-        </button>
-      </div>
-    )
-  }
-  if (error) {
-    return (
-      <div className="p-10">
-        <h1>Sorry, something went wrong!</h1>
-        <p>Please report this error by emailing hello@firstvoices.com so that we can fix it.</p>
-        <p>Include the link or action you took to get to this page.</p>
-        <p>Thank You!</p>
-      </div>
-    )
-  }
+function AlphabetPresentationWidget({ characters, onCharacterClick, links, selectedData, onVideoClick, videoIsOpen }) {
   return (
     <section className="py-12 bg-white" data-testid="AlphabetPresentationWidget">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -117,8 +83,6 @@ function AlphabetPresentationWidget({
 // PROPTYPES
 const { bool, array, func, string, shape, arrayOf, object } = PropTypes
 AlphabetPresentationWidget.propTypes = {
-  isLoading: bool,
-  error: object,
   characters: arrayOf(
     shape({
       title: string,

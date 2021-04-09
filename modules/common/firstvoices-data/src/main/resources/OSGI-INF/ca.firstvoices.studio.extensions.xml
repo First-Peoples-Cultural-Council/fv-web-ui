@@ -125,6 +125,7 @@
       <schema name="fvancestry"/>
       <facet name="Publishable"/>
       <facet name="Orderable"/>
+      <facet name="Versionable"/>
       <facet name="PublishSpace"/>
       <subtypes>
         <type>FVCharacter</type>
@@ -231,6 +232,7 @@
       <schema name="fvcore"/>
       <schema name="fvlegacy"/>
       <facet name="Publishable"/>
+      <facet name="Versionable"/>
     </doctype>
     <doctype name="FVAlphabet" append="true">
       <subtypes>
@@ -441,6 +443,7 @@
       <schema name="fvcore"/>
       <schema name="fvlegacy"/>
       <facet name="NXTag"/>
+      <facet name="Versionable"/>
       <facet name="Publishable"/>
       <facet name="Commentable"/>
       <facet name="HasRelatedText"/>

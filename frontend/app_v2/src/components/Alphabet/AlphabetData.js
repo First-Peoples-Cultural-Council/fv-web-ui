@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { useQuery } from 'react-query'
 
 //FPCC
 import useGetSite from 'common/useGetSite'
 import api from 'services/api'
 import { getMediaUrl } from 'common/urlHelpers'
+import { triggerError } from 'common/navigationHelpers'
 /**
  * @summary AlphabetData
  * @component
@@ -14,17 +15,18 @@ import { getMediaUrl } from 'common/urlHelpers'
  *
  */
 
-const AlphabetData = () => {
+const AlphabetData = ({ widgetView }) => {
   const { uid } = useGetSite()
   const { character, sitename } = useParams()
   const [selectedData, setSelectedData] = useState({})
+  const history = useHistory()
 
   // Data fetch
   const response = useQuery(['alphabet', uid], () => api.alphabet.get(uid), {
     // The query will not execute until the siteId exists
     enabled: !!uid,
   })
-  const { status, isLoading, error, data } = response
+  const { status, isLoading, error, isError, data } = response
 
   // Find slected character data and manipulate for presentation layer
   const findSelectedCharacterData = (selectedCharacter) => {
@@ -51,13 +53,14 @@ const AlphabetData = () => {
   }
 
   useEffect(() => {
-    if (character && data && status === 'success' && error === null) {
+    if (character && data && status === 'success' && !isError) {
       const _selectedData = findSelectedCharacterData(character)
       if (_selectedData !== undefined && _selectedData?.title !== selectedData?.title) {
         setSelectedData(_selectedData)
       }
     }
-  }, [character, status, error])
+    if (isError && !widgetView) triggerError(error, history)
+  }, [character, status, isError])
 
   // Video Modal
   const [videoIsOpen, setVideoIsOpen] = useState(false)
@@ -76,8 +79,7 @@ const AlphabetData = () => {
   return {
     characters: data?.characters,
     links: data?.relatedLinks,
-    error,
-    isLoading,
+    isLoading: isLoading || status === 'idle',
     sitename,
     onCharacterClick,
     onVideoClick,

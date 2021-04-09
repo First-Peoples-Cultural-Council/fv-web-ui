@@ -2,6 +2,7 @@ import React from 'react'
 // import PropTypes from 'prop-types'
 import HomePresentation from 'components/Home/HomePresentation'
 import HomeData from 'components/Home/HomeData'
+import Loading from 'components/Loading'
 
 /**
  * @summary HomeContainer
@@ -12,8 +13,12 @@ import HomeData from 'components/Home/HomeData'
  * @returns {node} jsx markup
  */
 function HomeContainer() {
-  const { isLoading, error, data, language } = HomeData()
-  return <HomePresentation isLoading={isLoading} error={error} data={data} language={language} />
+  const { isLoading, data, language } = HomeData()
+  return (
+    <Loading.Container isLoading={isLoading}>
+      <HomePresentation data={data} language={language} />
+    </Loading.Container>
+  )
 }
 
 export default HomeContainer

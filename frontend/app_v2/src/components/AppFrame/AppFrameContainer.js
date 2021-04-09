@@ -6,7 +6,6 @@ import Resource from 'components/Resource'
 import Alphabet from 'components/Alphabet'
 import Home from 'components/Home'
 import Search from 'components/Search'
-import Suspender from 'components/Suspender'
 import Words from 'components/Words'
 import Word from 'components/Word'
 import Phrases from 'components/Phrases'
@@ -21,6 +20,7 @@ import Story from 'components/Story'
 import Games from 'components/Games'
 import Game from 'components/Game'
 import Kids from 'components/Kids'
+import ErrorHandler from 'components/ErrorHandler'
 
 import NavBar from 'components/NavBar'
 
@@ -37,7 +37,7 @@ function AppFrameContainer() {
     <div className="AppFrame overflow-hidden">
       <NavBar.Container className="relative z-10" />
       <main role="main" className="relative z-0 min-h-screen">
-        <Suspender>
+        <ErrorHandler.Container>
           <Switch>
             <Route path="/:sitename/search">
               <Helmet>
@@ -179,7 +179,7 @@ function AppFrameContainer() {
               </div>
             </Route>
           </Switch>
-        </Suspender>
+        </ErrorHandler.Container>
       </main>
     </div>
   )

@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 
 import useGetSite from 'common/useGetSite'
 import searchApi from 'services/api/search'
 import { copy } from 'common/actionHelpers'
+import { triggerError } from 'common/navigationHelpers'
 
 /**
  * @summary SearchData
@@ -17,6 +18,7 @@ import { copy } from 'common/actionHelpers'
 function SearchData() {
   const { title, uid } = useGetSite()
   const location = useLocation()
+  const history = useHistory()
 
   // Extract search term from URL search params
   const searchTerm = new URLSearchParams(location.search).get('q') ? new URLSearchParams(location.search).get('q') : ''
@@ -32,7 +34,7 @@ function SearchData() {
     // The query will not execute until the siteId exists and a search term has been provided
     enabled: !!uid && !!searchTerm,
   })
-  const { data, isLoading, error } = response
+  const { data, error, isError, isLoading } = response
 
   // DataAdaptor
   const items = data?.results
@@ -45,6 +47,10 @@ function SearchData() {
         return result
       })
     : []
+
+  useEffect(() => {
+    if (isError) triggerError(error, history)
+  }, [isError])
 
   // Get Filters
   const filters = [{ type: 'ALL', label: 'All Results', count: data?.statistics.resultCount }]
@@ -71,7 +77,6 @@ function SearchData() {
   return {
     currentFilter,
     siteTitle: title ? title : 'FirstVoices',
-    error,
     filters,
     handleFilter,
     isLoading,
