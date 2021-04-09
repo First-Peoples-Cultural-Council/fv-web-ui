@@ -38,7 +38,7 @@ function DialectTileData({ children, dialectGroups, dialectId, href, isWorkspace
 
   const onDialectClick = (e) => {
     e.preventDefault()
-    if (isPrivate && isLoggedIn) {
+    if (isPrivate) {
       setIsDialogOpen(true)
     } else {
       NavigationHelpers.navigate(hrefToUse, pushWindowPath, false)
@@ -51,7 +51,7 @@ function DialectTileData({ children, dialectGroups, dialectId, href, isWorkspace
 
   const handleDialogOk = () => {
     setIsDialogOpen(false)
-    window.location.href = `/register?requestedUrl=/register&requestedSite=${dialectId}`
+    window.location.href = `/register?requestedSite=${dialectId}`
   }
 
   return children({
