@@ -39,17 +39,17 @@
   "properties": {
     "dictionary_all_field": {
       "type": "text",
-      "analyzer": "fulltext"
+      "analyzer": "fulltext",
+      "boost": 1
     },
     "exact_matches_language": {
       "type": "text",
       "analyzer": "standard",
-      "boost": 10
+      "boost": 1
     },
     "exact_matches_translations": {
       "type": "text",
-      "analyzer": "standard",
-      "boost": 10
+      "analyzer": "standard"
     },
     "secondary_search_terms": {
       "type": "text",
@@ -187,7 +187,13 @@
     "ecm:title": {
       "type": "keyword",
       "copy_to": "exact_matches_language",
-      "ignore_above": 256
+      "ignore_above": 256,
+      "fields": {
+        "lowercase": {
+          "type": "keyword",
+          "normalizer": "kw_normalizer"
+        }
+      }
     },
     "note:note": {
       "type": "keyword",
