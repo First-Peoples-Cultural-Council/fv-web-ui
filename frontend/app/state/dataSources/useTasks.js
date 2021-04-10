@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import {
   fetchTasks as _fetchTasks,
-  fetchUserTasks as _fetchUserTasks,
   getSimpleTasks as _getSimpleTasks,
   getSimpleTask as _getSimpleTask,
   postRequestReview as _postRequestReview,
@@ -19,13 +18,8 @@ function useTasks() {
     computeTasks: useSelector((state) => state.tasks.computeTasks),
     computeSimpleTask: useSelector((state) => state.tasks.computeSimpleTask),
     computeSimpleTasks: useSelector((state) => state.tasks.computeSimpleTasks),
-    computeUserTasks: useSelector((state) => state.tasks.computeUserTasks),
     fetchTasks: (pathOrId, operationParams, messageStart, messageSuccess, messageError) => {
       const dispatchObj = _fetchTasks(pathOrId, operationParams, messageStart, messageSuccess, messageError)
-      dispatch(dispatchObj)
-    },
-    fetchUserTasks: (pathOrId, operationParams, messageStart, messageSuccess, messageError) => {
-      const dispatchObj = _fetchUserTasks(pathOrId, operationParams, messageStart, messageSuccess, messageError)
       dispatch(dispatchObj)
     },
     getSimpleTask: (uid) => {

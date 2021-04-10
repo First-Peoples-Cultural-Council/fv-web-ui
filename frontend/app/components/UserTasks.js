@@ -126,10 +126,6 @@ export class UserTasks extends React.Component {
         id: this.state.userRegistrationTasksPath,
         entity: this.props.computeUserRegistrationTasks,
       },
-      {
-        id: this.state.lastActionedTaskId,
-        entity: this.props.computeUserTasksReject,
-      },
     ])
 
     const computeUserRegistrationTasks = ProviderHelpers.getEntry(

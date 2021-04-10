@@ -30,7 +30,6 @@ const initialState = {
   success: false,
 }
 
-const computeUserTasksOperation = computeOperation('user_tasks')
 const computeTasksOperation = computeOperation('tasks')
 const computeCountTotalTasksFactory = computeOperation('count_total_tasks')
 const computeUserRegistrationTasksFactory = computeOperation('user_registration')
@@ -194,7 +193,6 @@ export const tasksReducer = combineReducers({
     return state ? state : []
   },
   computeTasks: computeTasksOperation.computeTasks,
-  computeUserTasks: computeUserTasksOperation.computeUserTasks,
   computeCountTotalTasks: computeCountTotalTasksFactory.computeCountTotalTasks,
   computeUserRegistrationTasks: computeUserRegistrationTasksFactory.computeUserRegistration,
   computeUserRegistrationApprove: computeUserRegistrationApproveOperation.computeUserRegistrationApprove,

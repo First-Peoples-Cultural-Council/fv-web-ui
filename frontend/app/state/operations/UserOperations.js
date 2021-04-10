@@ -45,40 +45,6 @@ export default class UserOperations {
     })
   }
 
-  static getUserTasks(params = {}) {
-    const properties = BaseOperations.getProperties()
-
-    return new Promise((resolve, reject) => {
-      properties.client
-        .operation('Task.GetAssigned')
-        .params(params)
-        .execute()
-        .then((tasks) => {
-          // Go through each task and do another request to figure out what document type each one is
-          /*tasks.map(function(task, i) {
-                            properties.client.request('/id/' + task.docref)
-                            .get()
-                            .then((document) => {
-                                task["doctype"] = document.type;
-                                console.log("document.type");
-                            }).catch((error) => { reject('Could not retrieve document.'); });
-                        })
-
-                      console.log(tasks);*/
-          resolve(tasks)
-        })
-        .catch((/*error*/) => {
-          reject(
-            IntlService.instance.translate({
-              key: 'operations.could_not_retrieve_user_tasks',
-              default: 'Could not retrieve user tasks',
-              case: 'first',
-            }) + '.'
-          )
-        })
-    })
-  }
-
   static fvUpdateUser(username = '', languagePreference) {
     const properties = BaseOperations.getProperties()
 

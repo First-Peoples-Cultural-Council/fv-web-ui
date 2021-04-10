@@ -46,10 +46,8 @@ export class KidsNavigation extends Component {
     splitWindowPath: array.isRequired,
     properties: object.isRequired,
     computeLogin: object.isRequired,
-    // computeUserTasks: object.isRequired,
     computePortal: object,
     // REDUX: actions/dispatch/func
-    // fetchUserTasks: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
     intl: object.isRequired,
@@ -67,16 +65,10 @@ export class KidsNavigation extends Component {
   }
 
   render() {
-    // const computeUserTasks = ProviderHelpers.getEntry(
-    //   this.props.computeUserTasks,
-    //   selectn('response.id', this.props.computeLogin)
-    // )
     const computePortal = ProviderHelpers.getEntry(
       this.props.computePortal,
       this.props.routeParams.dialect_path + '/Portal'
     )
-
-    // const userTaskCount = selectn('response.length', computeUserTasks) || 0
 
     const portalLogo = selectn('response.contextParameters.portal.fv-portal:logo.path', computePortal)
 
@@ -159,7 +151,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
   const { properties } = navigation
   const { computeLogin } = nuxeo
-  // const { computeUserTasks } = tasks
   const { splitWindowPath } = windowPath
   const { computePortal } = fvPortal
   const { intlService } = locale
@@ -168,7 +159,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
     splitWindowPath,
     properties,
     computeLogin,
-    // computeUserTasks,
     computePortal,
     intl: intlService,
   }
@@ -176,7 +166,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  // fetchUserTasks,
   pushWindowPath,
   replaceWindowPath,
 }
