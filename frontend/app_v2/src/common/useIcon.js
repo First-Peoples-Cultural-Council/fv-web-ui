@@ -13,6 +13,7 @@ import Copy from 'common/icons/Copy'
 import Dictionary from 'common/icons/Dictionary'
 import Facebook from 'common/icons/Facebook'
 import HamburgerMenu from 'common/icons/HamburgerMenu'
+import Home from 'common/icons/Home'
 import Instagram from 'common/icons/Instagram'
 import Kids from 'common/icons/Kids'
 import Learn from 'common/icons/Learn'
@@ -54,6 +55,7 @@ function useIcon(iconName, iconStyling) {
     Dictionary,
     Facebook,
     HamburgerMenu,
+    Home,
     Instagram,
     Kids,
     Learn,
