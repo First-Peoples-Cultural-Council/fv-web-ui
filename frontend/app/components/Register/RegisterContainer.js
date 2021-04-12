@@ -19,22 +19,26 @@ function RegisterContainer() {
         computeEntities,
         fvUserFields,
         fvUserOptions,
-        serverResponse,
-        onRequestSaveForm,
         formRef,
         formValue,
+        isLoggedIn,
+        onRequestSaveForm,
         requestedSiteTitle,
+        requestedSite,
+        serverResponse,
       }) => {
         return (
           <PromiseWrapper renderOnError computeEntities={computeEntities}>
             <RegisterPresentation
               fvUserFields={fvUserFields}
               fvUserOptions={fvUserOptions}
-              serverResponse={serverResponse}
-              onRequestSaveForm={onRequestSaveForm}
               formRef={formRef}
               formValue={formValue}
+              isLoggedIn={isLoggedIn}
+              onRequestSaveForm={onRequestSaveForm}
               requestedSiteTitle={requestedSiteTitle}
+              requestedSite={requestedSite}
+              serverResponse={serverResponse}
             />
           </PromiseWrapper>
         )

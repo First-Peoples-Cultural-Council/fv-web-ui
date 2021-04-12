@@ -139,13 +139,8 @@ const fields = {
     'fvuserinfo:language_team_member': t.maybe(t.Boolean),
   },
   FVUserJoin: {
-    'userinfo:firstName': t.String,
-    'userinfo:lastName': t.String,
-    'userinfo:email': Email,
     'fvuserinfo:requestedSpace': t.String,
     'fvuserinfo:role': t.String,
-    'fvuserinfo:ageGroup': t.maybe(AgeRanges),
-    'fvuserinfo:phone': t.maybe(t.String),
     'fvuserinfo:comment': t.maybe(t.String),
     'fvuserinfo:community_member': t.maybe(t.Boolean),
     'fvuserinfo:language_team_member': t.maybe(t.Boolean),

@@ -4,6 +4,7 @@ import selectn from 'selectn'
 
 import useDialect from 'dataSources/useDialect'
 import useIntl from 'dataSources/useIntl'
+import useLogin from 'dataSources/useLogin'
 import useUser from 'dataSources/useUser'
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
@@ -20,7 +21,10 @@ import ProviderHelpers from 'common/ProviderHelpers'
 function RegisterData({ children }) {
   const { fetchDialect2, computeDialect2 } = useDialect()
   const { intl } = useIntl()
+  const { computeLogin } = useLogin()
   const { selfregisterUser, computeUserSelfregister } = useUser()
+
+  const isLoggedIn = computeLogin.success && computeLogin.isConnected
 
   const formRef = useRef()
   const [formValue, setFormValue] = useState(null)
@@ -39,10 +43,10 @@ function RegisterData({ children }) {
     }
   }, [requestedSite])
 
-  const fvUserFields = requestedSite ? selectn('FVUserJoin', fields) : selectn('FVUser', fields)
+  const fvUserFields = isLoggedIn ? selectn('FVUserJoin', fields) : selectn('FVUser', fields)
   const fvUserOptions = requestedSite
-    ? Object.assign({}, selectn('FVUserJoin', options))
-    : Object.assign({}, selectn('FVUser', options))
+    ? Object.assign({}, selectn('FVUserPreselected', options))
+    : Object.assign({}, selectn('FVUserRegistration', options))
 
   const registrationResponse = ProviderHelpers.getEntry(computeUserSelfregister, userRequest)
   const dialectResponse = ProviderHelpers.getEntry(computeDialect2, requestedSite)
@@ -76,14 +80,11 @@ function RegisterData({ children }) {
     }
     setFormValue(properties)
     if (currentFormValue) {
-      const payload = Object.assign({}, properties, {
-        'userinfo:groups': [properties['userinfo:groups']],
-      })
       const currentUserRequest = {
         'entity-type': 'document',
         type: 'FVUserRegistration',
         id: selectn('userinfo:email', properties),
-        properties: payload,
+        properties: properties,
       }
       selfregisterUser(
         currentUserRequest,
@@ -108,11 +109,13 @@ function RegisterData({ children }) {
     computeEntities,
     fvUserFields,
     fvUserOptions,
-    serverResponse,
-    onRequestSaveForm,
     formRef,
     formValue,
+    isLoggedIn,
+    onRequestSaveForm,
     requestedSiteTitle,
+    requestedSite: requestedSite ? true : false,
+    serverResponse,
   })
 }
 // PROPTYPES
