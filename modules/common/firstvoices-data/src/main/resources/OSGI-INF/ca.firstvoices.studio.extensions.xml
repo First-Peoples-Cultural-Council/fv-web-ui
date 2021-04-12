@@ -18863,19 +18863,6 @@ function run(input, params) {
     </policy>
 
   </extension>
-  <extension target="org.nuxeo.ecm.platform.web.common.requestcontroller.service.RequestControllerService"
-             point="corsConfig">
-
-    <!-- allowOrigin="http://127.0.0.1:9010 http://localhost:9010 http://localhost http://localhost:3000 http://localhost:8080" -->
-
-    <!-- Note: ENSURE THIS IS LIMITED BEFORE GOING TO PROD -->
-
-    <corsConfig allowOrigin="*" name="firstVoicesCors" supportedMethods="GET, POST, HEAD, OPTIONS, PUT, DELETE">
-
-      <pattern>/nuxeo/.*</pattern>
-
-    </corsConfig>
-  </extension>
   <extension target="org.nuxeo.ecm.platform.usermanager.UserService" point="userManager">
 
     <userManager>

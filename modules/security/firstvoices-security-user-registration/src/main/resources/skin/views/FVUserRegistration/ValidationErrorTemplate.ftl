@@ -61,7 +61,7 @@
           <div>
 
             <#if exceptionMsg??>
-            Your invitation cannot be validated : "${exceptionMsg}".
+            Your invitation cannot be validated. Please contact us at support@fpcc.ca for assistance.
             </#if>
               <#if error??>
               An error occured during your invitation processs.
