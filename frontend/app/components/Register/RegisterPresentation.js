@@ -6,7 +6,6 @@ import t from 'tcomb-form'
 import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
 import Link from 'components/Link'
-import { string } from 'node_modules/joi/lib/index'
 /**
  * @summary RegisterPresentation
  * @component
@@ -97,7 +96,7 @@ function RegisterPresentation({
   )
 }
 // PROPTYPES
-const { func, object } = PropTypes
+const { func, object, string } = PropTypes
 RegisterPresentation.propTypes = {
   fvUserFields: object.isRequired,
   fvUserOptions: object.isRequired,
