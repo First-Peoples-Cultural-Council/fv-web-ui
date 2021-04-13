@@ -7,6 +7,7 @@ import {
 function useUser() {
   const dispatch = useDispatch()
   return {
+    computeRequestJoin: useSelector((state) => state.fvUser.computeRequestJoin),
     requestJoin: ({ siteId, reason, communityMember, languageTeamMember, comment }) => {
       const dispatchObj = _requestJoin({ siteId, reason, communityMember, languageTeamMember, comment })
       dispatch(dispatchObj)
