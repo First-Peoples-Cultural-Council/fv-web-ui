@@ -57,17 +57,17 @@ const FVPortalTemplate = function template(locals) {
 }
 
 const FVUserRegistrationTemplate = function template(locals) {
-  let selectedCommunityLanguageLabel = null
+  let selectedSiteLabel = null
 
-  locals.onChange = new (function setSelectedCommunityLanguageLabel() {
+  locals.onChange = new (function setSelectedSiteLabel() {
     const requestedSpaceElement = document.getElementById('registration-requested-space')
     if (requestedSpaceElement !== null) {
       const selectBox = requestedSpaceElement.getElementsByTagName('select')[0]
       if (selectBox?.selectedIndex > 0) {
-        selectedCommunityLanguageLabel = selectBox.options[selectBox.selectedIndex].innerHTML
+        selectedSiteLabel = selectBox.options[selectBox.selectedIndex].innerHTML
         document.getElementById('language_team_member_name').innerHTML = document.getElementById(
           'community_member_name'
-        ).innerHTML = selectedCommunityLanguageLabel
+        ).innerHTML = selectedSiteLabel
       }
     }
   })()
@@ -83,14 +83,12 @@ const FVUserRegistrationTemplate = function template(locals) {
         <div className="col-md-6" id="registration-requested-space">
           {locals.inputs['fvuserinfo:requestedSpace']}
         </div>
-
-        <div className={classNames('col-md-12', { hidden: !selectedCommunityLanguageLabel })}>
+        <div className={classNames('col-md-12', { hidden: !selectedSiteLabel })}>
           {locals.inputs['fvuserinfo:community_member']}
         </div>
-        <div className={classNames('col-md-12', { hidden: !selectedCommunityLanguageLabel })}>
+        <div className={classNames('col-md-12', { hidden: !selectedSiteLabel })}>
           {locals.inputs['fvuserinfo:language_team_member']}
         </div>
-
         <div className="col-md-12">{locals.inputs['fvuserinfo:comment']}</div>
       </fieldset>
     </div>
@@ -105,9 +103,7 @@ const FVUserPreselectedTemplate = function template(locals) {
         <div className="col-md-6">{locals.inputs['userinfo:email']}</div>
         <div className="col-md-6">{locals.inputs['fvuserinfo:role']}</div>
         <div className="col-md-6">{locals.inputs['fvuserinfo:ageGroup']}</div>
-        <div className="col-md-6" id="registration-requested-space">
-          {locals.inputs['fvuserinfo:requestedSpace']}
-        </div>
+        <div className={classNames('col-md-12', { hidden: true })}>{locals.inputs['fvuserinfo:requestedSpace']}</div>
         <div className="col-md-12">{locals.inputs['fvuserinfo:community_member']}</div>
         <div className="col-md-12">{locals.inputs['fvuserinfo:language_team_member']}</div>
         <div className="col-md-12">{locals.inputs['fvuserinfo:comment']}</div>

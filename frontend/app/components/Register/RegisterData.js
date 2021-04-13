@@ -22,7 +22,7 @@ function RegisterData({ children }) {
   const { fetchDialect2, computeDialect2 } = useDialect()
   const { intl } = useIntl()
   const { computeLogin } = useLogin()
-  const { selfregisterUser, computeUserSelfregister } = useUser()
+  const { selfregisterUser, computeUserSelfregister, requestJoin } = useUser()
 
   const isLoggedIn = computeLogin.success && computeLogin.isConnected
 
@@ -78,21 +78,32 @@ function RegisterData({ children }) {
         }
       }
     }
+
     setFormValue(properties)
     if (currentFormValue) {
-      const currentUserRequest = {
-        'entity-type': 'document',
-        type: 'FVUserRegistration',
-        id: selectn('userinfo:email', properties),
-        properties: properties,
+      if (isLoggedIn) {
+        requestJoin({
+          siteId: selectn('fvuserinfo:requestedSpace', properties),
+          reason: selectn('fvuserinfo:role', properties),
+          communityMember: selectn('fvuserinfo:community_member', properties) || false,
+          languageTeamMember: selectn('fvuserinfo:language_team_member', properties) || false,
+          comment: selectn('fvuserinfo:comment', properties),
+        })
+      } else {
+        const currentUserRequest = {
+          'entity-type': 'document',
+          type: 'FVUserRegistration',
+          id: selectn('userinfo:email', properties),
+          properties: properties,
+        }
+        selfregisterUser(
+          currentUserRequest,
+          null,
+          null,
+          intl.trans('views.pages.users.register.user_request_success', 'User request submitted successfully!')
+        )
+        setUserRequest(currentUserRequest)
       }
-      selfregisterUser(
-        currentUserRequest,
-        null,
-        null,
-        intl.trans('views.pages.users.register.user_request_success', 'User request submitted successfully!')
-      )
-      setUserRequest(currentUserRequest)
     } else {
       window.scrollTo(0, 0)
     }
