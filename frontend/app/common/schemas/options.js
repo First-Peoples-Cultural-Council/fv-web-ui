@@ -31,16 +31,6 @@ const i18nExt = {
 
 window.intl = IntlService.instance
 
-// const configExt = {
-//   config: {
-//     // for each of lg md sm xs you can specify the columns width
-//     horizontal: {
-//       md: [3, 9],
-//       sm: [6, 6],
-//     },
-//   },
-// }
-
 const FVPortalTemplate = function template(locals) {
   return (
     <fieldset>
@@ -78,11 +68,11 @@ const FVUserRegistrationTemplate = function template(locals) {
         <div className="col-md-6">{locals.inputs['userinfo:firstName']}</div>
         <div className="col-md-6">{locals.inputs['userinfo:lastName']}</div>
         <div className="col-md-6">{locals.inputs['userinfo:email']}</div>
-        <div className="col-md-6">{locals.inputs['fvuserinfo:role']}</div>
         <div className="col-md-6">{locals.inputs['fvuserinfo:ageGroup']}</div>
         <div className="col-md-6" id="registration-requested-space">
           {locals.inputs['fvuserinfo:requestedSpace']}
         </div>
+        <div className="col-md-6">{locals.inputs['fvuserinfo:role']}</div>
         <div className={classNames('col-md-12', { hidden: !selectedSiteLabel })}>
           {locals.inputs['fvuserinfo:community_member']}
         </div>
@@ -101,9 +91,9 @@ const FVUserPreselectedTemplate = function template(locals) {
         <div className="col-md-6">{locals.inputs['userinfo:firstName']}</div>
         <div className="col-md-6">{locals.inputs['userinfo:lastName']}</div>
         <div className="col-md-6">{locals.inputs['userinfo:email']}</div>
-        <div className="col-md-6">{locals.inputs['fvuserinfo:role']}</div>
         <div className="col-md-6">{locals.inputs['fvuserinfo:ageGroup']}</div>
         <div className={classNames('col-md-12', { hidden: true })}>{locals.inputs['fvuserinfo:requestedSpace']}</div>
+        <div className="col-md-6">{locals.inputs['fvuserinfo:role']}</div>
         <div className="col-md-12">{locals.inputs['fvuserinfo:community_member']}</div>
         <div className="col-md-12">{locals.inputs['fvuserinfo:language_team_member']}</div>
         <div className="col-md-12">{locals.inputs['fvuserinfo:comment']}</div>
