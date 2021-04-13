@@ -22,6 +22,8 @@ package ca.firstvoices.resetpassword.runner;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.nuxeo.ecm.core.api.NuxeoException;
 
@@ -43,6 +45,18 @@ public class StringHashGenerator {
     } catch (NoSuchAlgorithmException e) {
       throw new NuxeoException(e);
     }
+  }
+
+  /**
+   * Very basic check to see if the key is valid SHA-256
+   * and avoid potential XSS
+   */
+  public static boolean validateKey(String key) {
+    String regex = "^[A-Fa-f0-9]{64}$";
+    Pattern pattern = Pattern.compile(regex);
+    Matcher matcher = pattern.matcher(key);
+
+    return matcher.matches();
   }
 
 }

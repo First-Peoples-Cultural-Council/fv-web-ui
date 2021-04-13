@@ -284,8 +284,9 @@ class WordsListView extends DataListView {
       currentAppliedFilter = Object.values(props.filter.get('currentAppliedFilter').toJS()).join('')
     }
 
-    let nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
-      1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
+    let nql = `${currentAppliedFilter}&currentPageIndex=${
+      pageIndex - 1
+    }&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
 
     const { routeParams } = this.props
     const letter = routeParams.letter
@@ -351,12 +352,6 @@ class WordsListView extends DataListView {
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         {selectn('response.entries', computeWords) && (
           <DocumentListView
-            // Export
-            hasExportDialect
-            exportDialectExportElement={this.props.exportDialectExportElement || 'FVWord'}
-            exportDialectLabel={this.props.exportDialectLabel}
-            exportDialectQuery={this.props.exportDialectQuery}
-            exportDialectColumns={this.props.exportDialectColumns}
             //
             className={'browseDataGrid'}
             columns={this.state.columns}
@@ -453,12 +448,6 @@ WordsListView.propTypes = {
   resetSearch: func,
   hasSearch: bool,
   hasViewModeButtons: bool,
-  // Export
-  hasExportDialect: bool,
-  exportDialectExportElement: string,
-  exportDialectColumns: string,
-  exportDialectLabel: string,
-  exportDialectQuery: string,
   // REDUX: reducers/state
   computeDialect2: object.isRequired,
   computeLogin: object.isRequired,

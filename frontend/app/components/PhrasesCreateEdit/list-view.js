@@ -244,10 +244,6 @@ export class PhrasesListView extends DataListView {
       dialect,
       dictionaryListClickHandlerViewMode,
       dictionaryListViewMode,
-      exportDialectColumns,
-      exportDialectExportElement,
-      exportDialectLabel,
-      exportDialectQuery,
       flashcard,
       flashcardTitle,
       gridCols,
@@ -290,12 +286,6 @@ export class PhrasesListView extends DataListView {
             // onSortChange={this._handleSortChange}
             // sortInfo={this.state.sortInfo.uiSortOrder}
 
-            // Export
-            hasExportDialect
-            exportDialectExportElement={exportDialectExportElement || 'FVPhrase'}
-            exportDialectLabel={exportDialectLabel}
-            exportDialectQuery={exportDialectQuery}
-            exportDialectColumns={exportDialectColumns}
             //
             columns={this.state.columns}
             data={computePhrases}
@@ -399,8 +389,9 @@ export class PhrasesListView extends DataListView {
       currentAppliedFilter = Object.values(props.filter.get('currentAppliedFilter').toJS()).join('')
     }
 
-    let nql = `${currentAppliedFilter}&currentPageIndex=${pageIndex -
-      1}&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
+    let nql = `${currentAppliedFilter}&currentPageIndex=${
+      pageIndex - 1
+    }&pageSize=${pageSize}&sortOrder=${sortOrder}&sortBy=${sortBy}`
 
     const { routeParams } = this.props
     const letter = routeParams.letter
@@ -467,12 +458,7 @@ PhrasesListView.propTypes = {
   onPagePropertiesChange: func,
   pageProperties: object,
   routeParams: object.isRequired,
-  // Export
-  hasExportDialect: bool,
-  exportDialectExportElement: string,
-  exportDialectColumns: string,
-  exportDialectLabel: string,
-  exportDialectQuery: string,
+
   // REDUX: reducers/state
   computeDialect2: object.isRequired,
   computeLogin: object.isRequired,

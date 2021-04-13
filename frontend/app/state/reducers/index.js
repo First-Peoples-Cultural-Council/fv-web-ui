@@ -3,7 +3,6 @@ import { audioReducer } from './audio'
 import { directoryReducer } from './directory'
 import { documentReducer } from './document'
 import { errorReducer } from './error'
-import { exportDialectReducer } from './exportDialect'
 import { fvAudioReducer } from './fvAudio'
 import { fvBookReducer } from './fvBook'
 import { fvCategoryReducer } from './fvCategory'
@@ -38,7 +37,6 @@ export default combineReducers({
   directory: directoryReducer,
   document: documentReducer,
   error: errorReducer,
-  exportDialect: exportDialectReducer,
   fvAudio: fvAudioReducer,
   fvBook: fvBookReducer,
   fvCategory: fvCategoryReducer,

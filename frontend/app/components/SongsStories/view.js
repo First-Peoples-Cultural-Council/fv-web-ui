@@ -20,20 +20,7 @@ import Immutable from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import {
-  askToDisableBook,
-  askToEnableBook,
-  askToPublishBook,
-  askToUnpublishBook,
-  deleteBook,
-  deleteBookEntry,
-  disableBook,
-  fetchBook,
-  fetchBookEntries,
-  enableBook,
-  publishBook,
-  unpublishBook,
-} from 'reducers/fvBook'
+import { deleteBook, deleteBookEntry, fetchBook, fetchBookEntries, publishBook } from 'reducers/fvBook'
 import { changeTitleParams, overrideBreadcrumbs } from 'reducers/navigation'
 import { fetchDialect2 } from 'reducers/fvDialect'
 import { pushWindowPath } from 'reducers/windowPath'
@@ -80,22 +67,15 @@ export class SongsStoriesView extends Component {
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
-    askToDisableBook: func.isRequired,
-    askToEnableBook: func.isRequired,
-    askToPublishBook: func.isRequired,
-    askToUnpublishBook: func.isRequired,
     changeTitleParams: func.isRequired,
     deleteBook: func.isRequired,
     deleteBookEntry: func.isRequired,
-    disableBook: func.isRequired,
     fetchBook: func.isRequired,
     fetchBookEntries: func.isRequired,
     fetchDialect2: func.isRequired,
-    enableBook: func.isRequired,
     publishBook: func.isRequired,
     pushWindowPath: func.isRequired,
     overrideBreadcrumbs: func.isRequired,
-    unpublishBook: func.isRequired,
   }
 
   constructor(props, context) {
@@ -246,13 +226,6 @@ export class SongsStoriesView extends Component {
         itemPath={this._getBookPath()}
         actions={['workflow', 'edit', 'visibility', 'publish', 'add-child']}
         publishAction={this.props.publishBook}
-        unpublishAction={this.props.unpublishBook}
-        askToPublishAction={this.props.askToPublishBook}
-        askToUnpublishAction={this.props.askToUnpublishBook}
-        enableAction={this.props.enableBook}
-        askToEnableAction={this.props.askToEnableBook}
-        disableAction={this.props.disableBook}
-        askToDisableAction={this.props.askToDisableBook}
         deleteAction={this.props.deleteBook}
         onNavigateRequest={this._onNavigateRequest}
         computeItem={computeBook}
@@ -289,22 +262,15 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  askToDisableBook,
-  askToEnableBook,
-  askToPublishBook,
-  askToUnpublishBook,
   changeTitleParams,
   deleteBook,
   deleteBookEntry,
-  disableBook,
   fetchBook,
   fetchBookEntries,
   fetchDialect2,
-  enableBook,
   publishBook,
   pushWindowPath,
   overrideBreadcrumbs,
-  unpublishBook,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SongsStoriesView)

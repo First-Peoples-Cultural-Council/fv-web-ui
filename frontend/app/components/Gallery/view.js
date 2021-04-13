@@ -22,18 +22,7 @@ import PhotoGallery from 'react-photo-gallery'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import {
-  askToDisableGallery,
-  askToEnableGallery,
-  askToPublishGallery,
-  askToUnpublishGallery,
-  disableGallery,
-  deleteGallery,
-  enableGallery,
-  fetchGallery,
-  publishGallery,
-  unpublishGallery,
-} from 'reducers/fvGallery'
+import { deleteGallery, fetchGallery, publishGallery } from 'reducers/fvGallery'
 import { changeTitleParams, overrideBreadcrumbs } from 'reducers/navigation'
 import { fetchDialect2 } from 'reducers/fvDialect'
 import { pushWindowPath } from 'reducers/windowPath'
@@ -60,20 +49,13 @@ export class Gallery extends React.Component {
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
-    askToDisableGallery: func.isRequired,
-    askToEnableGallery: func.isRequired,
-    askToPublishGallery: func.isRequired,
-    askToUnpublishGallery: func.isRequired,
     changeTitleParams: func.isRequired,
-    disableGallery: func.isRequired,
     deleteGallery: func.isRequired,
     fetchDialect2: func.isRequired,
     fetchGallery: func.isRequired,
     overrideBreadcrumbs: func.isRequired,
     publishGallery: func.isRequired,
     pushWindowPath: func.isRequired,
-    unpublishGallery: func.isRequired,
-    enableGallery: func.isRequired,
   }
 
   constructor(props, context) {
@@ -141,13 +123,6 @@ export class Gallery extends React.Component {
         itemPath={this._getGalleryPath()}
         actions={['workflow', 'edit', 'visibility', 'publish']}
         publishAction={this.props.publishGallery}
-        unpublishAction={this.props.unpublishGallery}
-        askToPublishAction={this.props.askToPublishGallery}
-        askToUnpublishAction={this.props.askToUnpublishGallery}
-        enableAction={this.props.enableGallery}
-        askToEnableAction={this.props.askToEnableGallery}
-        disableAction={this.props.disableGallery}
-        askToDisableAction={this.props.askToDisableGallery}
         deleteAction={this.props.deleteGallery}
         onNavigateRequest={this._onNavigateRequest}
         computeItem={computeGallery}
@@ -194,20 +169,13 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  askToDisableGallery,
-  askToEnableGallery,
-  askToPublishGallery,
-  askToUnpublishGallery,
   changeTitleParams,
-  disableGallery,
   deleteGallery,
-  enableGallery,
   fetchDialect2,
   fetchGallery,
   overrideBreadcrumbs,
   publishGallery,
   pushWindowPath,
-  unpublishGallery,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Gallery)

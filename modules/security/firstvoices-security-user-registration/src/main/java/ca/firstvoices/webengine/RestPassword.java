@@ -23,6 +23,7 @@ package ca.firstvoices.webengine;
 import ca.firstvoices.resetpassword.runner.CreatePasswordResetLinkUnrestricted;
 import ca.firstvoices.resetpassword.runner.SearchRegistrationByResetPassKeyUnrestricted;
 import ca.firstvoices.resetpassword.runner.SetNewPasswordUnrestricted;
+import ca.firstvoices.resetpassword.runner.StringHashGenerator;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
@@ -110,6 +111,10 @@ public class RestPassword extends ModuleRoot {
         new SearchRegistrationByResetPassKeyUnrestricted(
         getDefaultRepositoryName(), key);
     runner.runUnrestricted();
+
+    if (!StringHashGenerator.validateKey(key)) {
+      return getView("wrongResetKey");
+    }
 
     String errorMessage = runner.getErrorMessage();
     if (errorMessage != null) {

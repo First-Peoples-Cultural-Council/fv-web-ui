@@ -39,3 +39,4 @@ nashorn_code_cache
 
 # Skaffold (for now)
 skaffold
+Dockerfile-skaffold

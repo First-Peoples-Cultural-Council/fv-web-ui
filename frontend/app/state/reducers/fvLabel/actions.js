@@ -51,14 +51,6 @@ export const unpublishLabel = execute('FV_LABEL_UNPUBLISH', 'FVUnpublishDialect'
   headers: { 'enrichers.document': 'ancestry,label,permissions' },
 })
 
-export const enableLabel = execute('FV_LABEL_ENABLE', 'FVEnableDocument', {
-  headers: { 'enrichers.document': 'ancestry,label,permissions' },
-})
-
-export const disableLabel = execute('FV_LABEL_DISABLE', 'FVDisableDocument', {
-  headers: { 'enrichers.document': 'ancestry,label,permissions' },
-})
-
 export const fetchSharedLabels = (page_provider, headers = {}, params = {}) => {
   return (dispatch) => {
     dispatch({ type: FV_LABELS_SHARED_FETCH_START })
