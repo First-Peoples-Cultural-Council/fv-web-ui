@@ -141,24 +141,11 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
       if (this.state.saved) {
         const currentWord = this._getComputeItem(this.props)
         const nextWord = this._getComputeItem(nextProps)
-
         const currentWordWasUpdated = selectn('wasUpdated', currentWord)
-        const currentWordWasCreated = selectn('wasCreated', currentWord)
-
         const nextWordWasUpdated = selectn('wasUpdated', nextWord)
-        const nextWordWasCreated = selectn('wasCreated', nextWord)
-
-        // 'Redirect' on update or creation success
-        if (
-          (nextWordWasUpdated && currentWordWasUpdated != nextWordWasUpdated) ||
-          (nextWordWasCreated && currentWordWasCreated != nextWordWasCreated)
-        ) {
-          if (nextWordWasUpdated) {
-            NavigationHelpers.navigateUp(this.props.currentPath, this.props.navigationMethod)
-          } else if (nextWordWasCreated) {
-            //navigateForwardReplace
-            //nextProps.replaceWindowPath('/' + nextProps.routeParams.siteTheme + selectn('response.path', nextWord).replace('Dictionary', 'learn/words'));
-          }
+        // 'Redirect' on update
+        if (nextWordWasUpdated && currentWordWasUpdated != nextWordWasUpdated) {
+          NavigationHelpers.navigateUp(this.props.currentPath, this.props.navigationMethod)
         }
       }
     }
