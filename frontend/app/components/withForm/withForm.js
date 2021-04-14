@@ -4,14 +4,17 @@ import { connect } from 'react-redux'
 import { List } from 'immutable'
 import classNames from 'classnames'
 import selectn from 'selectn'
-
+import { Document } from 'nuxeo'
 import t from 'tcomb-form'
 
+// Material UI
+import { Popover } from '@material-ui/core'
+
+// FPCC
+import { updateDocument } from 'reducers/document'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
-
-import { Popover } from '@material-ui/core'
 import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
 import WarningBanner from 'components/WarningBanner'
@@ -20,20 +23,19 @@ import './withForm.css'
 
 const confirmationButtonsStyle = { padding: '4px', marginLeft: '5px', border: '1px solid gray' }
 
-export default function withForm(ComposedFilter /*, publishWarningEnabled = false*/) {
+export default function withForm(ComposedFilter) {
   class ViewWithForm extends Component {
     static propTypes = {
-      // routeParams: PropTypes.object,
       initialValues: PropTypes.object,
       fields: PropTypes.object.isRequired,
       options: PropTypes.object.isRequired,
       type: PropTypes.string.isRequired,
       itemId: PropTypes.string.isRequired,
-      saveMethod: PropTypes.func.isRequired,
       cancelMethod: PropTypes.func,
       currentPath: PropTypes.array,
       navigationMethod: PropTypes.func,
       computeEntities: PropTypes.instanceOf(List).isRequired,
+      updateDocument: PropTypes.func.isRequired,
     }
 
     static defaultProps = {
@@ -58,12 +60,10 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
       return ProviderHelpers.getEntry(item.get('entity'), itemId)
     }
 
-    _onRequestSaveForm = (e, computedItem) => {
-      // Prevent default behaviour
+    _onRequestSaveForm = (e, computedItem, publish = false) => {
       e.preventDefault()
       const formValue = this['form_' + this.props.type].getValue()
       const properties = {}
-      // Passed validation
       if (formValue) {
         for (const key in formValue) {
           if (Object.prototype.hasOwnProperty.call(formValue, key) && key) {
@@ -81,20 +81,26 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
             }
           }
         }
-        this.props.saveMethod(computedItem, properties)
+        const newDocument = new Document(computedItem.response, {
+          repository: computedItem.response._repository,
+          nuxeo: computedItem.response._nuxeo,
+        })
+        // Set new value property on document
+        newDocument.set(properties)
+        // TODO: pass republish prop as header
+        if (publish) {
+          this.props.updateDocument(newDocument, properties, { value: 'Republish' })
+        }
+        this.props.updateDocument(newDocument)
 
         this.setState({
           saved: true,
           formValue: properties,
         })
+        NavigationHelpers.navigateUp(this.props.currentPath, this.props.navigationMethod)
       } else {
         window.scrollTo(0, 0)
       }
-    }
-    _onRequestSaveAndPublishForm = (e, computedItem) => {
-      // Prevent default behaviour
-      e.preventDefault()
-      this._onRequestSaveForm(e, computedItem)
     }
 
     _onRequestCancelForm = (e, force = false) => {
@@ -174,7 +180,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
             variant="contained"
             color="secondary"
             onClick={(e) => {
-              this._onRequestSaveAndPublishForm(e, computeItem)
+              this._onRequestSaveForm(e, computeItem, true)
             }}
           >
             {<FVLabel transKey="save & publish" defaultStr="Save & Publish" transform="first" />}
@@ -323,5 +329,10 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
     }
   }
 
-  return connect(mapStateToProps)(ViewWithForm)
+  // REDUX: actions/dispatch/func
+  const mapDispatchToProps = {
+    updateDocument,
+  }
+
+  return connect(mapStateToProps, mapDispatchToProps)(ViewWithForm)
 }
