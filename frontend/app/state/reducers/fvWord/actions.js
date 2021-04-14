@@ -1,4 +1,4 @@
-import { create, _delete, execute, fetch, query, update } from 'reducers/rest'
+import { create, _delete, execute, fetch, query } from 'reducers/rest'
 import DirectoryOperations from 'operations/DirectoryOperations'
 
 import {
@@ -33,13 +33,6 @@ export const fetchWords = query('FV_WORDS', 'FVWord', {
 export const createWord = create('FV_WORD', 'FVWord', {
   headers: { 'enrichers.document': 'ancestry,word,permissions' },
 })
-
-export const updateWord = update(
-  'FV_WORD',
-  'FVWord',
-  { headers: { 'enrichers.document': 'ancestry,word,permissions' } },
-  false
-)
 
 export const deleteWord = _delete('FV_WORD', 'FVWord', {})
 

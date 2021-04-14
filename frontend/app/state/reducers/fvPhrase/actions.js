@@ -1,4 +1,4 @@
-import { create, _delete, execute, fetch, query, update } from 'reducers/rest'
+import { create, _delete, execute, fetch, query } from 'reducers/rest'
 import DirectoryOperations from 'operations/DirectoryOperations'
 import {
   FV_PHRASES_SHARED_FETCH_START,
@@ -54,13 +54,6 @@ export const fetchPhrases = query('FV_PHRASES', 'FVPhrase', { headers: { 'enrich
 export const createPhrase = create('FV_PHRASE', 'FVPhrase', {
   headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
 })
-
-export const updatePhrase = update(
-  'FV_PHRASE',
-  'FVPhrase',
-  { headers: { 'enrichers.document': 'ancestry,phrase,permissions' } },
-  false
-)
 
 export const deletePhrase = _delete('FV_PHRASE', 'FVPhrase', {})
 

@@ -1,10 +1,6 @@
-import { fetch, update, query, execute } from 'reducers/rest'
+import { fetch, query, execute } from 'reducers/rest'
 
 export const fetchCharacter = fetch('FV_CHARACTER', 'FVCharacter', {
-  headers: { 'enrichers.document': 'ancestry,character,permissions' },
-})
-
-export const updateCharacter = update('FV_CHARACTER', 'FVCharacter', {
   headers: { 'enrichers.document': 'ancestry,character,permissions' },
 })
 
