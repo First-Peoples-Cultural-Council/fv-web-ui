@@ -39,6 +39,7 @@ import './WordsCreate.css'
 // Views
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
+import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
 
 /**
@@ -228,6 +229,12 @@ export class PageDialectWordsCreate extends Component {
       window.scrollTo(0, 0)
     }
   }
+
+  _onRequestSaveAndPublishForm = (e) => {
+    e.preventDefault()
+    this._onRequestSaveForm(e)
+  }
+
   _stateGetDefault = () => {
     const FVWordOptions = Object.assign({}, selectn('FVWord', options))
 
@@ -280,10 +287,19 @@ export class PageDialectWordsCreate extends Component {
                     value={this.state.formValue}
                     options={FVWordOptions}
                   />
-                  <div className="form-group">
-                    <button type="submit" className="btn btn-primary">
-                      <FVLabel transKey="save" defaultStr="Save" transform="first" />
-                    </button>
+                  <div className="form-group" style={{ margin: '5px', textAlign: 'left' }}>
+                    <FVButton type="submit" variant="contained" color="primary" style={{ marginRight: '5px' }}>
+                      {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
+                    </FVButton>
+                    <FVButton
+                      variant="contained"
+                      color="secondary"
+                      onClick={(e) => {
+                        this._onRequestSaveAndPublishForm(e)
+                      }}
+                    >
+                      {<FVLabel transKey="save & publish" defaultStr="Save & Publish" transform="first" />}
+                    </FVButton>
                   </div>
                 </form>
               </div>

@@ -58,7 +58,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
       return ProviderHelpers.getEntry(item.get('entity'), itemId)
     }
 
-    _onRequestSaveForm = (e, portal) => {
+    _onRequestSaveForm = (e, computedItem) => {
       // Prevent default behaviour
       e.preventDefault()
       const formValue = this['form_' + this.props.type].getValue()
@@ -81,7 +81,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
             }
           }
         }
-        this.props.saveMethod(portal, properties)
+        this.props.saveMethod(computedItem, properties)
 
         this.setState({
           saved: true,
@@ -90,6 +90,11 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
       } else {
         window.scrollTo(0, 0)
       }
+    }
+    _onRequestSaveAndPublishForm = (e, computedItem) => {
+      // Prevent default behaviour
+      e.preventDefault()
+      this._onRequestSaveForm(e, computedItem)
     }
 
     _onRequestCancelForm = (e, force = false) => {
@@ -161,6 +166,35 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
     render() {
       const { initialValues, fields, options, type } = this.props
       const computeItem = this._getComputeItem(this.props)
+      const submitButtons = (
+        <>
+          <FVButton variant="text" onClick={this._onRequestCancelForm} style={{ marginRight: '5px' }}>
+            {<FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />}
+          </FVButton>
+          <FVButton
+            data-testid="withForm__saveBtn"
+            variant="contained"
+            color="primary"
+            onClick={(e) => {
+              this._onRequestSaveForm(e, computeItem)
+            }}
+            style={{ marginRight: '5px' }}
+          >
+            {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
+          </FVButton>
+          <FVButton
+            data-testid="withForm__saveAndPublishBtn"
+            variant="contained"
+            color="secondary"
+            onClick={(e) => {
+              this._onRequestSaveAndPublishForm(e, computeItem)
+            }}
+          >
+            {<FVLabel transKey="save & publish" defaultStr="Save & Publish" transform="first" />}
+          </FVButton>
+        </>
+      )
+
       return (
         <div className="row">
           <div className={classNames('col-xs-12', 'col-md-9')}>
@@ -172,19 +206,7 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
                   }}
                 >
                   <div data-testid="withForm__btnGroup1" className="form-group" style={{ textAlign: 'right' }}>
-                    <FVButton variant="text" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
-                      {<FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />}
-                    </FVButton>
-                    <FVButton
-                      data-testid="withForm__saveBtn"
-                      variant="contained"
-                      color="primary"
-                      onClick={(e) => {
-                        this._onRequestSaveForm(e, computeItem)
-                      }}
-                    >
-                      {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
-                    </FVButton>
+                    {submitButtons}
                     {this._hasPendingReview(selectn('response', computeItem))}
                   </div>
 
@@ -200,58 +222,46 @@ export default function withForm(ComposedFilter /*, publishWarningEnabled = fals
 
                   <div data-testid="withForm__btnGroup2" className="form-group" style={{ textAlign: 'right' }}>
                     {this._hasPendingReview(selectn('response', computeItem))}
-                    <FVButton variant="text" onClick={this._onRequestCancelForm} style={{ marginRight: '10px' }}>
-                      {<FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />}
-                    </FVButton>
-                    <FVButton
-                      data-testid="withForm__saveBtn"
-                      variant="contained"
-                      color="primary"
-                      onClick={(e) => {
-                        this._onRequestSaveForm(e, computeItem)
-                      }}
-                    >
-                      {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
-                    </FVButton>
-
-                    <Popover
-                      open={this.state.showCancelWarning}
-                      anchorEl={this.state.cancelButtonEl}
-                      anchorOrigin={{ horizontal: 'left', vertical: 'center' }}
-                      transformOrigin={{ horizontal: 'right', vertical: 'center' }}
-                      onClose={() => this.setState({ showCancelWarning: false })}
-                    >
-                      <div style={{ padding: '10px', margin: '0 15px', borderRadius: '5px' }}>
-                        <span
-                          dangerouslySetInnerHTML={{
-                            __html: this.props.intl.trans(
-                              'views.hoc.view.discard_warning',
-                              'Are you sure you want to <strong>discard your changes</strong>?',
-                              'first'
-                            ),
-                          }}
-                        />
-                        <FVButton
-                          variant="text"
-                          size="small"
-                          style={confirmationButtonsStyle}
-                          onClick={(e) => {
-                            this._onRequestCancelForm(e, true)
-                          }}
-                        >
-                          <FVLabel transKey="yes" defaultStr="Yes" transform="first" />!
-                        </FVButton>
-                        <FVButton
-                          variant="text"
-                          size="small"
-                          style={confirmationButtonsStyle}
-                          onClick={() => this.setState({ showCancelWarning: false })}
-                        >
-                          <FVLabel transKey="no" defaultStr="No" transform="first" />!
-                        </FVButton>
-                      </div>
-                    </Popover>
+                    {submitButtons}
                   </div>
+
+                  <Popover
+                    open={this.state.showCancelWarning}
+                    anchorEl={this.state.cancelButtonEl}
+                    anchorOrigin={{ horizontal: 'left', vertical: 'center' }}
+                    transformOrigin={{ horizontal: 'right', vertical: 'center' }}
+                    onClose={() => this.setState({ showCancelWarning: false })}
+                  >
+                    <div style={{ padding: '10px', margin: '0 15px', borderRadius: '5px' }}>
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: this.props.intl.trans(
+                            'views.hoc.view.discard_warning',
+                            'Are you sure you want to <strong>discard your changes</strong>?',
+                            'first'
+                          ),
+                        }}
+                      />
+                      <FVButton
+                        variant="text"
+                        size="small"
+                        style={confirmationButtonsStyle}
+                        onClick={(e) => {
+                          this._onRequestCancelForm(e, true)
+                        }}
+                      >
+                        <FVLabel transKey="yes" defaultStr="Yes" transform="first" />!
+                      </FVButton>
+                      <FVButton
+                        variant="text"
+                        size="small"
+                        style={confirmationButtonsStyle}
+                        onClick={() => this.setState({ showCancelWarning: false })}
+                      >
+                        <FVLabel transKey="no" defaultStr="No" transform="first" />!
+                      </FVButton>
+                    </div>
+                  </Popover>
                 </form>
               </div>
             </ComposedFilter>
