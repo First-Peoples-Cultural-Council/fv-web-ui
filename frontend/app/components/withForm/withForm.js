@@ -11,7 +11,7 @@ import t from 'tcomb-form'
 import { Popover } from '@material-ui/core'
 
 // FPCC
-import { updateDocument } from 'reducers/document'
+import { updateDocument, updateAndPublishDocument } from 'reducers/document'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
@@ -36,6 +36,7 @@ export default function withForm(ComposedFilter) {
       navigationMethod: PropTypes.func,
       computeEntities: PropTypes.instanceOf(List).isRequired,
       updateDocument: PropTypes.func.isRequired,
+      updateAndPublishDocument: PropTypes.func.isRequired,
     }
 
     static defaultProps = {
@@ -87,11 +88,12 @@ export default function withForm(ComposedFilter) {
         })
         // Set new value property on document
         newDocument.set(properties)
-        // TODO: pass republish prop as header
+
         if (publish) {
-          this.props.updateDocument(newDocument, properties, { value: 'Republish' })
+          this.props.updateAndPublishDocument(newDocument)
+        } else {
+          this.props.updateDocument(newDocument)
         }
-        this.props.updateDocument(newDocument)
 
         this.setState({
           saved: true,
@@ -332,6 +334,7 @@ export default function withForm(ComposedFilter) {
   // REDUX: actions/dispatch/func
   const mapDispatchToProps = {
     updateDocument,
+    updateAndPublishDocument,
   }
 
   return connect(mapStateToProps, mapDispatchToProps)(ViewWithForm)

@@ -18,6 +18,13 @@ export const updateDocument = update(
   false
 )
 
+export const updateAndPublishDocument = update(
+  'FV_DOCUMENT',
+  'Document',
+  { headers: { 'enrichers.document': 'ancestry,permissions', fv_publish: 'true' } },
+  false
+)
+
 export const deleteDocument = _delete('FV_DOCUMENT', 'Document', {})
 
 export const publishDocument = (workspaceDocPath, sectionTargetPath) => {
