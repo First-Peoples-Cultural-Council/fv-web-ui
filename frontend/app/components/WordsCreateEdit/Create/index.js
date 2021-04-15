@@ -18,7 +18,7 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createWord } from 'reducers/fvWord'
+import { createWord, createAndPublishWord } from 'reducers/fvWord'
 import { fetchDialect, fetchDialect2 } from 'reducers/fvDialect'
 import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 
@@ -58,6 +58,7 @@ export class PageDialectWordsCreate extends Component {
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
     createWord: func.isRequired,
+    createAndPublishWord: func.isRequired,
     fetchDialect: func.isRequired,
     fetchDialect2: func.isRequired,
     pushWindowPath: func.isRequired,
@@ -181,7 +182,7 @@ export class PageDialectWordsCreate extends Component {
     return content
   }
 
-  _onRequestSaveForm = (e) => {
+  _onRequestSaveForm = (e, publish = false) => {
     // Prevent default behaviour
     e.preventDefault()
 
@@ -212,27 +213,35 @@ export class PageDialectWordsCreate extends Component {
     // Passed validation
     if (formValue) {
       const now = Date.now()
-      this.props.createWord(
-        this.props.routeParams.dialect_path + '/Dictionary',
-        {
-          type: 'FVWord',
-          name: now.toString(),
-          properties: properties,
-        },
-        null,
-        now
-      )
+      if (publish) {
+        this.props.createAndPublishWord(
+          this.props.routeParams.dialect_path + '/Dictionary',
+          {
+            type: 'FVWord',
+            name: now.toString(),
+            properties: properties,
+          },
+          null,
+          now
+        )
+      } else {
+        this.props.createWord(
+          this.props.routeParams.dialect_path + '/Dictionary',
+          {
+            type: 'FVWord',
+            name: now.toString(),
+            properties: properties,
+          },
+          null,
+          now
+        )
+      }
       this.setState({
         wordPath: this.props.routeParams.dialect_path + '/Dictionary/' + now.toString() + '.' + now,
       })
     } else {
       window.scrollTo(0, 0)
     }
-  }
-
-  _onRequestSaveAndPublishForm = (e) => {
-    e.preventDefault()
-    this._onRequestSaveForm(e)
   }
 
   _stateGetDefault = () => {
@@ -279,7 +288,12 @@ export class PageDialectWordsCreate extends Component {
             </h1>
             <div className="row" style={{ marginTop: '15px' }}>
               <div className={classNames('col-xs-8', 'col-md-10')}>
-                <form onSubmit={this._onRequestSaveForm} data-testid="PageDialectWordsCreate__form">
+                <form
+                  onSubmit={(e) => {
+                    this._onRequestSaveForm(e)
+                  }}
+                  data-testid="PageDialectWordsCreate__form"
+                >
                   <t.form.Form
                     ref={this.formWordCreate}
                     type={t.struct(selectn('FVWord', fields))}
@@ -288,14 +302,21 @@ export class PageDialectWordsCreate extends Component {
                     options={FVWordOptions}
                   />
                   <div className="form-group" style={{ margin: '5px', textAlign: 'left' }}>
-                    <FVButton type="submit" variant="contained" color="primary" style={{ marginRight: '5px' }}>
+                    <FVButton
+                      variant="contained"
+                      color="primary"
+                      onClick={(e) => {
+                        this._onRequestSaveForm(e)
+                      }}
+                      style={{ marginRight: '5px' }}
+                    >
                       {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
                     </FVButton>
                     <FVButton
                       variant="contained"
                       color="secondary"
                       onClick={(e) => {
-                        this._onRequestSaveAndPublishForm(e)
+                        this._onRequestSaveForm(e, true)
                       }}
                     >
                       {<FVLabel transKey="save & publish" defaultStr="Save & Publish" transform="first" />}
@@ -340,6 +361,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   createWord,
+  createAndPublishWord,
   fetchDialect,
   fetchDialect2,
   pushWindowPath,
