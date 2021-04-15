@@ -21,7 +21,7 @@ import Immutable, { List } from 'immutable'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { changeTitleParams, overrideBreadcrumbs } from 'reducers/navigation'
-import { fetchBook, fetchBookEntries, updateBook, updateBookEntry } from 'reducers/fvBook'
+import { fetchBook, fetchBookEntries } from 'reducers/fvBook'
 import { fetchDialect2 } from 'reducers/fvDialect'
 import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 
@@ -41,8 +41,6 @@ import FVLabel from 'components/FVLabel'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import Typography from '@material-ui/core/Typography'
-// Models
-import { Document } from 'nuxeo'
 
 // Views
 import BookEntryEdit from 'components/SongsStories/entry/edit'
@@ -81,8 +79,6 @@ export class PageDialectBookEdit extends Component {
     overrideBreadcrumbs: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
-    updateBook: func.isRequired,
-    updateBookEntry: func.isRequired,
   }
   state = {
     editPageDialogOpen: false,
@@ -172,21 +168,6 @@ export class PageDialectBookEdit extends Component {
       componentState: STATE_DEFAULT,
       errorMessage: undefined,
     })
-  }
-
-  _handleSave = (book, formValue) => {
-    const newDocument = new Document(book.response, {
-      repository: book.response._repository,
-      nuxeo: book.response._nuxeo,
-    })
-
-    // Set new value property on document
-    newDocument.set(formValue)
-
-    // Save document
-    this.props.updateBook(newDocument, null, null)
-
-    this.setState({ formValue: formValue })
   }
 
   _handleCancel = () => {
@@ -293,7 +274,6 @@ export class PageDialectBookEdit extends Component {
                 itemId={this._getBookPath()}
                 fields={fields}
                 options={options}
-                saveMethod={this._handleSave}
                 cancelMethod={this._handleCancel}
                 currentPath={this.props.splitWindowPath}
                 navigationMethod={this.props.pushWindowPath}
@@ -375,8 +355,6 @@ const mapDispatchToProps = {
   overrideBreadcrumbs,
   pushWindowPath,
   replaceWindowPath,
-  updateBook,
-  updateBookEntry,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageDialectBookEdit)
