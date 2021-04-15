@@ -7,7 +7,7 @@ import ConfGlobal from 'common/conf/local.js'
  * create
  * --------------------------------------
  */
-export const create = (key /*, type, properties = {}*/) => {
+export const create = (key, type, properties = {}) => {
   return (parentDoc, docParams, file = null, timestamp, xpath) => {
     return (dispatch) => {
       // timestamp specified as we can't rely on pathOrId to be unique at this point
@@ -39,7 +39,7 @@ export const create = (key /*, type, properties = {}*/) => {
             dispatchObj.success = false
           })
       }
-      return DocumentOperations.createDocument(parentDoc, docParams)
+      return DocumentOperations.createDocument(parentDoc, docParams, properties.headers)
         .then((response) => {
           const dispatchObj = {
             type: key + '_CREATE_SUCCESS',

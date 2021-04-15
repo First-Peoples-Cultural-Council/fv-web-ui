@@ -34,6 +34,10 @@ export const createWord = create('FV_WORD', 'FVWord', {
   headers: { 'enrichers.document': 'ancestry,word,permissions' },
 })
 
+export const createAndPublishWord = create('FV_WORD', 'FVWord', {
+  headers: { 'enrichers.document': 'ancestry,word,permissions', fv_publish: 'true' },
+})
+
 export const deleteWord = _delete('FV_WORD', 'FVWord', {})
 
 // Document.FollowLifecycleTransition expects a param that specifies the type of transition to take place e.g. { value: 'Republish' }

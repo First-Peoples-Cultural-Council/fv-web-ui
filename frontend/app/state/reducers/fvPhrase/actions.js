@@ -55,6 +55,10 @@ export const createPhrase = create('FV_PHRASE', 'FVPhrase', {
   headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
 })
 
+export const createAndPublishPhrase = create('FV_PHRASE', 'FVPhrase', {
+  headers: { 'enrichers.document': 'ancestry,phrase,permissions', fv_publish: 'true' },
+})
+
 export const deletePhrase = _delete('FV_PHRASE', 'FVPhrase', {})
 
 // Document.FollowLifecycleTransition expects a param that specifies the type of transition to take place e.g. { value: 'Republish' }
