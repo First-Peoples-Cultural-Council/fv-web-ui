@@ -21,7 +21,7 @@ import Immutable, { List } from 'immutable'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { changeTitleParams, overrideBreadcrumbs } from 'reducers/navigation'
-import { fetchBook, fetchBookEntries, updateBookEntry } from 'reducers/fvBook'
+import { fetchBook, fetchBookEntries, updateBookEntry, deleteBookEntry } from 'reducers/fvBook'
 import { fetchDialect2 } from 'reducers/fvDialect'
 import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 
@@ -77,6 +77,7 @@ export class PageDialectBookEdit extends Component {
     fetchBookEntries: func.isRequired,
     overrideBreadcrumbs: func.isRequired,
     updateBookEntry: func.isRequired,
+    deleteBookEntry: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
   }
@@ -179,6 +180,10 @@ export class PageDialectBookEdit extends Component {
         this.props.updateBookEntry(page.set({ 'fvbookentry:sort_map': orderAsString }))
       })
     }
+  }
+
+  _handleDeleteBookEntry = (pageToDelete) => {
+    this.props.deleteBookEntry(pageToDelete.uid)
   }
 
   _handleCancel = () => {
@@ -301,6 +306,7 @@ export class PageDialectBookEdit extends Component {
                 pushWindowPath={this.props.pushWindowPath}
                 splitWindowPath={this.props.splitWindowPath}
                 sortOrderChanged={this._storeSortOrder}
+                handleDelete={this._handleDeleteBookEntry}
                 handleSaveOrder={this._handleSaveOrder}
                 defaultLanguage={DEFAULT_LANGUAGE}
                 editAction={this._editPage}
@@ -367,6 +373,7 @@ const mapDispatchToProps = {
   fetchDialect2,
   fetchBookEntries,
   overrideBreadcrumbs,
+  deleteBookEntry,
   updateBookEntry,
   pushWindowPath,
   replaceWindowPath,
