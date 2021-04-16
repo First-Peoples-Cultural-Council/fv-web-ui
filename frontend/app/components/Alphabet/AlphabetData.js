@@ -84,7 +84,7 @@ function AlphabetData({ children }) {
 
   const onCharacterLinkClick = () => {
     const newPathArray = splitWindowPath.slice()
-    newPathArray.push(currentChar.title)
+    newPathArray.push(currentChar.uid)
     pushWindowPath('/' + newPathArray.join('/'))
   }
 

@@ -47,7 +47,7 @@ function AlphabetDetailData({ children }) {
   const { fetchDialect2, computeDialect2 } = useDialect()
   const { computeLogin } = useLogin()
 
-  const characterPath = `${routeParams.dialect_path}/Alphabet/${routeParams.character}`
+  const characterPath = routeParams.characterId
   const fetchData = () => {
     fetchCharacter(characterPath)
     fetchDialect2(routeParams.dialect_path)

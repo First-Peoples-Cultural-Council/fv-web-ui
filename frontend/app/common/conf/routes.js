@@ -761,7 +761,7 @@ const routes = [
       ANYTHING_BUT_SLASH,
       'learn',
       'alphabet',
-      new paramMatch('character', ANYTHING_BUT_SLASH),
+      new paramMatch('characterId', ANYTHING_BUT_SLASH),
     ],
     title:
       intl.translate({
