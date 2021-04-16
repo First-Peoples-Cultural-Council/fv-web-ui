@@ -18,25 +18,36 @@ import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import classNames from 'classnames'
 
+import NavigationHelpers from 'common/NavigationHelpers'
+
 import BookEntry from 'components/SongsStories/entry/view'
 
 import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
 
+const { func, array } = PropTypes
+
 export default class SongsStoriesEntryListView extends Component {
   static propTypes = {
+    splitWindowPath: array.isRequired,
+    pushWindowPath: func.isRequired,
+    handleSaveOrder: func.isRequired,
     items: PropTypes.oneOfType([PropTypes.array, PropTypes.instanceOf(List)]),
   }
 
   constructor(props, context) {
     super(props, context)
 
+    const isList = List.isList(this.props.items)
+
     this.state = {
-      items: List(this.props.items),
-      originalItems: List(this.props.items),
-      reorderWarning: false,
+      items: isList ? this.props.items : List(this.props.items),
+      originalItems: isList ? this.props.items : List(this.props.items),
+      reorderWarning: isList ? true : false,
+      reorderSuccess: false,
+      reorderInProgress: false,
     }
-    ;['_moveUp', '_moveDown', '_reset'].forEach((method) => (this[method] = this[method].bind(this)))
+    ;['_moveUp', '_moveDown', '_saveOrder'].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   _moveUp(entry) {
@@ -50,6 +61,7 @@ export default class SongsStoriesEntryListView extends Component {
       this.setState({
         items: newList,
         reorderWarning: true,
+        reorderSuccess: false,
       })
 
       this.props.sortOrderChanged(newList)
@@ -67,22 +79,41 @@ export default class SongsStoriesEntryListView extends Component {
       this.setState({
         items: newList,
         reorderWarning: true,
+        reorderSuccess: false,
       })
 
       this.props.sortOrderChanged(newList)
     }
   }
 
-  _reset() {
+  _navigateToSongStory = () => {
+    NavigationHelpers.navigateUpMultiple(this.props.splitWindowPath, this.props.pushWindowPath, 2)
+  }
+
+  _saveOrder() {
+    this.props.handleSaveOrder()
+
     this.setState({
-      items: this.state.originalItems,
       reorderWarning: false,
+      reorderInProgress: true,
+      reorderSuccess: false,
     })
+
+    // Give a few seconds for the update to complete
+    // in case someone navigates away too quickly
+    // on a very slow connection
+    setTimeout(() => {
+      this.setState({
+        reorderWarning: false,
+        reorderInProgress: false,
+        reorderSuccess: true,
+      })
+    }, 1500)
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.items != this.props.items) {
-      this.setState({ items: List(nextProps.items), reorderWarning: false })
+      this.setState({ items: List(nextProps.items) })
     }
 
     if (nextProps.metadata != this.props.metadata) {
@@ -93,15 +124,30 @@ export default class SongsStoriesEntryListView extends Component {
   render() {
     return (
       <div>
+        {this.state.reorderSuccess ? (
+          <div className={classNames('alert', 'alert-success')} role="alert">
+            Your changes have been saved!
+            <FVButton variant="contained" style={{ marginLeft: '15px' }} onClick={this._navigateToSongStory}>
+              Back to Cover Page
+            </FVButton>
+          </div>
+        ) : (
+          ''
+        )}
+
+        {this.state.reorderInProgress ? (
+          <div className={classNames('alert', 'alert-warning')} role="alert">
+            Please wait... Your changes are being saved...
+          </div>
+        ) : (
+          ''
+        )}
+
         {this.state.reorderWarning ? (
           <div className={classNames('alert', 'alert-warning')} role="alert">
-            <FVLabel
-              transKey="views.pages.explore.dialect.learn.songs_stories.edit_x_pages"
-              defaultStr="Note: This new sort order will be saved once the book is saved in the 'Book' tab."
-              transform="first"
-            />
-            <FVButton variant="contained" style={{ marginLeft: '15px' }} onClick={this._reset}>
-              <FVLabel transKey="reset_order" defaultStr="Reset Order" transform="words" />
+            Your changes to the order of pages have not been applied yet.
+            <FVButton variant="contained" style={{ marginLeft: '15px' }} onClick={this._saveOrder}>
+              Save Changes
             </FVButton>
           </div>
         ) : (

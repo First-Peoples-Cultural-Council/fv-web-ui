@@ -202,6 +202,19 @@ export class PageToolbar extends Component {
                   </FVButton>
                 </AuthorizationFilter>
               ) : null}
+              {/* Button: Edit children */}
+              {actions.includes('edit-child') ? (
+                <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>
+                  <FVButton
+                    className="PageToolbar__button"
+                    color="secondary"
+                    onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/edit/?mode=pages')}
+                    variant="contained"
+                  >
+                    <FVLabel transKey="edit_reorder_pages" defaultStr="Edit / Reorder Pages" transform="words" />
+                  </FVButton>
+                </AuthorizationFilter>
+              ) : null}
               {/* Button: New */}
               {actions.includes('add-child') ? (
                 <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>

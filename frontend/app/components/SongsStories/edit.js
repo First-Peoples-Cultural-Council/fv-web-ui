@@ -21,7 +21,7 @@ import Immutable, { List } from 'immutable'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { changeTitleParams, overrideBreadcrumbs } from 'reducers/navigation'
-import { fetchBook, fetchBookEntries } from 'reducers/fvBook'
+import { fetchBook, fetchBookEntries, updateBookEntry } from 'reducers/fvBook'
 import { fetchDialect2 } from 'reducers/fvDialect'
 import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 
@@ -35,7 +35,6 @@ import PromiseWrapper from 'components/PromiseWrapper'
 import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
-import FVTab from 'components/FVTab'
 import FVLabel from 'components/FVLabel'
 
 import Dialog from '@material-ui/core/Dialog'
@@ -77,6 +76,7 @@ export class PageDialectBookEdit extends Component {
     fetchDialect2: func.isRequired,
     fetchBookEntries: func.isRequired,
     overrideBreadcrumbs: func.isRequired,
+    updateBookEntry: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
   }
@@ -170,6 +170,17 @@ export class PageDialectBookEdit extends Component {
     })
   }
 
+  _handleSaveOrder = () => {
+    // Save sort order if it has changed
+    if (!this.state.sortedItems.isEmpty()) {
+      this.state.sortedItems.forEach((page, key) => {
+        const orderAsString = String(key).padStart(5, '0')
+        // fvbookentry:sort_map is stored as a string - so need to pad with 0 for proper sorting
+        this.props.updateBookEntry(page.set({ 'fvbookentry:sort_map': orderAsString }))
+      })
+    }
+  }
+
   _handleCancel = () => {
     NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.pushWindowPath)
   }
@@ -240,49 +251,45 @@ export class PageDialectBookEdit extends Component {
     }
 
     const title = selectn('response.properties.dc:title', _computeBook)
+    const queryParams = new URLSearchParams(window.location.search)
+    const mode = queryParams.get('mode')
+
     return (
       <AuthenticationFilter.Container
         is403={this.state.is403}
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
         <div>
-          <FVTab
-            tabItems={[
-              { label: this.props.intl.trans('book', 'Book', 'first') },
-              { label: this.props.intl.trans('pages', 'Pages', 'first') },
-            ]}
-            tabsValue={this.state.tabValue}
-            tabsOnChange={(e, tabValue) => this.setState({ tabValue })}
-          />
-          {this.state.tabValue === 0 && (
-            <div style={{ padding: 8 * 3 }}>
-              {title && (
-                <Typography variant="h3">
-                  <>
-                    <FVLabel
-                      transKey="views.pages.explore.dialect.learn.songs_stories.edit_x_book"
-                      defaultStr={'Edit ' + title + ' Book'}
-                      transform="words"
-                      params={[title]}
-                    />
-                  </>
-                </Typography>
-              )}
-              <EditViewWithForm
-                computeEntities={computeEntities}
-                initialValues={context}
-                itemId={this._getBookPath()}
-                fields={fields}
-                options={options}
-                cancelMethod={this._handleCancel}
-                currentPath={this.props.splitWindowPath}
-                navigationMethod={this.props.pushWindowPath}
-                type="FVBook"
-                routeParams={this.props.routeParams}
-              />
-            </div>
-          )}
-          {this.state.tabValue === 1 && (
+          {mode === 'cover' ||
+            (mode === null && (
+              <div style={{ padding: 8 * 3 }}>
+                {title && (
+                  <Typography variant="h3">
+                    <>
+                      <FVLabel
+                        transKey="views.pages.explore.dialect.learn.songs_stories.edit_x_book"
+                        defaultStr={'Edit ' + title + ' Book'}
+                        transform="words"
+                        params={[title]}
+                      />
+                    </>
+                  </Typography>
+                )}
+                <EditViewWithForm
+                  computeEntities={computeEntities}
+                  initialValues={context}
+                  itemId={this._getBookPath()}
+                  fields={fields}
+                  options={options}
+                  cancelMethod={this._handleCancel}
+                  currentPath={this.props.splitWindowPath}
+                  navigationMethod={this.props.pushWindowPath}
+                  type="FVBook"
+                  routeParams={this.props.routeParams}
+                />
+              </div>
+            ))}
+          {mode === 'pages' && (
             <div style={{ padding: 8 * 3 }}>
               {title && (
                 <Typography variant="h5">
@@ -291,12 +298,19 @@ export class PageDialectBookEdit extends Component {
               )}
               <BookEntryList
                 reorder
+                pushWindowPath={this.props.pushWindowPath}
+                splitWindowPath={this.props.splitWindowPath}
                 sortOrderChanged={this._storeSortOrder}
+                handleSaveOrder={this._handleSaveOrder}
                 defaultLanguage={DEFAULT_LANGUAGE}
                 editAction={this._editPage}
                 innerStyle={{ minHeight: 'inherit' }}
                 metadata={selectn('response', _computeBookEntries) || {}}
-                items={selectn('response.entries', _computeBookEntries) || []}
+                items={
+                  this.state.sortedItems.isEmpty
+                    ? selectn('response.entries', _computeBookEntries) || []
+                    : this.state.sortedItems
+                }
               />
             </div>
           )}
@@ -353,6 +367,7 @@ const mapDispatchToProps = {
   fetchDialect2,
   fetchBookEntries,
   overrideBreadcrumbs,
+  updateBookEntry,
   pushWindowPath,
   replaceWindowPath,
 }
