@@ -177,7 +177,9 @@ export class PageDialectBookEdit extends Component {
       this.state.sortedItems.forEach((page, key) => {
         const orderAsString = String(key).padStart(5, '0')
         // fvbookentry:sort_map is stored as a string - so need to pad with 0 for proper sorting
-        this.props.updateBookEntry(page.set({ 'fvbookentry:sort_map': orderAsString }))
+        this.props.updateBookEntry(page.set({ 'fvbookentry:sort_map': orderAsString }), null, null, null, null, null, {
+          headers: { 'enrichers.document': '' },
+        })
       })
     }
   }

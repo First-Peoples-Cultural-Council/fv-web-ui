@@ -309,7 +309,8 @@ export const update = (key, type, properties = {}, usePathAsId = true) => {
     messageSuccess = undefined,
     messageError = undefined,
     file,
-    xpath
+    xpath,
+    overwriteProperties = {}
   ) {
     const _messageStart = IntlService.instance.searchAndReplace(messageStart)
     const _messageSuccess = IntlService.instance.searchAndReplace(messageSuccess)
@@ -328,7 +329,14 @@ export const update = (key, type, properties = {}, usePathAsId = true) => {
             : _messageStart,
       })
 
-      return DocumentOperations.updateDocument(newDoc, { headers: properties.headers }, file, xpath)
+      // Allow overwriting headers from the calling function
+      const finalHeaders = Object.assign(
+        {},
+        properties.headers,
+        Object.prototype.hasOwnProperty.call(overwriteProperties, 'headers') ? overwriteProperties.headers : {}
+      )
+
+      return DocumentOperations.updateDocument(newDoc, { headers: finalHeaders }, file, xpath)
         .then((response) => {
           const dispatchObj = {
             type: key + '_UPDATE_SUCCESS',
