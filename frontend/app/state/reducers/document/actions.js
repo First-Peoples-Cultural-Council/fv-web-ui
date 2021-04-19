@@ -21,7 +21,7 @@ export const updateDocument = update(
 export const updateAndPublishDocument = update(
   'FV_DOCUMENT',
   'Document',
-  { headers: { 'enrichers.document': 'ancestry,permissions', fv_publish: 'true' } },
+  { headers: { 'enrichers.document': 'ancestry,permissions', 'fv-publish': true } },
   false
 )
 

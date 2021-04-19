@@ -56,7 +56,7 @@ export const createPhrase = create('FV_PHRASE', 'FVPhrase', {
 })
 
 export const createAndPublishPhrase = create('FV_PHRASE', 'FVPhrase', {
-  headers: { 'enrichers.document': 'ancestry,phrase,permissions', fv_publish: 'true' },
+  headers: { 'enrichers.document': 'ancestry,phrase,permissions', 'fv-publish': true },
 })
 
 export const deletePhrase = _delete('FV_PHRASE', 'FVPhrase', {})
