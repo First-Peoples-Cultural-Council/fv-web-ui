@@ -51,12 +51,10 @@ export const fetchPhrase = fetch('FV_PHRASE', 'FVPhrase', {
 
 export const fetchPhrases = query('FV_PHRASES', 'FVPhrase', { headers: { 'enrichers.document': 'phrase' } })
 
-export const createPhrase = create('FV_PHRASE', 'FVPhrase', {
-  headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
-})
+export const createPhrase = create('FV_PHRASE', 'FVPhrase', {})
 
 export const createAndPublishPhrase = create('FV_PHRASE', 'FVPhrase', {
-  headers: { 'enrichers.document': 'ancestry,phrase,permissions', 'fv-publish': true },
+  headers: { 'fv-publish': true },
 })
 
 export const deletePhrase = _delete('FV_PHRASE', 'FVPhrase', {})

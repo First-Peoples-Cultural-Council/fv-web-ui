@@ -30,12 +30,10 @@ export const fetchWords = query('FV_WORDS', 'FVWord', {
   },
 })
 
-export const createWord = create('FV_WORD', 'FVWord', {
-  headers: { 'enrichers.document': 'ancestry,word,permissions' },
-})
+export const createWord = create('FV_WORD', 'FVWord', {})
 
 export const createAndPublishWord = create('FV_WORD', 'FVWord', {
-  headers: { 'enrichers.document': 'ancestry,word,permissions', 'fv-publish': true },
+  headers: { 'fv-publish': true },
 })
 
 export const deleteWord = _delete('FV_WORD', 'FVWord', {})
