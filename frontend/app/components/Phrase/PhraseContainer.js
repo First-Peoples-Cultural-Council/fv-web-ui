@@ -36,7 +36,6 @@ function PhraseContainer() {
         docType,
         dialectClassName,
         generalNote,
-        literalTranslations,
         photos,
         phrasebooks,
         properties,
@@ -73,7 +72,6 @@ function PhraseContainer() {
               dialectClassName={dialectClassName}
               docType={docType}
               generalNote={generalNote}
-              literalTranslations={literalTranslations}
               metadata={computePhrase}
               photos={photos}
               properties={properties}
