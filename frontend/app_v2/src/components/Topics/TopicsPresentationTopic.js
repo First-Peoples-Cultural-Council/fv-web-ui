@@ -70,8 +70,8 @@ function TopicsPresentationTopic({ audio, heading, image, listCount, subheading,
         flex-col
         items-center
         justify-between
-        rounded-25
-        xl:rounded-50
+        rounded-3xl
+        xl:rounded-4xl
         p-8
         text-white
         w-full

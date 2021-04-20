@@ -1,28 +1,28 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
-import Page from 'components/Page'
-import Resource from 'components/Resource'
+
 import Alphabet from 'components/Alphabet'
-import Home from 'components/Home'
-import Search from 'components/Search'
-import Words from 'components/Words'
-import Word from 'components/Word'
-import Phrases from 'components/Phrases'
-import Phrase from 'components/Phrase'
 import Categories from 'components/Categories'
-import Songs from 'components/Songs'
-import Song from 'components/Song'
-import Lists from 'components/Lists'
-import List from 'components/List'
-import Stories from 'components/Stories'
-import Story from 'components/Story'
+import ErrorHandler from 'components/ErrorHandler'
+import Home from 'components/Home'
 import Games from 'components/Games'
 import Game from 'components/Game'
 import Kids from 'components/Kids'
-import ErrorHandler from 'components/ErrorHandler'
-
+import Lists from 'components/Lists'
+import List from 'components/List'
 import NavBar from 'components/NavBar'
+import Page from 'components/Page'
+import Phrases from 'components/Phrases'
+import Phrase from 'components/Phrase'
+import Resource from 'components/Resource'
+import Search from 'components/Search'
+import Songs from 'components/Songs'
+import Song from 'components/Song'
+import Stories from 'components/Stories'
+import Story from 'components/Story'
+import Words from 'components/Words'
+import Word from 'components/Word'
 
 /**
  * @summary AppFrameContainer
@@ -174,9 +174,7 @@ function AppFrameContainer() {
 
             {/* Catch all for all other pages */}
             <Route path="*">
-              <div className="flex justify-center items-center min-h-screen">
-                <img src="/assets/images/under-construction.gif" alt="This page is under construction" />
-              </div>
+              <ErrorHandler.Container error={{ status: 404 }} />
             </Route>
           </Switch>
         </ErrorHandler.Container>

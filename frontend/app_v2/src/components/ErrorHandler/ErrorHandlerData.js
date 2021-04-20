@@ -8,7 +8,7 @@ import { useLocation } from 'react-router-dom'
  */
 function ErrorHandlerData() {
   const location = useLocation()
-  const errorStatusCode = location?.state?.errorStatusCode
+  const errorStatusCode = location?.state?.errorStatusCode ? location?.state?.errorStatusCode : null
   return {
     errorStatusCode,
   }
