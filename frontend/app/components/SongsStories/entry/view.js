@@ -148,7 +148,7 @@ class Page extends Component {
           {this.props.editAction ? (
             <div className={classNames('col-xs-12', 'text-right')} style={{ paddingTop: '15px' }}>
               <small>
-                Internal ID: <strong>{this.props.entry.uid}</strong>
+                Page ID: <strong>{this.props.entry.uid.substring(0, 8)}</strong>
               </small>
             </div>
           ) : (

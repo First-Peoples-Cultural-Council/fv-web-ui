@@ -221,7 +221,7 @@ export class SongsStoriesView extends Component {
 
     return (
       <DetailsViewWithActions
-        labels={{ single: 'Book' }}
+        labels={{ single: 'Book Cover' }}
         itemPath={this._getBookPath()}
         actions={['workflow', 'edit', 'visibility', 'publish', 'add-child']}
         publishAction={this.props.publishBook}

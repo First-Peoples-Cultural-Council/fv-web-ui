@@ -206,7 +206,8 @@ export default class SongsStoriesEntryListView extends Component {
 
           {this.state.deleteCandidate !== null ? (
             <div className={classNames('alert', 'alert-warning')} role="alert">
-              Are you sure you want to delete the page? <small>(Internal ID: {this.state.deleteCandidate.uid})</small>?
+              Are you sure you want to delete the page?{' '}
+              <small>(ID: {this.state.deleteCandidate.uid.substring(0, 8)})</small>?
               <FVButton variant="contained" style={{ marginLeft: '15px' }} onClick={this._confirmDelete}>
                 Delete Page
               </FVButton>

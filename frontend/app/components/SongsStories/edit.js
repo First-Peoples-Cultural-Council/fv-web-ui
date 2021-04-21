@@ -275,7 +275,7 @@ export class PageDialectBookEdit extends Component {
                     <>
                       <FVLabel
                         transKey="views.pages.explore.dialect.learn.songs_stories.edit_x_book"
-                        defaultStr={'Edit ' + title + ' Book'}
+                        defaultStr={'Edit ' + title + ' Book Cover'}
                         transform="words"
                         params={[title]}
                       />
