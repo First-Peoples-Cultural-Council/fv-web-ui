@@ -1,7 +1,6 @@
 import React from 'react'
 import PhraseData from 'components/Phrase/PhraseData'
-// FROM V1!
-import WordContainerV1 from 'app_v1/WordContainer'
+import PhrasePresentation from 'components/Phrase/PhrasePresentation'
 /**
  * @summary PhraseContainer
  * @component
@@ -13,7 +12,7 @@ import WordContainerV1 from 'app_v1/WordContainer'
 function PhraseContainer() {
   const { hasSiteData, phraseId } = PhraseData()
   // Wait for getSite call to finish before we render WordContainerV1
-  return hasSiteData && phraseId ? <WordContainerV1 wordId={phraseId} /> : <div>waiting</div>
+  return hasSiteData && phraseId ? <PhrasePresentation phraseId={phraseId} /> : <div>waiting</div>
 }
 
 export default PhraseContainer
