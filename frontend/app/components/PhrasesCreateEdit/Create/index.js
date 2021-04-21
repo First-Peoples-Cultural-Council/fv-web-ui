@@ -268,15 +268,16 @@ export class PhrasesCreate extends Component {
     }
 
     const computeEntities = Immutable.fromJS([
-      // {
-      //   id: this.state.phrasePath,
-      //   entity: this.props.computePhrase,
-      // },
       {
         id: this.props.routeParams.dialect_path,
         entity: this.props.computeDialect2,
       },
     ])
+
+    const isPublicDialect =
+      selectn('response.state', computeDialect2) === 'Published' ||
+      selectn('response.state', computeDialect2) === 'Republish'
+
     return (
       <AuthenticationFilter.Container
         is403={this.state.is403}
@@ -316,15 +317,17 @@ export class PhrasesCreate extends Component {
                   >
                     {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
                   </FVButton>
-                  <FVButton
-                    variant="contained"
-                    color="secondary"
-                    onClick={(e) => {
-                      this._onRequestSaveForm(e, true)
-                    }}
-                  >
-                    {<FVLabel transKey="save & publish" defaultStr="Save & Publish" transform="first" />}
-                  </FVButton>
+                  {isPublicDialect ? (
+                    <FVButton
+                      variant="contained"
+                      color="secondary"
+                      onClick={(e) => {
+                        this._onRequestSaveForm(e, true)
+                      }}
+                    >
+                      {<FVLabel transKey="save & publish" defaultStr="Save & Publish" transform="first" />}
+                    </FVButton>
+                  ) : null}
                 </div>
               </form>
             </div>

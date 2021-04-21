@@ -209,6 +209,7 @@ export class ExploreDialectEdit extends Component {
 
             <EditViewWithForm
               computeEntities={computeEntities}
+              computeDialect={computeDialect2}
               initialValues={context}
               itemId={portalPath}
               fields={fields}

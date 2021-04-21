@@ -258,7 +258,6 @@ export class PageDialectWordsCreate extends Component {
       },
     ])
 
-    // const _computeWord = ProviderHelpers.getEntry(this.props.computeWord, this.state.wordPath)
     const _computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
     // Set default value on form
@@ -271,6 +270,10 @@ export class PageDialectWordsCreate extends Component {
         _computeDialect2
       )
     }
+
+    const isPublicDialect =
+      selectn('response.state', _computeDialect2) === 'Published' ||
+      selectn('response.state', _computeDialect2) === 'Republish'
 
     return (
       <AuthenticationFilter.Container
@@ -312,15 +315,17 @@ export class PageDialectWordsCreate extends Component {
                     >
                       {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
                     </FVButton>
-                    <FVButton
-                      variant="contained"
-                      color="secondary"
-                      onClick={(e) => {
-                        this._onRequestSaveForm(e, true)
-                      }}
-                    >
-                      {<FVLabel transKey="save & publish" defaultStr="Save & Publish" transform="first" />}
-                    </FVButton>
+                    {isPublicDialect ? (
+                      <FVButton
+                        variant="contained"
+                        color="secondary"
+                        onClick={(e) => {
+                          this._onRequestSaveForm(e, true)
+                        }}
+                      >
+                        {<FVLabel transKey="save & publish" defaultStr="Save & Publish" transform="first" />}
+                      </FVButton>
+                    ) : null}
                   </div>
                 </form>
               </div>

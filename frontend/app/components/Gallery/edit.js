@@ -207,6 +207,7 @@ export class PageDialectGalleryEdit extends Component {
 
             <EditViewWithForm
               computeEntities={computeEntities}
+              computeDialect={_computeDialect2}
               initialValues={context}
               itemId={this._getGalleryPath()}
               fields={fields}

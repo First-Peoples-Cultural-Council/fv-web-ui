@@ -187,6 +187,7 @@ export class PageDialectMediaEdit extends Component {
             return (
               <EditViewWithForm
                 computeEntities={computeEntities}
+                computeDialect={computeDialect2}
                 initialValues={context}
                 itemId={this._getResourcePath()}
                 fields={modifiedFields}
