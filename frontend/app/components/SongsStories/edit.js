@@ -284,6 +284,7 @@ export class PageDialectBookEdit extends Component {
                 )}
                 <EditViewWithForm
                   computeEntities={computeEntities}
+                  computeDialect={_computeDialect2}
                   initialValues={context}
                   itemId={this._getBookPath()}
                   fields={fields}

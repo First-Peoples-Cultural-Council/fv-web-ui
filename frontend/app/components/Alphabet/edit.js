@@ -133,6 +133,7 @@ export class PageDialectAlphabetCharacterEdit extends Component {
 
           <EditViewWithForm
             computeEntities={computeEntities}
+            computeDialect={computeDialect2}
             initialValues={context}
             itemId={this.state.characterPath}
             fields={fields}

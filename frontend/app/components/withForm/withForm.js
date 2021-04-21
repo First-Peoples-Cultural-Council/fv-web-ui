@@ -35,6 +35,7 @@ export default function withForm(ComposedFilter) {
       currentPath: PropTypes.array,
       navigationMethod: PropTypes.func,
       computeEntities: PropTypes.instanceOf(List).isRequired,
+      computeDialect: PropTypes.object.isRequired,
       updateDocument: PropTypes.func.isRequired,
       updateAndPublishDocument: PropTypes.func.isRequired,
     }
@@ -161,6 +162,9 @@ export default function withForm(ComposedFilter) {
     render() {
       const { initialValues, fields, options, type } = this.props
       const computeItem = this._getComputeItem(this.props)
+      const isPublicDialect =
+        selectn('response.state', this.props.computeDialect) === 'Published' ||
+        selectn('response.state', this.props.computeDialect) === 'Republish'
       const submitButtons = (
         <>
           <FVButton variant="text" onClick={this._onRequestCancelForm} style={{ marginRight: '5px' }}>
@@ -177,16 +181,18 @@ export default function withForm(ComposedFilter) {
           >
             {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
           </FVButton>
-          <FVButton
-            data-testid="withForm__saveAndPublishBtn"
-            variant="contained"
-            color="secondary"
-            onClick={(e) => {
-              this._onRequestSaveForm(e, computeItem, true)
-            }}
-          >
-            {<FVLabel transKey="save & publish" defaultStr="Save & Publish" transform="first" />}
-          </FVButton>
+          {isPublicDialect ? (
+            <FVButton
+              data-testid="withForm__saveAndPublishBtn"
+              variant="contained"
+              color="secondary"
+              onClick={(e) => {
+                this._onRequestSaveForm(e, computeItem, true)
+              }}
+            >
+              {<FVLabel transKey="save & publish" defaultStr="Save & Publish" transform="first" />}
+            </FVButton>
+          ) : null}
         </>
       )
 

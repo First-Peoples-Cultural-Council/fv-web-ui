@@ -261,6 +261,7 @@ export class PhrasesEdit extends Component {
 
           <EditViewWithForm
             computeEntities={computeEntities}
+            computeDialect={computeDialect2}
             initialValues={context}
             itemId={this._getPhrasePath()}
             fields={fields}
