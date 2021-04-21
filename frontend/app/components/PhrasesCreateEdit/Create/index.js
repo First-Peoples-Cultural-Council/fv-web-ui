@@ -56,6 +56,7 @@ export class PhrasesCreate extends Component {
     // REDUX: reducers/state
     routeParams: object.isRequired,
     computeDialect2: object.isRequired,
+    computeLogin: object.isRequired,
     computePhrase: object.isRequired,
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
@@ -277,6 +278,9 @@ export class PhrasesCreate extends Component {
     const isPublicDialect =
       selectn('response.state', computeDialect2) === 'Published' ||
       selectn('response.state', computeDialect2) === 'Republish'
+    const isRecorderWithApproval = ProviderHelpers.isRecorderWithApproval(this.props.computeLogin)
+    const isAdmin = ProviderHelpers.isAdmin(this.props.computeLogin)
+    const hasWritePriveleges = isRecorderWithApproval || isAdmin
 
     return (
       <AuthenticationFilter.Container
@@ -317,7 +321,7 @@ export class PhrasesCreate extends Component {
                   >
                     {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
                   </FVButton>
-                  {isPublicDialect ? (
+                  {isPublicDialect && hasWritePriveleges ? (
                     <FVButton
                       variant="contained"
                       color="secondary"
@@ -343,14 +347,16 @@ export class PhrasesCreate extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvPhrase, navigation, windowPath } = state
+  const { fvDialect, fvPhrase, navigation, nuxeo, windowPath } = state
 
   const { computePhrase } = fvPhrase
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
   const { route } = navigation
+  const { computeLogin } = nuxeo
   return {
     computeDialect2,
+    computeLogin,
     computePhrase,
     routeParams: route.routeParams,
     splitWindowPath,

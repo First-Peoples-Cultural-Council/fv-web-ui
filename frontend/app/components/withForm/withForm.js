@@ -36,6 +36,7 @@ export default function withForm(ComposedFilter) {
       navigationMethod: PropTypes.func,
       computeEntities: PropTypes.instanceOf(List).isRequired,
       computeDialect: PropTypes.object.isRequired,
+      computeLogin: PropTypes.object.isRequired,
       updateDocument: PropTypes.func.isRequired,
       updateAndPublishDocument: PropTypes.func.isRequired,
     }
@@ -160,7 +161,12 @@ export default function withForm(ComposedFilter) {
     }
 
     render() {
-      const { initialValues, fields, options, type } = this.props
+      const { computeLogin, initialValues, fields, options, type } = this.props
+
+      const isRecorderWithApproval = ProviderHelpers.isRecorderWithApproval(computeLogin)
+      const isAdmin = ProviderHelpers.isAdmin(computeLogin)
+      const hasWritePriveleges = isRecorderWithApproval || isAdmin
+
       const computeItem = this._getComputeItem(this.props)
       const isPublicDialect =
         selectn('response.state', this.props.computeDialect) === 'Published' ||
@@ -181,7 +187,7 @@ export default function withForm(ComposedFilter) {
           >
             {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
           </FVButton>
-          {isPublicDialect ? (
+          {isPublicDialect && hasWritePriveleges ? (
             <FVButton
               data-testid="withForm__saveAndPublishBtn"
               variant="contained"
@@ -329,11 +335,13 @@ export default function withForm(ComposedFilter) {
   }
 
   const mapStateToProps = (state) => {
-    const { locale } = state
+    const { locale, nuxeo } = state
     const { intlService } = locale
+    const { computeLogin } = nuxeo
 
     return {
       intl: intlService,
+      computeLogin,
     }
   }
 

@@ -274,6 +274,9 @@ export class PageDialectWordsCreate extends Component {
     const isPublicDialect =
       selectn('response.state', _computeDialect2) === 'Published' ||
       selectn('response.state', _computeDialect2) === 'Republish'
+    const isRecorderWithApproval = ProviderHelpers.isRecorderWithApproval(this.props.computeLogin)
+    const isAdmin = ProviderHelpers.isAdmin(this.props.computeLogin)
+    const hasWritePriveleges = isRecorderWithApproval || isAdmin
 
     return (
       <AuthenticationFilter.Container
@@ -315,7 +318,7 @@ export class PageDialectWordsCreate extends Component {
                     >
                       {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
                     </FVButton>
-                    {isPublicDialect ? (
+                    {isPublicDialect && hasWritePriveleges ? (
                       <FVButton
                         variant="contained"
                         color="secondary"
