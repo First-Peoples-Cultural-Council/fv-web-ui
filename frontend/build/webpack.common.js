@@ -185,8 +185,6 @@ module.exports = (env) => ({
       exposes: {
         './useRoute': 'dataSources/useRoute',
         './FVProvider': 'components/FVProvider',
-        './WordsListContainer': 'components/WordsList/WordsListContainer',
-        './WordContainer': 'components/Word/WordContainer',
       },
       remotes: {
         'app_v2': 'app_v2',

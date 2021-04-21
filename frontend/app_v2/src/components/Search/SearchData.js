@@ -16,9 +16,10 @@ import { triggerError } from 'common/navigationHelpers'
  *
  */
 function SearchData() {
-  const { title, uid } = useGetSite()
+  const { title, uid, path } = useGetSite()
   const location = useLocation()
   const history = useHistory()
+  const siteShortUrl = path ? path.split('/').pop() : ''
 
   // Extract search term from URL search params
   const searchTerm = new URLSearchParams(location.search).get('q') ? new URLSearchParams(location.search).get('q') : ''
@@ -83,6 +84,7 @@ function SearchData() {
     items,
     actions: [copy],
     searchTerm,
+    siteShortUrl,
   }
 }
 

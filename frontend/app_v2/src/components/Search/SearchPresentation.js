@@ -22,6 +22,7 @@ function SearchPresentation({
   isLoading,
   items,
   actions,
+  siteShortUrl,
   searchTerm,
 }) {
   const wholeDomain = siteTitle === 'FirstVoices'
@@ -70,7 +71,13 @@ function SearchPresentation({
           <ul className="inline-block md:block list-none m-2 md:m-0 md:space-y-4 ">{getFilterListItems()}</ul>
         </div>
         <div className="min-h-220 col-span-11 md:col-span-9">
-          <DictionaryListPresentation items={items} actions={actions} isLoading={isLoading} wholeDomain={wholeDomain} />
+          <DictionaryListPresentation
+            items={items}
+            actions={actions}
+            isLoading={isLoading}
+            siteShortUrl={siteShortUrl}
+            wholeDomain={wholeDomain}
+          />
         </div>
       </div>
     </>
@@ -86,6 +93,7 @@ SearchPresentation.propTypes = {
   isLoading: bool,
   items: array,
   searchTerm: string,
+  siteShortUrl: string,
   siteTitle: string,
 }
 
