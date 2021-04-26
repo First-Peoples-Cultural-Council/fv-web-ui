@@ -4,7 +4,7 @@ export const copy = {
   actionTitle: 'copy',
   iconName: 'Copy',
   confirmationMessage: 'Copied!',
-  clickHandler: function clickCopyHandler(str) {
+  clickHandler: function clickCopyHandler(str, id) {
     // Create new element
     const el = document.createElement('textarea')
     // Set value (string to be copied)
@@ -20,9 +20,9 @@ export const copy = {
     // Remove temporary element
     document.body.removeChild(el)
     //Set tooltip confirmation with timeout
-    document.getElementById(`copy-message-${str}`).style.display = 'contents'
+    document.getElementById(`copy-message-${id}`).style.display = 'contents'
     setTimeout(function timeout() {
-      document.getElementById(`copy-message-${str}`).style.display = 'none'
+      document.getElementById(`copy-message-${id}`).style.display = 'none'
     }, 1000)
   },
 }

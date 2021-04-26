@@ -122,11 +122,11 @@ function DictionaryListPresentation({ actions, isLoading, items, siteShortUrl, w
                         <td key={toolIndex} className=" px-6 pt-4 text-right">
                           <button
                             className="relative text-fv-blue-dark hover:text-fv-blue-light"
-                            onClick={() => clickHandler(title)}
+                            onClick={() => clickHandler(title, id)}
                           >
                             <span className="sr-only">{actionTitle}</span>
                             {useIcon(iconName, 'fill-current h-8 w-8 md:h-6 md:w-6')}
-                            <span id={`${actionTitle}-message-${title}`} className="hidden">
+                            <span id={`${actionTitle}-message-${id}`} className="hidden">
                               <div className="absolute bottom-0 right-0 w-auto p-1 text-sm bg-fv-blue-dark text-white text-center rounded-lg shadow-lg ">
                                 {confirmationMessage}
                               </div>
