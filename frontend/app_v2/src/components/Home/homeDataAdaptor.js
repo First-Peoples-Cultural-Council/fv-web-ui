@@ -1,4 +1,5 @@
 import {
+  WIDGET_ABOUT,
   WIDGET_ALPHABET,
   WIDGET_CONTACT,
   WIDGET_HERO,
@@ -232,8 +233,42 @@ const getHome = (response) => {
         audio: welcomeAudio,
       }
     }
+
+    if (type === 'AboutWidget') {
+      let aboutText = ''
+      let linkTitle
+      let linkHref
+      let imageHref
+
+      settings.forEach(function assignValues({ category, key, value }) {
+        if (category === 'general' && key === 'about_text') {
+          aboutText = value
+        }
+        if (category === 'general' && key === 'about_link_title') {
+          linkTitle = value
+        }
+        if (category === 'general' && key === 'about_link_href') {
+          linkHref = value
+        }
+        if (category === 'general' && key === 'about_image_href') {
+          imageHref = value
+        }
+        return
+      })
+
+      return {
+        type: WIDGET_ABOUT,
+        uid: widget.uid,
+        title: widget['dc:title'],
+        text: aboutText,
+        link: linkTitle && linkHref ? { title: linkTitle, href: linkHref } : null,
+        image: imageHref ? { href: imageHref } : null,
+      }
+    }
+
     return widget
   })
+
   return {
     uid,
     pageTitle: properties?.['dc:title'],
