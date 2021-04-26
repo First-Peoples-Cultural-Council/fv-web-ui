@@ -22,7 +22,7 @@ import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { changeTitleParams, overrideBreadcrumbs } from 'reducers/navigation'
 import { fetchDialect2 } from 'reducers/fvDialect'
-import { fetchResource, updateResource } from 'reducers/fvResources'
+import { fetchResource } from 'reducers/fvResources'
 import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
@@ -31,9 +31,6 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import PromiseWrapper from 'components/PromiseWrapper'
-
-// Models
-import { Document } from 'nuxeo'
 
 // Views
 import fields from 'common/schemas/fields'
@@ -60,7 +57,6 @@ export class PageDialectMediaEdit extends Component {
     overrideBreadcrumbs: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
-    updateResource: func.isRequired,
   }
 
   constructor(props, context) {
@@ -71,7 +67,7 @@ export class PageDialectMediaEdit extends Component {
     }
 
     // Bind methods to 'this'
-    ;['_handleSave', '_handleCancel'].forEach((method) => (this[method] = this[method].bind(this)))
+    ;['_handleCancel'].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   fetchData(newProps) {
@@ -125,21 +121,6 @@ export class PageDialectMediaEdit extends Component {
       default:
         return false
     }
-  }
-
-  _handleSave(phrase, formValue) {
-    const newDocument = new Document(phrase.response, {
-      repository: phrase.response._repository,
-      nuxeo: phrase.response._nuxeo,
-    })
-
-    // Set new value property on document
-    newDocument.set(formValue)
-
-    // Save document
-    this.props.updateResource(newDocument, null, null)
-
-    this.setState({ formValue: formValue })
   }
 
   _handleCancel() {
@@ -201,18 +182,16 @@ export class PageDialectMediaEdit extends Component {
         {(() => {
           if (type) {
             // Remove file upload for editing...
-            const modifiedFields = Immutable.fromJS(fields)
-              .deleteIn([type, 'file'])
-              .toJS()
+            const modifiedFields = Immutable.fromJS(fields).deleteIn([type, 'file']).toJS()
 
             return (
               <EditViewWithForm
                 computeEntities={computeEntities}
+                computeDialect={computeDialect2}
                 initialValues={context}
                 itemId={this._getResourcePath()}
                 fields={modifiedFields}
                 options={options}
-                saveMethod={this._handleSave}
                 cancelMethod={this._handleCancel}
                 currentPath={this.props.splitWindowPath}
                 navigationMethod={this.props.replaceWindowPath}
@@ -251,7 +230,6 @@ const mapDispatchToProps = {
   overrideBreadcrumbs,
   pushWindowPath,
   replaceWindowPath,
-  updateResource,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageDialectMediaEdit)

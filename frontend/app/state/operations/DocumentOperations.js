@@ -26,13 +26,15 @@ export default class DocumentOperations {
    * createDocument
    * --------------------------------------
    */
-  static createDocument(parentDocPathOrId, docParams) {
+  static createDocument(parentDocPathOrId, docParams, headers = {}) {
     const properties = BaseOperations.getProperties()
+    const defaultHeaders = { 'enrichers.document': 'breadcrumb' }
+    const headersToSend = Object.assign(defaultHeaders, headers)
 
     return new Promise((resolve, reject) => {
       properties.client
         .repository()
-        .create(parentDocPathOrId, docParams, { headers: { 'enrichers.document': 'breadcrumb' } })
+        .create(parentDocPathOrId, docParams, { headers: headersToSend })
         .then((doc) => {
           resolve(doc)
         })

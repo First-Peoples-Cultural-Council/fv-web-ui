@@ -23,7 +23,7 @@ import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { changeTitleParams, overrideBreadcrumbs } from 'reducers/navigation'
 import { fetchDialect2 } from 'reducers/fvDialect'
-import { fetchGallery, updateGallery } from 'reducers/fvGallery'
+import { fetchGallery } from 'reducers/fvGallery'
 import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
@@ -38,9 +38,6 @@ import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 import FVLabel from 'components/FVLabel'
-
-// Models
-import { Document } from 'nuxeo'
 
 // Views
 import fields from 'common/schemas/fields'
@@ -67,7 +64,6 @@ export class PageDialectGalleryEdit extends Component {
     overrideBreadcrumbs: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
-    updateGallery: func.isRequired,
   }
   state = {
     gallery: null,
@@ -163,54 +159,10 @@ export class PageDialectGalleryEdit extends Component {
     return _props.routeParams.dialect_path + '/Portal/' + StringHelpers.clean(_props.routeParams.gallery)
   }
 
-  _handleSave = (phrase, formValue) => {
-    const newDocument = new Document(phrase.response, {
-      repository: phrase.response._repository,
-      nuxeo: phrase.response._nuxeo,
-    })
-
-    // Set new value property on document
-    newDocument.set(formValue)
-
-    // Save document
-    this.props.updateGallery(newDocument, null, null)
-
-    this.setState({ formValue: formValue })
-  }
-
   _handleCancel = () => {
     NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.replaceWindowPath)
   }
 
-  _onRequestSaveForm = (e) => {
-    // Prevent default behaviour
-    e.preventDefault()
-    // TODO: this.refs DEPRECATED
-    const formValue = this.formGallery.current.getValue()
-
-    // Passed validation
-    if (formValue) {
-      const gallery = ProviderHelpers.getEntry(this.props.computeGallery, this._getGalleryPath())
-
-      // TODO: Find better way to construct object then accessing internal function
-      // Create new document rather than modifying the original document
-      const newDocument = new Document(gallery.response, {
-        repository: gallery.response._repository,
-        nuxeo: gallery.response._nuxeo,
-      })
-
-      // Set new value property on document
-      newDocument.set(formValue)
-
-      // Save document
-      this.props.updateGallery(newDocument)
-
-      this.setState({ formValue: formValue })
-    } else {
-      //let firstError = this.refs["form_word_create"].validate().firstError();
-      window.scrollTo(0, 0)
-    }
-  }
   _stateGetDefault = () => {
     let context
 
@@ -255,11 +207,11 @@ export class PageDialectGalleryEdit extends Component {
 
             <EditViewWithForm
               computeEntities={computeEntities}
+              computeDialect={_computeDialect2}
               initialValues={context}
               itemId={this._getGalleryPath()}
               fields={fields}
               options={options}
-              saveMethod={this._handleSave}
               cancelMethod={this._handleCancel}
               currentPath={this.props.splitWindowPath}
               navigationMethod={this.props.replaceWindowPath}
@@ -270,45 +222,6 @@ export class PageDialectGalleryEdit extends Component {
         </PromiseWrapper>
       </AuthenticationFilter.Container>
     )
-    /*
-    return (
-      <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        <h1>
-          {intl.trans(
-            'views.pages.explore.dialect.gallery.edit_x_gallery',
-            'Edit ' + selectn('response.properties.dc:title', _computeGallery) + ' Gallery',
-            'words',
-            [selectn('response.properties.dc:title', _computeGallery)]
-          )}
-        </h1>
-
-        <div className="row" style={{ marginTop: '15px' }}>
-          <div className={classNames('col-xs-8', 'col-md-10')}>
-            <form onSubmit={this._onRequestSaveForm}>
-              <t.form.Form
-                ref={this.formGallery}
-                type={t.struct(selectn('FVGallery', fields))}
-                context={selectn('response', _computeDialect2)}
-                value={this.state.formValue || selectn('response.properties', _computeGallery)}
-                options={selectn('FVGallery', options)}
-              />
-              <div className="form-group">
-                <button type="submit" className="btn btn-primary">
-                  {intl.trans('save', 'Save', 'first')}
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <div className={classNames('col-xs-4', 'col-md-2')}>
-            <Paper style={{ padding: '15px', margin: '20px 0' }}>
-              <div className="subheader">{intl.trans('metadata', 'Metadata', 'first')}</div>
-            </Paper>
-          </div>
-        </div>
-      </PromiseWrapper>
-    )
-    */
   }
   _stateGetErrorBoundary = () => {
     const { copy, errorMessage } = this.state
@@ -345,7 +258,6 @@ const mapDispatchToProps = {
   overrideBreadcrumbs,
   pushWindowPath,
   replaceWindowPath,
-  updateGallery,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageDialectGalleryEdit)

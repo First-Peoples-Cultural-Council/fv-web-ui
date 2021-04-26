@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import About from 'components/About'
 import Alphabet from 'components/Alphabet'
 import ContactUs from 'components/ContactUs'
 import Hero from 'components/Hero'
@@ -12,6 +13,7 @@ import SearchInput from 'components/SearchInput'
 import CircleImage from 'components/CircleImage'
 import useIcon from 'common/useIcon'
 import {
+  WIDGET_ABOUT,
   WIDGET_ALPHABET,
   WIDGET_CONTACT,
   WIDGET_GALLERY,
@@ -92,6 +94,16 @@ function HomePresentation({ data, language }) {
                   title={title}
                   url={url}
                 />
+              </div>
+            )
+          }
+
+          if (type === WIDGET_ABOUT) {
+            const { title, text, image, link } = widgetProps
+
+            return (
+              <div key={index} className="px-6">
+                <About.Container link={link} image={image} title={title} text={text} />
               </div>
             )
           }

@@ -12,7 +12,7 @@ import AlphabetPresentationSelected from 'components/Alphabet/AlphabetPresentati
  * @returns {node} jsx markup
  */
 function AlphabetPresentationWidget({ characters, onCharacterClick, links, selectedData, onVideoClick, videoIsOpen }) {
-  return (
+  return characters ? (
     <section className="py-12 bg-white" data-testid="AlphabetPresentationWidget">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative">
@@ -78,7 +78,7 @@ function AlphabetPresentationWidget({ characters, onCharacterClick, links, selec
         </div>
       </div>
     </section>
-  )
+  ) : null
 }
 // PROPTYPES
 const { bool, array, func, string, shape, arrayOf, object } = PropTypes

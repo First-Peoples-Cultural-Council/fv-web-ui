@@ -64,12 +64,6 @@ export const createBook = create('FV_BOOK', 'FVBook', {
   headers: { 'enrichers.document': 'ancestry,permissions,book' },
 })
 
-export const updateBook = update(
-  'FV_BOOK',
-  'FVBook',
-  { headers: { 'enrichers.document': 'ancestry,permissions,book' } },
-  false
-)
 export const deleteBook = _delete('FV_BOOK', 'FVBook', {})
 
 // Document.FollowLifecycleTransition expects a param that specifies the type of transition to take place e.g. { value: 'Republish' }
@@ -86,7 +80,7 @@ export const createBookEntry = create('FV_BOOK_ENTRY', 'FVBookEntry', {
 })
 
 export const updateBookEntry = update('FV_BOOK_ENTRY', 'FVBookEntry', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
+  headers: { 'enrichers.document': 'book' },
 })
 
 export const deleteBookEntry = _delete('FV_BOOK_ENTRY', 'FVBookEntry', {})

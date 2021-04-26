@@ -12,6 +12,9 @@ module.exports = {
       animation: {
         'pulse-blur': 'pulse-blur 2.5s linear infinite',
       },
+      borderRadius: {
+        '4xl': '3rem',
+      },
       fontSize: {
         xxs: '.5rem',
       },

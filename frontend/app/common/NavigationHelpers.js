@@ -47,22 +47,18 @@ export default {
   navigateUp: (currentPathArray, navigationFunc) => {
     navigationFunc('/' + arrayPopImmutable(currentPathArray).join('/'))
   },
+  // Navigate up multiple paths (how many is specified by level)
+  navigateUpMultiple: (currentPathArray, navigationFunc, levels) => {
+    navigationFunc('/' + arrayPopImmutable(currentPathArray, levels).join('/'))
+  },
   // Navigate forward, replacing the current page within the URL
   navigateForwardReplace: (currentPathArray, forwardPathArray, navigationFunc) => {
-    navigationFunc(
-      '/' +
-        arrayPopImmutable(currentPathArray)
-          .concat(forwardPathArray)
-          .join('/')
-    )
+    navigationFunc('/' + arrayPopImmutable(currentPathArray).concat(forwardPathArray).join('/'))
   },
   // Navigate forward, replacing the current page within the URL
   navigateForwardReplaceMultiple: (currentPathArray, forwardPathArray, navigationFunc) => {
     navigationFunc(
-      '/' +
-        arrayPopImmutable(currentPathArray, forwardPathArray.length)
-          .concat(forwardPathArray)
-          .join('/')
+      '/' + arrayPopImmutable(currentPathArray, forwardPathArray.length).concat(forwardPathArray).join('/')
     )
   },
   // Navigate forward by appending the forward path
@@ -321,10 +317,7 @@ export const updateUrlIfPageOrPageSizeIsDifferent = ({
     // With pagination, replace end part of url
     if (hasPagination(splitWindowPath)) {
       navigationFunc(
-        '/' +
-          arrayPopImmutable(splitWindowPath, [pageSizeNum, pageNum].length)
-            .concat([pageSizeNum, pageNum])
-            .join('/')
+        '/' + arrayPopImmutable(splitWindowPath, [pageSizeNum, pageNum].length).concat([pageSizeNum, pageNum]).join('/')
       )
     } else {
       // When no pagination, append to url

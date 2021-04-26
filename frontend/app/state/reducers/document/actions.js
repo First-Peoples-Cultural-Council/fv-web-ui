@@ -1,7 +1,31 @@
-import { fetch, execute } from 'reducers/rest'
+import { create, _delete, execute, fetch, update } from 'reducers/rest'
 import DocumentOperations from 'operations/DocumentOperations'
-// console.log('! document', { RESTActions, DocumentOperations }) // eslint-disable-line
+
 import { DOCUMENT_PUBLISH_START, DOCUMENT_PUBLISH_SUCCESS, DOCUMENT_PUBLISH_ERROR } from './actionTypes'
+
+export const fetchDocument = fetch('FV_DOCUMENT', 'Document', {
+  headers: { 'enrichers.document': 'ancestry,permissions,acls' },
+})
+
+export const createDocument = create('FV_DOCUMENT', 'Document', {
+  headers: { 'enrichers.document': 'ancestry,permissions' },
+})
+
+export const updateDocument = update(
+  'FV_DOCUMENT',
+  'Document',
+  { headers: { 'enrichers.document': 'ancestry,permissions' } },
+  false
+)
+
+export const updateAndPublishDocument = update(
+  'FV_DOCUMENT',
+  'Document',
+  { headers: { 'enrichers.document': 'ancestry,permissions', 'fv-publish': true } },
+  false
+)
+
+export const deleteDocument = _delete('FV_DOCUMENT', 'Document', {})
 
 export const publishDocument = (workspaceDocPath, sectionTargetPath) => {
   return (dispatch) => {
@@ -16,10 +40,6 @@ export const publishDocument = (workspaceDocPath, sectionTargetPath) => {
       })
   }
 }
-
-export const fetchDocument = fetch('FV_DOCUMENT', 'Document', {
-  headers: { 'enrichers.document': 'ancestry,permissions,acls' },
-})
 
 export const fetchResultSet = execute('FV_RESULT_SET', 'Repository.ResultSetQuery')
 

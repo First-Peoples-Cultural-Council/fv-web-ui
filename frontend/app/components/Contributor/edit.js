@@ -276,17 +276,12 @@ export class EditContributor extends React.Component {
     // Save document
     const file =
       formData['fvcontributor:profile_picture'].length >= 1 ? formData['fvcontributor:profile_picture'][0] : null
-    /*const _updateContributor = await this.props.updateContributor({
-      newDoc: newDocument,
-      file,
-      xpath: 'fvcontributor:profile_picture',
-    })*/
     const _updateContributor = await this.props.updateContributor(newDocument, file, 'fvcontributor:profile_picture')
+
     if (_updateContributor.success) {
       this.setState({
         errors: [],
         formData,
-        // itemUid: response.uid,
         componentState: STATE_SUCCESS,
       })
     } else {

@@ -1,6 +1,7 @@
 import React from 'react'
 import AlphabetDetailPresentation from 'components/AlphabetDetail/AlphabetDetailPresentation'
 import AlphabetDetailData from 'components/AlphabetDetail/AlphabetDetailData'
+import PromiseWrapper from 'components/PromiseWrapper'
 
 /**
  * @summary AlphabetDetailContainer
@@ -33,24 +34,26 @@ function AlphabetDetailContainer() {
         tabValue,
       }) => {
         return (
-          <AlphabetDetailPresentation
-            character={character}
-            relatedVideos={relatedVideos}
-            computedCharacter={computedCharacter}
-            computedDialect2={computedDialect2}
-            computeEntities={computeEntities}
-            computeLogin={computeLogin}
-            currentAppliedFilter={currentAppliedFilter}
-            intl={intl}
-            onNavigateRequest={onNavigateRequest}
-            publishChangesAction={publishChangesAction}
-            relatedWords={relatedWords}
-            shouldRenderPageToolbar={shouldRenderPageToolbar}
-            tabsOnChange={tabsOnChange}
-            tabValue={tabValue}
-            routeParams={routeParams}
-            relatedAudio={relatedAudio}
-          />
+          <PromiseWrapper computeEntities={computeEntities}>
+            <AlphabetDetailPresentation
+              character={character}
+              relatedVideos={relatedVideos}
+              computedCharacter={computedCharacter}
+              computedDialect2={computedDialect2}
+              computeEntities={computeEntities}
+              computeLogin={computeLogin}
+              currentAppliedFilter={currentAppliedFilter}
+              intl={intl}
+              onNavigateRequest={onNavigateRequest}
+              publishChangesAction={publishChangesAction}
+              relatedWords={relatedWords}
+              shouldRenderPageToolbar={shouldRenderPageToolbar}
+              tabsOnChange={tabsOnChange}
+              tabValue={tabValue}
+              routeParams={routeParams}
+              relatedAudio={relatedAudio}
+            />
+          </PromiseWrapper>
         )
       }}
     </AlphabetDetailData>
