@@ -35,31 +35,55 @@ module.exports = {
         },
       },
       colors: {
-        'fv-red': {
-          light: '#b36e54',
-          DEFAULT: '#A04A29',
-          dark: '#803b21',
-        },
-        'fv-orange': {
-          light: '#e09938',
-          DEFAULT: '#D87F06',
-          dark: '#ad6605',
-        },
-        'fv-blue': {
+        // Core colors
+        'fv-primary': {
           light: '#1870A7',
           DEFAULT: '#3A6880',
           dark: '#2e5366',
         },
-        'fv-turquoise': {
+        'fv-secondary': {
+          light: '#e09938',
+          DEFAULT: '#D87F06',
+          dark: '#ad6605',
+        },
+        'fv-tertiary': {
+          light: 'TBD',
+          DEFAULT: '#1C1A1A',
+          dark: 'TBD',
+        },
+
+        // Reserved colors
+        'fv-word': {
           light: '#c2dedc',
           DEFAULT: '#35928A',
           dark: '#2a756e',
         },
-        'fv-purple': {
+        'fv-phrase': {
+          light: '#e09938',
+          DEFAULT: '#D87F06',
+          dark: '#ad6605',
+        },
+        'fv-song': {
+          light: '#b36e54',
+          DEFAULT: '#A04A29',
+          dark: '#803b21',
+        },
+        'fv-story': {
           light: '#785d72',
           DEFAULT: '#56354f',
           dark: '#452a3f',
         },
+        'fv-resource': {
+          light: 'TBD',
+          DEFAULT: 'TBD',
+          dark: 'TBD',
+        },
+        'fv-other': {
+          light: 'TBD',
+          DEFAULT: 'TBD',
+          dark: 'TBD',
+        },
+        // Other colors
         'fv-charcoal': {
           light: '#5D5858',
           DEFAULT: '#313133',
@@ -73,6 +97,10 @@ module.exports = {
         'fv-yellow': {
           DEFAULT: '#F4E31E',
         },
+      },
+      fontFamily: {
+        sans: ['TBD', 'sans-serif'],
+        serif: ['TBD', 'serif'],
       },
     },
   },

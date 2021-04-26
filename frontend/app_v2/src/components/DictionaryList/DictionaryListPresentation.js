@@ -18,7 +18,7 @@ import Loading from 'components/Loading'
  * @returns {node} jsx markup
  */
 function DictionaryListPresentation({ isLoading, items, wholeDomain, actions }) {
-  const typeColor = { word: 'fv-turquoise', phrase: 'fv-orange', song: 'fv-red', story: 'fv-purple' }
+  const typeColor = { word: 'fv-turquoise', phrase: 'fv-secondary', song: 'fv-red', story: 'fv-purple' }
   return (
     <Loading.Container isLoading={isLoading}>
       {items !== undefined && items?.length > 0 ? (
@@ -26,7 +26,7 @@ function DictionaryListPresentation({ isLoading, items, wholeDomain, actions }) 
           <div className="py-2 align-middle inline-block min-w-full">
             <div className="shadow-md overflow-hidden border-b border-gray-300 sm:rounded-lg">
               <table className="min-w-full divide-y divide-gray-300">
-                <thead className="bg-gray-50">
+                <thead className="bg-gray-100">
                   <tr>
                     <th
                       scope="col"
@@ -61,7 +61,7 @@ function DictionaryListPresentation({ isLoading, items, wholeDomain, actions }) 
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-300">
                   {items.map(({ id, title, translations, audio, type, parentDialect }, index) => (
-                    <tr key={id + index}>
+                    <tr key={id + index} className={index % 2 !== 0 ? 'bg-gray-50' : ''}>
                       <td className="px-6 py-4 flex items-center">
                         <Link
                           className="font-medium text-gray-900 mr-2"
@@ -77,15 +77,15 @@ function DictionaryListPresentation({ isLoading, items, wholeDomain, actions }) 
                                 icons={{
                                   Play: useIcon(
                                     'Audio',
-                                    'fill-current text-fv-blue-dark hover:text-fv-blue-light m-1 h-8 w-8 md:h-6 md:w-6'
+                                    'fill-current text-fv-primary-dark hover:text-fv-primary-light m-1 h-8 w-8 md:h-6 md:w-6'
                                   ),
                                   Pause: useIcon(
                                     'PauseCircle',
-                                    'fill-current text-fv-blue-dark hover:text-fv-blue-light m-1 h-8 w-8 md:h-6 md:w-6'
+                                    'fill-current text-fv-primary-dark hover:text-fv-primary-light m-1 h-8 w-8 md:h-6 md:w-6'
                                   ),
                                   Error: useIcon(
                                     'TimesCircle',
-                                    'fill-current text-fv-blue-dark hover:text-fv-blue-light m-1 h-8 w-8 md:h-6 md:w-6'
+                                    'fill-current text-fv-primary-dark hover:text-fv-primary-light m-1 h-8 w-8 md:h-6 md:w-6'
                                   ),
                                 }}
                               />
@@ -119,13 +119,13 @@ function DictionaryListPresentation({ isLoading, items, wholeDomain, actions }) 
                       {actions.map(({ actionTitle, iconName, clickHandler, confirmationMessage }, toolIndex) => (
                         <td key={toolIndex} className=" px-6 pt-4 text-right">
                           <button
-                            className="relative text-fv-blue-dark hover:text-fv-blue-light"
+                            className="relative text-fv-primary-dark hover:text-fv-primary-light"
                             onClick={() => clickHandler(title)}
                           >
                             <span className="sr-only">{actionTitle}</span>
                             {useIcon(iconName, 'fill-current h-8 w-8 md:h-6 md:w-6')}
                             <span id={`${actionTitle}-message-${title}`} className="hidden">
-                              <div className="absolute bottom-0 right-0 w-auto p-1 text-sm bg-fv-blue-dark text-white text-center rounded-lg shadow-lg ">
+                              <div className="absolute bottom-0 right-0 w-auto p-1 text-sm bg-fv-primary-dark text-white text-center rounded-lg shadow-lg ">
                                 {confirmationMessage}
                               </div>
                             </span>

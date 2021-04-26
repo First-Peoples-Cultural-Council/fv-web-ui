@@ -59,7 +59,7 @@ function SearchPresentation({
 
   return (
     <>
-      <section className="bg-gradient-to-b to-fv-turquoise from-fv-blue-light p-5">
+      <section className="bg-gradient-to-b from-fv-primary-light to-fv-primary p-5">
         <div className="mx-auto lg:w-3/5">
           <SearchInput.Container />
         </div>

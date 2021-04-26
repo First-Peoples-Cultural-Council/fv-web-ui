@@ -13,7 +13,7 @@ function TopicsPresentation({ title, topics }) {
   return (
     <section className="Topics bg-white py-12 mx-10">
       <div className="relative mx-10">
-        <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-blue font-bold sm:text-5xl">
+        <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-primary font-bold sm:text-5xl">
           <span className="inline-block px-4 sm:px-8 lg:px-20 bg-white">{title}</span>
         </h2>
         <hr className="absolute z-0 w-full" style={{ top: '50%' }} />

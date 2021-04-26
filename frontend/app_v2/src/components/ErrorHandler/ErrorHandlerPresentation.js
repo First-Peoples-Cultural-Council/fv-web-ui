@@ -15,11 +15,11 @@ import useIcon from 'common/useIcon'
 function ErrorHandlerPresentation({ status, heading, content }) {
   const history = useHistory()
   return (
-    <div className="min-w-screen min-h-screen bg-gradient-to-r from-fv-turquoise to-fv-blue-light flex items-center p-5 lg:p-20 overflow-hidden relative">
+    <div className="min-w-screen min-h-screen bg-gradient-to-r from-fv-turquoise to-fv-primary-light flex items-center p-5 lg:p-20 overflow-hidden relative">
       <div className="w-full flex-1 min-h-full min-w-full rounded-3xl bg-white shadow-xl p-10 lg:p-20 text-gray-800 relative items-center text-center">
         <h1 className="font-black text-3xl lg:text-5xl text-fv-charcoal mb-12">Oops! We&apos;ve found a problem...</h1>
         <div className="mb-12 text-gray-600 font-light">
-          <h1 className="font-black uppercase text-3xl lg:text-5xl text-fv-turquoise mb-5">
+          <h1 className="font-black text-3xl lg:text-5xl text-fv-turquoise mb-5">
             {status} {heading}
           </h1>
           {content}
@@ -34,13 +34,13 @@ function ErrorHandlerPresentation({ status, heading, content }) {
           </button>
         </div>
         <Link
-          className="bg-gradient-to-r from-fv-orange to-fv-red hover:from-fv-red hover:to-fv-red text-white font-semibold px-6 py-3 rounded-md mr-6"
+          className="bg-gradient-to-r from-fv-secondary to-fv-red hover:from-fv-red hover:to-fv-red text-white font-semibold px-6 py-3 rounded-md mr-6"
           to="/"
         >
           Home
         </Link>
         <a
-          className="bg-gradient-to-r from-fv-blue-light to-fv-turquoise hover:from-fv-blue-light hover:to-fv-blue-light text-white font-semibold px-6 py-3 rounded-md"
+          className="bg-gradient-to-r from-fv-primary-light to-fv-turquoise hover:from-fv-primary-light hover:to-fv-primary-light text-white font-semibold px-6 py-3 rounded-md"
           href="https://support.firstvoices.com/servicedesk/customer/portal/1"
         >
           Support

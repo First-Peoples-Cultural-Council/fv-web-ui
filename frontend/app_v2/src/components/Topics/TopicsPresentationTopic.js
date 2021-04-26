@@ -28,22 +28,22 @@ function TopicsPresentationTopic({ audio, heading, image, listCount, subheading,
   let textSize
   switch (type) {
     case WIDGET_LIST_WORD:
-      bgColor = 'bg-fv-turquoise'
+      bgColor = 'bg-fv-word'
       icon = 'ChatBubble'
       textSize = 'text-4xl lg:text-5xl'
       break
     case WIDGET_LIST_PHRASE:
-      bgColor = 'bg-fv-orange'
+      bgColor = 'bg-fv-phrase'
       icon = 'Quote'
       textSize = 'text-3xl lg:text-4xl'
       break
     case WIDGET_LIST_SONG:
-      bgColor = 'bg-fv-red'
+      bgColor = 'bg-fv-song'
       icon = 'MusicNote'
       textSize = 'text-3xl lg:text-4xl'
       break
     case WIDGET_LIST_STORY:
-      bgColor = 'bg-fv-purple'
+      bgColor = 'bg-fv-story'
       icon = 'Book'
       textSize = 'text-3xl lg:text-4xl'
       break
@@ -71,7 +71,6 @@ function TopicsPresentationTopic({ audio, heading, image, listCount, subheading,
         items-center
         justify-between
         rounded-3xl
-        xl:rounded-4xl
         p-8
         text-white
         w-full

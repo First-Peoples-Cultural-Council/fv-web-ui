@@ -88,7 +88,7 @@ function NavBarPresentation({
               </a>
               <a
                 href="/register?requestedUrl=/register"
-                className="hidden ml-4 whitespace-nowrap xl:inline-flex items-center justify-center py-2 px-4 border border-transparent rounded-3xl  shadow-sm text-base font-medium text-white bg-fv-orange hover:bg-fv-orange-dark"
+                className="hidden ml-4 whitespace-nowrap xl:inline-flex items-center justify-center py-2 px-4 border border-transparent rounded-3xl  shadow-sm text-base font-medium text-white bg-fv-secondary hover:bg-fv-secondary-dark"
               >
                 Register
               </a>
@@ -108,7 +108,7 @@ function NavBarPresentation({
               {/* User Avatar */}
               <div className="ml-4 flex items-center md:ml-6">
                 <button
-                  className="max-w-xs p-3 bg-fv-orange hover:bg-fv-orange-dark text-white text-xl rounded-full h-12 w-12 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-fv-turquoise"
+                  className="max-w-xs p-3 bg-fv-secondary hover:bg-fv-secondary-dark text-white text-xl rounded-full h-12 w-12 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-fv-turquoise"
                   id="user-menu"
                   onClick={() => {
                     onMenuClick(userMenuId)

@@ -25,7 +25,9 @@ function ResourcePresentation({ body, bannerHeading }) {
           {body.map(({ sectionHeading, sectionText }, index) => {
             return (
               <section key={index} className="max-w-screen-xl py-4 px-4 lg:my-16 lg:mx-24 lg:p-0 mx-auto">
-                <h2 className="border-b border-gray-500 font-bold mb-5 pb-5 text-3xl text-fv-blue">{sectionHeading}</h2>
+                <h2 className="border-b border-gray-500 font-bold mb-5 pb-5 text-3xl text-fv-primary">
+                  {sectionHeading}
+                </h2>
                 <div className="prose-xl">{sectionText}</div>
               </section>
             )

@@ -44,7 +44,7 @@ function HeroPresentation({ background, foreground, foregroundIcon, search, vari
       classNamesForegroundIcon = 'mb-2'
       classNamesContainer = `
         ${classNamesContainer}
-        ${background ? `${classNamesWithBackground}` : 'text-white bg-gradient-to-r from-gray-600 to-gray-700 py-16'}
+        ${background ? `${classNamesWithBackground}` : 'text-white bg-gradient-to-b from-gray-600 to-gray-700 py-16'}
         grid gap-3 grid-cols-none lg:grid-cols-4`
       if (background) {
         containerStyles = Object.assign({}, containerStyles, {
@@ -82,9 +82,9 @@ function HeroPresentation({ background, foreground, foregroundIcon, search, vari
           inset-x-0
           bottom-0
           z-0
-          bg-gradient-to-r
-          to-fv-turquoise
-          from-fv-blue-light
+          bg-gradient-to-b
+          from-fv-primary-light
+          to-fv-primary
           h-1/5
           lg:h-1/4"
         >
