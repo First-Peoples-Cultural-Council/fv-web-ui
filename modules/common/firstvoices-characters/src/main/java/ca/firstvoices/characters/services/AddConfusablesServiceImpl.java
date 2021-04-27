@@ -161,16 +161,19 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
     for (DocumentModel doc : charactersDocs) {
       String charTitle = String.valueOf(doc.getPropertyValue("dc:title"));
 
-      // Update confusables for lowercase
-      updateConfusableCharacters(session, doc, dialect,
-          StringEscapeUtils.unescapeJava(charTitle),
-          confusables.get(charTitle).toArray(new String[0]));
+      if (charTitle != null && confusables.containsKey(charTitle)) {
+        // Update confusables for lowercase
+        updateConfusableCharacters(session, doc, dialect,
+            StringEscapeUtils.unescapeJava(charTitle),
+            confusables.get(charTitle).toArray(new String[0]));
+      }
 
       String upperCaseTitle =
           String.valueOf(doc.getPropertyValue("fvcharacter:upper_case_character"));
 
-      // Update confusables for uppercase
-      if (upperCaseTitle != null && !upperCaseTitle.isEmpty()) {
+      if (upperCaseTitle != null && !upperCaseTitle.isEmpty()
+          && confusables.containsKey(upperCaseTitle)) {
+        // Update confusables for uppercase
         updateConfusableCharacters(session, doc, dialect,
             StringEscapeUtils.unescapeJava(upperCaseTitle),
             confusables.get(upperCaseTitle).toArray(new String[0]));
