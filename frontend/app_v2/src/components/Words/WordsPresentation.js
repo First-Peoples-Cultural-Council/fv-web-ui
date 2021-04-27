@@ -63,7 +63,7 @@ function WordsPresentation({
     <>
       <section className="bg-gradient-to-b to-fv-turquoise from-fv-blue-light p-5">
         <div className="mx-auto lg:w-3/5">
-          <SearchInput.Container />
+          <SearchInput.Container docType={'WORD'} />
         </div>
       </section>
       <div className="grid grid-cols-11 md:p-2">
