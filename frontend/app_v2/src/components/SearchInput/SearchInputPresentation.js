@@ -48,11 +48,11 @@ function SearchInputPresentation({
 
   return (
     <>
-      <div className="mt-1 flex rounded-md">
+      <div className="flex rounded-md">
         <div className="relative flex items-stretch flex-grow focus-within:z-10">
           <input
             data-testid="SearchInput"
-            className="block w-full focus text-2xl text-fv-charcoal-light rounded-none rounded-l-md pl-5"
+            className="block w-full focus text-2xl text-fv-charcoal-light rounded-none rounded-l-md pl-4"
             type="text"
             placeholder={`Search ${siteTitle}`}
             onChange={handleTextFieldChange}
@@ -64,7 +64,7 @@ function SearchInputPresentation({
             value={searchValue}
           />
         </div>
-        <div className="-ml-px relative inline-flex items-center px-2 py-2 border-l-2 text-fv-charcoal-light border-gray-300 text-sm font-medium rounded-r-md bg-gray-50 hover:bg-gray-100">
+        <div className="-ml-px relative inline-flex items-center px-2 py-1.5 border-l-2 text-fv-charcoal-light border-gray-300 text-sm font-medium rounded-r-md bg-gray-50 hover:bg-gray-100">
           <label htmlFor="search-options" className="sr-only">
             Search options
           </label>
