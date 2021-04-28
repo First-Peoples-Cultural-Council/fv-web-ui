@@ -4,7 +4,6 @@ import { useHistory, useLocation } from 'react-router-dom'
 
 import useGetSite from 'common/useGetSite'
 import searchApi from 'services/api/search'
-import { copy } from 'common/actionHelpers'
 import { triggerError } from 'common/navigationHelpers'
 
 /**
@@ -86,7 +85,7 @@ function SearchData() {
     handleFilter,
     isLoading,
     items,
-    actions: [copy],
+    actions: ['copy'],
     searchTerm,
     siteShortUrl,
   }

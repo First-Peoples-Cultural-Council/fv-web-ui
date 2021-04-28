@@ -7,6 +7,7 @@ import AudioMinimal from 'components/AudioMinimal'
 import useIcon from 'common/useIcon'
 import { makePlural } from 'common/urlHelpers'
 import { getMediaUrl } from 'common/urlHelpers'
+import EntryActions from 'components/EntryActions'
 import Loading from 'components/Loading'
 
 /**
@@ -117,23 +118,14 @@ function DictionaryListPresentation({ actions, isLoading, items, siteShortUrl, w
                           <Link to={`/${parentDialect.shortUrl}`}>{parentDialect.name}</Link>
                         </td>
                       ) : null}
-                      {/* Action buttons */}
-                      {actions.map(({ actionTitle, iconName, clickHandler, confirmationMessage }, toolIndex) => (
-                        <td key={toolIndex} className=" px-6 pt-4 text-right">
-                          <button
-                            className="relative text-fv-blue-dark hover:text-fv-blue-light"
-                            onClick={() => clickHandler(title, id)}
-                          >
-                            <span className="sr-only">{actionTitle}</span>
-                            {useIcon(iconName, 'fill-current h-8 w-8 md:h-6 md:w-6')}
-                            <span id={`${actionTitle}-message-${id}`} className="hidden">
-                              <div className="absolute bottom-0 right-0 w-auto p-1 text-sm bg-fv-blue-dark text-white text-center rounded-lg shadow-lg ">
-                                {confirmationMessage}
-                              </div>
-                            </span>
-                          </button>
-                        </td>
-                      ))}
+                      <td className="text-right">
+                        <EntryActions.Container
+                          documentId={id}
+                          documentTitle={title}
+                          actions={actions}
+                          withConfirmation
+                        />
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -149,16 +141,9 @@ function DictionaryListPresentation({ actions, isLoading, items, siteShortUrl, w
 }
 
 // PROPTYPES
-const { array, arrayOf, bool, func, shape, string } = PropTypes
+const { array, arrayOf, bool, shape, string } = PropTypes
 DictionaryListPresentation.propTypes = {
-  actions: arrayOf(
-    shape({
-      actionTitle: string,
-      iconName: string,
-      clickHandler: func,
-      confirmationMessage: string,
-    })
-  ),
+  actions: array,
   isLoading: bool,
   items: arrayOf(
     shape({

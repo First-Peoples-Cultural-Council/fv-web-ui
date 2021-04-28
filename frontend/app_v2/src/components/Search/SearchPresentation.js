@@ -89,6 +89,7 @@ const { array, bool, func, string } = PropTypes
 SearchPresentation.propTypes = {
   actions: array,
   currentFilter: string,
+  domain: string,
   filters: array,
   domsin: string,
   handleFilter: func,

@@ -3,7 +3,6 @@ import { useInfiniteQuery } from 'react-query'
 import { useHistory, useLocation } from 'react-router-dom'
 
 import useGetSite from 'common/useGetSite'
-import { copy } from 'common/actionHelpers'
 import { triggerError } from 'common/navigationHelpers'
 import useIntersectionObserver from 'common/useIntersectionObserver'
 import testApi from 'services/api/test'
@@ -97,7 +96,7 @@ function WordsData() {
     handleFilter,
     isLoading,
     items: data ? data : {},
-    actions: [copy],
+    actions: ['copy'],
     searchTerm,
     siteShortUrl,
     infiniteScroll,
