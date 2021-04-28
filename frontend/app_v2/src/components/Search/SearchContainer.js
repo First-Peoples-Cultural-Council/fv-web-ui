@@ -15,6 +15,7 @@ function SearchContainer() {
     actions,
     currentFilter,
     filters,
+    domain,
     handleFilter,
     handleSearchSubmit,
     handleTextFieldChange,
@@ -30,6 +31,7 @@ function SearchContainer() {
       actions={actions}
       currentFilter={currentFilter}
       filters={filters}
+      domain={domain}
       handleFilter={handleFilter}
       handleSearchSubmit={handleSearchSubmit}
       handleTextFieldChange={handleTextFieldChange}

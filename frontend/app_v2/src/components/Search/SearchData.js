@@ -26,6 +26,9 @@ function SearchData() {
   const docTypeFilter = new URLSearchParams(location.search).get('docType')
     ? new URLSearchParams(location.search).get('docType')
     : 'ALL'
+  const domain = new URLSearchParams(location.search).get('domain')
+    ? new URLSearchParams(location.search).get('domain')
+    : 'BOTH'
 
   // Local State
   const [currentFilter, setCurrentFilter] = useState(docTypeFilter)
@@ -79,6 +82,7 @@ function SearchData() {
     currentFilter,
     siteTitle: title ? title : 'FirstVoices',
     filters,
+    domain,
     handleFilter,
     isLoading,
     items,

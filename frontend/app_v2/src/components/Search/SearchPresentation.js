@@ -18,6 +18,7 @@ function SearchPresentation({
   currentFilter,
   siteTitle,
   filters,
+  domain,
   handleFilter,
   isLoading,
   items,
@@ -40,7 +41,7 @@ function SearchPresentation({
         >
           <Link
             className={`inline-block transition duration-500 ease-in-out md:block p-3 flex-grow rounded-xl capitalize cursor-pointer ${filterIsActiveClass}`}
-            to={`${location.pathname}?q=${searchTerm}&docType=${filter.type}`}
+            to={`${location.pathname}?q=${searchTerm}&docType=${filter.type}&domain=${domain}`}
             onClick={() => {
               handleFilter(filter.type)
             }}
@@ -89,6 +90,7 @@ SearchPresentation.propTypes = {
   actions: array,
   currentFilter: string,
   filters: array,
+  domsin: string,
   handleFilter: func,
   isLoading: bool,
   items: array,
