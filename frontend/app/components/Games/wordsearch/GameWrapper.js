@@ -69,8 +69,8 @@ export default class GameWrapper extends Component {
    */
   componentDidMount() {
     //Setup default asset paths
-    const defaultAssetsPath = 'assets/games/fv-games-wordsearch'
-    const defaultImagesPath = `${defaultAssetsPath}/images`
+    const commonImagesPath = 'games/common/images'
+    const gameImagesPath = 'games/fv-games-wordsearch/images'
 
     //Default game config
     /**
@@ -78,17 +78,23 @@ export default class GameWrapper extends Component {
      */
 
     const gameConfig = {
-      images: {
-        preloaderLoading: `${defaultImagesPath}/loading.png`,
-        preloaderLogo: `${defaultImagesPath}/logo.png`,
-        tile: `${defaultImagesPath}/tile.png`,
-        title: `${defaultImagesPath}/title.png`,
-        playAudio: `${defaultImagesPath}/play_audio.png`,
-        background: `${defaultImagesPath}/background.png`,
+      assets: {
+        boot: [`${commonImagesPath}/loading.png`, `${commonImagesPath}/logo.png`],
+        preload: [
+          `${commonImagesPath}/background.png`,
+          `${commonImagesPath}/transp.png`,
+          `${commonImagesPath}/play_audio.png`,
+          `${commonImagesPath}/well_done.png`,
+          `${commonImagesPath}/right_arrow.png`,
+          `${commonImagesPath}/left_arrow.png`,
+          `${commonImagesPath}/mute.png`,
+          `${commonImagesPath}/unmute.png`,
+          `${gameImagesPath}/cloud.png`,
+          `${gameImagesPath}/title.png`,
+          `${gameImagesPath}/tile.png`,
+        ],
       },
-
       letters: this.props.characters,
-
       words: this.props.words,
     }
 
