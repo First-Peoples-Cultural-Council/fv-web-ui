@@ -1,6 +1,7 @@
 import React from 'react'
 import WordData from 'components/Word/WordData'
 import WordPresentation from 'components/Word/WordPresentation'
+import Loading from 'components/Loading'
 /**
  * @summary WordContainer
  * @component
@@ -10,9 +11,12 @@ import WordPresentation from 'components/Word/WordPresentation'
  * @returns {node} jsx markup
  */
 function WordContainer() {
-  const { hasSiteData, wordId } = WordData()
-
-  return hasSiteData && wordId ? <WordPresentation wordId={wordId} /> : <div>waiting</div>
+  const { actions, entry, isLoading, moreActions } = WordData()
+  return (
+    <Loading.Container isLoading={isLoading}>
+      <WordPresentation actions={actions} entry={entry} moreActions={moreActions} />
+    </Loading.Container>
+  )
 }
 
 export default WordContainer
