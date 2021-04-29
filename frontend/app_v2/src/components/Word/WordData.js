@@ -32,6 +32,7 @@ function WordData() {
   const { data, error, isError, isLoading } = response
 
   const properties = data?.properties ? data.properties : {}
+  const wordContextParams = data?.contextParameters?.word ? data.contextParameters.word : {}
 
   const entry = {
     title: properties['dc:title'] || '',
@@ -39,16 +40,16 @@ function WordData() {
     translations: properties['fv:definitions'] || [],
     literalTranslations: properties['fv:literal_translation'] || [],
     acknowledgement: properties['fv-word:acknowledgement'] || '',
-    categories: properties['fv-word:categories'] || [],
     culturalNotes: properties['fv:cultural_note'] || [],
     generalNote: properties['fv:general_note'] || [],
     partOfSpeech: properties['fv-word:part_of_speech'] || '',
     pronunciation: properties['fv-word:pronunciation'] || '',
-    audio: properties['fv:related_audio'] || [],
-    relatedPhrases: properties['fv:related_phrases'] || [],
-    relatedAssets: properties['fv:related_assets'] || [],
-    pictures: properties['fv:related_pictures'] || [],
-    videos: properties['fv:related_videos'] || [],
+    categories: wordContextParams?.categories || [],
+    audio: wordContextParams?.related_audio || [],
+    relatedPhrases: wordContextParams?.related_phrases || [],
+    relatedAssets: wordContextParams?.related_assets || [],
+    pictures: wordContextParams?.related_pictures || [],
+    videos: wordContextParams?.related_videos || [],
   }
 
   //   const relatedToAssets = selectn('contextParameters.word.related_by', wordRawData) || []
@@ -62,7 +63,7 @@ function WordData() {
     isLoading,
     entry: data?.title ? entry : {},
     actions: ['copy'],
-    moreActions: [],
+    moreActions: ['share'],
     siteShortUrl,
   }
 }
