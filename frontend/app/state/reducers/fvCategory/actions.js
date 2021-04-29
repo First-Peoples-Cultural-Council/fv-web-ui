@@ -15,10 +15,6 @@ export const fetchCategories = query('FV_CATEGORIES', 'FVCategory', {
   headers: { 'enrichers.document': 'ancestry, parentDoc, breadcrumb, children' },
 })
 
-export const fetchSharedCategories = query('FV_CATEGORIES_SHARED', 'FVCategory', {
-  headers: { 'enrichers.document': 'ancestry, parentDoc, breadcrumb, children' },
-})
-
 /*
  * createCategory
  * --------------------------------------
