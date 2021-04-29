@@ -23,6 +23,7 @@ import LinkedIn from 'common/icons/LinkedIn'
 import Login from 'common/icons/Login'
 import Logo from 'common/icons/Logo'
 import Mail from 'common/icons/Mail'
+import More from 'common/icons/More'
 import MusicNote from 'common/icons/MusicNote'
 import PauseCircle from 'common/icons/PauseCircle'
 import PlaceHolder from 'common/icons/PlaceHolder'
@@ -66,6 +67,7 @@ function useIcon(iconName, iconStyling) {
     Login,
     Logo,
     Mail,
+    More,
     MusicNote,
     PlayArrow,
     PauseCircle,

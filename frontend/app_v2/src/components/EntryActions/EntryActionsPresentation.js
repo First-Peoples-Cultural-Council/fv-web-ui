@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { Menu, Transition } from '@headlessui/react'
 
 // FPCC
 import useIcon from 'common/useIcon'
@@ -11,6 +12,10 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
+
 function EntryActionsPresentation({
   documentId,
   documentTitle,
@@ -57,9 +62,56 @@ function EntryActionsPresentation({
             </span>
           ))
         : null}
-      {moreActionsToShow
-        ? moreActionsToShow.map(({ actionTitle }, index) => <span key={index}>{actionTitle}</span>)
-        : null}
+      {/* More Menu button and items */}
+      {moreActionsToShow.length > 0 ? (
+        <Menu as="div" className="relative inline-block text-left">
+          {({ open }) => (
+            <>
+              <div>
+                <Menu.Button className="inline-flex justify-center w-full border-l border-gray-300 p-2 text-sm font-medium text-fv-blue-dark hover:text-fv-blue-light bg-white hover:bg-gray-50">
+                  {useIcon('More', 'fill-current h-8 w-8 md:h-6 md:w-6')}
+                </Menu.Button>
+              </div>
+
+              <Transition
+                show={open}
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items
+                  static
+                  className="z-10 origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                >
+                  <div className="py-1">
+                    {moreActionsToShow.map(({ actionTitle, iconName, clickHandler }, index) => (
+                      <Menu.Item key={index}>
+                        {({ active }) => (
+                          <button
+                            className={classNames(
+                              active ? 'bg-gray-100 text-fv-blue-light' : 'text-fv-blue-dark',
+                              'w-full group flex items-center px-4 py-2 text-sm uppercase'
+                            )}
+                            onClick={() => clickHandler(documentTitle, documentId)}
+                          >
+                            <span className="sr-only">{actionTitle}</span>
+                            {useIcon(iconName, 'fill-current mr-3 h-5 w-5')}
+                            {actionTitle}
+                          </button>
+                        )}
+                      </Menu.Item>
+                    ))}
+                  </div>
+                </Menu.Items>
+              </Transition>
+            </>
+          )}
+        </Menu>
+      ) : null}
     </div>
   )
 }
