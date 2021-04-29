@@ -33,16 +33,18 @@ function EntryActionsPresentation({
                 <button
                   className={`relative inline-flex items-center p-2 ${
                     index === actionsToShow.length - 1 ? '' : 'border-r border-gray-300'
-                  } text-sm font-medium text-fv-blue-dark hover:text-fv-blue-light bg-white hover:bg-gray-50`}
+                  } text-sm font-medium text-fv-charcoal-light hover:text-fv-charcoal bg-white`}
                   onClick={() => clickHandler(documentTitle, documentId)}
                 >
                   <span className="sr-only">{actionTitle}</span>
                   {useIcon(iconName, 'fill-current h-8 w-8 md:h-6 md:w-6')}
                   {withLabels ? (
                     <>
-                      <span className="ml-2 font-semibold uppercase bg-white text-fv-blue-dark">{actionTitle}</span>
+                      <span className="ml-2 font-semibold uppercase bg-white text-fv-charcoal-light">
+                        {actionTitle}
+                      </span>
                       <span id={`${actionTitle}-message-${documentId}`} className="hidden">
-                        <span className="absolute bottom-2 right-0 font-semibold uppercase bg-white text-fv-blue-dark">
+                        <span className="absolute bottom-2 right-0 font-semibold uppercase bg-white text-fv-charcoal-light">
                           {confirmationMessage}
                         </span>
                       </span>
@@ -51,7 +53,7 @@ function EntryActionsPresentation({
                   {withConfirmation ? (
                     <>
                       <span id={`${actionTitle}-message-${documentId}`} className="hidden">
-                        <div className="absolute bottom-1 -right-1 w-auto p-1 text-sm bg-fv-blue-dark text-white text-center rounded-lg shadow-lg ">
+                        <div className="absolute bottom-1 -right-1 w-auto p-1 text-sm bg-fv-charcoal-light text-white text-center rounded-lg shadow-lg ">
                           {confirmationMessage}
                         </div>
                       </span>
@@ -68,7 +70,7 @@ function EntryActionsPresentation({
           {({ open }) => (
             <>
               <div>
-                <Menu.Button className="inline-flex justify-center w-full border-l border-gray-300 p-2 text-sm font-medium text-fv-blue-dark hover:text-fv-blue-light bg-white hover:bg-gray-50">
+                <Menu.Button className="inline-flex justify-center w-full border-l border-gray-300 p-2 text-sm font-medium text-fv-charcoal-light hover:text-fv-charcoal bg-white">
                   {useIcon('More', 'fill-current h-8 w-8 md:h-6 md:w-6')}
                 </Menu.Button>
               </div>
@@ -93,7 +95,7 @@ function EntryActionsPresentation({
                         {({ active }) => (
                           <button
                             className={classNames(
-                              active ? 'bg-gray-100 text-fv-blue-light' : 'text-fv-blue-dark',
+                              active ? 'bg-gray-100 text-fv-charcoal' : 'text-fv-charcoal-light',
                               'w-full group flex items-center px-4 py-2 text-sm uppercase'
                             )}
                             onClick={() => clickHandler(documentTitle, documentId)}

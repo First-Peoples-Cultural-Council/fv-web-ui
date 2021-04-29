@@ -80,15 +80,15 @@ function DictionaryListPresentation({ actions, isLoading, items, siteShortUrl, w
                                 icons={{
                                   Play: useIcon(
                                     'Audio',
-                                    'fill-current text-fv-blue-dark hover:text-fv-blue-light m-1 h-8 w-8 md:h-6 md:w-6'
+                                    'fill-current text-fv-charcoal-light hover:text-fv-charcoal m-1 h-8 w-8 md:h-6 md:w-6'
                                   ),
                                   Pause: useIcon(
                                     'PauseCircle',
-                                    'fill-current text-fv-blue-dark hover:text-fv-blue-light m-1 h-8 w-8 md:h-6 md:w-6'
+                                    'fill-current text-fv-charcoal-light hover:text-fv-charcoal m-1 h-8 w-8 md:h-6 md:w-6'
                                   ),
                                   Error: useIcon(
                                     'TimesCircle',
-                                    'fill-current text-fv-blue-dark hover:text-fv-blue-light m-1 h-8 w-8 md:h-6 md:w-6'
+                                    'fill-current text-fv-charcoal-light hover:text-fv-charcoal m-1 h-8 w-8 md:h-6 md:w-6'
                                   ),
                                 }}
                               />
@@ -118,7 +118,7 @@ function DictionaryListPresentation({ actions, isLoading, items, siteShortUrl, w
                           <Link to={`/${parentDialect.shortUrl}`}>{parentDialect.name}</Link>
                         </td>
                       ) : null}
-                      <td className="text-right">
+                      <td className="text-right px-6">
                         <EntryActions.Container
                           documentId={id}
                           documentTitle={title}
