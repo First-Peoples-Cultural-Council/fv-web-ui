@@ -97,7 +97,6 @@ public class InitialDatabaseSetupTest extends AbstractFirstVoicesDataTest {
     assertTrue(session.exists(new PathRef("/FV/sections/Site")));
     assertTrue(session.exists(new PathRef("/FV/Workspaces/Site/Resources")));
     assertTrue(session.exists(new PathRef("/FV/Workspaces/Site/Resources/Pages")));
-    assertTrue(session.exists(new PathRef("/FV/Workspaces/SharedData/Shared Categories")));
     assertTrue(session.exists(new PathRef("/FV/Workspaces/SharedData/Shared Links")));
     assertTrue(session.exists(new PathRef("/FV/Workspaces/SharedData/Shared Resources")));
 
