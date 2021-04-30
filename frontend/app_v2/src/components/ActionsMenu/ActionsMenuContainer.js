@@ -13,8 +13,8 @@ import ActionsMenuPresentation from 'components/ActionsMenu/ActionsMenuPresentat
 function ActionsMenuContainer({
   documentId,
   documentTitle,
-  actions,
-  moreActions,
+  actions = [],
+  moreActions = [],
   withLabels = false,
   withConfirmation = false,
   withTooltip = false,

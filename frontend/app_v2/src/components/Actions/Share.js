@@ -21,12 +21,12 @@ function Share({ docId, docTitle, withLabels }) {
     <>
       <button
         id="ShareAction"
-        className="relative inline-flex items-center p-2 text-sm font-medium text-fv-charcoal-light hover:text-fv-charcoal"
+        className="relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal-light hover:text-fv-charcoal"
         onClick={() => setOpen(!open)}
       >
         <span className="sr-only">Share</span>
         {useIcon('WebShare', 'fill-current h-8 w-8 md:h-6 md:w-6')}
-        {withLabels ? <span className="ml-2 font-semibold uppercase text-fv-charcoal-light">Share</span> : null}
+        {withLabels ? <span className="ml-2">Share</span> : null}
       </button>
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" static className="fixed z-10 inset-0 overflow-y-auto" open={open} onClose={setOpen}>

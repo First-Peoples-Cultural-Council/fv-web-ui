@@ -21,7 +21,7 @@ function WordPresentation({ actions, moreActions, entry }) {
           <div className="flow-root">
             <div className="w-full sm:flex items-center mt-5 px-6">
               <h3 className="sm:inline-flex sm:flex-1 font-bold text-xl sm:text-2xl">{entry.title}</h3>
-              <div className="sm:inline-flex p-2 sm:p-0">
+              <div className="sm:inline-flex">
                 <ActionsMenu.Container
                   documentId={entry.id}
                   documentTitle={entry.title}

@@ -41,18 +41,16 @@ function Copy({ docId, docTitle, withLabels, withConfirmation, withTooltip }) {
   return (
     <button
       id="CopyAction"
-      className="relative inline-flex items-center p-2 text-sm font-medium text-fv-charcoal-light hover:text-fv-charcoal"
+      className="relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal-light hover:text-fv-charcoal"
       onClick={() => clickCopyHandler()}
     >
       <span className="sr-only">Copy</span>
       {useIcon('Copy', 'fill-current h-8 w-8 md:h-6 md:w-6')}
       {withLabels ? (
         <>
-          <span className="ml-2 font-semibold uppercase text-fv-charcoal-light">Copy</span>
+          <span className="ml-2">Copy</span>
           <span id={`copy-message-${docId}`} className={confirmation ? '' : 'hidden'}>
-            <span className="absolute bottom-2 right-0 font-semibold uppercase bg-white text-fv-charcoal-light">
-              Copied
-            </span>
+            <span className="absolute bottom-1 -right-2 bg-white">Copied</span>
           </span>
         </>
       ) : null}

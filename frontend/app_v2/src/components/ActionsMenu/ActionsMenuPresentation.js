@@ -30,7 +30,7 @@ function ActionsMenuPresentation({
   return (
     <div className="ActionsMenu">
       {actions.includes('copy') ? (
-        <span className="ml-3 inline-flex sm:ml-0 border-l border-gray-300">
+        <span className="sm:ml-3 inline-flex">
           <div className="relative inline-block text-left">
             <Actions.Copy
               docId={documentId}
@@ -43,7 +43,7 @@ function ActionsMenuPresentation({
         </span>
       ) : null}
       {actions.includes('share') ? (
-        <span className="ml-3 inline-flex sm:ml-0 border-l border-gray-300">
+        <span className="ml-3 pl-2 inline-flex border-l border-gray-300">
           <div className="relative inline-block text-left">
             <Actions.Share docId={documentId} docTitle={documentTitle} withLabels={withLabels} />
           </div>
@@ -54,11 +54,14 @@ function ActionsMenuPresentation({
         <Menu as="div" className="relative inline-block text-left">
           {({ open }) => (
             <>
-              <div>
-                <Menu.Button className="inline-flex justify-center w-full border-l border-gray-300 p-2 text-sm font-medium text-fv-charcoal-light hover:text-fv-charcoal bg-white">
-                  {useIcon('More', 'fill-current h-8 w-8 md:h-6 md:w-6')}
-                </Menu.Button>
-              </div>
+              <span className="ml-3 pl-2 inline-flex border-l border-gray-300">
+                <div className="relative inline-block text-left">
+                  <Menu.Button className="relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal-light hover:text-fv-charcoal">
+                    {useIcon('More', 'fill-current h-8 w-8 md:h-6 md:w-6')}
+                    <span className="ml-2">More</span>
+                  </Menu.Button>
+                </div>
+              </span>
 
               <Transition
                 show={open}
