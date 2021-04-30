@@ -21,7 +21,7 @@ function Share({ docId, docTitle, withLabels }) {
     <>
       <button
         id="ShareAction"
-        className="relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal-light hover:text-fv-charcoal"
+        className="relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal hover:text-black"
         onClick={() => setOpen(!open)}
       >
         <span className="sr-only">Share</span>

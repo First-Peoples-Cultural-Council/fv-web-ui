@@ -41,7 +41,7 @@ function Copy({ docId, docTitle, withLabels, withConfirmation, withTooltip }) {
   return (
     <button
       id="CopyAction"
-      className="relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal-light hover:text-fv-charcoal"
+      className="relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal hover:text-black"
       onClick={() => clickCopyHandler()}
     >
       <span className="sr-only">Copy</span>

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useQuery } from 'react-query'
-import { useHistory, useLocation, useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 
 import useGetSite from 'common/useGetSite'
 import documentApi from 'services/api/document'
@@ -15,20 +15,15 @@ import { triggerError } from 'common/navigationHelpers'
  */
 function WordData() {
   const { wordId } = useParams()
-  const { uid, path } = useGetSite()
-  const location = useLocation()
+  const { path } = useGetSite()
   const history = useHistory()
   const siteShortUrl = path ? path.split('/').pop() : ''
 
   // Data fetch
-  const response = useQuery(
-    ['search', location.search],
-    () => documentApi.get({ id: wordId, contextParameters: 'word' }),
-    {
-      // The query will not execute until the siteId exists and a search term has been provided
-      enabled: !!uid && !!wordId,
-    }
-  )
+  const response = useQuery(['word', wordId], () => documentApi.get({ id: wordId, contextParameters: 'word' }), {
+    // The query will not execute until the wordId has been provided
+    enabled: !!wordId,
+  })
   const { data, error, isError, isLoading } = response
 
   const properties = data?.properties ? data.properties : {}

@@ -56,7 +56,7 @@ function ActionsMenuPresentation({
             <>
               <span className="ml-3 pl-2 inline-flex border-l border-gray-300">
                 <div className="relative inline-block text-left">
-                  <Menu.Button className="relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal-light hover:text-fv-charcoal">
+                  <Menu.Button className="relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal hover:text-black">
                     {useIcon('More', 'fill-current h-8 w-8 md:h-6 md:w-6')}
                     <span className="ml-2">More</span>
                   </Menu.Button>
