@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<xs:schema
+  targetNamespace="http://www.nuxeo.org/ecm/schemas/fvLists"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="relationId" type="xs:string"/>
+  <xs:element name="listId" type="xs:string"/>
+  <xs:element name="documentId" type="xs:string"/>
+  <xs:element name="customOrder" type="xs:float"/>
+  <xs:element name="created" type="xs:date"/>
+
+  <!-- A new field <xs:element name="aNewField" type="xs:string"/> -->
+
+</xs:schema>

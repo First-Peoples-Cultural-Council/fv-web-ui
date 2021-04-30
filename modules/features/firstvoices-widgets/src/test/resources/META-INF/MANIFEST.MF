@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: FirstVoicesWidgets.test
+Require-Bundle: org.nuxeo.runtime,FirstVoicesData,FirstVoicesCoreIO
+Bundle-Version: 1.0.qualifier
+Bundle-Name: FirstVoicesWidgets.test
+Bundle-ClassPath: .
+Bundle-ActivationPolicy: lazy
+Bundle-ManifestVersion: 2
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Vendor: Nuxeo

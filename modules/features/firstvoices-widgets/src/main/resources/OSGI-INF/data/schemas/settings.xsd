@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema
+  xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/First-Voices/settings"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://www.nuxeo.org/ecm/project/schemas/First-Voices/settings">
+
+  <xs:simpleType name="category">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="general" />
+      <xs:enumeration value="presentation" />
+      <xs:enumeration value="logic" />
+      <xs:enumeration value="publishing" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="setting">
+    <xs:sequence>
+      <xs:element name="key" type="xs:string"/>
+      <xs:element name="value" type="xs:string"/>
+      <xs:element name="category" type="nxs:category"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="settings">
+    <xs:sequence>
+      <xs:element name="settings" type="nxs:setting" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:element name="settings" type="nxs:settings"/>
+
+</xs:schema>

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.features.lists.services.listService.contrib" version="1.0">
+    <implementation class="ca.firstvoices.lists.services.ListServiceImpl"/>
+
+    <service>
+        <provide interface="ca.firstvoices.lists.services.ListService"/>
+    </service>
+</component>

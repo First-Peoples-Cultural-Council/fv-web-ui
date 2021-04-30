@@ -13,6 +13,8 @@
   <name>Feature Modules</name>
 
   <modules>
+    <module>firstvoices-lists</module>
+    <module>firstvoices-widgets</module>
   </modules>
 
 </project>

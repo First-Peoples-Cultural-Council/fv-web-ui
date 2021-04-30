@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<component name="fv-widgets-contrib" version="1.0">
+
+  <require>org.nuxeo.runtime.started</require>
+  <require>org.nuxeo.ecm.core.schema.TypeService</require>
+  <require>org.nuxeo.ecm.core.CoreExtensions</require>
+
+  <!-- Define widgets schema and facets -->
+  <extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
+    <schema name="widgets" prefix="widgets" src="OSGI-INF/data/schemas/widgets.xsd"/>
+    <schema name="settings" prefix="settings" src="OSGI-INF/data/schemas/settings.xsd"/><!-- move to DATA if useful -->
+  </extension>
+
+  <extension point="doctype" target="org.nuxeo.ecm.core.schema.TypeService">
+    <facet name="WidgetAware">
+      <schema name="widgets" />
+    </facet>
+    <facet name="Configurable">
+      <schema name="settings" />
+    </facet>
+  </extension>
+
+  <!-- Attach widgets facet to FVDialect, FVPage as examples -->
+  <!-- this could be expanded to a new FVDashboard object too! -->
+  <extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
+    <doctype name="FVDialect" append="true">
+      <facet name="WidgetAware"/>
+    </doctype>
+    <doctype name="FVPage" append="true">
+      <facet name="WidgetAware"/>
+    </doctype>
+  </extension>
+
+  <!-- Define FVWidget type -->
+  <!-- Publishing should be tied to the parent document -->
+  <extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
+    <schema name="widget" prefix="widget" src="OSGI-INF/data/schemas/widget.xsd"/>
+  </extension>
+
+  <extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
+    <doctype name="FVWidget" extends="Document">
+
+      <schema name="widget"/>
+      <schema name="dublincore"/>
+
+      <facet name="Configurable"/>
+      <facet name="HiddenInCreation"/>
+      <facet name="HiddenInNavigation"/>
+    </doctype>
+  </extension>
+
+
+
+  <!-- SOME TESTS FOR LISTS -->
+  <extension target="org.nuxeo.ecm.core.schema.TypeService"
+    point="schema">
+    <schema name="fvLists" src="OSGI-INF/data/schemas/lists.xsd" />
+  </extension>
+
+  <extension target="org.nuxeo.ecm.directory.sql.SQLDirectoryFactory"
+    point="directories">
+    <directory name="fvLists">
+      <schema>fvLists</schema>
+      <dataSource>java:/nxsqldirectory</dataSource>
+      <cacheEntryName>fv-lists-cache</cacheEntryName>
+      <table>list2doc</table>
+      <idField>relationId</idField>
+      <autoincrementIdField>true</autoincrementIdField>
+      <createTablePolicy>on_missing_columns</createTablePolicy>
+      <querySizeLimit>1000</querySizeLimit>
+    </directory>
+  </extension>
+
+  <!-- Consider a Redis cache? -->
+  <!-- https://doc.nuxeo.com/nxdoc/how-to-configure-a-new-directory-cache/ -->
+  <!-- https://doc.nuxeo.com/nxdoc/dbs-cache/ -->
+  <extension target="org.nuxeo.ecm.core.cache.CacheService" point="caches">
+    <cache name="fv-lists-cache">
+      <ttl>20</ttl>
+      <option name="maxSize">100</option>
+      <option name="concurrencyLevel">500</option>
+    </cache>
+  </extension>
+
+</component>
