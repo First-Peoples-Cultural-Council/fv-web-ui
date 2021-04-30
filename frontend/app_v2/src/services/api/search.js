@@ -1,4 +1,4 @@
-import { api } from 'services/api/config'
+import { api } from 'services/config'
 
 const search = {
   get: async (query) => {

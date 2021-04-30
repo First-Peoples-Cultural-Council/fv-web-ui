@@ -157,6 +157,8 @@ export class Wordscramble extends Component {
       this.props.routeParams.dialect_path + '/Dictionary'
     )
 
+    const phrasesArray = selectn('response.entries', computePhrases) || []
+
     return (
       <PromiseWrapper
         renderOnError
@@ -165,33 +167,42 @@ export class Wordscramble extends Component {
         style={containerStyle}
       >
         <h1 style={{ ...titleStyle, ...titleLogoStyle }}>Word Scramble</h1>
-        <p style={{ textAlign: 'center' }}>
-          <a
-            href="#"
-            onClick={this._changeContent.bind(
-              this,
-              selectn('response.currentPageIndex', computePhrases),
-              selectn('response.pageCount', computePhrases)
-            )}
-          >
-            Load More Words!
-          </a>
-        </p>
-        {(selectn('response.entries', computePhrases) || [])
-          .filter((phrase) => selectn('properties.dc:title', phrase).indexOf(' ') > 0)
-          .map((phrase, i) => {
-            return (
-              <Scramble
-                key={i}
-                sentence={{
-                  original: new List(selectn('properties.dc:title', phrase).split(' ')),
-                  translation: selectn('properties.fv:definitions[0].translation', phrase),
-                  audio: selectn('contextParameters.phrase.related_audio[0].path', phrase),
-                  picture: selectn('contextParameters.phrase.related_pictures[0]', phrase),
-                }}
-              />
-            )
-          })}
+        {phrasesArray?.length > 0 ? (
+          <div>
+            <p style={{ textAlign: 'center' }}>
+              <a
+                href="#"
+                onClick={this._changeContent.bind(
+                  this,
+                  selectn('response.currentPageIndex', computePhrases),
+                  selectn('response.pageCount', computePhrases)
+                )}
+              >
+                Load More Words!
+              </a>
+            </p>
+            {phrasesArray
+              .filter((phrase) => selectn('properties.dc:title', phrase).indexOf(' ') > 0)
+              .map((phrase, i) => {
+                return (
+                  <Scramble
+                    key={i}
+                    sentence={{
+                      original: new List(selectn('properties.dc:title', phrase).split(' ')),
+                      translation: selectn('properties.fv:definitions[0].translation', phrase),
+                      audio: selectn('contextParameters.phrase.related_audio[0].path', phrase),
+                      picture: selectn('contextParameters.phrase.related_pictures[0]', phrase),
+                    }}
+                  />
+                )
+              })}
+          </div>
+        ) : (
+          <div style={{ textAlign: 'center' }}>
+            This Language Site does not have enough phrases uploaded to play Word Scramble yet. Check back when more
+            phrases have been added.
+          </div>
+        )}
       </PromiseWrapper>
     )
   }

@@ -22,13 +22,7 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import {
-  approveRegistration,
-  approveTask,
-  fetchUserRegistrationTasks,
-  rejectRegistration,
-  rejectTask,
-} from 'reducers/tasks'
+import { fetchUserRegistrationTasks } from 'reducers/tasks'
 import { fetchDialect2 } from 'reducers/fvDialect'
 import { userUpgrade } from 'reducers/fvUser'
 
@@ -51,19 +45,11 @@ export class UserTasks extends React.Component {
     // REDUX: reducers/state
     computeDialect2: object.isRequired,
     computeLogin: object.isRequired,
-    computeUserRegistrationApprove: object.isRequired,
-    computeUserRegistrationReject: object.isRequired,
     computeUserRegistrationTasks: object.isRequired,
-    computeUserTasksApprove: object.isRequired,
-    computeUserTasksReject: object.isRequired,
     computeUserUpgrade: object.isRequired,
     // REDUX: actions/dispatch/func
-    approveRegistration: func.isRequired,
-    approveTask: func.isRequired,
     fetchDialect2: func.isRequired,
     fetchUserRegistrationTasks: func.isRequired,
-    rejectRegistration: func.isRequired,
-    rejectTask: func.isRequired,
     userUpgrade: func.isRequired,
   }
 
@@ -80,45 +66,9 @@ export class UserTasks extends React.Component {
     }
 
     // Bind methods to 'this'
-    ;[
-      '_handleTaskActions',
-      '_handleOpen',
-      '_handlePreApprovalOpen',
-      '_handleClose',
-      'fetchData',
-      '_saveMethod',
-    ].forEach((method) => (this[method] = this[method].bind(this)))
-  }
-
-  _handleTaskActions(id, action) {
-    switch (action) {
-      case 'approve':
-        this.props.approveTask(
-          id,
-          {
-            comment: '',
-            status: 'validate',
-          },
-          null,
-          this.props.intl.trans('views.pages.tasks.request_approved', 'Request Approved Successfully', 'words')
-        )
-        break
-
-      case 'reject':
-        this.props.rejectTask(
-          id,
-          {
-            comment: '',
-            status: 'reject',
-          },
-          null,
-          this.props.intl.trans('views.pages.tasks.request_rejected', 'Request Rejected Successfully', 'words')
-        )
-        break
-      default: // NOTE: do nothing
-    }
-
-    this.setState({ lastActionedTaskId: id })
+    ;['_handleOpen', '_handlePreApprovalOpen', '_handleClose', 'fetchData', '_saveMethod'].forEach(
+      (method) => (this[method] = this[method].bind(this))
+    )
   }
 
   _getRoleLabel(role) {
@@ -135,16 +85,6 @@ export class UserTasks extends React.Component {
       pruneAction: 'accepted',
     })
     newProps.fetchDialect2(selectn('routeParams.dialect', newProps))
-  }
-
-  componentDidUpdate(prevProps) {
-    const test1 = this.props.computeUserTasksApprove != prevProps.computeUserTasksApprove
-    const test2 = this.props.computeUserTasksReject != prevProps.computeUserTasksReject
-    const test3 = this.props.computeUserRegistrationApprove != prevProps.computeUserRegistrationApprove
-    const test4 = this.props.computeUserRegistrationReject != prevProps.computeUserRegistrationReject
-    if (test1 || test2 || test3 || test4) {
-      this.fetchData(this.props)
-    }
   }
 
   componentDidMount() {
@@ -186,10 +126,6 @@ export class UserTasks extends React.Component {
         id: this.state.userRegistrationTasksPath,
         entity: this.props.computeUserRegistrationTasks,
       },
-      {
-        id: this.state.lastActionedTaskId,
-        entity: this.props.computeUserTasksReject,
-      },
     ])
 
     const computeUserRegistrationTasks = ProviderHelpers.getEntry(
@@ -225,7 +161,7 @@ export class UserTasks extends React.Component {
     }
 
     // Compute User Registration Tasks
-    (selectn('response.entries', computeUserRegistrationTasks) || []).map(
+    ;(selectn('response.entries', computeUserRegistrationTasks) || []).map(
       function registrationTasksMap(task, i) {
         const uid = selectn('uid', task)
 
@@ -351,27 +287,17 @@ export class UserTasks extends React.Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvUser, nuxeo, tasks, locale } = state
+  const { fvDialect, fvUser, tasks, nuxeo, locale } = state
 
   const { computeLogin } = nuxeo
   const { computeDialect2 } = fvDialect
-  const {
-    computeUserRegistrationApprove,
-    computeUserRegistrationReject,
-    computeUserRegistrationTasks,
-    computeUserTasksApprove,
-    computeUserTasksReject,
-  } = tasks
+  const { computeUserRegistrationTasks } = tasks
   const { computeUserUpgrade } = fvUser
   const { intlService } = locale
   return {
     computeDialect2,
     computeLogin,
-    computeUserRegistrationApprove,
-    computeUserRegistrationReject,
     computeUserRegistrationTasks,
-    computeUserTasksApprove,
-    computeUserTasksReject,
     computeUserUpgrade,
     intl: intlService,
   }
@@ -379,12 +305,8 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  approveRegistration,
-  approveTask,
   fetchDialect2,
   fetchUserRegistrationTasks,
-  rejectRegistration,
-  rejectTask,
   userUpgrade,
 }
 

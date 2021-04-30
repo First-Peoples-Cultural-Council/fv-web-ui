@@ -99,6 +99,10 @@ export class PageToolbar extends Component {
 
     const permissionEntity = selectn('response', computePermissionEntity) ? computePermissionEntity : computeEntity
     const computeEntities = Immutable.fromJS([{ id: selectn('response.uid', computeEntity), entity: computeEntity }])
+    const hasUpublishedChanges = selectn(
+      'response.contextParameters.unpublished_changes.unpublished_changes_exist',
+      computeEntity
+    )
     const isRecorderWithApproval = ProviderHelpers.isRecorderWithApproval(this.props.computeLogin)
     const isAdmin = ProviderHelpers.isAdmin(this.props.computeLogin)
     const hasWritePriveleges = isRecorderWithApproval || isAdmin
@@ -171,9 +175,9 @@ export class PageToolbar extends Component {
                     className="PageToolbar__button"
                     color="secondary"
                     data-guide-role="publish-changes"
-                    disabled={!this.state.isPublished}
                     onClick={this._publishChanges}
                     variant="contained"
+                    disabled={!hasUpublishedChanges}
                   >
                     <FVLabel transKey="publish_changes" defaultStr="Publish Changes" transform="words" />
                   </FVButton>
@@ -195,6 +199,19 @@ export class PageToolbar extends Component {
                     <span style={{ whiteSpace: 'pre-wrap' }}>
                       {' ' + this.props.intl.searchAndReplace(this.props.label)}
                     </span>
+                  </FVButton>
+                </AuthorizationFilter>
+              ) : null}
+              {/* Button: Edit children */}
+              {actions.includes('edit-child') ? (
+                <AuthorizationFilter filter={{ permission: 'Write', entity: selectn('response', computeEntity) }}>
+                  <FVButton
+                    className="PageToolbar__button"
+                    color="secondary"
+                    onClick={this.props.handleNavigateRequest.bind(this, this.props.windowPath + '/edit/?mode=pages')}
+                    variant="contained"
+                  >
+                    <FVLabel transKey="edit_reorder_pages" defaultStr="Edit / Reorder Pages" transform="words" />
                   </FVButton>
                 </AuthorizationFilter>
               ) : null}

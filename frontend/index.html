@@ -242,6 +242,19 @@
       height: 39px;
     }
 
+    /* SITE WIDE BANNER */
+
+    .SiteWideBanner {
+      display: none;
+      width: 100%;
+      padding: 5px;
+      text-align: center;
+      bottom: 0;
+      left: 0;
+      position: fixed;
+      background-color: bisque;
+    }
+
     /* MODIFIERS */
 
     @media (max-width: 650px) {
@@ -441,7 +454,23 @@
         </div>
       </div>
 
+      <!-- Legacy Poll Banner -->
+      <div id="legacy-poll-banner" class="SiteWideBanner">
+        Are you used to the old version of FirstVoices!
+        <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=hRKXsozrpUuXD9XSdI7xHpo0N8bD6oNOikdaoW3v7tBUMjhCV0EyMDNNSTlZQVpJNDRHOEpQRlZDSC4u"
+          target="_blank">We'd like to hear your thoughts here</a>.
+      </div>
+
       <script type=text/javascript>
+
+        // Poll for legacy users
+        window.addEventListener('load', function () {
+          const urlParams = new URLSearchParams(window.location.search);
+          const fromLegacy = urlParams.get('legacy');
+          if (fromLegacy) {
+            document.getElementById('legacy-poll-banner').style.display = 'block'
+          }
+        })
 
         if (isWorkspace()) {
           // Set top nav bar color to Workspace default

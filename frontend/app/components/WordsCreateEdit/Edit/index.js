@@ -22,7 +22,7 @@ import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { changeTitleParams, overrideBreadcrumbs } from 'reducers/navigation'
 import { fetchDialect2 } from 'reducers/fvDialect'
-import { fetchWord, updateWord } from 'reducers/fvWord'
+import { fetchWord } from 'reducers/fvWord'
 import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
@@ -38,9 +38,6 @@ import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import FVLabel from 'components/FVLabel'
 import './WordsEdit.css'
-
-// Models
-import { Document } from 'nuxeo'
 
 // Views
 import fields from 'common/schemas/fields'
@@ -69,11 +66,9 @@ export class WordsEdit extends Component {
     pushWindowPath: func.isRequired,
     overrideBreadcrumbs: func.isRequired,
     replaceWindowPath: func.isRequired,
-    updateWord: func.isRequired,
   }
 
   state = {
-    formValue: null,
     componentState: STATE_LOADING,
     copy: {},
     is403: false,
@@ -90,9 +85,6 @@ export class WordsEdit extends Component {
   shouldComponentUpdate(newProps, newState) {
     const previousWord = this.props.computeWord
     const nextWord = newProps.computeWord
-
-    // const previousDialect = this.props.computeDialect2
-    // const nextDialect = newProps.computeDialect2
     switch (true) {
       case newProps.routeParams.word != this.props.routeParams.word:
         return true
@@ -103,19 +95,11 @@ export class WordsEdit extends Component {
       case typeof nextWord.equals === 'function' && nextWord.equals(previousWord) === false:
         return true
 
-      // case typeof nextDialect.equals === 'function' && nextDialect.equals(previousDialect) === false:
-      //   console.log(4)
-      //   return true
-
       case this.state.componentState != newState.componentState:
         return true
 
       case newProps.windowPath != this.props.windowPath:
         return true
-
-      // case is(newProps.computeDialect2, this.props.computeDialect2) === false:
-      //   console.log(7)
-      //   return true
 
       case is(newProps.computeWord, this.props.computeWord) === false:
         return true
@@ -234,21 +218,6 @@ export class WordsEdit extends Component {
     return _props.routeParams.dialect_path + '/Dictionary/' + StringHelpers.clean(_props.routeParams.word)
   }
 
-  _handleSave = (word, formValue) => {
-    const newDocument = new Document(word.response, {
-      repository: word.response._repository,
-      nuxeo: word.response._nuxeo,
-    })
-
-    // Set new value property on document
-    newDocument.set(formValue)
-
-    // Save document
-    this.props.updateWord(newDocument, null, null)
-
-    this.setState({ formValue: formValue })
-  }
-
   _handleCancel = () => {
     if (this.state.redirect) {
       NavigationHelpers.navigate(this.state.redirect, this.props.pushWindowPath, false)
@@ -315,11 +284,11 @@ export class WordsEdit extends Component {
 
             <EditViewWithForm
               computeEntities={computeEntities}
+              computeDialect={computeDialect2}
               initialValues={context}
               itemId={this._getWordPath()}
               fields={fields}
               options={options}
-              saveMethod={this._handleSave}
               cancelMethod={this._handleCancel}
               currentPath={this.props.splitWindowPath}
               navigationMethod={this.props.replaceWindowPath}
@@ -364,7 +333,6 @@ const mapDispatchToProps = {
   pushWindowPath,
   overrideBreadcrumbs,
   replaceWindowPath,
-  updateWord,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(WordsEdit)

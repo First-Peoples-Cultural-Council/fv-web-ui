@@ -340,7 +340,7 @@
     "guest": "Visitante",
     "guest_account_with_access_rights": "<B>Cuenta de visitante solamente</B> (puede ver todos los archivos p\u00fablicos)",
     "guide": "gu\u00eda",
-    "hangman": "Juego de ahorcado",
+    "parachute": "Juego de ahorcado",
     "headline": "Encabezado",
     "hear_welcome_greet": "para escuchar un saludo de bienvenida en",
     "help": "AYUDA",
@@ -1260,7 +1260,7 @@
             "archive_contains": "El archivo contiene",
             "coloring_book": [],
             "concentration": [],
-            "hangman": {
+            "parachute": {
               "guess_puzzle_to_make_it_to_the_beach": "Resuelve el rompecabezas para poder llegar a la playa",
               "new_puzzle": "Nuevo rompecabezas",
               "oh_no": "\u00a1Oh, no! Se han acabado los intentos. No renuncies a\u00fan. \u00a1Int\u00e9ntalo de nuevo!",

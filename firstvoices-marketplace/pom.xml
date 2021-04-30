@@ -35,11 +35,6 @@
     </dependency>
     <dependency>
       <groupId>ca.firstvoices</groupId>
-      <artifactId>firstvoices-export</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ca.firstvoices</groupId>
       <artifactId>firstvoices-data</artifactId>
       <version>${project.version}</version>
     </dependency>

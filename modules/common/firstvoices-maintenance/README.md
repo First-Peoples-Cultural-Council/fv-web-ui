@@ -3,7 +3,6 @@
 ## Module Description
 This module defines and handles both routine and one time maintenance operations against data in FirstVoices.
 It is intended for working on long operations that will usually be done via workers and on a schedule.
-For example, it currently handles migrating categories from SharedCategories to local categories.
 
 ## Learn More
 

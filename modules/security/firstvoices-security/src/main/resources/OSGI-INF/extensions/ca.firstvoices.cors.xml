@@ -1,0 +1,13 @@
+<component name="ca.firstvoices.security.cors">
+
+  <extension target="org.nuxeo.ecm.platform.web.common.requestcontroller.service.RequestControllerService"
+             point="corsConfig">
+
+    <corsConfig allowOrigin="*" name="firstVoicesCors" supportedMethods="GET, POST, HEAD, OPTIONS, PUT, DELETE">
+
+      <pattern>/nuxeo/.*</pattern>
+
+    </corsConfig>
+  </extension>
+
+</component>

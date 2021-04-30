@@ -20,6 +20,8 @@
 
 package ca.firstvoices.characters.services;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 
@@ -32,6 +34,17 @@ public interface AddConfusablesService {
    * @param dialect Dialect to add confusables to.
    */
   void addConfusables(CoreSession session, DocumentModel dialect);
+
+  /**
+   * Add confusables from all other dialects to this alphabet
+   */
+  void addConfusablesFromAllDialects(CoreSession session, DocumentModel dialect);
+
+  /**
+   * Returns a list of uppercase and lowercase confusables across the site
+   */
+  HashMap<String, HashSet<String>> getConfusablesFromAllDialects(CoreSession session,
+      DocumentModel dialect);
 
   DocumentModel updateConfusableCharacters(CoreSession session, DocumentModel characterDocument,
       DocumentModel dialect, String characterToUpdate, String[] newConfusables);

@@ -28,7 +28,7 @@ Default styling
     { title: 'x' },
     { title: 'c' },
   ]}
-  language="jestLanguage"
+  language="TestLanguage"
   selectedData={{
     title: "k'",
     uid: 'e1134fc0-e4c4-4684-89d8-fb7ee1bd9bff',
@@ -41,7 +41,7 @@ Default styling
         definitions: ['defn1', 'defn2'],
         src:
           'https://dev.firstvoices.com/nuxeo/nxfile/default/15761975-8249-400c-a9e2-4a5357ca7ce9/file:content/sample1.mp3',
-        url: '/jestLanguage/word/1-2-3',
+        url: '/TestLanguage/word/1-2-3',
       },
       {
         uid: '1-2-3',
@@ -49,7 +49,7 @@ Default styling
         definitions: ['defn1', 'defn2'],
         src:
           'https://dev.firstvoices.com/nuxeo/nxfile/default/15761975-8249-400c-a9e2-4a5357ca7ce9/file:content/sample1.mp3',
-        url: '/jestLanguage/word/1-2-3',
+        url: '/TestLanguage/word/1-2-3',
       },
       {
         uid: '1-2-3',
@@ -57,7 +57,7 @@ Default styling
         definitions: ['defn1', 'defn2'],
         src:
           'https://dev.firstvoices.com/nuxeo/nxfile/default/15761975-8249-400c-a9e2-4a5357ca7ce9/file:content/sample1.mp3',
-        url: '/jestLanguage/word/1-2-3',
+        url: '/TestLanguage/word/1-2-3',
       },
     ],
   }}

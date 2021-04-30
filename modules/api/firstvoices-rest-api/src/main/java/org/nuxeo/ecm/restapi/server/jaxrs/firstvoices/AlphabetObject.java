@@ -93,35 +93,94 @@ public class AlphabetObject extends DefaultObject {
         }
       }
 
-      String[] relatedAudio = (String[]) charDoc
-          .getPropertyValue("fvcore:related_audio");
-      if (relatedAudio != null) {
-        for (String audioId: relatedAudio) {
-          RelatedMedia m = mediaFromId(session, audioId);
-          if (m != null) {
-            c.getRelatedAudio().add(m);
+      String customOrder = (String) charDoc.getPropertyValue("fv:custom_order");
+      if (customOrder != null) {
+        c.setCustomOrder(customOrder);
+      }
+
+      Object audio = charDoc.getPropertyValue("fv:related_audio");
+      if (audio != null) {
+        if (audio instanceof String) {
+          c.getRelatedAudio().add(mediaFromId(session, (String) audio));
+        }
+        if (audio instanceof List) {
+          for (Object s : (List) audio) {
+            if (s != null) {
+              if (s instanceof String) {
+                c.getRelatedAudio().add(mediaFromId(session, (String) s));
+              } else {
+                c.getRelatedAudio().add(mediaFromId(session, s.toString()));
+              }
+            }
+          }
+        }
+        if (audio instanceof Object[]) {
+          for (Object s : (Object[]) audio) {
+            if (s != null) {
+              if (s instanceof String) {
+                c.getRelatedAudio().add(mediaFromId(session, (String) s));
+              } else {
+                c.getRelatedAudio().add(mediaFromId(session, s.toString()));
+              }
+            }
           }
         }
       }
 
-      String[] relatedPictures =  (String[]) charDoc
-          .getPropertyValue("fvcore:related_pictures");
-      if (relatedPictures != null) {
-        for (String pictureId: relatedPictures) {
-          RelatedMedia m = mediaFromId(session, pictureId);
-          if (m != null) {
-            c.getRelatedPictures().add(m);
+      Object pictures = charDoc.getPropertyValue("fv:related_pictures");
+      if (pictures != null) {
+        if (pictures instanceof String) {
+          c.getRelatedPictures().add(mediaFromId(session, (String) audio));
+        }
+        if (pictures instanceof List) {
+          for (Object s : (List) pictures) {
+            if (s != null) {
+              if (s instanceof String) {
+                c.getRelatedPictures().add(mediaFromId(session, (String) s));
+              } else {
+                c.getRelatedPictures().add(mediaFromId(session, s.toString()));
+              }
+            }
+          }
+        }
+        if (pictures instanceof Object[]) {
+          for (Object s : (Object[]) pictures) {
+            if (s != null) {
+              if (s instanceof String) {
+                c.getRelatedPictures().add(mediaFromId(session, (String) s));
+              } else {
+                c.getRelatedPictures().add(mediaFromId(session, s.toString()));
+              }
+            }
           }
         }
       }
 
-      String[] relatedVideo = (String[]) charDoc
-          .getPropertyValue("fvcore:related_videos");
-      if (relatedVideo != null) {
-        for (String videoId: relatedVideo) {
-          RelatedMedia m = mediaFromId(session, videoId);
-          if (m != null) {
-            c.getRelatedVideo().add(m);
+      Object videos = charDoc.getPropertyValue("fv:related_videos");
+      if (videos != null) {
+        if (videos instanceof String) {
+          c.getRelatedVideo().add(mediaFromId(session, (String) audio));
+        }
+        if (videos instanceof List) {
+          for (Object s : (List) videos) {
+            if (s != null) {
+              if (s instanceof String) {
+                c.getRelatedVideo().add(mediaFromId(session, (String) s));
+              } else {
+                c.getRelatedVideo().add(mediaFromId(session, s.toString()));
+              }
+            }
+          }
+        }
+        if (videos instanceof Object[]) {
+          for (Object s : (Object[]) videos) {
+            if (s != null) {
+              if (s instanceof String) {
+                c.getRelatedVideo().add(mediaFromId(session, (String) s));
+              } else {
+                c.getRelatedVideo().add(mediaFromId(session, s.toString()));
+              }
+            }
           }
         }
       }
@@ -136,20 +195,21 @@ public class AlphabetObject extends DefaultObject {
   private static Word wordFromId(CoreSession session, String id) {
     DocumentModel dom = session.getDocument(new IdRef(id));
     if (dom != null) {
-      Word w = new Word(id, (String) dom.getPropertyValue("fv-word:part_of_speech"),
+      Word w = new Word(id,
+          (String) dom.getPropertyValue("fv-word:part_of_speech"),
           dom.getTitle());
 
       ArrayList<HashMap<String, String>> definitions =
           (ArrayList<HashMap<String, String>>) dom.getPropertyValue("fv:definitions");
       if (definitions != null) {
-        for (HashMap<String, String> definition: definitions) {
+        for (HashMap<String, String> definition : definitions) {
           w.getTranslations().put(definition.get("language"), definition.get("translation"));
         }
       }
 
       String[] relatedAudio = (String[]) dom.getPropertyValue("fvcore:related_audio");
       if (relatedAudio != null) {
-        for (String audioId: relatedAudio) {
+        for (String audioId : relatedAudio) {
           RelatedMedia m = mediaFromId(session, audioId);
           if (m != null) {
             w.getRelatedAudio().add(m);
@@ -185,11 +245,7 @@ public class AlphabetObject extends DefaultObject {
         // why does this trigger an exception? Nuxeo is astonishing.
       }
 
-      return new RelatedMedia(id,
-          dom.getTitle(),
-          mimeType,
-          binaryPath
-         );
+      return new RelatedMedia(id, dom.getTitle(), mimeType, binaryPath);
     }
     return null;
   }

@@ -14,7 +14,6 @@ function SearchContainer() {
   const {
     actions,
     currentFilter,
-    error,
     filters,
     handleFilter,
     handleSearchSubmit,
@@ -23,13 +22,13 @@ function SearchContainer() {
     items,
     newSearchValue,
     searchTerm,
-    sitename,
+    siteShortUrl,
+    siteTitle,
   } = SearchData()
   return (
     <SearchPresentation
       actions={actions}
       currentFilter={currentFilter}
-      error={error}
       filters={filters}
       handleFilter={handleFilter}
       handleSearchSubmit={handleSearchSubmit}
@@ -38,7 +37,8 @@ function SearchContainer() {
       items={items}
       newSearchValue={newSearchValue}
       searchTerm={searchTerm}
-      sitename={sitename}
+      siteShortUrl={siteShortUrl}
+      siteTitle={siteTitle}
     />
   )
 }

@@ -438,15 +438,6 @@ const routes = [
   },
   {
     siteTheme: WORKSPACES,
-    id: 'tasks',
-    path: ['tasks'],
-    title: intl.translate({ key: 'tasks', default: 'Tasks', case: 'first' }),
-    page: <Pages.PageTasks />,
-    disableWorkspaceSectionNav: true,
-    breadcrumbs: false,
-  },
-  {
-    siteTheme: WORKSPACES,
     path: ['tasks', 'users', new paramMatch('dialect', ANYTHING_BUT_SLASH)],
     title: intl.translate({ key: 'tasks', default: 'Tasks', case: 'first' }),
     page: <Pages.PageUserTasks type="users" />,
@@ -770,7 +761,7 @@ const routes = [
       ANYTHING_BUT_SLASH,
       'learn',
       'alphabet',
-      new paramMatch('character', ANYTHING_BUT_SLASH),
+      new paramMatch('characterId', ANYTHING_BUT_SLASH),
     ],
     title:
       intl.translate({
@@ -799,7 +790,7 @@ const routes = [
       ANYTHING_BUT_SLASH,
       'learn',
       'alphabet',
-      new paramMatch('character', ANYTHING_BUT_SLASH),
+      new paramMatch('characterId', ANYTHING_BUT_SLASH),
       'edit',
     ],
     title:
@@ -957,7 +948,7 @@ const routes = [
         case: 'words',
       }) +
       ' | {$dialect_name}',
-    page: <Pages.PageHangman />,
+    page: <Pages.PageParachute />,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
     extractPaths: true,
   },

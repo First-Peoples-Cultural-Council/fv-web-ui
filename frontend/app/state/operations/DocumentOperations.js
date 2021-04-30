@@ -26,13 +26,15 @@ export default class DocumentOperations {
    * createDocument
    * --------------------------------------
    */
-  static createDocument(parentDocPathOrId, docParams) {
+  static createDocument(parentDocPathOrId, docParams, headers = {}) {
     const properties = BaseOperations.getProperties()
+    const defaultHeaders = { 'enrichers.document': 'breadcrumb' }
+    const headersToSend = Object.assign(defaultHeaders, headers)
 
     return new Promise((resolve, reject) => {
       properties.client
         .repository()
-        .create(parentDocPathOrId, docParams, { headers: { 'enrichers.document': 'breadcrumb' } })
+        .create(parentDocPathOrId, docParams, { headers: headersToSend })
         .then((doc) => {
           resolve(doc)
         })
@@ -127,51 +129,7 @@ export default class DocumentOperations {
       }
     })
   }
-  /*
-   * disableDocument
-   * --------------------------------------
-   */
-  static disableDocument(pathOrUid) {
-    const properties = BaseOperations.getProperties()
 
-    return new Promise((resolve, reject) => {
-      properties.client
-        .operation('FVDisableDocument')
-        .input(pathOrUid)
-        .execute()
-        .then((doc) => {
-          resolve(doc)
-        })
-        .catch((error) => {
-          error.response.json().then((jsonError) => {
-            reject(StringHelpers.extractErrorMessage(jsonError))
-          })
-        })
-    })
-  }
-
-  /*
-   * enableDocument
-   * --------------------------------------
-   */
-  static enableDocument(pathOrUid) {
-    const properties = BaseOperations.getProperties()
-
-    return new Promise((resolve, reject) => {
-      properties.client
-        .operation('FVEnableDocument')
-        .input(pathOrUid)
-        .execute()
-        .then((doc) => {
-          resolve(doc)
-        })
-        .catch((error) => {
-          error.response.json().then((jsonError) => {
-            reject(StringHelpers.extractErrorMessage(jsonError))
-          })
-        })
-    })
-  }
   /*
    * executeOperation
    * --------------------------------------
@@ -202,7 +160,7 @@ export default class DocumentOperations {
           resolve(response)
         })
         .catch((error) => {
-          if (error.hasOwnProperty('response')) {
+          if (Object.prototype.hasOwnProperty.call(error, 'response')) {
             error.response.json().then((jsonError) => {
               reject(StringHelpers.extractErrorMessage(jsonError))
             })
@@ -264,10 +222,10 @@ export default class DocumentOperations {
           resolve(doc)
         })
         .catch((error) => {
-          if (error.hasOwnProperty('response')) {
+          if (Object.prototype.hasOwnProperty.call(error, 'response')) {
             error.response.json().then((jsonError) => {
               // Note: Intentional == comparison
-              if (jsonError.hasOwnProperty('status') && jsonError.status == '404') {
+              if (Object.prototype.hasOwnProperty.call(jsonError, 'status') && jsonError.status == '404') {
                 jsonError.message =
                   jsonError.message +
                   ' (404 - ' +
@@ -278,7 +236,7 @@ export default class DocumentOperations {
                   ')'
               }
               // Note: intentional == comparison
-              if (jsonError.hasOwnProperty('status') && jsonError.status == '403') {
+              if (Object.prototype.hasOwnProperty.call(jsonError, 'status') && jsonError.status == '403') {
                 reject(jsonError.status)
               }
 
@@ -413,29 +371,6 @@ export default class DocumentOperations {
               append: '.',
             })
           )
-        })
-    })
-  }
-
-  /*
-   * unpublishDialect
-   * --------------------------------------
-   */
-  static unpublishDialect(pathOrUid) {
-    const properties = BaseOperations.getProperties()
-
-    return new Promise((resolve, reject) => {
-      properties.client
-        .operation('FVUnpublishDialect')
-        .input(pathOrUid)
-        .execute()
-        .then((doc) => {
-          resolve(doc)
-        })
-        .catch((error) => {
-          error.response.json().then((jsonError) => {
-            reject(StringHelpers.extractErrorMessage(jsonError))
-          })
         })
     })
   }

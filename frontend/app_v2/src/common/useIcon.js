@@ -2,8 +2,10 @@ import React from 'react'
 
 import About from 'common/icons/About'
 import Audio from 'common/icons/Audio'
+import BackArrow from 'common/icons/BackArrow'
 import Book from 'common/icons/Book'
 import ChatBubble from 'common/icons/ChatBubble'
+import Checkmark from 'common/icons/Checkmark'
 import ChevronDown from 'common/icons/ChevronDown'
 import ChevronLeft from 'common/icons/ChevronLeft'
 import ChevronRight from 'common/icons/ChevronRight'
@@ -32,6 +34,7 @@ import Spinner from 'common/icons/Spinner'
 import Resources from 'common/icons/Resources'
 import TimesCircle from 'common/icons/TimesCircle'
 import Twitter from 'common/icons/Twitter'
+import UnfoldMore from 'common/icons/UnfoldMore'
 import WebShare from 'common/icons/WebShare'
 import Youtube from 'common/icons/Youtube'
 
@@ -42,8 +45,10 @@ function useIcon(iconName, iconStyling) {
   const icons = {
     About,
     Audio,
+    BackArrow,
     Book,
     ChatBubble,
+    Checkmark,
     ChevronDown,
     ChevronLeft,
     ChevronRight,
@@ -72,6 +77,7 @@ function useIcon(iconName, iconStyling) {
     Spinner,
     TimesCircle,
     Twitter,
+    UnfoldMore,
     WebShare,
     Youtube,
   }

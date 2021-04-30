@@ -14,6 +14,7 @@ import NavBarData from 'components/NavBar/NavBarData'
 function NavBarContainer({ className }) {
   const {
     currentUser,
+    logoUrl,
     menuData,
     title,
     onWorkspaceModeClick,
@@ -29,6 +30,7 @@ function NavBarContainer({ className }) {
       onWorkspaceModeClick={onWorkspaceModeClick}
       title={title}
       currentUser={currentUser}
+      logoUrl={logoUrl}
       menuData={menuData}
       onMenuClick={onMenuClick}
       openMenu={openMenu}

@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import AlphabetPresentationSelected from 'components/Alphabet/AlphabetPresentationSelected'
-import useIcon from 'common/useIcon'
 /**
  * @summary AlphabetPresentationWidget
  * @component
@@ -12,32 +11,8 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function AlphabetPresentationWidget({ characters, error, isLoading, onCharacterClick, links, selectedData }) {
-  if (isLoading) {
-    return (
-      <div className="flex justify-around p-10">
-        <button
-          type="button"
-          className="bg-fv-orange border border-transparent items-center inline-flex px-5 py-2 rounded-md shadow-sm text-base text-white ease-in-out"
-          disabled
-        >
-          {useIcon('Spinner', 'animate-spin h-5 w-5 mr-3 fill-current')}
-          Loading
-        </button>
-      </div>
-    )
-  }
-  if (error) {
-    return (
-      <div className="p-10">
-        <h1>Sorry, something went wrong!</h1>
-        <p>Please report this error by emailing hello@firstvoices.com so that we can fix it.</p>
-        <p>Include the link or action you took to get to this page.</p>
-        <p>Thank You!</p>
-      </div>
-    )
-  }
-  return (
+function AlphabetPresentationWidget({ characters, onCharacterClick, links, selectedData, onVideoClick, videoIsOpen }) {
+  return characters ? (
     <section className="py-12 bg-white" data-testid="AlphabetPresentationWidget">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative">
@@ -50,7 +25,7 @@ function AlphabetPresentationWidget({ characters, error, isLoading, onCharacterC
           <div className="col-span-7 md:col-span-4">
             <div className="grid grid-cols-7 md:grid-cols-5 lg:grid-cols-7">
               {characters &&
-                characters.map(({ title, uid }) => {
+                characters.map(({ title, id }) => {
                   return (
                     <button
                       data-testid={
@@ -69,7 +44,7 @@ function AlphabetPresentationWidget({ characters, error, isLoading, onCharacterC
                       text-2xl
                       ${selectedData?.title === title ? 'bg-fv-blue text-white' : ''}
                       `}
-                      key={uid}
+                      key={id}
                       onClick={() => onCharacterClick(title)}
                     >
                       {title}
@@ -87,7 +62,7 @@ function AlphabetPresentationWidget({ characters, error, isLoading, onCharacterC
                 Please select a character
               </div>
             )}
-            {selectedData && AlphabetPresentationSelected({ selectedData })}
+            {selectedData?.id && AlphabetPresentationSelected({ selectedData, onVideoClick, videoIsOpen })}
             {links && (
               <ul className="text-center mt-10">
                 {links.map(({ url, title }, index) => {
@@ -103,17 +78,15 @@ function AlphabetPresentationWidget({ characters, error, isLoading, onCharacterC
         </div>
       </div>
     </section>
-  )
+  ) : null
 }
 // PROPTYPES
 const { bool, array, func, string, shape, arrayOf, object } = PropTypes
 AlphabetPresentationWidget.propTypes = {
-  isLoading: bool,
-  error: array,
   characters: arrayOf(
     shape({
       title: string,
-      uid: string,
+      id: string,
       src: string,
       relatedEntries: array,
     })
@@ -121,10 +94,13 @@ AlphabetPresentationWidget.propTypes = {
   onCharacterClick: func,
   selectedData: object,
   links: array,
+  onVideoClick: func,
+  videoIsOpen: bool,
 }
 
 AlphabetPresentationWidget.defaultProps = {
   onCharacterClick: () => {},
+  onVideoClick: () => {},
 }
 
 export default AlphabetPresentationWidget

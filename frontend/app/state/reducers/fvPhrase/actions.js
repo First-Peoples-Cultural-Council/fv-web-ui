@@ -1,4 +1,4 @@
-import { create, _delete, execute, fetch, query, update } from 'reducers/rest'
+import { create, _delete, execute, fetch, query } from 'reducers/rest'
 import DirectoryOperations from 'operations/DirectoryOperations'
 import {
   FV_PHRASES_SHARED_FETCH_START,
@@ -51,33 +51,16 @@ export const fetchPhrase = fetch('FV_PHRASE', 'FVPhrase', {
 
 export const fetchPhrases = query('FV_PHRASES', 'FVPhrase', { headers: { 'enrichers.document': 'phrase' } })
 
-export const createPhrase = create('FV_PHRASE', 'FVPhrase', {
-  headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
-})
+export const createPhrase = create('FV_PHRASE', 'FVPhrase', {})
 
-export const updatePhrase = update(
-  'FV_PHRASE',
-  'FVPhrase',
-  { headers: { 'enrichers.document': 'ancestry,phrase,permissions' } },
-  false
-)
+export const createAndPublishPhrase = create('FV_PHRASE', 'FVPhrase', {
+  headers: { 'fv-publish': true },
+})
 
 export const deletePhrase = _delete('FV_PHRASE', 'FVPhrase', {})
 
 // Document.FollowLifecycleTransition expects a param that specifies the type of transition to take place e.g. { value: 'Republish' }
 export const publishPhrase = execute('FV_PHRASE_PUBLISH', 'Document.FollowLifecycleTransition', {
-  headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
-})
-
-export const unpublishPhrase = execute('FV_PHRASE_UNPUBLISH', 'FVUnpublishDialect', {
-  headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
-})
-
-export const enablePhrase = execute('FV_PHRASE_ENABLE', 'FVEnableDocument', {
-  headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
-})
-
-export const disablePhrase = execute('FV_PHRASE_DISABLE', 'FVDisableDocument', {
   headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
 })
 

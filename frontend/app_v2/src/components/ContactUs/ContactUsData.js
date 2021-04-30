@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import * as yup from 'yup'
 
 import api from 'services/api'
-import { getFormData, validateForm } from 'common/FormHelpers'
+import { getFormData, validateForm } from 'common/formHelpers'
 /**
  * @summary ContactUsData
  * @component
@@ -28,7 +28,7 @@ function ContactUsData({ siteId, contactEmail }) {
     const validationResults = await validateForm({ formData, validator })
 
     if (validationResults.valid) {
-      api.postMail({
+      api.mail.post({
         docId: siteId,
         name: formData.Name,
         from: formData.Email,

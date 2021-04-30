@@ -9,8 +9,30 @@ module.exports = {
       xl: '1280px',
     },
     extend: {
+      animation: {
+        'pulse-blur': 'pulse-blur 2.5s linear infinite',
+      },
+      borderRadius: {
+        '4xl': '3rem',
+      },
       fontSize: {
         xxs: '.5rem',
+      },
+      keyframes: {
+        'pulse-blur': {
+          '0%, 50%, 100%': {
+            transform: 'scale(1)',
+            filter: 'blur(0px)',
+          },
+          '25%': {
+            transform: 'scale(0.6)',
+            filter: 'blur(2px)',
+          },
+          '75%': {
+            transform: 'scale(1.4)',
+            filter: 'blur(2px)',
+          },
+        },
       },
       colors: {
         'fv-red': {
@@ -51,10 +73,6 @@ module.exports = {
         'fv-yellow': {
           DEFAULT: '#F4E31E',
         },
-      },
-      borderRadius: {
-        50: '3.13rem',
-        25: '1.6rem',
       },
     },
   },

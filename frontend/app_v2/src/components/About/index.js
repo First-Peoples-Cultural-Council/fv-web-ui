@@ -1,7 +1,8 @@
 import AboutContainer from 'components/About/AboutContainer'
-import AboutData from 'components/About/AboutData'
+import AboutPresentation from 'components/About/AboutPresentation'
 
 export default {
   Container: AboutContainer,
-  Data: AboutData,
+  Presentation: AboutPresentation,
+  Data: {},
 }

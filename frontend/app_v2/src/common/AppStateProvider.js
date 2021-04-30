@@ -1,19 +1,20 @@
 import PropTypes from 'prop-types'
 import React, { useReducer, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
+import { useQuery } from 'react-query'
 import useLocalStorage from 'react-use-localstorage'
 import useRoute from 'app_v1/useRoute'
 
 import AppStateContext from 'common/AppStateContext'
 import { reducerInitialState, reducer } from 'common/reducer'
+import { triggerError } from 'common/navigationHelpers'
 
 import api from 'services/api'
-import getSiteAdaptor from 'services/api/adaptors/getSite'
-import getUserAdaptor from 'services/api/adaptors/getUser'
 import AudioMachineData from 'components/AudioMachine/AudioMachineData'
 import MenuMachineData from 'components/MenuMachine/MenuMachineData'
 function AppStateProvider({ children }) {
   const [workspaceToggle, setWorkspaceToggle] = useLocalStorage('fpcc:workspaceToggle', false)
+  const history = useHistory()
   const { sitename } = useParams()
   const { machine, send } = AudioMachineData()
   const { machine: menuMachine, send: menuSend } = MenuMachineData()
@@ -21,21 +22,24 @@ function AppStateProvider({ children }) {
 
   // Get language data
   // --------------------------------
-  const { isLoading: siteIsLoading, error: siteError, data: siteData } = api.getSite(sitename, getSiteAdaptor)
+  const { isLoading: siteIsLoading, error: siteError, data: siteData } = useQuery(['site', sitename], () =>
+    api.site.get(sitename)
+  )
   useEffect(() => {
     if (siteIsLoading === false && siteError === null) {
-      dispatch({ type: 'api.getSite', payload: siteData })
+      dispatch({ type: 'api.site.get', payload: siteData })
     }
+    if (siteError) triggerError(siteError, history)
   }, [siteIsLoading, siteError])
 
   // Get user data
   // --------------------------------
-  const { isLoading: isLoadingGetUser, error: errorGetUser, data: dataGetUser } = api.getUser(getUserAdaptor)
+  const { isLoading: userIsLoading, error: userError, data: userData } = useQuery('user', () => api.user.get())
   useEffect(() => {
-    if (isLoadingGetUser === false && errorGetUser === null) {
-      dispatch({ type: 'api.getUser', payload: dataGetUser })
+    if (userIsLoading === false && userError === null) {
+      dispatch({ type: 'api.user.get', payload: userData })
     }
-  }, [isLoadingGetUser, errorGetUser])
+  }, [userIsLoading, userError])
 
   // Sets internal Redux > routeParams value over in V1
   // (eg: used for displaying words)

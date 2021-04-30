@@ -52,7 +52,6 @@ function PhraseData({ children }) {
   const definitions = selectn('properties.fv:definitions', phraseRawData)
   const docType = selectn('type', phraseRawData)
   const generalNote = selectn('properties.fv:general_note', phraseRawData)
-  const literalTranslations = selectn('properties.fv:literal_translation', phraseRawData)
   const photos = selectn('contextParameters.phrase.related_pictures', phraseRawData) || []
   const phrasebooks = selectn('contextParameters.phrase.phrase_books', phraseRawData) || []
   const relatedAssets = selectn('contextParameters.phrase.related_assets', phraseRawData) || []
@@ -109,7 +108,6 @@ function PhraseData({ children }) {
     definitions,
     dialectClassName,
     generalNote,
-    literalTranslations,
     photos,
     properties,
     pushWindowPath,

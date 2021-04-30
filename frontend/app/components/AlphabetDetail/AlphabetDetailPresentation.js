@@ -29,7 +29,6 @@ import LiteralUnicodePresentation from 'components/LiteralUnicode/LiteralUnicode
 import PageToolbar from 'components/PageToolbar'
 import PhraseListView from 'components/PhrasesCreateEdit/list-view'
 import Preview from 'components/Preview'
-import PromiseWrapper from 'components/PromiseWrapper'
 import WordListView from 'components/WordsCreateEdit/list-view'
 
 import './AlphabetDetail.css'
@@ -63,7 +62,6 @@ function AlphabetDetailPresentation({
   character,
   computedCharacter,
   computedDialect2,
-  computeEntities,
   computeLogin,
   currentAppliedFilter,
   intl,
@@ -78,7 +76,7 @@ function AlphabetDetailPresentation({
   tabValue,
 }) {
   return (
-    <PromiseWrapper computeEntities={computeEntities}>
+    <>
       {shouldRenderPageToolbar && (
         <div className="row">
           <PageToolbar
@@ -279,7 +277,7 @@ function AlphabetDetailPresentation({
           </div>
         </div>
       </div>
-    </PromiseWrapper>
+    </>
   )
 }
 // PROPTYPES

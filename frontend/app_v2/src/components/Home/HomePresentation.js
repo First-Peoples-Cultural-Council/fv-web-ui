@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import About from 'components/About'
 import Alphabet from 'components/Alphabet'
 import ContactUs from 'components/ContactUs'
 import Hero from 'components/Hero'
@@ -12,6 +13,7 @@ import SearchInput from 'components/SearchInput'
 import CircleImage from 'components/CircleImage'
 import useIcon from 'common/useIcon'
 import {
+  WIDGET_ABOUT,
   WIDGET_ALPHABET,
   WIDGET_CONTACT,
   WIDGET_GALLERY,
@@ -30,36 +32,12 @@ import {
  *
  * @returns {node} jsx markup
  */
-function HomePresentation({ isLoading, error, data, language }) {
+function HomePresentation({ data, language }) {
   const widgets = data ? data.widgets : []
   const fallBackIcon = useIcon('Spinner', 'fill-current w-56 h-56 lg:w-72 lg:h-72')
-  if (isLoading) {
-    return (
-      <div className="flex justify-around p-10">
-        <button
-          type="button"
-          className="bg-fv-orange border border-transparent items-center inline-flex px-5 py-2 rounded-md shadow-sm text-base text-white ease-in-out"
-          disabled
-        >
-          {useIcon('Spinner', 'animate-spin h-5 w-5 mr-3 fill-current')}
-          Loading
-        </button>
-      </div>
-    )
-  }
-  if (error) {
-    return (
-      <div>
-        <h1>Sorry, something went wrong!</h1>
-        <p>Please check the url or report this error by emailing hello@firstvoices.com so that we can fix it.</p>
-        <p>Include the link or action you took to get to this page.</p>
-        <p>Thank You!</p>
-      </div>
-    )
-  }
   return (
     <div>
-      {widgets.length > 0 &&
+      {widgets?.length > 0 &&
         widgets.map(({ type, ...widgetProps }, index) => {
           if (type === WIDGET_HERO) {
             const { uid, background, variant } = widgetProps
@@ -120,6 +98,16 @@ function HomePresentation({ isLoading, error, data, language }) {
             )
           }
 
+          if (type === WIDGET_ABOUT) {
+            const { title, text, image, link } = widgetProps
+
+            return (
+              <div key={index} className="px-6">
+                <About.Container link={link} image={image} title={title} text={text} />
+              </div>
+            )
+          }
+
           if (type === WIDGET_ALPHABET) {
             return (
               <div key={index} className="px-6">
@@ -167,10 +155,8 @@ function HomePresentation({ isLoading, error, data, language }) {
   )
 }
 // PROPTYPES
-const { array, bool, oneOfType, string, shape } = PropTypes
+const { array, string, shape } = PropTypes
 HomePresentation.propTypes = {
-  isLoading: bool,
-  error: oneOfType([bool, array]),
   data: shape({
     uid: string,
     pageTitle: string,

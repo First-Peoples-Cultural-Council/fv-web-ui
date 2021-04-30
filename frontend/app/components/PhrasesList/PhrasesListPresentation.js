@@ -38,7 +38,6 @@ import 'components/DictionaryList/DictionaryList.css'
 
 const DictionaryListLargeScreen = React.lazy(() => import('components/DictionaryList/DictionaryListLargeScreen'))
 const DictionaryListSmallScreen = React.lazy(() => import('components/DictionaryList/DictionaryListSmallScreen'))
-const ExportDialect = React.lazy(() => import('components/ExportDialect'))
 const FlashcardList = React.lazy(() => import('components/FlashcardList'))
 
 const VIEWMODE_SMALL_SCREEN = 2
@@ -59,13 +58,8 @@ function PhrasesListPresentation(props) {
     childrenSearch,
     clickHandlerViewMode,
     columns,
-    dialect,
     dialectClassName,
     dictionaryListViewMode,
-    exportDialectColumns,
-    exportDialectExportElement,
-    exportDialectLabel,
-    exportDialectQuery,
     fetcher,
     fetcherParams,
     filter,
@@ -210,14 +204,6 @@ function PhrasesListPresentation(props) {
         <div className={dialectClassName}>
           {childrenSearch}
           {generateListButtons({
-            // Export
-            dialect,
-            exportDialectColumns,
-            exportDialectExportElement,
-            exportDialectLabel,
-            exportDialectQuery,
-            // Commented out until export is fixed
-            // hasExportDialect,
             // View mode
             clickHandlerViewMode,
             dictionaryListViewMode,
@@ -298,36 +284,8 @@ function PhrasesListPresentation(props) {
 
 // generateListButtons
 // ------------------------------------
-function generateListButtons({
-  // Export
-  dialect,
-  exportDialectColumns,
-  exportDialectExportElement,
-  exportDialectLabel,
-  exportDialectQuery,
-  hasExportDialect,
-  hasViewModeButtons,
-}) {
-  let exportDialect = null
-  if (hasExportDialect) {
-    exportDialect = (
-      <AuthorizationFilter filter={{ permission: 'Write', entity: dialect }}>
-        <ExportDialect
-          exportDialectColumns={exportDialectColumns}
-          exportDialectExportElement={exportDialectExportElement}
-          exportDialectLabel={exportDialectLabel}
-          exportDialectQuery={exportDialectQuery}
-        />
-      </AuthorizationFilter>
-    )
-  }
-
-  return (
-    <div className="WordsList__ListButtonsGroup">
-      {hasViewModeButtons && <FlashcardButton.Container />}
-      {exportDialect}
-    </div>
-  )
+function generateListButtons({ hasViewModeButtons }) {
+  return <div className="WordsList__ListButtonsGroup">{hasViewModeButtons && <FlashcardButton.Container />}</div>
 }
 
 // generateSortTitleLargeSmall
@@ -453,13 +411,8 @@ PhrasesListPresentation.propTypes = {
   childrenSearch: node,
   clickHandlerViewMode: func, // NOTE: event handler for clicks on view mode buttons (eg: Flashcard)
   columns: array.isRequired, // NOTE: Important prop. Defines table headers and how cells are rendered.
-  dialect: object, // NOTE: used to determine permissions with export dialect
   dialectClassName: string,
   dictionaryListViewMode: number, // NOTE: can force a specific view mode with this prop (eg: always in VIEWMODE_LARGE_SCREEN)
-  exportDialectColumns: string,
-  exportDialectExportElement: string,
-  exportDialectLabel: string,
-  exportDialectQuery: string,
   fetcher: func,
   fetcherParams: object, // NOTE: object of paging data: currentPageIndex, pageSize, filters
   filter: object,
@@ -480,7 +433,6 @@ PhrasesListPresentation.propTypes = {
 }
 
 PhrasesListPresentation.defaultProps = {
-  hasExportDialect: false,
   columns: [],
   clickHandlerViewMode: () => {},
   hasSorting: true,

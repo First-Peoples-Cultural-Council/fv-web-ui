@@ -1,6 +1,7 @@
 package org.nuxeo.ecm.restapi.server.jaxrs.firstvoices;
 
 import static ca.firstvoices.rest.data.SearchResults.SearchDomain;
+import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.rest.data.SearchResult;
 import ca.firstvoices.rest.data.SearchResults;
 import java.util.ArrayList;
@@ -8,11 +9,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import javax.print.Doc;
-import javax.swing.text.Document;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -22,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -32,6 +31,7 @@ import org.nuxeo.ecm.core.api.SortInfo;
 import org.nuxeo.ecm.webengine.model.WebObject;
 import org.nuxeo.ecm.webengine.model.impl.DefaultObject;
 import org.nuxeo.elasticsearch.api.ElasticSearchService;
+import org.nuxeo.elasticsearch.api.EsResult;
 import org.nuxeo.elasticsearch.fetcher.EsFetcher;
 import org.nuxeo.elasticsearch.query.NxQueryBuilder;
 import org.nuxeo.runtime.api.Framework;
@@ -45,11 +45,16 @@ public class SearchObject extends DefaultObject {
   @GET
   @Path("")
   public Response doSearch(
-      @QueryParam(value = "q") String query,
-      @QueryParam(value = "parentPath") String parent,
+      @QueryParam(value = "q") String query, @QueryParam(value = "parentPath") String parent,
       @QueryParam(value = "ancestorId") String ancestorId,
       @QueryParam(value = "docType") @DefaultValue("all") String docType,
-      @QueryParam(value = "domain") @DefaultValue("both") String domain) {
+      @QueryParam(value = "domain") @DefaultValue("both") String domain,
+      @QueryParam(value = "perPage") @DefaultValue("25") Integer perPage,
+      @QueryParam(value = "page") @DefaultValue("1") Integer from) {
+
+    if (perPage > 100) {
+      perPage = 100;
+    }
 
     SearchDomain searchDomain = SearchDomain.BOTH;
 
@@ -76,10 +81,7 @@ public class SearchObject extends DefaultObject {
     final CoreSession session = getContext().getCoreSession();
     final ElasticSearchService ess = Framework.getService(ElasticSearchService.class);
 
-    BoolQueryBuilder basicConstraints;
-
-    BoolQueryBuilder typesQuery = QueryBuilders
-        .boolQuery();
+    BoolQueryBuilder typesQuery = QueryBuilders.boolQuery();
 
     switch (documentTypes) {
 
@@ -100,12 +102,29 @@ public class SearchObject extends DefaultObject {
         break;
     }
 
+    float englishBoost = 1.0f;
+    float languageBoost = 1.0f;
+
+    switch (searchDomain) {
+      case ENGLISH:
+        englishBoost = 1.1f;
+        languageBoost = 0.4f;
+        break;
+      case LANGUAGE:
+        englishBoost = 0.4f;
+        languageBoost = 1.1f;
+        break;
+      case BOTH:
+      default:
+        break;
+    }
+
     typesQuery.minimumShouldMatch(1);
 
+    BoolQueryBuilder basicConstraints;
+
     basicConstraints = QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("ecm:isVersion",
-        false)).must(
-            typesQuery
-                    );
+        false)).must(typesQuery);
 
     if (ancestorId != null && ancestorId.trim().length() > 0) {
       //can't use ecm:ancestorId in ES, but we do have path
@@ -119,63 +138,64 @@ public class SearchObject extends DefaultObject {
       basicConstraints.must(QueryBuilders.wildcardQuery("ecm:path", parent + "*"));
     }
 
+    QueryBuilder exactMatchQuery = QueryBuilders.multiMatchQuery(query,
+        "ecm:fulltext_dictionary_all_field",
+        "dc:title").analyzer("keyword").type(MultiMatchQueryBuilder.Type.PHRASE).boost(1.3f);
+
+    QueryBuilder exactTitleMatch =
+        QueryBuilders.matchQuery("ecm:title.lowercase", query.toLowerCase()).boost(1.2f);
+
+    QueryBuilder phraseQuery = QueryBuilders.matchPhraseQuery("ecm:fulltext_dictionary_all_field",
+        query).boost(1.5f);
+
     QueryBuilder englishQuery = QueryBuilders
         .fuzzyQuery("exact_matches_translations", query)
         .fuzziness(Fuzziness.fromEdits(1))
-        .transpositions(true);
+        .transpositions(true)
+        .boost(englishBoost);
 
     QueryBuilder languageQuery = QueryBuilders
         .fuzzyQuery("exact_matches_language", query)
         .fuzziness(Fuzziness.fromEdits(1))
-        .transpositions(true);
+        .transpositions(true)
+        .boost(languageBoost);
 
-    QueryBuilder combinedLanguageQuery = QueryBuilders.boolQuery().should(languageQuery).should(
-        englishQuery).minimumShouldMatch(1);
+    QueryBuilder combinedLanguageQuery = QueryBuilders
+        .boolQuery()
+        .should(languageQuery)
+        .should(englishQuery)
+        .should(exactMatchQuery)
+        .should(exactTitleMatch)
+        .should(phraseQuery)
+        .minimumShouldMatch(1);
 
-    QueryBuilder scoredQuery = null;
+    int offset = (from - 1) * perPage;
 
-    switch (searchDomain) {
-      case ENGLISH:
-        scoredQuery = QueryBuilders
-            .boostingQuery(combinedLanguageQuery, languageQuery)
-            .negativeBoost(0.25f);
-        break;
-      case LANGUAGE:
-        scoredQuery = QueryBuilders
-            .boostingQuery(combinedLanguageQuery, englishQuery)
-            .negativeBoost(0.25f);
-        break;
-      case BOTH:
-      default:
-        scoredQuery = combinedLanguageQuery;
-        break;
-    }
-
-    QueryBuilder composedQuery = basicConstraints.must(scoredQuery);
+    QueryBuilder composedQuery = basicConstraints.must(combinedLanguageQuery);
 
     NxQueryBuilder nxQueryBuilder = new NxQueryBuilder(session).esQuery(composedQuery);
-    nxQueryBuilder.limit(100);
     nxQueryBuilder.fetchFromElasticsearch();
     nxQueryBuilder.addSort(new SortInfo("_score", false));
+    nxQueryBuilder.limit(perPage);
+    nxQueryBuilder.offset(offset);
+
+
     ElasticSearchResultConsumer consumer = new ElasticSearchResultConsumer(session,
         d -> query.equals(d.getTitle()));
     nxQueryBuilder.hitDocConsumer(consumer);
 
-    ess.query(nxQueryBuilder);
+    EsResult result = ess.queryAndAggregate(nxQueryBuilder);
 
     searchResults.getResults().addAll(consumer.getResults());
 
-    searchResults.getStatistics().setResultCount(searchResults.getResults().size());
+    searchResults.getStatistics().setResultCount(result
+        .getElasticsearchResponse()
+        .getHits().totalHits);
 
-    searchResults
-        .getStatistics()
-        .getCountsByType()
-        .putAll(
-        consumer
+    searchResults.getStatistics().getCountsByType().putAll(consumer
         .getResults()
         .stream()
-        .collect(Collectors.groupingBy(SearchResult::getType, Collectors.counting()))
-        );
+        .collect(Collectors.groupingBy(SearchResult::getType, Collectors.counting())));
 
     return Response.ok(searchResults).build();
   }
@@ -205,35 +225,18 @@ public class SearchObject extends DefaultObject {
       sr.setTitle(d.getTitle());
       sr.setPath(d.getPathAsString());
 
-
       // find the parent dialect, if there is one
       List<DocumentModel> parents = session.getParentDocuments(d.getRef());
 
-      Optional.ofNullable(parents).orElse(new ArrayList<>()).stream()
-              .filter(p -> p.getType().equalsIgnoreCase("FVDialect"))
-              .findFirst().ifPresent(p -> sr.setParentDialect(p.getId(), p.getName()));
+      Optional.ofNullable(parents).orElse(new ArrayList<>()).stream().filter(p -> p
+          .getType()
+          .equalsIgnoreCase("FVDialect")).findFirst().ifPresent(p -> sr.setParentDialect(p.getId(),
+          p.getName(),
+          (String) p.getPropertyValue("fvdialect:short_url")));
 
       // need to load it from the DB to get the required fields
       DocumentModel dbDoc = session.getDocument(d.getRef());
       sr.setType(getFriendlyType(dbDoc));
-
-      Object pictures = dbDoc.getPropertyValue("fv:related_pictures");
-      if (pictures != null) {
-        if (pictures instanceof String) {
-          sr.getPictures().add((String) pictures);
-        }
-        if (pictures instanceof List) {
-          for (Object s : (List) pictures) {
-            if (s != null) {
-              if (s instanceof String) {
-                sr.getPictures().add((String) s);
-              } else {
-                sr.getPictures().add(s.toString());
-              }
-            }
-          }
-        }
-      }
 
       Object audio = dbDoc.getPropertyValue("fv:related_audio");
       if (audio != null) {
@@ -251,13 +254,30 @@ public class SearchObject extends DefaultObject {
             }
           }
         }
+        if (audio instanceof Object[]) {
+          for (Object s : (Object[]) audio) {
+            if (s != null) {
+              if (s instanceof String) {
+                sr.getAudio().add((String) s);
+              } else {
+                sr.getAudio().add(s.toString());
+              }
+            }
+          }
+        }
       }
 
       List<Map<String, String>> definitions = (List<Map<String, String>>) dbDoc.getPropertyValue(
           "fv:definitions");
 
       for (Map<String, String> definition : definitions) {
-        sr.getTranslations().putAll(definition);
+        if (definition.containsKey("translation")) {
+          String translation = definition.get("translation");
+          sr.getTranslations().add(translation);
+        }
+      }
+      if (this.exactMatchP != null) {
+        sr.setExactMatch(this.exactMatchP.test(dbDoc));
       }
 
       if (fields != null) {
@@ -267,6 +287,8 @@ public class SearchObject extends DefaultObject {
       if (this.exactMatchP != null) {
         sr.setExactMatch(this.exactMatchP.test(dbDoc));
       }
+
+      sr.setVisibility(StateUtils.stateToVisibility(dbDoc.getCurrentLifeCycleState()));
 
       rez.add(sr);
     }
@@ -280,8 +302,7 @@ public class SearchObject extends DefaultObject {
 
     switch (dm.getType()) {
       case "FVBook":
-        return Optional.ofNullable(dm.getPropertyValue("fvbook:type"))
-                       .orElse("book").toString();
+        return Optional.ofNullable(dm.getPropertyValue("fvbook:type")).orElse("book").toString();
       case "FVPhrase":
         return "phrase";
       case "FVWord":

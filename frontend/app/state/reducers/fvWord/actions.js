@@ -1,4 +1,4 @@
-import { create, _delete, execute, fetch, query, update } from 'reducers/rest'
+import { create, _delete, execute, fetch, query } from 'reducers/rest'
 import DirectoryOperations from 'operations/DirectoryOperations'
 
 import {
@@ -30,16 +30,11 @@ export const fetchWords = query('FV_WORDS', 'FVWord', {
   },
 })
 
-export const createWord = create('FV_WORD', 'FVWord', {
-  headers: { 'enrichers.document': 'ancestry,word,permissions' },
-})
+export const createWord = create('FV_WORD', 'FVWord', {})
 
-export const updateWord = update(
-  'FV_WORD',
-  'FVWord',
-  { headers: { 'enrichers.document': 'ancestry,word,permissions' } },
-  false
-)
+export const createAndPublishWord = create('FV_WORD', 'FVWord', {
+  headers: { 'fv-publish': true },
+})
 
 export const deleteWord = _delete('FV_WORD', 'FVWord', {})
 
@@ -47,19 +42,6 @@ export const deleteWord = _delete('FV_WORD', 'FVWord', {})
 export const publishWord = execute('FV_WORD_PUBLISH', 'Document.FollowLifecycleTransition', {
   headers: { 'enrichers.document': 'ancestry,word,permissions' },
 })
-
-export const unpublishWord = execute('FV_WORD_UNPUBLISH', 'FVUnpublishDialect', {
-  headers: { 'enrichers.document': 'ancestry,word,permissions' },
-})
-
-export const enableWord = execute('FV_WORD_ENABLE', 'FVEnableDocument', {
-  headers: { 'enrichers.document': 'ancestry,word,permissions' },
-})
-
-export const disableWord = execute('FV_WORD_DISABLE', 'FVDisableDocument', {
-  headers: { 'enrichers.document': 'ancestry,word,permissions' },
-})
-
 export const fetchSharedWords = (page_provider, headers = {}, params = {}) => {
   return (dispatch) => {
     dispatch({ type: FV_WORDS_SHARED_FETCH_START })

@@ -1,7 +1,10 @@
 import { useContext, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+
+// FPCC
+import { getMediaUrl } from 'common/urlHelpers'
 import useGetSite from 'common/useGetSite'
-import useUserGet from 'common/useUserGet'
+import useGetUser from 'common/useGetUser'
 import useWorkspaceToggle from 'common/useWorkspaceToggle'
 import AppStateContext from 'common/AppStateContext'
 /**
@@ -19,9 +22,11 @@ function NavBarData() {
   const { context } = machine
   const { openMenu } = context
 
-  const { title } = useGetSite()
+  const { title, logoId } = useGetSite()
   const { value: workspaceToggleValue, set } = useWorkspaceToggle()
-  const { firstName, lastName, userName = '' } = useUserGet()
+  const { firstName, lastName, username } = useGetUser()
+
+  const logoUrl = getMediaUrl({ type: 'image', id: logoId, viewName: 'Small' })
 
   const onWorkspaceModeClick = () => {
     set(!workspaceToggleValue)
@@ -57,9 +62,11 @@ function NavBarData() {
     }
   }, [openMenu])
   const currentUser = {
-    userInitials: firstName || lastName ? firstName?.charAt(0) + lastName?.charAt(0) : userName.charAt(0),
+    userInitials:
+      firstName || lastName ? (firstName?.charAt(0) || '') + (lastName?.charAt(0) || '') : username?.charAt(0) || '',
     firstName,
-    userName,
+    lastName,
+    username,
   }
 
   const menuData = [
@@ -77,6 +84,7 @@ function NavBarData() {
       title: 'Learn',
       id: 'learn',
       itemsData: [
+        { title: 'Lists', href: `/${sitename}/lists` },
         { title: 'Songs', href: `/${sitename}/songs` },
         { title: 'Stories', href: `/${sitename}/stories` },
         { title: 'Games', href: `/${sitename}/games` },
@@ -86,17 +94,16 @@ function NavBarData() {
       title: 'Resources',
       id: 'resources',
       itemsData: [
-        { title: 'Kids Site', href: `/${sitename}/kids` },
-        { title: 'Mobile App', href: `/${sitename}/app` },
-        { title: 'Keyboard App', href: `/${sitename}/keyboard` },
+        { title: 'Mobile App', href: `/${sitename}/apps` },
+        { title: 'Keyboards', href: `/${sitename}/keyboards` },
       ],
     },
     {
       title: 'About',
       id: 'about',
       itemsData: [
-        { title: 'Our Language', href: `/${sitename}/ourlanguage` },
-        { title: 'Our People', href: `/${sitename}/about` },
+        { title: 'Our Language', href: `/${sitename}/our-language` },
+        { title: 'Our People', href: `/${sitename}/our-people` },
       ],
     },
     { title: 'Kids', id: 'kids', href: `/${sitename}/kids` },
@@ -104,6 +111,7 @@ function NavBarData() {
 
   return {
     currentUser,
+    logoUrl,
     menuData,
     onClickOutside,
     onKeyPress,

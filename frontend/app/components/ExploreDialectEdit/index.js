@@ -21,7 +21,7 @@ import Immutable, { is } from 'immutable'
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { fetchDialect2 } from 'reducers/fvDialect'
-import { fetchPortal, updatePortal } from 'reducers/fvPortal'
+import { fetchPortal } from 'reducers/fvPortal'
 import { replaceWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
@@ -34,9 +34,6 @@ import PromiseWrapper from 'components/PromiseWrapper'
 import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import FVLabel from 'components/FVLabel'
-
-// Models
-import { Document } from 'nuxeo'
 
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
@@ -61,7 +58,6 @@ export class ExploreDialectEdit extends Component {
     fetchDialect2: func.isRequired,
     fetchPortal: func.isRequired,
     replaceWindowPath: func.isRequired,
-    updatePortal: func.isRequired,
   }
   state = {
     componentState: STATE_LOADING,
@@ -157,20 +153,6 @@ export class ExploreDialectEdit extends Component {
     return content
   }
 
-  _handleSave = (portal, formValue) => {
-    // TODO: Find better way to construct object then accessing internal function
-    const portalDoc = new Document(portal.response, {
-      repository: portal.response._repository,
-      nuxeo: portal.response._nuxeo,
-    })
-
-    // Set new value property on document
-    portalDoc.set(formValue)
-
-    // Save document
-    this.props.updatePortal(portalDoc, null, null)
-  }
-
   _handleCancel = () => {
     NavigationHelpers.navigateUp(this.props.splitWindowPath, this.props.replaceWindowPath)
   }
@@ -191,12 +173,12 @@ export class ExploreDialectEdit extends Component {
     const computePortal = ProviderHelpers.getEntry(this.props.computePortal, portalPath)
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
-    let initialValues = {}
+    let context = {}
 
     // Set initial values
     if (selectn('response', computeDialect2) && selectn('response', computePortal)) {
-      initialValues = Object.assign(selectn('response', computeDialect2), {
-        initialValues: selectn('response.properties', computePortal),
+      context = Object.assign(selectn('response', computeDialect2), {
+        otherContext: { parentId: selectn('response.uid', computePortal) },
       })
     }
     return (
@@ -227,11 +209,11 @@ export class ExploreDialectEdit extends Component {
 
             <EditViewWithForm
               computeEntities={computeEntities}
-              initialValues={initialValues}
+              computeDialect={computeDialect2}
+              initialValues={context}
               itemId={portalPath}
               fields={fields}
               options={options}
-              saveMethod={this._handleSave}
               cancelMethod={this._handleCancel}
               currentPath={this.props.splitWindowPath}
               navigationMethod={this.props.replaceWindowPath}
@@ -274,7 +256,6 @@ const mapDispatchToProps = {
   fetchDialect2,
   fetchPortal,
   replaceWindowPath,
-  updatePortal,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExploreDialectEdit)

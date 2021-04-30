@@ -18,7 +18,6 @@
     <module>firstvoices-core-tests</module>
     <module>firstvoices-data</module>
     <module>firstvoices-enrichers</module>
-    <module>firstvoices-export</module>
     <module>firstvoices-health-monitor</module>
     <module>firstvoices-maintenance</module>
     <module>firstvoices-maintenance-common</module>

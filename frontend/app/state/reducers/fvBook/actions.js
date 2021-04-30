@@ -64,28 +64,10 @@ export const createBook = create('FV_BOOK', 'FVBook', {
   headers: { 'enrichers.document': 'ancestry,permissions,book' },
 })
 
-export const updateBook = update(
-  'FV_BOOK',
-  'FVBook',
-  { headers: { 'enrichers.document': 'ancestry,permissions,book' } },
-  false
-)
 export const deleteBook = _delete('FV_BOOK', 'FVBook', {})
 
 // Document.FollowLifecycleTransition expects a param that specifies the type of transition to take place e.g. { value: 'Republish' }
 export const publishBook = execute('FV_BOOK_PUBLISH', 'Document.FollowLifecycleTransition', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
-})
-
-export const unpublishBook = execute('FV_BOOK_UNPUBLISH', 'FVUnpublishDialect', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
-})
-
-export const enableBook = execute('FV_BOOK_ENABLE', 'FVEnableDocument', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
-})
-
-export const disableBook = execute('FV_BOOK_DISABLE', 'FVDisableDocument', {
   headers: { 'enrichers.document': 'ancestry,permissions,book' },
 })
 
@@ -98,25 +80,13 @@ export const createBookEntry = create('FV_BOOK_ENTRY', 'FVBookEntry', {
 })
 
 export const updateBookEntry = update('FV_BOOK_ENTRY', 'FVBookEntry', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
+  headers: { 'enrichers.document': 'book' },
 })
 
 export const deleteBookEntry = _delete('FV_BOOK_ENTRY', 'FVBookEntry', {})
 
 // Document.FollowLifecycleTransition expects a param that specifies the type of transition to take place e.g. { value: 'Republish' }
 export const publishBookEntry = execute('FV_BOOK_ENTRY_PUBLISH', 'Document.FollowLifecycleTransition', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
-})
-
-export const unpublishBookEntry = execute('FV_BOOK_ENTRY_UNPUBLISH', 'FVUnpublishDialect', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
-})
-
-export const enableBookEntry = execute('FV_BOOK_ENTRY_ENABLE', 'FVEnableDocument', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
-})
-
-export const disableBookEntry = execute('FV_BOOK_ENTRY_DISABLE', 'FVDisableDocument', {
   headers: { 'enrichers.document': 'ancestry,permissions,book' },
 })
 

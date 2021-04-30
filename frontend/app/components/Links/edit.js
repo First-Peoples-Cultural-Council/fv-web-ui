@@ -15,31 +15,21 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Immutable from 'immutable'
-
-// REDUX
+import selectn from 'selectn'
+import t from 'tcomb-form'
 import { connect } from 'react-redux'
-// REDUX: actions/dispatch/func
+import { Document } from 'nuxeo'
+
+// FPCC
 import { fetchDialect2 } from 'reducers/fvDialect'
 import { fetchLink, updateLink } from 'reducers/fvLink'
 import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
-
-import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import PromiseWrapper from 'components/PromiseWrapper'
-
-// Models
-import { Document } from 'nuxeo'
-
-// Views
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
-
-import withForm from 'components/withForm'
+import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
-
-const EditViewWithForm = withForm(PromiseWrapper, true)
 
 const { array, func, object, string } = PropTypes
 export class Edit extends Component {
@@ -69,10 +59,11 @@ export class Edit extends Component {
       link: null,
       linkPath: !props.value ? props.routeParams.dialect_path + '/Dictionary/' + props.routeParams.link : props.value,
       formValue: null,
+      saved: false,
     }
 
     // Bind methods to 'this'
-    ;['_handleSave', '_handleCancel'].forEach((method) => (this[method] = this[method].bind(this)))
+    ;['_onRequestSaveForm', '_onRequestCancelForm'].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   fetchData(newProps) {
@@ -133,26 +124,49 @@ export class Edit extends Component {
     }
   }
 
-  _handleSave(link, formValue) {
-    const newDocument = new Document(link.response, {
-      repository: link.response._repository,
-      nuxeo: link.response._nuxeo,
-    })
+  _onRequestSaveForm = (e, computedItem) => {
+    // Prevent default behaviour
+    e.preventDefault()
+    const formValue = this.form_FVLink.getValue()
+    const properties = {}
+    // Passed validation
+    if (formValue) {
+      for (const key in formValue) {
+        if (Object.prototype.hasOwnProperty.call(formValue, key) && key) {
+          if (formValue[key]) {
+            // Filter out null values in an array
+            if (formValue[key] instanceof Array) {
+              const formValueKey = formValue[key].filter((item) => item !== null)
+              properties[key] = formValueKey
+            } else {
+              properties[key] = formValue[key]
+            }
+          }
+        }
+      }
+      const newDocument = new Document(computedItem.response, {
+        repository: computedItem.response._repository,
+        nuxeo: computedItem.response._nuxeo,
+      })
 
-    // Set new value property on document
-    newDocument.set(formValue)
+      newDocument.set(properties)
 
-    // Save document
-    this.props.updateLink(newDocument, null, null)
+      this.props.updateLink(newDocument, null, null)
 
-    if (this.props.onDocumentCreated) {
-      this.props.onDocumentCreated(newDocument)
+      if (this.props.onDocumentCreated) {
+        this.props.onDocumentCreated(newDocument)
+      }
+
+      this.setState({
+        saved: true,
+        formValue: properties,
+      })
+    } else {
+      window.scrollTo(0, 0)
     }
-
-    this.setState({ formValue: formValue })
   }
 
-  _handleCancel() {
+  _onRequestCancelForm() {
     if (this.props.cancelMethod) {
       this.props.cancelMethod()
     } else {
@@ -162,17 +176,6 @@ export class Edit extends Component {
 
   render() {
     let context
-
-    const computeEntities = Immutable.fromJS([
-      {
-        id: this.state.linkPath,
-        entity: this.props.computeLink,
-      },
-      {
-        id: this.props.routeParams.dialect_path,
-        entity: this.props.computeDialect2,
-      },
-    ])
 
     const computeLink = ProviderHelpers.getEntry(this.props.computeLink, this.state.linkPath)
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
@@ -200,20 +203,29 @@ export class Edit extends Component {
             params={[selectn('response.properties.dc:title', computeLink)]}
           />
         </h1>
-
-        <EditViewWithForm
-          computeEntities={computeEntities}
-          initialValues={context}
-          itemId={this.state.linkPath}
-          fields={fields}
-          options={options}
-          saveMethod={this._handleSave}
-          cancelMethod={this._handleCancel}
-          currentPath={this.props.splitWindowPath}
-          navigationMethod={() => {}}
-          type="FVLink"
-          routeParams={this.props.routeParams}
+        <t.form.Form
+          ref={(element) => {
+            this.form_FVLink = element
+          }}
+          type={t.struct(selectn('FVLink', fields))}
+          context={context}
+          value={this.state.formValue || selectn('response.properties', computeLink)}
+          options={selectn('FVLink', options)}
         />
+        <FVButton variant="text" onClick={this._onRequestCancelForm} style={{ marginRight: '5px' }}>
+          {<FVLabel transKey="cancel" defaultStr="Cancel" transform="first" />}
+        </FVButton>
+        <FVButton
+          data-testid="Link__saveBtn"
+          variant="contained"
+          color="primary"
+          onClick={(e) => {
+            this._onRequestSaveForm(e, computeLink)
+          }}
+          style={{ marginRight: '5px' }}
+        >
+          {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
+        </FVButton>
       </div>
     )
   }

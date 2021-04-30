@@ -65,7 +65,7 @@ function SongStoryContainer() {
           <DetailsViewWithActions
             labels={{ single: 'Book' }}
             itemPath={bookPath}
-            actions={['workflow', 'edit', 'visibility', 'publish', 'add-child']}
+            actions={['workflow', 'edit', 'visibility', 'publish', 'edit-child', 'add-child']}
             publishAction={publishBook}
             deleteAction={deleteBook}
             onNavigateRequest={pushWindowPath}

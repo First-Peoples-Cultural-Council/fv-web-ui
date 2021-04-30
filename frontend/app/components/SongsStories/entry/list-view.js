@@ -18,25 +18,41 @@ import PropTypes from 'prop-types'
 import { List } from 'immutable'
 import classNames from 'classnames'
 
+import NavigationHelpers from 'common/NavigationHelpers'
+
 import BookEntry from 'components/SongsStories/entry/view'
 
 import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
 
+const { func, array } = PropTypes
+
 export default class SongsStoriesEntryListView extends Component {
   static propTypes = {
+    splitWindowPath: array.isRequired,
+    pushWindowPath: func.isRequired,
+    handleSaveOrder: func.isRequired,
+    handleDelete: func.isRequired,
     items: PropTypes.oneOfType([PropTypes.array, PropTypes.instanceOf(List)]),
   }
 
   constructor(props, context) {
     super(props, context)
 
+    const isList = List.isList(this.props.items)
+
     this.state = {
-      items: List(this.props.items),
-      originalItems: List(this.props.items),
-      reorderWarning: false,
+      items: isList ? this.props.items : List(this.props.items),
+      originalItems: isList ? this.props.items : List(this.props.items),
+      reorderWarning: isList ? true : false,
+      reorderSuccess: false,
+      reorderInProgress: false,
+      deleteCandidate: null,
+      deletedPageIds: List(),
     }
-    ;['_moveUp', '_moveDown', '_reset'].forEach((method) => (this[method] = this[method].bind(this)))
+    ;['_moveUp', '_moveDown', '_setupDelete', '_confirmDelete', '_cancelDelete', '_saveOrder'].forEach(
+      (method) => (this[method] = this[method].bind(this))
+    )
   }
 
   _moveUp(entry) {
@@ -50,6 +66,8 @@ export default class SongsStoriesEntryListView extends Component {
       this.setState({
         items: newList,
         reorderWarning: true,
+        reorderSuccess: false,
+        deleteCandidate: null,
       })
 
       this.props.sortOrderChanged(newList)
@@ -67,22 +85,68 @@ export default class SongsStoriesEntryListView extends Component {
       this.setState({
         items: newList,
         reorderWarning: true,
+        reorderSuccess: false,
+        deleteCandidate: null,
       })
 
       this.props.sortOrderChanged(newList)
     }
   }
 
-  _reset() {
+  _confirmDelete() {
+    if (this.state.deleteCandidate !== null) {
+      this.props.handleDelete(this.state.deleteCandidate)
+
+      this.setState({
+        deleteCandidate: null,
+        // Keep record of deleted pages for display purposes
+        deletedPageIds: this.state.deletedPageIds.push(this.state.deleteCandidate.uid),
+      })
+    }
+  }
+
+  _setupDelete(entry) {
     this.setState({
-      items: this.state.originalItems,
-      reorderWarning: false,
+      reorderSuccess: false,
+      deleteCandidate: entry,
     })
+  }
+
+  _cancelDelete() {
+    this.setState({
+      reorderSuccess: false,
+      deleteCandidate: null,
+    })
+  }
+
+  _navigateToSongStory = () => {
+    NavigationHelpers.navigateUpMultiple(this.props.splitWindowPath, this.props.pushWindowPath, 2)
+  }
+
+  _saveOrder() {
+    this.props.handleSaveOrder()
+
+    this.setState({
+      reorderWarning: false,
+      reorderInProgress: true,
+      reorderSuccess: false,
+    })
+
+    // Give a few seconds for the update to complete
+    // in case someone navigates away too quickly
+    // on a very slow connection
+    setTimeout(() => {
+      this.setState({
+        reorderWarning: false,
+        reorderInProgress: false,
+        reorderSuccess: true,
+      })
+    }, 2000)
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.items != this.props.items) {
-      this.setState({ items: List(nextProps.items), reorderWarning: false })
+      this.setState({ items: List(nextProps.items) })
     }
 
     if (nextProps.metadata != this.props.metadata) {
@@ -91,27 +155,83 @@ export default class SongsStoriesEntryListView extends Component {
   }
 
   render() {
+    let listItems = this.state.items
+
+    if (this.state.deletedPageIds.size > 0) {
+      // Manually pop the deleted page from the list
+      // Simulating a delete action
+      this.state.deletedPageIds.forEach((id) => {
+        const deletedPageIndex = listItems.findIndex((v) => {
+          return v.uid == id
+        })
+
+        if (deletedPageIndex != -1) {
+          listItems = listItems.delete(deletedPageIndex)
+        }
+      })
+    }
+
     return (
       <div>
-        {this.state.reorderWarning ? (
-          <div className={classNames('alert', 'alert-warning')} role="alert">
-            <FVLabel
-              transKey="views.pages.explore.dialect.learn.songs_stories.edit_x_pages"
-              defaultStr="Note: This new sort order will be saved once the book is saved in the 'Book' tab."
-              transform="first"
-            />
-            <FVButton variant="contained" style={{ marginLeft: '15px' }} onClick={this._reset}>
-              <FVLabel transKey="reset_order" defaultStr="Reset Order" transform="words" />
-            </FVButton>
-          </div>
-        ) : (
-          ''
-        )}
-        {this.state.items.map(
+        <div style={{ position: 'fixed', bottom: 0, width: '95%', zIndex: 9999 }}>
+          {this.state.reorderSuccess ? (
+            <div className={classNames('alert', 'alert-success')} role="alert">
+              Your changes have been saved!
+              <FVButton variant="contained" style={{ marginLeft: '15px' }} onClick={this._navigateToSongStory}>
+                Back to Cover Page
+              </FVButton>
+            </div>
+          ) : (
+            ''
+          )}
+
+          {this.state.reorderInProgress ? (
+            <div className={classNames('alert', 'alert-warning')} role="alert">
+              Please wait... Your changes are being saved...
+            </div>
+          ) : (
+            ''
+          )}
+
+          {this.state.reorderWarning ? (
+            <div className={classNames('alert', 'alert-warning')} role="alert">
+              Your changes to the order of pages have not been applied yet.
+              <FVButton variant="contained" style={{ marginLeft: '15px' }} onClick={this._saveOrder}>
+                Save Changes
+              </FVButton>
+            </div>
+          ) : (
+            ''
+          )}
+
+          {this.state.deleteCandidate !== null ? (
+            <div className={classNames('alert', 'alert-warning')} role="alert">
+              Are you sure you want to delete the page?{' '}
+              <small>(ID: {this.state.deleteCandidate.uid.substring(0, 8)})</small>?
+              <FVButton variant="contained" style={{ marginLeft: '15px' }} onClick={this._confirmDelete}>
+                Delete Page
+              </FVButton>
+              <FVButton variant="contained" style={{ marginLeft: '15px' }} onClick={this._cancelDelete}>
+                Cancel
+              </FVButton>
+            </div>
+          ) : (
+            ''
+          )}
+        </div>
+
+        {listItems.map(
           function (entry, i) {
             const entryControls = []
 
             if (this.props.reorder) {
+              // Delete should also be available when reordering
+              entryControls.push(
+                <FVButton variant="contained" key="delete" onClick={this._setupDelete.bind(this, entry)}>
+                  Delete
+                </FVButton>
+              )
+
               entryControls.push(
                 <FVButton variant="contained" key="up" disabled={i == 0} onClick={this._moveUp.bind(this, entry)}>
                   <FVLabel transKey="move_up" defaultStr="move up" transform="words" />

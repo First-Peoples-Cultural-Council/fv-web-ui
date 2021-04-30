@@ -6,9 +6,6 @@ import {
   FV_DIALECT_UPDATE_START,
   FV_DIALECT_UPDATE_SUCCESS,
   FV_DIALECT_UPDATE_ERROR,
-  FV_DIALECT_UNPUBLISH_START,
-  FV_DIALECT_UNPUBLISH_SUCCESS,
-  FV_DIALECT_UNPUBLISH_ERROR,
 } from './actionTypes'
 import { combineReducers } from 'redux'
 
@@ -66,22 +63,6 @@ const computeDialectStats = computeDialectStatsOperation.computeDialectStats
 
 const computeDialectList = computeDialectListOperation.computeDialectList
 
-const computeDialectUnpublish = (state = initialState, action = {}) => {
-  switch (action.type) {
-    case FV_DIALECT_UNPUBLISH_START:
-      return { ...state, isFetching: true, success: false }
-
-    case FV_DIALECT_UNPUBLISH_SUCCESS:
-      return { ...state, response: action.document, isFetching: false, success: true }
-
-    case FV_DIALECT_UNPUBLISH_ERROR:
-      return { ...state, isFetching: false, isError: true, error: action.error }
-
-    default:
-      return { ...state, isFetching: false }
-  }
-}
-
 // export const fvDialectReducer = {
 //   computeDialect,
 //   computeDialect2ByShortURL,
@@ -89,7 +70,6 @@ const computeDialectUnpublish = (state = initialState, action = {}) => {
 //   computeDialect2,
 //   computeDialectStats,
 //   computeDialectList,
-//   computeDialectUnpublish,
 // }
 
 export const fvDialectReducer = combineReducers({
@@ -99,5 +79,4 @@ export const fvDialectReducer = combineReducers({
   computeDialect2,
   computeDialectStats,
   computeDialectList,
-  computeDialectUnpublish,
 })

@@ -97,15 +97,9 @@ export class ReportsView extends PageDialectLearnBase {
     const { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } = this._getURLPageProps()
 
     let listView = null
-    let exportDialectExportElement = undefined
-    const extricateReportData = this.state.currentReport.toJS()
-    const exportDialectQuery = extricateReportData.query
-    let exportDialectLabel = undefined
 
     switch (this.state.currentReport.get('type')) {
       case 'words':
-        exportDialectExportElement = 'FVWord'
-        exportDialectLabel = 'Word Report'
         listView = (
           <WordsListView
             controlViaURL
@@ -121,18 +115,11 @@ export class ReportsView extends PageDialectLearnBase {
             onPagePropertiesChange={this._handlePagePropertiesChange}
             onPaginationReset={this._resetURLPagination}
             routeParams={routeParams}
-            // Export Dialect
-            exportDialectExportElement={exportDialectExportElement}
-            exportDialectLabel={exportDialectLabel}
-            exportDialectQuery={`SELECT * FROM ${exportDialectExportElement} WHERE ecm:path STARTSWITH '${routeParams.dialect_path}/Dictionary' ${exportDialectQuery}`}
-            exportDialectColumns={'*'}
           />
         )
         break
 
       case 'phrases':
-        exportDialectExportElement = 'FVPhrase'
-        exportDialectLabel = 'Phrase Report'
         listView = (
           <PhraseListView
             controlViaURL
@@ -148,11 +135,6 @@ export class ReportsView extends PageDialectLearnBase {
             onPagePropertiesChange={this._handlePagePropertiesChange}
             onPaginationReset={this._resetURLPagination}
             routeParams={routeParams}
-            // Export Dialect
-            exportDialectExportElement={exportDialectExportElement}
-            exportDialectLabel={exportDialectLabel}
-            exportDialectQuery={`SELECT * FROM ${exportDialectExportElement} WHERE ecm:path STARTSWITH '${routeParams.dialect_path}/Dictionary' ${exportDialectQuery}`}
-            exportDialectColumns={'*'}
           />
         )
         break
@@ -173,8 +155,6 @@ export class ReportsView extends PageDialectLearnBase {
             onPagePropertiesChange={this._handlePagePropertiesChange}
             onPaginationReset={this._resetURLPagination}
             routeParams={routeParams}
-            // TODO: endpdoint doesn't support FVBook exports
-            hasExportDialect={false}
           />
         )
         break

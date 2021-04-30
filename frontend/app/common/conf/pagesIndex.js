@@ -26,7 +26,7 @@ const PageDialectPlay = React.lazy(() => import('components/Games'))
 
 const PageJigsawGame = React.lazy(() => import('components/Games/jigsaw'))
 const PageWordSearch = React.lazy(() => import('components/Games/wordsearch'))
-const PageHangman = React.lazy(() => import('components/Games/hangman'))
+const PageParachute = React.lazy(() => import('components/Games/parachute'))
 const PageWordscramble = React.lazy(() => import('components/Games/wordscramble'))
 const PageQuiz = React.lazy(() => import('components/Games/quiz'))
 const PageConcentration = React.lazy(() => import('components/Games/concentration'))
@@ -62,7 +62,6 @@ const PageHome = React.lazy(() => import('components/HomeLayout'))
 const PageContent = React.lazy(() => import('components/PageContent'))
 const PagePlay = React.lazy(() => import('components/Games'))
 const PageSearch = React.lazy(() => import('components/SearchDictionary/SearchDictionaryContainer'))
-const PageTasks = React.lazy(() => import('components/Tasks/TasksContainer'))
 const PageUserTasks = React.lazy(() => import('components/UserTasks'))
 const PageUsersRegister = React.lazy(() => import('components/Register'))
 const PageUsersForgotPassword = React.lazy(() => import('components/Users/forgotpassword'))
@@ -167,7 +166,6 @@ export {
   PageDialectReportsView,
   PagePlay,
   PageSearch,
-  PageTasks,
   PageUserTasks,
   PageUsersRegister,
   PageUsersForgotPassword,
@@ -176,7 +174,7 @@ export {
   PageJigsawGame,
   PageWordSearch,
   PageConcentration,
-  PageHangman,
+  PageParachute,
   PageWordscramble,
   PageQuiz,
   // KIDS
