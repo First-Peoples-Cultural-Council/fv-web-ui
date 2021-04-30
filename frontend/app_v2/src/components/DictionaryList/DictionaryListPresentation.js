@@ -7,7 +7,7 @@ import AudioMinimal from 'components/AudioMinimal'
 import useIcon from 'common/useIcon'
 import { makePlural } from 'common/urlHelpers'
 import { getMediaUrl } from 'common/urlHelpers'
-import EntryActions from 'components/EntryActions'
+import ActionsMenu from 'components/ActionsMenu'
 import Loading from 'components/Loading'
 
 /**
@@ -119,11 +119,12 @@ function DictionaryListPresentation({ actions, isLoading, items, siteShortUrl, w
                         </td>
                       ) : null}
                       <td className="text-right px-6">
-                        <EntryActions.Container
+                        <ActionsMenu.Container
                           documentId={id}
                           documentTitle={title}
                           actions={actions}
                           withConfirmation
+                          withTooltip
                         />
                       </td>
                     </tr>

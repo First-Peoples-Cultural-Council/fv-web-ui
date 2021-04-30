@@ -12,7 +12,6 @@ import { Dialog, Transition } from '@headlessui/react'
  */
 function ModalPresentation({ children, heading, isOpen }) {
   const [open, setOpen] = useState(isOpen)
-
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" static className="fixed z-10 inset-0 overflow-y-auto" open={open} onClose={setOpen}>

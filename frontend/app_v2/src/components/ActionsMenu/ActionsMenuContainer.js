@@ -1,45 +1,46 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import EntryActionsPresentation from 'components/EntryActions/EntryActionsPresentation'
-import EntryActionsData from 'components/EntryActions/EntryActionsData'
+import ActionsMenuPresentation from 'components/ActionsMenu/ActionsMenuPresentation'
 
 /**
- * @summary EntryActionsContainer
+ * @summary ActionsMenuContainer
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function EntryActionsContainer({
+function ActionsMenuContainer({
   documentId,
   documentTitle,
   actions,
   moreActions,
   withLabels = false,
   withConfirmation = false,
+  withTooltip = false,
 }) {
-  const { actionsToShow, moreActionsToShow } = EntryActionsData({ actions, moreActions })
   return (
-    <EntryActionsPresentation
+    <ActionsMenuPresentation
       documentId={documentId}
       documentTitle={documentTitle}
-      actionsToShow={actionsToShow}
-      moreActionsToShow={moreActionsToShow}
+      actions={actions}
+      moreActions={moreActions}
       withLabels={withLabels}
       withConfirmation={withConfirmation}
+      withTooltip={withTooltip}
     />
   )
 }
 // PROPTYPES
 const { array, bool, string } = PropTypes
-EntryActionsContainer.propTypes = {
+ActionsMenuContainer.propTypes = {
   documentId: string,
   documentTitle: string,
   actions: array,
   moreActions: array,
   withLabels: bool,
   withConfirmation: bool,
+  withTooltip: bool,
 }
 
-export default EntryActionsContainer
+export default ActionsMenuContainer

@@ -62,8 +62,8 @@ function WordData() {
     wordId,
     isLoading,
     entry: data?.title ? entry : {},
-    actions: ['copy'],
-    moreActions: ['share'],
+    actions: ['copy', 'share'],
+    moreActions: ['copy'],
     siteShortUrl,
   }
 }

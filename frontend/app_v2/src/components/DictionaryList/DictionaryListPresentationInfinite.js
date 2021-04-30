@@ -8,7 +8,7 @@ import useIcon from 'common/useIcon'
 import { makePlural } from 'common/urlHelpers'
 import { getMediaUrl } from 'common/urlHelpers'
 import Loading from 'components/Loading'
-import EntryActions from 'components/EntryActions'
+import ActionsMenu from 'components/ActionsMenu'
 
 /**
  * @summary DictionaryListPresentation
@@ -124,11 +124,12 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
                             </td>
                           ) : null}
                           <td className="text-right px-6">
-                            <EntryActions.Container
+                            <ActionsMenu.Container
                               documentId={id}
                               documentTitle={title}
                               actions={actions}
                               withConfirmation
+                              withTooltip
                             />
                           </td>
                         </tr>

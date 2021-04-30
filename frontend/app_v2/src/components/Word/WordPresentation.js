@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 // FPCC
 import { getMediaUrl } from 'common/urlHelpers'
 import AudioNative from 'components/AudioNative'
-import EntryActions from 'components/EntryActions'
+import ActionsMenu from 'components/ActionsMenu'
 /**
  * @summary WordPresentation
  * @component
@@ -22,12 +22,13 @@ function WordPresentation({ actions, moreActions, entry }) {
             <div className="w-full sm:flex items-center mt-5 px-6">
               <h3 className="sm:inline-flex sm:flex-1 font-bold text-xl sm:text-2xl">{entry.title}</h3>
               <div className="sm:inline-flex p-2 sm:p-0">
-                <EntryActions.Container
+                <ActionsMenu.Container
                   documentId={entry.id}
                   documentTitle={entry.title}
                   actions={actions}
                   moreActions={moreActions}
                   withLabels
+                  withConfirmation
                 />
               </div>
             </div>
