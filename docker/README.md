@@ -66,7 +66,7 @@ This setup script will:
 1. Create a docker image called `nuxeo-dev` for the back-end
 2. Create volumes on your host machine (in `fv-web-ui/docker/nuxeo_dev_docker`). These will be mounted on the `nuxeo-dev` container.
 
-*Note*: You can build and deploy any version of the FirstVoices package after the environment is setup as specified in [Development Procedures -> Pushing Changes -> Method 1](#method-1-deploy-entire-zip---recommended-for-changes-in-multiple-modules).
+*Note*: You can build and deploy any version of the FirstVoices package after the environment is setup as specified in [Development Procedures -> Pushing Changes -> Method 1](#method-1-for-backend).
 
 ### Step 2: Startup the environment
 
@@ -204,7 +204,9 @@ You can access the Postgres database, run `docker exec -it <CONTAINER ID> psql -
 
 After making a change to a Nuxeo module, you can deploy your change to the docker container in two ways:
 
-#### [BACKEND] Method 1 (deploy entire ZIP - recommended for changes in multiple modules):
+#### Method 1 for Backend
+
+This will deploy the entire ZIP - it is recommended for changes in multiple modules.
 
 To build the entire project and deploy it to your local container, run in the `docker` folder:
 ```
@@ -221,16 +223,22 @@ Flags:
 * The `minimal` flag will skip building modules that are more relevant to server deployments (e.g. API, Cognito). You can remove this property if you wish to include these locally. The packages to exlcude are defined in the Maven `full-marketplace` profile. 
 * The `skip-tests` flag will skip tests for all packages.
 
-#### [BACKEND] Method 2 (deploy a single module):
+#### Method 2 for Backend
 
-- From the root of your module run the command `./UpdateModule.sh`. If you are creating a new module you will need to copy the UpdateModule.sh script from another module into the root of your module
-  (eg: copy `/FirstVoicesData/UpdateModule.sh` into `/YourNewModule`).
+This will deploy a single module.
 
-      Optionally you can add the flag ```-skip-tests``` to skip the compilation and running of unit tests during the module deploy (eg: ```./UpdateModule.sh -skip-tests```).
+To build a single module and deploy it to your local container, run in the `docker` folder:
 
-- Alternatively navigate to `docker/` and run the command `./UpdateModuleMain.sh <ModuleName>` where `<ModuleName>` is the name of the module you have created/made changes to (eg: `./UpdateModuleMain.sh FirstVoicesData`).
+```
+./UpdateModuleMain.sh $MODULE_PATH
+```
 
-  Both of the above will build the module, remove any old copies inside of the docker container, copy the new jarfile into the docker container, and restart the nuxeo backend to deploy the changes/module.
+Where $MODULE_PATH is the path to the folder from `fv-web-ui/modules`, for example: `security/firstvoices-security`.
+
+To update the FirstVoices Security package without tests for example, run: 
+```
+./UpdateModuleMain.sh security/firstvoices-security -skip-tests
+```
 
 #### [FRONTEND] Method 1:
 
