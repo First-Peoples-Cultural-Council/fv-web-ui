@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.nuxeo.ecm.automation.AutomationService;
 import org.nuxeo.ecm.automation.OperationContext;
@@ -37,6 +38,12 @@ public class UpdateVisibilityOperationTest extends AbstractFirstVoicesOperations
 
   private OperationContext ctx;
 
+  @BeforeClass
+  public static void unregisterEvents() {
+    // Remove ancestry listener
+    // To help isolate testing to the service
+    unregisterEvents(new String[]{"ancestryAssignmentListener"});
+  }
 
   @Test
   public void testNewToTeam() throws OperationException {
