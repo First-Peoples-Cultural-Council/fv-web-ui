@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import useGetSite from 'common/useGetSite'
 import documentApi from 'services/api/document'
 import { triggerError } from 'common/navigationHelpers'
+import { localDateMDYT } from 'common/stringHelpers'
 
 /**
  * @summary WordData
@@ -39,15 +40,18 @@ function WordData() {
     generalNote: properties['fv:general_note'] || [],
     partOfSpeech: properties['fv-word:part_of_speech'] || '',
     pronunciation: properties['fv-word:pronunciation'] || '',
+    reference: properties['fv:reference'] || '',
+    created: localDateMDYT(properties['dc:created']) || '',
+    modified: localDateMDYT(properties['dc:modified']) || '',
+    version: properties['uid:major_version'] || '',
     categories: wordContextParams?.categories || [],
     audio: wordContextParams?.related_audio || [],
     relatedPhrases: wordContextParams?.related_phrases || [],
     relatedAssets: wordContextParams?.related_assets || [],
     pictures: wordContextParams?.related_pictures || [],
     videos: wordContextParams?.related_videos || [],
+    sources: wordContextParams?.sources || [],
   }
-
-  //   const relatedToAssets = selectn('contextParameters.word.related_by', wordRawData) || []
 
   useEffect(() => {
     if (isError) triggerError(error, history)
