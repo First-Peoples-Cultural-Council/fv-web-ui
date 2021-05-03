@@ -17,19 +17,14 @@ import Immutable from 'immutable'
  * @returns {array} object.categories
  * @returns {array} object.computeEntities Immutable list, used with PromiseWrapper
  */
-function useCategoriesCustomOrShared(fetchLatest = false) {
-  const { computeCategories, fetchCategories, computeSharedCategories, fetchSharedCategories } = useCategories()
+function useCategoriesForGrid(fetchLatest = false) {
+  const { computeCategories, fetchCategories } = useCategories()
   const { routeParams } = useRoute()
   const catPath = `/api/v1/path/${routeParams.dialect_path}/Categories/@children`
-  const sharedCatPath = `/api/v1/path/FV/${routeParams.area}/SharedData/Shared Categories/@children`
   const categories = ProviderHelpers.getEntry(computeCategories, catPath)
-  const sharedCategories = ProviderHelpers.getEntry(computeSharedCategories, sharedCatPath)
   const categoriesInProgress = selectn('action', categories) === 'FV_CATEGORIES_QUERY_START'
-  const sharedCategoriesInProgress = selectn('action', sharedCategories) === 'FV_CATEGORIES_SHARED_QUERY_START'
   const categoriesSuccess = selectn('action', categories) === 'FV_CATEGORIES_QUERY_SUCCESS'
-  const sharedCategoriesSuccess = selectn('action', sharedCategories) === 'FV_CATEGORIES_SHARED_QUERY_SUCCESS'
   const categoriesEntries = selectn('response.entries', categories)
-  const sharedCategoriesEntries = selectn('response.entries', sharedCategories)
   useEffect(() => {
     // Fetch dialect specific categories
     if (!categoriesInProgress) {
@@ -43,13 +38,6 @@ function useCategoriesCustomOrShared(fetchLatest = false) {
         })
       }
     }
-    if (!sharedCategoriesInProgress) {
-      ProviderHelpers.fetchIfMissing({
-        action: fetchSharedCategories,
-        key: sharedCatPath,
-        reducer: computeSharedCategories,
-      })
-    }
   }, [])
 
   let _categories = []
@@ -57,9 +45,6 @@ function useCategoriesCustomOrShared(fetchLatest = false) {
     if (categoriesSuccess) {
       if (categoriesEntries.length > 0) {
         _categories = categoriesEntries
-      }
-      if (categoriesEntries.length === 0 && sharedCategoriesSuccess) {
-        _categories = sharedCategoriesEntries
       }
     }
   }
@@ -70,12 +55,8 @@ function useCategoriesCustomOrShared(fetchLatest = false) {
         id: catPath,
         entity: computeCategories,
       },
-      {
-        id: sharedCatPath,
-        entity: computeSharedCategories,
-      },
     ]),
   }
 }
 
-export default useCategoriesCustomOrShared
+export default useCategoriesForGrid

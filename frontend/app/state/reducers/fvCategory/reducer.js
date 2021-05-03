@@ -21,9 +21,6 @@ const computeCategory = _computeCategoryFactory.computeCategory
 const _computeCategoriesFactory = computeQuery('categories')
 const computeCategories = _computeCategoriesFactory.computeCategories
 
-const _computeSharedCategoriesFactory = computeQuery('categories_shared')
-const computeSharedCategories = _computeSharedCategoriesFactory.computeCategoriesShared
-
 // CREATE
 const computeCreateCategory = (
   state = {
@@ -50,7 +47,6 @@ const computeCreateCategory = (
 }
 
 export const fvCategoryReducer = combineReducers({
-  computeSharedCategories,
   computeCategory,
   computeCategories,
   computeCreateCategory,

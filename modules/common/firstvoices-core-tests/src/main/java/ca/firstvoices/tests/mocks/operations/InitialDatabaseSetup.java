@@ -20,7 +20,6 @@
 
 package ca.firstvoices.tests.mocks.operations;
 
-import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORIES;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_LINKS;
 import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_RESOURCES;
 import static org.nuxeo.ecm.platform.usermanager.UserConfig.EMAIL_COLUMN;
@@ -98,7 +97,6 @@ public class InitialDatabaseSetup {
     createNewDocument("Site", "Section", FV_SECTIONS);
     createNewDocument("Resources", FV_RESOURCES, WORKSPACES_SITE);
     createNewDocument("Pages", "Folder", WORKSPACES_SITE + "/Resources");
-    createNewDocument("Shared Categories", FV_CATEGORIES, WORKSPACES_SHARED_DATA);
     createNewDocument("Shared Links", FV_LINKS, WORKSPACES_SHARED_DATA);
     createNewDocument("Shared Resources", FV_RESOURCES, WORKSPACES_SHARED_DATA);
 

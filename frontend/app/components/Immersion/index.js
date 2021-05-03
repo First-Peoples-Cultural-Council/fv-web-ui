@@ -73,11 +73,6 @@ class PageDialectImmersionList extends PageDialectLearnBase {
 
   DIALECT_FILTER_TYPE = 'immersion'
 
-  /*
-   TODO add shared categories for immersion specific (Shared Categories)
-   Dictionary -> Dictionary with label or some other document type?
-   */
-
   constructor(props, context) {
     super(props, context)
 
