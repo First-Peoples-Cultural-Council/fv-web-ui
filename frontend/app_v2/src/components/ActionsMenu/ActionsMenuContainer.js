@@ -11,8 +11,8 @@ import ActionsMenuPresentation from 'components/ActionsMenu/ActionsMenuPresentat
  * @returns {node} jsx markup
  */
 function ActionsMenuContainer({
-  documentId,
-  documentTitle,
+  docId,
+  docTitle,
   actions = [],
   moreActions = [],
   withLabels = false,
@@ -21,8 +21,8 @@ function ActionsMenuContainer({
 }) {
   return (
     <ActionsMenuPresentation
-      documentId={documentId}
-      documentTitle={documentTitle}
+      docId={docId}
+      docTitle={docTitle}
       actions={actions}
       moreActions={moreActions}
       withLabels={withLabels}
@@ -34,8 +34,8 @@ function ActionsMenuContainer({
 // PROPTYPES
 const { array, bool, string } = PropTypes
 ActionsMenuContainer.propTypes = {
-  documentId: string,
-  documentTitle: string,
+  docId: string,
+  docTitle: string,
   actions: array,
   moreActions: array,
   withLabels: bool,

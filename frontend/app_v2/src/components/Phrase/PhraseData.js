@@ -63,8 +63,8 @@ function PhraseData() {
     phraseId,
     isLoading,
     entry: data?.title ? entry : {},
-    actions: ['copy', 'share'],
-    moreActions: ['copy'],
+    actions: ['copy'],
+    moreActions: ['share'],
     siteShortUrl,
   }
 }

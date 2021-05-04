@@ -1,11 +1,12 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Menu, Transition } from '@headlessui/react'
 
 // FPCC
 import useIcon from 'common/useIcon'
-
 import Actions from 'components/Actions'
+import Share from 'components/Share'
+import Modal from 'components/Modal'
 /**
  * @summary ActionsMenuPresentation
  * @component
@@ -18,44 +19,41 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-function ActionsMenuPresentation({
-  documentId,
-  documentTitle,
-  actions,
-  moreActions,
-  withLabels,
-  withConfirmation,
-  withTooltip,
-}) {
+function ActionsMenuPresentation({ docId, docTitle, actions, moreActions, withLabels, withConfirmation, withTooltip }) {
+  const [shareModelOpen, setShareModalOpen] = useState(false)
   return (
     <div className="inline-flex">
+      {/* Pinned Action Buttons */}
       {actions.includes('copy') ? (
-        <span className="sm:ml-3 inline-flex">
-          <Actions.Copy
-            docId={documentId}
-            docTitle={documentTitle}
-            withLabels={withLabels}
-            withConfirmation={withConfirmation}
-            withTooltip={withTooltip}
-          />
-        </span>
+        <Actions.Copy
+          docId={docId}
+          docTitle={docTitle}
+          withLabels={withLabels}
+          withConfirmation={withConfirmation}
+          withTooltip={withTooltip}
+        />
       ) : null}
-      {actions.includes('share') ? (
-        <span className="ml-3 pl-2 inline-flex border-l border-gray-300">
-          <Actions.Share docId={documentId} docTitle={documentTitle} withLabels={withLabels} />
-        </span>
-      ) : null}
-      {/* More Menu button and items */}
+      {actions.includes('share') && (
+        <button
+          id="ShareAction"
+          className="ml-2 pl-2 relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal hover:text-black border-l border-gray-300"
+          onClick={() => setShareModalOpen(true)}
+        >
+          <span className="sr-only">Share</span>
+          {useIcon('WebShare', 'fill-current h-8 w-8 md:h-6 md:w-6')}
+          {withLabels ? <span className="mx-2">Share</span> : null}
+        </button>
+      )}
+
+      {/* More Menu button and Action items */}
       {moreActions.length > 0 ? (
         <Menu as="div" className="relative inline-flex text-left">
           {({ open }) => (
             <>
-              <span className="ml-3 pl-2 inline-flex border-l border-gray-300">
-                <Menu.Button className="relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal hover:text-black">
-                  {useIcon('More', 'fill-current h-8 w-8 md:h-6 md:w-6')}
-                  <span className="ml-2">More</span>
-                </Menu.Button>
-              </span>
+              <Menu.Button className="ml-2 pl-2 relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal hover:text-black border-l border-gray-300">
+                {useIcon('More', 'fill-current h-8 w-8 md:h-6 md:w-6')}
+                <span className="mx-2">More</span>
+              </Menu.Button>
 
               <Transition
                 show={open}
@@ -72,18 +70,24 @@ function ActionsMenuPresentation({
                   className="z-10 origin-top-right absolute top-5 right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                 >
                   <div className="py-1">
-                    <Menu.Item>
-                      {({ active }) => (
-                        <span
-                          className={classNames(
-                            active ? 'bg-gray-100 text-fv-charcoal' : 'text-fv-charcoal-light',
-                            'w-full group flex items-center px-4 py-2 text-sm uppercase'
-                          )}
-                        >
-                          <Actions.Share docId={documentId} docTitle={documentTitle} withLabels={withLabels} />
-                        </span>
-                      )}
-                    </Menu.Item>
+                    {moreActions.includes('share') && (
+                      <Menu.Item>
+                        {({ active }) => (
+                          <button
+                            id="ShareAction"
+                            className={classNames(
+                              active ? 'bg-gray-100 text-fv-charcoal' : 'text-fv-charcoal-light',
+                              'w-full group flex items-center px-4 py-2 text-sm uppercase'
+                            )}
+                            onClick={() => setShareModalOpen(true)}
+                          >
+                            <span className="sr-only">Share</span>
+                            {useIcon('WebShare', 'fill-current h-8 w-8 md:h-6 md:w-6')}
+                            {withLabels ? <span className="ml-2">Share</span> : null}
+                          </button>
+                        )}
+                      </Menu.Item>
+                    )}
                   </div>
                 </Menu.Items>
               </Transition>
@@ -91,14 +95,22 @@ function ActionsMenuPresentation({
           )}
         </Menu>
       ) : null}
+      {/* Share Modal */}
+      <Modal.Presentation
+        heading={`Share ${docTitle} on:`}
+        isOpen={shareModelOpen}
+        closeHandler={() => setShareModalOpen(false)}
+      >
+        <Share.Container url={'someUrlHere' + docId} title={docTitle} />
+      </Modal.Presentation>
     </div>
   )
 }
 // PROPTYPES
 const { array, bool, string } = PropTypes
 ActionsMenuPresentation.propTypes = {
-  documentId: string,
-  documentTitle: string,
+  docId: string,
+  docTitle: string,
   actions: array,
   moreActions: array,
   withLabels: bool,

@@ -125,8 +125,8 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
                           ) : null}
                           <td className="text-right px-6">
                             <ActionsMenu.Container
-                              documentId={id}
-                              documentTitle={title}
+                              docId={id}
+                              docTitle={title}
                               actions={actions}
                               withConfirmation
                               withTooltip

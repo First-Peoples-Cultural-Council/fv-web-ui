@@ -43,10 +43,10 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
                   />
                 ))}
             </span>
-            <div className="my-2 md:my-0 md:inline-flex">
+            <div className="my-2 md:my-0 md:mt-1 md:ml-2">
               <ActionsMenu.Container
-                documentId={entry.id}
-                documentTitle={entry.title}
+                docId={entry.id}
+                docTitle={entry.title}
                 actions={actions}
                 moreActions={moreActions}
                 withLabels
