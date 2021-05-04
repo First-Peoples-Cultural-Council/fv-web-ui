@@ -4,6 +4,7 @@ import { Menu, Transition } from '@headlessui/react'
 
 // FPCC
 import useIcon from 'common/useIcon'
+import { makePlural } from 'common/urlHelpers'
 import Actions from 'components/Actions'
 import Share from 'components/Share'
 import Modal from 'components/Modal'
@@ -19,7 +20,16 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-function ActionsMenuPresentation({ docId, docTitle, actions, moreActions, withLabels, withConfirmation, withTooltip }) {
+function ActionsMenuPresentation({
+  docId,
+  docTitle,
+  docType,
+  actions,
+  moreActions,
+  withLabels,
+  withConfirmation,
+  withTooltip,
+}) {
   const [shareModelOpen, setShareModalOpen] = useState(false)
   return (
     <div className="inline-flex">
@@ -52,7 +62,7 @@ function ActionsMenuPresentation({ docId, docTitle, actions, moreActions, withLa
             <>
               <Menu.Button className="ml-2 pl-2 relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal hover:text-black border-l border-gray-300">
                 {useIcon('More', 'fill-current h-8 w-8 md:h-6 md:w-6')}
-                <span className="mx-2">More</span>
+                {withLabels ? <span className="mx-2">More</span> : null}
               </Menu.Button>
 
               <Transition
@@ -83,7 +93,7 @@ function ActionsMenuPresentation({ docId, docTitle, actions, moreActions, withLa
                           >
                             <span className="sr-only">Share</span>
                             {useIcon('WebShare', 'fill-current h-8 w-8 md:h-6 md:w-6')}
-                            {withLabels ? <span className="ml-2">Share</span> : null}
+                            <span className="ml-2">Share</span>
                           </button>
                         )}
                       </Menu.Item>
@@ -101,7 +111,10 @@ function ActionsMenuPresentation({ docId, docTitle, actions, moreActions, withLa
         isOpen={shareModelOpen}
         closeHandler={() => setShareModalOpen(false)}
       >
-        <Share.Container url={'someUrlHere' + docId} title={docTitle} />
+        <Share.Container
+          url={`${window.location.origin.toString()}/${makePlural(docType)}/${docId}`}
+          title={docTitle}
+        />
       </Modal.Presentation>
     </div>
   )
@@ -111,6 +124,7 @@ const { array, bool, string } = PropTypes
 ActionsMenuPresentation.propTypes = {
   docId: string,
   docTitle: string,
+  docType: string,
   actions: array,
   moreActions: array,
   withLabels: bool,

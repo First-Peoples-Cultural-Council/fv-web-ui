@@ -5,7 +5,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import useGetSite from 'common/useGetSite'
 import documentApi from 'services/api/document'
 import { triggerError } from 'common/navigationHelpers'
-import { localDateMDYT } from 'common/stringHelpers'
+import { getFriendlyDocType, localDateMDYT } from 'common/stringHelpers'
 
 /**
  * @summary PhraseData
@@ -35,8 +35,9 @@ function PhraseData() {
   const phraseContextParams = data?.contextParameters?.phrase ? data.contextParameters.phrase : {}
 
   const entry = {
+    id: data?.uid || '',
+    type: getFriendlyDocType(data?.type) || '',
     title: properties['dc:title'] || '',
-    docType: data?.type || '',
     translations: properties['fv:definitions'] || [],
     acknowledgement: properties['fv-phrase:acknowledgement'] || '',
     culturalNotes: properties['fv:cultural_note'] || [],

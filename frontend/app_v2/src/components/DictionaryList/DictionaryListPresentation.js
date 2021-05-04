@@ -18,7 +18,7 @@ import Loading from 'components/Loading'
  *
  * @returns {node} jsx markup
  */
-function DictionaryListPresentation({ actions, isLoading, items, siteShortUrl, wholeDomain }) {
+function DictionaryListPresentation({ actions, isLoading, items, moreActions, siteShortUrl, wholeDomain }) {
   const typeColor = { word: 'fv-turquoise', phrase: 'fv-orange', song: 'fv-red', story: 'fv-purple' }
   return (
     <Loading.Container isLoading={isLoading}>
@@ -122,7 +122,9 @@ function DictionaryListPresentation({ actions, isLoading, items, siteShortUrl, w
                         <ActionsMenu.Container
                           docId={id}
                           docTitle={title}
+                          docType={type}
                           actions={actions}
+                          moreActions={moreActions}
                           withConfirmation
                           withTooltip
                         />
@@ -157,6 +159,7 @@ DictionaryListPresentation.propTypes = {
       sitename: string,
     })
   ),
+  moreActions: array,
   siteShortUrl: string,
   wholeDomain: bool,
 }
@@ -164,6 +167,7 @@ DictionaryListPresentation.propTypes = {
 DictionaryListPresentation.defaultProps = {
   wholeDomain: false,
   actions: [],
+  moreActions: [],
 }
 
 export default DictionaryListPresentation

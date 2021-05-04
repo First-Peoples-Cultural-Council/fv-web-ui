@@ -29,7 +29,7 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
           <div className="ml-3 md:flex items-top">
             <span className="font-bold text-xl md:text-2xl">{entry.title}</span>
             {/* Audio */}
-            <span className="mx-2">
+            <span className="mx-2 text-fv-charcoal">
               {entry?.audio.length > 0 &&
                 entry.audio.map((audioFile, index) => (
                   <AudioMinimal.Container
@@ -47,6 +47,7 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
               <ActionsMenu.Container
                 docId={entry.id}
                 docTitle={entry.title}
+                docType={entry.type}
                 actions={actions}
                 moreActions={moreActions}
                 withLabels

@@ -5,7 +5,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import useGetSite from 'common/useGetSite'
 import documentApi from 'services/api/document'
 import { triggerError } from 'common/navigationHelpers'
-import { localDateMDYT } from 'common/stringHelpers'
+import { getFriendlyDocType, localDateMDYT } from 'common/stringHelpers'
 
 /**
  * @summary WordData
@@ -31,8 +31,9 @@ function WordData() {
   const wordContextParams = data?.contextParameters?.word ? data.contextParameters.word : {}
 
   const entry = {
+    id: data?.uid || '',
+    type: getFriendlyDocType(data?.type) || '',
     title: properties['dc:title'] || '',
-    docType: data?.type || '',
     translations: properties['fv:definitions'] || [],
     literalTranslations: properties['fv:literal_translation'] || [],
     acknowledgement: properties['fv-word:acknowledgement'] || '',

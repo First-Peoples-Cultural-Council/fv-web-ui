@@ -19,7 +19,15 @@ import ActionsMenu from 'components/ActionsMenu'
  * @returns {node} jsx markup
  */
 
-function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items, siteShortUrl, wholeDomain }) {
+function DictionaryListPresentation({
+  actions,
+  infiniteScroll,
+  isLoading,
+  items,
+  moreActions,
+  siteShortUrl,
+  wholeDomain,
+}) {
   const typeColor = { word: 'fv-turquoise', phrase: 'fv-orange', song: 'fv-red', story: 'fv-purple' }
   const { isFetchingNextPage, fetchNextPage, hasNextPage, loadButtonLabel, loadButtonRef } = infiniteScroll
 
@@ -127,7 +135,9 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
                             <ActionsMenu.Container
                               docId={id}
                               docTitle={title}
+                              docType={type}
                               actions={actions}
+                              moreActions={moreActions}
                               withConfirmation
                               withTooltip
                             />
@@ -167,6 +177,7 @@ DictionaryListPresentation.propTypes = {
   infiniteScroll: object,
   isLoading: bool,
   items: object,
+  moreActions: array,
   siteShortUrl: string,
   wholeDomain: bool,
 }
@@ -174,6 +185,7 @@ DictionaryListPresentation.propTypes = {
 DictionaryListPresentation.defaultProps = {
   wholeDomain: false,
   actions: [],
+  moreActions: [],
 }
 
 export default DictionaryListPresentation

@@ -97,6 +97,7 @@ function WordsData() {
     isLoading,
     items: data ? data : {},
     actions: ['copy'],
+    moreActions: ['share'],
     searchTerm,
     siteShortUrl,
     infiniteScroll,

@@ -13,6 +13,7 @@ import ActionsMenuPresentation from 'components/ActionsMenu/ActionsMenuPresentat
 function ActionsMenuContainer({
   docId,
   docTitle,
+  docType,
   actions = [],
   moreActions = [],
   withLabels = false,
@@ -23,6 +24,7 @@ function ActionsMenuContainer({
     <ActionsMenuPresentation
       docId={docId}
       docTitle={docTitle}
+      docType={docType}
       actions={actions}
       moreActions={moreActions}
       withLabels={withLabels}
@@ -36,6 +38,7 @@ const { array, bool, string } = PropTypes
 ActionsMenuContainer.propTypes = {
   docId: string,
   docTitle: string,
+  docType: string,
   actions: array,
   moreActions: array,
   withLabels: bool,

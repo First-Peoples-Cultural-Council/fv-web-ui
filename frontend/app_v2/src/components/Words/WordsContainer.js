@@ -20,6 +20,7 @@ function WordsContainer() {
     handleTextFieldChange,
     isLoading,
     items,
+    moreActions,
     newSearchValue,
     searchTerm,
     siteShortUrl,
@@ -36,6 +37,7 @@ function WordsContainer() {
       handleTextFieldChange={handleTextFieldChange}
       isLoading={isLoading}
       items={items}
+      moreActions={moreActions}
       newSearchValue={newSearchValue}
       searchTerm={searchTerm}
       siteShortUrl={siteShortUrl}

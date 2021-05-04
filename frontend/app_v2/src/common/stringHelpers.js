@@ -17,3 +17,16 @@ export const localDateMDY = (dateString) => {
   const day = d.getDate()
   return `${month < 10 ? '0' : ''}${month}/${day < 10 ? '0' : ''}${day}/${d.getFullYear()}`
 }
+
+export const getFriendlyDocType = (FVType) => {
+  switch (FVType) {
+    case 'FVWord':
+      return 'word'
+    case 'FVPhrase':
+      return 'phrase'
+    case 'FVBook':
+      return 'song/story'
+    default:
+      return ''
+  }
+}
