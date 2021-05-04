@@ -48,16 +48,16 @@ function Copy({ docId, docTitle, withLabels, withConfirmation, withTooltip }) {
       {useIcon('Copy', 'fill-current h-8 w-8 md:h-6 md:w-6')}
       {withLabels ? (
         <>
-          <span className="ml-2">Copy</span>
+          <span className="mx-2">Copy</span>
           <span id={`copy-message-${docId}`} className={confirmation ? '' : 'hidden'}>
-            <span className="absolute bottom-1 -right-2 bg-white">Copied</span>
+            <span className="absolute bottom-0 right-0 bg-white">Copied</span>
           </span>
         </>
       ) : null}
       {withTooltip ? (
         <>
           <span id={`copy-message-${docId}`} className={confirmation ? '' : 'hidden'}>
-            <div className="absolute bottom-1 -right-1 w-auto p-1 text-sm bg-fv-charcoal-light text-white text-center rounded-lg shadow-lg ">
+            <div className="absolute bottom-0 -right-1 w-auto p-1 text-sm bg-fv-charcoal-light text-white text-center rounded-lg shadow-lg ">
               Copied
             </div>
           </span>
