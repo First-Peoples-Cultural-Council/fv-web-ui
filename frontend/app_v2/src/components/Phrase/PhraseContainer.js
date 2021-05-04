@@ -1,6 +1,7 @@
 import React from 'react'
 import PhraseData from 'components/Phrase/PhraseData'
-import PhrasePresentation from 'components/Phrase/PhrasePresentation'
+import DictionaryDetail from 'components/DictionaryDetail'
+import Loading from 'components/Loading'
 /**
  * @summary PhraseContainer
  * @component
@@ -10,9 +11,17 @@ import PhrasePresentation from 'components/Phrase/PhrasePresentation'
  * @returns {node} jsx markup
  */
 function PhraseContainer() {
-  const { hasSiteData, phraseId } = PhraseData()
-  // Wait for getSite call to finish before we render WordContainerV1
-  return hasSiteData && phraseId ? <PhrasePresentation phraseId={phraseId} /> : <div>waiting</div>
+  const { actions, entry, isLoading, moreActions, siteShortUrl } = PhraseData()
+  return (
+    <Loading.Container isLoading={isLoading}>
+      <DictionaryDetail.Presentation
+        actions={actions}
+        entry={entry}
+        moreActions={moreActions}
+        siteShortUrl={siteShortUrl}
+      />
+    </Loading.Container>
+  )
 }
 
 export default PhraseContainer

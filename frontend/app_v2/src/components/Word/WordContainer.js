@@ -1,6 +1,6 @@
 import React from 'react'
 import WordData from 'components/Word/WordData'
-import WordPresentation from 'components/Word/WordPresentation'
+import DictionaryDetail from 'components/DictionaryDetail'
 import Loading from 'components/Loading'
 /**
  * @summary WordContainer
@@ -14,7 +14,12 @@ function WordContainer() {
   const { actions, entry, isLoading, moreActions, siteShortUrl } = WordData()
   return (
     <Loading.Container isLoading={isLoading}>
-      <WordPresentation actions={actions} entry={entry} moreActions={moreActions} siteShortUrl={siteShortUrl} />
+      <DictionaryDetail.Presentation
+        actions={actions}
+        entry={entry}
+        moreActions={moreActions}
+        siteShortUrl={siteShortUrl}
+      />
     </Loading.Container>
   )
 }

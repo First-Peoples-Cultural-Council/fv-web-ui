@@ -7,19 +7,19 @@ import { getMediaUrl } from 'common/urlHelpers'
 import AudioNative from 'components/AudioNative'
 import ActionsMenu from 'components/ActionsMenu'
 /**
- * @summary WordPresentation
+ * @summary DictionaryDetailPresentation
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function WordPresentation({ actions, moreActions, entry, siteShortUrl }) {
+function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUrl }) {
   const metaDataTitleStyling = 'text-left font-semibold text-xs uppercase text-fv-charcoal sm:w-40 sm:flex-shrink-0'
   const metaDataContentStyling = 'mt-1 text-sm sm:mt-0 sm:ml-6 sm:col-span-2'
   const noMedia = entry?.pictures?.length < 1 || entry?.videos?.length < 1 ? true : false
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white" data-testid="WordPresentation">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white" data-testid="DictionaryDetailPresentation">
       <div className="grid grid-cols-8 gap-4">
         <div id="WordDetails" className={`col-span-8 md:col-span-5 ${noMedia ? 'md:col-start-3' : ''}`}>
           <div className="flow-root">
@@ -65,7 +65,7 @@ function WordPresentation({ actions, moreActions, entry, siteShortUrl }) {
                 </ol>
               </div>
             )}
-            {/* Literal Translations */}
+            {/* Literal Translations - WORD ONLY */}
             {entry?.literalTranslations?.length > 0 && (
               <div className="p-3">
                 <h4 className="text-left font-semibold text-sm uppercase text-fv-charcoal">Literal translation</h4>
@@ -287,11 +287,11 @@ function WordPresentation({ actions, moreActions, entry, siteShortUrl }) {
 }
 // PROPTYPES
 const { array, object, string } = PropTypes
-WordPresentation.propTypes = {
+DictionaryDetailPresentation.propTypes = {
   actions: array,
   entry: object,
   moreActions: array,
   siteShortUrl: string,
 }
 
-export default WordPresentation
+export default DictionaryDetailPresentation
