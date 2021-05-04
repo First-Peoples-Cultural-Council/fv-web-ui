@@ -48,8 +48,6 @@ import org.nuxeo.ecm.webengine.model.impl.DefaultObject;
  */
 @WebObject(type = "statistics")
 @Produces({MediaType.APPLICATION_JSON})
-@SuppressWarnings("common-java:DuplicatedBlocks") //only until FVGenerateJSONStatistics is
-// deprecated
 public class StatisticsObject extends DefaultObject {
 
   protected static final String BASE_DOCS_QUERY =

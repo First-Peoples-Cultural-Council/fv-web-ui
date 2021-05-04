@@ -5,7 +5,6 @@
 			replace="true"/>
 		<operation class="ca.firstvoices.security.operations.FVDialectRegularDocumentPermissions"
 			replace="true"/>
-		<operation class="ca.firstvoices.security.operations.FVGenerateJsonStatistics" replace="true"/>
 		<operation class="ca.firstvoices.security.operations.FVPublishParents" replace="true"/>
 		<operation class="ca.firstvoices.security.operations.FVSetListenerFlag" replace="true"/>
 		<operation class="ca.firstvoices.security.operations.FVGetDialectsForUser"/>
