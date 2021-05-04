@@ -134,7 +134,8 @@ public class StatisticsObject extends DefaultObject {
       for (String lcs : lifeCycleStates) {
         queryToResult(session,
             query + " AND ecm:currentLifeCycleState='" + lcs
-                + "'").ifPresent(count -> aggregate.put(StateUtils.stateToVisibility(lcs), count));
+                + "'").ifPresent(count -> aggregate.put(lcs.toLowerCase() + " ("
+            + StateUtils.stateToVisibility(lcs) + ")", count));
       }
 
       // Children's archive
