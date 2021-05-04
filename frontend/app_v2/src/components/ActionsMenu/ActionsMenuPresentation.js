@@ -28,39 +28,33 @@ function ActionsMenuPresentation({
   withTooltip,
 }) {
   return (
-    <div className="ActionsMenu">
+    <div className="inline-flex">
       {actions.includes('copy') ? (
         <span className="sm:ml-3 inline-flex">
-          <div className="relative inline-block text-left">
-            <Actions.Copy
-              docId={documentId}
-              docTitle={documentTitle}
-              withLabels={withLabels}
-              withConfirmation={withConfirmation}
-              withTooltip={withTooltip}
-            />
-          </div>
+          <Actions.Copy
+            docId={documentId}
+            docTitle={documentTitle}
+            withLabels={withLabels}
+            withConfirmation={withConfirmation}
+            withTooltip={withTooltip}
+          />
         </span>
       ) : null}
       {actions.includes('share') ? (
         <span className="ml-3 pl-2 inline-flex border-l border-gray-300">
-          <div className="relative inline-block text-left">
-            <Actions.Share docId={documentId} docTitle={documentTitle} withLabels={withLabels} />
-          </div>
+          <Actions.Share docId={documentId} docTitle={documentTitle} withLabels={withLabels} />
         </span>
       ) : null}
       {/* More Menu button and items */}
       {moreActions.length > 0 ? (
-        <Menu as="div" className="relative inline-block text-left">
+        <Menu as="div" className="relative inline-flex text-left">
           {({ open }) => (
             <>
               <span className="ml-3 pl-2 inline-flex border-l border-gray-300">
-                <div className="relative inline-block text-left">
-                  <Menu.Button className="relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal hover:text-black">
-                    {useIcon('More', 'fill-current h-8 w-8 md:h-6 md:w-6')}
-                    <span className="ml-2">More</span>
-                  </Menu.Button>
-                </div>
+                <Menu.Button className="relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal hover:text-black">
+                  {useIcon('More', 'fill-current h-8 w-8 md:h-6 md:w-6')}
+                  <span className="ml-2">More</span>
+                </Menu.Button>
               </span>
 
               <Transition
@@ -75,7 +69,7 @@ function ActionsMenuPresentation({
               >
                 <Menu.Items
                   static
-                  className="z-10 origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  className="z-10 origin-top-right absolute top-5 right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                 >
                   <div className="py-1">
                     <Menu.Item>

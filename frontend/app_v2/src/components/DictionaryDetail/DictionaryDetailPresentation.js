@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom'
 
 // FPCC
 import { getMediaUrl } from 'common/urlHelpers'
-import AudioNative from 'components/AudioNative'
+import useIcon from 'common/useIcon'
+import AudioMinimal from 'components/AudioMinimal'
 import ActionsMenu from 'components/ActionsMenu'
 /**
  * @summary DictionaryDetailPresentation
@@ -19,44 +20,46 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
   const metaDataContentStyling = 'mt-1 text-sm sm:mt-0 sm:ml-6 sm:col-span-2'
   const noMedia = entry?.pictures?.length < 1 || entry?.videos?.length < 1 ? true : false
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white" data-testid="DictionaryDetailPresentation">
+    <div
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-2 md:mt-10 bg-white"
+      data-testid="DictionaryDetailPresentation"
+    >
       <div className="grid grid-cols-8 gap-4">
         <div id="WordDetails" className={`col-span-8 md:col-span-5 ${noMedia ? 'md:col-start-3' : ''}`}>
-          <div className="flow-root">
-            <div className="w-full sm:flex items-center mt-2 md:mt-10 px-6">
-              <h3 className="md:inline-flex font-bold text-xl md:text-2xl">{entry.title}</h3>
-              <div className="md:inline-flex py-2 md:py-0 md:ml-2 items-center">
-                <ActionsMenu.Container
-                  documentId={entry.id}
-                  documentTitle={entry.title}
-                  actions={actions}
-                  moreActions={moreActions}
-                  withLabels
-                  withConfirmation
-                />
-              </div>
-            </div>
-          </div>
-          {/* Audio */}
-          <div className="px-4 pb-2 sm:px-0 sm:py-0">
-            {entry?.audio.length > 0 && (
-              <div className="sm:flex sm:px-5 sm:py-5">
-                {entry.audio.map((audioFile, index) => (
-                  <AudioNative.Container
+          <div className="ml-3 md:flex items-top">
+            <span className="font-bold text-xl md:text-2xl">{entry.title}</span>
+            {/* Audio */}
+            <span className="mx-2">
+              {entry?.audio.length > 0 &&
+                entry.audio.map((audioFile, index) => (
+                  <AudioMinimal.Container
                     key={`${audioFile.uid}_${index}`}
-                    className="w-full md:w-2/5 text-black"
+                    icons={{
+                      Play: useIcon('Audio', 'fill-current h-10 w-10 md:w-8 md:h-8'),
+                      Pause: useIcon('PauseCircle', 'fill-current h-10 w-10 md:w-8 md:h-8'),
+                      Error: useIcon('TimesCircle', 'fill-current h-10 w-10 md:w-8 md:h-8'),
+                    }}
                     src={getMediaUrl({ type: 'audio', id: audioFile.uid })}
                   />
                 ))}
-              </div>
-            )}
+            </span>
+            <div className="my-2 md:my-0 md:inline-flex">
+              <ActionsMenu.Container
+                documentId={entry.id}
+                documentTitle={entry.title}
+                actions={actions}
+                moreActions={moreActions}
+                withLabels
+                withConfirmation
+              />
+            </div>
+          </div>
+
+          <section className="mx-16">
             {/* Translations/Definitions */}
             {entry?.translations?.length > 0 && (
               <div className="p-3">
-                <h4 className="text-left font-semibold text-sm uppercase text-fv-charcoal">
-                  {entry?.translations[0].language} translation
-                </h4>
-                <ol className="list-decimal mx-8">
+                <ol className="list-decimal">
                   {entry?.translations.map((translation, index) => (
                     <li key={index} className="p-0.5">
                       {translation.translation}
@@ -69,7 +72,7 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
             {entry?.literalTranslations?.length > 0 && (
               <div className="p-3">
                 <h4 className="text-left font-semibold text-sm uppercase text-fv-charcoal">Literal translation</h4>
-                <ol className="list-decimal mx-8">
+                <ol className="list-decimal">
                   {entry?.literalTranslations.map((translation, index) => (
                     <li key={index} className="p-0.5">
                       {translation.translation}
@@ -78,6 +81,8 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
                 </ol>
               </div>
             )}
+          </section>
+          <section>
             {/* Related Phrases */}
             {entry?.relatedPhrases?.length > 0 && (
               <div className="sm:flex p-3">
@@ -150,94 +155,90 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
                 <h4 className="text-left font-semibold text-lg uppercase text-fv-charcoal">Categories</h4>
                 <div>
                   {entry.categories.map((category, i) => (
-                    <div
+                    <Link
                       key={category.uid}
+                      to={`/${siteShortUrl}/categories/${category.uid}`}
                       className={`${
                         i === 0 ? 'ml-0' : ''
                       } m-1 p-1.5 inline-flex text-sm font-semibold rounded-md bg-fv-turquoise text-white`}
                     >
                       {category['dc:title']}
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </div>
             )}
-            {/* Metadata */}
-            <section className="my-5">
-              {entry?.partOfSpeech && (
-                <div className="sm:flex p-2">
-                  <dt className={metaDataTitleStyling}>Part of Speech</dt>
-                  <dd className={metaDataContentStyling}>{entry?.partOfSpeech}</dd>
-                </div>
-              )}
-              {entry?.pronunciation && (
-                <div className="sm:flex p-2">
-                  <dt className={metaDataTitleStyling}>Pronunciation</dt>
-                  <dd className={metaDataContentStyling}>{entry?.pronunciation}</dd>
-                </div>
-              )}
-              {entry?.culturalNotes && (
-                <div className="sm:flex p-2">
-                  <dt className={metaDataTitleStyling}>Cultural notes:</dt>
-                  {entry.culturalNotes.map((note, i) => (
-                    <dd key={i} className={metaDataContentStyling}>
-                      {note}
-                    </dd>
-                  ))}
-                </div>
-              )}
-              {entry?.generalNote && (
-                <div className="sm:flex p-2">
-                  <dt className={metaDataTitleStyling}>General note</dt>
-                  <dd className={metaDataContentStyling} dangerouslySetInnerHTML={{ __html: entry?.generalNote }} />
-                </div>
-              )}
-              {entry?.acknowledgement && (
-                <div className="sm:flex p-2">
-                  <dt className={metaDataTitleStyling}>Acknowledgement</dt>
-                  <dd className={metaDataContentStyling}>{entry?.acknowledgement}</dd>
-                </div>
-              )}
-              {entry?.reference && (
-                <div className="sm:flex p-2">
-                  <dt className={metaDataTitleStyling}>Reference:</dt>
-                  <dd className={metaDataContentStyling}>{entry?.reference}</dd>
-                </div>
-              )}
-              {entry?.sources && (
-                <div className="sm:flex p-2">
-                  <dt className={metaDataTitleStyling}>Sources:</dt>
-                  {entry.sources.map((source) => (
-                    <dd key={source.uid} className={metaDataContentStyling}>
-                      {source?.['dc:title']}
-                    </dd>
-                  ))}
-                </div>
-              )}
-              {entry?.created && (
-                <div className="sm:flex p-2">
-                  <dt className={metaDataTitleStyling}>Added to FirstVoices:</dt>
-                  <dd className={metaDataContentStyling}>{entry?.created}</dd>
-                </div>
-              )}
-              {entry?.modified && (
-                <div className="sm:flex p-2">
-                  <dt className={metaDataTitleStyling}>Last modified:</dt>
-                  <dd className={metaDataContentStyling}>{entry?.modified}</dd>
-                </div>
-              )}
-              {entry?.version && (
-                <div className="sm:flex p-2">
-                  <dt className={metaDataTitleStyling}>version:</dt>
-                  <dd className={metaDataContentStyling}>{entry?.version}</dd>
-                </div>
-              )}
-            </section>
-          </div>
+          </section>
+          {/* Metadata */}
+          <section className="p-3">
+            <h4 className="text-left mb-2 font-semibold text-lg uppercase text-fv-charcoal">Metadata</h4>
+            {entry?.partOfSpeech && (
+              <div className="sm:flex py-2">
+                <dt className={metaDataTitleStyling}>Part of Speech</dt>
+                <dd className={metaDataContentStyling}>{entry?.partOfSpeech}</dd>
+              </div>
+            )}
+            {entry?.pronunciation && (
+              <div className="sm:flex py-2">
+                <dt className={metaDataTitleStyling}>Pronunciation</dt>
+                <dd className={metaDataContentStyling}>{entry?.pronunciation}</dd>
+              </div>
+            )}
+            {entry?.culturalNotes && (
+              <div className="sm:flex py-2">
+                <dt className={metaDataTitleStyling}>Cultural notes:</dt>
+                {entry.culturalNotes.map((note, i) => (
+                  <dd key={i} className={metaDataContentStyling}>
+                    {note}
+                  </dd>
+                ))}
+              </div>
+            )}
+            {entry?.generalNote && (
+              <div className="sm:flex py-2">
+                <dt className={metaDataTitleStyling}>General note</dt>
+                <dd className={metaDataContentStyling} dangerouslySetInnerHTML={{ __html: entry?.generalNote }} />
+              </div>
+            )}
+            {entry?.acknowledgement && (
+              <div className="sm:flex py-2">
+                <dt className={metaDataTitleStyling}>Acknowledgement</dt>
+                <dd className={metaDataContentStyling}>{entry?.acknowledgement}</dd>
+              </div>
+            )}
+            {entry?.reference && (
+              <div className="sm:flex py-2">
+                <dt className={metaDataTitleStyling}>Reference:</dt>
+                <dd className={metaDataContentStyling}>{entry?.reference}</dd>
+              </div>
+            )}
+            {entry?.sources && (
+              <div className="sm:flex py-2">
+                <dt className={metaDataTitleStyling}>Sources:</dt>
+                {entry.sources.map((source) => (
+                  <dd key={source.uid} className={metaDataContentStyling}>
+                    {source?.['dc:title']}
+                  </dd>
+                ))}
+              </div>
+            )}
+            {entry?.created && (
+              <div className="sm:flex py-2">
+                <dt className={metaDataTitleStyling}>Added to FirstVoices:</dt>
+                <dd className={metaDataContentStyling}>{entry?.created}</dd>
+              </div>
+            )}
+            {entry?.modified && (
+              <div className="sm:flex py-2">
+                <dt className={metaDataTitleStyling}>Last modified:</dt>
+                <dd className={metaDataContentStyling}>{entry?.modified}</dd>
+              </div>
+            )}
+          </section>
         </div>
         {/* Pictures and Video */}
         {noMedia ? null : (
-          <div id="WordMedia" className="col-span-8 md:col-span-3 p-5 md:mt-12">
+          <div id="WordMedia" className="col-span-8 md:col-span-3 p-5 md:mt-5">
             <ul>
               {entry?.pictures
                 ? entry.pictures.map((picture, index) => (
@@ -282,7 +283,7 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
           </div>
         )}
       </div>
-    </section>
+    </div>
   )
 }
 // PROPTYPES
