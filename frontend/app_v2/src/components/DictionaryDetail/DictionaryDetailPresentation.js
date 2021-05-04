@@ -16,8 +16,8 @@ import ActionsMenu from 'components/ActionsMenu'
  * @returns {node} jsx markup
  */
 function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUrl }) {
-  const metaDataTitleStyling = 'text-left font-semibold text-xs uppercase text-fv-charcoal sm:w-40 sm:flex-shrink-0'
-  const metaDataContentStyling = 'mt-1 text-sm sm:mt-0 sm:ml-6 sm:col-span-2'
+  const metaDataLableStyling = 'text-sm font-semibold uppercase text-fv-charcoal sm:w-40 sm:flex-shrink-0'
+  const metaDataContentStyling = 'text-sm text-black sm:mt-0 sm:ml-6 sm:col-span-2'
   const noMedia = entry?.pictures?.length < 1 || entry?.videos?.length < 1 ? true : false
   return (
     <div
@@ -174,19 +174,19 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
             <h4 className="text-left mb-2 font-semibold text-lg uppercase text-fv-charcoal">Metadata</h4>
             {entry?.partOfSpeech && (
               <div className="sm:flex py-2">
-                <dt className={metaDataTitleStyling}>Part of Speech</dt>
+                <dt className={metaDataLableStyling}>Part of Speech</dt>
                 <dd className={metaDataContentStyling}>{entry?.partOfSpeech}</dd>
               </div>
             )}
             {entry?.pronunciation && (
               <div className="sm:flex py-2">
-                <dt className={metaDataTitleStyling}>Pronunciation</dt>
+                <dt className={metaDataLableStyling}>Pronunciation</dt>
                 <dd className={metaDataContentStyling}>{entry?.pronunciation}</dd>
               </div>
             )}
             {entry?.culturalNotes && (
               <div className="sm:flex py-2">
-                <dt className={metaDataTitleStyling}>Cultural notes:</dt>
+                <dt className={metaDataLableStyling}>Cultural notes</dt>
                 {entry.culturalNotes.map((note, i) => (
                   <dd key={i} className={metaDataContentStyling}>
                     {note}
@@ -196,25 +196,25 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
             )}
             {entry?.generalNote && (
               <div className="sm:flex py-2">
-                <dt className={metaDataTitleStyling}>General note</dt>
+                <dt className={metaDataLableStyling}>Notes</dt>
                 <dd className={metaDataContentStyling} dangerouslySetInnerHTML={{ __html: entry?.generalNote }} />
               </div>
             )}
             {entry?.acknowledgement && (
               <div className="sm:flex py-2">
-                <dt className={metaDataTitleStyling}>Acknowledgement</dt>
+                <dt className={metaDataLableStyling}>Acknowledgement</dt>
                 <dd className={metaDataContentStyling}>{entry?.acknowledgement}</dd>
               </div>
             )}
             {entry?.reference && (
               <div className="sm:flex py-2">
-                <dt className={metaDataTitleStyling}>Reference:</dt>
+                <dt className={metaDataLableStyling}>Reference</dt>
                 <dd className={metaDataContentStyling}>{entry?.reference}</dd>
               </div>
             )}
             {entry?.sources && (
               <div className="sm:flex py-2">
-                <dt className={metaDataTitleStyling}>Sources:</dt>
+                <dt className={metaDataLableStyling}>Sources</dt>
                 {entry.sources.map((source) => (
                   <dd key={source.uid} className={metaDataContentStyling}>
                     {source?.['dc:title']}
@@ -224,13 +224,13 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
             )}
             {entry?.created && (
               <div className="sm:flex py-2">
-                <dt className={metaDataTitleStyling}>Added to FirstVoices:</dt>
+                <dt className={metaDataLableStyling}>Date added</dt>
                 <dd className={metaDataContentStyling}>{entry?.created}</dd>
               </div>
             )}
             {entry?.modified && (
               <div className="sm:flex py-2">
-                <dt className={metaDataTitleStyling}>Last modified:</dt>
+                <dt className={metaDataLableStyling}>Last modified</dt>
                 <dd className={metaDataContentStyling}>{entry?.modified}</dd>
               </div>
             )}
