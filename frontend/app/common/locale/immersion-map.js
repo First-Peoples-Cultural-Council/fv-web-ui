@@ -2924,13 +2924,6 @@ export const labelMap = [
     templateStrings: [],
   },
   {
-    key: 'general.language_statistics',
-    isUsed: true,
-    category: 'general',
-    type: 'phrase',
-    templateStrings: [],
-  },
-  {
     key: 'general.languages',
     isUsed: true,
     category: 'general',

@@ -64,7 +64,7 @@
   "dependencies": {
     "@fpcc/fv-game-jigsaw": "1.0.1",
     "@fpcc/fv-game-memory": "1.0.0",
-    "@fpcc/fv-game-wordsearch": "^1.0.1",
+    "@fpcc/fv-game-wordsearch": "1.1.2",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@sentry/react": "^5.29.2",

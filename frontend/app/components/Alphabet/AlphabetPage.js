@@ -91,7 +91,7 @@ export class PageDialectLearnAlphabet extends PageDialectLearnBase {
             dialect={{ compute: _computeDialect2, update: this.props.updateDialect2 }}
             routeParams={this.props.routeParams}
           >
-            <ToolbarNavigation hideStatistics />
+            <ToolbarNavigation />
           </Header>
         )}
         <div className={classNames('row', 'dialect-body-container')} style={{ marginTop: '15px' }}>

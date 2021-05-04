@@ -22,7 +22,7 @@ import classNames from 'classnames'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchDialect2, updateDialect2, fetchDialectStats, republishDialect } from 'reducers/fvDialect'
+import { fetchDialect2, updateDialect2, republishDialect } from 'reducers/fvDialect'
 import { queryModifiedWords, queryCreatedWords, queryUserCreatedWords, queryUserModifiedWords } from 'reducers/fvWord'
 import {
   queryCreatedSongs,
@@ -108,7 +108,6 @@ export class DialectLearn extends Component {
     fetchDialect2: func.isRequired,
     fetchPortal: func.isRequired,
     updateDialect2: func.isRequired,
-    fetchDialectStats: func.isRequired,
     republishDialect: func.isRequired,
     queryModifiedWords: func.isRequired,
     queryCreatedWords: func.isRequired,
@@ -133,8 +132,6 @@ export class DialectLearn extends Component {
     super(props, context)
 
     this.state = {
-      showStats: false,
-      fetchedStats: false,
       fetchedRecentActivityLists: new Set(),
       expandedCards: {
         words: false,
@@ -143,9 +140,7 @@ export class DialectLearn extends Component {
         stories: false,
       },
     }
-    ;['_showStats', '_publishChangesAction', '_loadRecentActivity'].forEach(
-      (method) => (this[method] = this[method].bind(this))
-    )
+    ;['_publishChangesAction', '_loadRecentActivity'].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   fetchData(newProps) {
@@ -197,20 +192,6 @@ export class DialectLearn extends Component {
         '!'
       )
     )
-  }
-
-  _showStats() {
-    if (!this.state.fetchedStats) {
-      this.props.fetchDialectStats(this.props.routeParams.dialect_path, {
-        dialectPath: this.props.routeParams.dialect_path,
-        docTypes: ['words', 'phrases', 'songs', 'stories'],
-      })
-    }
-
-    this.setState({
-      fetchedStats: true,
-      showStats: !this.state.showStats,
-    })
   }
 
   _loadRecentActivity(key) {
@@ -375,12 +356,10 @@ export class DialectLearn extends Component {
 
         <Header
           dialect={{ compute: computeDialect2, update: this.props.updateDialect2 }}
-          handleShowStats={this._showStats}
-          isStatisticsVisible={this.state.showStats}
           portal={{ compute: computePortal, update: this.props.updatePortal }}
           routeParams={this.props.routeParams}
         >
-          <ToolbarNavigation handleShowStats={this._showStats} isStatisticsVisible={this.state.showStats} />
+          <ToolbarNavigation />
         </Header>
 
         <div className={classNames('row', 'dialect-body-container', dialectClassName)} style={{ marginTop: '15px' }}>
@@ -870,7 +849,6 @@ const mapDispatchToProps = {
   fetchDialect2,
   fetchPortal,
   updateDialect2,
-  fetchDialectStats,
   republishDialect,
   queryModifiedWords,
   queryCreatedWords,

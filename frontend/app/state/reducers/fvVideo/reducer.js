@@ -5,9 +5,6 @@ import {
   FV_VIDEOS_SHARED_FETCH_START,
   FV_VIDEOS_SHARED_FETCH_SUCCESS,
   FV_VIDEOS_SHARED_FETCH_ERROR,
-  FV_VIDEO_FETCH_STATS_START,
-  FV_VIDEO_FETCH_STATS_SUCCESS,
-  FV_VIDEO_FETCH_STATS_ERROR,
 } from './actionTypes'
 
 const initialState = {
@@ -94,19 +91,4 @@ export const fvVideoReducer = combineReducers({
   },
   */
   computeVideo: computeVideoFactory.computeVideo,
-  computeVideoStats(state = initialState, action) {
-    switch (action.type) {
-      case FV_VIDEO_FETCH_STATS_START:
-        return { ...state, isFetching: true, success: false }
-
-      case FV_VIDEO_FETCH_STATS_SUCCESS:
-        return { ...state, response: action.document, isFetching: false, success: true }
-
-      case FV_VIDEO_FETCH_STATS_ERROR:
-        return { ...state, isFetching: false, isError: true, error: action.error }
-
-      default:
-        return { ...state, isFetching: false }
-    }
-  },
 })

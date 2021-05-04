@@ -13,11 +13,20 @@ import static ca.firstvoices.data.lifecycle.Constants.TEAM;
 import static ca.firstvoices.data.lifecycle.Constants.UNPUBLISH_TRANSITION;
 
 import ca.firstvoices.core.io.utils.DialectUtils;
+import ca.firstvoices.core.io.utils.StateUtils;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoException;
+import org.nuxeo.ecm.platform.audit.api.AuditLogger;
+import org.nuxeo.ecm.platform.audit.api.ExtendedInfo;
+import org.nuxeo.ecm.platform.audit.api.LogEntry;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  * @author david
@@ -38,18 +47,21 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
       throw new NuxeoException("You must provide a visibility value to update to.");
     }
 
+    boolean transitioned = false;
+
     String currentLifeCycleState = doc.getCurrentLifeCycleState();
+    final String originalVisibility = StateUtils.stateToVisibility(currentLifeCycleState);
 
     switch (visibility) {
       case MEMBERS:
         // Members ===> "Enabled"
         if (currentLifeCycleState.equals(NEW_STATE) || currentLifeCycleState
             .equals(DISABLED_STATE)) {
-          doc.followTransition(ENABLE_TRANSITION);
+          transitioned = doc.followTransition(ENABLE_TRANSITION);
         } else if (currentLifeCycleState.equals(PUBLISHED_STATE)) {
           // Unpublish Transition will trigger the ProxyPublisherListener and move
           // document to enabled state
-          doc.followTransition(UNPUBLISH_TRANSITION);
+          transitioned = doc.followTransition(UNPUBLISH_TRANSITION);
         }
         break;
 
@@ -62,7 +74,7 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
           // document to enabled state
           doc.followTransition(UNPUBLISH_TRANSITION);
         }
-        doc.followTransition(DISABLE_TRANSITION);
+        transitioned = doc.followTransition(DISABLE_TRANSITION);
         break;
       case PUBLIC:
         // Public ===> "Published"
@@ -97,14 +109,16 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
         if (!currentLifeCycleState.equals(PUBLISHED_STATE)) {
           // Publish Transition will trigger the ProxyPublisherListener and move documents to
           // published state
-          doc.followTransition(PUBLISH_TRANSITION);
+          transitioned = doc.followTransition(PUBLISH_TRANSITION);
         } else {
-          doc.followTransition(REPUBLISH_TRANSITION);
+          transitioned = doc.followTransition(REPUBLISH_TRANSITION);
         }
         break;
       default:
         break;
     }
+
+    logInAuditLog(doc, originalVisibility, visibility, transitioned);
 
     return doc;
   }
@@ -112,5 +126,38 @@ public class UpdateVisibilityServiceImpl implements UpdateVisibilityService {
   @Override
   public boolean isValidVisibility(String visibility) {
     return MEMBERS.equals(visibility) || PUBLIC.equals(visibility) || TEAM.equals(visibility);
+  }
+
+  /**
+   * Log visibility change in audit logger
+   * @param doc document to log
+   * @param fromVisibility visibility we are moving from (current)
+   * @param toVisibility visibility we are moving to
+   * @param transitioned true if the transition happened, false otherwise
+   */
+  private void logInAuditLog(DocumentModel doc,
+      String fromVisibility, String toVisibility, boolean transitioned) {
+    AuditLogger logger = Framework.getService(AuditLogger.class);
+
+    if (logger != null) {
+      LogEntry entry = logger.newLogEntry();
+      entry.setEventId("Visibility changed");
+      entry.setCategory("Document");
+      entry.setPrincipalName(doc.getCoreSession().getPrincipal().getName());
+      entry.setEventDate(new Date());
+      entry.setDocLifeCycle(toVisibility);
+      entry.setDocUUID(doc.getRef());
+
+      Map<String, ExtendedInfo> extended = new HashMap<>();
+      extended.put("visibilityFrom", logger.newExtendedInfo(fromVisibility));
+      extended.put("visibilityTo", logger.newExtendedInfo(toVisibility));
+      extended.put("transitioned", logger.newExtendedInfo(transitioned));
+      entry.setExtendedInfos(extended);
+
+      entry.setComment(String.format("From %s to %s (%s)",
+          fromVisibility, toVisibility, (transitioned) ? "Success" : "Failed or Ignored"));
+
+      logger.addLogEntries(Collections.singletonList(entry));
+    }
   }
 }

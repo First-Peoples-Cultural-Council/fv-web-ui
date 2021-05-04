@@ -17,8 +17,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import NavigationHelpers from 'common/NavigationHelpers'
 import selectn from 'selectn'
-import PageStats from 'components/PageStats'
-import AuthenticationFilter from 'components/AuthenticationFilter'
 
 /**
  * Header for dialect pages
@@ -27,15 +25,7 @@ export default class Header extends Component {
   static propTypes = {
     backgroundImage: PropTypes.string,
     dialect: PropTypes.object,
-    handleShowStats: PropTypes.func,
-    isStatisticsVisible: PropTypes.bool,
     portal: PropTypes.object,
-    routeParams: PropTypes.object,
-  }
-
-  static defaultProps = {
-    isStatisticsVisible: false,
-    handleShowStats: () => {},
   }
 
   constructor(props, context) {
@@ -47,7 +37,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { portal, routeParams, isStatisticsVisible } = this.props
+    const { portal } = this.props
 
     const backgroundImage = selectn(
       'response.contextParameters.portal.fv-portal:background_top_image.path',
@@ -70,16 +60,8 @@ export default class Header extends Component {
       backgroundRepeat: 'no-repeat',
     }
 
-    // const isSection = routeParams.area === SECTIONS
-
     return (
       <div className="Header row" style={portalBackgroundStyles}>
-        <AuthenticationFilter.Container hideFromSections>
-          {isStatisticsVisible && (
-            <PageStats handleShowStats={this.props.handleShowStats} dialectPath={routeParams.dialect_path} />
-          )}
-        </AuthenticationFilter.Container>
-
         {this.props.children}
       </div>
     )

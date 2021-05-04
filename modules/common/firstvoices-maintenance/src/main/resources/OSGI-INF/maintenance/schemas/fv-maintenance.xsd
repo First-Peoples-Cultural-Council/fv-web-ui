@@ -33,7 +33,9 @@
   <!-- List of available jobs to set -->
   <xs:simpleType name="job_ids">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Categories.Migrate" /> <!-- note: this must much the ID used to evaluate the jobs to run -->
+      <xs:enumeration value="Alphabet.AddConfusables" />
+      <xs:enumeration value="Alphabet.ComputeCustomOrder" />
+      <xs:enumeration value="Alphabet.CleanConfusables" />
     </xs:restriction>
   </xs:simpleType>
 
