@@ -19,6 +19,7 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
   const metaDataLableStyling = 'text-sm font-semibold uppercase text-fv-charcoal sm:w-40 sm:flex-shrink-0'
   const metaDataContentStyling = 'text-sm text-black sm:mt-0 sm:ml-6 sm:col-span-2'
   const noMedia = entry?.pictures?.length < 1 || entry?.videos?.length < 1 ? true : false
+  const shortTitle = entry?.title.length < 20
   return (
     <div
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-2 md:mt-10 bg-white"
@@ -27,7 +28,9 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
       <div className="grid grid-cols-8 gap-4">
         <div id="WordDetails" className={`col-span-8 md:col-span-5 ${noMedia ? 'md:col-start-3' : ''}`}>
           <div className="ml-3 md:flex items-top">
-            <span className="font-bold text-xl md:text-2xl">{entry.title}</span>
+            <span className={`font-bold ${shortTitle ? 'text-2xl md:text-4xl' : 'text-xl md:text-2xl'}`}>
+              {entry.title}
+            </span>
             {/* Audio */}
             <span className="mx-2 text-fv-charcoal">
               {entry?.audio.length > 0 &&
