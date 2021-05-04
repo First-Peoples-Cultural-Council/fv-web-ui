@@ -106,11 +106,10 @@ function ActionsMenuPresentation({
         </Menu>
       ) : null}
       {/* Share Modal */}
-      <Modal.Presentation
-        heading={`Share ${docTitle} on:`}
-        isOpen={shareModelOpen}
-        closeHandler={() => setShareModalOpen(false)}
-      >
+      <Modal.Presentation isOpen={shareModelOpen} closeHandler={() => setShareModalOpen(false)}>
+        <h3 className="mb-1 text-xl font-medium text-fv-charcoal">
+          Share <em>{docTitle}</em> on:
+        </h3>
         <Share.Container
           url={`${window.location.origin.toString()}/${makePlural(docType)}/${docId}`}
           title={docTitle}

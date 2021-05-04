@@ -10,7 +10,7 @@ import { Dialog, Transition } from '@headlessui/react'
  *
  * @returns {node} jsx markup
  */
-function ModalPresentation({ children, heading, isOpen, closeHandler }) {
+function ModalPresentation({ children, isOpen, closeHandler }) {
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" static className="fixed z-10 inset-0 overflow-y-auto" open={isOpen} onClose={closeHandler}>
@@ -43,9 +43,6 @@ function ModalPresentation({ children, heading, isOpen, closeHandler }) {
             <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
               <div>
                 <div className="mt-3 text-center sm:mt-5">
-                  <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
-                    {heading}
-                  </Dialog.Title>
                   <div className="mt-2">{children}</div>
                 </div>
               </div>
@@ -66,10 +63,9 @@ function ModalPresentation({ children, heading, isOpen, closeHandler }) {
   )
 }
 // PROPTYPES
-const { bool, func, object, string } = PropTypes
+const { bool, func, object } = PropTypes
 ModalPresentation.propTypes = {
   children: object,
-  heading: string,
   isOpen: bool,
   closeHandler: func,
 }
