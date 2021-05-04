@@ -29,8 +29,6 @@ export const fetchDialect2 = fetch('FV_DIALECT2', 'FVDialect', {
 
 export const queryDialect2ByShortURL = query('FV_DIALECT2_SHORTURL', 'FVDialect', {})
 
-export const fetchDialectStats = execute('FV_DIALECT_STATS', 'FVGenerateJsonStatistics', {})
-
 export const fetchDialects = query('FV_DIALECTS', 'FVDialect', {
   headers: { 'enrichers.document': 'ancestry,dialect' },
 })

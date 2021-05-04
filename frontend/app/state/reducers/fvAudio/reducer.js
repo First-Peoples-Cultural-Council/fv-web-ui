@@ -5,9 +5,6 @@ import {
   FV_AUDIOS_SHARED_FETCH_START,
   FV_AUDIOS_SHARED_FETCH_SUCCESS,
   FV_AUDIOS_SHARED_FETCH_ERROR,
-  FV_AUDIO_FETCH_STATS_START,
-  FV_AUDIO_FETCH_STATS_SUCCESS,
-  FV_AUDIO_FETCH_STATS_ERROR,
 } from './actionTypes'
 
 const initialState = {
@@ -110,24 +107,7 @@ const computeSharedAudios = (state = initialState, action) => {
 const _computeAudioFactory = computeFetch('audio')
 const computeAudio = _computeAudioFactory.computeAudio
 
-const computeAudioStats = (state = initialState, action) => {
-  switch (action.type) {
-    case FV_AUDIO_FETCH_STATS_START:
-      return { ...state, isFetching: true, success: false }
-
-    case FV_AUDIO_FETCH_STATS_SUCCESS:
-      return { ...state, response: action.document, isFetching: false, success: true }
-
-    case FV_AUDIO_FETCH_STATS_ERROR:
-      return { ...state, isFetching: false, isError: true, error: action.error }
-
-    default:
-      return { ...state, isFetching: false }
-  }
-}
-
 export const fvAudioReducer = combineReducers({
   computeSharedAudios,
   computeAudio,
-  computeAudioStats,
 })

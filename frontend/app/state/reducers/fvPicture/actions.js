@@ -6,9 +6,6 @@ import {
   FV_PICTURES_SHARED_FETCH_START,
   FV_PICTURES_SHARED_FETCH_SUCCESS,
   FV_PICTURES_SHARED_FETCH_ERROR,
-  FV_PICTURE_FETCH_STATS_START,
-  FV_PICTURE_FETCH_STATS_SUCCESS,
-  FV_PICTURE_FETCH_STATS_ERROR,
   FV_PICTURE_UPDATE_START,
   FV_PICTURE_UPDATE_SUCCESS,
   FV_PICTURE_UPDATE_ERROR,
@@ -60,51 +57,6 @@ export const fetchSharedPictures = function fetchSharedPictures(pageProvider, he
       })
       .catch((error) => {
         dispatch({ type: FV_PICTURES_SHARED_FETCH_ERROR, error: error })
-      })
-  }
-}
-
-/*
-const fetchPictureAndStats = function fetchPictureWithStats(path) {
-	  return dispatch => Promise.all([
-	    dispatch(fetchPicture(path)),
-        dispatch(fetchPictureStats())
-      ]);
-}
-
-export const fetchPicture = function fetchPicture(pathOrId) {
-  return (dispatch) => {
-
-    let pictures = {};
-    pictures[pathOrId] = {};
-
-    dispatch( { type: FV_PICTURE_FETCH_START, pictures: pictures, pathOrId: pathOrId } );
-
-    return DocumentOperations.getDocument(pathOrId, 'FVPicture', { headers: { 'enrichers.document': 'ancestry' } })
-    .then((response) => {
-
-      pictures[pathOrId] = { response: response };
-
-      dispatch( { type: FV_PICTURE_FETCH_SUCCESS, pictures: pictures, pathOrId: pathOrId } )
-    }).catch((error) => {
-
-        pictures[pathOrId] = { error: error };
-
-        dispatch( { type: FV_PICTURE_FETCH_ERROR, pictures: pictures, pathOrId: pathOrId } )
-    });
-  }
-};*/
-
-export const fetchPictureStats = function fetchPictureStats(dialectId) {
-  return (dispatch) => {
-    dispatch({ type: FV_PICTURE_FETCH_STATS_START })
-
-    return DocumentOperations.getPictureStats(dialectId)
-      .then((response) => {
-        dispatch({ type: FV_PICTURE_FETCH_STATS_SUCCESS, document: response })
-      })
-      .catch((error) => {
-        dispatch({ type: FV_PICTURE_FETCH_STATS_ERROR, error: error })
       })
   }
 }

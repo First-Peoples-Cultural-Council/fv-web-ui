@@ -6,9 +6,6 @@ import {
   FV_PICTURES_SHARED_FETCH_START,
   FV_PICTURES_SHARED_FETCH_SUCCESS,
   FV_PICTURES_SHARED_FETCH_ERROR,
-  FV_PICTURE_FETCH_STATS_START,
-  FV_PICTURE_FETCH_STATS_SUCCESS,
-  FV_PICTURE_FETCH_STATS_ERROR,
 } from './actionTypes'
 
 const initialState = {
@@ -104,19 +101,4 @@ export const fvPictureReducer = combineReducers({
         break;
       }
     },*/
-  computePictureStats(state = initialState, action) {
-    switch (action.type) {
-      case FV_PICTURE_FETCH_STATS_START:
-        return { ...state, isFetching: true, success: false }
-
-      case FV_PICTURE_FETCH_STATS_SUCCESS:
-        return { ...state, response: action.document, isFetching: false, success: true }
-
-      case FV_PICTURE_FETCH_STATS_ERROR:
-        return { ...state, isFetching: false, isError: true, error: action.error }
-
-      default:
-        return { ...state, isFetching: false }
-    }
-  },
 })

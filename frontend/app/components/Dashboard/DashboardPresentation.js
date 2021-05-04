@@ -32,6 +32,9 @@ function DashboardPresentation({ widgets }) {
           Admin Dashboard
         </Typography>
       </div>
+
+      <div className="Dashboard__widgetsContainer Dashboard__widgetsContainerFullWidth">{/* Statistics Widget */}</div>
+
       <div className="Dashboard__widgetsContainer">
         {widgets.map((widget, index) => {
           return <div key={`Dashboard__widgetsContainer--${index}`}>{widget}</div>

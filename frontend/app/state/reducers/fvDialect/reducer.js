@@ -23,7 +23,6 @@ const computeDialectsQuery = computeQuery('dialects')
 // const computeDialectQuery = computeQuery('dialect2_query')
 const computeDialectByShortURL = computeQuery('dialect2_shorturl')
 const computeDialectFetch = computeFetch('dialect2')
-const computeDialectStatsOperation = computeOperation('dialect_stats')
 const computeDialectListOperation = computeOperation('dialect_list')
 
 const computeDialect = (state = initialState, action = {}) => {
@@ -59,8 +58,6 @@ const computeDialects = computeDialectsQuery.computeDialects
 
 const computeDialect2 = computeDialectFetch.computeDialect2
 
-const computeDialectStats = computeDialectStatsOperation.computeDialectStats
-
 const computeDialectList = computeDialectListOperation.computeDialectList
 
 // export const fvDialectReducer = {
@@ -68,7 +65,6 @@ const computeDialectList = computeDialectListOperation.computeDialectList
 //   computeDialect2ByShortURL,
 //   computeDialects,
 //   computeDialect2,
-//   computeDialectStats,
 //   computeDialectList,
 // }
 
@@ -77,6 +73,5 @@ export const fvDialectReducer = combineReducers({
   computeDialect2ByShortURL,
   computeDialects,
   computeDialect2,
-  computeDialectStats,
   computeDialectList,
 })
