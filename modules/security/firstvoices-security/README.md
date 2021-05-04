@@ -6,8 +6,6 @@ In addition, it overrides the default Nuxeo login page to use a custom FirstVoic
 
 ## ToDo
 * Move various non-security operations from this module
-* Move document validation logic/operations from this module
-* Move auditLoggerListener customization from this module
 * Retire JSF login page as soon as SSO is configured
 
 ## Learn More

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<component name="ca.firstvoices.core.io.listeners.audit.contrib" version="1.0">
+
+    <require>org.nuxeo.ecm.platform.audit.service.NXAuditEventsService</require>
+
+    <extension point="listener" target="org.nuxeo.ecm.core.event.EventServiceComponent">
+        <!-- listener to ignore specific audit events -->
+        <listener name="auditLoggerListener" async="false" postCommit="false" priority="500"
+          class="ca.firstvoices.core.io.listeners.OverwriteAuditEventListener" />
+    </extension>
+
+</component>

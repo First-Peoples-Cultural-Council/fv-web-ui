@@ -38,6 +38,7 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
+import org.nuxeo.ecm.core.api.model.PropertyNotFoundException;
 import org.nuxeo.ecm.core.query.sql.NXQL;
 import org.nuxeo.ecm.core.schema.FacetNames;
 import org.nuxeo.runtime.api.Framework;
@@ -87,7 +88,13 @@ public class FVUserProfileServiceImpl implements FVUserProfileService {
       NuxeoPrincipal currentUser, String baseURL, Boolean defaultHome) {
     String primaryDialectPath = null;
     String primaryDialeprimaryDialectShortUrltShortUrl = null;
-    String userPreferences = (String) currentUser.getModel().getPropertyValue("user:preferences");
+    String userPreferences = null;
+
+    try {
+      userPreferences = (String) currentUser.getModel().getPropertyValue("user:preferences");
+    } catch (PropertyNotFoundException exec) {
+      // Fall back to alternatives below
+    }
 
     if (currentUser.isAnonymous()) {
       return null;
