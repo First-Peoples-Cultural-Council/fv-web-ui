@@ -20,7 +20,7 @@ function phraseDataAdaptor(data) {
     categories: phraseContextParams?.phrase_books || [],
     audio:
       phraseContextParams?.related_audio?.map((file) => {
-        return { ...file, speaker: 'Betty White' }
+        return { ...file, speaker: 'Name of speaker' }
       }) || [],
     relatedPhrases: phraseContextParams?.related_phrases || [],
     relatedAssets: phraseContextParams?.related_assets || [],

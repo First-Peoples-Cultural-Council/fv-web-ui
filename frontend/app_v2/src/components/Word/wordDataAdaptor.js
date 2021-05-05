@@ -21,7 +21,7 @@ function wordDataAdaptor(data) {
     categories: wordContextParams?.categories || [],
     audio:
       wordContextParams?.related_audio?.map((file) => {
-        return { ...file, speaker: 'Betty White' }
+        return { ...file, speaker: 'Name of speaker' }
       }) || [],
     relatedPhrases: wordContextParams?.related_phrases || [],
     relatedAssets: wordContextParams?.related_assets || [],
