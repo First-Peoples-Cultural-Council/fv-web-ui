@@ -18,7 +18,10 @@ function phraseDataAdaptor(data) {
     modified: localDateMDYT(properties['dc:modified']) || '',
     version: properties['uid:major_version'] || '',
     categories: phraseContextParams?.phrase_books || [],
-    audio: phraseContextParams?.related_audio || [],
+    audio:
+      phraseContextParams?.related_audio?.map((file) => {
+        return { ...file, speaker: 'Betty White' }
+      }) || [],
     relatedPhrases: phraseContextParams?.related_phrases || [],
     relatedAssets: phraseContextParams?.related_assets || [],
     pictures: phraseContextParams?.related_pictures || [],

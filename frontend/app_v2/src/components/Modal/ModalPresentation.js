@@ -63,9 +63,9 @@ function ModalPresentation({ children, isOpen, closeHandler }) {
   )
 }
 // PROPTYPES
-const { bool, func, object } = PropTypes
+const { bool, func, node } = PropTypes
 ModalPresentation.propTypes = {
-  children: object,
+  children: node,
   isOpen: bool,
   closeHandler: func,
 }

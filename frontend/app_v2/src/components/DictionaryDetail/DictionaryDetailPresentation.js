@@ -27,65 +27,71 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
     >
       <div className="grid grid-cols-8 gap-4">
         <div id="WordDetails" className={`col-span-8 md:col-span-5 ${noMedia ? 'md:col-start-3' : ''}`}>
-          <div className="ml-3 md:flex items-top">
-            <span className={`font-bold ${shortTitle ? 'text-2xl md:text-4xl' : 'text-xl md:text-2xl'}`}>
-              {entry.title}
-            </span>
+          <section>
+            <div className="ml-3 md:flex items-top">
+              <span className={`font-bold ${shortTitle ? 'text-2xl md:text-4xl' : 'text-xl md:text-2xl'}`}>
+                {entry.title}
+              </span>
+              <div className="my-2 md:my-0 md:mt-1 md:ml-4">
+                <ActionsMenu.Container
+                  docId={entry.id}
+                  docTitle={entry.title}
+                  docType={entry.type}
+                  actions={actions}
+                  moreActions={moreActions}
+                  withLabels
+                  withConfirmation
+                />
+              </div>
+            </div>
+
+            <div className="mx-4 md:mx-16">
+              {/* Translations/Definitions */}
+              {entry?.translations?.length > 0 && (
+                <div className="p-3">
+                  <ol className="list-decimal">
+                    {entry?.translations.map((translation, index) => (
+                      <li key={index} className="p-0.5">
+                        {translation.translation}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+              {/* Literal Translations - WORD ONLY */}
+              {entry?.literalTranslations?.length > 0 && (
+                <div className="p-3">
+                  <h4 className="text-left font-semibold text-sm uppercase text-fv-charcoal">Literal translation</h4>
+                  <ol className="list-decimal">
+                    {entry?.literalTranslations.map((translation, index) => (
+                      <li key={index} className="p-0.5">
+                        {translation.translation}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+            </div>
             {/* Audio */}
-            <span className="mx-2 text-fv-charcoal">
-              {entry?.audio.length > 0 &&
-                entry.audio.map((audioFile, index) => (
+            {entry?.audio.length > 0 && (
+              <div className="p-3 md:mx-10 text-fv-charcoal">
+                {entry.audio.map((audioFile, index) => (
                   <AudioMinimal.Container
                     key={`${audioFile.uid}_${index}`}
                     icons={{
-                      Play: useIcon('Audio', 'fill-current h-10 w-10 md:w-8 md:h-8'),
-                      Pause: useIcon('PauseCircle', 'fill-current h-10 w-10 md:w-8 md:h-8'),
-                      Error: useIcon('TimesCircle', 'fill-current h-10 w-10 md:w-8 md:h-8'),
+                      Play: useIcon('Play', 'fill-current h-6 w-6 md:w-4 md:h-4 mr-2'),
+                      Pause: useIcon('Pause', 'fill-current h-6 w-6 md:w-4 md:h-4 mr-2'),
+                      Error: useIcon('Exclamation', 'fill-current h-6 w-6 md:w-4 md:h-4 mr-2'),
                     }}
+                    buttonStyling="bg-fv-charcoal-light text-white text-sm rounded-md inline-flex items-center p-1.5 mr-2 mb-2"
+                    label={audioFile.speaker}
                     src={getMediaUrl({ type: 'audio', id: audioFile.uid })}
                   />
                 ))}
-            </span>
-            <div className="my-2 md:my-0 md:mt-1 md:ml-2">
-              <ActionsMenu.Container
-                docId={entry.id}
-                docTitle={entry.title}
-                docType={entry.type}
-                actions={actions}
-                moreActions={moreActions}
-                withLabels
-                withConfirmation
-              />
-            </div>
-          </div>
-
-          <section className="mx-16">
-            {/* Translations/Definitions */}
-            {entry?.translations?.length > 0 && (
-              <div className="p-3">
-                <ol className="list-decimal">
-                  {entry?.translations.map((translation, index) => (
-                    <li key={index} className="p-0.5">
-                      {translation.translation}
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            )}
-            {/* Literal Translations - WORD ONLY */}
-            {entry?.literalTranslations?.length > 0 && (
-              <div className="p-3">
-                <h4 className="text-left font-semibold text-sm uppercase text-fv-charcoal">Literal translation</h4>
-                <ol className="list-decimal">
-                  {entry?.literalTranslations.map((translation, index) => (
-                    <li key={index} className="p-0.5">
-                      {translation.translation}
-                    </li>
-                  ))}
-                </ol>
               </div>
             )}
           </section>
+
           <section>
             {/* Related Phrases */}
             {entry?.relatedPhrases?.length > 0 && (
