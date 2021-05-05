@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 
 import useGetSite from 'common/useGetSite'
 import searchApi from 'services/api/search'
@@ -15,10 +15,10 @@ import { triggerError } from 'common/navigationHelpers'
  *
  */
 function SearchData() {
-  const { title, uid, path } = useGetSite()
+  const { title, uid } = useGetSite()
   const location = useLocation()
   const history = useHistory()
-  const siteShortUrl = path ? path.split('/').pop() : ''
+  const { sitename } = useParams()
 
   // Extract search term from URL search params
   const searchTerm = new URLSearchParams(location.search).get('q') ? new URLSearchParams(location.search).get('q') : ''
@@ -87,7 +87,7 @@ function SearchData() {
     items,
     actions: ['copy'],
     searchTerm,
-    siteShortUrl,
+    sitename,
   }
 }
 

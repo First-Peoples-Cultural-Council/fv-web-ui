@@ -15,7 +15,7 @@ import ActionsMenu from 'components/ActionsMenu'
  *
  * @returns {node} jsx markup
  */
-function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUrl }) {
+function DictionaryDetailPresentation({ actions, moreActions, entry, sitename }) {
   const metaDataLableStyling = 'text-sm font-semibold uppercase text-fv-charcoal sm:w-40 sm:flex-shrink-0'
   const metaDataContentStyling = 'text-sm text-black sm:mt-0 sm:ml-6 sm:col-span-2'
   const noMedia = entry?.pictures?.length < 1 || entry?.videos?.length < 1 ? true : false
@@ -114,7 +114,7 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
                       return (
                         <tr key={index} className={zebraStripe}>
                           <td className="py-2 pl-5 pr-2">
-                            <Link to={`/${siteShortUrl}/phrases/${phrase.uid}`}>{phrase['dc:title']}</Link>
+                            <Link to={`/${sitename}/phrases/${phrase.uid}`}>{phrase['dc:title']}</Link>
                           </td>
                           <td className="py-2 pr-5 pl-2">
                             <span>{phrase?.['fv:definitions']?.[0].translation}</span>
@@ -147,7 +147,7 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
                       return (
                         <tr key={index} className={zebraStripe}>
                           <td className="py-2 pl-5">
-                            <Link to={`/${siteShortUrl}/words/${asset.uid}`}>{asset['dc:title']}</Link>
+                            <Link to={`/${sitename}/words/${asset.uid}`}>{asset['dc:title']}</Link>
                           </td>
                           <td className="py-2 pr-5">
                             <span>{asset?.['fv:definitions']?.[0].translation}</span>
@@ -167,7 +167,7 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, siteShortUr
                   {entry.categories.map((category, i) => (
                     <Link
                       key={category.uid}
-                      to={`/${siteShortUrl}/categories/${category.uid}`}
+                      to={`/${sitename}/categories/${category.uid}`}
                       className={`${
                         i === 0 ? 'ml-0' : ''
                       } m-1 p-1.5 inline-flex text-sm font-semibold rounded-md bg-fv-turquoise text-white`}
@@ -302,7 +302,7 @@ DictionaryDetailPresentation.propTypes = {
   actions: array,
   entry: object,
   moreActions: array,
-  siteShortUrl: string,
+  sitename: string,
 }
 
 export default DictionaryDetailPresentation

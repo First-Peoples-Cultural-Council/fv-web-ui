@@ -23,7 +23,7 @@ function SearchContainer() {
     items,
     newSearchValue,
     searchTerm,
-    siteShortUrl,
+    sitename,
     siteTitle,
   } = SearchData()
   return (
@@ -39,7 +39,7 @@ function SearchContainer() {
       items={items}
       newSearchValue={newSearchValue}
       searchTerm={searchTerm}
-      siteShortUrl={siteShortUrl}
+      sitename={sitename}
       siteTitle={siteTitle}
     />
   )

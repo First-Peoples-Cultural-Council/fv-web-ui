@@ -23,7 +23,7 @@ function SearchPresentation({
   isLoading,
   items,
   actions,
-  siteShortUrl,
+  sitename,
   searchTerm,
 }) {
   const wholeDomain = siteTitle === 'FirstVoices'
@@ -76,7 +76,7 @@ function SearchPresentation({
             items={items}
             actions={actions}
             isLoading={isLoading}
-            siteShortUrl={siteShortUrl}
+            sitename={sitename}
             wholeDomain={wholeDomain}
           />
         </div>
@@ -96,7 +96,7 @@ SearchPresentation.propTypes = {
   isLoading: bool,
   items: array,
   searchTerm: string,
-  siteShortUrl: string,
+  sitename: string,
   siteTitle: string,
 }
 

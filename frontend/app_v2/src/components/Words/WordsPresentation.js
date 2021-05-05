@@ -23,7 +23,7 @@ function WordsPresentation({
   items,
   actions,
   moreActions,
-  siteShortUrl,
+  sitename,
   searchTerm,
   infiniteScroll,
 }) {
@@ -78,7 +78,7 @@ function WordsPresentation({
             actions={actions}
             isLoading={isLoading}
             moreActions={moreActions}
-            siteShortUrl={siteShortUrl}
+            sitename={sitename}
             wholeDomain={wholeDomain}
             infiniteScroll={infiniteScroll}
           />
@@ -98,7 +98,7 @@ WordsPresentation.propTypes = {
   isLoading: bool,
   items: object,
   searchTerm: string,
-  siteShortUrl: string,
+  sitename: string,
   siteTitle: string,
   infiniteScroll: object,
 }

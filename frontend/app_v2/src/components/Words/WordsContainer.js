@@ -23,7 +23,7 @@ function WordsContainer() {
     moreActions,
     newSearchValue,
     searchTerm,
-    siteShortUrl,
+    sitename,
     siteTitle,
     infiniteScroll,
   } = WordsData()
@@ -40,7 +40,7 @@ function WordsContainer() {
       moreActions={moreActions}
       newSearchValue={newSearchValue}
       searchTerm={searchTerm}
-      siteShortUrl={siteShortUrl}
+      sitename={sitename}
       siteTitle={siteTitle}
       infiniteScroll={infiniteScroll}
     />
