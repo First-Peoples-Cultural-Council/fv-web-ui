@@ -113,7 +113,7 @@ const AlphabetPresentationSelected = ({ sitename, selectedData, onVideoClick, vi
             text-center
             text-white"
           >
-            {useIcon('PlayArrow', 'fill-current mr-2 -ml-1 h-8 w-8')}
+            {useIcon('Play', 'fill-current mr-2 -ml-1 h-8 w-8')}
             Play Video
           </button>
         </div>

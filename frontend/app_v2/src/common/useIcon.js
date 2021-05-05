@@ -12,6 +12,7 @@ import ChevronRight from 'common/icons/ChevronRight'
 import Close from 'common/icons/Close'
 import Copy from 'common/icons/Copy'
 import Dictionary from 'common/icons/Dictionary'
+import Exclamation from 'common/icons/Exclamation'
 import Facebook from 'common/icons/Facebook'
 import HamburgerMenu from 'common/icons/HamburgerMenu'
 import Instagram from 'common/icons/Instagram'
@@ -25,9 +26,10 @@ import Logo from 'common/icons/Logo'
 import Mail from 'common/icons/Mail'
 import More from 'common/icons/More'
 import MusicNote from 'common/icons/MusicNote'
+import Pause from 'common/icons/Pause'
 import PauseCircle from 'common/icons/PauseCircle'
 import PlaceHolder from 'common/icons/PlaceHolder'
-import PlayArrow from 'common/icons/PlayArrow'
+import Play from 'common/icons/Play'
 import PlayCircle from 'common/icons/PlayCircle'
 import Quote from 'common/icons/Quote'
 import Search from 'common/icons/Search'
@@ -56,6 +58,7 @@ function useIcon(iconName, iconStyling) {
     Close,
     Copy,
     Dictionary,
+    Exclamation,
     Facebook,
     HamburgerMenu,
     Instagram,
@@ -69,9 +72,10 @@ function useIcon(iconName, iconStyling) {
     Mail,
     More,
     MusicNote,
-    PlayArrow,
+    Pause,
     PauseCircle,
     PlaceHolder,
+    Play,
     PlayCircle,
     Quote,
     Resources,
