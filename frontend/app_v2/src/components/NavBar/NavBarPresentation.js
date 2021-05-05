@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 // FPCC
 import NavBarPresentationMenu from './NavBarPresentationMenu'
 import NavBarPresentationMobile from './NavBarPresentationMobile'
-import CircleImage from 'components/CircleImage'
 import FVToggle from 'components/FVToggle'
 
 import useIcon from 'common/useIcon'
@@ -23,7 +22,6 @@ function NavBarPresentation({
   className,
   currentUser,
   workspaceToggleValue,
-  logoUrl,
   menuData,
   onClickOutside,
   onKeyPress,
@@ -53,12 +51,6 @@ function NavBarPresentation({
     />
   ))
 
-  const languageSiteIcon = logoUrl ? (
-    <CircleImage.Presentation src={logoUrl} classNameWidth="w-10" classNameHeight="h-10" alt="" />
-  ) : (
-    useIcon('Spinner', 'fill-current text-white w-10 h-10 inline mr-2')
-  )
-
   return (
     <header id="NavBar" className={`relative bg-fv-charcoal ${className}`} onKeyUp={onKeyPress}>
       <nav className="max-w-screen-2xl mx-auto px-2 lg:px-6 xl:px-16">
@@ -68,11 +60,13 @@ function NavBarPresentation({
               <span className="sr-only">FirstVoices Logo</span>
               {useIcon('Logo', 'fill-current h-10')}
             </Link>
-            <span className="px-2 text-2xl text-gray-600">/</span>
-            <Link className="text-white flex items-center" to={`/${sitename}/`}>
+            <Link
+              className="text-white flex items-center group p-1 bg-fv-charcoal rounded-md text-lg font-medium hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-fv-turquoise"
+              to={`/${sitename}/`}
+            >
               <span className="sr-only">{title}</span>
-              {languageSiteIcon}
-              <span className="md:hidden">{title}</span>
+              {useIcon('Home', 'fill-current h-12 w-8')}
+              <span className="md:hidden ml-3 mr-2">{title}</span>
             </Link>
           </div>
 
@@ -174,7 +168,6 @@ function NavBarPresentation({
 const { array, bool, object, string, func } = PropTypes
 NavBarPresentation.propTypes = {
   currentUser: object,
-  logoUrl: string,
   menuData: array,
   title: string,
   className: string,

@@ -15,6 +15,7 @@ import Dictionary from 'common/icons/Dictionary'
 import Exclamation from 'common/icons/Exclamation'
 import Facebook from 'common/icons/Facebook'
 import HamburgerMenu from 'common/icons/HamburgerMenu'
+import Home from 'common/icons/Home'
 import Instagram from 'common/icons/Instagram'
 import Kids from 'common/icons/Kids'
 import Learn from 'common/icons/Learn'
@@ -61,6 +62,7 @@ function useIcon(iconName, iconStyling) {
     Exclamation,
     Facebook,
     HamburgerMenu,
+    Home,
     Instagram,
     Kids,
     Learn,
