@@ -2,10 +2,9 @@ import { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { useHistory, useParams } from 'react-router-dom'
 
-import useGetSite from 'common/useGetSite'
+import phraseDataAdaptor from 'components/Phrase/phraseDataAdaptor'
 import documentApi from 'services/api/document'
 import { triggerError } from 'common/navigationHelpers'
-import { getFriendlyDocType, localDateMDYT } from 'common/stringHelpers'
 
 /**
  * @summary PhraseData
@@ -15,10 +14,8 @@ import { getFriendlyDocType, localDateMDYT } from 'common/stringHelpers'
  *
  */
 function PhraseData() {
-  const { phraseId } = useParams()
-  const { path } = useGetSite()
+  const { phraseId, sitename } = useParams()
   const history = useHistory()
-  const siteShortUrl = path ? path.split('/').pop() : ''
 
   // Data fetch
   const response = useQuery(
@@ -30,31 +27,7 @@ function PhraseData() {
     }
   )
   const { data, error, isError, isLoading } = response
-
-  const properties = data?.properties ? data.properties : {}
-  const phraseContextParams = data?.contextParameters?.phrase ? data.contextParameters.phrase : {}
-
-  const entry = {
-    id: data?.uid || '',
-    type: getFriendlyDocType(data?.type) || '',
-    title: properties['dc:title'] || '',
-    translations: properties['fv:definitions'] || [],
-    acknowledgement: properties['fv-phrase:acknowledgement'] || '',
-    culturalNotes: properties['fv:cultural_note'] || [],
-    generalNote: properties['fv:general_note'] || [],
-    pronunciation: properties['fv-phrase:pronunciation'] || '',
-    reference: properties['fv:reference'] || '',
-    created: localDateMDYT(properties['dc:created']) || '',
-    modified: localDateMDYT(properties['dc:modified']) || '',
-    version: properties['uid:major_version'] || '',
-    categories: phraseContextParams?.phrase_books || [],
-    audio: phraseContextParams?.related_audio || [],
-    relatedPhrases: phraseContextParams?.related_phrases || [],
-    relatedAssets: phraseContextParams?.related_assets || [],
-    pictures: phraseContextParams?.related_pictures || [],
-    videos: phraseContextParams?.related_videos || [],
-    sources: phraseContextParams?.sources || [],
-  }
+  const entry = phraseDataAdaptor(data)
 
   useEffect(() => {
     if (isError) triggerError(error, history)
@@ -66,7 +39,7 @@ function PhraseData() {
     entry: data?.title ? entry : {},
     actions: ['copy'],
     moreActions: ['share'],
-    siteShortUrl,
+    sitename,
   }
 }
 
