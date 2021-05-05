@@ -320,13 +320,16 @@ public class SitesObject extends DefaultObject {
               .collect(Collectors.toSet());
         }
 
+        String joinText = (String) associatedDialect.getPropertyValue("fvdialect:join_text");
+
         return new Site(associatedDialect.getPathAsString(),
             associatedDialect.getId(),
             roles,
             groups,
             String.valueOf(associatedDialect.getPropertyValue("dc:title")),
             (String) associatedDialect.getPropertyValue("fvdialect:parent_language"),
-            logoImageId);
+            logoImageId,
+            joinText);
 
       }).filter(Objects::nonNull).collect(Collectors.toList());
 
