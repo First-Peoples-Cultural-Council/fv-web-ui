@@ -21,6 +21,7 @@ function NavBarPresentation({
   title,
   className,
   currentUser,
+  isHome,
   workspaceToggleValue,
   menuData,
   onClickOutside,
@@ -51,23 +52,29 @@ function NavBarPresentation({
     />
   ))
 
+  const fvlogo = isHome
+    ? useIcon('FVLogo', 'fill-current h-10')
+    : useIcon('FVShortLogo', 'text-fv-charcoal-light fill-current h-6')
+
   return (
     <header id="NavBar" className={`relative bg-fv-charcoal ${className}`} onKeyUp={onKeyPress}>
       <nav className="max-w-screen-2xl mx-auto px-2 lg:px-6 xl:px-16">
         <div className="flex justify-between items-center py-1  md:space-x-10">
           <div className="flex items-center">
-            <Link className="text-white flex items-center" to={`/${sitename}/`}>
+            <Link className="text-white flex items-center" to={'/'}>
               <span className="sr-only">FirstVoices Logo</span>
-              {useIcon('Logo', 'fill-current h-10')}
+              {fvlogo}
             </Link>
-            <Link
-              className="text-white flex items-center group p-1 bg-fv-charcoal rounded-md text-lg font-medium hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-fv-turquoise"
-              to={`/${sitename}/`}
-            >
-              <span className="sr-only">{title}</span>
-              {useIcon('Home', 'fill-current h-12 w-8')}
-              <span className="md:hidden ml-3 mr-2">{title}</span>
-            </Link>
+            {isHome ? null : (
+              <Link
+                className="text-white flex items-center group p-1 bg-fv-charcoal rounded-md text-lg font-medium hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-fv-turquoise"
+                to={`/${sitename}/`}
+              >
+                <span className="sr-only">{title}</span>
+                {useIcon('Home', 'fill-current h-12 w-8')}
+                <span className="md:hidden ml-3 mr-2">{title}</span>
+              </Link>
+            )}
           </div>
 
           <div className="hidden lg:flex xl:space-x-6 ">{menus}</div>
@@ -168,6 +175,7 @@ function NavBarPresentation({
 const { array, bool, object, string, func } = PropTypes
 NavBarPresentation.propTypes = {
   currentUser: object,
+  isHome: bool,
   menuData: array,
   title: string,
   className: string,
