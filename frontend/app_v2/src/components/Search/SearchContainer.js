@@ -15,6 +15,7 @@ function SearchContainer() {
     actions,
     currentFilter,
     filters,
+    domain,
     handleFilter,
     handleSearchSubmit,
     handleTextFieldChange,
@@ -22,6 +23,7 @@ function SearchContainer() {
     items,
     newSearchValue,
     searchTerm,
+    sitename,
     siteTitle,
   } = SearchData()
   return (
@@ -29,6 +31,7 @@ function SearchContainer() {
       actions={actions}
       currentFilter={currentFilter}
       filters={filters}
+      domain={domain}
       handleFilter={handleFilter}
       handleSearchSubmit={handleSearchSubmit}
       handleTextFieldChange={handleTextFieldChange}
@@ -36,6 +39,7 @@ function SearchContainer() {
       items={items}
       newSearchValue={newSearchValue}
       searchTerm={searchTerm}
+      sitename={sitename}
       siteTitle={siteTitle}
     />
   )

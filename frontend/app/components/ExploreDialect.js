@@ -76,27 +76,20 @@ export class ExploreDialect extends Component {
 
   fetchData(newProps) {
     newProps.fetchDialect2(newProps.routeParams.dialect_path)
-
-    // NOTE: this is functionally similar to `ProviderHelpers.fetchIfMissing`
-    // fetchIfMissing` doesn't support passing in other params
-    // to be used with the `action` function
-    const path = newProps.routeParams.dialect_path + '/Portal'
-    if (!selectn('success', ProviderHelpers.getEntry(this.props.computePortal, path))) {
-      newProps.fetchPortal(
-        path,
-        this.props.intl.trans(
-          'views.pages.explore.dialect.fetching_community_portal',
-          'Fetching community portal.',
-          'first'
-        ),
-        null,
-        this.props.intl.trans(
-          'views.pages.explore.dialect.problem_fetching_portal',
-          'Problem fetching community portal it may be unpublished or offline.',
-          'first'
-        )
+    newProps.fetchPortal(
+      `${newProps.routeParams.dialect_path}/Portal`,
+      this.props.intl.trans(
+        'views.pages.explore.dialect.fetching_community_portal',
+        'Fetching community portal.',
+        'first'
+      ),
+      null,
+      this.props.intl.trans(
+        'views.pages.explore.dialect.problem_fetching_portal',
+        'Problem fetching community portal it may be unpublished or offline.',
+        'first'
       )
-    }
+    )
   }
 
   // Fetch data on initial render

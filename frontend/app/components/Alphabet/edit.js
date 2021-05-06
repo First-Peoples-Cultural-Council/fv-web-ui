@@ -20,7 +20,7 @@ import Immutable from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchCharacter, updateCharacter } from 'reducers/fvCharacter'
+import { fetchCharacter } from 'reducers/fvCharacter'
 import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 import { fetchDialect2 } from 'reducers/fvDialect'
 
@@ -31,9 +31,6 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import PromiseWrapper from 'components/PromiseWrapper'
 import StateErrorBoundary from 'components/ErrorBoundary'
 import FVLabel from 'components/FVLabel'
-
-// Models
-import { Document } from 'nuxeo'
 
 // Views
 import fields from 'common/schemas/fields'
@@ -57,7 +54,6 @@ export class PageDialectAlphabetCharacterEdit extends Component {
     fetchCharacter: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
-    updateCharacter: func.isRequired,
   }
 
   constructor(props, context) {
@@ -66,7 +62,6 @@ export class PageDialectAlphabetCharacterEdit extends Component {
     this.state = {
       character: null,
       characterPath: props.routeParams.dialect_path + '/Alphabet/' + props.routeParams.character,
-      formValue: null,
       is403: false,
     }
   }
@@ -138,11 +133,11 @@ export class PageDialectAlphabetCharacterEdit extends Component {
 
           <EditViewWithForm
             computeEntities={computeEntities}
+            computeDialect={computeDialect2}
             initialValues={context}
             itemId={this.state.characterPath}
             fields={fields}
             options={options}
-            saveMethod={this._handleSave}
             cancelMethod={this._navigateUp}
             currentPath={this.props.splitWindowPath}
             navigationMethod={this.props.replaceWindowPath}
@@ -166,21 +161,6 @@ export class PageDialectAlphabetCharacterEdit extends Component {
       return
     }
     this.props.fetchCharacter(this.state.characterPath)
-  }
-
-  _handleSave = (character, formValue) => {
-    const newDocument = new Document(character.response, {
-      repository: character.response._repository,
-      nuxeo: character.response._nuxeo,
-    })
-
-    // Set new value property on document
-    newDocument.set(formValue)
-
-    // Save document
-    this.props.updateCharacter(newDocument)
-
-    this.setState({ formValue: formValue })
   }
 
   _navigateUp = () => {
@@ -209,7 +189,6 @@ const mapDispatchToProps = {
   fetchDialect2,
   pushWindowPath,
   replaceWindowPath,
-  updateCharacter,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PageDialectAlphabetCharacterEdit)

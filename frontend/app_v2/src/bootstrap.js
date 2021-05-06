@@ -7,6 +7,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import AppFrameContainer from './components/AppFrame/AppFrameContainer'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import AppStateProvider from 'common/AppStateProvider'
+import ErrorHandler from 'components/ErrorHandler'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,10 +32,7 @@ ReactDOM.render(
               <AppFrameContainer />
             </AppStateProvider>
           </Route>
-
-          <div className="grid h-screen">
-            <h1 className="place-self-center font-bold text-3xl">Missing site name in url</h1>
-          </div>
+          <ErrorHandler.Container error={{ status: 404 }} />
         </Switch>
       </Router>
     </QueryClientProvider>

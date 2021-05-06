@@ -21,6 +21,8 @@ import useCharacter from 'dataSources/useCharacter'
 import useDialect from 'dataSources/useDialect'
 import useIntl from 'dataSources/useIntl'
 import useLogin from 'dataSources/useLogin'
+import useNavigation from 'dataSources/useNavigation'
+import useProperties from 'dataSources/useProperties'
 import useRoute from 'dataSources/useRoute'
 import useWindowPath from 'dataSources/useWindowPath'
 
@@ -39,20 +41,23 @@ import StringHelpers, { CLEAN_NXQL } from 'common/StringHelpers'
  *
  */
 function AlphabetDetailData({ children }) {
-  const [tabValue, setTabValue] = useState(0)
-  const { routeParams } = useRoute()
-  const { intl } = useIntl()
   const { fetchCharacter, publishCharacter, computeCharacter } = useCharacter()
-  const { pushWindowPath } = useWindowPath()
   const { fetchDialect2, computeDialect2 } = useDialect()
+  const { intl } = useIntl()
   const { computeLogin } = useLogin()
+  const { changeTitleParams, overrideBreadcrumbs } = useNavigation()
+  const { properties } = useProperties()
+  const { routeParams } = useRoute()
+  const { pushWindowPath } = useWindowPath()
 
-  const characterPath = `${routeParams.dialect_path}/Alphabet/${routeParams.character}`
+  const [tabValue, setTabValue] = useState(0)
+
+  const characterId = routeParams.characterId
   const fetchData = () => {
-    fetchCharacter(characterPath)
+    fetchCharacter(characterId)
     fetchDialect2(routeParams.dialect_path)
   }
-  const computedCharacter = ProviderHelpers.getEntry(computeCharacter, characterPath)
+  const computedCharacter = ProviderHelpers.getEntry(computeCharacter, characterId)
   const computedDialect2 = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
 
   const onNavigateRequest = (path) => {
@@ -64,7 +69,7 @@ function AlphabetDetailData({ children }) {
    */
   const publishChangesAction = () => {
     publishCharacter(
-      characterPath,
+      characterId,
       { value: 'Republish' },
       null,
       intl.trans(
@@ -81,7 +86,7 @@ function AlphabetDetailData({ children }) {
 
   const computeEntities = Immutable.fromJS([
     {
-      id: characterPath,
+      id: characterId,
       entity: computeCharacter,
     },
     {
@@ -91,6 +96,13 @@ function AlphabetDetailData({ children }) {
   ])
 
   const character = selectn('response.title', computedCharacter)
+
+  useEffect(() => {
+    if (character && selectn('pageTitleParams.character', properties) !== character) {
+      changeTitleParams({ character: character })
+      overrideBreadcrumbs({ find: characterId, replace: 'pageTitleParams.character' })
+    }
+  }, [properties, character])
 
   // Set filter
   // Clean character to make it NXQL friendly

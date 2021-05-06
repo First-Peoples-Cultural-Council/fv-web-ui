@@ -21,8 +21,8 @@ public class Statistics implements Serializable {
 
   private final Metadata metadata;
 
-  public Statistics(final String requestingUser, final String dialectPath) {
-    this.metadata = new Metadata(requestingUser, dialectPath);
+  public Statistics(final String requestingUser, final String siteId) {
+    this.metadata = new Metadata(requestingUser, siteId);
   }
 
   public Map<String, Map<String, BigDecimal>> getAggregate() {
@@ -40,19 +40,19 @@ public class Statistics implements Serializable {
   public static class Metadata implements Serializable {
 
     private final String requestingUser;
-    private final String dialectPath;
+    private final String siteId;
 
-    public String getDialectPath() {
-      return dialectPath;
+    public String getSiteId() {
+      return siteId;
     }
 
     public String getRequestingUser() {
       return requestingUser;
     }
 
-    public Metadata(final String requestingUser, final String dialectPath) {
+    public Metadata(final String requestingUser, final String siteId) {
       this.requestingUser = requestingUser;
-      this.dialectPath = dialectPath;
+      this.siteId = siteId;
     }
 
   }

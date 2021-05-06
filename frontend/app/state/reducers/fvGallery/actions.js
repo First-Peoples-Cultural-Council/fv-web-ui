@@ -1,4 +1,4 @@
-import { create, _delete, execute, fetch, query, update } from 'reducers/rest'
+import { create, _delete, execute, fetch, query } from 'reducers/rest'
 
 export const fetchGallery = fetch('FV_GALLERY', 'FVGallery', {
   headers: { 'enrichers.document': 'ancestry,gallery,permissions' },
@@ -9,12 +9,6 @@ export const fetchGalleries = query('FV_GALLERIES', 'FVGallery', {
 export const createGallery = create('FV_GALLERY', 'FVGallery', {
   headers: { 'enrichers.document': 'ancestry,gallery,permissions' },
 })
-export const updateGallery = update(
-  'FV_GALLERY',
-  'FVGallery',
-  { headers: { 'enrichers.document': 'ancestry,gallery,permissions' } },
-  false
-)
 export const deleteGallery = _delete('FV_GALLERY', 'FVGallery', {})
 
 // Document.FollowLifecycleTransition expects a param that specifies the type of transition to take place e.g. { value: 'Republish' }

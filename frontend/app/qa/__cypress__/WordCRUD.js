@@ -17,9 +17,7 @@ describe('WordCRUD.js > PageDialectWordsCreate', () => {
 
     // Test validation
     cy.logger({ type: 'subheader', text: 'Empty Save' })
-    cy.findByTestId('PageDialectWordsCreate__form').within(() => {
-      cy.findByText('save', { exact: false }).click()
-    })
+    cy.findByTestId('PageDialectWordsCreate__save').click()
     cy.findByText('Value in field "Word" cannot be empty.').should('exist')
 
     // CREATE
@@ -37,9 +35,7 @@ describe('WordCRUD.js > PageDialectWordsCreate', () => {
     cy.findByLabelText('Available in games', { exact: false }).check()
 
     cy.logger({ type: 'subheader', text: '[CREATE] Save' })
-    cy.findByTestId('PageDialectWordsCreate__form').within(() => {
-      cy.findByText('save', { exact: false }).click()
-    })
+    cy.findByTestId('PageDialectWordsCreate__save').click()
 
     // Read
     cy.logger({ text: 'READ' })
@@ -71,9 +67,7 @@ describe('WordCRUD.js > PageDialectWordsCreate', () => {
 
     // UPDATE: save
     cy.logger({ type: 'subheader', text: '[CREATE] Save' })
-    cy.findByTestId('withForm__btnGroup2').within(() => {
-      cy.findByText('save', { exact: false }).click()
-    })
+    cy.findByTestId('withForm__saveBtn').click()
 
     // UPDATE: verify
     cy.logger({ type: 'subheader', text: '[CREATE] VERIFY' })

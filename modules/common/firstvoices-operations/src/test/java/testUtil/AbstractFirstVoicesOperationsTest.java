@@ -54,7 +54,10 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
+import org.nuxeo.ecm.core.event.EventService;
+import org.nuxeo.ecm.core.event.impl.EventListenerDescriptor;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.test.runner.Features;
 import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import runner.FirstVoicesOperationsFeature;
@@ -268,5 +271,23 @@ public abstract class AbstractFirstVoicesOperationsTest {
 
     userModel = userManager.createUser(userModel);
     return userModel;
+  }
+
+  /**
+   * Unregister events so that they do not interfere with tests
+   * @param listenersToDisable list of listener names to deactivate
+   */
+  public static void unregisterEvents(String[] listenersToDisable) {
+    // Remove ancestry, publish, and bulk life cycle listeners
+    // To help isolate testing to the service
+    EventService eventService = Framework.getService(EventService.class);
+
+    for (String listener : listenersToDisable) {
+      EventListenerDescriptor listenerDescriptor = eventService.getEventListener(listener);
+
+      if (listenerDescriptor != null) {
+        eventService.removeEventListener(listenerDescriptor);
+      }
+    }
   }
 }

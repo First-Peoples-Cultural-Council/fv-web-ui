@@ -42,7 +42,7 @@ function NavBarPresentationMobile({ menuData }) {
   }
 
   return (
-    <nav className="inset-x-0 transition transform origin-top-right md:hidden ">
+    <nav className="inset-x-0 transition transform origin-top-right lg:hidden ">
       <div className="shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y-2 divide-gray-200">
         {selectedMenu === null ? (
           <ul className="grid grid-rows-3 divide-y-2 divide-gray-200">

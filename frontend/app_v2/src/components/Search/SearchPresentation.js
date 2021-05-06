@@ -18,10 +18,12 @@ function SearchPresentation({
   currentFilter,
   siteTitle,
   filters,
+  domain,
   handleFilter,
   isLoading,
   items,
   actions,
+  sitename,
   searchTerm,
 }) {
   const wholeDomain = siteTitle === 'FirstVoices'
@@ -39,7 +41,7 @@ function SearchPresentation({
         >
           <Link
             className={`inline-block transition duration-500 ease-in-out md:block p-3 flex-grow rounded-xl capitalize cursor-pointer ${filterIsActiveClass}`}
-            to={`${location.pathname}?q=${searchTerm}&docType=${filter.type}`}
+            to={`${location.pathname}?q=${searchTerm}&docType=${filter.type}&domain=${domain}`}
             onClick={() => {
               handleFilter(filter.type)
             }}
@@ -70,7 +72,13 @@ function SearchPresentation({
           <ul className="inline-block md:block list-none m-2 md:m-0 md:space-y-4 ">{getFilterListItems()}</ul>
         </div>
         <div className="min-h-220 col-span-11 md:col-span-9">
-          <DictionaryListPresentation items={items} actions={actions} isLoading={isLoading} wholeDomain={wholeDomain} />
+          <DictionaryListPresentation
+            items={items}
+            actions={actions}
+            isLoading={isLoading}
+            sitename={sitename}
+            wholeDomain={wholeDomain}
+          />
         </div>
       </div>
     </>
@@ -81,11 +89,14 @@ const { array, bool, func, string } = PropTypes
 SearchPresentation.propTypes = {
   actions: array,
   currentFilter: string,
+  domain: string,
   filters: array,
+  domsin: string,
   handleFilter: func,
   isLoading: bool,
   items: array,
   searchTerm: string,
+  sitename: string,
   siteTitle: string,
 }
 

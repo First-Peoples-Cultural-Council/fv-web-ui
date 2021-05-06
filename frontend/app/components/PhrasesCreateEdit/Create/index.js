@@ -23,7 +23,7 @@ import PromiseWrapper from 'components/PromiseWrapper'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { createPhrase } from 'reducers/fvPhrase'
+import { createPhrase, createAndPublishPhrase } from 'reducers/fvPhrase'
 import { fetchDialect, fetchDialect2 } from 'reducers/fvDialect'
 import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 
@@ -40,6 +40,7 @@ import options from 'common/schemas/options'
 import { STATE_LOADING, STATE_DEFAULT } from 'common/Constants'
 import StateLoading from 'components/Loading'
 import StateErrorBoundary from 'components/ErrorBoundary'
+import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
 import './PhrasesCreate.css'
 
@@ -55,11 +56,13 @@ export class PhrasesCreate extends Component {
     // REDUX: reducers/state
     routeParams: object.isRequired,
     computeDialect2: object.isRequired,
+    computeLogin: object.isRequired,
     computePhrase: object.isRequired,
     splitWindowPath: array.isRequired,
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
     createPhrase: func.isRequired,
+    createAndPublishPhrase: func.isRequired,
     fetchDialect: func.isRequired,
     fetchDialect2: func.isRequired,
     pushWindowPath: func.isRequired,
@@ -185,7 +188,7 @@ export class PhrasesCreate extends Component {
     }
     return content
   }
-  _onRequestSaveForm = (e) => {
+  _onRequestSaveForm = (e, publish = false) => {
     // Prevent default behaviour
     e.preventDefault()
 
@@ -216,16 +219,29 @@ export class PhrasesCreate extends Component {
     // Passed validation
     if (formValue) {
       const now = Date.now()
-      this.props.createPhrase(
-        this.props.routeParams.dialect_path + '/Dictionary',
-        {
-          type: 'FVPhrase',
-          name: now.toString(),
-          properties: properties,
-        },
-        null,
-        now
-      )
+      if (publish) {
+        this.props.createAndPublishPhrase(
+          this.props.routeParams.dialect_path + '/Dictionary',
+          {
+            type: 'FVPhrase',
+            name: now.toString(),
+            properties: properties,
+          },
+          null,
+          now
+        )
+      } else {
+        this.props.createPhrase(
+          this.props.routeParams.dialect_path + '/Dictionary',
+          {
+            type: 'FVPhrase',
+            name: now.toString(),
+            properties: properties,
+          },
+          null,
+          now
+        )
+      }
 
       this.setState({
         phrasePath: this.props.routeParams.dialect_path + '/Dictionary/' + now.toString() + '.' + now,
@@ -253,15 +269,19 @@ export class PhrasesCreate extends Component {
     }
 
     const computeEntities = Immutable.fromJS([
-      // {
-      //   id: this.state.phrasePath,
-      //   entity: this.props.computePhrase,
-      // },
       {
         id: this.props.routeParams.dialect_path,
         entity: this.props.computeDialect2,
       },
     ])
+
+    const isPublicDialect =
+      selectn('response.state', computeDialect2) === 'Published' ||
+      selectn('response.state', computeDialect2) === 'Republish'
+    const isRecorderWithApproval = ProviderHelpers.isRecorderWithApproval(this.props.computeLogin)
+    const isAdmin = ProviderHelpers.isAdmin(this.props.computeLogin)
+    const hasWritePriveleges = isRecorderWithApproval || isAdmin
+
     return (
       <AuthenticationFilter.Container
         is403={this.state.is403}
@@ -275,10 +295,14 @@ export class PhrasesCreate extends Component {
               params={[selectn('response.title', computeDialect2)]}
             />
           </h1>
-
           <div className="row" style={{ marginTop: '15px' }}>
             <div className={classNames('col-xs-8', 'col-md-10')}>
-              <form data-testid="PhrasesCreate__form" onSubmit={this._onRequestSaveForm}>
+              <form
+                data-testid="PhrasesCreate__form"
+                onSubmit={(e) => {
+                  this._onRequestSaveForm(e)
+                }}
+              >
                 <t.form.Form
                   ref={this.formPhraseCreate}
                   type={t.struct(selectn('FVPhrase', fields))}
@@ -287,9 +311,27 @@ export class PhrasesCreate extends Component {
                   options={FVPhraseOptions}
                 />
                 <div className="form-group">
-                  <button type="submit" className="btn btn-primary">
-                    <FVLabel transKey="save" defaultStr="Save" transform="first" />
-                  </button>
+                  <FVButton
+                    variant="contained"
+                    color="primary"
+                    onClick={(e) => {
+                      this._onRequestSaveForm(e)
+                    }}
+                    style={{ marginRight: '5px' }}
+                  >
+                    {<FVLabel transKey="save" defaultStr="Save" transform="first" />}
+                  </FVButton>
+                  {isPublicDialect && hasWritePriveleges ? (
+                    <FVButton
+                      variant="contained"
+                      color="secondary"
+                      onClick={(e) => {
+                        this._onRequestSaveForm(e, true)
+                      }}
+                    >
+                      {<FVLabel transKey="save & publish" defaultStr="Save & Publish" transform="first" />}
+                    </FVButton>
+                  ) : null}
                 </div>
               </form>
             </div>
@@ -305,14 +347,16 @@ export class PhrasesCreate extends Component {
 
 // REDUX: reducers/state
 const mapStateToProps = (state /*, ownProps*/) => {
-  const { fvDialect, fvPhrase, navigation, windowPath } = state
+  const { fvDialect, fvPhrase, navigation, nuxeo, windowPath } = state
 
   const { computePhrase } = fvPhrase
   const { computeDialect2 } = fvDialect
   const { splitWindowPath, _windowPath } = windowPath
   const { route } = navigation
+  const { computeLogin } = nuxeo
   return {
     computeDialect2,
+    computeLogin,
     computePhrase,
     routeParams: route.routeParams,
     splitWindowPath,
@@ -323,6 +367,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
   createPhrase,
+  createAndPublishPhrase,
   fetchDialect,
   fetchDialect2,
   pushWindowPath,

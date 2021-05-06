@@ -10,11 +10,16 @@ import PropTypes from 'prop-types'
  */
 function Home({ styling }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" className={styling}>
-      <title>Home</title>
-      <g data-name="Home 02">
-        <path d="M22.835,13.128l-10-9a.5.5,0,0,0-.67,0l-10,9A.5.5,0,0,0,2.5,14H5v6.5a.5.5,0,0,0,.5.5h5a.5.5,0,0,0,.5-.5V16h3v4.5a.5.5,0,0,0,.5.5h5a.5.5,0,0,0,.5-.5V14h2.5a.5.5,0,0,0,.335-.872ZM19.5,13a.5.5,0,0,0-.5.5V20H15V15.5a.5.5,0,0,0-.5-.5h-4a.5.5,0,0,0-.5.5V20H6V13.5a.5.5,0,0,0-.5-.5H3.8l8.7-7.827L21.2,13Z" />
-      </g>
+    <svg
+      className={styling}
+      height="100px"
+      width="100px"
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      viewBox="0 0 100 100"
+    >
+      <polygon points="5,53.75 20,53.75 20,91.249 42.667,91.249 42.667,67.396 57.333,67.396 57.333,91.249 79.999,91.249 79.999,53.75   95,53.75 49.998,8.751 " />
     </svg>
   )
 }

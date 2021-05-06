@@ -1,5 +1,4 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
 import WordsPresentation from 'components/Words/WordsPresentation'
 import WordsData from 'components/Words/WordsData'
 
@@ -12,13 +11,40 @@ import WordsData from 'components/Words/WordsData'
  * @returns {node} jsx markup
  */
 function WordsContainer() {
-  const { exampleOutput } = WordsData({ exampleInput: 'passedInToData' })
-  return <WordsPresentation exampleProp={exampleOutput} />
-}
-// PROPTYPES
-// const { string } = PropTypes
-WordsContainer.propTypes = {
-  //   something: string,
+  const {
+    actions,
+    currentFilter,
+    filters,
+    handleFilter,
+    handleSearchSubmit,
+    handleTextFieldChange,
+    isLoading,
+    items,
+    moreActions,
+    newSearchValue,
+    searchTerm,
+    sitename,
+    siteTitle,
+    infiniteScroll,
+  } = WordsData()
+  return (
+    <WordsPresentation
+      actions={actions}
+      currentFilter={currentFilter}
+      filters={filters}
+      handleFilter={handleFilter}
+      handleSearchSubmit={handleSearchSubmit}
+      handleTextFieldChange={handleTextFieldChange}
+      isLoading={isLoading}
+      items={items}
+      moreActions={moreActions}
+      newSearchValue={newSearchValue}
+      searchTerm={searchTerm}
+      sitename={sitename}
+      siteTitle={siteTitle}
+      infiniteScroll={infiniteScroll}
+    />
+  )
 }
 
 export default WordsContainer

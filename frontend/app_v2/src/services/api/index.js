@@ -4,6 +4,7 @@ import home from 'services/api/home'
 import mail from 'services/api/mail'
 import search from 'services/api/search'
 import site from 'services/api/site'
+import test from 'services/api/test'
 import user from 'services/api/user'
 
 export default {
@@ -13,5 +14,6 @@ export default {
   mail,
   search,
   site,
+  test,
   user,
 }

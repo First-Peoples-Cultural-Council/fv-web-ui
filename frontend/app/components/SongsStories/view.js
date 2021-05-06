@@ -20,7 +20,7 @@ import Immutable from 'immutable'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { deleteBook, deleteBookEntry, fetchBook, fetchBookEntries, publishBook } from 'reducers/fvBook'
+import { deleteBook, fetchBook, fetchBookEntries, publishBook } from 'reducers/fvBook'
 import { changeTitleParams, overrideBreadcrumbs } from 'reducers/navigation'
 import { fetchDialect2 } from 'reducers/fvDialect'
 import { pushWindowPath } from 'reducers/windowPath'
@@ -69,7 +69,6 @@ export class SongsStoriesView extends Component {
     // REDUX: actions/dispatch/func
     changeTitleParams: func.isRequired,
     deleteBook: func.isRequired,
-    deleteBookEntry: func.isRequired,
     fetchBook: func.isRequired,
     fetchBookEntries: func.isRequired,
     fetchDialect2: func.isRequired,
@@ -222,7 +221,7 @@ export class SongsStoriesView extends Component {
 
     return (
       <DetailsViewWithActions
-        labels={{ single: 'Book' }}
+        labels={{ single: 'Book Cover' }}
         itemPath={this._getBookPath()}
         actions={['workflow', 'edit', 'visibility', 'publish', 'add-child']}
         publishAction={this.props.publishBook}
@@ -264,7 +263,6 @@ const mapStateToProps = (state /*, ownProps*/) => {
 const mapDispatchToProps = {
   changeTitleParams,
   deleteBook,
-  deleteBookEntry,
   fetchBook,
   fetchBookEntries,
   fetchDialect2,

@@ -1,8 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  fetchCategories as _fetchCategories,
-  fetchSharedCategories as _fetchSharedCategories,
-} from 'reducers/fvCategory'
+import { fetchCategories as _fetchCategories } from 'reducers/fvCategory'
 function useCategories() {
   const dispatch = useDispatch()
 
@@ -10,15 +7,9 @@ function useCategories() {
     const dispatchObj = _fetchCategories(path)
     dispatch(dispatchObj)
   }
-  const fetchSharedCategories = (path) => {
-    const dispatchObj = _fetchSharedCategories(path)
-    dispatch(dispatchObj)
-  }
   return {
     computeCategories: useSelector((state) => state.fvCategory.computeCategories),
-    computeSharedCategories: useSelector((state) => state.fvCategory.computeSharedCategories),
     fetchCategories,
-    fetchSharedCategories,
   }
 }
 export default useCategories

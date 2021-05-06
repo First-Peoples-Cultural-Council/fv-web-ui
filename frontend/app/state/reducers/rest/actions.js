@@ -7,7 +7,7 @@ import ConfGlobal from 'common/conf/local.js'
  * create
  * --------------------------------------
  */
-export const create = (key /*, type, properties = {}*/) => {
+export const create = (key, type, properties = {}) => {
   return (parentDoc, docParams, file = null, timestamp, xpath) => {
     return (dispatch) => {
       // timestamp specified as we can't rely on pathOrId to be unique at this point
@@ -39,7 +39,7 @@ export const create = (key /*, type, properties = {}*/) => {
             dispatchObj.success = false
           })
       }
-      return DocumentOperations.createDocument(parentDoc, docParams)
+      return DocumentOperations.createDocument(parentDoc, docParams, properties.headers)
         .then((response) => {
           const dispatchObj = {
             type: key + '_CREATE_SUCCESS',
@@ -309,7 +309,8 @@ export const update = (key, type, properties = {}, usePathAsId = true) => {
     messageSuccess = undefined,
     messageError = undefined,
     file,
-    xpath
+    xpath,
+    overwriteProperties = {}
   ) {
     const _messageStart = IntlService.instance.searchAndReplace(messageStart)
     const _messageSuccess = IntlService.instance.searchAndReplace(messageSuccess)
@@ -328,7 +329,14 @@ export const update = (key, type, properties = {}, usePathAsId = true) => {
             : _messageStart,
       })
 
-      return DocumentOperations.updateDocument(newDoc, { headers: properties.headers }, file, xpath)
+      // Allow overwriting headers from the calling function
+      const finalHeaders = Object.assign(
+        {},
+        properties.headers,
+        Object.prototype.hasOwnProperty.call(overwriteProperties, 'headers') ? overwriteProperties.headers : {}
+      )
+
+      return DocumentOperations.updateDocument(newDoc, { headers: finalHeaders }, file, xpath)
         .then((response) => {
           const dispatchObj = {
             type: key + '_UPDATE_SUCCESS',

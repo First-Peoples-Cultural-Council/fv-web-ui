@@ -22,7 +22,7 @@ import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
 import { changeTitleParams, overrideBreadcrumbs } from 'reducers/navigation'
 import { fetchDialect2 } from 'reducers/fvDialect'
-import { fetchPhrase, updatePhrase } from 'reducers/fvPhrase'
+import { fetchPhrase } from 'reducers/fvPhrase'
 import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
@@ -32,9 +32,6 @@ import StringHelpers from 'common/StringHelpers'
 
 import AuthenticationFilter from 'components/AuthenticationFilter'
 import PromiseWrapper from 'components/PromiseWrapper'
-
-// Models
-import { Document } from 'nuxeo'
 
 // Views
 import fields from 'common/schemas/fields'
@@ -68,7 +65,6 @@ export class PhrasesEdit extends Component {
     overrideBreadcrumbs: func.isRequired,
     pushWindowPath: func.isRequired,
     replaceWindowPath: func.isRequired,
-    updatePhrase: func.isRequired,
   }
   state = {
     formValue: null,
@@ -211,21 +207,6 @@ export class PhrasesEdit extends Component {
     return _props.routeParams.dialect_path + '/Dictionary/' + StringHelpers.clean(_props.routeParams.phrase)
   }
 
-  _handleSave = (phrase, formValue) => {
-    const newDocument = new Document(phrase.response, {
-      repository: phrase.response._repository,
-      nuxeo: phrase.response._nuxeo,
-    })
-
-    // Set new value property on document
-    newDocument.set(formValue)
-
-    // Save document
-    this.props.updatePhrase(newDocument, null, null)
-
-    this.setState({ formValue: formValue })
-  }
-
   _handleCancel = () => {
     if (this.state.redirect) {
       NavigationHelpers.navigate(this.state.redirect, this.props.pushWindowPath, false)
@@ -280,11 +261,11 @@ export class PhrasesEdit extends Component {
 
           <EditViewWithForm
             computeEntities={computeEntities}
+            computeDialect={computeDialect2}
             initialValues={context}
             itemId={this._getPhrasePath()}
             fields={fields}
             options={options}
-            saveMethod={this._handleSave}
             cancelMethod={this._handleCancel}
             currentPath={this.props.splitWindowPath}
             navigationMethod={this.props.replaceWindowPath}
@@ -330,7 +311,6 @@ const mapDispatchToProps = {
   overrideBreadcrumbs,
   pushWindowPath,
   replaceWindowPath,
-  updatePhrase,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PhrasesEdit)

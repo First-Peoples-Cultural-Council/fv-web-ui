@@ -14,14 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import React from 'react'
-import PropTypes from 'prop-types'
-
-import classNames from 'classnames'
 
 import Link from 'components/Link'
-import EditorInsertChart from '@material-ui/icons/InsertChart'
-import FVButton from 'components/FVButton'
-import AuthenticationFilter from 'components/AuthenticationFilter'
 import FVLabel from 'components/FVLabel'
 
 import useRoute from 'dataSources/useRoute'
@@ -29,7 +23,7 @@ import useRoute from 'dataSources/useRoute'
  * Navigation for learning page
  */
 
-const ToolbarNavigation = ({ hideStatistics, isStatisticsVisible, handleShowStats }) => {
+const ToolbarNavigation = () => {
   const { routeParams } = useRoute()
   const dialectPath = routeParams.dialect_path
   return (
@@ -54,28 +48,9 @@ const ToolbarNavigation = ({ hideStatistics, isStatisticsVisible, handleShowStat
             </Link>
           </div>
         </div>
-        {hideStatistics !== true && isStatisticsVisible !== true && (
-          <AuthenticationFilter.Container hideFromSections>
-            <div className="col-xs-12 col-md-2">
-              <div className={classNames('hidden-xs')} float="right">
-                <FVButton variant="text" style={{ color: '#fff' }} onClick={handleShowStats}>
-                  <EditorInsertChart />
-                  <FVLabel transKey="language_statistics" defaultStr="Language Statistics" />
-                </FVButton>
-              </div>
-            </div>
-          </AuthenticationFilter.Container>
-        )}
       </div>
     </div>
   )
-}
-
-const { bool, func } = PropTypes
-ToolbarNavigation.propTypes = {
-  handleShowStats: func,
-  hideStatistics: bool,
-  isStatisticsVisible: bool,
 }
 
 export default ToolbarNavigation

@@ -145,6 +145,15 @@ class Page extends Component {
             )}
             <div className="pull-right">{this.props.appendEntryControls}</div>
           </div>
+          {this.props.editAction ? (
+            <div className={classNames('col-xs-12', 'text-right')} style={{ paddingTop: '15px' }}>
+              <small>
+                Page ID: <strong>{this.props.entry.uid.substring(0, 8)}</strong>
+              </small>
+            </div>
+          ) : (
+            ''
+          )}
         </div>
       </div>
     )

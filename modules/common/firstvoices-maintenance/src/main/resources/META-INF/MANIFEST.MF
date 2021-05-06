@@ -8,7 +8,6 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ManifestVersion: 2
 Bundle-Vendor: Nuxeo
-Nuxeo-Component: OSGI-INF/dialect/categories/categories-services.xml,
- OSGI-INF/dialect/categories/categories-operations.xml,
+Nuxeo-Component: OSGI-INF/dialect/categories/categories-operations.xml,
  OSGI-INF/maintenance/fv-maintenance-contrib.xml,
  OSGI-INF/maintenance/maintenance-services.xml

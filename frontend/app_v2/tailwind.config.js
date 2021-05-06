@@ -12,6 +12,9 @@ module.exports = {
       animation: {
         'pulse-blur': 'pulse-blur 2.5s linear infinite',
       },
+      borderRadius: {
+        '4xl': '3rem',
+      },
       fontSize: {
         xxs: '.5rem',
       },
@@ -58,7 +61,7 @@ module.exports = {
           dark: '#452a3f',
         },
         'fv-charcoal': {
-          light: '#5D5858',
+          light: '#646363',
           DEFAULT: '#313133',
         },
         'fv-green': {

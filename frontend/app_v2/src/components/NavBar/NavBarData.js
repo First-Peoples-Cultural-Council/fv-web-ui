@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 
 // FPCC
 import useGetSite from 'common/useGetSite'
@@ -20,6 +20,9 @@ function NavBarData() {
   const { machine, send } = menu
   const { context } = machine
   const { openMenu } = context
+  const location = useLocation()
+  const isHome = location.pathname === `/${sitename}/`
+  const isSearchPage = location.pathname.startsWith(`/${sitename}/search`)
 
   const { title } = useGetSite()
   const { value: workspaceToggleValue, set } = useWorkspaceToggle()
@@ -108,6 +111,8 @@ function NavBarData() {
 
   return {
     currentUser,
+    isHome,
+    isSearchPage,
     menuData,
     onClickOutside,
     onKeyPress,
