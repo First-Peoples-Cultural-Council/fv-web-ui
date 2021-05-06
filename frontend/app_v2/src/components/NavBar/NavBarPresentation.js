@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import NavBarPresentationMenu from './NavBarPresentationMenu'
 import NavBarPresentationMobile from './NavBarPresentationMobile'
 import FVToggle from 'components/FVToggle'
+import SearchInput from 'components/SearchInput'
 
 import useIcon from 'common/useIcon'
 
@@ -22,6 +23,7 @@ function NavBarPresentation({
   className,
   currentUser,
   isHome,
+  isSearchPage,
   workspaceToggleValue,
   menuData,
   onClickOutside,
@@ -65,7 +67,7 @@ function NavBarPresentation({
               <span className="sr-only">FirstVoices Logo</span>
               {fvlogo}
             </Link>
-            {isHome ? null : (
+            {!isHome && (
               <Link
                 className="text-white flex items-center group p-1 bg-fv-charcoal rounded-md text-lg font-medium hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-fv-turquoise"
                 to={`/${sitename}/`}
@@ -78,7 +80,7 @@ function NavBarPresentation({
           </div>
 
           <div className="hidden lg:flex xl:space-x-6 ">{menus}</div>
-          <div className="inline-flex">
+          <div className="relative inline-flex">
             {currentUser?.username === 'Guest' || currentUser?.username === undefined ? (
               <div className="hidden lg:flex items-center">
                 <a
@@ -123,7 +125,7 @@ function NavBarPresentation({
                   {currentUser.userInitials}
                 </button>
                 {/* User Menu dropdown */}
-                {openMenu === userMenuId ? (
+                {openMenu === userMenuId && (
                   <div className="absolute top-6 right-0 w-72 py-8 transform lg:-translate-x-0" role="menu">
                     <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
                       <ul className="text-base text-fv-charcoal font-medium grid bg-white gap-12 p-8 md:gap-8">
@@ -146,10 +148,15 @@ function NavBarPresentation({
                       </ul>
                     </div>
                   </div>
-                ) : null}
+                )}
               </div>
             )}
-            <div className="items-center lg:hidden">
+            {!isHome && !isSearchPage && (
+              <div className="flex items-center">
+                <SearchInput.Container minimal />
+              </div>
+            )}
+            <div className="flex items-center lg:hidden">
               <button
                 type="button"
                 onClick={() => openCloseMobileNavbar()}

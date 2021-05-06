@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import SearchInputPresentation from 'components/SearchInput/SearchInputPresentation'
+import SearchInputPresentationMinimal from 'components/SearchInput/SearchInputPresentationMinimal'
 import SearchInputData from 'components/SearchInput/SearchInputData'
 
 /**
@@ -13,7 +14,7 @@ import SearchInputData from 'components/SearchInput/SearchInputData'
  *
  * @returns {node} jsx markup
  */
-function SearchInputContainer({ docType }) {
+function SearchInputContainer({ docType, minimal }) {
   const {
     currentOption,
     handleSearchSubmit,
@@ -26,7 +27,14 @@ function SearchInputContainer({ docType }) {
     searchValue,
     siteTitle,
   } = SearchInputData({ docType })
-  return (
+  return minimal ? (
+    <SearchInputPresentationMinimal
+      handleSearchSubmit={handleSearchSubmit}
+      handleTextFieldChange={handleTextFieldChange}
+      searchValue={searchValue}
+      siteTitle={siteTitle}
+    />
+  ) : (
     <SearchInputPresentation
       currentOption={currentOption}
       handleSearchSubmit={handleSearchSubmit}

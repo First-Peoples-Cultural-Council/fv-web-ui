@@ -15,6 +15,7 @@ function NavBarContainer({ className }) {
   const {
     currentUser,
     isHome,
+    isSearchPage,
     menuData,
     title,
     onWorkspaceModeClick,
@@ -29,6 +30,7 @@ function NavBarContainer({ className }) {
       className={className}
       currentUser={currentUser}
       isHome={isHome}
+      isSearchPage={isSearchPage}
       menuData={menuData}
       onClickOutside={onClickOutside}
       onKeyPress={onKeyPress}
