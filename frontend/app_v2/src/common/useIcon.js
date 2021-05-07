@@ -16,6 +16,7 @@ import Exclamation from 'common/icons/Exclamation'
 import Facebook from 'common/icons/Facebook'
 import FVLogo from 'common/icons/FVLogo'
 import FVShortLogo from 'common/icons/FVShortLogo'
+import ForwardArrow from 'common/icons/ForwardArrow'
 import HamburgerMenu from 'common/icons/HamburgerMenu'
 import Home from 'common/icons/Home'
 import Instagram from 'common/icons/Instagram'
@@ -64,6 +65,7 @@ function useIcon(iconName, iconStyling) {
     Facebook,
     FVLogo,
     FVShortLogo,
+    ForwardArrow,
     HamburgerMenu,
     Home,
     Instagram,
