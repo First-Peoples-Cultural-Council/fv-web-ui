@@ -10,8 +10,8 @@ import Loading from 'components/Loading'
  *
  * @returns {node} jsx markup
  */
-function WordContainer() {
-  const { actions, entry, isLoading, moreActions, sitename } = WordData()
+function WordContainer({ docId }) {
+  const { actions, entry, isLoading, moreActions, sitename } = WordData({ docId })
   return (
     <Loading.Container isLoading={isLoading}>
       <DictionaryDetail.Presentation actions={actions} entry={entry} moreActions={moreActions} sitename={sitename} />

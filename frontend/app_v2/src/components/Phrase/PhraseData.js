@@ -13,19 +13,17 @@ import { triggerError } from 'common/navigationHelpers'
  * @param {object} props
  *
  */
-function PhraseData() {
+function PhraseData({ docId }) {
   const { phraseId, sitename } = useParams()
   const history = useHistory()
 
+  const id = docId ? docId : phraseId
+
   // Data fetch
-  const response = useQuery(
-    ['phrase', phraseId],
-    () => documentApi.get({ id: phraseId, contextParameters: 'phrase' }),
-    {
-      // The query will not execute until the phraseId has been provided
-      enabled: !!phraseId,
-    }
-  )
+  const response = useQuery(['phrase', id], () => documentApi.get({ id: id, contextParameters: 'phrase' }), {
+    // The query will not execute until the phraseId has been provided
+    enabled: !!id,
+  })
   const { data, error, isError, isLoading } = response
   const entry = phraseDataAdaptor(data)
 
@@ -35,7 +33,7 @@ function PhraseData() {
 
   return {
     phraseId,
-    isLoading,
+    isLoading: isLoading || isError,
     entry: data?.title ? entry : {},
     actions: ['copy'],
     moreActions: ['share'],

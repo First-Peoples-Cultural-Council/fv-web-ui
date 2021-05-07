@@ -13,15 +13,17 @@ import { triggerError } from 'common/navigationHelpers'
  * @param {object} props
  *
  */
-function WordData() {
+function WordData({ docId }) {
   const { wordId } = useParams()
   const history = useHistory()
   const { sitename } = useParams()
 
+  const id = docId ? docId : wordId
+
   // Data fetch
-  const response = useQuery(['word', wordId], () => documentApi.get({ id: wordId, contextParameters: 'word' }), {
+  const response = useQuery(['word', id], () => documentApi.get({ id: id, contextParameters: 'word' }), {
     // The query will not execute until the wordId has been provided
-    enabled: !!wordId,
+    enabled: !!id,
   })
   const { data, error, isError, isLoading } = response
 
@@ -32,8 +34,8 @@ function WordData() {
   }, [isError])
 
   return {
-    wordId,
-    isLoading,
+    wordId: id,
+    isLoading: isLoading || isError,
     entry: data?.title ? entry : {},
     actions: ['copy'],
     moreActions: ['share'],

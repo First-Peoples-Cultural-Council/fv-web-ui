@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
@@ -9,6 +9,9 @@ import { makePlural } from 'common/urlHelpers'
 import { getMediaUrl } from 'common/urlHelpers'
 import Loading from 'components/Loading'
 import ActionsMenu from 'components/ActionsMenu'
+import Drawer from 'components/Drawer'
+import Word from 'components/Word'
+import Phrase from 'components/Phrase'
 
 /**
  * @summary DictionaryListPresentation
@@ -20,8 +23,50 @@ import ActionsMenu from 'components/ActionsMenu'
  */
 
 function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items, moreActions, sitename, wholeDomain }) {
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [selectedItem, setselectedItem] = useState({})
   const typeColor = { word: 'fv-turquoise', phrase: 'fv-orange', song: 'fv-red', story: 'fv-purple' }
   const { isFetchingNextPage, fetchNextPage, hasNextPage, loadButtonLabel, loadButtonRef } = infiniteScroll
+
+  function getDrawerContents() {
+    const { id, type, parentDialect } = selectedItem
+
+    const link = type ? (
+      <Link
+        className="font-medium text-fv-charcoal mr-2 float-right inline-flex items-center"
+        to={`/${parentDialect?.shortUrl ? parentDialect.shortUrl : sitename}/${makePlural(type)}/${id}`}
+      >
+        Go to {type} {useIcon('ForwardArrow', 'fill-current h-10 w-10')}
+      </Link>
+    ) : null
+
+    switch (type) {
+      case 'word':
+        return (
+          <>
+            {link}
+            <Word.Container docId={'a5c17a6c-31dd-458a-bc4a-d00ac3306eca'} />
+          </>
+        )
+      case 'phrase':
+        return (
+          <>
+            {link}
+            <Phrase.Container docId={'a5c17a6c-31dd-458a-bc4a-d00ac3306eca'} />
+          </>
+        )
+      default:
+        return null
+    }
+  }
+
+  function handleItemClick(item) {
+    if (item.type === 'word' || item.type === 'phrase') {
+      setselectedItem(item)
+      setDrawerOpen(true)
+    }
+    return
+  }
 
   return (
     <Loading.Container isLoading={isLoading}>
@@ -34,26 +79,26 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
                   <tr>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      className="px-6 py-3 text-left text-xs font-medium text-fv-charcoal-light uppercase tracking-wider"
                     >
                       Entry
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      className="px-6 py-3 text-left text-xs font-medium text-fv-charcoal-light uppercase tracking-wider"
                     >
                       Translation
                     </th>
                     <th
                       scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      className="px-6 py-3 text-left text-xs font-medium text-fv-charcoal-light uppercase tracking-wider"
                     >
                       Type
                     </th>
                     {wholeDomain ? (
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-6 py-3 text-left text-xs font-medium text-fv-charcoal-light uppercase tracking-wider"
                       >
                         Language Site
                       </th>
@@ -69,14 +114,12 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
                       {page.results.map(({ id, title, translations, audio, type, parentDialect }) => (
                         <tr key={id}>
                           <td className="px-6 py-4 flex items-center">
-                            <Link
-                              className="font-medium text-gray-900 mr-2"
-                              to={`/${parentDialect?.shortUrl ? parentDialect.shortUrl : sitename}/${makePlural(
-                                type
-                              )}/${id}`}
+                            <button
+                              className="font-medium text-fv-charcoal mr-2"
+                              onClick={() => handleItemClick({ id, type, parentDialect })}
                             >
                               {title}
-                            </Link>
+                            </button>
                             {audio.length > 0
                               ? audio.map((audioId, i) => (
                                   <AudioMinimal.Container
@@ -102,7 +145,7 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
                           </td>
                           <td className="px-6 py-4">
                             {translations ? (
-                              <ol className="text-gray-900">
+                              <ol className="text-fv-charcoal">
                                 {translations.map((translation, i) => (
                                   <li key={i}>
                                     {translations.length > 1 ? `${i + 1}. ` : null} {translation}
@@ -119,7 +162,7 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
                             </span>
                           </td>
                           {wholeDomain ? (
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-fv-charcoal-light">
                               <Link to={`/${parentDialect.shortUrl}`}>{parentDialect.name}</Link>
                             </td>
                           ) : null}
@@ -158,6 +201,9 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
       ) : (
         <div className="m-5 md:mx-20 md:my-10">Sorry, no results were found for this search.</div>
       )}
+      <Drawer.Presentation isOpen={drawerOpen} closeHandler={() => setDrawerOpen(false)}>
+        {getDrawerContents()}
+      </Drawer.Presentation>
     </Loading.Container>
   )
 }
