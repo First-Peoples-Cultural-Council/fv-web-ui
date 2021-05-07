@@ -7,14 +7,31 @@ public class Category implements Serializable {
 
   private final String id;
   private final String title;
-  private int entryCount;
+  private final String type;
   private final String parentId;
 
+  public enum CategoryTypes {
+    WORD("word"),
+    PHRASE("phrase"),
+    ALL("all");
+
+    private final String value;
+
+    CategoryTypes(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+  }
+
   public Category(
-      final String id, final String parentId, final String title, final int entryCount) {
+      final String id, final String parentId, final String title,
+      final String type) {
     this.id = id;
     this.title = title;
-    this.entryCount = entryCount;
+    this.type = type;
     this.parentId = parentId;
   }
 
@@ -30,12 +47,8 @@ public class Category implements Serializable {
     return title;
   }
 
-  public int getEntryCount() {
-    return entryCount;
-  }
-
-  public void incrementEntryCount(final int toAdd) {
-    this.entryCount += toAdd;
+  public String getType() {
+    return type;
   }
 }
 
