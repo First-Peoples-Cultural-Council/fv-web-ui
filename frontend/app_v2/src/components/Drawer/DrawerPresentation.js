@@ -21,29 +21,25 @@ function DrawerPresentation({ children, isOpen, closeHandler }) {
           <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex sm:pl-16">
             <Transition.Child
               as={Fragment}
-              enter="transform transition ease-in-out duration-300 sm:duration-500"
+              enter="transform transition ease-in-out duration-100 sm:duration-200"
               enterFrom="translate-x-full"
               enterTo="translate-x-0"
-              leave="transform transition ease-in-out duration-300 sm:duration-500"
+              leave="transform transition ease-in-out duration-100 sm:duration-200"
               leaveFrom="translate-x-0"
               leaveTo="translate-x-full"
             >
               <div className="w-screen max-w-2xl">
                 <div className="h-full flex flex-col py-6 bg-white shadow-xl overflow-y-scroll">
-                  <div className="px-4 sm:px-6 mt-14">
-                    <div className="flex justify-end">
-                      <div className="ml-3 h-7 flex items-center">
-                        <button
-                          className="bg-white rounded-md text-fv-charcoal-light hover:text-fv-charcoal focus:outline-black"
-                          onClick={closeHandler}
-                        >
-                          <span className="sr-only">Close panel</span>
-                          {useIcon('Close', 'h-6 w-6')}
-                        </button>
-                      </div>
-                    </div>
+                  <div className="flex justify-end px-4 sm:px-6 mt-6 ml-3">
+                    <button
+                      className="bg-white h-7 rounded-md text-fv-charcoal-light hover:text-fv-charcoal focus:outline-black"
+                      onClick={closeHandler}
+                    >
+                      <span className="sr-only">Close panel</span>
+                      {useIcon('Close', 'h-7 w-7')}
+                    </button>
                   </div>
-                  <div className="mt-6 relative flex-1 px-4 sm:px-6">{children}</div>
+                  {children}
                 </div>
               </div>
             </Transition.Child>
