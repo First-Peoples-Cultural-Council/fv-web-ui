@@ -14,9 +14,9 @@ function LoadingContainer({ children, isLoading }) {
   return isLoading ? <LoadingPresentation /> : children
 }
 // PROPTYPES
-const { bool, object } = PropTypes
+const { bool, node } = PropTypes
 LoadingContainer.propTypes = {
-  children: object,
+  children: node,
   isLoading: bool,
 }
 

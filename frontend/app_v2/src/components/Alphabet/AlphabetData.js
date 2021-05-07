@@ -79,7 +79,7 @@ const AlphabetData = ({ widgetView }) => {
   return {
     characters: data?.characters,
     links: data?.relatedLinks,
-    isLoading: isLoading || status === 'idle',
+    isLoading: isLoading || status === 'idle' || isError,
     sitename,
     onCharacterClick,
     onVideoClick,

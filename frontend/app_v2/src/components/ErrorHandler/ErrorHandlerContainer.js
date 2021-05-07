@@ -63,9 +63,9 @@ function ErrorHandlerContainer({ children, error }) {
   }
 }
 // PROPTYPES
-const { object } = PropTypes
+const { node } = PropTypes
 ErrorHandlerContainer.propTypes = {
-  children: object,
+  children: node,
 }
 
 export default ErrorHandlerContainer

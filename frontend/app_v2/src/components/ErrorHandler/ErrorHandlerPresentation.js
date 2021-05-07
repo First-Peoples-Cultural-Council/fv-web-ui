@@ -29,7 +29,7 @@ function ErrorHandlerPresentation({ status, heading, content }) {
             className="text-lg font-light outline-none focus:outline-none transform transition-all hover:scale-110 text-fv-turquoise hover:text-fv-turquoise-dark"
             onClick={() => history.goBack()}
           >
-            {useIcon('BackArrow', 'inline-flex pb-2 h-7 fill-current mr-2')}
+            {useIcon('BackArrow', 'inline-flex pb-2 h-7 fill-current mr-2 h-10')}
             Go Back
           </button>
         </div>

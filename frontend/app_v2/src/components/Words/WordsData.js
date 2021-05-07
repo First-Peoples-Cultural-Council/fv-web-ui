@@ -94,7 +94,7 @@ function WordsData() {
     siteTitle: title ? title : 'FirstVoices',
     filters,
     handleFilter,
-    isLoading,
+    isLoading: isLoading || isError,
     items: data ? data : {},
     actions: ['copy'],
     moreActions: ['share'],
