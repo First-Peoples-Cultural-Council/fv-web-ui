@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import useIcon from 'common/useIcon'
 
 /**
- * @summary SearchPresentation
+ * @summary SearchInputPresentation
  * @component
  *
  * @param {object} props

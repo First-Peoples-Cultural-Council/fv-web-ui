@@ -9,7 +9,7 @@ import React from 'react'
  */
 function LoadingPresentation() {
   return (
-    <div className="m-5">
+    <div className="mt-72">
       <div className="flex justify-center items-center">
         <div className="bg-fv-red w-10 h-10 rounded-full m-8 animate-pulse-blur" />
         <div

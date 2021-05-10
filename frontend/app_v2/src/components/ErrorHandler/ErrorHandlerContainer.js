@@ -40,8 +40,16 @@ function ErrorHandlerContainer({ children, error }) {
           content="Sorry, we couldn't find that page."
         />
       )
-    // Catch any other 4** errors or any 5** errors
-    case Math.floor(errorStatus / 100) === 4:
+    // Catch any other 4** errors
+    case Math.floor(errorStatusCode / 100) === 4:
+      return (
+        <ErrorHandlerPresentation
+          status={errorStatusCode}
+          heading={'Error'}
+          content={'Sorry, please try again. If this issue persists please contact our team.'}
+        />
+      )
+    // Catch any other 5** errors
     case Math.floor(errorStatus / 100) === 5:
       return (
         <ErrorHandlerPresentation
