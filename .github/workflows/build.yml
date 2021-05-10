@@ -78,15 +78,15 @@ jobs:
           node-version: "13.12.0"
 
       # Setup the maven build caching (~/.m2/repository directory) to restore from or save to
-      - name: Cache project build
-        if: steps.changed-backend.outputs.backend_files
-        id: cache-build
-        uses: actions/cache@v1.1.2
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-JDK11-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-JDK11
+#       - name: Cache project build
+#         if: steps.changed-backend.outputs.backend_files
+#         id: cache-build
+#         uses: actions/cache@v1.1.2
+#         with:
+#           path: ~/.m2/repository
+#           key: ${{ runner.os }}-maven-JDK11-${{ hashFiles('**/pom.xml') }}
+#           restore-keys: |
+#             ${{ runner.os }}-maven-JDK11
 
 
         # Build only the backend if changes are made to the backend and not frontend
