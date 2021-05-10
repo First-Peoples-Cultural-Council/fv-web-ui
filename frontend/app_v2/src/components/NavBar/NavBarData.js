@@ -1,8 +1,7 @@
 import { useContext, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 
 // FPCC
-import { getMediaUrl } from 'common/urlHelpers'
 import useGetSite from 'common/useGetSite'
 import useGetUser from 'common/useGetUser'
 import useWorkspaceToggle from 'common/useWorkspaceToggle'
@@ -21,12 +20,13 @@ function NavBarData() {
   const { machine, send } = menu
   const { context } = machine
   const { openMenu } = context
+  const location = useLocation()
+  const isHome = location.pathname === `/${sitename}/`
+  const isSearchPage = location.pathname.startsWith(`/${sitename}/search`)
 
-  const { title, logoId } = useGetSite()
+  const { title } = useGetSite()
   const { value: workspaceToggleValue, set } = useWorkspaceToggle()
   const { firstName, lastName, username } = useGetUser()
-
-  const logoUrl = getMediaUrl({ type: 'image', id: logoId, viewName: 'Small' })
 
   const onWorkspaceModeClick = () => {
     set(!workspaceToggleValue)
@@ -111,7 +111,8 @@ function NavBarData() {
 
   return {
     currentUser,
-    logoUrl,
+    isHome,
+    isSearchPage,
     menuData,
     onClickOutside,
     onKeyPress,

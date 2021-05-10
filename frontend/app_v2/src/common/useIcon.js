@@ -14,7 +14,10 @@ import Copy from 'common/icons/Copy'
 import Dictionary from 'common/icons/Dictionary'
 import Exclamation from 'common/icons/Exclamation'
 import Facebook from 'common/icons/Facebook'
+import FVLogo from 'common/icons/FVLogo'
+import FVShortLogo from 'common/icons/FVShortLogo'
 import HamburgerMenu from 'common/icons/HamburgerMenu'
+import Home from 'common/icons/Home'
 import Instagram from 'common/icons/Instagram'
 import Kids from 'common/icons/Kids'
 import Learn from 'common/icons/Learn'
@@ -22,7 +25,6 @@ import Lessons from 'common/icons/Lessons'
 import Link from 'common/icons/Link'
 import LinkedIn from 'common/icons/LinkedIn'
 import Login from 'common/icons/Login'
-import Logo from 'common/icons/Logo'
 import Mail from 'common/icons/Mail'
 import More from 'common/icons/More'
 import MusicNote from 'common/icons/MusicNote'
@@ -60,7 +62,10 @@ function useIcon(iconName, iconStyling) {
     Dictionary,
     Exclamation,
     Facebook,
+    FVLogo,
+    FVShortLogo,
     HamburgerMenu,
+    Home,
     Instagram,
     Kids,
     Learn,
@@ -68,7 +73,6 @@ function useIcon(iconName, iconStyling) {
     Link,
     LinkedIn,
     Login,
-    Logo,
     Mail,
     More,
     MusicNote,

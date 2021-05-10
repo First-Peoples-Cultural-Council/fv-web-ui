@@ -61,7 +61,7 @@ module.exports = {
           dark: '#452a3f',
         },
         'fv-charcoal': {
-          light: '#5D5858',
+          light: '#646363',
           DEFAULT: '#313133',
         },
         'fv-green': {
