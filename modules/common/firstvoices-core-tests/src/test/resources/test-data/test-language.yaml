@@ -59,6 +59,12 @@ children:
           - type: FVContributors
             name: "Contributors"
           - type: FVCategories
+            name: "Phrase Books"
+            children:
+              - type: FVCategory
+                name: "Phrase Book 1"
+                key: "testPhraseBook"
+          - type: FVCategories
             name: "Categories"
             children:
               - type: FVCategory
