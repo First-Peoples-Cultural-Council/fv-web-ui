@@ -9,6 +9,11 @@
   </parent>
   <artifactId>firstvoices-rest-api-simple</artifactId>
   <name>Simplified API</name>
+
+  <prerequisites>
+    <maven>3.3.9</maven>
+  </prerequisites>
+
   <dependencies>
 
     <dependency>
@@ -19,19 +24,19 @@
     <dependency>
       <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-annotations</artifactId>
-      <version>2.1.2</version>
+      <version>2.1.9</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-jaxrs2</artifactId>
-      <version>2.1.2</version>
+      <version>2.1.9</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-core</artifactId>
-      <version>2.1.2</version>
+      <version>2.1.9</version>
       <scope>compile</scope>
     </dependency>
 
@@ -334,7 +339,7 @@
       <plugin>
         <groupId>org.codehaus.gmavenplus</groupId>
         <artifactId>gmavenplus-plugin</artifactId>
-        <version>1.9.0</version>
+        <version>1.12.1</version>
         <executions>
           <execution>
             <goals>
@@ -358,7 +363,7 @@
       <plugin>
         <groupId>io.swagger.core.v3</groupId>
         <artifactId>swagger-maven-plugin</artifactId>
-        <version>2.1.1</version>
+        <version>2.1.9</version>
         <configuration>
           <outputFileName>openapi</outputFileName>
           <outputPath>${project.build.directory}/openapi</outputPath>
@@ -380,7 +385,7 @@
       <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
-        <version>1.10.0</version>
+        <version>1.11.3</version>
         <extensions>true</extensions>
         <executions>
           <execution>
@@ -418,7 +423,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.2.0</version>
         <executions>
           <execution>
             <id>copy-resources</id>
@@ -444,7 +449,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.3</version>
+        <version>3.2.4</version>
         <executions>
           <execution>
             <phase>package</phase>
