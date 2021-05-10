@@ -7,17 +7,6 @@
   <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
              point="providers">
 
-
-    <coreQueryPageProvider name="FIND_CATEGORIES_PP">
-      <pattern>
-        SELECT * from FVCategories where ecm:ancestorId=? and ecm:name='Categories' and ecm:isVersion=0 and
-        ecm:isTrashed=0
-      </pattern>
-      <sort column="dc:title" ascending="true"/>
-      <pageSize>1000</pageSize>
-    </coreQueryPageProvider>
-
-
     <coreQueryPageProvider name="FIND_CATEGORY_IN_CATEGORIES_PP">
       <pattern>
         SELECT *
@@ -53,23 +42,6 @@
       </pattern>
       <pageSize>10000</pageSize>
     </genericPageProvider>
-
-    <coreQueryPageProvider name="FIND_WORDS_WITH_CATEGORY_PP">
-      <pattern>
-        select * from FVWord where fv-word:categories = ? and ecm:isVersion=0 and ecm:isTrashed=0
-      </pattern>
-      <sort column="dc:title" ascending="true"/>
-      <pageSize>10000</pageSize>
-    </coreQueryPageProvider>
-
-    <coreQueryPageProvider name="FIND_WORDS_WITH_CATEGORY_PROXIED_PP">
-      <pattern>
-        select * from FVWord where fvproxy:proxied_categories = ? and ecm:isVersion=0 and ecm:isTrashed=0
-      </pattern>
-      <sort column="dc:title" ascending="true"/>
-      <pageSize>1000</pageSize>
-    </coreQueryPageProvider>
-
 
   </extension>
 </component>
