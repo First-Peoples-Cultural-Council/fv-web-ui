@@ -35,6 +35,13 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+            
+      # Setup and use custom settings xml (currently to address https://maven.apache.org/docs/3.8.1/release-notes.html#how-to-fix-when-i-get-a-http-repository-blocked)
+      - name: Apply Custom Maven Settings
+        if: steps.changed-backend.outputs.backend_files
+        uses: whelk-io/maven-settings-xml-action@v14
+        with:
+          mirrors: '[{ "id": "secure-public", "name": "Nuxeo Secure", "mirrorOf": "public", "url": "https://maven.nuxeo.org/nexus/content/groups/public" }, { "id": "secure-public2", "name": "Nuxeo Secure2", "mirrorOf": "public", "url": "http://maven.nuxeo.org/nexus/content/groups/public", "blocked": "false" }]'
 
         # Build only the backend if changes are made to the backend and not frontend
       - name: Build backend with Maven
