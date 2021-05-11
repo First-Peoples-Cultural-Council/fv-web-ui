@@ -63,13 +63,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Setup and use custom settings xml (currently to address https://maven.apache.org/docs/3.8.1/release-notes.html#how-to-fix-when-i-get-a-http-repository-blocked)
-      - name: maven-settings-xml-action
-        if: steps.changed-backend.outputs.backend_files
-        uses: whelk-io/maven-settings-xml-action@v14
-        with:
-          mirrors: '[{ "id": "secure-public", "name": "Nuxeo Secure", "mirrorOf": "public", "url": "https://maven.nuxeo.org/nexus/content/groups/public" }]'
-
       # Installs the correct version of java for the project
       - name: Set up JDK 11
         if: steps.changed-backend.outputs.backend_files
@@ -95,11 +88,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-JDK11
 
+      # Setup and use custom settings xml (currently to address https://maven.apache.org/docs/3.8.1/release-notes.html#how-to-fix-when-i-get-a-http-repository-blocked)
+      - name: Apply Custom Maven Settings
+        if: steps.changed-backend.outputs.backend_files
+        uses: whelk-io/maven-settings-xml-action@v14
+        with:
+          mirrors: '[{ "id": "secure-public", "name": "Nuxeo Secure", "mirrorOf": "public", "url": "https://maven.nuxeo.org/nexus/content/groups/public" }, { "id": "secure-public2", "name": "Nuxeo Secure2", "mirrorOf": "public", "url": "http://maven.nuxeo.org/nexus/content/groups/public", "blocked": "false" }]'
 
         # Build only the backend if changes are made to the backend and not frontend
       - name: Build backend with Maven
         if: steps.changed-backend.outputs.backend_files
-        run: mvn clean install
+        run: mvn clean install -XU
 
 
         # Setup the Node modules caching (~/.npm directory) to restore from or save to
