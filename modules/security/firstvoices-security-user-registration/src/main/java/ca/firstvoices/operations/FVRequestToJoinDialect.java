@@ -38,9 +38,11 @@ import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.IterableQueryResult;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.query.sql.NXQL;
+import org.nuxeo.ecm.platform.usermanager.UserManager;
 
 @Operation(id = FVRequestToJoinDialect.ID,
     category = Constants.CAT_USERS_GROUPS,
@@ -53,6 +55,8 @@ public class FVRequestToJoinDialect {
   private static final Log log = LogFactory.getLog(FVRequestToJoinDialect.class);
 
   @Context protected CoreSession session;
+
+  @Context protected UserManager userManager;
 
   @Context protected OperationContext operationContext;
 
@@ -80,17 +84,6 @@ public class FVRequestToJoinDialect {
       }
     }
 
-    try (final IterableQueryResult queryResult = session.queryAndFetch(String.format(
-        "SELECT * from FVSiteJoinRequest where fvjoinrequest:dialect = %s and fvjoinrequest:user "
-            + "= %s",
-        NXQL.escapeString(dialect),
-        NXQL.escapeString(user.getEmail())), "NXQL")) {
-
-      if (queryResult.size() > 0) {
-        throw new OperationException("You cannot request to join more than once");
-      }
-    }
-
     joinRequest.setProperty("FVSiteJoinRequest", "user", user.getEmail());
     joinRequest.setProperty("FVSiteJoinRequest", "dialect", dialect);
     joinRequest.setProperty("FVSiteJoinRequest", "requestTime", new Date());
@@ -99,8 +92,8 @@ public class FVRequestToJoinDialect {
     joinRequest.setProperty("FVSiteJoinRequest", "interestReason", interestReason);
     joinRequest.setProperty("FVSiteJoinRequest", "comment", dialect);
 
-    final DocumentModel document = session.createDocument(joinRequest);
-    session.saveDocument(document);
+    final DocumentModel joinRequestDocument = session.createDocument(joinRequest);
+    session.saveDocument(joinRequestDocument);
 
   }
 
