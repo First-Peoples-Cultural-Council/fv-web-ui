@@ -11,15 +11,21 @@
 	<extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
 		<schema name="user" override="true" src="schemas/fvuser.xsd" />
 		<schema name="fvuserinfo" src="schemas/fvuserinfo.xsd" prefix="fvuserinfo" />
+		<schema name="FVSiteJoinRequest" src="schemas/fvsitejoinrequest.xsd" prefix="fvjoinrequest" />
 	</extension>
-	
+
 	<extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
-	
+
+		<doctype name="FVSiteJoinRequest">
+			<schema name="FVSiteJoinRequest"/>
+			<facet>HiddenInNavigation</facet>
+		</doctype>
+
 	   <!-- <doctype name="FVUser" extends="Picture">
 	     <schema name="userinfo"/>
 	     <schema name="fvuser"/>
 	   </doctype> -->
-	   
+
 	   <doctype name="FVUserRegistration" extends="UserRegistration">
 	     <schema name="fvuserinfo"/>
 	     <facet>Versionable</facet>
@@ -33,16 +39,16 @@
 		<doctype name="FVUserRegistrationContainer" extends="UserRegistrationContainer">
 			<facet name="HiddenInNavigation"/>
 		</doctype>
-	   
+
 	</extension>
-	
+
 	<extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService" point="types">
 	    <types>
 	      <type name="FVUserRegistration">registrationRequest</type>
 		  <type name="FVUserRegistrationContainer">default</type>
 		</types>
 	</extension>
-  
+
         <extension target="org.nuxeo.ecm.user.registration.UserRegistrationService"
 	    point="configuration">
 	    <configuration merge="true">

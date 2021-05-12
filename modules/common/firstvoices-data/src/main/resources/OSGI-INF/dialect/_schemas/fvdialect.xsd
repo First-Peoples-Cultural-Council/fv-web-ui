@@ -76,6 +76,7 @@
   <xs:element name="featured_audio" type="xs:string"/>
   <xs:element name="featured_words" type="xs:string"/>
   <xs:element name="greeting" type="xs:string"/>
+  <xs:element name="join_text" type="xs:string"/>
   <xs:element name="keyboards" type="nxs:stringList"/>
   <xs:element name="keymanweb" type="nxs:fvdialect_keymanwebListType"/>
   <xs:complexType name="fvdialect_keymanwebListType">

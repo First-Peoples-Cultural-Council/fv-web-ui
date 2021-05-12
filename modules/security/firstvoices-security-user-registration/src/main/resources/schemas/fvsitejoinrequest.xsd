@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/First-Voices/FVSiteJoinRequest"
+    targetNamespace="http://www.nuxeo.org/ecm/project/schemas/First-Voices/FVSiteJoinRequest">
+
+  <xs:include schemaLocation="base.xsd" />
+
+
+  <xs:element name="user" type="xs:string" />
+  <xs:element name="dialect" type="xs:string" />
+  <xs:element name="requestTime" type="xs:dateTime"/>
+
+  <xs:element name="communityMember" type="xs:boolean" />
+  <xs:element name="languageTeam" type="xs:boolean" />
+
+  <xs:element name="interestReason" type="xs:string" />
+  <xs:element name="comment" type="xs:string"/>
+
+</xs:schema>

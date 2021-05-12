@@ -225,7 +225,6 @@ public class FVRegistrationUtilities {
     if (dialect.getCurrentLifeCycleState().equals("disabled")) {
       throw new UserRegistrationException("Cannot request to join a disabled dialect.");
     }
-
     // Set Workspace document as requested space
     registrationRequest.setPropertyValue("fvuserinfo:requestedSpace", dialect.getId());
 
