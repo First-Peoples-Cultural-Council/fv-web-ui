@@ -11,9 +11,11 @@ import useProperties from 'dataSources/useProperties'
 import useRoute from 'dataSources/useRoute'
 import useWindowPath from 'dataSources/useWindowPath'
 import useWord from 'dataSources/useWord'
+// import useDocument from 'dataSources/useDocument'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
+// import { getDialectClassname, getLatestResponse } from 'common/Helpers'
 import { getDialectClassname } from 'common/Helpers'
 
 /**
@@ -25,7 +27,7 @@ import { getDialectClassname } from 'common/Helpers'
  * @param {function} props.children
  *
  */
-function WordData({ children, wordId }) {
+function WordData({ children }) {
   const { fetchDialect2, computeDialect2 } = useDialect()
   const { computeLogin } = useLogin()
   const { changeTitleParams, overrideBreadcrumbs } = useNavigation()
@@ -33,21 +35,19 @@ function WordData({ children, wordId }) {
   const { routeParams } = useRoute()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
   const { computeWord, deleteWord, fetchWord, publishWord } = useWord()
+  //   const { computeDocument } = useDocument()
 
-  let wordPath = StringHelpers.isUUID(routeParams.word)
+  const wordPath = StringHelpers.isUUID(routeParams.word)
     ? routeParams.word
     : routeParams.dialect_path + '/Dictionary/' + StringHelpers.clean(routeParams.word)
-
-  // For v2
-  if (StringHelpers.isUUID(wordId)) {
-    wordPath = wordId
-  }
 
   // Dialect
   const dialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
   const dialectClassName = getDialectClassname(computeDialect2)
   // Word
   const _computeWord = ProviderHelpers.getEntry(computeWord, wordPath)
+
+  //   const _computeWord = getLatestResponse(wordPath, [computeWord, computeDocument])
   const wordRawData = selectn('response', _computeWord)
 
   const acknowledgement = selectn('properties.fv-word:acknowledgement', wordRawData)

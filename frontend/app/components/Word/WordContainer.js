@@ -16,9 +16,9 @@ const DetailsViewWithActions = withActions(PromiseWrapper, true)
  *
  * @returns {node} jsx markup
  */
-function WordContainer({ wordId }) {
+function WordContainer() {
   return (
-    <WordData wordId={wordId}>
+    <WordData>
       {({
         // Actions
         computeEntities,

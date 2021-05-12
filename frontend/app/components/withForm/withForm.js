@@ -24,6 +24,11 @@ import './withForm.css'
 const confirmationButtonsStyle = { padding: '4px', marginLeft: '5px', border: '1px solid gray' }
 
 export default function withForm(ComposedFilter) {
+  const _navigateOnSave = (path, method) => {
+    setTimeout(function () {
+      NavigationHelpers.navigateUp(path, method)
+    }, 0)
+  }
   class ViewWithForm extends Component {
     static propTypes = {
       initialValues: PropTypes.object,
@@ -101,7 +106,8 @@ export default function withForm(ComposedFilter) {
           saved: true,
           formValue: properties,
         })
-        NavigationHelpers.navigateUp(this.props.currentPath, this.props.navigationMethod)
+
+        _navigateOnSave(this.props.currentPath, this.props.navigationMethod)
       } else {
         window.scrollTo(0, 0)
       }
