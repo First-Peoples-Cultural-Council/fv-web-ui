@@ -336,6 +336,10 @@ export class AddMediaComponent extends Component {
               {this.state.typeError}
               {form}
             </div>
+            <div style={{ padding: '10px 0px 10px 10px', fontSize: 'small' }}>
+              By uploading this media you are acknowledging that you have copyright or permission to use it. We do
+              <br /> not monitor uploads, however, we may be required to remove media that violates copyright laws.
+            </div>
           </DialogContent>
           <DialogActions></DialogActions>
         </Dialog>

@@ -7,42 +7,41 @@
   <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
              point="providers">
 
-
-    <coreQueryPageProvider name="FIND_CATEGORIES_PP">
-      <pattern>
-        SELECT * from FVCategories where ecm:ancestorId=? and ecm:name='Categories' and ecm:isVersion=0 and
-        ecm:isTrashed=0
-      </pattern>
-      <sort column="dc:title" ascending="true"/>
-      <pageSize>1000</pageSize>
-    </coreQueryPageProvider>
-
-
     <coreQueryPageProvider name="FIND_CATEGORY_IN_CATEGORIES_PP">
       <pattern>
-        SELECT * from FVCategory where ecm:ancestorId=? and ecm:isVersion=0 and ecm:isTrashed=0
+        SELECT *
+        FROM FVCategory
+          WHERE ecm:isProxy = 0 AND ecm:isTrashed = 0 AND ecm:isVersion = 0
+        AND ecm:ancestorId = ?
+        AND ecm:parentId LIKE ?
       </pattern>
       <sort column="dc:title" ascending="true"/>
       <pageSize>1000</pageSize>
     </coreQueryPageProvider>
 
-
-    <coreQueryPageProvider name="FIND_WORDS_WITH_CATEGORY_PP">
+    <genericPageProvider name="FIND_WORD_CATEGORIES_IN_USE_PP"
+      class="org.nuxeo.ecm.platform.query.nxql.CoreQueryAndFetchPageProvider">
       <pattern>
-        select * from FVWord where fv-word:categories = ? and ecm:isVersion=0 and ecm:isTrashed=0
+        SELECT
+          DISTINCT fv-word:categories/*
+        FROM FVWord
+          WHERE ecm:isProxy = 0 AND ecm:isTrashed = 0 AND ecm:isVersion = 0
+        AND ecm:ancestorId = ?
       </pattern>
-      <sort column="dc:title" ascending="true"/>
       <pageSize>1000</pageSize>
-    </coreQueryPageProvider>
+    </genericPageProvider>
 
-    <coreQueryPageProvider name="FIND_WORDS_WITH_CATEGORY_PROXIED_PP">
+    <genericPageProvider name="FIND_PHRASE_CATEGORIES_IN_USE_PP"
+      class="org.nuxeo.ecm.platform.query.nxql.CoreQueryAndFetchPageProvider">
       <pattern>
-        select * from FVWord where fvproxy:proxied_categories = ? and ecm:isVersion=0 and ecm:isTrashed=0
+        SELECT
+        DISTINCT fv-phrase:phrase_books/*
+        FROM FVPhrase
+          WHERE ecm:isProxy = 0 AND ecm:isTrashed = 0 AND ecm:isVersion = 0
+        AND ecm:ancestorId = ?
       </pattern>
-      <sort column="dc:title" ascending="true"/>
-      <pageSize>1000</pageSize>
-    </coreQueryPageProvider>
-
+      <pageSize>10000</pageSize>
+    </genericPageProvider>
 
   </extension>
 </component>

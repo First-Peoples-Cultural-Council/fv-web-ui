@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 
 import useGetSite from 'common/useGetSite'
 import searchApi from 'services/api/search'
-import { copy } from 'common/actionHelpers'
 import { triggerError } from 'common/navigationHelpers'
 
 /**
@@ -16,16 +15,19 @@ import { triggerError } from 'common/navigationHelpers'
  *
  */
 function SearchData() {
-  const { title, uid, path } = useGetSite()
+  const { title, uid } = useGetSite()
   const location = useLocation()
   const history = useHistory()
-  const siteShortUrl = path ? path.split('/').pop() : ''
+  const { sitename } = useParams()
 
   // Extract search term from URL search params
   const searchTerm = new URLSearchParams(location.search).get('q') ? new URLSearchParams(location.search).get('q') : ''
   const docTypeFilter = new URLSearchParams(location.search).get('docType')
     ? new URLSearchParams(location.search).get('docType')
     : 'ALL'
+  const domain = new URLSearchParams(location.search).get('domain')
+    ? new URLSearchParams(location.search).get('domain')
+    : 'BOTH'
 
   // Local State
   const [currentFilter, setCurrentFilter] = useState(docTypeFilter)
@@ -79,12 +81,13 @@ function SearchData() {
     currentFilter,
     siteTitle: title ? title : 'FirstVoices',
     filters,
+    domain,
     handleFilter,
     isLoading,
     items,
-    actions: [copy],
+    actions: ['copy'],
     searchTerm,
-    siteShortUrl,
+    sitename,
   }
 }
 

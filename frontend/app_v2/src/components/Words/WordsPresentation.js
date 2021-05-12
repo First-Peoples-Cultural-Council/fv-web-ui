@@ -22,7 +22,8 @@ function WordsPresentation({
   isLoading,
   items,
   actions,
-  siteShortUrl,
+  moreActions,
+  sitename,
   searchTerm,
   infiniteScroll,
 }) {
@@ -76,7 +77,8 @@ function WordsPresentation({
             items={items}
             actions={actions}
             isLoading={isLoading}
-            siteShortUrl={siteShortUrl}
+            moreActions={moreActions}
+            sitename={sitename}
             wholeDomain={wholeDomain}
             infiniteScroll={infiniteScroll}
           />
@@ -89,13 +91,14 @@ function WordsPresentation({
 const { array, bool, func, object, string } = PropTypes
 WordsPresentation.propTypes = {
   actions: array,
+  moreActions: array,
   currentFilter: string,
   filters: array,
   handleFilter: func,
   isLoading: bool,
   items: object,
   searchTerm: string,
-  siteShortUrl: string,
+  sitename: string,
   siteTitle: string,
   infiniteScroll: object,
 }

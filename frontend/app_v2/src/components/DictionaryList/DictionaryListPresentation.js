@@ -7,6 +7,7 @@ import AudioMinimal from 'components/AudioMinimal'
 import useIcon from 'common/useIcon'
 import { makePlural } from 'common/urlHelpers'
 import { getMediaUrl } from 'common/urlHelpers'
+import ActionsMenu from 'components/ActionsMenu'
 import Loading from 'components/Loading'
 
 /**
@@ -17,7 +18,7 @@ import Loading from 'components/Loading'
  *
  * @returns {node} jsx markup
  */
-function DictionaryListPresentation({ actions, isLoading, items, siteShortUrl, wholeDomain }) {
+function DictionaryListPresentation({ actions, isLoading, items, moreActions, sitename, wholeDomain }) {
   const typeColor = { word: 'fv-turquoise', phrase: 'fv-orange', song: 'fv-red', story: 'fv-purple' }
   return (
     <Loading.Container isLoading={isLoading}>
@@ -65,7 +66,7 @@ function DictionaryListPresentation({ actions, isLoading, items, siteShortUrl, w
                       <td className="px-6 py-4 flex items-center">
                         <Link
                           className="font-medium text-gray-900 mr-2"
-                          to={`/${parentDialect?.shortUrl ? parentDialect.shortUrl : siteShortUrl}/${makePlural(
+                          to={`/${parentDialect?.shortUrl ? parentDialect.shortUrl : sitename}/${makePlural(
                             type
                           )}/${id}`}
                         >
@@ -79,15 +80,15 @@ function DictionaryListPresentation({ actions, isLoading, items, siteShortUrl, w
                                 icons={{
                                   Play: useIcon(
                                     'Audio',
-                                    'fill-current text-fv-blue-dark hover:text-fv-blue-light m-1 h-8 w-8 md:h-6 md:w-6'
+                                    'fill-current text-fv-charcoal-light hover:text-fv-charcoal m-1 h-8 w-8 md:h-6 md:w-6'
                                   ),
                                   Pause: useIcon(
                                     'PauseCircle',
-                                    'fill-current text-fv-blue-dark hover:text-fv-blue-light m-1 h-8 w-8 md:h-6 md:w-6'
+                                    'fill-current text-fv-charcoal-light hover:text-fv-charcoal m-1 h-8 w-8 md:h-6 md:w-6'
                                   ),
                                   Error: useIcon(
                                     'TimesCircle',
-                                    'fill-current text-fv-blue-dark hover:text-fv-blue-light m-1 h-8 w-8 md:h-6 md:w-6'
+                                    'fill-current text-fv-charcoal-light hover:text-fv-charcoal m-1 h-8 w-8 md:h-6 md:w-6'
                                   ),
                                 }}
                               />
@@ -117,23 +118,17 @@ function DictionaryListPresentation({ actions, isLoading, items, siteShortUrl, w
                           <Link to={`/${parentDialect.shortUrl}`}>{parentDialect.name}</Link>
                         </td>
                       ) : null}
-                      {/* Action buttons */}
-                      {actions.map(({ actionTitle, iconName, clickHandler, confirmationMessage }, toolIndex) => (
-                        <td key={toolIndex} className=" px-6 pt-4 text-right">
-                          <button
-                            className="relative text-fv-blue-dark hover:text-fv-blue-light"
-                            onClick={() => clickHandler(title, id)}
-                          >
-                            <span className="sr-only">{actionTitle}</span>
-                            {useIcon(iconName, 'fill-current h-8 w-8 md:h-6 md:w-6')}
-                            <span id={`${actionTitle}-message-${id}`} className="hidden">
-                              <div className="absolute bottom-0 right-0 w-auto p-1 text-sm bg-fv-blue-dark text-white text-center rounded-lg shadow-lg ">
-                                {confirmationMessage}
-                              </div>
-                            </span>
-                          </button>
-                        </td>
-                      ))}
+                      <td className="text-right px-6">
+                        <ActionsMenu.Container
+                          docId={id}
+                          docTitle={title}
+                          docType={type}
+                          actions={actions}
+                          moreActions={moreActions}
+                          withConfirmation
+                          withTooltip
+                        />
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -149,16 +144,9 @@ function DictionaryListPresentation({ actions, isLoading, items, siteShortUrl, w
 }
 
 // PROPTYPES
-const { array, arrayOf, bool, func, shape, string } = PropTypes
+const { array, arrayOf, bool, shape, string } = PropTypes
 DictionaryListPresentation.propTypes = {
-  actions: arrayOf(
-    shape({
-      actionTitle: string,
-      iconName: string,
-      clickHandler: func,
-      confirmationMessage: string,
-    })
-  ),
+  actions: array,
   isLoading: bool,
   items: arrayOf(
     shape({
@@ -171,13 +159,15 @@ DictionaryListPresentation.propTypes = {
       sitename: string,
     })
   ),
-  siteShortUrl: string,
+  moreActions: array,
+  sitename: string,
   wholeDomain: bool,
 }
 
 DictionaryListPresentation.defaultProps = {
   wholeDomain: false,
   actions: [],
+  moreActions: [],
 }
 
 export default DictionaryListPresentation
