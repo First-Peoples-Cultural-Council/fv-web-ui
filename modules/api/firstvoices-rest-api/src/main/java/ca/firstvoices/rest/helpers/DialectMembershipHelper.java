@@ -27,7 +27,7 @@ public class DialectMembershipHelper {
   public static DialectMembershipStatus getMembershipStatus(
       CoreSession session, NuxeoPrincipal principal, String dialectId) {
 
-    boolean alreadyMember = FVSiteJoinRequestUtilities.isMember(session,FVRequestTo
+    boolean alreadyMember = FVSiteJoinRequestUtilities.isMember(session,
         principal,
         dialectId);
 
@@ -40,17 +40,15 @@ public class DialectMembershipHelper {
       return DialectMembershipStatus.UNAUTHENTICATED;
     }
 
-    if (!pendingRegistration && !alreadyMember) {
-      return DialectMembershipStatus.AVAILABLE;
-    }
-    if (pendingRegistration && !alreadyMember) {
-      return DialectMembershipStatus.PENDING;
-    }
     if (alreadyMember) {
       return DialectMembershipStatus.JOINED;
     }
 
-    return DialectMembershipStatus.UNKNOWN;
+    if (!pendingRegistration) {
+      return DialectMembershipStatus.AVAILABLE;
+    }
+
+    return DialectMembershipStatus.PENDING;
 
   }
 
