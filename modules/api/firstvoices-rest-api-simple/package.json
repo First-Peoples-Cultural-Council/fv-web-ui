@@ -8,7 +8,7 @@
     "help": "redoc-cli --help"
   },
   "dependencies": {
-    "mobx": "^5.15.4",
-    "redoc-cli": "0.9.8"
+    "mobx": "^6.3.0",
+    "redoc-cli": "^0.11.4"
   }
 }

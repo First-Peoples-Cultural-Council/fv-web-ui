@@ -10,8 +10,6 @@
     <register class="ca.firstvoices.rest.marshallers.StatisticsWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.CategoryListWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.CategoryWriter" enable="true"/>
-    <register class="ca.firstvoices.rest.marshallers.PhraseListWriter" enable="true"/>
-    <register class="ca.firstvoices.rest.marshallers.PhraseWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.SearchResultsWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.SearchResultWriter" enable="true"/>
 

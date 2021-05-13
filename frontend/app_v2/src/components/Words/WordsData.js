@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 
 import useGetSite from 'common/useGetSite'
-import { copy } from 'common/actionHelpers'
 import { triggerError } from 'common/navigationHelpers'
 import useIntersectionObserver from 'common/useIntersectionObserver'
 import testApi from 'services/api/test'
@@ -17,10 +16,10 @@ import testApi from 'services/api/test'
  *
  */
 function WordsData() {
-  const { title, path } = useGetSite()
+  const { title } = useGetSite()
   const location = useLocation()
   const history = useHistory()
-  const siteShortUrl = path ? path.split('/').pop() : ''
+  const { sitename } = useParams()
 
   // Extract search term from URL search params
   const searchTerm = new URLSearchParams(location.search).get('q') ? new URLSearchParams(location.search).get('q') : ''
@@ -97,9 +96,10 @@ function WordsData() {
     handleFilter,
     isLoading,
     items: data ? data : {},
-    actions: [copy],
+    actions: ['copy'],
+    moreActions: ['share'],
     searchTerm,
-    siteShortUrl,
+    sitename,
     infiniteScroll,
   }
 }

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import useIcon from 'common/useIcon'
 
 /**
- * @summary SearchPresentation
+ * @summary SearchInputPresentation
  * @component
  *
  * @param {object} props
@@ -86,7 +86,7 @@ function SearchInputPresentation({
           ) : null}
 
           <button type="button" onClick={handleSearchSubmit}>
-            {useIcon('Search', 'fill-current h-8 w-8 ')}
+            {useIcon('Search', 'fill-current h-7 w-7 ')}
           </button>
         </div>
       </div>

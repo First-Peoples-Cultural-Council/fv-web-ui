@@ -20,9 +20,10 @@ function WordsContainer() {
     handleTextFieldChange,
     isLoading,
     items,
+    moreActions,
     newSearchValue,
     searchTerm,
-    siteShortUrl,
+    sitename,
     siteTitle,
     infiniteScroll,
   } = WordsData()
@@ -36,9 +37,10 @@ function WordsContainer() {
       handleTextFieldChange={handleTextFieldChange}
       isLoading={isLoading}
       items={items}
+      moreActions={moreActions}
       newSearchValue={newSearchValue}
       searchTerm={searchTerm}
-      siteShortUrl={siteShortUrl}
+      sitename={sitename}
       siteTitle={siteTitle}
       infiniteScroll={infiniteScroll}
     />

@@ -3,7 +3,7 @@
 export const copy = {
   actionTitle: 'copy',
   iconName: 'Copy',
-  confirmationMessage: 'Copied!',
+  confirmationMessage: 'Copied',
   clickHandler: function clickCopyHandler(str, id) {
     // Create new element
     const el = document.createElement('textarea')

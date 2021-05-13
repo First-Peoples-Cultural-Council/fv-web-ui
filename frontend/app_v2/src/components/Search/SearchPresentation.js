@@ -18,11 +18,12 @@ function SearchPresentation({
   currentFilter,
   siteTitle,
   filters,
+  domain,
   handleFilter,
   isLoading,
   items,
   actions,
-  siteShortUrl,
+  sitename,
   searchTerm,
 }) {
   const wholeDomain = siteTitle === 'FirstVoices'
@@ -40,7 +41,7 @@ function SearchPresentation({
         >
           <Link
             className={`inline-block transition duration-500 ease-in-out md:block p-3 flex-grow rounded-xl capitalize cursor-pointer ${filterIsActiveClass}`}
-            to={`${location.pathname}?q=${searchTerm}&docType=${filter.type}`}
+            to={`${location.pathname}?q=${searchTerm}&docType=${filter.type}&domain=${domain}`}
             onClick={() => {
               handleFilter(filter.type)
             }}
@@ -75,7 +76,7 @@ function SearchPresentation({
             items={items}
             actions={actions}
             isLoading={isLoading}
-            siteShortUrl={siteShortUrl}
+            sitename={sitename}
             wholeDomain={wholeDomain}
           />
         </div>
@@ -88,12 +89,14 @@ const { array, bool, func, string } = PropTypes
 SearchPresentation.propTypes = {
   actions: array,
   currentFilter: string,
+  domain: string,
   filters: array,
+  domsin: string,
   handleFilter: func,
   isLoading: bool,
   items: array,
   searchTerm: string,
-  siteShortUrl: string,
+  sitename: string,
   siteTitle: string,
 }
 

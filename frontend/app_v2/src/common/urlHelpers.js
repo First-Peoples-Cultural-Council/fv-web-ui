@@ -4,7 +4,7 @@ export const getMediaUrl = ({ id, type, viewName = 'Medium' }) => {
   if (!id) {
     return 'An id must be supplied to create a media url'
   }
-  switch (type?.substring(0, 5)) {
+  switch (type) {
     case 'audio':
       return `/nuxeo/nxfile/default/${id}/file:content/`
 
@@ -13,6 +13,9 @@ export const getMediaUrl = ({ id, type, viewName = 'Medium' }) => {
 
     case 'image':
       return `/nuxeo/nxpicsfile/default/${id}/${viewName}:content/`
+    // Use when gif needs to be accommodated
+    case 'gifOrImg':
+      return `/nuxeo/nxfile/default/${id}/file:content/`
 
     default:
       return 'The media type supplied is not recognised by the url helper'

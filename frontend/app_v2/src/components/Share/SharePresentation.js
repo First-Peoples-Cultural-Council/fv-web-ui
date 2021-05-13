@@ -11,10 +11,11 @@ import PropTypes from 'prop-types'
  */
 function SharePresentation({ url, title }) {
   return (
-    <ul>
+    <ul className="flex align-center justify-center">
       {navigator.share ? (
-        <li className="m-2 h-9 w-9 inline-flex align-center text-white rounded bg-fv-purple">
+        <li>
           <button
+            className="my-2 mx-1 h-9 w-9 inline-flex items-center align-center justify-center rounded text-white bg-fv-purple"
             onClick={() =>
               navigator.share({
                 title: title,
@@ -22,27 +23,47 @@ function SharePresentation({ url, title }) {
               })
             }
           >
-            {useIcon('WebShare', 'fill-current h-6 w-6 m-1.5')}
+            {useIcon('WebShare', 'fill-current h-7 w-7')}
           </button>
         </li>
       ) : null}
-      <li className="m-2 h-9 w-9 inline-flex align-center rounded text-blue-300">
-        <a href={`https://twitter.com/intent/tweet?url=${url}&text=${title}`}>
-          {useIcon('Twitter', 'fill-current h-9 w-9 ml-1.5')}
+      <li>
+        <a
+          className="my-2 mx-1 h-9 w-9 inline-flex align-center justify-center rounded text-blue-300"
+          href={`https://twitter.com/intent/tweet?url=${url}&text=${title}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {useIcon('Twitter', 'fill-current h-9 w-9')}
         </a>
       </li>
-      <li className="m-2 h-9 w-9 inline-flex items-center align-center rounded text-blue-900">
-        <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}`}>
-          {useIcon('Facebook', 'fill-current h-9 w-9 ml-1.5')}
+      <li>
+        <a
+          className="my-2 mx-1 h-9 w-9 inline-flex items-center align-center justify-center rounded text-blue-900"
+          href={`https://www.facebook.com/sharer/sharer.php?u=${url}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {useIcon('Facebook', 'fill-current h-9 w-9')}
         </a>
       </li>
-      <li className="m-2 h-9 w-9 inline-flex align-center rounded text-blue-700">
-        <a href={`https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${title}`}>
-          {useIcon('LinkedIn', 'fill-current h-9 w-9 ml-1.5')}
+      <li>
+        <a
+          className="my-2 mx-1 h-9 w-9 inline-flex items-center align-center justify-center rounded text-blue-700"
+          href={`https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${title}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {useIcon('LinkedIn', 'fill-current h-9 w-9')}
         </a>
       </li>
-      <li className="m-2 h-9 w-9 inline-flex align-center text-white rounded bg-fv-red">
-        <a href={`mailto:?subject=${title}&body=${url}`}>{useIcon('Mail', 'fill-current h-6 w-6 m-1.5')}</a>
+      <li>
+        <a
+          className="my-2 mx-1 h-9 w-9 inline-flex items-center align-center justify-center rounded text-white bg-fv-red"
+          href={`mailto:?subject=${title}&body=${url}`}
+        >
+          {useIcon('Mail', 'fill-current h-7 w-7')}
+        </a>
       </li>
     </ul>
   )

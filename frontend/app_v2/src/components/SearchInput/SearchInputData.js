@@ -21,11 +21,15 @@ function SearchInputData({ docType }) {
 
   // Extract search term from URL search params
   const searchTerm = new URLSearchParams(location.search).get('q') ? new URLSearchParams(location.search).get('q') : ''
+  const domain = new URLSearchParams(location.search).get('domain')
+    ? new URLSearchParams(location.search).get('domain')
+    : 'BOTH'
+  const domainLabel = getLabel(domain)
 
   // Local State
   const [searchValue, setSearchValue] = useState(searchTerm)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [currentOption, setCurrentOption] = useState({ label: 'All', id: 'BOTH' })
+  const [currentOption, setCurrentOption] = useState({ label: domainLabel, id: domain })
   const type = docType ? docType : 'ALL'
   const path = docType ? makePlural(docType).toLowerCase() : 'search'
   const options = [
@@ -33,6 +37,17 @@ function SearchInputData({ docType }) {
     { label: 'English', id: 'ENGLISH' },
     { label: 'Entry', id: 'LANGUAGE' },
   ]
+
+  function getLabel(option) {
+    switch (option) {
+      case 'ENGLISH':
+        return 'English'
+      case 'LANGUAGE':
+        return 'Entry'
+      default:
+        return 'All'
+    }
+  }
 
   const handleTextFieldChange = (event) => {
     setSearchValue(event.target.value)

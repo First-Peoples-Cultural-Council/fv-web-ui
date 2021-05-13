@@ -10,7 +10,7 @@ import AudioMinimalData from './AudioMinimalData'
  *
  * @returns {node} jsx markup
  */
-function AudioMinimalContainer({ src, icons, iconStyling }) {
+function AudioMinimalContainer({ src, icons, iconStyling, label, buttonStyling }) {
   const { isPlaying, isLoading, isErrored, onClick, onKeyPress } = AudioMinimalData({ src })
   return (
     <AudioMinimalPresentation
@@ -21,6 +21,8 @@ function AudioMinimalContainer({ src, icons, iconStyling }) {
       onKeyPress={onKeyPress}
       icons={icons}
       iconStyling={iconStyling}
+      label={label}
+      buttonStyling={buttonStyling}
     />
   )
 }
@@ -33,6 +35,8 @@ AudioMinimalContainer.propTypes = {
   shouldStopPropagation: bool,
   icons: object,
   iconStyling: string,
+  label: string,
+  buttonStyling: string,
 }
 
 export default AudioMinimalContainer
