@@ -11,11 +11,9 @@ import useProperties from 'dataSources/useProperties'
 import useRoute from 'dataSources/useRoute'
 import useWindowPath from 'dataSources/useWindowPath'
 import useWord from 'dataSources/useWord'
-// import useDocument from 'dataSources/useDocument'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
-// import { getDialectClassname, getLatestResponse } from 'common/Helpers'
 import { getDialectClassname } from 'common/Helpers'
 
 /**
@@ -35,7 +33,6 @@ function WordData({ children }) {
   const { routeParams } = useRoute()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
   const { computeWord, deleteWord, fetchWord, publishWord } = useWord()
-  //   const { computeDocument } = useDocument()
 
   const wordPath = StringHelpers.isUUID(routeParams.word)
     ? routeParams.word
@@ -46,8 +43,6 @@ function WordData({ children }) {
   const dialectClassName = getDialectClassname(computeDialect2)
   // Word
   const _computeWord = ProviderHelpers.getEntry(computeWord, wordPath)
-
-  //   const _computeWord = getLatestResponse(wordPath, [computeWord, computeDocument])
   const wordRawData = selectn('response', _computeWord)
 
   const acknowledgement = selectn('properties.fv-word:acknowledgement', wordRawData)

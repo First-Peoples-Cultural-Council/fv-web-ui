@@ -9,6 +9,8 @@ import t from 'tcomb-form'
 
 // Material UI
 import { Popover } from '@material-ui/core'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
 
 // FPCC
 import { updateDocument, updateAndPublishDocument } from 'reducers/document'
@@ -17,6 +19,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
 import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
+import FVSnackbar from 'components/FVSnackbar'
 import WarningBanner from 'components/WarningBanner'
 import RequestReview from 'components/RequestReview'
 import './withForm.css'
@@ -25,9 +28,9 @@ const confirmationButtonsStyle = { padding: '4px', marginLeft: '5px', border: '1
 
 export default function withForm(ComposedFilter) {
   const _navigateOnSave = (path, method) => {
-    setTimeout(function () {
+    setTimeout(function navigateAfterTimeout() {
       NavigationHelpers.navigateUp(path, method)
-    }, 0)
+    }, 1000)
   }
   class ViewWithForm extends Component {
     static propTypes = {
@@ -57,6 +60,7 @@ export default function withForm(ComposedFilter) {
         formValue: null,
         showCancelWarning: false,
         saved: false,
+        snackBarOpen: false,
       }
     }
 
@@ -103,6 +107,7 @@ export default function withForm(ComposedFilter) {
         }
 
         this.setState({
+          snackBarOpen: true,
           saved: true,
           formValue: properties,
         })
@@ -129,6 +134,10 @@ export default function withForm(ComposedFilter) {
           formValue: formValue,
         })
       }
+    }
+
+    _handleSnackbarClose = () => {
+      this.setState({ snackBarOpen: false })
     }
 
     _hasPendingReview = (item) => {
@@ -335,6 +344,18 @@ export default function withForm(ComposedFilter) {
               </ul>
             </div>
           </div>
+          <FVSnackbar
+            open={this.state.snackBarOpen}
+            autoHideDuration={3000}
+            onClose={this._handleSnackbarClose}
+            message="Saved!"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            action={
+              <IconButton size="small" aria-label="close" color="inherit" onClick={this._handleSnackbarClose}>
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            }
+          />
         </div>
       )
     }
