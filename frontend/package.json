@@ -32,7 +32,8 @@
     "test:e2e:local:headless:debug": "npm run test:mockDataSetup:local && start-server-and-test start http://127.0.0.1:3001 cy:run:debug",
     "temp": "start-server-and-test start http://127.0.0.1:3001 cy:open",
     "docs": "npx jsdoc --destination qa/Documentation app/assets/javascripts/components/**/*.js",
-    "test": "jest"
+    "test": "jest",
+    "startInSkaffold": "webpack serve --progress --config build/webpack.skaffold.js"
   },
   "lint-staged": {
     "*.{json,css,md}": [
