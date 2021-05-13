@@ -1,16 +1,7 @@
 package ca.firstvoices.rest.helpers;
 
-import ca.firstvoices.utils.FVRegistrationUtilities;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import ca.firstvoices.utils.FVSiteJoinRequestUtilities;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 
 public class DialectMembershipHelper {
@@ -36,20 +27,23 @@ public class DialectMembershipHelper {
   public static DialectMembershipStatus getMembershipStatus(
       CoreSession session, NuxeoPrincipal principal, String dialectId) {
 
-    boolean alreadyMember = false;
+    boolean alreadyMember = FVSiteJoinRequestUtilities.isMember(session,
+        principal,
+        dialectId);
 
-    final DocumentModelList registrations = FVRegistrationUtilities.getRegistrations(session,
+    boolean pendingRegistration = FVSiteJoinRequestUtilities.hasPendingRegistration(session,
         principal.getEmail(),
         dialectId);
+
 
     if (principal.isAnonymous()) {
       return DialectMembershipStatus.UNAUTHENTICATED;
     }
 
-    if (registrations.isEmpty() && !alreadyMember) {
+    if (!pendingRegistration && !alreadyMember) {
       return DialectMembershipStatus.AVAILABLE;
     }
-    if (!registrations.isEmpty() && !alreadyMember) {
+    if (pendingRegistration && !alreadyMember) {
       return DialectMembershipStatus.PENDING;
     }
     if (alreadyMember) {

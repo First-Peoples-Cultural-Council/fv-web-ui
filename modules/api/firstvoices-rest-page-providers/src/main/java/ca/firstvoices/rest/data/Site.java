@@ -57,4 +57,8 @@ public class Site implements Serializable {
   public String getLogoId() {
     return logoId;
   }
+
+  public String getJoinText() {
+    return joinText;
+  }
 }
