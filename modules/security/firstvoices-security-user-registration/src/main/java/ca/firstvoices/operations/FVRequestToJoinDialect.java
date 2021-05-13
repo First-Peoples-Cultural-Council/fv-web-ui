@@ -26,10 +26,7 @@
 package ca.firstvoices.operations;
 
 import static ca.firstvoices.utils.FVSiteJoinRequestUtilities.SITE_JOIN_REQUEST_SCHEMA;
-
 import java.util.Date;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
@@ -50,8 +47,6 @@ public class FVRequestToJoinDialect {
 
   public static final String ID = "User.RequestToJoinDialect";
 
-  private static final Log log = LogFactory.getLog(FVRequestToJoinDialect.class);
-
   @Context protected CoreSession session;
 
   @Context protected UserManager userManager;
@@ -65,7 +60,7 @@ public class FVRequestToJoinDialect {
   @Param(name = "dialect", required = true) protected String dialect;
 
   @OperationMethod
-  public void run() throws Exception {
+  public void run() {
     NuxeoPrincipal user = operationContext.getPrincipal();
 
     final DocumentModel joinRequest = session.createDocumentModel("FVSiteJoinRequest");

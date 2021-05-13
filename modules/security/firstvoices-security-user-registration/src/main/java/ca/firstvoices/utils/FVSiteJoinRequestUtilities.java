@@ -20,16 +20,10 @@
 
 package ca.firstvoices.utils;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import javax.print.Doc;
-import org.apache.commons.lang3.text.WordUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.IterableQueryResult;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.query.sql.NXQL;
@@ -38,6 +32,9 @@ import org.nuxeo.ecm.core.schema.FacetNames;
 public class FVSiteJoinRequestUtilities {
 
   public static final String SITE_JOIN_REQUEST_SCHEMA = "FVSiteJoinRequest";
+
+  private FVSiteJoinRequestUtilities() {
+  }
 
 
   public static boolean isMember(CoreSession session, NuxeoPrincipal user, String dialect) {
@@ -58,11 +55,7 @@ public class FVSiteJoinRequestUtilities {
         + "ecm:acl/*/principal IN (" + escapedGroupList + ") " + " AND ecm:isProxy = 0 ";
 
     DocumentModelList matches = session.query(query);
-    if (!matches.isEmpty()) {
-      return true;
-    }
-
-    return false;
+    return !matches.isEmpty();
   }
 
   public static boolean hasPendingRegistration(CoreSession session, String email, String dialect) {

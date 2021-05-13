@@ -27,7 +27,7 @@ public class DialectMembershipHelper {
   public static DialectMembershipStatus getMembershipStatus(
       CoreSession session, NuxeoPrincipal principal, String dialectId) {
 
-    boolean alreadyMember = FVSiteJoinRequestUtilities.isMember(session,
+    boolean alreadyMember = FVSiteJoinRequestUtilities.isMember(session,FVRequestTo
         principal,
         dialectId);
 
