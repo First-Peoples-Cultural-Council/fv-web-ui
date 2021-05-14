@@ -9,16 +9,6 @@ export const getDialectClassname = (computed) => {
   )
 }
 
-// export const getLatestResponse = (responsesArray) => {
-//   let mostRecent = { lastModified: 0 }
-//   responsesArray.forEach((response) => {
-//     if (new Date(response?.lastModified).valueOf() > new Date(mostRecent?.lastModified).valueOf()) {
-//       mostRecent = response
-//     }
-//   })
-//   return mostRecent
-// }
-
 export const getLatestResponse = (path, reducerArray) => {
   let mostRecent = { response: { lastModified: 0 } }
   reducerArray.forEach((reducer) => {
