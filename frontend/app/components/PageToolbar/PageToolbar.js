@@ -123,9 +123,6 @@ export class PageToolbar extends Component {
       return state
     }
 
-    const docType = selectn('response.type', computeEntity)
-    const disablePublishChangesBtn = !(hasUpublishedChanges || docType === 'FVBook')
-
     return (
       <AppBar color="primary" position="static" classes={classes} className="PageToolbar">
         <Toolbar>
@@ -180,7 +177,7 @@ export class PageToolbar extends Component {
                     data-guide-role="publish-changes"
                     onClick={this._publishChanges}
                     variant="contained"
-                    disabled={disablePublishChangesBtn}
+                    disabled={!hasUpublishedChanges}
                   >
                     <FVLabel transKey="publish_changes" defaultStr="Publish Changes" transform="words" />
                   </FVButton>
