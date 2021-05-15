@@ -53,7 +53,7 @@ import {
  *
  */
 
-function PhrasesListData({ children }) {
+function PhrasesListData({ children, reportFilter }) {
   const { computeDocument, fetchDocument } = useDocument()
   const { computeDialect2, fetchDialect2 } = useDialect()
   const { intl } = useIntl()
@@ -128,7 +128,9 @@ function PhrasesListData({ children }) {
     if (curFetchDocumentAction === 'FV_DOCUMENT_FETCH_SUCCESS') {
       let currentAppliedFilter
       // Handle phrasebooks
-      if (queryPhraseBook) {
+      if (reportFilter) {
+        currentAppliedFilter = reportFilter?.query
+      } else if (queryPhraseBook) {
         currentAppliedFilter = ` AND ${
           area === 'Workspaces' ? 'fv-phrase:phrase_books' : 'fvproxy:proxied_categories'
         }/* IN ("${queryPhraseBook}")`
@@ -168,6 +170,7 @@ function PhrasesListData({ children }) {
     querySearchTerm,
     querySortBy,
     querySortOrder,
+    reportFilter,
   ])
 
   const DEFAULT_LANGUAGE = 'english'

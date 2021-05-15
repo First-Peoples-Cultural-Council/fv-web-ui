@@ -17,9 +17,9 @@ import { SEARCHDIALECT_CHECKBOX, SEARCHDIALECT_SELECT, SEARCH_DATA_TYPE_WORD } f
  *
  * @returns {node} jsx markup
  */
-function WordsListContainer() {
+function WordsListContainer({ reportFilter }) {
   return (
-    <WordsListData>
+    <WordsListData reportFilter={reportFilter}>
       {({
         browseMode,
         checkboxNames,
@@ -55,6 +55,67 @@ function WordsListContainer() {
         smallScreenTemplate,
         sortHandler,
       }) => {
+        const childrenSearch = !reportFilter ? (
+          <Suspense fallback={<div>loading...</div>}>
+            <SearchDialectContainer
+              checkboxNames={checkboxNames}
+              key={`forceRender${resetCount}`}
+              incrementResetCount={incrementResetCount}
+              browseMode={browseMode}
+              childrenSearchMessage={
+                <SearchDialectMessage
+                  dialectClassName={dialectClassName}
+                  letter={queryLetter}
+                  category={queryCategory}
+                  partOfSpeech={querySearchPartOfSpeech}
+                  searchStyle={querySearchStyle}
+                  searchTerm={querySearchTerm}
+                  shouldSearchCulturalNotes // TODO: is this a bug?
+                  shouldSearchDefinitions={querySearchByDefinitions}
+                  shouldSearchLiteralTranslations={querySearchByTranslations}
+                  shouldSearchTitle={querySearchByTitle}
+                  searchDialectDataType={SEARCH_DATA_TYPE_WORD}
+                />
+              }
+              childrenUiSecondary={searchUiSecondary.map(
+                ({ defaultChecked, defaultValue, idName, labelText, options, type }, index) => {
+                  switch (type) {
+                    case SEARCHDIALECT_CHECKBOX:
+                      return (
+                        <SearchDialectCheckbox
+                          key={index}
+                          defaultChecked={defaultChecked}
+                          idName={idName}
+                          labelText={labelText}
+                        />
+                      )
+                    case SEARCHDIALECT_SELECT: {
+                      return (
+                        <SearchDialectSelect
+                          key={`forceRenderSelect${resetCount}`}
+                          defaultValue={defaultValue}
+                          idName={idName}
+                          labelText={labelText}
+                        >
+                          {options.map(({ value, text }, key) => {
+                            return (
+                              <option key={key} value={value} disabled={value === null}>
+                                {text}
+                              </option>
+                            )
+                          })}
+                        </SearchDialectSelect>
+                      )
+                    }
+                    default:
+                      return null
+                  }
+                }
+              )}
+              searchDialectDataType={SEARCH_DATA_TYPE_WORD}
+            />
+          </Suspense>
+        ) : null
         return (
           <PromiseWrapper renderOnError computeEntities={computeEntities}>
             <WordsListPresentation
@@ -69,72 +130,13 @@ function WordsListContainer() {
               navigationRouteSearch={navigationRouteSearch}
               onClickCreate={onClickCreate}
               pushWindowPath={pushWindowPath}
+              reportFilter={reportFilter}
               routeParams={routeParams}
               setRouteParams={setRouteParams}
               // ==================================================
               // Search
               // --------------------------------------------------
-              childrenSearch={
-                <Suspense fallback={<div>loading...</div>}>
-                  <SearchDialectContainer
-                    checkboxNames={checkboxNames}
-                    key={`forceRender${resetCount}`}
-                    incrementResetCount={incrementResetCount}
-                    browseMode={browseMode}
-                    childrenSearchMessage={
-                      <SearchDialectMessage
-                        dialectClassName={dialectClassName}
-                        letter={queryLetter}
-                        category={queryCategory}
-                        partOfSpeech={querySearchPartOfSpeech}
-                        searchStyle={querySearchStyle}
-                        searchTerm={querySearchTerm}
-                        shouldSearchCulturalNotes // TODO: is this a bug?
-                        shouldSearchDefinitions={querySearchByDefinitions}
-                        shouldSearchLiteralTranslations={querySearchByTranslations}
-                        shouldSearchTitle={querySearchByTitle}
-                        searchDialectDataType={SEARCH_DATA_TYPE_WORD}
-                      />
-                    }
-                    childrenUiSecondary={searchUiSecondary.map(
-                      ({ defaultChecked, defaultValue, idName, labelText, options, type }, index) => {
-                        switch (type) {
-                          case SEARCHDIALECT_CHECKBOX:
-                            return (
-                              <SearchDialectCheckbox
-                                key={index}
-                                defaultChecked={defaultChecked}
-                                idName={idName}
-                                labelText={labelText}
-                              />
-                            )
-                          case SEARCHDIALECT_SELECT: {
-                            return (
-                              <SearchDialectSelect
-                                key={`forceRenderSelect${resetCount}`}
-                                defaultValue={defaultValue}
-                                idName={idName}
-                                labelText={labelText}
-                              >
-                                {options.map(({ value, text }, key) => {
-                                  return (
-                                    <option key={key} value={value} disabled={value === null}>
-                                      {text}
-                                    </option>
-                                  )
-                                })}
-                              </SearchDialectSelect>
-                            )
-                          }
-                          default:
-                            return null
-                        }
-                      }
-                    )}
-                    searchDialectDataType={SEARCH_DATA_TYPE_WORD}
-                  />
-                </Suspense>
-              }
+              childrenSearch={childrenSearch}
               // ==================================================
               // Table data
               // --------------------------------------------------

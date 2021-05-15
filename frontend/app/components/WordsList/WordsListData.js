@@ -57,7 +57,7 @@ import {
  *
  */
 
-function WordsListData({ children }) {
+function WordsListData({ children, reportFilter }) {
   const { computeDocument, fetchDocument } = useDocument()
   const { computeDialect2, fetchDialect2 } = useDialect()
   const { intl } = useIntl()
@@ -137,7 +137,9 @@ function WordsListData({ children }) {
   useEffect(() => {
     if (curFetchDocumentAction === 'FV_DOCUMENT_FETCH_SUCCESS') {
       let currentAppliedFilter
-      if (queryCategory) {
+      if (reportFilter) {
+        currentAppliedFilter = reportFilter?.query
+      } else if (queryCategory) {
         currentAppliedFilter = ` AND ${
           area === 'Workspaces' ? 'fv-word:categories' : 'fvproxy:proxied_categories'
         }/* IN ("${queryCategory}") &enrichment=category_children`
@@ -179,6 +181,7 @@ function WordsListData({ children }) {
     querySearchTerm,
     querySortBy,
     querySortOrder,
+    reportFilter,
   ])
 
   // Parts of speech

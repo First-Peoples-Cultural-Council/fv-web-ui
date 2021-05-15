@@ -33,8 +33,7 @@ const PageConcentration = React.lazy(() => import('components/Games/concentratio
 
 const PageDialectGalleries = React.lazy(() => import('components/Gallery'))
 const PageDialectGalleryView = React.lazy(() => import('components/Gallery/view'))
-const PageDialectReports = React.lazy(() => import('components/Reports'))
-const PageDialectReportsView = React.lazy(() => import('components/Reports/ReportsView'))
+const Reports = React.lazy(() => import('components/Reports/ReportsContainer'))
 
 const PageDialectLearnWords = React.lazy(() => import('components/Words/WordsContainer'))
 const PageDialectLearnPhrases = React.lazy(() => import('components/Phrases/PhrasesContainer'))
@@ -162,8 +161,7 @@ export {
   PageDialectPlay,
   PageDialectGalleries,
   PageDialectGalleryView,
-  PageDialectReports,
-  PageDialectReportsView,
+  Reports,
   PagePlay,
   PageSearch,
   PageUserTasks,

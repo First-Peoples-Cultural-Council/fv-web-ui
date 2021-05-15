@@ -73,6 +73,7 @@ function PhrasesListPresentation(props) {
     onClickCreate,
     pageTitle,
     pushWindowPath,
+    reportFilter,
     routeParams,
     rowClickHandler,
     setRouteParams,
@@ -180,27 +181,28 @@ function PhrasesListPresentation(props) {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div>
-        <h1 className="DialectPageTitle">{pageTitle}</h1>
-
-        <AuthorizationFilter filter={filter} hideFromSections routeParams={routeParams}>
-          <div id="CreateNewEntry" className="text-right">
-            <FVButton
-              variant="contained"
-              href={hrefCreate}
-              onClick={(e) => {
-                e.preventDefault()
-                onClickCreate(hrefCreate)
-              }}
-              color="primary"
-            >
-              <FVLabel
-                transKey="views.pages.explore.dialect.learn.phrases.create_new_phrase"
-                defaultStr="Create New Phrase"
-                transform="phrases"
-              />
-            </FVButton>
-          </div>
-        </AuthorizationFilter>
+        <h1 className="DialectPageTitle">{reportFilter?.name ? reportFilter?.name : pageTitle}</h1>
+        {reportFilter ? null : (
+          <AuthorizationFilter filter={filter} hideFromSections routeParams={routeParams}>
+            <div id="CreateNewEntry" className="text-right">
+              <FVButton
+                variant="contained"
+                href={hrefCreate}
+                onClick={(e) => {
+                  e.preventDefault()
+                  onClickCreate(hrefCreate)
+                }}
+                color="primary"
+              >
+                <FVLabel
+                  transKey="views.pages.explore.dialect.learn.phrases.create_new_phrase"
+                  defaultStr="Create New Phrase"
+                  transform="phrases"
+                />
+              </FVButton>
+            </div>
+          </AuthorizationFilter>
+        )}
         <div className={dialectClassName}>
           {childrenSearch}
           {generateListButtons({
@@ -208,6 +210,7 @@ function PhrasesListPresentation(props) {
             clickHandlerViewMode,
             dictionaryListViewMode,
             hasViewModeButtons,
+            reportFilter,
           })}
           <Media
             queries={{
@@ -284,8 +287,12 @@ function PhrasesListPresentation(props) {
 
 // generateListButtons
 // ------------------------------------
-function generateListButtons({ hasViewModeButtons }) {
-  return <div className="WordsList__ListButtonsGroup">{hasViewModeButtons && <FlashcardButton.Container />}</div>
+function generateListButtons({ hasViewModeButtons, reportFilter }) {
+  return (
+    <div className="WordsList__ListButtonsGroup">
+      {hasViewModeButtons && !reportFilter && <FlashcardButton.Container />}
+    </div>
+  )
 }
 
 // generateSortTitleLargeSmall
@@ -426,6 +433,7 @@ PhrasesListPresentation.propTypes = {
   onClickCreate: func,
   pageTitle: string,
   pushWindowPath: func,
+  reportFilter: object,
   routeParams: object, // NOTE: redux saved route params, using page & pageSize
   rowClickHandler: func, // NOTE: this list view is used in the browse mode where you can select items to add to other documents (eg: add a contributor to a phrase). This is the event handler for that action
   setRouteParams: func,
