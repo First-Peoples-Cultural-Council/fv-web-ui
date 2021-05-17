@@ -1,25 +1,25 @@
-const wordDefaultCols = ['title', 'related_pictures', 'related_audio', 'fv:definitions', 'fv-word:part_of_speech']
-const phraseDefaultCols = ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'fv-phrase:phrase_books']
+const wordDefaultCols = ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'state']
+const phraseDefaultCols = ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'state']
 export const reportsQueries = [
   {
     name: 'Words Visible to Team Only',
     type: 'words',
     query:
       " AND ecm:primaryType='FVWord' AND (ecm:currentLifeCycleState='New' OR ecm:currentLifeCycleState='Disabled')",
-    cols: wordDefaultCols,
+    cols: ['title', 'related_pictures', 'related_audio', 'fv:definitions', 'fv-word:part_of_speech'],
   },
   {
     name: 'Words Visible to Members Only',
     type: 'words',
     query: " AND ecm:primaryType='FVWord' AND ecm:currentLifeCycleState='Enabled'",
-    cols: wordDefaultCols,
+    cols: ['title', 'related_pictures', 'related_audio', 'fv:definitions', 'fv-word:part_of_speech'],
   },
   {
     name: 'Words Visible to the Public',
     type: 'words',
     query:
       " AND ecm:primaryType='FVWord' AND (ecm:currentLifeCycleState='Published' OR ecm:currentLifeCycleState='Republished')",
-    cols: wordDefaultCols,
+    cols: ['title', 'related_pictures', 'related_audio', 'fv:definitions', 'fv-word:part_of_speech'],
   },
   {
     name: 'Words without Audio',
@@ -92,7 +92,7 @@ export const reportsQueries = [
     name: 'Words recently modified',
     type: 'words',
     query: " AND ecm:primaryType='FVWord'",
-    cols: ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'fv-word:categories', 'dc:modified'],
+    cols: ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'dc:modified'],
     sortBy: 'dc:modified',
     sortOrder: 'desc',
   },
@@ -100,7 +100,7 @@ export const reportsQueries = [
     name: 'Words recently created',
     type: 'words',
     query: " AND ecm:primaryType='FVWord'",
-    cols: ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'fv-word:categories', 'dc:created'],
+    cols: ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'dc:created'],
     sortBy: 'dc:created',
     sortOrder: 'desc',
   },
@@ -109,19 +109,19 @@ export const reportsQueries = [
     type: 'phrases',
     query:
       " AND ecm:primaryType='FVPhrase' AND (ecm:currentLifeCycleState='New' OR ecm:currentLifeCycleState='Disabled')",
-    cols: phraseDefaultCols,
+    cols: ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'fv-phrase:phrase_books'],
   },
   {
     name: 'Phrases Visible to Members Only',
     type: 'phrases',
     query: " AND ecm:primaryType='FVPhrase' AND ecm:currentLifeCycleState='Enabled'",
-    cols: phraseDefaultCols,
+    cols: ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'fv-phrase:phrase_books'],
   },
   {
     name: 'Phrases Visible to the Public',
     type: 'phrases',
     query: " AND ecm:primaryType='FVPhrase' AND ecm:currentLifeCycleState='Published'",
-    cols: phraseDefaultCols,
+    cols: ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'fv-phrase:phrase_books'],
   },
   {
     name: 'Phrases without Audio',
@@ -169,7 +169,7 @@ export const reportsQueries = [
     name: 'Phrases recently modified',
     type: 'phrases',
     query: " AND ecm:primaryType='FVPhrase'",
-    cols: ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'fv-phrase:phrase_books', 'dc:modified'],
+    cols: ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'dc:modified'],
     sortBy: 'dc:modified',
     sortOrder: 'desc',
   },
@@ -177,7 +177,7 @@ export const reportsQueries = [
     name: 'Phrases recently created',
     type: 'phrases',
     query: " AND ecm:primaryType='FVPhrase'",
-    cols: ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'fv-phrase:phrase_books', 'dc:created'],
+    cols: ['title', 'fv:definitions', 'related_pictures', 'related_audio', 'dc:created'],
     sortBy: 'dc:created',
     sortOrder: 'desc',
   },
