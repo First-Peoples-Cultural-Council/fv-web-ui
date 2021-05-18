@@ -59,6 +59,7 @@ import org.javers.core.diff.Diff;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.schema.DocumentType;
 import org.nuxeo.runtime.api.Framework;
 
@@ -71,7 +72,22 @@ public class UnpublishedChangesServiceImpl implements UnpublishedChangesService 
       return false;
     }
 
-    return diff.hasChanges();
+    boolean mainDocHasChanged = diff.hasChanges();
+
+    if (!mainDocHasChanged && FV_BOOK.equals(document.getType())) {
+      // If cover of book (song and story) does not have changes, we need to no
+      // check in children as well (book entries)
+      DocumentModelList children = session.getChildren(document.getRef());
+
+      for (DocumentModel child : children) {
+        Diff childDiff = getUnpublishedChanges(session, child);
+        if (childDiff != null && childDiff.hasChanges()) {
+          return true;
+        }
+      }
+    }
+
+    return mainDocHasChanged;
   }
 
   public Diff getUnpublishedChanges(CoreSession session, DocumentModel document) {
