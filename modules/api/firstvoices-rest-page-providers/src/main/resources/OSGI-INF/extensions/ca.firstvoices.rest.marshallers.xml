@@ -12,8 +12,9 @@
     <register class="ca.firstvoices.rest.marshallers.CategoryWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.SearchResultsWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.SearchResultWriter" enable="true"/>
-
-
+    <register class="ca.firstvoices.rest.marshallers.SiteMembershipRequestWriter" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.SiteMembershipRequestReader" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.SiteMembershipStatusWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.AlphabetWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.CharacterWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.LinkWriter" enable="true"/>

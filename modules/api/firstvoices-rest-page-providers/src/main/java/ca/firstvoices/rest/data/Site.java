@@ -12,11 +12,14 @@ public class Site implements Serializable {
   private final String title;
   private final String parentLanguageTitle;
   private final String logoId;
+  private final String joinText;
 
+  @SuppressWarnings("java:S107")
   public Site(
       final String path, final String uid, final Set<String> roles,
       final Set<String> groups, final String title,
-      final String parentLanguageTitle, final String logoId) {
+      final String parentLanguageTitle, final String logoId,
+      final String joinText) {
     this.path = path;
     this.uid = uid;
     this.roles = roles;
@@ -24,6 +27,7 @@ public class Site implements Serializable {
     this.title = title;
     this.parentLanguageTitle = parentLanguageTitle;
     this.logoId = logoId;
+    this.joinText = joinText;
   }
 
   public String getPath() {
@@ -52,5 +56,9 @@ public class Site implements Serializable {
 
   public String getLogoId() {
     return logoId;
+  }
+
+  public String getJoinText() {
+    return joinText;
   }
 }
