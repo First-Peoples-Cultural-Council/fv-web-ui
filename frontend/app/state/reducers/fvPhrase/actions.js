@@ -46,7 +46,7 @@ export const fetchPhrasesAll = function fetchPhrasesAll(path /*, type*/) {
 }
 
 export const fetchPhrase = fetch('FV_PHRASE', 'FVPhrase', {
-  headers: { 'enrichers.document': 'ancestry,phrase,permissions' },
+  headers: { 'enrichers.document': 'ancestry,phrase,permissions,unpublished_changes' },
 })
 
 export const fetchPhrases = query('FV_PHRASES', 'FVPhrase', { headers: { 'enrichers.document': 'phrase' } })
