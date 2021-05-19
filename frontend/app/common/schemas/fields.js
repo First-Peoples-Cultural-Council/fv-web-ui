@@ -106,7 +106,15 @@ const fields = {
     'fvcategory:image': t.maybe(t.String),
   }),
   FVContributor: Object.assign({}, Dublincore),
-  FVDialect: Object.assign({}, Dublincore, {
+  FVDialect: {
+    'fvdialect:greeting': t.String,
+    'fvdialect:featured_audio': t.maybe(t.String),
+    'fvdialect:about_our_people': t.String,
+    'fvdialect:news': t.maybe(t.String),
+    'fvdialect:background_top_image': t.String,
+    'fvdialect:logos': t.list(t.maybe(t.String)),
+    'fvdialect:featured_words': t.list(t.String),
+    'fvdialect:related_links': t.list(t.String),
     'fvdialect:about_our_language': t.String,
     'fvdialect:country': t.String,
     'fvdialect:dominant_language': t.String,
@@ -114,7 +122,7 @@ const fields = {
     'fvdialect:keyboards': t.list(t.String),
     'fvdialect:language_resources': t.list(t.String),
     'fvdialect:contact_information': t.String,
-  }),
+  },
   FVCharacter: Object.assign(
     {},
     {

@@ -217,7 +217,7 @@ export class ExploreDialectEdit extends Component {
               cancelMethod={this._handleCancel}
               currentPath={this.props.splitWindowPath}
               navigationMethod={this.props.replaceWindowPath}
-              type="FVPortal"
+              type="FVDialect"
               routeParams={this.props.routeParams}
             />
           </div>

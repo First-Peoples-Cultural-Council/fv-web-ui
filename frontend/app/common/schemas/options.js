@@ -56,6 +56,28 @@ const FVPortalTemplate = function template(locals) {
   )
 }
 
+const FVDialectTemplate = function template(locals) {
+  return (
+    <fieldset>
+      <div className="col-md-12">{locals.inputs['fvdialect:greeting']}</div>
+      <div className="col-md-12">{locals.inputs['fvdialect:featured_audio']}</div>
+      <div className="col-md-12">{locals.inputs['fvdialect:about_our_people']}</div>
+      <div className="col-md-12">{locals.inputs['fvdialect:news']}</div>
+      <div className="col-md-12">{locals.inputs['fvdialect:background_top_image']}</div>
+      <div className="col-md-12">{locals.inputs['fvdialect:logos']}</div>
+      <div className="col-md-12">{locals.inputs['fvdialect:featured_words']}</div>
+      <div className="col-md-12">{locals.inputs['fvdialect:related_links']}</div>
+      <div className="col-md-12">{locals.inputs['fvdialect:about_our_language']}</div>
+      <div className="col-md-12">{locals.inputs['fvdialect:country']}</div>
+      <div className="col-md-12">{locals.inputs['fvdialect:dominant_language']}</div>
+      <div className="col-md-12">{locals.inputs['fvdialect:region']}</div>
+      <div className="col-md-12">{locals.inputs['fvdialect:keyboards']}</div>
+      <div className="col-md-12">{locals.inputs['fvdialect:language_resources']}</div>
+      <div className="col-md-12">{locals.inputs['fvdialect:contact_information']}</div>
+    </fieldset>
+  )
+}
+
 const FVUserRegistrationTemplate = function template(locals) {
   let selectedCommunityLanguageLabel = null
 
@@ -1186,20 +1208,77 @@ const options = {
 
   FVDialect: {
     fields: {
-      'dc:title': {
-        label: intl.trans('models.dialect_name', 'Dialect Name', 'first'),
-        type: 'text',
+      'fvdialect:greeting': {
+        label: intl.trans('models.portal_greeting', 'Greeting', 'first'),
       },
-      'dc:description': {
-        label: intl.trans('models.about_dialect', 'About Dialect', 'first'),
+      'fvdialect:featured_audio': {
+        label: intl.trans('models.greeting_audio', 'Greeting Audio', 'first'),
+        factory: MediaFactory,
+        type: 'FVAudio',
+      },
+      'fvdialect:about_our_people': {
+        label: intl.trans('views.pages.explore.dialect.about_us', 'About Us', 'first'),
         type: 'textarea',
         factory: WysiwygFactory,
         attrs: {
-          dataTestId: 'wysiwyg-dc_description',
+          placeholder: intl.trans('models.enter_portal_description', 'Enter language site description here', 'first'),
+        },
+      },
+      'fvdialect:news': {
+        label: intl.trans('news', 'News', 'first'),
+        type: 'textarea',
+        factory: WysiwygFactory,
+        help: intl.trans('models.news_tip', 'Tip: Use * to start a bullet list!', 'first'),
+      },
+      'fvdialect:background_top_image': {
+        label: intl.trans('models.background_image', 'Background Image', 'first'),
+        factory: MediaFactory,
+        type: 'FVPicture',
+      },
+      'fvdialect:logos': {
+        label: intl.trans('logo', 'Logo', 'first'),
+        item: {
+          factory: MediaFactory,
+          type: 'FVPicture',
+          locals: {
+            labelAddMediaComponent: intl.trans('picture_upload', 'Upload picture', 'first'),
+            labelSelectMediaComponent: intl.trans('pictures_browse', 'Browse pictures', 'first'),
+          },
+        },
+        template: RelatedMediaLayout,
+        i18n: {
+          ...i18nExt,
+          add: `+ ${intl.trans('add logo', 'Add Logo', 'first')}`,
+        },
+      },
+      'fvdialect:featured_words': {
+        label: intl.trans('featured_words', 'Featured Words', 'first'),
+        item: {
+          factory: SelectSuggestFactory,
+          type: 'FVWord',
+          attrs: {
+            disableCreateNewButton: true,
+            previewProps: {
+              minimal: true,
+            },
+          },
+        },
+      },
+      'fvdialect:related_links': {
+        label: intl.trans('related_links', 'Related Links', 'first'),
+        item: {
+          factory: SelectSuggestFactory,
+          type: 'FVLink',
+          attrs: {
+            previewProps: {
+              minimal: true,
+            },
+            allowEdit: true,
+          },
         },
       },
       'fvdialect:about_our_language': {
-        label: intl.trans('models.about_dialect', 'About Dialect', 'first'),
+        label: intl.trans('views.pages.explore.dialect.learn.about_our_language', 'About Our Language', 'first'),
         type: 'textarea',
         factory: WysiwygFactory,
         attrs: {
@@ -1261,6 +1340,7 @@ const options = {
         },
       },
     },
+    template: FVDialectTemplate,
     i18n: i18nExt,
   },
 
