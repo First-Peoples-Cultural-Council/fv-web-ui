@@ -446,7 +446,7 @@ const routes = [
   {
     path: ['register'],
     title: intl.translate({ key: 'register', default: 'Register', case: 'first' }),
-    page: <Pages.PageUsersRegister />,
+    page: <Pages.Register />,
   },
   {
     path: ['forgotpassword'],
@@ -528,7 +528,7 @@ const routes = [
         default: 'Registration',
         case: 'words',
       }),
-    page: <Pages.PageUsersRegister />,
+    page: <Pages.Register />,
     disableWorkspaceSectionNav: true,
     extractPaths: true,
   },

@@ -62,7 +62,7 @@ const PageContent = React.lazy(() => import('components/PageContent'))
 const PagePlay = React.lazy(() => import('components/Games'))
 const PageSearch = React.lazy(() => import('components/SearchDictionary/SearchDictionaryContainer'))
 const PageUserTasks = React.lazy(() => import('components/UserTasks'))
-const PageUsersRegister = React.lazy(() => import('components/Register/RegisterContainer'))
+const Register = React.lazy(() => import('components/Register/RegisterContainer'))
 const PageUsersForgotPassword = React.lazy(() => import('components/Users/forgotpassword'))
 
 // KIDS
@@ -165,7 +165,7 @@ export {
   PagePlay,
   PageSearch,
   PageUserTasks,
-  PageUsersRegister,
+  Register,
   PageUsersForgotPassword,
   PageDialectImmersionList,
   //GAMES
