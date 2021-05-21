@@ -285,7 +285,7 @@ export class WordsEdit extends Component {
             <EditViewWithForm
               computeEntities={computeEntities}
               computeDialect={computeDialect2}
-              initialValues={context}
+              context={context}
               itemId={this._getWordPath()}
               fields={fields}
               options={options}
