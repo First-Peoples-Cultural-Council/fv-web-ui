@@ -61,10 +61,10 @@ const FVDialectTemplate = function template(locals) {
     <fieldset>
       <div className="col-md-12">{locals.inputs['fvdialect:greeting']}</div>
       <div className="col-md-12">{locals.inputs['fvdialect:featured_audio']}</div>
-      <div className="col-md-12">{locals.inputs['fvdialect:about_our_people']}</div>
+      <div className="col-md-12">{locals.inputs['fvdialect:about_us']}</div>
       <div className="col-md-12">{locals.inputs['fvdialect:news']}</div>
       <div className="col-md-12">{locals.inputs['fvdialect:background_top_image']}</div>
-      <div className="col-md-12">{locals.inputs['fvdialect:logos']}</div>
+      <div className="col-md-12">{locals.inputs['fvdialect:logo']}</div>
       <div className="col-md-12">{locals.inputs['fvdialect:featured_words']}</div>
       <div className="col-md-12">{locals.inputs['fvdialect:related_links']}</div>
       <div className="col-md-12">{locals.inputs['fvdialect:about_our_language']}</div>
@@ -1216,7 +1216,7 @@ const options = {
         factory: MediaFactory,
         type: 'FVAudio',
       },
-      'fvdialect:about_our_people': {
+      'fvdialect:about_us': {
         label: intl.trans('views.pages.explore.dialect.about_us', 'About Us', 'first'),
         type: 'textarea',
         factory: WysiwygFactory,
@@ -1235,21 +1235,10 @@ const options = {
         factory: MediaFactory,
         type: 'FVPicture',
       },
-      'fvdialect:logos': {
+      'fvdialect:logo': {
         label: intl.trans('logo', 'Logo', 'first'),
-        item: {
-          factory: MediaFactory,
-          type: 'FVPicture',
-          locals: {
-            labelAddMediaComponent: intl.trans('picture_upload', 'Upload picture', 'first'),
-            labelSelectMediaComponent: intl.trans('pictures_browse', 'Browse pictures', 'first'),
-          },
-        },
-        template: RelatedMediaLayout,
-        i18n: {
-          ...i18nExt,
-          add: `+ ${intl.trans('add logo', 'Add Logo', 'first')}`,
-        },
+        factory: MediaFactory,
+        type: 'FVPicture',
       },
       'fvdialect:featured_words': {
         label: intl.trans('featured_words', 'Featured Words', 'first'),
