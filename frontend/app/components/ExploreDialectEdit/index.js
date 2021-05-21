@@ -174,12 +174,42 @@ export class ExploreDialectEdit extends Component {
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
     let context = {}
+    let initialValues = {}
 
     // Set initial values
     if (selectn('response', computeDialect2) && selectn('response', computePortal)) {
       context = Object.assign(selectn('response', computeDialect2), {
         otherContext: { parentId: selectn('response.uid', computePortal) },
       })
+      const dialectProperties = selectn('response.properties', computeDialect2)
+      const portalProperties = selectn('response.properties', computePortal)
+
+      initialValues = {
+        'fvdialect:greeting': dialectProperties['fvdialect:greeting'] || portalProperties['fv-portal:greeting'] || null,
+        'fvdialect:featured_audio':
+          dialectProperties['fvdialect:featured_audio'] || portalProperties['fv-portal:featured_audio'] || null,
+        'fvdialect:about_us': dialectProperties['fvdialect:about_us'] || portalProperties['fv-portal:about'] || null,
+        'fvdialect:news': dialectProperties['fvdialect:news'] || portalProperties['fv-portal:news'] || null,
+        'fvdialect:background_top_image':
+          dialectProperties['fvdialect:background_top_image'] ||
+          portalProperties['fv-portal:background_top_image'] ||
+          null,
+        'fvdialect:logo': dialectProperties['fvdialect:logo'] || portalProperties['fv-portal:logo'] || null,
+        'fvdialect:featured_words': dialectProperties['fvdialect:featured_words']?.length
+          ? dialectProperties['fvdialect:featured_words']
+          : portalProperties['fv-portal:featured_words'] || [],
+        'fvdialect:related_links': dialectProperties['fvdialect:related_links']?.length
+          ? dialectProperties['fvdialect:related_links']
+          : portalProperties['fv-portal:related_links'] || [],
+        'fvdialect:about_our_language':
+          dialectProperties['fvdialect:about_our_language'] || dialectProperties['dc:description'] || null,
+        'fvdialect:country': dialectProperties['fvdialect:country'] || null,
+        'fvdialect:dominant_language': dialectProperties['fvdialect:dominant_language'] || null,
+        'fvdialect:region': dialectProperties['fvdialect:region'] || null,
+        'fvdialect:keyboards': dialectProperties['fvdialect:keyboards'] || [],
+        'fvdialect:language_resources': dialectProperties['fvdialect:language_resources'] || [],
+        'fvdialect:contact_information': dialectProperties['fvdialect:contact_information'] || null,
+      }
     }
     return (
       <AuthenticationFilter.Container
@@ -210,8 +240,9 @@ export class ExploreDialectEdit extends Component {
             <EditViewWithForm
               computeEntities={computeEntities}
               computeDialect={computeDialect2}
-              initialValues={context}
-              itemId={portalPath}
+              context={context}
+              initialValues={initialValues}
+              itemId={this.props.routeParams.dialect_path}
               fields={fields}
               options={options}
               cancelMethod={this._handleCancel}
