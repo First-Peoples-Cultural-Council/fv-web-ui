@@ -14,7 +14,7 @@ import withToggle from 'components/withToggle'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import FormHelpers from 'common/FormHelpers'
-
+import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
 
 import './withFilter.css'
@@ -134,22 +134,18 @@ export default function withFilter(ComposedFilter, DefaultFetcherParams) {
                     options={options.toJS()}
                   />
                   <div className="FilteredGridList__btnGroup">
-                    <button
-                      type="button"
-                      className="FilteredGridList__btn RaisedButton RaisedButton--primary"
+                    <FVButton
+                      variant="contained"
+                      color="secondary"
                       onClick={(e) => {
                         this._onReset(e, this.props)
                       }}
                     >
                       {intl.trans('reset', 'Reset', 'first')}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={this._onFilterSaveForm}
-                      className="FilteredGridList__btn RaisedButton RaisedButton--primary"
-                    >
+                    </FVButton>
+                    <FVButton variant="contained" color="primary" onClick={this._onFilterSaveForm}>
                       {intl.trans('filter', 'Filter', 'first')}
-                    </button>
+                    </FVButton>
                   </div>
                 </FiltersWithToggle>
               </form>

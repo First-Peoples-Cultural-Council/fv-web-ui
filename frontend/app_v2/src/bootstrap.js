@@ -8,6 +8,7 @@ import AppFrameContainer from './components/AppFrame/AppFrameContainer'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import AppStateProvider from 'common/AppStateProvider'
 import ErrorHandler from 'components/ErrorHandler'
+import ScrollToTop from 'common/ScrollToTop'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,6 +27,7 @@ ReactDOM.render(
   <AppV1Provider>
     <QueryClientProvider client={queryClient}>
       <Router>
+        <ScrollToTop />
         <Switch>
           <Route path="/:sitename">
             <AppStateProvider>

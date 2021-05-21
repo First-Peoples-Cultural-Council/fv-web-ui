@@ -15,9 +15,9 @@ import { SEARCHDIALECT_CHECKBOX, SEARCH_DATA_TYPE_PHRASE } from 'common/Constant
  *
  * @returns {node} jsx markup
  */
-function PhrasesListContainer() {
+function PhrasesListContainer({ reportFilter }) {
   return (
-    <PhrasesListData>
+    <PhrasesListData reportFilter={reportFilter}>
       {({
         browseMode,
         checkboxNames,
@@ -51,6 +51,43 @@ function PhrasesListContainer() {
         setRouteParams,
         sortHandler,
       }) => {
+        const childrenSearch = !reportFilter ? (
+          <Suspense fallback={<div>loading...</div>}>
+            <SearchDialectContainer
+              checkboxNames={checkboxNames}
+              key={`forceRender${resetCount}`}
+              incrementResetCount={incrementResetCount}
+              browseMode={browseMode}
+              childrenSearchMessage={
+                <SearchDialectMessage
+                  dialectClassName={dialectClassName}
+                  letter={queryLetter}
+                  phraseBook={queryPhraseBook}
+                  searchStyle={querySearchStyle}
+                  searchTerm={querySearchTerm}
+                  shouldSearchCulturalNotes={querySearchByCulturalNotes}
+                  shouldSearchDefinitions={querySearchByDefinitions}
+                  shouldSearchTitle={querySearchByTitle}
+                  searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
+                />
+              }
+              childrenUiSecondary={searchUiSecondary.map(({ defaultChecked, idName, labelText, type }, index) => {
+                if (type === SEARCHDIALECT_CHECKBOX) {
+                  return (
+                    <SearchDialectCheckbox
+                      key={index}
+                      defaultChecked={defaultChecked}
+                      idName={idName}
+                      labelText={labelText}
+                    />
+                  )
+                }
+                return null
+              })}
+              searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
+            />
+          </Suspense>
+        ) : null
         return (
           <PromiseWrapper renderOnError computeEntities={computeEntities}>
             <PhrasesListPresentation
@@ -64,48 +101,13 @@ function PhrasesListContainer() {
               navigationRouteSearch={navigationRouteSearch}
               onClickCreate={onClickCreate}
               pushWindowPath={pushWindowPath}
+              reportFilter={reportFilter}
               routeParams={routeParams}
               setRouteParams={setRouteParams}
               // ==================================================
               // Search
               // --------------------------------------------------
-              childrenSearch={
-                <Suspense fallback={<div>loading...</div>}>
-                  <SearchDialectContainer
-                    checkboxNames={checkboxNames}
-                    key={`forceRender${resetCount}`}
-                    incrementResetCount={incrementResetCount}
-                    browseMode={browseMode}
-                    childrenSearchMessage={
-                      <SearchDialectMessage
-                        dialectClassName={dialectClassName}
-                        letter={queryLetter}
-                        phraseBook={queryPhraseBook}
-                        searchStyle={querySearchStyle}
-                        searchTerm={querySearchTerm}
-                        shouldSearchCulturalNotes={querySearchByCulturalNotes}
-                        shouldSearchDefinitions={querySearchByDefinitions}
-                        shouldSearchTitle={querySearchByTitle}
-                        searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
-                      />
-                    }
-                    childrenUiSecondary={searchUiSecondary.map(({ defaultChecked, idName, labelText, type }, index) => {
-                      if (type === SEARCHDIALECT_CHECKBOX) {
-                        return (
-                          <SearchDialectCheckbox
-                            key={index}
-                            defaultChecked={defaultChecked}
-                            idName={idName}
-                            labelText={labelText}
-                          />
-                        )
-                      }
-                      return null
-                    })}
-                    searchDialectDataType={SEARCH_DATA_TYPE_PHRASE}
-                  />
-                </Suspense>
-              }
+              childrenSearch={childrenSearch}
               // ==================================================
               // Table data
               // --------------------------------------------------

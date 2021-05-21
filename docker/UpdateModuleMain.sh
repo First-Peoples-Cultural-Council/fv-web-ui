@@ -19,7 +19,7 @@ fi
 # Build main module.
 echo 'Building module: ' $MODULE
 if [ "$2" == "-skip-tests" ]; then
-    mvn -Dmaven.test.skip=true install -q
+    mvn clean install -Dmaven.test.skip=true
     if [[ "$?" -ne 0 ]]; then
         echo
         echo -e "${RED}fv-web-ui build failed \n${ENDCOLOR}"; exit 1

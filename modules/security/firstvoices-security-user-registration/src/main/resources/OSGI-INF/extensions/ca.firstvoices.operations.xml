@@ -1,5 +1,5 @@
 <component name="ca.firstvoices.uregistration.operations.contrib">
-  
+
      <require>org.nuxeo.ecm.core.automation.features.operations</require>
 
 	<extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent" point="operations" >
@@ -11,6 +11,7 @@
 		<operation class="ca.firstvoices.operations.FVUpdateGroup" replace="true" />
 		<operation class="ca.firstvoices.operations.FVUpdateUser" replace="true" />
 		<operation class="ca.firstvoices.operations.FVChangeUserGroupToDialectGroup" replace="true" />
+		<operation class="ca.firstvoices.operations.FVRequestToJoinDialect" replace="true" />
 	</extension>
-    
+
 </component>

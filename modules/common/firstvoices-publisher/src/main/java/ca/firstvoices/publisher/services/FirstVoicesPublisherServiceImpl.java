@@ -50,7 +50,7 @@ import ca.firstvoices.core.io.utils.StateUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -422,9 +422,9 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
 
           if (workspaceProperty.isList()) {
             workspacePropertyValues =
-                new HashSet<>(PropertyUtils.getValuesAsList(proxy, workspaceFieldName));
+                new LinkedHashSet<>(PropertyUtils.getValuesAsList(proxy, workspaceFieldName));
           } else {
-            workspacePropertyValues = new HashSet<>(
+            workspacePropertyValues = new LinkedHashSet<>(
                 Collections.singleton(String.valueOf(workspaceProperty.getValueForWrite())));
           }
 

@@ -266,7 +266,7 @@ const REPORT_VIEW = {
       case: 'words',
     }) +
     ' | {$dialect_name}',
-  page: <Pages.PageDialectReportsView />,
+  page: <Pages.Reports />,
   extractPaths: true,
   redirects: [WORKSPACE_TO_SECTION_REDIRECT],
 }
@@ -1120,7 +1120,7 @@ const routes = [
         default: 'Reports',
         case: 'words',
       }) + ' | {$dialect_name}',
-    page: <Pages.PageDialectReports />,
+    page: <Pages.Reports />,
     extractPaths: true,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
   },

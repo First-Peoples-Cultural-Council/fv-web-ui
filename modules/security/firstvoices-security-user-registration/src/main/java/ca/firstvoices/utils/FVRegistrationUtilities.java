@@ -30,7 +30,6 @@ import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_CAN_PROC
 import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_EXISTS_ERROR;
 import static ca.firstvoices.utils.FVRegistrationConstants.SYSTEM_APPROVED_GROUP_CHANGE;
 import static ca.firstvoices.utils.FVRegistrationConstants.USER_NAME_ARG;
-
 import ca.firstvoices.user.FVUserRegistrationInfo;
 import java.io.Serializable;
 import java.time.Year;
@@ -159,7 +158,8 @@ public class FVRegistrationUtilities {
   public static DocumentModelList getRegistrations(CoreSession session, StringList users) {
     String query = String.format(
         "SELECT * FROM FVUserRegistration " + "WHERE userinfo:email IN ('%s') "
-            + "ORDER BY dc:created DESC", String.join("','", users));
+            + "ORDER BY dc:created DESC",
+        String.join("','", users));
 
     DocumentModelList docs = session.query(query);
 
@@ -172,16 +172,19 @@ public class FVRegistrationUtilities {
    * @param user    user to lookup registration for
    * @param dialect dialect user requested to join
    */
-  public static DocumentModelList getRegistrations(CoreSession session, String user,
-      String dialect) {
+  public static DocumentModelList getRegistrations(
+      CoreSession session, String user, String dialect) {
     String query = String.format(
         "SELECT * FROM FVUserRegistration " + "WHERE userinfo:email LIKE '%s' "
-            + "AND fvuserinfo:requestedSpace = '%s' " + "ORDER BY dc:created DESC", user, dialect);
+            + "AND fvuserinfo:requestedSpace = '%s' " + "ORDER BY dc:created DESC",
+        user,
+        dialect);
 
     DocumentModelList docs = session.query(query);
 
     return docs;
   }
+
 
   public DocumentModel getDialect() {
     return dialect;
@@ -204,8 +207,8 @@ public class FVRegistrationUtilities {
    * @param session
    * @param userManager1
    */
-  public void registrationCommonSetup(DocumentModel registrationRequest, CoreSession session,
-      UserManager userManager1) {
+  public void registrationCommonSetup(
+      DocumentModel registrationRequest, CoreSession session, UserManager userManager1) {
     userManager = userManager1;
 
     requestedSpaceId = (String) registrationRequest.getPropertyValue("fvuserinfo:requestedSpace");
@@ -225,7 +228,6 @@ public class FVRegistrationUtilities {
     if (dialect.getCurrentLifeCycleState().equals("disabled")) {
       throw new UserRegistrationException("Cannot request to join a disabled dialect.");
     }
-
     // Set Workspace document as requested space
     registrationRequest.setPropertyValue("fvuserinfo:requestedSpace", dialect.getId());
 
@@ -259,17 +261,17 @@ public class FVRegistrationUtilities {
     userInfo.setFirstName((String) registrationRequest.getPropertyValue("userinfo:firstName"));
     userInfo.setLastName((String) registrationRequest.getPropertyValue("userinfo:lastName"));
     userInfo.setComment((String) registrationRequest.getPropertyValue("fvuserinfo:comment"));
-    userInfo.setCommunityMember(
-        (Boolean) registrationRequest.getPropertyValue("fvuserinfo:community_member"));
-    userInfo.setLanguageTeamMember(
-        (Boolean) registrationRequest.getPropertyValue("fvuserinfo:language_team_member"));
+    userInfo.setCommunityMember((Boolean) registrationRequest.getPropertyValue(
+        "fvuserinfo:community_member"));
+    userInfo.setLanguageTeamMember((Boolean) registrationRequest.getPropertyValue(
+        "fvuserinfo:language_team_member"));
 
     userInfo.setLogin(userInfo.getEmail());
 
     try {
       FVUserPreferencesSetup up = new FVUserPreferencesSetup();
-      String defaultUserPrefs = up
-          .createDefaultUserPreferencesWithRegistration(registrationRequest);
+      String defaultUserPrefs =
+          up.createDefaultUserPreferencesWithRegistration(registrationRequest);
       userInfo.setPreferences(defaultUserPrefs);
     } catch (Exception e) {
       log.error(e);
@@ -285,8 +287,8 @@ public class FVRegistrationUtilities {
    * @param session
    * @return
    */
-  public void quickUserRegistrationCondition(DocumentModel registrationRequest,
-      CoreSession session) {
+  public void quickUserRegistrationCondition(
+      DocumentModel registrationRequest, CoreSession session) {
     ugdr = new UnrestrictedGroupResolver(session, dialect);
     ugdr.runUnrestricted();
 
@@ -313,8 +315,8 @@ public class FVRegistrationUtilities {
   /**
    * @throws Exception
    */
-  private void notificationEmailsAndReminderTasks(DocumentModel dialect, DocumentModel ureg,
-      int variant) throws Exception {
+  private void notificationEmailsAndReminderTasks(
+      DocumentModel dialect, DocumentModel ureg, int variant) throws Exception {
     Map<String, String> options = new HashMap<>();
     options.put("fName", (String) ureg.getPropertyValue("userinfo:firstName"));
     options.put("lName", (String) ureg.getPropertyValue("userinfo:lastName"));
@@ -355,12 +357,12 @@ public class FVRegistrationUtilities {
 
     // If authorized, use preset groups
     NuxeoPrincipal currentUser = session.getPrincipal();
-    if (currentUser.isAdministrator() || currentUser
-        .isMemberOf(CustomSecurityConstants.LANGUAGE_ADMINS_GROUP)) {
+    if (currentUser.isAdministrator()
+        || currentUser.isMemberOf(CustomSecurityConstants.LANGUAGE_ADMINS_GROUP)) {
       autoAccept = true;
 
-      @SuppressWarnings("unchecked") List<String> preSetGroup = (List<String>) registrationRequest
-          .getPropertyValue("userinfo:groups");
+      @SuppressWarnings("unchecked") List<String> preSetGroup =
+          (List<String>) registrationRequest.getPropertyValue("userinfo:groups");
 
       if (!preSetGroup.isEmpty()) {
         userInfo.setGroups(preSetGroup);
@@ -383,9 +385,10 @@ public class FVRegistrationUtilities {
    * @param autoAccept
    * @return
    */
-  public String registrationCommonFinish(UserRegistrationService registrationService,
-      DocumentModel registrationRequest, Map<String, Serializable> info, String comment,
-      ValidationMethod validationMethod, boolean autoAccept, CoreSession session) throws Exception {
+  public String registrationCommonFinish(
+      UserRegistrationService registrationService, DocumentModel registrationRequest,
+      Map<String, Serializable> info, String comment, ValidationMethod validationMethod,
+      boolean autoAccept, CoreSession session) throws Exception {
     int validationStatus;
 
     try {
@@ -413,7 +416,8 @@ public class FVRegistrationUtilities {
           throw new RestOperationException(
               "A pending registration with the same credentials is present. Please check your "
                   + "email (including SPAM folder) for a message with instructions or contact us"
-                  + " for help.", 400);
+                  + " for help.",
+              400);
         default:
           break;
       }
@@ -437,12 +441,19 @@ public class FVRegistrationUtilities {
     // Set permissions on registration document
     String registrationId = null;
 
-    registrationId = registrationService.submitRegistrationRequest(
-        registrationService.getConfiguration(UserRegistrationService.CONFIGURATION_NAME).getName(),
-        userInfo, docInfo, info, validationMethod, autoAccept, userInfo.getEmail());
+    registrationId = registrationService.submitRegistrationRequest(registrationService
+            .getConfiguration(UserRegistrationService.CONFIGURATION_NAME)
+            .getName(),
+        userInfo,
+        docInfo,
+        info,
+        validationMethod,
+        autoAccept,
+        userInfo.getEmail());
 
     UnrestrictedRequestPermissionResolver urpr = new UnrestrictedRequestPermissionResolver(session,
-        registrationId, ugdr.languageAdminGroup);
+        registrationId,
+        ugdr.languageAdminGroup);
     urpr.runUnrestricted();
 
     return registrationId;
@@ -457,8 +468,8 @@ public class FVRegistrationUtilities {
     CoreInstance.doPrivileged(s, session -> {
 
       DocumentModel ureg = session.getDocument(uregRef);
-      dialect = session
-          .getDocument(new IdRef((String) ureg.getPropertyValue("docinfo:documentId")));
+      dialect =
+          session.getDocument(new IdRef((String) ureg.getPropertyValue("docinfo:documentId")));
       String dialectLifeCycleState = dialect.getCurrentLifeCycleState();
 
       String username = (String) ureg.getPropertyValue("userinfo:login");
@@ -482,8 +493,9 @@ public class FVRegistrationUtilities {
               ureg.getPropertyValue("fvuserinfo:preferences"));
         }
 
-        userDoc
-            .setPropertyValue("user:yearBornRange", ureg.getPropertyValue("fvuserinfo:ageGroup"));
+        userDoc.setPropertyValue(
+            "user:yearBornRange",
+            ureg.getPropertyValue("fvuserinfo:ageGroup"));
         userDoc.setPropertyValue("user:role", ureg.getPropertyValue("fvuserinfo:role"));
         userDoc.setPropertyValue("user:ua", ureg.getPropertyValue("fvuserinfo:ua"));
         userDoc.setPropertyValue("user:ip", ureg.getPropertyValue("fvuserinfo:ip"));
@@ -493,7 +505,8 @@ public class FVRegistrationUtilities {
 
         // Add user to 'members' group
         String newUserGroup = "members";
-        DocumentEventContext groupCtx = new DocumentEventContext(session, session.getPrincipal(),
+        DocumentEventContext groupCtx = new DocumentEventContext(session,
+            session.getPrincipal(),
             dialect);
         groupCtx.setProperty(USER_NAME_ARG, username);
         groupCtx.setProperty(GROUP_NAME_ARG, newUserGroup);
@@ -505,11 +518,11 @@ public class FVRegistrationUtilities {
         // Send appropriate email templates
 
         // User indicated they are a language team member
-        if (ureg.getPropertyValue("fvuserinfo:language_team_member") != null && (boolean) ureg
-            .getPropertyValue("fvuserinfo:language_team_member")) {
+        if (ureg.getPropertyValue("fvuserinfo:language_team_member") != null
+            && (boolean) ureg.getPropertyValue("fvuserinfo:language_team_member")) {
           notificationEmailsAndReminderTasks(dialect, ureg, NEW_TEAM_MEMBER_SELF_REGISTRATION_ACT);
-        } else if (ureg.getPropertyValue("fvuserinfo:community_member") != null && (boolean) ureg
-            .getPropertyValue("fvuserinfo:community_member")) {
+        } else if (ureg.getPropertyValue("fvuserinfo:community_member") != null
+            && (boolean) ureg.getPropertyValue("fvuserinfo:community_member")) {
           // User indicated they are a community team member
           notificationEmailsAndReminderTasks(dialect, ureg, NEW_MEMBER_SELF_REGISTRATION_ACT);
         }
@@ -592,8 +605,8 @@ public class FVRegistrationUtilities {
 
     private String languageAdminGroup;
 
-    protected UnrestrictedRequestPermissionResolver(CoreSession session, String registrationDocId,
-        String languageAdminGroup) {
+    protected UnrestrictedRequestPermissionResolver(
+        CoreSession session, String registrationDocId, String languageAdminGroup) {
       super(session);
       this.registrationDocId = registrationDocId;
       this.languageAdminGroup = languageAdminGroup;
