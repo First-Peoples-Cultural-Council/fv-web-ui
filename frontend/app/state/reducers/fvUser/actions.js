@@ -14,7 +14,7 @@ export const fetchUserDialects = execute('FV_USER_DIALECTS', 'FVGetDialectsForUs
 
 export const fetchUserStartpage = execute('FV_USER_STARTPAGE', 'FVGetUserStartPage')
 
-export const requestJoin = ({ siteId, reason, communityMember, languageTeamMember, comment }) => {
+export const requestJoin = ({ siteId, interestReason, communityMember, languageTeam, comment }) => {
   return (dispatch) => {
     dispatch({
       type: FV_REQUEST_JOIN_PUT_START,
@@ -23,9 +23,9 @@ export const requestJoin = ({ siteId, reason, communityMember, languageTeamMembe
     })
 
     return DirectoryOperations.putToAPI(`${URLHelpers.getBaseURL()}api/v1/site/${siteId}/membership`, {
-      reason,
+      interestReason,
       communityMember,
-      languageTeamMember,
+      languageTeam,
       comment,
     })
       .then((response) => {

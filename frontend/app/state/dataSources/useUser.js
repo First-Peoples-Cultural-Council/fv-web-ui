@@ -8,8 +8,8 @@ function useUser() {
   const dispatch = useDispatch()
   return {
     computeRequestJoin: useSelector((state) => state.fvUser.computeRequestJoin),
-    requestJoin: ({ siteId, reason, communityMember, languageTeamMember, comment }) => {
-      const dispatchObj = _requestJoin({ siteId, reason, communityMember, languageTeamMember, comment })
+    requestJoin: ({ siteId, interestReason, communityMember, languageTeam, comment }) => {
+      const dispatchObj = _requestJoin({ siteId, interestReason, communityMember, languageTeam, comment })
       dispatch(dispatchObj)
     },
     computeUserDialects: useSelector((state) => state.fvUser.computeUserDialects),

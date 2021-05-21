@@ -84,9 +84,9 @@ function RegisterData({ children }) {
       if (isLoggedIn) {
         requestJoin({
           siteId: selectn('fvuserinfo:requestedSpace', properties),
-          reason: selectn('fvuserinfo:role', properties),
+          interestReason: selectn('fvuserinfo:role', properties),
           communityMember: selectn('fvuserinfo:community_member', properties) || false,
-          languageTeamMember: selectn('fvuserinfo:language_team_member', properties) || false,
+          languageTeam: selectn('fvuserinfo:language_team_member', properties) || false,
           comment: selectn('fvuserinfo:comment', properties),
         })
       } else {
