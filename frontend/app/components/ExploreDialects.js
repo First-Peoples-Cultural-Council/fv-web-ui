@@ -19,7 +19,7 @@ import PropTypes from 'prop-types'
 // REDUX
 import { connect } from 'react-redux'
 // REDUX: actions/dispatch/func
-import { fetchPortalsFromCustomAPI } from 'reducers/fvPortal'
+import { fetchPortals } from 'reducers/fvPortal'
 import { fetchDirectory } from 'reducers/directory'
 import { pushWindowPath } from 'reducers/windowPath'
 
@@ -46,7 +46,7 @@ export class ExploreDialects extends Component {
     computeLogin: object.isRequired,
     properties: object.isRequired,
     // REDUX: actions/dispatch/func
-    fetchPortalsFromCustomAPI: func.isRequired,
+    fetchPortals: func.isRequired,
     pushWindowPath: func.isRequired,
     fetchDirectory: func.isRequired,
   }
@@ -141,7 +141,7 @@ export class ExploreDialects extends Component {
   }
 
   _fetchData = (newProps) => {
-    newProps.fetchPortalsFromCustomAPI({ area: newProps.routeParams.area })
+    newProps.fetchPortals({ area: newProps.routeParams.area })
     newProps.fetchDirectory('parent_languages', 2000, true)
   }
 
@@ -174,7 +174,7 @@ const mapStateToProps = (state /*, ownProps*/) => {
 
 // REDUX: actions/dispatch/func
 const mapDispatchToProps = {
-  fetchPortalsFromCustomAPI,
+  fetchPortals,
   fetchDirectory,
   pushWindowPath,
 }

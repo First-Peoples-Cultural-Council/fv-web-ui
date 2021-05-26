@@ -9,26 +9,8 @@ export const updatePortal = update('FV_PORTAL', 'FVPortal', {
 export const fetchPortal = fetch('FV_PORTAL', 'FVPortal', {
   headers: { 'enrichers.document': 'ancestry,portal' },
 })
-// export const fetchPortals = query("FV_PORTALS", "FVPortal", {
-//   page_provider: "get_dialects",
-//   headers: { "enrichers.document": "ancestry,portal", "properties": "" },
-// })
 
-export const fetchPortals = function fetchPortals(pageProvider, headers = {}, params = {}) {
-  return (dispatch) => {
-    dispatch({ type: FV_FETCH_PORTALS_START })
-
-    return DirectoryOperations.getDocumentsViaPageProvider(pageProvider, 'FVPortal', headers, params)
-      .then((response) => {
-        dispatch({ type: FV_FETCH_PORTALS_FETCH_SUCCESS, documents: response })
-      })
-      .catch((error) => {
-        dispatch({ type: FV_FETCH_PORTALS_FETCH_ERROR, error: error })
-      })
-  }
-}
-
-export const fetchPortalsFromCustomAPI = function fetchPortalsFromCustomAPI(params) {
+export const fetchPortals = function fetchPortals(params) {
   return (dispatch) => {
     dispatch({ type: FV_FETCH_PORTALS_START })
     return DirectoryOperations.getDocumentsViaCustomAPI(`/site/${params.area}`)
