@@ -30,7 +30,7 @@ export const fetchUserDialects = execute('FV_USER_DIALECTS', 'FVGetDialectsForUs
 
 export const fetchUserStartpage = execute('FV_USER_STARTPAGE', 'FVGetUserStartPage')
 
-export const requestJoin = ({ siteId, interestReason, communityMember, languageTeam, comment }) => {
+export const requestMembership = ({ siteId, interestReason, communityMember, languageTeam, comment }) => {
   return (dispatch) => {
     dispatch({
       type: FV_MEMBERSHIP_CREATE_START,

@@ -2,22 +2,44 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   fetchUserDialects as _fetchUserDialects,
   selfregisterUser as _selfregisterUser,
-  requestJoin as _requestJoin,
+  requestMembership as _requestMembership,
+  getMembershipStatus as _getMembershipStatus,
+  getJoinRequest as _getJoinRequest,
+  getJoinRequests as _getJoinRequests,
+  postJoinRequest as _postJoinRequest,
 } from 'reducers/fvUser'
 function useUser() {
   const dispatch = useDispatch()
   return {
-    computeRequestJoin: useSelector((state) => state.fvUser.computeRequestJoin),
-    requestJoin: ({ siteId, interestReason, communityMember, languageTeam, comment }) => {
-      const dispatchObj = _requestJoin({ siteId, interestReason, communityMember, languageTeam, comment })
+    computeJoinRequest: useSelector((state) => state.fvUser.computeJoinRequest),
+    computeJoinRequests: useSelector((state) => state.fvUser.computeJoinRequests),
+    computeMembership: useSelector((state) => state.fvUser.computeMembership),
+    computeUserDialects: useSelector((state) => state.fvUser.computeUserDialects),
+    computeUserSelfregister: useSelector((state) => state.fvUser.computeUserDialects),
+    getJoinRequest: ({ siteId, requestId }) => {
+      const dispatchObj = _getJoinRequest({ siteId, requestId })
       dispatch(dispatchObj)
     },
-    computeUserDialects: useSelector((state) => state.fvUser.computeUserDialects),
+    getJoinRequests: ({ siteId }) => {
+      const dispatchObj = _getJoinRequests({ siteId })
+      dispatch(dispatchObj)
+    },
+    postJoinRequest: ({ siteId, requestId, newStatus, messageToUser }) => {
+      const dispatchObj = _postJoinRequest({ siteId, requestId, newStatus, messageToUser })
+      dispatch(dispatchObj)
+    },
+    getMembershipStatus: ({ siteId }) => {
+      const dispatchObj = _getMembershipStatus({ siteId })
+      dispatch(dispatchObj)
+    },
+    requestMembership: ({ siteId, interestReason, communityMember, languageTeam, comment }) => {
+      const dispatchObj = _requestMembership({ siteId, interestReason, communityMember, languageTeam, comment })
+      dispatch(dispatchObj)
+    },
     fetchUserDialects: (pathOrId, operationParams, messageStart, messageSuccess, messageError) => {
       const dispatchObj = _fetchUserDialects(pathOrId, operationParams, messageStart, messageSuccess, messageError)
       dispatch(dispatchObj)
     },
-    computeUserSelfregister: useSelector((state) => state.fvUser.computeUserDialects),
     selfregisterUser: (pathOrId, operationParams, messageStart, messageSuccess, messageError) => {
       const dispatchObj = _selfregisterUser(pathOrId, operationParams, messageStart, messageSuccess, messageError)
       dispatch(dispatchObj)

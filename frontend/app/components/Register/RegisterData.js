@@ -22,7 +22,7 @@ function RegisterData({ children }) {
   const { fetchPortals, computePortals } = usePortal()
   const { intl } = useIntl()
   const { computeLogin } = useLogin()
-  const { selfregisterUser, computeUserSelfregister, requestJoin } = useUser()
+  const { selfregisterUser, computeUserSelfregister, requestMembership } = useUser()
 
   const isLoggedIn = computeLogin.success && computeLogin.isConnected
 
@@ -85,7 +85,7 @@ function RegisterData({ children }) {
     setFormValue(properties)
     if (currentFormValue) {
       if (isLoggedIn) {
-        requestJoin({
+        requestMembership({
           siteId: selectn('fvuserinfo:requestedSpace', properties),
           interestReason: selectn('fvuserinfo:role', properties),
           communityMember: selectn('fvuserinfo:community_member', properties) || false,
