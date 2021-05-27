@@ -1,0 +1,10 @@
+<settings>
+  <mirrors>
+    <mirror>
+      <id>secure-public</id>
+      <name>Nuxeo Secure</name>
+      <url>https://maven.nuxeo.org/nexus/content/groups/public</url>
+      <mirrorOf>public</mirrorOf>
+    </mirror>
+  </mirrors>
+</settings>

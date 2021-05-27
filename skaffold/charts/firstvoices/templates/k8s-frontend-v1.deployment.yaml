@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-v1
+spec:
+  replicas: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      name: frontend-v1
+      labels:
+        app: frontend-v1
+    spec:
+      containers:
+        - name: frontend-v1
+          image: {{ .Values.frontendV1.image }}
+          resources:
+            requests:
+              cpu: 100m
+              memory: "2000M"
+            limits:
+              cpu: 1
+              memory: "2000M"
+          args:
+            - "npm"
+            - "run"
+            - "startInSkaffold"
+          ports:
+            - name: http
+              containerPort: 3001
+          env:
+            - name: NUXEO_URL
+              value: "https://fv{{ .Values.hostSuffix }}{{ .Values.domainSuffix }}/nuxeo"
+            - name: V2_URL
+              value: "http://frontend-v2:3002/"
+            - name: CONTEXT_PATH
+              value: ""
+            - name: PUBLIC_PATH
+              value: "https://fv{{ .Values.hostSuffix }}{{ .Values.domainSuffix }}"
+
+
+  selector:
+    matchLabels:
+      app: frontend-v1

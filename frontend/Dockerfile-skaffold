@@ -1,0 +1,6 @@
+FROM node:lts-alpine
+EXPOSE 3001
+COPY package.json .
+RUN npm install
+COPY . .
+

@@ -1,0 +1,32 @@
+domainSuffix: .fvgke.mapleleafsoftware.io # all created ingresses will be under this domain
+hostSuffix: -sk2
+environment: g1
+
+frontendV1:
+  image: frontend-v1:latest
+frontendV2:
+  image: frontend-v2:latest
+firstvoices:
+  image: firstvoices:latest
+  databaseGCloudSidecar: false
+  databaseGCloudSidecarParameters: ""
+  databaseHost: datacube2.mapleleaf.intranet
+
+database_restoration:
+  image: database_restoration:latest
+
+elastic:
+  deploy: false
+database:
+  deploy: false
+  username: fv_ra
+  password: devdevdev
+  name: fv
+
+firstvoicesPostgresql:
+  pvc:
+    size: "20Gi"
+
+ingress:
+  configureForMk8s: true
+  useManagedCertificate: true

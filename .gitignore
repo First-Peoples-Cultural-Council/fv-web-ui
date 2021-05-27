@@ -37,6 +37,3 @@ nashorn_code_cache
 /docker/database/*
 /docker/frontend/
 
-# Skaffold (for now)
-skaffold
-Dockerfile-skaffold

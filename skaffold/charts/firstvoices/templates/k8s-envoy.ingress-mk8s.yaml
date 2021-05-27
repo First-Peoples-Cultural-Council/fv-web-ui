@@ -1,0 +1,35 @@
+{{ if .Values.ingress.configureForMk8s }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: envoy
+  annotations:
+    kubernetes.io/ingress.class: public
+spec:
+  defaultBackend:
+    service:
+      name: envoy
+      port:
+        number: 10000
+  rules:
+    - host: fv{{ .Values.hostSuffix }}{{ .Values.domainSuffix }}
+      http:
+        paths:
+          - path: /*
+            pathType: Prefix
+            backend:
+              service:
+                name: envoy
+                port:
+                  number: 10000
+    - host: v2{{ .Values.hostSuffix }}{{ .Values.domainSuffix }}
+      http:
+        paths:
+          - path: /*
+            pathType: Prefix
+            backend:
+              service:
+                name: envoy
+                port:
+                  number: 10000
+  {{ end }}

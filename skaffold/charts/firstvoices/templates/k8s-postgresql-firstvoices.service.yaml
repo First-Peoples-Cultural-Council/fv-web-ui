@@ -1,0 +1,12 @@
+{{ if .Values.database.deploy }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql-firstvoices
+spec:
+  selector:
+    app: postgresql-firstvoices
+  ports:
+    - port: 5432
+      targetPort: 5432
+  {{ end }}

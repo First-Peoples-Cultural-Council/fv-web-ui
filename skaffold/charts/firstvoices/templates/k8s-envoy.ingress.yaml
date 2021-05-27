@@ -1,0 +1,35 @@
+{{ if not .Values.ingress.configureForMk8s}}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: envoy
+  annotations:
+    # this needs to be 'public', not 'nginx', for newer versions of mk8s
+    kubernetes.io/ingress.class: gce
+    kubernetes.io/ingress.global-static-ip-name: fv-skaffold
+    networking.gke.io/managed-certificates: ingress-certificate
+    # service.alpha.kubernetes.io/app-protocols:
+    # nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: fv{{ .Values.hostSuffix }}{{ .Values.domainSuffix }}
+      http:
+        paths:
+          - path: /
+            #pathType: Prefix
+            backend:
+              serviceName: envoy
+              servicePort: 10000
+#              service:
+#                name: envoy
+#                port:
+#                  number: 10000
+    - host: v2{{ .Values.hostSuffix }}{{ .Values.domainSuffix }}
+      http:
+        paths:
+          - path: /
+            #pathType: Prefix
+            backend:
+              serviceName: envoy
+              servicePort: 10000
+  {{ end }}

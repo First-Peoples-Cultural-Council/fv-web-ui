@@ -1,0 +1,9 @@
+reserve global ip (see script)
+
+create an A record for this ip (eg fvgkedemo.mapleleafsoftware.io)
+create a wildcard (*.) CNAME pointing to this A record (eg *.fvgkedemo.mapleleafsoftware.io)
+
+nslookup anything.fvgkedemo.mapleleafsoftware.io should resolve successfully at this point
+
+
+

@@ -1,0 +1,71 @@
+apiVersion: skaffold/v2beta13
+kind: Config
+build:
+  cluster:
+    concurrency: 1
+    # pullSecretName: kaniko-secret
+    timeout: 120m # can be slow to build first time since pulling nuxeo deps takes forever
+    volumes:
+      - name: m2-cache
+        persistentVolumeClaim:
+          claimName: m2-cache-claim
+    resources:
+      requests:
+        cpu: 1
+        ephemeralStorage: 10Gi
+        memory: 2Gi
+      limits:
+        cpu: 3
+        ephemeralStorage: 10Gi
+        memory: 4Gi
+  artifacts:
+    - image: database_restoration
+      context: dockerfiles/database
+      kaniko:
+        snapshotMode: redo
+        dockerfile: Dockerfile
+        cache:
+          repo: ""
+    - image: frontend-v1
+      context: ../frontend
+      kaniko:
+        snapshotMode: redo
+        dockerfile: Dockerfile-skaffold
+        cache:
+          repo: ""
+    - image: frontend-v2
+      context: ../frontend/app_v2
+      kaniko:
+        snapshotMode: redo
+        dockerfile: Dockerfile-skaffold
+        cache:
+          repo: ""
+    - image: firstvoices
+      context: ../
+      kaniko:
+        singleSnapshot: true
+        dockerfile: Dockerfile-skaffold
+        cache:
+          repo: ""
+        volumeMounts:
+          - name: m2-cache
+            mountPath: /root/.m2
+deploy:
+  helm:
+    releases:
+      - name: skaffold-helm-release
+        chartPath: ./charts/firstvoices
+        setValueTemplates:
+          domainSuffix: .iron.mapleleaf.intranet
+          ingress.useManagedCertificate: false
+          database.enable: false
+          google-cloud-db-enable: false
+        artifactOverrides:
+          frontendV1:
+            image: frontend-v1
+          frontendV2:
+            image: frontend-v2
+          firstvoices:
+            image: firstvoices
+          database_restoration:
+            image: database_restoration

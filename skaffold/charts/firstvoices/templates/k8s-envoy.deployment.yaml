@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: envoy
+spec:
+  replicas: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      name: envoy-pod
+      labels:
+        app: envoy
+    spec:
+      volumes:
+      - name: envoy-config
+        configMap:
+          name: envoy-config
+          items:
+            - key: "envoy.yaml"
+              path: "envoy.yaml"
+      containers:
+        - name: envoy
+          image: envoyproxy/envoy-alpine:v1.16-latest
+          volumeMounts:
+            - name: envoy-config
+              mountPath: "/etc/envoy"
+              readOnly: true
+          readinessProbe:
+            httpGet:
+              path: /server_info
+              port: 9901
+            initialDelaySeconds: 5
+            periodSeconds: 120
+          resources:
+            limits:
+              cpu: "1"
+              memory: "400M"
+          ports:
+            - name: admin
+              containerPort: 9901
+            - name: http-in
+              containerPort: 10000
+  selector:
+    matchLabels:
+      app: envoy

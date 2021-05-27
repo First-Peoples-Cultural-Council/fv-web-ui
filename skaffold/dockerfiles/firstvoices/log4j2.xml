@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Log4j Configuration - For more configuration information and examples see https://logging.apache.org/log4j/2.x/ -->
+<Configuration monitorInterval="30" status="WARN">
+  <Appenders>
+    <RollingFile name="FILE" fileName="${sys:nuxeo.log.dir}/server.log"
+                 filePattern="${sys:nuxeo.log.dir}/server-%d{yyyy-MM-dd}.log.gz" append="true">
+      <PatternLayout pattern="%d{ISO8601} %-5p [%t] [%c] %m%n" />
+      <CronTriggeringPolicy schedule="0 0 0 * * ?" evaluateOnStartup="true" /> <!-- Rollover at midnight every day -->
+      <DefaultRolloverStrategy />
+      <ThresholdFilter level="DEBUG" onMatch="ACCEPT" />
+    </RollingFile>
+
+    <Console name="CONSOLE" target="SYSTEM_OUT">
+      <ThresholdFilter level="DEBUG" onMatch="ACCEPT" />
+      <PatternLayout pattern="%d{ISO8601} %-5p [%c{1}] %m%n" />
+    </Console>
+  </Appenders>
+  <Loggers>
+
+    <Logger name="org.nuxeo" level="DEBUG" />
+    <Logger name="org.nuxeo.ecm.core.storage.dbs.DBSCachingRepository" level="WARN" />
+    <Logger name="org.nuxeo.elasticsearch.ElasticSearchComponent" level="INFO" />
+    <Logger name="org.nuxeo.elasticsearch.audit.ESAuditBackend" level="WARN" />
+    <Logger name="org.nuxeo.elasticsearch.audit.ESAuditMigrationWork" level="WARN" />
+    <Logger name="org.nuxeo.ecm.platform.query.core.PageProviderClassReplacerRegistry" level="WARN" />
+    <Logger name="org.nuxeo.ecm.core.storage.sql.jdbc" level="trace" />
+    <Logger name="org.apache.catalina.loader" level="WARN" additivity="false">
+      <AppenderRef ref="CLASSLOADER" />
+    </Logger>
+    <Logger name="org.apache.catalina.core.AprLifecycleListener" level="WARN" additivity="false">
+      <AppenderRef ref="TOMCAT" />
+    </Logger>
+
+    <Logger name="org.jboss" level="INFO" />
+    <Logger name="org.hibernate" level="INFO" />
+    <Logger name="jacorb" level="WARN" />
+    <Logger name="org.jgroups" level="WARN" />
+    <Logger name="org.quartz" level="WARN" />
+    <Logger name="com.sun.jersey.spi.container.servlet.WebComponent" level="WARN" />
+    <Logger name="com.sun.jersey.spi.inject.Errors" level="WARN">
+      <!-- hide warn on GET with payload used for elasticsearch passthrough -->
+      <RegexFilter regex="The following warnings have been detected.*(\n.*org.nuxeo.elasticsearch.http.*){1,3}.*" onMatch="DENY" onMismatch="NEUTRAL" />
+    </Logger>
+
+    <Logger name="org.apache.shindig.common.xml.XmlUtil" level="WARN" />
+    <Logger name="org.apache.myfaces.shared_tomahawk" level="WARN" />
+    <Logger name="org.artofsolving.jodconverter" level="WARN" />
+
+    <Logger name="org.elasticsearch.bootstrap" level="WARN" />
+
+    <Root level="DEBUG">
+      <AppenderRef ref="CONSOLE" />
+    </Root>
+  </Loggers>
+</Configuration>
+
