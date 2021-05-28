@@ -21,7 +21,7 @@
 package ca.firstvoices.operations;
 
 import static ca.firstvoices.services.FVUserGroupUpdateUtilities.updateFVProperty;
-import static ca.firstvoices.utils.FVOperationCredentialsVerification.terminateOnInvalidCredentials_GroupUpdate;
+import static ca.firstvoices.utils.FVOperationCredentialsVerification.groupUpdate;
 import static ca.firstvoices.utils.FVRegistrationConstants.APPEND;
 import static ca.firstvoices.utils.FVRegistrationConstants.GROUP_COLON;
 import static ca.firstvoices.utils.FVRegistrationConstants.GROUP_DESCRIPTION;
@@ -104,7 +104,7 @@ public class FVUpdateGroup {
       throw new OperationException("Cannot update non-existent group: " + groupName);
     }
 
-    if (terminateOnInvalidCredentials_GroupUpdate(session, groupName)) {
+    if (groupUpdate(session, groupName)) {
       return "You do not have permission to change " + groupDoc.getName(); // invalid credentials
     }
 

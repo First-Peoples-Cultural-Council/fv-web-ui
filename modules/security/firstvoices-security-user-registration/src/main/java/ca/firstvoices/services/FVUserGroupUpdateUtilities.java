@@ -23,7 +23,6 @@ package ca.firstvoices.services;
 import static ca.firstvoices.utils.FVRegistrationConstants.APPEND;
 import static ca.firstvoices.utils.FVRegistrationConstants.REMOVE;
 import static ca.firstvoices.utils.FVRegistrationConstants.UPDATE;
-
 import ca.firstvoices.utils.FVRegistrationUtilities;
 import java.util.ArrayList;
 import org.nuxeo.ecm.automation.core.util.StringList;
@@ -38,8 +37,8 @@ public class FVUserGroupUpdateUtilities {
    * @param schemaName
    * @param field
    */
-  public static DocumentModel updateFVProperty(String action, DocumentModel doc, StringList data,
-      String schemaName, String field) {
+  public static DocumentModel updateFVProperty(
+      String action, DocumentModel doc, StringList data, String schemaName, String field) {
     ArrayList<String> arrayData = FVRegistrationUtilities.makeArrayFromStringList(data);
 
     if (!action.equals(UPDATE)) {

@@ -25,7 +25,6 @@ import static ca.firstvoices.utils.FVRegistrationConstants.INVITATION_VALIDATED;
 import static ca.firstvoices.utils.FVRegistrationConstants.LADMIN_APPROVED_GROUP_CHANGE;
 import static ca.firstvoices.utils.FVRegistrationConstants.SYSTEM_APPROVED_GROUP_CHANGE;
 import static ca.firstvoices.utils.FVRegistrationConstants.USER_NAME_ARG;
-
 import ca.firstvoices.services.FVMoveUserToDialectServiceImpl;
 import ca.firstvoices.utils.FVRegistrationUtilities;
 import org.apache.commons.logging.Log;
@@ -41,8 +40,8 @@ import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
  */
 public class FVRegistrationCompletionListener implements EventListener {
 
-  private static final Log log = LogFactory
-      .getLog(ca.firstvoices.listeners.FVRegistrationCompletionListener.class);
+  private static final Log log =
+      LogFactory.getLog(ca.firstvoices.listeners.FVRegistrationCompletionListener.class);
 
   // accepts documentRemoved && registrationValidated
 
@@ -69,7 +68,8 @@ public class FVRegistrationCompletionListener implements EventListener {
         dialect = docCtx.getSourceDocument();
 
         try {
-          util.placeNewUserInGroup(dialect, (String) docCtx.getProperty(GROUP_NAME_ARG),
+          util.placeNewUserInGroup(dialect,
+              (String) docCtx.getProperty(GROUP_NAME_ARG),
               (String) docCtx.getProperty(USER_NAME_ARG));
         } catch (Exception e) {
           log.error(e);
@@ -81,8 +81,10 @@ public class FVRegistrationCompletionListener implements EventListener {
         dialect = docCtx.getSourceDocument();
 
         try {
-          util.systemPlaceNewUserInGroup(dialect, (String) docCtx.getProperty(GROUP_NAME_ARG),
-              (String) docCtx.getProperty(USER_NAME_ARG), dialect.getCoreSession());
+          util.systemPlaceNewUserInGroup(dialect,
+              (String) docCtx.getProperty(GROUP_NAME_ARG),
+              (String) docCtx.getProperty(USER_NAME_ARG),
+              dialect.getCoreSession());
         } catch (Exception e) {
           log.error(e);
         }

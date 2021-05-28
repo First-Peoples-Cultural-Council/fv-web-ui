@@ -60,8 +60,8 @@ public class FVOperationCredentialsVerification {
     return GLOBAL_ADMINISTRATOR_OR_SYSTEM;
   }
 
-  public static boolean terminateOnInvalidCredentials_NewUserHomeChange(CoreSession session,
-      UserManager userManager, String username, String dialectGUID) {
+  public static boolean newUserHomeChange(
+      CoreSession session, UserManager userManager, String username, String dialectGUID) {
     try {
       NuxeoPrincipal invokingPrincipal = session.getPrincipal();
 
@@ -70,8 +70,10 @@ public class FVOperationCredentialsVerification {
       if (credentialsType != GLOBAL_ADMINISTRATOR_OR_SYSTEM) {
         // language admin can make changes to a user in their dialect
         if (credentialsType == LANGUAGE_ADMINISTRATOR) {
-          DocumentModelList registrations = FVRegistrationUtilities
-              .getRegistrations(session, username, dialectGUID);
+          DocumentModelList registrations = FVRegistrationUtilities.getRegistrations(
+              session,
+              username,
+              dialectGUID);
 
           // If registrations for this dialect found, allow moving user
           return registrations.size() <= 0;
@@ -86,8 +88,8 @@ public class FVOperationCredentialsVerification {
     return false; // continue executing command - valid credentials
   }
 
-  public static boolean terminateOnInvalidCredentials_UserUpdate(CoreSession session,
-      UserManager userManager, String username) {
+  public static boolean userUpdate(
+      CoreSession session, UserManager userManager, String username) {
     NuxeoPrincipal invokingPrincipal = session.getPrincipal();
 
     int credentialsType = isValidPrincipal(invokingPrincipal);
@@ -116,8 +118,8 @@ public class FVOperationCredentialsVerification {
     return false; // continue executing command - valid credentials
   }
 
-  public static boolean terminateOnInvalidCredentials_GroupUpdate(CoreSession session,
-      String groupName) {
+  public static boolean groupUpdate(
+      CoreSession session, String groupName) {
     NuxeoPrincipal invokingPrincipal = session.getPrincipal();
 
     int credentialsType = isValidPrincipal(invokingPrincipal);

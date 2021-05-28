@@ -43,7 +43,9 @@ import org.nuxeo.ecm.user.registration.UserRegistrationService;
 /**
  * Operation to invite a User.
  */
-@Operation(id = UserInvite.ID, category = Constants.CAT_USERS_GROUPS, label = "Invite a user",
+@Operation(id = UserInvite.ID,
+    category = Constants.CAT_USERS_GROUPS,
+    label = "Invite a user",
     description = "Stores a registration request and returns its ID.")
 public class UserInvite {
 
@@ -51,35 +53,27 @@ public class UserInvite {
 
   private static final Log log = LogFactory.getLog(UserInvite.class);
 
-  @Context
-  protected UserManager userManager;
+  @Context protected UserManager userManager;
 
-  @Context
-  protected UserRegistrationService registrationService;
+  @Context protected UserRegistrationService registrationService;
 
-  @Context
-  protected CoreSession session;
+  @Context protected CoreSession session;
 
-  @Context
-  protected AutomationService autoService;
+  @Context protected AutomationService autoService;
 
-  @Context
-  protected OperationContext ctx;
+  @Context protected OperationContext ctx;
 
-  @Param(name = "docInfo", required = false)
-  protected DocumentRegistrationInfo docInfo = null;
+  @Param(name = "docInfo", required = false) protected DocumentRegistrationInfo docInfo = null;
 
-  @Param(name = "validationMethod", required = false)
-  protected ValidationMethod validationMethod = ValidationMethod.EMAIL;
+  @Param(name = "validationMethod", required = false) protected ValidationMethod validationMethod =
+      ValidationMethod.EMAIL;
 
-  @Param(name = "autoAccept", required = false)
-  protected boolean autoAccept = false;
+  @Param(name = "autoAccept", required = false) protected boolean autoAccept = false;
 
-  @Param(name = "info", required = false)
-  protected Map<String, Serializable> info = new HashMap<>();
+  @Param(name = "info", required = false) protected Map<String, Serializable> info =
+      new HashMap<>();
 
-  @Param(name = "comment", required = false)
-  protected String comment;
+  @Param(name = "comment", required = false) protected String comment;
 
   @OperationMethod
   public String run(DocumentModel registrationRequest) throws Exception {
@@ -98,10 +92,12 @@ public class UserInvite {
 
     autoAccept = utilCommon.userInviteCondition(registrationRequest, session);
 
-    String registrationId = utilCommon
-        .registrationCommonFinish(registrationService, registrationRequest, info, comment,
-            validationMethod, autoAccept, session);
-
-    return registrationId;
+    return utilCommon.registrationCommonFinish(registrationService,
+        registrationRequest,
+        info,
+        comment,
+        validationMethod,
+        autoAccept,
+        session);
   }
 }

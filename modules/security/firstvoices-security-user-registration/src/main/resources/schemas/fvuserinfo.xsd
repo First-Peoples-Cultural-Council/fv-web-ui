@@ -1,36 +1,14 @@
 <?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fvuserinfo"
-	targetNamespace="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fvuserinfo">
+           targetNamespace="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fvuserinfo">
 
+  <xs:include schemaLocation="base.xsd"/>
 
-  	<xs:include schemaLocation="base.xsd" />
+  <xs:element name="preferences" type="xs:string"/>
 
-	<xs:element name="ageGroup" type="xs:string"/>
-
-	<xs:element name="role">
-		<xs:simpleType>
-			<xs:restriction base="xs:string">
-				<xs:enumeration value="languagerevitalizer"/>
-				<xs:enumeration value="teacher"/>
-				<xs:enumeration value="educator"/>
-				<xs:enumeration value="student"/>
-				<xs:enumeration value="learner-1"/>
-				<xs:enumeration value="learner-2"/>
-				<xs:enumeration value="other"/>
-			</xs:restriction>
-		</xs:simpleType>
-	</xs:element>
-
-	<xs:element name="preferences" type="xs:string"/>
-	<xs:element name="requestedSpace" type="xs:string"/>
-	<xs:element name="community_member" type="xs:boolean"/>
-	<xs:element name="language_team_member" type="xs:boolean"/>
-	<xs:element name="comment" type="xs:string"/>
-
-	<!-- Request properties -->
-	<xs:element name="ip" type="xs:string" />
-	<xs:element name="ua" type="xs:string" />
-	<xs:element name="referer" type="xs:string" />
+  <!-- Request properties -->
+  <xs:element name="ip" type="xs:string"/>
+  <xs:element name="ua" type="xs:string"/>
+  <xs:element name="referer" type="xs:string"/>
 
 </xs:schema>

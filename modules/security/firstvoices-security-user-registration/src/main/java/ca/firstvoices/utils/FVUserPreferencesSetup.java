@@ -70,8 +70,8 @@ public class FVUserPreferencesSetup {
    * @param registration
    * @throws Exception
    */
-  public DocumentModel updateUserPreferencesWithRegistration(DocumentModel existingUserObject,
-      DocumentModel registration) {
+  public DocumentModel updateUserPreferencesWithRegistration(
+      DocumentModel existingUserObject, DocumentModel registration) {
     String modifiedPreferencesString = createDefaultUserPreferencesWithRegistration(registration);
     existingUserObject.setPropertyValue("user:preferences", modifiedPreferencesString);
 

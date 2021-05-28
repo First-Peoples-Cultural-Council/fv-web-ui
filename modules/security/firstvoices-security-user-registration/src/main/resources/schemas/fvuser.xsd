@@ -1,36 +1,36 @@
 <?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fvuser"
-    targetNamespace="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fvuser">
+           xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fvuser"
+           targetNamespace="http://www.nuxeo.org/ecm/project/schemas/First-Voices/fvuser">
 
-  <xs:include schemaLocation="base.xsd" />
+  <xs:include schemaLocation="base.xsd"/>
 
-  <xs:element name="username" type="xs:string" />
-  <xs:element name="password" type="xs:string" />
-  <xs:element name="email" type="xs:string" />
-  <xs:element name="firstName" type="xs:string" />
-  <xs:element name="lastName" type="xs:string" />
-  <xs:element name="company" type="xs:string" />
+  <xs:element name="username" type="xs:string"/>
+  <xs:element name="password" type="xs:string"/>
+  <xs:element name="email" type="xs:string"/>
+  <xs:element name="firstName" type="xs:string"/>
+  <xs:element name="lastName" type="xs:string"/>
+  <xs:element name="company" type="xs:string"/>
 
   <!-- inverse reference -->
-  <xs:element name="groups" type="nxs:stringList" />
+  <xs:element name="groups" type="nxs:stringList"/>
 
-  <xs:element name="contributors" type="xs:string" />
-  <xs:element name="comments" type="xs:string" />
+  <xs:element name="contributors" type="xs:string"/>
+  <xs:element name="comments" type="xs:string"/>
 
   <!-- Additional properties -->
-  <xs:element name="yearBornRange" type="xs:string" />
-  <xs:element name="role" type="xs:string" />
+  <xs:element name="yearBornRange" type="xs:string"/>
+  <xs:element name="role" type="xs:string"/>
 
   <!-- Request properties -->
   <!-- These are captured during registration but could be supplemented in future logins -->
-  <xs:element name="ip" type="xs:string" />
-  <xs:element name="ua" type="xs:string" />
-  <xs:element name="referer" type="xs:string" />
-  <xs:element name="created" type="xs:date" />
+  <xs:element name="ip" type="xs:string"/>
+  <xs:element name="ua" type="xs:string"/>
+  <xs:element name="referer" type="xs:string"/>
+  <xs:element name="created" type="xs:date"/>
 
   <!-- To avoid creating additional tables, use strings for now (should store JSON) -->
-  <xs:element name="preferences" type="xs:string" />
+  <xs:element name="preferences" type="xs:string"/>
   <xs:element name="tenantId" type="xs:string"/>
   <xs:element name="languagePreference" type="xs:string"/>
 

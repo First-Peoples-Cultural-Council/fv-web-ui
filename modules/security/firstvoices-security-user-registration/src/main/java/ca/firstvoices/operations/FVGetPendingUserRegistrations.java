@@ -30,9 +30,10 @@ import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 
-@Operation(id = FVGetPendingUserRegistrations.ID, category = Constants.CAT_USERS_GROUPS, label =
-    "FVGetPendingUserRegistrations", description =
-    "Get registrations for specific dialect or "
+@Operation(id = FVGetPendingUserRegistrations.ID,
+    category = Constants.CAT_USERS_GROUPS,
+    label = "FVGetPendingUserRegistrations",
+    description = "Get registrations for specific dialect or "
         + "when input is ALL (*) for the system. \n prune action can be 'ignore', 'approved' or "
         + "'accepted'\n.")
 public class FVGetPendingUserRegistrations {
@@ -44,11 +45,9 @@ public class FVGetPendingUserRegistrations {
   // accepted means they created a password
   public static final String ACCEPTED = "accepted";
   private static final Log log = LogFactory.getLog(FVGetPendingUserRegistrations.class);
-  @Context
-  protected CoreSession session;
+  @Context protected CoreSession session;
 
-  @Param(name = "dialectID")
-  protected String dialectID;
+  @Param(name = "dialectID") protected String dialectID;
 
   @Param(name = "pruneAction", required = false, values = {APPROVED, ACCEPTED, IGNORE})
   protected String pruneAction;
@@ -62,16 +61,17 @@ public class FVGetPendingUserRegistrations {
 
       // If dialect id provided, filter based on dialect id
       if (!(dialectID.toLowerCase().equals("all") || dialectID.toLowerCase().equals("*"))) {
-        query = String
-            .format("Select * from Document where ecm:mixinType = 'UserRegistration' and %s = '%s'",
-                "docinfo:documentId", dialectID);
+        query = String.format(
+            "Select * from Document where ecm:mixinType = 'UserRegistration' and %s = '%s'",
+            "docinfo:documentId",
+            dialectID);
       }
 
       // If "approved" or "accepted" specified, filter based on state
       if (pruneAction.equals(APPROVED) || pruneAction.equals(ACCEPTED)) {
-        query = String
-            .format(query + "AND ecm:currentLifeCycleState = '%s' ORDER BY dc:created DESC",
-                pruneAction);
+        query = String.format(
+            query + "AND ecm:currentLifeCycleState = '%s' ORDER BY dc:created DESC",
+            pruneAction);
       }
 
       registrations = session.query(query);

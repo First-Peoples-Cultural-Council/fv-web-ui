@@ -28,23 +28,23 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CustomPreferencesObject {
 
-  @JsonProperty(value = "General", required = false)
-  private Map<String, Object> general = new HashMap<>();
+  @JsonProperty(value = "General", required = false) private Map<String, Object> general =
+      new HashMap<>();
 
-  @JsonProperty(value = "Navigation", required = false)
-  private Map<String, Object> navigation = new HashMap<>();
+  @JsonProperty(value = "Navigation", required = false) private Map<String, Object> navigation =
+      new HashMap<>();
 
-  @JsonProperty(value = "Theme", required = false)
-  private Map<String, Object> theme = new HashMap<>();
+  @JsonProperty(value = "Theme", required = false) private Map<String, Object> theme =
+      new HashMap<>();
 
-  @JsonProperty(value = "generalPreferences", required = false)
-  private Map<String, Object> generalPreferences = new HashMap<>();
+  @JsonProperty(value = "generalPreferences", required = false) private Map<String, Object>
+      generalPreferences = new HashMap<>();
 
-  @JsonProperty(value = "navigationPreferences", required = false)
-  private Map<String, Object> navigationPreferences = new HashMap<>();
+  @JsonProperty(value = "navigationPreferences", required = false) private Map<String, Object>
+      navigationPreferences = new HashMap<>();
 
-  @JsonProperty(value = "themePreferences", required = false)
-  private Map<String, Object> themePreferences = new HashMap<>();
+  @JsonProperty(value = "themePreferences", required = false) private Map<String, Object>
+      themePreferences = new HashMap<>();
 
   public Map<String, Object> getGeneralPreferences() {
     return general.isEmpty() ? generalPreferences : general;

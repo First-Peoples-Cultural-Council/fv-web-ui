@@ -21,7 +21,6 @@
 package ca.firstvoices.listeners;
 
 import static ca.firstvoices.utils.FVRegistrationConstants.CHECK_REGISTRATION_TIMEOUT_EVENT_NAME;
-
 import ca.firstvoices.workers.FVRegistrationTimeOutWorker;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

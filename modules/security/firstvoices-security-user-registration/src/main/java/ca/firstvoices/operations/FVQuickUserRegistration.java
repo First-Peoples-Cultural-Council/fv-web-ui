@@ -47,34 +47,31 @@ import org.nuxeo.ecm.user.invite.UserInvitationService.ValidationMethod;
 import org.nuxeo.ecm.user.registration.DocumentRegistrationInfo;
 import org.nuxeo.ecm.user.registration.UserRegistrationService;
 
-@Operation(id = FVQuickUserRegistration.ID, category = Constants.CAT_USERS_GROUPS, label = "Guest"
-    + " self registration", description = "Starts guest registration.")
+@Operation(id = FVQuickUserRegistration.ID,
+    category = Constants.CAT_USERS_GROUPS,
+    label = "Guest" + " self registration",
+    description = "Starts guest registration.")
 public class FVQuickUserRegistration {
 
   public static final String ID = "User.SelfRegistration";
 
   private static final Log log = LogFactory.getLog(FVQuickUserRegistration.class);
 
-  @Context
-  protected UserManager userManager;
+  @Context protected UserManager userManager;
 
-  @Context
-  protected UserRegistrationService registrationService;
+  @Context protected UserRegistrationService registrationService;
 
-  @Context
-  protected CoreSession session;
+  @Context protected CoreSession session;
 
-  @Context
-  protected OperationContext operationContext;
+  @Context protected OperationContext operationContext;
 
-  @Param(name = "docInfo", required = false)
-  protected DocumentRegistrationInfo docInfo = null;
+  @Param(name = "docInfo", required = false) protected DocumentRegistrationInfo docInfo = null;
 
-  @Param(name = "validationMethod", required = false)
-  protected ValidationMethod validationMethod = ValidationMethod.EMAIL;
+  @Param(name = "validationMethod", required = false) protected ValidationMethod validationMethod =
+      ValidationMethod.EMAIL;
 
-  @Param(name = "info", required = false)
-  protected Map<String, Serializable> info = new HashMap<>();
+  @Param(name = "info", required = false) protected Map<String, Serializable> info =
+      new HashMap<>();
 
   @OperationMethod
   public Object run(DocumentModel registrationRequest) throws Exception {
@@ -120,9 +117,13 @@ public class FVQuickUserRegistration {
 
       utilCommon.quickUserRegistrationCondition(registrationRequest, session);
 
-      String registrationId = utilCommon
-          .registrationCommonFinish(registrationService, registrationRequest, info, null,
-              validationMethod, true, session); // we always autoAccept quick registration
+      utilCommon.registrationCommonFinish(registrationService,
+          registrationRequest,
+          info,
+          null,
+          validationMethod,
+          true,
+          session); // we always autoAccept quick registration
     } catch (RestOperationException e) {
       // Pass validation errors back to UI
       if (e.getStatus() == 400) {

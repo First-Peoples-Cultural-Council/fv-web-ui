@@ -7,11 +7,11 @@
       <PatternLayout pattern="%d{ISO8601} %-5p [%t] [%c] %m%n" />
       <CronTriggeringPolicy schedule="0 0 0 * * ?" evaluateOnStartup="true" /> <!-- Rollover at midnight every day -->
       <DefaultRolloverStrategy />
-      <ThresholdFilter level="DEBUG" onMatch="ACCEPT" />
+      <ThresholdFilter level="INFO" onMatch="ACCEPT" />
     </RollingFile>
 
     <Console name="CONSOLE" target="SYSTEM_OUT">
-      <ThresholdFilter level="DEBUG" onMatch="ACCEPT" />
+      <ThresholdFilter level="INFO" onMatch="ACCEPT" />
       <PatternLayout pattern="%d{ISO8601} %-5p [%c{1}] %m%n" />
     </Console>
   </Appenders>
@@ -48,7 +48,7 @@
 
     <Logger name="org.elasticsearch.bootstrap" level="WARN" />
 
-    <Root level="DEBUG">
+    <Root level="INFO">
       <AppenderRef ref="CONSOLE" />
     </Root>
   </Loggers>

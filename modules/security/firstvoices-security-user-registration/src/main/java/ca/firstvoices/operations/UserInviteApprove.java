@@ -42,32 +42,27 @@ import org.nuxeo.ecm.user.registration.UserRegistrationService;
 /**
  * Operation to accept a user invitation.
  */
-@Operation(id = UserInviteApprove.ID, category = Constants.CAT_USERS_GROUPS, label = "Approve "
-    + "user invite", description = "Approves a request to join the system.")
+@Operation(id = UserInviteApprove.ID,
+    category = Constants.CAT_USERS_GROUPS,
+    label = "Approve " + "user invite",
+    description = "Approves a request to join the system.")
 public class UserInviteApprove {
 
   public static final String ID = "User.ApproveInvite";
 
-  @Context
-  protected UserManager userManager;
+  @Context protected UserManager userManager;
 
-  @Context
-  protected UserRegistrationService registrationService;
+  @Context protected UserRegistrationService registrationService;
 
-  @Param(name = "registrationId")
-  protected String registrationId;
+  @Param(name = "registrationId") protected String registrationId;
 
-  @Param(name = "group", required = false)
-  protected String group = "members";
+  @Param(name = "group", required = false) protected String group = "members";
 
-  @Param(name = "comment", required = false)
-  protected String comment;
+  @Param(name = "comment", required = false) protected String comment;
 
-  @Param(name = "appurl", required = false)
-  protected String appurl = null;
+  @Param(name = "appurl", required = false) protected String appurl = null;
 
-  @Context
-  protected CoreSession session;
+  @Context protected CoreSession session;
 
   @OperationMethod
   public void run() {
@@ -96,8 +91,10 @@ public class UserInviteApprove {
     // Set additional information for email
     Map<String, Serializable> additionalInfo = new HashMap<String, Serializable>();
 
-    additionalInfo.put("enterPasswordUrl",
-        appurl + registrationService.getConfiguration(UserRegistrationService.CONFIGURATION_NAME)
+    additionalInfo.put(
+        "enterPasswordUrl",
+        appurl + registrationService
+            .getConfiguration(UserRegistrationService.CONFIGURATION_NAME)
             .getEnterPasswordUrl());
 
     // Determine the document url to add it into the email

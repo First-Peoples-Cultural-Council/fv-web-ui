@@ -66,8 +66,9 @@ public class CreatePasswordResetLinkUnrestricted extends UnrestrictedSessionRunn
       errorMessage = "label.askResetPassForm.registrationnotfound";
       return;
     }
-    String key = StringHashGenerator
-        .hashStrings(email, Long.toString(Calendar.getInstance().getTimeInMillis()));
+    String key = StringHashGenerator.hashStrings(
+        email,
+        Long.toString(Calendar.getInstance().getTimeInMillis()));
     passwordResetLink =
         Framework.getProperty("nuxeo.url") + "/site/resetPassword/enterNewPassword/" + key;
     try (Session session = Framework.getService(DirectoryService.class).open("resetPasswordKeys")) {

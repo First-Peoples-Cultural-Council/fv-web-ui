@@ -24,7 +24,6 @@ import static ca.firstvoices.utils.FVRegistrationConstants.LOGIN_AND_EMAIL_EXIST
 import static ca.firstvoices.utils.FVRegistrationConstants.LOGIN_EXISTS_ERROR;
 import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_CAN_PROCEED;
 import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_EXISTS_ERROR;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.core.Constants;
@@ -39,17 +38,10 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
 import org.nuxeo.runtime.api.Framework;
 
-/*
-    public static final int REGISTRATION_CAN_PROCEED       = 0;
-    public static final int EMAIL_EXISTS_ERROR             = 1;
-    public static final int LOGIN_EXISTS_ERROR             = 2;
-    public static final int LOGIN_AND_EMAIL_EXIST_ERROR    = 3;
-    public static final int REGISTRATION_EXISTS_ERROR      = 4;
-
-*/
-@Operation(id = FVValidateRegistrationAttempt.ID, category = Constants.CAT_USERS_GROUPS, label =
-    "FVValidateRegistrationAttempt", description =
-    "Validate new user registration attempt. "
+@Operation(id = FVValidateRegistrationAttempt.ID,
+    category = Constants.CAT_USERS_GROUPS,
+    label = "FVValidateRegistrationAttempt",
+    description = "Validate new user registration attempt. "
         + "Input: Login and Email of the new user. Return error code (email exists, login exist, "
         + "registration can be accepted)")
 public class FVValidateRegistrationAttempt {
@@ -58,14 +50,11 @@ public class FVValidateRegistrationAttempt {
 
   private static final Log log = LogFactory.getLog(FVValidateRegistrationAttempt.class);
 
-  @Param(name = "Login:")
-  protected String login;
+  @Param(name = "Login:") protected String login;
 
-  @Param(name = "email:", required = false)
-  protected String email = null;
+  @Param(name = "email:", required = false) protected String email = null;
 
-  @Context
-  protected CoreSession session;
+  @Context protected CoreSession session;
 
   @OperationMethod
   public int run() {
@@ -92,12 +81,16 @@ public class FVValidateRegistrationAttempt {
             querryStr = String.format(
                 "Select * from Document where ecm:mixinType = 'UserRegistration' AND "
                     + "ecm:currentLifeCycleState = 'approved' AND ( %s = '%s' OR %s = '%s')",
-                "userinfo:login", login, "userinfo:email", email);
+                "userinfo:login",
+                login,
+                "userinfo:email",
+                email);
           }
         } else {
           querryStr = String.format(
               "Select * from Document where ecm:mixinType = 'UserRegistration' AND "
-                  + "ecm:currentLifeCycleState = 'approved' AND  %s = '%s' ", "userinfo:login",
+                  + "ecm:currentLifeCycleState = 'approved' AND  %s = '%s' ",
+              "userinfo:login",
               login);
         }
 

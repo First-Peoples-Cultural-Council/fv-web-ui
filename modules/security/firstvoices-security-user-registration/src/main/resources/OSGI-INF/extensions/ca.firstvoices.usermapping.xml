@@ -1,27 +1,24 @@
 <component name="ca.firstvoices.security.usermapper.contrib">
-	<extension target="org.nuxeo.usermapper.service.UserMapperComponent" point="mapper">
-	
-	  <mapper name="fv" type="js">
-	    <mapperScript>
-            searchAttributes.put("username", userObject.username);
-	        userAttributes.put("username", userObject.username);
-	        userAttributes.put("email", userObject.email);
-	        userAttributes.put("firstName", userObject.firstName);
-	        userAttributes.put("lastName", userObject.lastName);
-	        userAttributes.put("comments", userObject.comments);
-			userAttributes.put("preferences", userObject.preferences);
-			userAttributes.put("yearBornRange", userObject.comments);
-			userAttributes.put("role", userObject.comments);
-			userAttributes.put("ip", userObject.comments);
-			userAttributes.put("ua", userObject.comments);
-			userAttributes.put("referer", userObject.comments);
-			userAttributes.put("created", userObject.comments);
-	        userAttributes.put("contributors", userObject.contributors);
-			userAttributes.put("preferences", userObject.preferences);
-			userAttributes.put("ageGroup", userObject.ageGroup);
-	    </mapperScript>
-	  </mapper>
-	
-	</extension>
-	
+  <extension target="org.nuxeo.usermapper.service.UserMapperComponent" point="mapper">
+
+    <mapper name="fv" type="js">
+      <mapperScript>
+        searchAttributes.put("username", userObject.username);
+        userAttributes.put("username", userObject.username);
+        userAttributes.put("email", userObject.email);
+        userAttributes.put("firstName", userObject.firstName);
+        userAttributes.put("lastName", userObject.lastName);
+        userAttributes.put("preferences", userObject.preferences);
+        userAttributes.put("yearBornRange", userObject.comments);
+        userAttributes.put("ip", userObject.comments);
+        userAttributes.put("ua", userObject.comments);
+        userAttributes.put("referer", userObject.comments);
+        userAttributes.put("created", userObject.comments);
+        userAttributes.put("contributors", userObject.contributors);
+        userAttributes.put("preferences", userObject.preferences);
+      </mapperScript>
+    </mapper>
+
+  </extension>
+
 </component>

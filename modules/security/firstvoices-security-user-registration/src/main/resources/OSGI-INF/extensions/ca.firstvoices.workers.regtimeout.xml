@@ -2,14 +2,14 @@
 
 <component name="ca.firstvoices.uregistration.workers.contrib">
 
-    <extension target="org.nuxeo.ecm.core.work.service" point="queues">
-        <queue id="FVRegistrationTimeOutWorker">
-            <name>Queue for checking timeout registration requests.</name>>
-            <maxThreads>1</maxThreads>
-            <capacity>200</capacity>
-            <clearCompletedAfterSeconds>20</clearCompletedAfterSeconds>
-            <category>default</category>
-        </queue>
-    </extension>
+  <extension target="org.nuxeo.ecm.core.work.service" point="queues">
+    <queue id="FVRegistrationTimeOutWorker">
+      <name>Queue for checking timeout registration requests.</name>>
+      <maxThreads>1</maxThreads>
+      <capacity>200</capacity>
+      <clearCompletedAfterSeconds>20</clearCompletedAfterSeconds>
+      <category>default</category>
+    </queue>
+  </extension>
 
 </component>

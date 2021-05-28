@@ -1,136 +1,120 @@
-<!--<component name="ca.firstvoices.schemas.uregistration.contrib">-->
 <component name="org.nuxeo.ecm.user.registration.core.types.contrib.override">
-	<require>org.nuxeo.ecm.user.registration.core.types.contrib</require>
+  <require>org.nuxeo.ecm.user.registration.core.types.contrib</require>
 
-  	<require>org.nuxeo.ecm.user.registration.lifecycle.contrib</require>
-  	<require>org.nuxeo.ecm.user.registration.core.types.contrib</require>
-	<require>org.nuxeo.ecm.user.invite.core.service.contrib</require>
-	<require>org.nuxeo.ecm.user.invite.core.types.contrib</require>
-	<require>org.nuxeo.ecm.user.registration.core.service.contrib</require>
+  <require>org.nuxeo.ecm.user.registration.lifecycle.contrib</require>
+  <require>org.nuxeo.ecm.user.registration.core.types.contrib</require>
+  <require>org.nuxeo.ecm.user.invite.core.service.contrib</require>
+  <require>org.nuxeo.ecm.user.invite.core.types.contrib</require>
+  <require>org.nuxeo.ecm.user.registration.core.service.contrib</require>
 
-	<extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
-		<schema name="user" override="true" src="schemas/fvuser.xsd" />
-		<schema name="fvuserinfo" src="schemas/fvuserinfo.xsd" prefix="fvuserinfo" />
-		<schema name="FVSiteJoinRequest" src="schemas/fvsitejoinrequest.xsd" prefix="fvjoinrequest" />
-	</extension>
+  <extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
+    <schema name="user" override="true" src="schemas/fvuser.xsd"/>
+    <schema name="fvuserinfo" src="schemas/fvuserinfo.xsd" prefix="fvuserinfo"/>
+    <schema name="FVSiteJoinRequest" src="schemas/fvsitejoinrequest.xsd" prefix="fvjoinrequest"/>
+  </extension>
 
-	<extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
+  <extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
 
-		<doctype name="FVSiteJoinRequest">
-			<schema name="FVSiteJoinRequest"/>
-			<facet>HiddenInNavigation</facet>
-		</doctype>
+    <doctype name="FVSiteJoinRequest">
+      <schema name="FVSiteJoinRequest"/>
+      <facet>HiddenInNavigation</facet>
+    </doctype>
 
-	   <!-- <doctype name="FVUser" extends="Picture">
-	     <schema name="userinfo"/>
-	     <schema name="fvuser"/>
-	   </doctype> -->
+    <doctype name="FVUserRegistration" extends="UserRegistration">
+      <schema name="fvuserinfo"/>
+      <facet>Versionable</facet>
+      <facet>HiddenInNavigation</facet>
+      <facet>Publishable</facet>
+      <facet>Commentable</facet>
+      <facet>HasRelatedText</facet>
+      <facet>UserRegistration</facet>
+    </doctype>
 
-	   <doctype name="FVUserRegistration" extends="UserRegistration">
-	     <schema name="fvuserinfo"/>
-	     <facet>Versionable</facet>
-	     <facet>HiddenInNavigation</facet>
-	     <facet>Publishable</facet>
-	     <facet>Commentable</facet>
-	     <facet>HasRelatedText</facet>
-	     <facet>UserRegistration</facet>
-	   </doctype>
+    <doctype name="FVUserRegistrationContainer" extends="UserRegistrationContainer">
+      <facet name="HiddenInNavigation"/>
+    </doctype>
 
-		<doctype name="FVUserRegistrationContainer" extends="UserRegistrationContainer">
-			<facet name="HiddenInNavigation"/>
-		</doctype>
+  </extension>
 
-	</extension>
+  <extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService" point="types">
+    <types>
+      <type name="FVUserRegistration">registrationRequest</type>
+      <type name="FVUserRegistrationContainer">default</type>
+    </types>
+  </extension>
 
-	<extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService" point="types">
-	    <types>
-	      <type name="FVUserRegistration">registrationRequest</type>
-		  <type name="FVUserRegistrationContainer">default</type>
-		</types>
-	</extension>
+  <extension target="org.nuxeo.ecm.user.registration.UserRegistrationService"
+             point="configuration">
+    <configuration merge="true">
+      <requestDocType>FVUserRegistration</requestDocType>
+      <container>
+        <docType>FVUserRegistrationContainer</docType>
+        <parentPath>/management/</parentPath>
+        <name>FVRegistrationRequests</name>
+        <title>FV UserRegistration Requests Container</title>
+      </container>
+      <userInfo>
+        <schemaName>userinfo</schemaName>
+        <usernameField>userinfo:login</usernameField>
+        <emailField>userinfo:email</emailField>
+        <firstnameField>userinfo:firstName</firstnameField>
+        <lastnameField>userinfo:lastName</lastnameField>
+        <groupsField>userinfo:groups</groupsField>
+        <companyField>userinfo:company</companyField>
+      </userInfo>
+      <fvuserInfo>
+        <schemaName>fvuserinfo</schemaName>
+        <preferencesField>fvuserinfo:preferences</preferencesField>
+      </fvuserInfo>
+      >
+      <validationEmail>
+        <title>You are invited to access FirstVoices</title>
+        <template>skin/views/FVGeneralEmailInviteDocTemplate.ftl</template>
+      </validationEmail>
+      <reviveEmail>
+        <title>You are invited to access FirstVoices</title>
+        <template>skin/views/FVReviveEmailInviteDocTemplate.ftl</template>
+      </reviveEmail>
+      <enterPasswordUrl>site/fv/users/enterpassword/</enterPasswordUrl>
+      <validationRelUrl>site/fv/users/validate</validationRelUrl>
+    </configuration>
 
-        <extension target="org.nuxeo.ecm.user.registration.UserRegistrationService"
-	    point="configuration">
-	    <configuration merge="true">
-	        <requestDocType>FVUserRegistration</requestDocType>
-			<container>
-				<docType>FVUserRegistrationContainer</docType>
-				<parentPath>/management/</parentPath>
-				<name>FVRegistrationRequests</name>
-				<title>FV UserRegistration Requests Container</title>
-			</container>
-	        <userInfo>
-	          	<schemaName>userinfo</schemaName>
-				<usernameField>userinfo:login</usernameField>
-				<emailField>userinfo:email</emailField>
-				<firstnameField>userinfo:firstName</firstnameField>
-				<lastnameField>userinfo:lastName</lastnameField>
-				<groupsField>userinfo:groups</groupsField>
-				<companyField>userinfo:company</companyField>
-			</userInfo>
-			<fvuserInfo>
-				<schemaName>fvuserinfo</schemaName>
-				<ageGroupField>fvuserinfo:ageGroup</ageGroupField>
-				<preferencesField>fvuserinfo:preferences</preferencesField>
-				<commentField>fvuserinfo:comment</commentField>
-				<roleField>fvuserinfo:role</roleField>
-			</fvuserInfo>>
-			<validationEmail>
-				<title>You are invited to access FirstVoices</title>
-				<template>skin/views/FVGeneralEmailInviteDocTemplate.ftl</template>
-			</validationEmail>
-			<reviveEmail>
-			  <title>You are invited to access FirstVoices</title>
-			  <template>skin/views/FVReviveEmailInviteDocTemplate.ftl</template>
-			</reviveEmail>
-			<enterPasswordUrl>site/fv/users/enterpassword/</enterPasswordUrl>
-			<validationRelUrl>site/fv/users/validate</validationRelUrl>
-	    </configuration>
+  </extension>
 
-		<!-- this is a new configuration for other emails -->
-		<!--<configuration name="admin">-->
-			<!--<test>test</test>-->
-			<!--<validationEmail>-->
-				<!--<title>123</title>-->
-				<!--<template>skin/views/Test.ftl</template>-->
-			<!--</validationEmail>-->
-		<!--</configuration>-->
-	</extension>
+  <!--
+    This extension is to override the default email received from the system
+    when a new user is invite to join FirstVoices via the Admin section.
+  -->
+  <extension target="org.nuxeo.ecm.user.invite.UserInvitationService"
+             point="configuration">
 
-	<!--
-		This extension is to override the default email received from the system
-		when a new user is invite to join FirstVoices via the Admin section.
-	-->
-	<extension target="org.nuxeo.ecm.user.invite.UserInvitationService"
-			   point="configuration">
+    <configuration merge="true">
+      <requestDocType>UserInvitation</requestDocType>
+      <container>
+        <docType>UserInvitationContainer</docType>
+        <parentPath>/management/</parentPath>
+        <name>invitationRequests</name>
+        <title>Invitation Requests Container</title>
+      </container>
+      <validationEmail>
+        <title>Hi ${userinfo.firstName} ${userinfo.lastName}! You are invited to access FirstVoices</title>
+        <template>skin/views/FVGeneralEmailInviteDocTemplate.ftl</template>
+      </validationEmail>
+      <reviveEmail>
+        <title>Hi ${userinfo.firstName} ${userinfo.lastName}! You are invited to access FirstVoices</title>
+        <template>skin/views/FVReviveEmailInviteDocTemplate.ftl</template>
+      </reviveEmail>
+      <enterPasswordUrl>site/fv/users/enterpassword/</enterPasswordUrl>
+      <validationRelUrl>site/fv/users/validate</validationRelUrl>
+    </configuration>
+  </extension>
 
-		<configuration merge="true">
-			<requestDocType>UserInvitation</requestDocType>
-			<container>
-				<docType>UserInvitationContainer</docType>
-				<parentPath>/management/</parentPath>
-				<name>invitationRequests</name>
-				<title>Invitation Requests Container</title>
-			</container>
-			<validationEmail>
-				<title>Hi ${userinfo.firstName} ${userinfo.lastName}! You are invited to access FirstVoices</title>
-				<template>skin/views/FVGeneralEmailInviteDocTemplate.ftl</template>
-			</validationEmail>
-			<reviveEmail>
-				<title>Hi ${userinfo.firstName} ${userinfo.lastName}! You are invited to access FirstVoices</title>
-				<template>skin/views/FVReviveEmailInviteDocTemplate.ftl</template>
-			</reviveEmail>
-			<enterPasswordUrl>site/fv/users/enterpassword/</enterPasswordUrl>
-			<validationRelUrl>site/fv/users/validate</validationRelUrl>
-		</configuration>
-	</extension>
-
-	<extension
-			target="org.nuxeo.ecm.platform.ui.web.auth.service.PluggableAuthenticationService"
-			point="openUrl">
-		<openUrl name="FVRegisterUser_enterpassword">
-			<grantPattern>${org.nuxeo.ecm.contextPath}/site/fv/users/enterpassword/.*</grantPattern>
-		</openUrl>
-	</extension>
+  <extension
+      target="org.nuxeo.ecm.platform.ui.web.auth.service.PluggableAuthenticationService"
+      point="openUrl">
+    <openUrl name="FVRegisterUser_enterpassword">
+      <grantPattern>${org.nuxeo.ecm.contextPath}/site/fv/users/enterpassword/.*</grantPattern>
+    </openUrl>
+  </extension>
 
 </component>

@@ -43,29 +43,25 @@ import org.nuxeo.ecm.user.registration.UserRegistrationService;
 /**
  * Operation to accept a user invitation.
  */
-@Operation(id = UserInviteReject.ID, category = Constants.CAT_USERS_GROUPS, label = "Rejects "
-    + "user invite", description = "Rejects a request to join the system.")
+@Operation(id = UserInviteReject.ID,
+    category = Constants.CAT_USERS_GROUPS,
+    label = "Rejects " + "user invite",
+    description = "Rejects a request to join the system.")
 public class UserInviteReject {
 
   public static final String ID = "User.UserInviteReject";
 
-  @Context
-  protected UserManager userManager;
+  @Context protected UserManager userManager;
 
-  @Context
-  protected UserRegistrationService registrationService;
+  @Context protected UserRegistrationService registrationService;
 
-  @Param(name = "group", required = false)
-  protected String group = "members";
+  @Param(name = "group", required = false) protected String group = "members";
 
-  @Param(name = "comment", required = false)
-  protected String comment;
+  @Param(name = "comment", required = false) protected String comment;
 
-  @Param(name = "appurl", required = false)
-  protected String appurl = null;
+  @Param(name = "appurl", required = false) protected String appurl = null;
 
-  @Context
-  protected CoreSession session;
+  @Context protected CoreSession session;
 
   @OperationMethod
   public void run(String registrationId) {
@@ -95,8 +91,10 @@ public class UserInviteReject {
     // Set additional information for email
     Map<String, Serializable> additionalInfo = new HashMap<>();
 
-    additionalInfo.put("enterPasswordUrl",
-        appurl + registrationService.getConfiguration(UserRegistrationService.CONFIGURATION_NAME)
+    additionalInfo.put(
+        "enterPasswordUrl",
+        appurl + registrationService
+            .getConfiguration(UserRegistrationService.CONFIGURATION_NAME)
             .getEnterPasswordUrl());
 
     // Determine the document url to add it into the email
