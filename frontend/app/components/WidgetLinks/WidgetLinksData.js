@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 
 import useRegistrations from 'dataSources/useRegistrations'
+import { URL_QUERY_PLACEHOLDER } from 'common/Constants'
 /**
  * @summary WidgetLinksData
  * @version 1.0.1
@@ -40,6 +41,10 @@ function WidgetLinksData({ children }) {
         text: 'Immersion Portal',
         transKey: 'views.pages.explore.dialect.immersion',
         transform: 'words',
+      },
+      {
+        url: `/dashboard/membership?task=${URL_QUERY_PLACEHOLDER}&page=1&pageSize=10&sortBy=date&sortOrder=desc`,
+        text: 'Membership Requests',
       },
     ]
     if (id) {
