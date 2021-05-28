@@ -62,6 +62,7 @@ const PageContent = React.lazy(() => import('components/PageContent'))
 const PagePlay = React.lazy(() => import('components/Games'))
 const PageSearch = React.lazy(() => import('components/SearchDictionary/SearchDictionaryContainer'))
 const PageUserTasks = React.lazy(() => import('components/UserTasks'))
+const Join = React.lazy(() => import('components/Join/JoinContainer'))
 const Register = React.lazy(() => import('components/Register/RegisterContainer'))
 const PageUsersForgotPassword = React.lazy(() => import('components/Users/forgotpassword'))
 
@@ -128,6 +129,9 @@ const DashboardContainer = React.lazy(() => import('components/Dashboard/Dashboa
 const DashboardDetailTasksContainer = React.lazy(() =>
   import('components/DashboardDetailTasks/DashboardDetailTasksContainer')
 )
+const DashboardDetailMembership = React.lazy(() =>
+  import('components/DashboardDetailMembership/DashboardDetailMembershipContainer')
+)
 
 // MENTOR-APPRENTICE PHOTO PROJECT
 // ----------------------
@@ -165,6 +169,7 @@ export {
   PagePlay,
   PageSearch,
   PageUserTasks,
+  Join,
   Register,
   PageUsersForgotPassword,
   PageDialectImmersionList,
@@ -222,4 +227,5 @@ export {
   // DASHBOARD
   DashboardContainer,
   DashboardDetailTasksContainer,
+  DashboardDetailMembership,
 }

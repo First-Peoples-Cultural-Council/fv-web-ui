@@ -444,6 +444,11 @@ const routes = [
     breadcrumbs: false,
   },
   {
+    path: ['join'],
+    title: intl.translate({ key: 'join', default: 'Join', case: 'first' }),
+    page: <Pages.Join />,
+  },
+  {
     path: ['register'],
     title: intl.translate({ key: 'register', default: 'Register', case: 'first' }),
     page: <Pages.Register />,
@@ -2465,6 +2470,14 @@ const routes = [
     path: ['dashboard', 'tasks'],
     title: intl.translate({ key: 'dashboard', default: 'Dashboard', case: 'first' }),
     page: <Pages.DashboardDetailTasksContainer />,
+    breadcrumbs: false,
+  },
+  {
+    siteTheme: WORKSPACES,
+    id: 'dashboard',
+    path: ['dashboard', 'membership'],
+    title: intl.translate({ key: 'dashboard', default: 'Dashboard', case: 'first' }),
+    page: <Pages.DashboardDetailMembership />,
     breadcrumbs: false,
   },
   // Mentor-Apprentice Photo Project
