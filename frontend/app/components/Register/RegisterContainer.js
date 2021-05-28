@@ -15,18 +15,7 @@ import PromiseWrapper from 'components/PromiseWrapper'
 function RegisterContainer() {
   return (
     <RegisterData>
-      {({
-        computeEntities,
-        fvUserFields,
-        fvUserOptions,
-        formRef,
-        formValue,
-        isLoggedIn,
-        onRequestSaveForm,
-        requestedSiteTitle,
-        requestedSite,
-        serverResponse,
-      }) => {
+      {({ computeEntities, fvUserFields, fvUserOptions, formRef, formValue, onRequestSaveForm, serverResponse }) => {
         return (
           <PromiseWrapper renderOnError computeEntities={computeEntities}>
             <RegisterPresentation
@@ -34,10 +23,7 @@ function RegisterContainer() {
               fvUserOptions={fvUserOptions}
               formRef={formRef}
               formValue={formValue}
-              isLoggedIn={isLoggedIn}
               onRequestSaveForm={onRequestSaveForm}
-              requestedSiteTitle={requestedSiteTitle}
-              requestedSite={requestedSite}
               serverResponse={serverResponse}
             />
           </PromiseWrapper>

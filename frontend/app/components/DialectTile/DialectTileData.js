@@ -51,7 +51,11 @@ function DialectTileData({ children, dialectGroups, dialectId, href, isWorkspace
 
   const handleDialogOk = () => {
     setIsDialogOpen(false)
-    window.location.href = `/register?requestedSite=${dialectId}`
+    if (isLoggedIn) {
+      window.location.href = `/join?requestedSite=${dialectId}`
+    } else {
+      window.location.href = '/register'
+    }
   }
 
   return children({

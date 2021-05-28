@@ -14,17 +14,7 @@ import Link from 'components/Link'
  *
  * @returns {node} jsx markup
  */
-function RegisterPresentation({
-  fvUserFields,
-  fvUserOptions,
-  formRef,
-  formValue,
-  isLoggedIn,
-  onRequestSaveForm,
-  requestedSiteTitle,
-  requestedSite,
-  serverResponse,
-}) {
+function RegisterPresentation({ fvUserFields, fvUserOptions, formRef, formValue, onRequestSaveForm, serverResponse }) {
   // Show success message
   let serverErrorMessage = ''
   if (serverResponse) {
@@ -61,42 +51,19 @@ function RegisterPresentation({
     }
   }
 
-  const heading = isLoggedIn ? (
-    <div style={{ padding: '0.5em', textAlign: 'center' }}>
-      <h1>
-        Request to join
-        {` ${requestedSiteTitle}`}
-      </h1>
-      <p>
-        Please include your reason for requesting to join this community site, and any information that supports that
-        request in the comment field below.
-      </p>
-    </div>
-  ) : (
-    <div style={{ padding: '0.5em', textAlign: 'center' }}>
-      <h1>
-        <FVLabel transKey="register" defaultStr="Register" transform="first" />
-        {requestedSite ? (
-          <div style={{ marginTop: '10px' }}>
-            <small>and request to join {requestedSiteTitle}</small>
-          </div>
-        ) : null}
-      </h1>
-      <h2>{requestedSite ? null : 'Are you a member of a language community?'}</h2>
-      <p>
-        Most language content is available <Link href="/explore/FV/sections/Data">here</Link> for everyone to access
-        without registration. If you are a member of
-        {requestedSite
-          ? ` the ${requestedSiteTitle} language community`
-          : ' a language community that is represented on FirstVoices'}
-        , please register in order to access any content intended solely for members of your community.
-      </p>
-    </div>
-  )
-
   return (
     <div className="row" style={{ maxWidth: '968px', margin: '0 auto' }}>
-      {heading}
+      <div style={{ padding: '0.5em', textAlign: 'center' }}>
+        <h1>
+          <FVLabel transKey="register" defaultStr="Register" transform="first" />
+        </h1>
+        <h2>Are you a member of a language community?</h2>
+        <p>
+          Most language content is available <Link href="/explore/FV/sections/Data">here</Link> for everyone to access
+          without registration. If you are a member of a language community that is represented on FirstVoices, please
+          register in order to access any content intended solely for members of your community.
+        </p>
+      </div>
       <form onSubmit={(event) => onRequestSaveForm(event)}>
         <t.form.Form ref={formRef} type={t.struct(fvUserFields)} value={formValue} options={fvUserOptions} />
         {serverErrorMessage}
@@ -113,7 +80,7 @@ function RegisterPresentation({
   )
 }
 // PROPTYPES
-const { bool, func, object, string } = PropTypes
+const { bool, func, object } = PropTypes
 RegisterPresentation.propTypes = {
   fvUserFields: object.isRequired,
   fvUserOptions: object.isRequired,
@@ -121,8 +88,6 @@ RegisterPresentation.propTypes = {
   formValue: object,
   isLoggedIn: bool,
   onRequestSaveForm: func.isRequired,
-  requestedSiteTitle: string,
-  requestedSite: bool,
   serverResponse: object,
 }
 

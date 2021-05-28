@@ -2,9 +2,7 @@ import { useRef, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
-import usePortal from 'dataSources/usePortal'
 import useIntl from 'dataSources/useIntl'
-import useLogin from 'dataSources/useLogin'
 import useUser from 'dataSources/useUser'
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
@@ -19,34 +17,16 @@ import ProviderHelpers from 'common/ProviderHelpers'
  *
  */
 function RegisterData({ children }) {
-  const { fetchPortals, computePortals } = usePortal()
   const { intl } = useIntl()
-  const { computeLogin } = useLogin()
-  const { selfregisterUser, computeUserSelfregister, requestMembership } = useUser()
-
-  const isLoggedIn = computeLogin.success && computeLogin.isConnected
+  const { selfregisterUser, computeUserSelfregister } = useUser()
 
   const formRef = useRef()
   const [formValue, setFormValue] = useState(null)
   const [userRequest, setUserRequest] = useState(null)
   const [serverResponse, setServerResponse] = useState(null)
-  const [requestedSiteTitle, setRequestedSiteTitle] = useState('')
 
-  const requestedSite = new URLSearchParams(window.location.search).get('requestedSite')
-    ? new URLSearchParams(window.location.search).get('requestedSite')
-    : null
-
-  useEffect(() => {
-    if (requestedSite) {
-      fetchPortals({ area: 'sections' })
-      setFormValue({ 'fvuserinfo:requestedSpace': requestedSite })
-    }
-  }, [requestedSite])
-
-  const fvUserFields = isLoggedIn ? selectn('FVUserJoin', fields) : selectn('FVUser', fields)
-  const fvUserOptions = requestedSite
-    ? Object.assign({}, selectn('FVUserPreselected', options))
-    : Object.assign({}, selectn('FVUserRegistration', options))
+  const fvUserFields = selectn('FVRegistration', fields)
+  const fvUserOptions = Object.assign({}, selectn('FVRegistration', options))
 
   const registrationResponse = ProviderHelpers.getEntry(computeUserSelfregister, userRequest)
 
@@ -60,14 +40,7 @@ function RegisterData({ children }) {
         })
       }
     }
-    if (selectn('success', computePortals)) {
-      const response = selectn('response', computePortals)
-      const portal = response.find((obj) => {
-        return obj.uid === requestedSite
-      })
-      setRequestedSiteTitle(portal.title)
-    }
-  }, [registrationResponse, computePortals])
+  }, [registrationResponse])
 
   const onRequestSaveForm = (event) => {
     // Prevent default behaviour
@@ -84,29 +57,19 @@ function RegisterData({ children }) {
 
     setFormValue(properties)
     if (currentFormValue) {
-      if (isLoggedIn) {
-        requestMembership({
-          siteId: selectn('fvuserinfo:requestedSpace', properties),
-          interestReason: selectn('fvuserinfo:role', properties),
-          communityMember: selectn('fvuserinfo:community_member', properties) || false,
-          languageTeam: selectn('fvuserinfo:language_team_member', properties) || false,
-          comment: selectn('fvuserinfo:comment', properties),
-        })
-      } else {
-        const currentUserRequest = {
-          'entity-type': 'document',
-          type: 'FVUserRegistration',
-          id: selectn('userinfo:email', properties),
-          properties: properties,
-        }
-        selfregisterUser(
-          currentUserRequest,
-          null,
-          null,
-          intl.trans('views.pages.users.register.user_request_success', 'User request submitted successfully!')
-        )
-        setUserRequest(currentUserRequest)
+      const currentUserRequest = {
+        'entity-type': 'document',
+        type: 'FVUserRegistration',
+        id: selectn('userinfo:email', properties),
+        properties: properties,
       }
+      selfregisterUser(
+        currentUserRequest,
+        null,
+        null,
+        intl.trans('views.pages.users.register.user_request_success', 'User request submitted successfully!')
+      )
+      setUserRequest(currentUserRequest)
     } else {
       window.scrollTo(0, 0)
     }
@@ -125,10 +88,7 @@ function RegisterData({ children }) {
     fvUserOptions,
     formRef,
     formValue,
-    isLoggedIn,
     onRequestSaveForm,
-    requestedSiteTitle,
-    requestedSite: requestedSite ? true : false,
     serverResponse,
   })
 }

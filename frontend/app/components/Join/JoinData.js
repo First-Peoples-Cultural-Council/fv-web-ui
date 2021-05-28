@@ -43,8 +43,8 @@ function JoinData({ children }) {
     }
   }, [requestedSite])
 
-  const fvUserFields = selectn('FVUserJoin', fields)
-  const fvUserOptions = Object.assign({}, selectn('FVUserPreselected', options))
+  const fvUserFields = selectn('FVJoin', fields)
+  const fvUserOptions = Object.assign({}, selectn('FVJoin', options))
 
   const registrationResponse = ProviderHelpers.getEntry(computeUserSelfregister, userRequest)
 
@@ -84,11 +84,11 @@ function JoinData({ children }) {
     if (currentFormValue) {
       if (isLoggedIn) {
         requestMembership({
-          siteId: selectn('fvuserinfo:requestedSpace', properties),
-          interestReason: selectn('fvuserinfo:role', properties),
-          communityMember: selectn('fvuserinfo:community_member', properties) || false,
-          languageTeam: selectn('fvuserinfo:language_team_member', properties) || false,
-          comment: selectn('fvuserinfo:comment', properties),
+          siteId: selectn('siteId', properties),
+          interestReason: selectn('interestReason', properties),
+          communityMember: selectn('communityMember', properties) || false,
+          languageTeam: selectn('languageTeam', properties) || false,
+          comment: selectn('comment', properties),
         })
       } else {
         const currentUserRequest = {
