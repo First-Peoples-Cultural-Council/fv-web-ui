@@ -15,7 +15,7 @@ function useUser() {
     computeJoinRequests: useSelector((state) => state.fvUser.computeJoinRequests),
     computeMembership: useSelector((state) => state.fvUser.computeMembership),
     computeUserDialects: useSelector((state) => state.fvUser.computeUserDialects),
-    computeUserSelfregister: useSelector((state) => state.fvUser.computeUserDialects),
+    computeUserSelfregister: useSelector((state) => state.fvUser.computeUserSelfregister),
     getJoinRequest: ({ siteId, requestId }) => {
       const dispatchObj = _getJoinRequest({ siteId, requestId })
       dispatch(dispatchObj)

@@ -28,17 +28,16 @@ function RegisterData({ children }) {
   const fvUserFields = selectn('FVRegistration', fields)
   const fvUserOptions = Object.assign({}, selectn('FVRegistration', options))
 
-  const registrationResponse = ProviderHelpers.getEntry(computeUserSelfregister, userRequest)
+  const _computeUserSelfregister = ProviderHelpers.getEntry(computeUserSelfregister, userRequest)
+  const registrationResponse = selectn('response', _computeUserSelfregister)
 
   useEffect(() => {
-    if (selectn('success', registrationResponse)) {
-      const status = selectn('response.value.status', registrationResponse)
-      if (status === 400 || status === 200) {
-        setServerResponse({
-          status: status,
-          message: selectn('response.value.entity', registrationResponse),
-        })
-      }
+    const status = selectn('value.status', registrationResponse)
+    if (status === 400 || status === 200) {
+      setServerResponse({
+        status: status,
+        message: selectn('response.value.entity', registrationResponse),
+      })
     }
   }, [registrationResponse])
 

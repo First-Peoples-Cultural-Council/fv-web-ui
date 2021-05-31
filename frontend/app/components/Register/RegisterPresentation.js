@@ -31,15 +31,12 @@ function RegisterPresentation({ fvUserFields, fvUserOptions, formRef, formValue,
         return (
           <div className="row" style={{ marginTop: '15px' }}>
             <div className={classNames('col-xs-12')}>
-              <h1>Thank you for your registration!</h1>
+              <h1>Thank you for registering for a FirstVoices account!</h1>
               <p>
-                You should receive a confirmation email from us shortly asking you to validate your email address and
-                create a password.
+                You will be emailed a link to set your password. If you don&apos;t receive an email within a few
+                minutes, please check your junk folder.
               </p>
-              <p>
-                If you do not see the email in a few minutes, please confirm it is not in your SPAM folder or contact us
-                for support.
-              </p>
+              <p>Your registration is not complete until you have set your password.</p>
               <p>
                 Go to our <Link href="/">home page</Link> or{' '}
                 <Link href="/explore/FV/sections/Data/">explore our community portals</Link>.
@@ -54,20 +51,17 @@ function RegisterPresentation({ fvUserFields, fvUserOptions, formRef, formValue,
   return (
     <div className="row" style={{ maxWidth: '968px', margin: '0 auto' }}>
       <div style={{ padding: '0.5em', textAlign: 'center' }}>
-        <h1>
-          <FVLabel transKey="register" defaultStr="Register" transform="first" />
-        </h1>
-        <h2>Are you a member of a language community?</h2>
+        <h1>Register for an account</h1>
         <p>
-          Most language content is available <Link href="/explore/FV/sections/Data">here</Link> for everyone to access
-          without registration. If you are a member of a language community that is represented on FirstVoices, please
-          register in order to access any content intended solely for members of your community.
+          Most language content on FirstVoices is already available to everyone without registration. You can browse
+          public content for different languages <Link href="/explore/FV/sections/Data">here</Link>. With a registered
+          FirstVoices account, you can request to join language sites as a member.
         </p>
       </div>
       <form onSubmit={(event) => onRequestSaveForm(event)}>
         <t.form.Form ref={formRef} type={t.struct(fvUserFields)} value={formValue} options={fvUserOptions} />
         {serverErrorMessage}
-        <p>
+        <p style={{ marginLeft: '5px', marginTop: '5px' }}>
           <small>Note: Fields marked with * are required</small>
         </p>
         <div className="form-group">
