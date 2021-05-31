@@ -63,7 +63,7 @@ public class FVResolveSignupNotificationAudience implements EventListener {
       case "joinRequestAccepted":
         CoreInstance.doPrivileged(ctx.getCoreSession(), session -> {
           Map<String, Object> infoMap = new HashMap<>();
-          notificationManager.sendNotification("userRequestAccess",
+          notificationManager.sendNotification("joinRequestAccepted",
               infoMap,
               ctx.getSourceDocument().getProperty(SITE_JOIN_REQUEST_SCHEMA, "user").toString());
         });
