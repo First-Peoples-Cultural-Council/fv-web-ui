@@ -447,11 +447,13 @@ const routes = [
     path: ['join'],
     title: intl.translate({ key: 'join', default: 'Join', case: 'first' }),
     page: <Pages.Join />,
+    disableWorkspaceSectionNav: true,
   },
   {
     path: ['register'],
     title: intl.translate({ key: 'register', default: 'Register', case: 'first' }),
     page: <Pages.Register />,
+    disableWorkspaceSectionNav: true,
   },
   {
     path: ['forgotpassword'],
