@@ -7,8 +7,7 @@ Please follow the instructions in this email to complete your registration.<br /
 
 Your <strong>username</strong> is: ${userinfo.login} (case-sensitive)<br />
 Your <strong>password</strong> can be setup by following this link:<br />
-<a href="${info['enterPasswordUrl']}${configurationName}/${userinfo.id}">${info['enterPasswordUrl']}${configurationName}
-    /${userinfo.id}</a><br /><br />
+<a href="${info['enterPasswordUrl']}${configurationName}/${userinfo.id}">${info['enterPasswordUrl']}${configurationName}/${userinfo.id}</a><br /><br />
 
 <!--Once you create a password, you will be able to login by going to https://www.firstvoices.com - your first login may take up to a minute as important settings are being configured.<br/><br/>-->
 <#if documentTitle != "">If you have an official role working on language revitalization as part of your community, your language administrator may need to upgrade your account before you can edit/add new entries.
