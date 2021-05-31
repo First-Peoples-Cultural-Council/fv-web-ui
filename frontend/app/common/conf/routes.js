@@ -448,6 +448,16 @@ const routes = [
     title: intl.translate({ key: 'join', default: 'Join', case: 'first' }),
     page: <Pages.Join />,
     disableWorkspaceSectionNav: true,
+    redirects: [
+      {
+        condition: (params) => {
+          return selectn('isConnected', params.props.computeLogin) === false
+        },
+        target: () => {
+          window.location.href = '/nuxeo/logout?requestedUrl=login.jsp'
+        },
+      },
+    ],
   },
   {
     path: ['register'],
