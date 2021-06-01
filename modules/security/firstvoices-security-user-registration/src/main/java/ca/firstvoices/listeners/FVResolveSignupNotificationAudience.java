@@ -31,6 +31,7 @@ import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.ACL;
 import org.nuxeo.ecm.core.event.Event;
@@ -92,9 +93,17 @@ public class FVResolveSignupNotificationAudience implements EventListener {
           if (languageAdminGroupName != null) {
             log.warn("sending notification to " + languageAdminGroupName);
             Map<String, Object> infoMap = new HashMap<>();
+
+            // Convert to NuxeoPrincipal
+            String username =
+                ctx.getSourceDocument().getProperty(SITE_JOIN_REQUEST_SCHEMA, "user").toString();
+            NuxeoPrincipal principal = userManager.getPrincipal(username);
+
             infoMap.put("dialectName", dialectDocument.getTitle());
-            infoMap.put("username",
-                ctx.getSourceDocument().getProperty(SITE_JOIN_REQUEST_SCHEMA, "user"));
+            infoMap.put("username", username);
+            infoMap.put("firstName", principal.getFirstName());
+            infoMap.put("lastName", principal.getLastName());
+            infoMap.put("traditionalName", principal.getModel().getProperty("traditionalName"));
             infoMap.put("communityMember",
                 ctx.getSourceDocument().getProperty(SITE_JOIN_REQUEST_SCHEMA, "communityMember"));
             infoMap.put("languageTeam",
