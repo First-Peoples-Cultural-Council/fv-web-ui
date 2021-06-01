@@ -25,17 +25,16 @@ import static ca.firstvoices.utils.FVRegistrationConstants.MID_REGISTRATION_PERI
 import static ca.firstvoices.utils.FVRegistrationConstants.MID_REGISTRATION_PERIOD_IN_DAYS;
 import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_DELETION_ACT;
 import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_DELETION_IN_DAYS;
-import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_EXPIRATION_ACT;
-import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_EXPIRATION_IN_DAYS;
-import ca.firstvoices.utils.FVRegistrationMailUtilities;
+
 import ca.firstvoices.utils.FVRegistrationUtilities;
 import java.util.Calendar;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.repository.RepositoryManager;
+import org.nuxeo.ecm.core.event.Event;
+import org.nuxeo.ecm.core.event.EventProducer;
+import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.core.work.AbstractWork;
 import org.nuxeo.runtime.api.Framework;
 
@@ -49,7 +48,6 @@ public class FVRegistrationTimeOutWorker extends AbstractWork {
    *
    */
   private static final long serialVersionUID = 1L;
-  private static final Log log = LogFactory.getLog(FVRegistrationTimeOutWorker.class);
 
   public FVRegistrationTimeOutWorker() {
     super("check-registration-timeout");
@@ -74,8 +72,6 @@ public class FVRegistrationTimeOutWorker extends AbstractWork {
     // currently set to check at 2am, 10am, 6pm
     if (diffDays == REGISTRATION_DELETION_IN_DAYS && modHours < 8) {
       actionValue = REGISTRATION_DELETION_ACT;
-    } else if (diffDays == REGISTRATION_EXPIRATION_IN_DAYS && modHours < 8) {
-      actionValue = REGISTRATION_EXPIRATION_ACT;
     } else if (diffDays == MID_REGISTRATION_PERIOD_IN_DAYS && modHours < 8) {
       actionValue = MID_REGISTRATION_PERIOD_ACT;
     }
@@ -90,60 +86,34 @@ public class FVRegistrationTimeOutWorker extends AbstractWork {
         .getService(RepositoryManager.class)
         .getDefaultRepositoryName(),
         session -> {
-        FVRegistrationMailUtilities mailUtil = new FVRegistrationMailUtilities();
-
         DocumentModelList registrations = session.query(
             "SELECT * FROM FVUserRegistration WHERE ecm:currentLifeCycleState = '"
                 + APPROVED + "'");
 
-        for (DocumentModel userRegistrations : registrations) {
-          Calendar regCreated = (Calendar) userRegistrations.getPropertyValue("dc:created");
+        for (DocumentModel registration : registrations) {
+          Calendar regCreated = (Calendar) registration.getPropertyValue("dc:created");
 
           if (regCreated == null) {
             // Seems like some registrations can come in with dc:created = null, so set
             // current time to those
             Calendar date = Calendar.getInstance();
-            userRegistrations.setPropertyValue("dc:created", date);
-            session.saveDocument(userRegistrations);
+            registration.setPropertyValue("dc:created", date);
+            session.saveDocument(registration);
           } else {
-            int regTOType = checkRegistrationTimeOut(regCreated);
-
-            // regTOType
-            //
-            // 0 - no action required (either already dealt with or still within no-action
-            // period)
-            //
-            // MID_REGISTRATION_PERIOD_ACT - registration is closing on timeout
-            // an email needs to be sent to a user who started registration
-            // and email informing LanguageAdministrator that user registration will be
-            // deleted in ? days
-            //
-            // REGISTRATION_EXPIRATION_ACT - registration timed out and it will be deleted
-            // in 24 hrs - last chance
-            // to activate account
-            // send an email to originator of registration request with information about
-            // cancellation
-            //
-            // REGISTRATION_DELETION_ACT - registration should be deleted
-            //
-
-            switch (regTOType) {
-              // TODO: Add to Audit log => log.info( "Registration period expired for user" +
-              // userRegistrations.getPropertyValue("userinfo:firstName") + " "
-              // + userRegistrations.getPropertyValue
-              // ("userinfo:lastName") + ".
-              // Registration was deleted.");
+            switch (checkRegistrationTimeOut(regCreated)) {
               case REGISTRATION_DELETION_ACT:
-                session.removeDocument(userRegistrations.getRef());
+                // Remove registration
+                session.removeDocument(registration.getRef());
                 break;
 
               case MID_REGISTRATION_PERIOD_ACT:
-              case REGISTRATION_EXPIRATION_ACT:
-                try {
-                  mailUtil.emailReminder(regTOType, userRegistrations, session);
-                } catch (Exception e) {
-                  log.error("Can not send reminder email", e);
-                }
+                // Remind user to register
+                EventProducer eventProducer = Framework.getService(EventProducer.class);
+                DocumentEventContext ctx = new DocumentEventContext(session,
+                    null,
+                    registration);
+                Event event = ctx.newEvent("registrationExpiring");
+                eventProducer.fireEvent(event);
                 break;
               default:
                 break;

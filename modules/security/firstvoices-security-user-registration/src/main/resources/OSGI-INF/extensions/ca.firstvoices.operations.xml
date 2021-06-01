@@ -3,11 +3,8 @@
   <require>org.nuxeo.ecm.core.automation.features.operations</require>
 
   <extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent" point="operations">
-    <operation class="ca.firstvoices.operations.UserInvite" replace="true"/>
-    <operation class="ca.firstvoices.operations.UserInviteApprove" replace="true"/>
     <operation class="ca.firstvoices.operations.FVQuickUserRegistration" replace="true"/>
     <operation class="ca.firstvoices.operations.FVGetPendingUserRegistrations" replace="true"/>
-    <operation class="ca.firstvoices.operations.FVValidateRegistrationAttempt" replace="true"/>
     <operation class="ca.firstvoices.operations.FVUpdateGroup" replace="true"/>
     <operation class="ca.firstvoices.operations.FVUpdateUser" replace="true"/>
     <operation class="ca.firstvoices.operations.FVChangeUserGroupToDialectGroup" replace="true"/>

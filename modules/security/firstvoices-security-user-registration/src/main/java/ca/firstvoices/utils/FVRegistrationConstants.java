@@ -27,11 +27,10 @@ public class FVRegistrationConstants {
   // Registration process ACTIONS constants - NOT timeouts
   public static final int MID_REGISTRATION_PERIOD_ACT = 1;
 
-  public static final int REGISTRATION_EXPIRATION_ACT = 2;
-
   public static final int REGISTRATION_DELETION_ACT = 3;
   // constants for validating registration attempt
   public static final int REGISTRATION_CAN_PROCEED = 0;
+  public static final int EMAIL_EXISTS_ERROR = 1;
   public static final int LOGIN_EXISTS_ERROR = 2;
   public static final int LOGIN_AND_EMAIL_EXIST_ERROR = 3;
   public static final int REGISTRATION_EXISTS_ERROR = 4;
@@ -39,10 +38,7 @@ public class FVRegistrationConstants {
   public static final String APPEND = "append";
   public static final String UPDATE = "update";
   public static final String REMOVE = "remove";
-  // TODO - adjust registration constants here
-  // TODO - all values in days
-  public static final int MID_REGISTRATION_PERIOD_IN_DAYS = 4;
-  public static final int REGISTRATION_EXPIRATION_IN_DAYS = 30;
+  public static final int MID_REGISTRATION_PERIOD_IN_DAYS = 10;
   public static final int REGISTRATION_DELETION_IN_DAYS = 31;
   public static final String GROUP_SCHEMA = "group";
   public static final String GROUP_COLON = GROUP_SCHEMA + ':';
@@ -62,8 +58,8 @@ public class FVRegistrationConstants {
   public static final String GROUP_NAME_ARG = "groupName";
   public static final String USER_NAME_ARG = "userName";
   public static final String GROUP_CHANGE_ARGS = "groupChangeArgs";
-  static final int NEW_USER_SELF_REGISTRATION_ACT = 5;
-  static final int NEW_MEMBER_SELF_REGISTRATION_ACT = 6;
-  static final int NEW_TEAM_MEMBER_SELF_REGISTRATION_ACT = 7;
-  static final int EMAIL_EXISTS_ERROR = 1;
+
+  private FVRegistrationConstants() {
+    throw new IllegalStateException("Utility class");
+  }
 }
