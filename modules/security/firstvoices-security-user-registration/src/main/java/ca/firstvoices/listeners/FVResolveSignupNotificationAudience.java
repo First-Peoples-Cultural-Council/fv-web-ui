@@ -67,22 +67,26 @@ public class FVResolveSignupNotificationAudience implements EventListener {
     NotificationManager notificationManager = Framework.getService(NotificationManager.class);
     UserManager userManager = Framework.getService(UserManager.class);
 
+    DocumentModel sourceDocument = ctx.getSourceDocument();
+    DocumentRef dialectDocumentId = new IdRef(sourceDocument
+        .getProperty(SITE_JOIN_REQUEST_SCHEMA, "dialect")
+        .toString());
+
     switch (event.getName()) {
       case "joinRequestAccepted":
         CoreInstance.doPrivileged(ctx.getCoreSession(), session -> {
+          DocumentModel dialectDocument = session.getDocument(dialectDocumentId);
+
           Map<String, Object> infoMap = new HashMap<>();
-          notificationManager.sendNotification("joinRequestAccepted",
+          infoMap.put("siteName", dialectDocument.getTitle());
+
+          notificationManager.sendNotification("userRequestAccess",
               infoMap,
               ctx.getSourceDocument().getProperty(SITE_JOIN_REQUEST_SCHEMA, "user").toString());
         });
 
         break;
       case "userRequestsAccess":
-        DocumentModel sourceDocument = ctx.getSourceDocument();
-        DocumentRef dialectDocumentId = new IdRef(sourceDocument
-            .getProperty(SITE_JOIN_REQUEST_SCHEMA, "dialect")
-            .toString());
-
         CoreInstance.doPrivileged(ctx.getCoreSession(), session -> {
           DocumentModel dialectDocument = session.getDocument(dialectDocumentId);
 
