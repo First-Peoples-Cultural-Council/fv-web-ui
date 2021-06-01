@@ -18,5 +18,6 @@ Nuxeo-Component: OSGI-INF/extensions/ca.firstvoices.operations.xml,
   OSGI-INF/extensions/ca.firstvoices.marshallers.xml,
   OSGI-INF/extensions/ca.firstvoices.resetpassword.directory.contrib.xml,
   OSGI-INF/extensions/ca.firstvoices.resetPassword.listener.contrib.xml,
-  OSGI-INF/extensions/ca.firstvoices.resetPassword.scheduler.contrib.xml
+  OSGI-INF/extensions/ca.firstvoices.resetPassword.scheduler.contrib.xml,
+  OSGI-INF/extensions/ca.firstvoices.signup.notifications.xml
 

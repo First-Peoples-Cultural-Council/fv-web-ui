@@ -25,14 +25,21 @@
 
 package ca.firstvoices.operations;
 
-import ca.firstvoices.utils.FVRegistrationUtilities;
+
+import static ca.firstvoices.utils.FVRegistrationConstants.EMAIL_EXISTS_ERROR;
+import static ca.firstvoices.utils.FVRegistrationConstants.LOGIN_AND_EMAIL_EXIST_ERROR;
+import static ca.firstvoices.utils.FVRegistrationConstants.LOGIN_EXISTS_ERROR;
+import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_CAN_PROCEED;
+import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_EXISTS_ERROR;
+
+import ca.firstvoices.user.FVUserRegistrationInfo;
+import ca.firstvoices.utils.FVUserPreferencesUtilities;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
@@ -40,9 +47,12 @@ import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.automation.server.jaxrs.RestOperationException;
+import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.ecm.user.invite.UserInvitationComponent;
 import org.nuxeo.ecm.user.invite.UserInvitationService.ValidationMethod;
 import org.nuxeo.ecm.user.registration.DocumentRegistrationInfo;
 import org.nuxeo.ecm.user.registration.UserRegistrationService;
@@ -55,7 +65,7 @@ public class FVQuickUserRegistration {
 
   public static final String ID = "User.SelfRegistration";
 
-  private static final Log log = LogFactory.getLog(FVQuickUserRegistration.class);
+  private FVUserRegistrationInfo userInfo;
 
   @Context protected UserManager userManager;
 
@@ -74,56 +84,32 @@ public class FVQuickUserRegistration {
       new HashMap<>();
 
   @OperationMethod
-  public Object run(DocumentModel registrationRequest) throws Exception {
-    String ip = null;
-
-    FVRegistrationUtilities utilCommon = new FVRegistrationUtilities();
-
-    // Extract additional information from request
+  public Object run(DocumentModel registrationRequest) {
     HttpServletRequest request = (HttpServletRequest) operationContext.get("request");
 
-    // Client IP
-    String ip1 = request.getHeader("Remote_Addr");
-    String ip2 = request.getHeader("X-Forwarded-For");
-
-    if (ip1 == null || ip1.isEmpty()) {
-      ip = ip2;
-    }
-
-    // Referer
-    String referer = request.getHeader("Referer");
-
-    // User-agent
-    String ua = request.getHeader("User-Agent");
-
-    // Add request variables to info object
-    info.put("ip", ip);
-    info.put("referer", referer);
-    info.put("ua", ua);
-
-    /*
-     * This operation has for most part similar code to sister operation UserInvite. The main
-     * difference is in
-     * conditions we apply for both. Common code is split into 2 parts - preCondition -
-     * postCondition Each of the
-     * operations executes it own, context specific conditions and any other operations
-     * following if appropriate. In
-     * this case it is sending of emails to both user and LanguageAdministrator informing them
-     * about actions.
-     */
-
     try {
-      utilCommon.registrationCommonSetup(registrationRequest, session, userManager);
+      String preferences =
+          FVUserPreferencesUtilities.createDefault(registrationRequest);
 
-      utilCommon.quickUserRegistrationCondition(registrationRequest, session);
+      // Setup `info` (this gets added to the registration object)
+      info.put("fvuserinfo:ip", getIp(request));
+      info.put("fvuserinfo:referer", request.getHeader("Referer"));
+      info.put("fvuserinfo:ua", request.getHeader("User-Agent"));
+      info.put("fvuserinfo:traditionalName",
+          registrationRequest.getPropertyValue("fvuserinfo:traditionalName"));
+      info.put("fvuserinfo:preferences", preferences);
+      info.put(UserInvitationComponent.PARAM_ORIGINATING_USER, session.getPrincipal().getName());
 
-      utilCommon.registrationCommonFinish(registrationService,
-          registrationRequest,
-          info,
-          null,
-          validationMethod,
-          true,
-          session); // we always autoAccept quick registration
+      // Setup `userinfo` (this gets translated to a user object)
+      userInfo = new FVUserRegistrationInfo();
+      userInfo.setEmail((String) registrationRequest.getPropertyValue("userinfo:email"));
+      userInfo.setFirstName((String) registrationRequest.getPropertyValue("userinfo:firstName"));
+      userInfo.setLastName((String) registrationRequest.getPropertyValue("userinfo:lastName"));
+      userInfo.setLogin(userInfo.getEmail());
+      userInfo.setPreferences(preferences);
+      userInfo.setGroups(Collections.singletonList("members"));
+
+      submitRegistration(info, validationMethod);
     } catch (RestOperationException e) {
       // Pass validation errors back to UI
       if (e.getStatus() == 400) {
@@ -134,4 +120,105 @@ public class FVQuickUserRegistration {
     return Response.status(200).entity("Thank you for registering!").build();
   }
 
+  /**
+   * @param info
+   * @param validationMethod
+   * @return
+   */
+  private void submitRegistration(Map<String, Serializable> info,
+      ValidationMethod validationMethod) throws RestOperationException {
+    int validationStatus;
+
+    // Validate registration
+    validationStatus = validateRegistration(userInfo.getLogin(), userInfo.getEmail());
+
+    if (validationStatus != REGISTRATION_CAN_PROCEED) {
+      switch (validationStatus) {
+        case EMAIL_EXISTS_ERROR:
+        case LOGIN_EXISTS_ERROR:
+        case LOGIN_AND_EMAIL_EXIST_ERROR:
+          throw new RestOperationException("This email address is already in use.", 400);
+
+        case REGISTRATION_EXISTS_ERROR:
+          throw new RestOperationException(
+              "A pending registration with the same credentials is present. Please check your "
+                  + "email (including SPAM folder) for a message with instructions or contact us"
+                  + " for help.",
+              400);
+        default:
+          break;
+      }
+    }
+
+    registrationService.submitRegistrationRequest(
+        userInfo,
+        info,
+        validationMethod,
+        true,
+        userInfo.getEmail());
+  }
+
+  private int validateRegistration(String login, String email) {
+    CoreInstance.doPrivileged(session, s -> {
+
+      DocumentModelList registrations = null;
+      DocumentModel userE = null;
+      int verificationState = REGISTRATION_CAN_PROCEED;
+      DocumentModel user = userManager.getUserModel(login);
+
+      if (user != null) {
+        verificationState = LOGIN_EXISTS_ERROR;
+      } else {
+        String queryStr = null;
+
+        if (email != null) {
+          userE = userManager.getUserModel(email);
+
+          if (userE != null) {
+            verificationState = LOGIN_AND_EMAIL_EXIST_ERROR;
+          } else {
+            queryStr = String.format(
+                "Select * from Document where ecm:mixinType = 'UserRegistration' AND "
+                    + "ecm:currentLifeCycleState = 'approved' AND ( %s = '%s' OR %s = '%s')",
+                "userinfo:login",
+                login,
+                "userinfo:email",
+                email);
+          }
+        } else {
+          queryStr = String.format(
+              "Select * from Document where ecm:mixinType = 'UserRegistration' AND "
+                  + "ecm:currentLifeCycleState = 'approved' AND  %s = '%s' ",
+              "userinfo:login",
+              login);
+        }
+
+        if (userE == null && queryStr != null) {
+          registrations = s.query(queryStr);
+
+          if (registrations != null && !registrations.isEmpty()) {
+            verificationState = REGISTRATION_EXISTS_ERROR;
+          }
+        }
+      }
+
+      return verificationState;
+    });
+
+    return REGISTRATION_CAN_PROCEED;
+  }
+
+  private String getIp(HttpServletRequest request) {
+    String ip = null;
+
+    // Client IP
+    String ip1 = request.getHeader("Remote_Addr");
+    String ip2 = request.getHeader("X-Forwarded-For");
+
+    if (ip1 == null || ip1.isEmpty()) {
+      ip = ip2;
+    }
+
+    return ip;
+  }
 }

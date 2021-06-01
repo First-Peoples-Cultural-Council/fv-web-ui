@@ -25,6 +25,7 @@ import static ca.firstvoices.utils.FVRegistrationConstants.REMOVE;
 import static ca.firstvoices.utils.FVRegistrationConstants.UPDATE;
 import ca.firstvoices.utils.FVRegistrationUtilities;
 import java.util.ArrayList;
+import java.util.List;
 import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.DocumentModel;
 
@@ -39,7 +40,7 @@ public class FVUserGroupUpdateUtilities {
    */
   public static DocumentModel updateFVProperty(
       String action, DocumentModel doc, StringList data, String schemaName, String field) {
-    ArrayList<String> arrayData = FVRegistrationUtilities.makeArrayFromStringList(data);
+    List<String> arrayData = FVRegistrationUtilities.makeArrayFromStringList(data);
 
     if (!action.equals(UPDATE)) {
       ArrayList<String> property = (ArrayList<String>) doc.getProperty(schemaName, field);
@@ -63,5 +64,9 @@ public class FVUserGroupUpdateUtilities {
     doc.setProperty(schemaName, field, arrayData);
 
     return doc;
+  }
+
+  private FVUserGroupUpdateUtilities() {
+    throw new IllegalStateException("Utility class");
   }
 }

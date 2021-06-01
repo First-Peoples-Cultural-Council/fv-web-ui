@@ -28,9 +28,9 @@ import java.util.Map;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoException;
 
-public class FVUserPreferencesSetup {
+public class FVUserPreferencesUtilities {
 
-  public String createDefaultUserPreferencesWithDialectID(String dialectID) {
+  public static String createDefaultFromSite(String dialectID) {
 
     // Create general preferences
     Map<String, Object> generalPreferences = new HashMap<>();
@@ -59,22 +59,13 @@ public class FVUserPreferencesSetup {
     }
   }
 
-  public String createDefaultUserPreferencesWithRegistration(DocumentModel registration) {
+  public static String createDefault(DocumentModel registration) {
     String dialectID = (String) registration.getPropertyValue("fvuserinfo:requestedSpace");
 
-    return createDefaultUserPreferencesWithDialectID(dialectID);
+    return createDefaultFromSite(dialectID);
   }
 
-  /**
-   * @param existingUserObject
-   * @param registration
-   * @throws Exception
-   */
-  public DocumentModel updateUserPreferencesWithRegistration(
-      DocumentModel existingUserObject, DocumentModel registration) {
-    String modifiedPreferencesString = createDefaultUserPreferencesWithRegistration(registration);
-    existingUserObject.setPropertyValue("user:preferences", modifiedPreferencesString);
-
-    return existingUserObject;
+  private FVUserPreferencesUtilities() {
+    throw new IllegalStateException("Utility class");
   }
 }

@@ -26,9 +26,6 @@ public class FVUserRegistrationInfo extends UserRegistrationInfo {
 
   protected String preferences;
 
-  public FVUserRegistrationInfo() {
-  }
-
   public String getPreferences() {
     return preferences;
   }

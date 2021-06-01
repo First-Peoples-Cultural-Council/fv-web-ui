@@ -48,7 +48,11 @@ import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.ACL;
 import org.nuxeo.ecm.core.api.security.SecurityConstants;
+import org.nuxeo.ecm.core.event.Event;
+import org.nuxeo.ecm.core.event.EventProducer;
+import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.runtime.api.Framework;
 
 
 @Operation(id = FVRequestToJoinDialectAdminAction.ID,
@@ -116,8 +120,8 @@ public class FVRequestToJoinDialectAdminAction {
         throw new IllegalArgumentException("Invalid requested status");
       }
 
-      if (validStartingStatuses.stream().noneMatch(s -> s.equals(joinRequestDocument.getProperty(
-          SITE_JOIN_REQUEST_SCHEMA,
+      if (validStartingStatuses.stream().noneMatch(s -> s.equals(
+          joinRequestDocument.getProperty(SITE_JOIN_REQUEST_SCHEMA,
           "status")))) {
         throw new IllegalArgumentException("Invalid starting status");
       }
@@ -163,27 +167,39 @@ public class FVRequestToJoinDialectAdminAction {
       }
 
 
-      //resolve target user
-      String email = joinRequestDocument.getProperty(SITE_JOIN_REQUEST_SCHEMA, "user").toString();
-      Map<String, Serializable> userSearchCriteria = new HashMap<>();
-      userSearchCriteria.put("email", email);
-      DocumentModelList foundUsers = userManager.searchUsers(userSearchCriteria, null);
-      if (foundUsers.size() != 1) {
-        throw new IllegalArgumentException("ambiguous or nonexistent user");
-      }
+      if (newStatus.equals("ACCEPT")) {
 
-      final DocumentModel user = foundUsers.get(0);
-      final String username = (String) user.getProperty("user", "username");
+        //resolve target user
+        String email = joinRequestDocument.getProperty(SITE_JOIN_REQUEST_SCHEMA, "user").toString();
+        Map<String, Serializable> userSearchCriteria = new HashMap<>();
+        userSearchCriteria.put("email", email);
+        DocumentModelList foundUsers = userManager.searchUsers(userSearchCriteria, null);
+        if (foundUsers.size() != 1) {
+          throw new IllegalArgumentException("ambiguous or nonexistent user");
+        }
+
+        final DocumentModel user = foundUsers.get(0);
+        final String username = (String) user.getProperty("user", "username");
 
 
-      // update target groups
-      for (String targetGroupName : targetGroups) {
-        DocumentModel groupDocument = userManager.getGroupModel(targetGroupName);
-        List<String> groupMembersList = (List<String>) groupDocument.getProperty("group",
-            "members");
-        groupMembersList.add(username);
-        groupDocument.setProperty("group", "members", groupMembersList);
-        userManager.updateGroup(groupDocument);
+        // update target groups
+        for (String targetGroupName : targetGroups) {
+          DocumentModel groupDocument = userManager.getGroupModel(targetGroupName);
+          List<String> groupMembersList = (List<String>) groupDocument.getProperty("group",
+              "members");
+          groupMembersList.add(username);
+          groupDocument.setProperty("group", "members", groupMembersList);
+          userManager.updateGroup(groupDocument);
+        }
+
+
+        EventProducer eventProducer = Framework.getService(EventProducer.class);
+        DocumentEventContext ctx = new DocumentEventContext(session,
+            session.getPrincipal(),
+            joinRequestDocument);
+        Event event = ctx.newEvent("joinRequestAccepted");
+        eventProducer.fireEvent(event);
+
       }
 
       // update request document

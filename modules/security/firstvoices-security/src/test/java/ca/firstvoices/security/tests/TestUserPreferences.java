@@ -26,10 +26,10 @@ import static ca.firstvoices.data.schemas.DomainTypesConstants.FV_LANGUAGE_FAMIL
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+
 import ca.firstvoices.security.seam.FVLogin;
 import ca.firstvoices.security.services.FVUserProfileService;
-import ca.firstvoices.utils.FVUserPreferencesSetup;
-import java.io.UnsupportedEncodingException;
+import ca.firstvoices.utils.FVUserPreferencesUtilities;
 import java.net.URISyntaxException;
 import javax.inject.Inject;
 import org.junit.Before;
@@ -104,7 +104,7 @@ public class TestUserPreferences extends AbstractFVTest {
 
     // add a dialect but the dialect does not have a short url
     String json =
-        new FVUserPreferencesSetup().createDefaultUserPreferencesWithDialectID(dialectDoc.getId());
+        FVUserPreferencesUtilities.createDefaultFromSite(dialectDoc.getId());
     assertNotNull(json);
     testUser.setPropertyValue("user:preferences", json);
     userManager.updateUser(testUser);

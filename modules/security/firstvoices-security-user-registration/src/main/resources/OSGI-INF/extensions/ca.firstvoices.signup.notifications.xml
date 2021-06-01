@@ -1,0 +1,38 @@
+<component name="ca.firstvoices.signup.notifications.contrib">
+
+  <extension point="notifications" target="org.nuxeo.ecm.platform.ec.notification.service.NotificationService">
+
+    <notification name="userRequestsAccess" channel="email" enabled="true"
+                  autoSubscribed="true" template="userRequestsAccess" subject="A user is requesting access"
+                  label="label.noLabel">
+    </notification>
+
+    <notification name="joinRequestAccepted" channel="email" enabled="true"
+                  autoSubscribed="true" template="joinRequestAccepted" subject="Your request has been accepted"
+                  label="label.noLabel">
+    </notification>
+
+  </extension>
+
+
+  <extension target="org.nuxeo.ecm.core.event.EventServiceComponent"
+             point="listener">
+    <listener name="joinRequestAccepted" async="true" postCommit="true"
+              priority="50" class="ca.firstvoices.listeners.FVResolveSignupNotificationAudience">
+    </listener>
+    <listener name="userRequestsAccess" async="true" postCommit="true"
+              priority="50" class="ca.firstvoices.listeners.FVResolveSignupNotificationAudience">
+    </listener>
+  </extension>
+
+  <extension
+      target="org.nuxeo.ecm.platform.ec.notification.service.NotificationService"
+      point="templates">
+
+    <template name="userRequestsAccess" src="emailTemplates/userRequestsAccess.ftl" />
+    <template name="joinRequestAccepted" src="emailTemplates/joinRequestAccepted.ftl" />
+
+  </extension>
+
+
+</component>

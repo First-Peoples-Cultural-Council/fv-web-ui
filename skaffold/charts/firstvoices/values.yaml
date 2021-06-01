@@ -30,3 +30,7 @@ firstvoicesPostgresql:
 ingress:
   configureForMk8s: true
   useManagedCertificate: true
+
+smtplogger:
+  deploy: true
+  image: smtplogger:latest

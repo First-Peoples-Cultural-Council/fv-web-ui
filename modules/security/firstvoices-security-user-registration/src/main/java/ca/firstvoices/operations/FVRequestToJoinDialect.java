@@ -37,8 +37,11 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
+import org.nuxeo.ecm.core.event.Event;
+import org.nuxeo.ecm.core.event.EventProducer;
+import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
-
+import org.nuxeo.runtime.api.Framework;
 
 @Operation(id = FVRequestToJoinDialect.ID,
     category = Constants.CAT_USERS_GROUPS,
@@ -93,10 +96,18 @@ public class FVRequestToJoinDialect {
       joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "comment", comment);
       joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "status", "NEW");
 
-
       final DocumentModel joinRequestDocument = session.createDocument(joinRequest);
-
       session.saveDocument(joinRequestDocument);
+
+
+      // dispatch event
+      EventProducer eventProducer = Framework.getService(EventProducer.class);
+      DocumentEventContext ctx = new DocumentEventContext(session,
+          session.getPrincipal(),
+          joinRequestDocument);
+      Event event = ctx.newEvent("userRequestsAccess");
+      eventProducer.fireEvent(event);
+
     }
   }
 

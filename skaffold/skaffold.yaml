@@ -50,6 +50,13 @@ build:
         volumeMounts:
           - name: m2-cache
             mountPath: /root/.m2
+    - image: smtplogger
+      context:  dockerfiles/smtplogger
+      kaniko:
+        singleSnapshot: true
+        dockerfile: Dockerfile
+        cache:
+          repo: ""
 deploy:
   helm:
     releases:
@@ -69,3 +76,5 @@ deploy:
             image: firstvoices
           database_restoration:
             image: database_restoration
+          smtplogger:
+            image: smtplogger
