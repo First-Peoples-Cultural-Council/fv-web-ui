@@ -69,44 +69,16 @@
       >
       <validationEmail>
         <title>You are invited to access FirstVoices</title>
-        <template>skin/views/FVGeneralEmailInviteDocTemplate.ftl</template>
+        <template>emailTemplates/setupPassword.ftl</template>
       </validationEmail>
       <reviveEmail>
-        <title>You are invited to access FirstVoices</title>
-        <template>skin/views/FVReviveEmailInviteDocTemplate.ftl</template>
+        <title>Reminder: You are invited to access FirstVoices</title>
+        <template>emailTemplates/setupPasswordReminder.ftl</template>
       </reviveEmail>
       <enterPasswordUrl>site/fv/users/enterpassword/</enterPasswordUrl>
       <validationRelUrl>site/fv/users/validate</validationRelUrl>
     </configuration>
 
-  </extension>
-
-  <!--
-    This extension is to override the default email received from the system
-    when a new user is invite to join FirstVoices via the Admin section.
-  -->
-  <extension target="org.nuxeo.ecm.user.invite.UserInvitationService"
-             point="configuration">
-
-    <configuration merge="true">
-      <requestDocType>UserInvitation</requestDocType>
-      <container>
-        <docType>UserInvitationContainer</docType>
-        <parentPath>/management/</parentPath>
-        <name>invitationRequests</name>
-        <title>Invitation Requests Container</title>
-      </container>
-      <validationEmail>
-        <title>Hi ${userinfo.firstName} ${userinfo.lastName}! You are invited to access FirstVoices</title>
-        <template>skin/views/FVGeneralEmailInviteDocTemplate.ftl</template>
-      </validationEmail>
-      <reviveEmail>
-        <title>Hi ${userinfo.firstName} ${userinfo.lastName}! You are invited to access FirstVoices</title>
-        <template>skin/views/FVReviveEmailInviteDocTemplate.ftl</template>
-      </reviveEmail>
-      <enterPasswordUrl>site/fv/users/enterpassword/</enterPasswordUrl>
-      <validationRelUrl>site/fv/users/validate</validationRelUrl>
-    </configuration>
   </extension>
 
   <extension

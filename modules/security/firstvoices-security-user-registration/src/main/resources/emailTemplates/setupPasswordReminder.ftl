@@ -1,3 +1,4 @@
+<!-- This email template is sent as a reminder to users who haven't completed their registration -->
 <html>
 <body>
 Hello ${userinfo.firstName} ${userinfo.lastName}, <br />

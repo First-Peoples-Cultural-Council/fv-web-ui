@@ -1,58 +1,36 @@
 <html>
     <body>
-        Hello!<br /><br />
-        ${fName} ${lName} wants to join <strong>${dialect}</strong> on FirstVoices as a community member.<br />
 
+    Hello!<br /><br />
+    ${traditionalName} ${firstName} ${lastName} wants to join <strong>${dialect}</strong> on FirstVoices as a community member.<br /><br />
+
+    Additional details from them:
+    <dl>
         <#if comment != "">
-        <p>They included this comment: </p>
-        <p>${comment}</p>
-    </#if>
+            <dt><strong>Comment</strong></dt>
+            <dd>${comment}</dd>
+        </#if>
+        <#if interestReason != "">
+            <dt><strong>Interest Reason</strong></dt>
+            <dd>${interestReason}</dd>
+        </#if>
+        <dt><strong>Community Member</strong></dt>
+        <dd>${communityMember?string("Yes", "No")}</dd>
+        <dt><strong>Language Team Member</strong></dt>
+        <dd>${languageTeam?string("Yes", "No")}</dd>
+    </dl>
 
     <p>
-        You can approve them as a community member here:<br />
-        <a href="${appURL}/tasks/users/${dialectId}">${appURL}/tasks/users/${dialectId}</a> (Note: you must be logged in to
-        perform that action)
+        What next?<br/>
+        <ul>
+            <li>You can <strong>approve</strong> or <strong>ignore</strong> their request <a href="${siteURL}/nuxeo/login.jsp?requestedUrl=../dashboard/membership">on your dashboard</a></li>
+            <li>You can also connect with them directly via email ${email}.</li>
+        </ul>
     </p>
 
-    <p>You can also connect with them directly here ${email} or choose to ignore this email.</p>
-
-    <p>Please do not reply to this email. Feel free to contact us at support@fpcc.ca for assistance or if you have any
-        issues.</p>
+    <p>Feel free to contact us at hello@firstvoices.com for assistance or if you have any issues.</p>
 
     <p>Regards,<br />
         The FirstVoices Team</p>
-</body>
-  </html>
-
-
-
-<html>
-<body>
-
-<p>A user is requesting access to a site you administer</p>
-
-<dl>
-    <dt>Dialect</dt>
-    <dd>${dialectName}</dd>
-    <dt>Email</dt>
-    <dd>${username}</dd>
-    <dt>First Name</dt>
-    <dd>${firstName}</dd>
-    <dt>Last Name</dt>
-    <dd>${lastName}</dd>
-    <dt>Traditional Name</dt>
-    <dd>${traditionalName}</dd>
-    <dt>Interest Reason</dt>
-    <dd>${interestReason}</dd>
-    <dt>Comment</dt>
-    <dd>${comment}</dd>
-    <dt>Language Team Member</dt>
-    <dd>${languageTeam?string("Yes", "No")}</dd>
-    <dt>Community Member</dt>
-    <dd>${communityMember?string("Yes", "No")}</dd>
-</dl>
-
-<p>Regards,<br />
-    The FirstVoices Team</p>
 </body>
 </html>
