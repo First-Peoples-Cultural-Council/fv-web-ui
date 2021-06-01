@@ -21,10 +21,12 @@
 package ca.firstvoices.listeners;
 
 import static ca.firstvoices.utils.FVSiteJoinRequestUtilities.SITE_JOIN_REQUEST_SCHEMA;
+
 import ca.firstvoices.utils.CustomSecurityConstants;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreInstance;
@@ -39,11 +41,16 @@ import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.platform.notification.api.NotificationManager;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.ecm.user.invite.UserRegistrationConfiguration;
+import org.nuxeo.ecm.user.registration.UserRegistrationService;
 import org.nuxeo.runtime.api.Framework;
 
 public class FVResolveSignupNotificationAudience implements EventListener {
 
   public static final Log log = LogFactory.getLog(FVResolveSignupNotificationAudience.class);
+
+  private final UserRegistrationService registrationService = Framework
+      .getService(UserRegistrationService.class);
 
   @Override
   public void handleEvent(Event event) {
@@ -94,16 +101,16 @@ public class FVResolveSignupNotificationAudience implements EventListener {
             log.warn("sending notification to " + languageAdminGroupName);
             Map<String, Object> infoMap = new HashMap<>();
 
-            // Convert to NuxeoPrincipal
             String username =
                 ctx.getSourceDocument().getProperty(SITE_JOIN_REQUEST_SCHEMA, "user").toString();
             NuxeoPrincipal principal = userManager.getPrincipal(username);
+            DocumentModel principalDoc = principal.getModel();
 
             infoMap.put("dialectName", dialectDocument.getTitle());
             infoMap.put("username", username);
             infoMap.put("firstName", principal.getFirstName());
             infoMap.put("lastName", principal.getLastName());
-            infoMap.put("traditionalName", principal.getModel().getProperty("traditionalName"));
+            infoMap.put("traditionalName", principalDoc.getPropertyValue("user:traditionalName"));
             infoMap.put("communityMember",
                 ctx.getSourceDocument().getProperty(SITE_JOIN_REQUEST_SCHEMA, "communityMember"));
             infoMap.put("languageTeam",
@@ -121,6 +128,48 @@ public class FVResolveSignupNotificationAudience implements EventListener {
           }
 
         });
+        break;
+      case "registrationExpiring":
+        CoreInstance.doPrivileged(ctx.getCoreSession(), session -> {
+          DocumentModel registerRequest = ctx.getSourceDocument();
+
+          // Get and construct enter password url
+          DocumentModel registerContainer =
+              session.getDocument(registerRequest.getParentRef());
+          String configName =
+              registerContainer.getPropertyValue("registrationconfiguration:name").toString();
+
+          UserRegistrationConfiguration regConfig =
+              registrationService.getConfiguration(configName);
+
+          String baseUrl = Framework.getProperty("nuxeo.url");
+          baseUrl = StringUtils.isBlank(baseUrl) ? "/" : baseUrl;
+          if (!baseUrl.endsWith("/")) {
+            baseUrl = baseUrl + "/";
+          }
+
+          Map<String, Object> infoMap = new HashMap<>();
+
+          String enterPasswordURL =
+              baseUrl.concat(regConfig.getEnterPasswordUrl());
+
+          infoMap.put("enterPasswordURL",
+              enterPasswordURL + "/" + configName + "/" + registerRequest.getId());
+
+          infoMap.put("dateCreated",
+              registerRequest.getPropertyValue("dc:created"));
+          infoMap.put("firstName",
+              registerRequest.getPropertyValue("userinfo:firstName"));
+          infoMap.put("lastName",
+              registerRequest.getPropertyValue("userinfo:lastName"));
+          infoMap.put("traditionalName",
+              registerRequest.getPropertyValue("fvuserinfo:traditionalName"));
+
+          notificationManager.sendNotification("registrationExpiring",
+              infoMap,
+              String.valueOf(registerRequest.getPropertyValue("userinfo:email")));
+        });
+
         break;
       default:
         break;
