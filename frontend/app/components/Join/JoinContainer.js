@@ -21,10 +21,8 @@ function JoinContainer() {
         fvUserOptions,
         formRef,
         formValue,
-        isLoggedIn,
         onRequestSaveForm,
         requestedSiteTitle,
-        requestedSite,
         serverResponse,
       }) => {
         return (
@@ -34,10 +32,8 @@ function JoinContainer() {
               fvUserOptions={fvUserOptions}
               formRef={formRef}
               formValue={formValue}
-              isLoggedIn={isLoggedIn}
               onRequestSaveForm={onRequestSaveForm}
               requestedSiteTitle={requestedSiteTitle}
-              requestedSite={requestedSite}
               serverResponse={serverResponse}
             />
           </PromiseWrapper>

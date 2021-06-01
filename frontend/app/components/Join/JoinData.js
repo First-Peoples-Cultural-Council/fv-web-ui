@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
 import usePortal from 'dataSources/usePortal'
-import useIntl from 'dataSources/useIntl'
 import useLogin from 'dataSources/useLogin'
 import useUser from 'dataSources/useUser'
 import fields from 'common/schemas/fields'
@@ -20,9 +19,8 @@ import ProviderHelpers from 'common/ProviderHelpers'
  */
 function JoinData({ children }) {
   const { fetchPortals, computePortals } = usePortal()
-  const { intl } = useIntl()
   const { computeLogin } = useLogin()
-  const { selfregisterUser, computeUserSelfregister, requestMembership } = useUser()
+  const { requestMembership, computeMembershipCreate } = useUser()
 
   const isLoggedIn = computeLogin.success && computeLogin.isConnected
 
@@ -39,25 +37,27 @@ function JoinData({ children }) {
   useEffect(() => {
     if (requestedSite) {
       fetchPortals({ area: 'sections' })
-      setFormValue({ 'fvuserinfo:requestedSpace': requestedSite })
+      setFormValue({ siteId: requestedSite })
     }
   }, [requestedSite])
 
   const fvUserFields = selectn('FVJoin', fields)
   const fvUserOptions = Object.assign({}, selectn('FVJoin', options))
 
-  const registrationResponse = ProviderHelpers.getEntry(computeUserSelfregister, userRequest)
+  const _computeRequestMembership = ProviderHelpers.getEntry(computeMembershipCreate, userRequest)
+  const requestMembershipResponse = selectn('response', _computeRequestMembership)
 
   useEffect(() => {
-    if (selectn('success', registrationResponse)) {
-      const status = selectn('response.value.status', registrationResponse)
-      if (status === 400 || status === 200) {
-        setServerResponse({
-          status: status,
-          message: selectn('response.value.entity', registrationResponse),
-        })
-      }
+    const status = selectn('value.status', requestMembershipResponse)
+    if (status === 400 || status === 200) {
+      setServerResponse({
+        status: status,
+        message: selectn('response.value.entity', requestMembershipResponse),
+      })
     }
+  }, [requestMembershipResponse])
+
+  useEffect(() => {
     if (selectn('success', computePortals)) {
       const response = selectn('response', computePortals)
       const portal = response.find((obj) => {
@@ -65,10 +65,9 @@ function JoinData({ children }) {
       })
       setRequestedSiteTitle(portal.title)
     }
-  }, [registrationResponse, computePortals])
+  }, [computePortals])
 
   const onRequestSaveForm = (event) => {
-    // Prevent default behaviour
     event.preventDefault()
     const currentFormValue = formRef.current.getValue()
     const properties = {}
@@ -81,30 +80,16 @@ function JoinData({ children }) {
     }
 
     setFormValue(properties)
-    if (currentFormValue) {
-      if (isLoggedIn) {
-        requestMembership({
-          siteId: selectn('siteId', properties),
-          interestReason: selectn('interestReason', properties),
-          communityMember: selectn('communityMember', properties) || false,
-          languageTeam: selectn('languageTeam', properties) || false,
-          comment: selectn('comment', properties),
-        })
-      } else {
-        const currentUserRequest = {
-          'entity-type': 'document',
-          type: 'FVUserRegistration',
-          id: selectn('userinfo:email', properties),
-          properties: properties,
-        }
-        selfregisterUser(
-          currentUserRequest,
-          null,
-          null,
-          intl.trans('views.pages.users.register.user_request_success', 'User request submitted successfully!')
-        )
-        setUserRequest(currentUserRequest)
+    if (currentFormValue && isLoggedIn) {
+      const currentUserRequest = {
+        siteId: selectn('siteId', properties),
+        interestReason: selectn('interestReason', properties),
+        communityMember: selectn('communityMember', properties) || false,
+        languageTeam: selectn('languageTeam', properties) || false,
+        comment: selectn('comment', properties),
       }
+      requestMembership(currentUserRequest)
+      setUserRequest(currentUserRequest)
     } else {
       window.scrollTo(0, 0)
     }
@@ -113,7 +98,7 @@ function JoinData({ children }) {
   const computeEntities = ProviderHelpers.toJSKeepId([
     {
       id: userRequest,
-      entity: computeUserSelfregister,
+      entity: computeMembershipCreate,
     },
   ])
 
@@ -126,7 +111,6 @@ function JoinData({ children }) {
     isLoggedIn,
     onRequestSaveForm,
     requestedSiteTitle,
-    requestedSite: requestedSite ? true : false,
     serverResponse,
   })
 }

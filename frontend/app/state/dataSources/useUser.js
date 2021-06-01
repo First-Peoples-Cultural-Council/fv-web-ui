@@ -13,7 +13,8 @@ function useUser() {
   return {
     computeJoinRequest: useSelector((state) => state.fvUser.computeJoinRequest),
     computeJoinRequests: useSelector((state) => state.fvUser.computeJoinRequests),
-    computeMembership: useSelector((state) => state.fvUser.computeMembership),
+    computeMembershipFetch: useSelector((state) => state.fvUser.computeMembershipFetch),
+    computeMembershipCreate: useSelector((state) => state.fvUser.computeMembershipCreate),
     computeUserDialects: useSelector((state) => state.fvUser.computeUserDialects),
     computeUserSelfregister: useSelector((state) => state.fvUser.computeUserSelfregister),
     getJoinRequest: ({ siteId, requestId }) => {

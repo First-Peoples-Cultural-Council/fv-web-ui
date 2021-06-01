@@ -1,22 +1,24 @@
 import { computeFetch, computeOperation } from 'reducers/rest'
 import { combineReducers } from 'redux'
 
-const computeUserFactory = computeFetch('user')
-const computeUserSelfregisterOperation = computeOperation('user_selfregister')
-const computeUserUpgradeOperation = computeOperation('user_upgrade')
-const computeUserDialectsOperation = computeOperation('user_dialects')
-const computeUserStartPageOperation = computeOperation('user_startpage')
-const computeMembershipFactory = computeFetch('membership')
 const computeJoinRequestFactory = computeFetch('join_request')
 const computeJoinRequestsFactory = computeFetch('join_requests')
+const computeMembershipFetchFactory = computeFetch('membership_fetch')
+const computeMembershipCreateOperation = computeFetch('membership_create')
+const computeUserFactory = computeFetch('user')
+const computeUserDialectsOperation = computeOperation('user_dialects')
+const computeUserSelfregisterOperation = computeOperation('user_selfregister')
+const computeUserStartPageOperation = computeOperation('user_startpage')
+const computeUserUpgradeOperation = computeOperation('user_upgrade')
 
 export const fvUserReducer = combineReducers({
-  computeUser: computeUserFactory.computeUser,
-  computeUserUpgrade: computeUserUpgradeOperation.computeUserUpgrade,
-  computeUserSelfregister: computeUserSelfregisterOperation.computeUserSelfregister,
-  computeUserDialects: computeUserDialectsOperation.computeUserDialects,
-  computeUserStartpage: computeUserStartPageOperation.computeUserStartpage,
-  computeMembership: computeMembershipFactory.computeMembership,
   computeJoinRequest: computeJoinRequestFactory.computeJoinRequest,
   computeJoinRequests: computeJoinRequestsFactory.computeJoinRequests,
+  computeMembershipFetch: computeMembershipFetchFactory.computeMembershipFetch,
+  computeMembershipCreate: computeMembershipCreateOperation.computeMembershipCreate,
+  computeUser: computeUserFactory.computeUser,
+  computeUserDialects: computeUserDialectsOperation.computeUserDialects,
+  computeUserSelfregister: computeUserSelfregisterOperation.computeUserSelfregister,
+  computeUserStartpage: computeUserStartPageOperation.computeUserStartpage,
+  computeUserUpgrade: computeUserUpgradeOperation.computeUserUpgrade,
 })
