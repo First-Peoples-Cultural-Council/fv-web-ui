@@ -8,6 +8,7 @@
         userAttributes.put("email", userObject.email);
         userAttributes.put("firstName", userObject.firstName);
         userAttributes.put("lastName", userObject.lastName);
+        userAttributes.put("traditionalName", userObject.traditionalName);
         userAttributes.put("preferences", userObject.preferences);
         userAttributes.put("yearBornRange", userObject.comments);
         userAttributes.put("ip", userObject.comments);

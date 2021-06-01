@@ -274,8 +274,9 @@ public class FVRegistrationUtilities {
     // Set permissions on registration document
     String registrationId = null;
 
-    registrationId = registrationService.submitRegistrationRequest(userInfo,
-        info,
+    registrationId = registrationService.submitRegistrationRequest(
+        userInfo,
+        info, // additional info to set on FVUserRegistration doc
         validationMethod,
         autoAccept,
         userInfo.getEmail());
@@ -308,6 +309,8 @@ public class FVRegistrationUtilities {
         // preferences
         // so that the user is not redirected to the private dialect and gets a 404.
         // Next step would be for Language Administrator to add them to a group directly.
+        userDoc.setPropertyValue("user:traditionalName",
+            ureg.getPropertyValue("fvuserinfo:traditionalName"));
         userDoc.setPropertyValue("user:ua", ureg.getPropertyValue("fvuserinfo:ua"));
         userDoc.setPropertyValue("user:ip", ureg.getPropertyValue("fvuserinfo:ip"));
         userDoc.setPropertyValue("user:referer", ureg.getPropertyValue("fvuserinfo:referer"));

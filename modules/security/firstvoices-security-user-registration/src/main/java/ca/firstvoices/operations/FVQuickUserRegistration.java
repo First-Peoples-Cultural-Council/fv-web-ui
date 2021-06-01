@@ -31,8 +31,6 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.OperationContext;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
@@ -54,8 +52,6 @@ import org.nuxeo.ecm.user.registration.UserRegistrationService;
 public class FVQuickUserRegistration {
 
   public static final String ID = "User.SelfRegistration";
-
-  private static final Log log = LogFactory.getLog(FVQuickUserRegistration.class);
 
   @Context protected UserManager userManager;
 
@@ -97,9 +93,11 @@ public class FVQuickUserRegistration {
     String ua = request.getHeader("User-Agent");
 
     // Add request variables to info object
-    info.put("ip", ip);
-    info.put("referer", referer);
-    info.put("ua", ua);
+    info.put("fvuserinfo:ip", ip);
+    info.put("fvuserinfo:referer", referer);
+    info.put("fvuserinfo:ua", ua);
+    info.put("fvuserinfo:traditionalName",
+        registrationRequest.getPropertyValue("fvuserinfo:traditionalName"));
 
     /*
      * This operation has for most part similar code to sister operation UserInvite. The main

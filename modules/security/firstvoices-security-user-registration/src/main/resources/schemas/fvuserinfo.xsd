@@ -7,6 +7,7 @@
   <xs:element name="preferences" type="xs:string"/>
 
   <!-- Request properties -->
+  <xs:element name="traditionalName" type="xs:string"/>
   <xs:element name="ip" type="xs:string"/>
   <xs:element name="ua" type="xs:string"/>
   <xs:element name="referer" type="xs:string"/>
