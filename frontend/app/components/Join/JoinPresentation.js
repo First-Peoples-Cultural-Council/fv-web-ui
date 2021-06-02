@@ -22,7 +22,6 @@ function JoinPresentation({
   requestedSiteTitle,
   serverResponse,
 }) {
-  // Show success message
   let serverErrorMessage = ''
   if (serverResponse) {
     switch (serverResponse?.status) {
@@ -46,7 +45,6 @@ function JoinPresentation({
             </div>
           </div>
         )
-
       case 200:
         return (
           <div className="row" style={{ maxWidth: '968px', margin: '0 auto' }}>

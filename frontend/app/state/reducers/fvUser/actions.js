@@ -38,12 +38,15 @@ export const requestMembership = ({ siteId, interestReason, communityMember, lan
       message: 'Request to join language site dispatched.',
     })
 
-    return DirectoryOperations.postToAPI(`${URLHelpers.getBaseURL()}api/v1/site/sections/${siteId}/membership`, {
-      interestReason,
-      communityMember,
-      languageTeam,
-      comment,
-    })
+    return DirectoryOperations.postToAPIwithResponse(
+      `${URLHelpers.getBaseURL()}api/v1/site/sections/${siteId}/membership`,
+      {
+        interestReason,
+        communityMember,
+        languageTeam,
+        comment,
+      }
+    )
       .then((response) => {
         dispatch({ type: FV_MEMBERSHIP_CREATE_SUCCESS, message: response })
         return response

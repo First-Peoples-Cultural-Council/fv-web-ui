@@ -18,14 +18,13 @@ import useLogin from 'dataSources/useLogin'
 import usePortal from 'dataSources/usePortal'
 import useProperties from 'dataSources/useProperties'
 import useRoute from 'dataSources/useRoute'
-// import useUser from 'dataSources/useUser'
+import useUser from 'dataSources/useUser'
 import useWindowPath from 'dataSources/useWindowPath'
 
 import './Breadcrumb.css'
 
 /**
  * @summary BreadcrumbData
- * @version 1.0.1
  * @component
  *
  * @param {object} props
@@ -41,7 +40,7 @@ function BreadcrumbData({ children, matchedPage, routes }) {
   const { pushWindowPath, splitWindowPath } = useWindowPath()
 
   const { computeLogin } = useLogin()
-  //   const { membershipFetch, computeMembershipFetch } = useUser()
+  const { getMembershipStatus, computeMembershipFetch } = useUser()
 
   const REMOVE_FROM_BREADCRUMBS = ['FV', 'sections', 'Data', 'Workspaces', 'search', 'nuxeo', 'app', 'explore']
   const isDialect = Object.prototype.hasOwnProperty.call(routeParams, 'dialect_path')
@@ -99,16 +98,25 @@ function BreadcrumbData({ children, matchedPage, routes }) {
   const portalLogoSrc = UIHelpers.getThumbnail(portalLogo, 'Thumbnail')
   const computedDialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
   const dialect = selectn('response', computedDialect)
+  const membershipStatus = selectn('message.membershipStatus', computeMembershipFetch)
 
   const isLoggedIn = computeLogin.success && computeLogin.isConnected
   const [showJoin, setShowJoin] = useState(false)
+  const [fetching, setFetching] = useState(false)
 
   useEffect(() => {
-    if (computedDialect?.response && isLoggedIn) {
-      const isMember = ProviderHelpers.isDialectMember(computeLogin, computedDialect)
-      setShowJoin(!isMember)
+    if (dialect && isLoggedIn && membershipStatus === undefined && !fetching) {
+      const siteId = dialect?.versionableId ? dialect?.versionableId : dialect?.uid
+      setFetching(true)
+      getMembershipStatus({ siteId: siteId })
     }
   }, [computedDialect])
+
+  useEffect(() => {
+    if (membershipStatus === 'available') {
+      setShowJoin(true)
+    }
+  }, [computeMembershipFetch])
 
   // Figure out the index of the Dialect in splitPath
   let indexDialect = -1

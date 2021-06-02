@@ -28,7 +28,11 @@ function BreadcrumbPresentation({ breadcrumbs, dialect, showJoin, portalLogoSrc,
         <FVButton
           variant="contained"
           color="primary"
-          onClick={() => (window.location.href = `/join?requestedSite=${dialect.uid}`)}
+          onClick={() =>
+            (window.location.href = `/join?requestedSite=${
+              dialect?.versionableId ? dialect?.versionableId : dialect?.uid
+            }`)
+          }
           style={{ margin: '10px', float: 'right' }}
         >
           Request to join {dialect.title}
