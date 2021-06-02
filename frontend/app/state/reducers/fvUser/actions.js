@@ -123,7 +123,7 @@ export const getJoinRequests = ({ siteId }) => {
 }
 
 // Value for newStatus can be 'ACCEPT' or 'IGNORE'
-export const postJoinRequest = ({ siteId, requestId, newStatus, messageToUser }) => {
+export const updateJoinRequest = ({ siteId, requestId, messageToUser, newStatus }) => {
   return (dispatch) => {
     dispatch({
       type: FV_JOIN_REQUEST_UPDATE_START,
@@ -131,7 +131,7 @@ export const postJoinRequest = ({ siteId, requestId, newStatus, messageToUser })
       message: 'Request to join language site dispatched.',
     })
 
-    return DirectoryOperations.postToAPI(
+    return DirectoryOperations.postToAPIwithResponse(
       `${URLHelpers.getBaseURL()}api/v1/site/sections/${siteId}/administration/joinRequests/${requestId}`,
       {
         newStatus,

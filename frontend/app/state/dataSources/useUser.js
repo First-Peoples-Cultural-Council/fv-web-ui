@@ -6,13 +6,14 @@ import {
   getMembershipStatus as _getMembershipStatus,
   getJoinRequest as _getJoinRequest,
   getJoinRequests as _getJoinRequests,
-  postJoinRequest as _postJoinRequest,
+  updateJoinRequest as _updateJoinRequest,
 } from 'reducers/fvUser'
 function useUser() {
   const dispatch = useDispatch()
   return {
     computeJoinRequest: useSelector((state) => state.fvUser.computeJoinRequest),
     computeJoinRequests: useSelector((state) => state.fvUser.computeJoinRequests),
+    computeUpdateJoinRequest: useSelector((state) => state.fvUser.computeUpdateJoinRequest),
     computeMembershipFetch: useSelector((state) => state.fvUser.computeMembershipFetch),
     computeMembershipCreate: useSelector((state) => state.fvUser.computeMembershipCreate),
     computeUserDialects: useSelector((state) => state.fvUser.computeUserDialects),
@@ -25,8 +26,12 @@ function useUser() {
       const dispatchObj = _getJoinRequests({ siteId })
       dispatch(dispatchObj)
     },
-    postJoinRequest: ({ siteId, requestId, newStatus, messageToUser }) => {
-      const dispatchObj = _postJoinRequest({ siteId, requestId, newStatus, messageToUser })
+    approveJoinRequest: ({ siteId, requestId, messageToUser, newStatus = 'ACCEPT' }) => {
+      const dispatchObj = _updateJoinRequest({ siteId, requestId, newStatus, messageToUser })
+      dispatch(dispatchObj)
+    },
+    ignoreJoinRequest: ({ siteId, requestId, messageToUser, newStatus = 'IGNORE' }) => {
+      const dispatchObj = _updateJoinRequest({ siteId, requestId, newStatus, messageToUser })
       dispatch(dispatchObj)
     },
     getMembershipStatus: ({ siteId }) => {

@@ -2,6 +2,9 @@ import { computeFetch, computeOperation } from 'reducers/rest'
 import { combineReducers } from 'redux'
 
 import {
+  FV_JOIN_REQUEST_UPDATE_START,
+  FV_JOIN_REQUEST_UPDATE_SUCCESS,
+  FV_JOIN_REQUEST_UPDATE_ERROR,
   FV_MEMBERSHIP_CREATE_START,
   FV_MEMBERSHIP_CREATE_SUCCESS,
   FV_MEMBERSHIP_CREATE_ERROR,
@@ -41,8 +44,6 @@ export const fvUserReducer = combineReducers({
         return { ...state, isFetching: false }
     }
   },
-  computeJoinRequest: computeJoinRequestFactory.computeJoinRequest,
-  computeJoinRequests: computeJoinRequestsFactory.computeJoinRequests,
   computeMembershipFetch(state = { isFetching: false, message: null, success: false }, action) {
     switch (action.type) {
       case FV_MEMBERSHIP_FETCH_START:
@@ -65,6 +66,30 @@ export const fvUserReducer = combineReducers({
         return { ...state, isFetching: false }
     }
   },
+  computeUpdateJoinRequest(state = { isFetching: false, message: null, success: false }, action) {
+    switch (action.type) {
+      case FV_JOIN_REQUEST_UPDATE_START:
+        return { ...state, isFetching: true }
+
+      // Send modified document to UI without access REST end-point
+      case FV_JOIN_REQUEST_UPDATE_SUCCESS:
+        return { ...state, message: action.message, isFetching: false, success: true }
+
+      // Send modified document to UI without access REST end-point
+      case FV_JOIN_REQUEST_UPDATE_ERROR:
+        return {
+          ...state,
+          isFetching: false,
+          isError: true,
+          error: action.message,
+        }
+
+      default:
+        return { ...state, isFetching: false }
+    }
+  },
+  computeJoinRequest: computeJoinRequestFactory.computeJoinRequest,
+  computeJoinRequests: computeJoinRequestsFactory.computeJoinRequests,
   computeUser: computeUserFactory.computeUser,
   computeUserDialects: computeUserDialectsOperation.computeUserDialects,
   computeUserSelfregister: computeUserSelfregisterOperation.computeUserSelfregister,
