@@ -227,22 +227,21 @@ function isAdmin(computeLogin) {
  */
 function isDialectMember(computeLogin, computeDialect) {
   const userGroups = selectn('response.properties.groups', computeLogin)
+  const acls = selectn('response.contextParameters.acls', computeDialect)
+  const separateName = acls?.[0].aces?.[0].id.split('_')
+  const dialectname = separateName?.[0]
+  const dialectGroups = [
+    `${dialectname}_language_administrators`,
+    `${dialectname}_recorders_with_approval`,
+    `${dialectname}_recorders`,
+    `${dialectname}_members`,
+  ]
 
-  let groupsToCheck = []
-  if (computeDialect && computeDialect.size > 0) {
-    if (computeDialect.getIn(['0', 'response'])) {
-      const aces = computeDialect.getIn(['0', 'response', 'contextParameters', 'acls', '0', 'aces'], [])
-      groupsToCheck = aces.map((a) => a.username)
-    }
+  if (userGroups && userGroups.length > 0) {
+    const arrayIntersection = userGroups.filter((value) => dialectGroups.indexOf(value) > -1)
+    return arrayIntersection.length >= 1
   }
-
-  if (!userGroups || !groupsToCheck) {
-    return true
-  }
-
-  const arrayIntersection = userGroups.filter((value) => groupsToCheck.indexOf(value) !== -1)
-
-  return arrayIntersection.length >= 1
+  return false
 }
 
 function isDialectPath(windowPath = '') {
