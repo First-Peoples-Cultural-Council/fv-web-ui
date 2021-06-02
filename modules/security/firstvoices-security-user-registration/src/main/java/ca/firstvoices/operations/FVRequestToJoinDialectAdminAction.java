@@ -26,7 +26,9 @@
 package ca.firstvoices.operations;
 
 import static ca.firstvoices.utils.FVSiteJoinRequestUtilities.SITE_JOIN_REQUEST_SCHEMA;
+
 import ca.firstvoices.utils.CustomSecurityConstants;
+import ca.firstvoices.utils.FVUserPreferencesUtilities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -178,7 +180,7 @@ public class FVRequestToJoinDialectAdminAction {
           throw new IllegalArgumentException("ambiguous or nonexistent user");
         }
 
-        final DocumentModel user = foundUsers.get(0);
+        DocumentModel user = foundUsers.get(0);
         final String username = (String) user.getProperty("user", "username");
 
 
@@ -192,6 +194,11 @@ public class FVRequestToJoinDialectAdminAction {
           userManager.updateGroup(groupDocument);
         }
 
+        // update user preferences to ensure user is redirected to site
+        String preferences =
+            FVUserPreferencesUtilities.createDefaultFromSite(dialectId);
+        user.setPropertyValue("preferences", preferences);
+        userManager.updateUser(user);
 
         EventProducer eventProducer = Framework.getService(EventProducer.class);
         DocumentEventContext ctx = new DocumentEventContext(session,

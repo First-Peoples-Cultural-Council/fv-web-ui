@@ -33,7 +33,6 @@ import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_CAN_PROC
 import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_EXISTS_ERROR;
 
 import ca.firstvoices.user.FVUserRegistrationInfo;
-import ca.firstvoices.utils.FVUserPreferencesUtilities;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
@@ -88,16 +87,13 @@ public class FVQuickUserRegistration {
     HttpServletRequest request = (HttpServletRequest) operationContext.get("request");
 
     try {
-      String preferences =
-          FVUserPreferencesUtilities.createDefault(registrationRequest);
-
       // Setup `info` (this gets added to the registration object)
       info.put("fvuserinfo:ip", getIp(request));
       info.put("fvuserinfo:referer", request.getHeader("Referer"));
       info.put("fvuserinfo:ua", request.getHeader("User-Agent"));
       info.put("fvuserinfo:traditionalName",
           registrationRequest.getPropertyValue("fvuserinfo:traditionalName"));
-      info.put("fvuserinfo:preferences", preferences);
+
       info.put(UserInvitationComponent.PARAM_ORIGINATING_USER, session.getPrincipal().getName());
 
       // Setup `userinfo` (this gets translated to a user object)
@@ -106,7 +102,6 @@ public class FVQuickUserRegistration {
       userInfo.setFirstName((String) registrationRequest.getPropertyValue("userinfo:firstName"));
       userInfo.setLastName((String) registrationRequest.getPropertyValue("userinfo:lastName"));
       userInfo.setLogin(userInfo.getEmail());
-      userInfo.setPreferences(preferences);
       userInfo.setGroups(Collections.singletonList("members"));
 
       submitRegistration(info, validationMethod);
@@ -159,7 +154,7 @@ public class FVQuickUserRegistration {
   }
 
   private int validateRegistration(String login, String email) {
-    CoreInstance.doPrivileged(session, s -> {
+    return CoreInstance.doPrivileged(session, s -> {
 
       DocumentModelList registrations = null;
       DocumentModel userE = null;
@@ -204,8 +199,6 @@ public class FVQuickUserRegistration {
 
       return verificationState;
     });
-
-    return REGISTRATION_CAN_PROCEED;
   }
 
   private String getIp(HttpServletRequest request) {

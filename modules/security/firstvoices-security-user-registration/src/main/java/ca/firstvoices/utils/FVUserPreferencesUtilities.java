@@ -25,7 +25,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
-import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoException;
 
 public class FVUserPreferencesUtilities {
@@ -57,12 +56,6 @@ public class FVUserPreferencesUtilities {
     } catch (JsonProcessingException e) {
       throw new NuxeoException(e);
     }
-  }
-
-  public static String createDefault(DocumentModel registration) {
-    String dialectID = (String) registration.getPropertyValue("fvuserinfo:requestedSpace");
-
-    return createDefaultFromSite(dialectID);
   }
 
   private FVUserPreferencesUtilities() {
