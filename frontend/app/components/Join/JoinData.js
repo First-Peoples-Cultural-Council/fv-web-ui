@@ -77,11 +77,23 @@ function JoinData({ children }) {
   }, [membershipStatus])
 
   useEffect(() => {
-    const status = selectn('value.status', requestMembershipResponse)
-    if (status === 400 || status === 200) {
+    if (requestMembershipResponse === 'Your request to join this dialect is now pending') {
       setServerResponse({
-        status: status,
-        message: selectn('response.value.entity', requestMembershipResponse),
+        status: 200,
+        message: 'Your request to join this dialect is now pending',
+      })
+    }
+    if (requestMembershipResponse?.startsWith('Failed to request joining this dialect')) {
+      setServerResponse({
+        status: 500,
+        message:
+          'Unfortunately we are unable to process your request at this time. Please contact hello@firstvoices.com if this error persists.',
+      })
+    }
+    if (requestMembershipResponse?.startsWith('Preconditions for joining this dialect have not been')) {
+      setServerResponse({
+        status: 400,
+        message: 'Unfortunately you are unable to request membership at this time. Please try again later.',
       })
     }
   }, [requestMembershipResponse])
