@@ -33,11 +33,24 @@ function JoinPresentation({
           </div>
         )
         break
+      case 403:
+        return (
+          <div className="row" style={{ maxWidth: '968px', margin: '0 auto' }}>
+            <div style={{ padding: '0.5em', textAlign: 'center', marginTop: '50px' }}>
+              <div className={classNames('alert', 'alert-danger')} role="alert">
+                {serverResponse?.message}
+              </div>
+              <p>
+                <Link href="/explore/FV/sections/Data/">Go to public language sites</Link>.
+              </p>
+            </div>
+          </div>
+        )
 
       case 200:
         return (
-          <div className="row" style={{ marginTop: '15px' }}>
-            <div className={classNames('col-xs-12')}>
+          <div className="row" style={{ maxWidth: '968px', margin: '0 auto' }}>
+            <div style={{ padding: '0.5em', textAlign: 'center' }}>
               <h1>Thank you for your request!</h1>
               <p>
                 Thank you for requesting to join the {requestedSiteTitle} language site as a member! Your request has

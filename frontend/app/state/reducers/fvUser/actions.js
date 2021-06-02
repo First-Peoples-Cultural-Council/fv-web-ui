@@ -63,7 +63,7 @@ export const getMembershipStatus = ({ siteId }) => {
       message: 'Membership status enquiry dispatched.',
     })
 
-    return DirectoryOperations.getFromApi(`${URLHelpers.getBaseURL()}api/v1/site/sections/${siteId}/membership`)
+    return DirectoryOperations.getFromAPI(`${URLHelpers.getBaseURL()}api/v1/site/sections/${siteId}/membership`)
       .then((response) => {
         dispatch({ type: FV_MEMBERSHIP_FETCH_SUCCESS, message: response })
         return response

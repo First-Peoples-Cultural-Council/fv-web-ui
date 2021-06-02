@@ -20,7 +20,7 @@ import ProviderHelpers from 'common/ProviderHelpers'
 function JoinData({ children }) {
   const { fetchPortals, computePortals } = usePortal()
   const { computeLogin } = useLogin()
-  const { requestMembership, computeMembershipCreate } = useUser()
+  const { requestMembership, computeMembershipCreate, getMembershipStatus, computeMembershipFetch } = useUser()
 
   const isLoggedIn = computeLogin.success && computeLogin.isConnected
 
@@ -38,24 +38,15 @@ function JoinData({ children }) {
     if (requestedSite) {
       fetchPortals({ area: 'sections' })
       setFormValue({ siteId: requestedSite })
+      getMembershipStatus({ siteId: requestedSite })
+    }
+    if (requestedSite === null) {
+      window.location.href = '/explore/FV/sections/Data/'
     }
   }, [requestedSite])
 
   const fvUserFields = selectn('FVJoin', fields)
   const fvUserOptions = Object.assign({}, selectn('FVJoin', options))
-
-  //const _computeRequestMembership = ProviderHelpers.getEntry(computeMembershipCreate, userRequest)
-  const requestMembershipResponse = selectn('response', computeMembershipCreate)
-
-  useEffect(() => {
-    const status = selectn('value.status', requestMembershipResponse)
-    if (status === 400 || status === 200) {
-      setServerResponse({
-        status: status,
-        message: selectn('response.value.entity', requestMembershipResponse),
-      })
-    }
-  }, [requestMembershipResponse])
 
   useEffect(() => {
     if (selectn('success', computePortals)) {
@@ -66,6 +57,34 @@ function JoinData({ children }) {
       setRequestedSiteTitle(portal.title)
     }
   }, [computePortals])
+
+  const requestMembershipResponse = selectn('message', computeMembershipCreate)
+  const membershipStatus = selectn('message.membershipStatus', computeMembershipFetch)
+
+  useEffect(() => {
+    if (membershipStatus === 'pending') {
+      setServerResponse({
+        status: 403,
+        message: 'You currently have a pending application to join this archive.',
+      })
+    }
+    if (membershipStatus === 'joined') {
+      setServerResponse({
+        status: 403,
+        message: 'You are already a member of this archive.',
+      })
+    }
+  }, [membershipStatus])
+
+  useEffect(() => {
+    const status = selectn('value.status', requestMembershipResponse)
+    if (status === 400 || status === 200) {
+      setServerResponse({
+        status: status,
+        message: selectn('response.value.entity', requestMembershipResponse),
+      })
+    }
+  }, [requestMembershipResponse])
 
   const onRequestSaveForm = (event) => {
     event.preventDefault()

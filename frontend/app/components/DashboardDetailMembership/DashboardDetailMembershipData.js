@@ -16,8 +16,7 @@ import { getBookData, getBookAudioVideo, getBookPictures } from 'components/Song
 import StringHelpers from 'common/StringHelpers'
 
 /**
- * @summary DashboardDetailTasksData
- * @version 1.0.1
+ * @summary DashboardDetailMembershipData
  * @component
  *
  * @param {object} props
@@ -28,7 +27,7 @@ import StringHelpers from 'common/StringHelpers'
  *
  * @returns {object} Data for DashboardDetailTasksContainer (NOTE: no dedicated Presentation layer)
  */
-function DashboardDetailTasksData({ children, columnRender }) {
+function DashboardDetailMembershipData({ children, columnRender }) {
   const { theme } = useTheme()
   const { intl } = useIntl()
   const [selectedItemData, setSelectedItemData] = useState({})
@@ -407,14 +406,14 @@ function DashboardDetailTasksData({ children, columnRender }) {
 }
 // PROPTYPES
 const { func, object } = PropTypes
-DashboardDetailTasksData.propTypes = {
+DashboardDetailMembershipData.propTypes = {
   children: func,
   columnRender: object,
 }
-DashboardDetailTasksData.defaultProps = {
+DashboardDetailMembershipData.defaultProps = {
   columnRender: {
     itemType: () => '',
   },
 }
 
-export default DashboardDetailTasksData
+export default DashboardDetailMembershipData

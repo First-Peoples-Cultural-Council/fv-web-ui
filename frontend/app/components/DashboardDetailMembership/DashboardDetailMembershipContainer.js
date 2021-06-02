@@ -11,7 +11,6 @@ import TablePagination from 'components/Table/TablePagination'
 import ItemIcon from 'components/ItemIcon'
 /**
  * @summary DashboardDetailMembershipContainer
- * @version 1.0.1
  * @component
  *
  * @param {object} props
