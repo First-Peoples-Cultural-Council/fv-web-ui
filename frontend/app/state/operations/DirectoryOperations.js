@@ -114,9 +114,14 @@ export default class DirectoryOperations {
     const api = ky.create({
       timeout: TIMEOUT,
     })
-    return api.post(path, { json: bodyObject }).then(() => {
-      return
-    }, apiErrorHandler)
+    return api.post(path, { json: bodyObject }).then(
+      () => {
+        return
+      },
+      (error) => {
+        return error.response.text()
+      }
+    )
   }
 
   /* NOTE: Currently only using with `simpleTaskApprove` & `simpleTaskIgnore`.

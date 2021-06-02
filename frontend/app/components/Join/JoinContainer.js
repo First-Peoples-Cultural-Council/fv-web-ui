@@ -2,7 +2,6 @@ import React from 'react'
 // import PropTypes from 'prop-types'
 import JoinPresentation from 'components/Join/JoinPresentation'
 import JoinData from 'components/Join/JoinData'
-import PromiseWrapper from 'components/PromiseWrapper'
 
 /**
  * @summary JoinContainer
@@ -15,18 +14,9 @@ import PromiseWrapper from 'components/PromiseWrapper'
 function JoinContainer() {
   return (
     <JoinData>
-      {({
-        computeEntities,
-        fvUserFields,
-        fvUserOptions,
-        formRef,
-        formValue,
-        onRequestSaveForm,
-        requestedSiteTitle,
-        serverResponse,
-      }) => {
+      {({ fvUserFields, fvUserOptions, formRef, formValue, onRequestSaveForm, requestedSiteTitle, serverResponse }) => {
         return (
-          <PromiseWrapper renderOnError computeEntities={computeEntities}>
+          <div>
             <JoinPresentation
               fvUserFields={fvUserFields}
               fvUserOptions={fvUserOptions}
@@ -36,7 +26,7 @@ function JoinContainer() {
               requestedSiteTitle={requestedSiteTitle}
               serverResponse={serverResponse}
             />
-          </PromiseWrapper>
+          </div>
         )
       }}
     </JoinData>

@@ -44,8 +44,8 @@ function JoinData({ children }) {
   const fvUserFields = selectn('FVJoin', fields)
   const fvUserOptions = Object.assign({}, selectn('FVJoin', options))
 
-  const _computeRequestMembership = ProviderHelpers.getEntry(computeMembershipCreate, userRequest)
-  const requestMembershipResponse = selectn('response', _computeRequestMembership)
+  //const _computeRequestMembership = ProviderHelpers.getEntry(computeMembershipCreate, userRequest)
+  const requestMembershipResponse = selectn('response', computeMembershipCreate)
 
   useEffect(() => {
     const status = selectn('value.status', requestMembershipResponse)
