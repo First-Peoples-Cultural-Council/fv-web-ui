@@ -54,7 +54,7 @@ function JoinData({ children }) {
       const portal = response.find((obj) => {
         return obj.uid === requestedSite
       })
-      setRequestedSiteTitle(portal.title)
+      setRequestedSiteTitle(portal?.title)
     }
   }, [computePortals])
 
