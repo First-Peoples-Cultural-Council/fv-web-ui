@@ -8,14 +8,21 @@ import './Breadcrumb.css'
 
 /**
  * @summary BreadcrumbPresentation
- * @version 1.0.1
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function BreadcrumbPresentation({ breadcrumbs, dialect, showJoin, portalLogoSrc, showWorkspaceSwitcher, area }) {
+function BreadcrumbPresentation({
+  breadcrumbs,
+  dialect,
+  showJoin,
+  membershipStatus,
+  portalLogoSrc,
+  showWorkspaceSwitcher,
+  area,
+}) {
   return dialect ? (
     <>
       <div className="row Breadcrumb__container">
@@ -28,6 +35,7 @@ function BreadcrumbPresentation({ breadcrumbs, dialect, showJoin, portalLogoSrc,
         <FVButton
           variant="contained"
           color="primary"
+          disabled={membershipStatus === 'pending'}
           onClick={() =>
             (window.location.href = `/join?requestedSite=${
               dialect?.versionableId ? dialect?.versionableId : dialect?.uid
@@ -35,7 +43,7 @@ function BreadcrumbPresentation({ breadcrumbs, dialect, showJoin, portalLogoSrc,
           }
           style={{ margin: '10px', float: 'right' }}
         >
-          Request to join {dialect.title}
+          {membershipStatus === 'pending' ? 'Request submitted' : `Request to join ${dialect.title}`}
         </FVButton>
       )}
       {showWorkspaceSwitcher && !showJoin && (
@@ -50,8 +58,9 @@ const { array, bool, object, string } = PropTypes
 BreadcrumbPresentation.propTypes = {
   breadcrumbs: array,
   dialect: object,
-  showJoin: bool,
+  membershipStatus: string,
   portalLogoSrc: string,
+  showJoin: bool,
   showWorkspaceSwitcher: bool,
   area: string,
 }
