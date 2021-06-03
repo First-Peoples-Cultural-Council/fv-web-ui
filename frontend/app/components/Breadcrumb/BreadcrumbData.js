@@ -113,7 +113,7 @@ function BreadcrumbData({ children, matchedPage, routes }) {
   }, [computedDialect])
 
   useEffect(() => {
-    if (membershipStatus === 'available') {
+    if (membershipStatus === 'available' || membershipStatus === 'pending') {
       setShowJoin(true)
     }
   }, [computeMembershipFetch])
@@ -239,8 +239,9 @@ function BreadcrumbData({ children, matchedPage, routes }) {
   return children({
     breadcrumbs,
     dialect,
-    showJoin,
     portalLogoSrc,
+    showJoin,
+    membershipStatus,
   })
 }
 // PROPTYPES

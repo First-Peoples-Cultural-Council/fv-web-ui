@@ -15,12 +15,13 @@ import BreadcrumbData from 'components/Breadcrumb/BreadcrumbData'
 function BreadcrumbContainer({ matchedPage, routes, showWorkspaceSwitcher, area }) {
   return (
     <BreadcrumbData matchedPage={matchedPage} routes={routes}>
-      {({ breadcrumbs, dialect, showJoin, portalLogoSrc }) => {
+      {({ breadcrumbs, dialect, showJoin, portalLogoSrc, membershipStatus }) => {
         return (
           <BreadcrumbPresentation
             breadcrumbs={breadcrumbs}
             dialect={dialect}
             showJoin={showJoin}
+            membershipStatus={membershipStatus}
             portalLogoSrc={portalLogoSrc}
             showWorkspaceSwitcher={showWorkspaceSwitcher}
             area={area}
