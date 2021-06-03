@@ -177,7 +177,8 @@ public class SitesObject extends DefaultObject {
   public Response listJoinRequests(
       @Context HttpServletRequest request, @PathParam("site") String site) {
     Optional<String> dialectId = this.resolveDialectId(request, site);
-    if (!callingUserHasLanguageAdministratorPermissions(dialectId.get())) {
+    if (!ctx.getPrincipal().isAdministrator()
+        && !callingUserHasLanguageAdministratorPermissions(dialectId.get())) {
       return Response.status(403).build();
     }
     return new SiteAdministrationDelegate(ctx.getCoreSession(), dialectId).listJoinRequests();
@@ -190,7 +191,8 @@ public class SitesObject extends DefaultObject {
       @Context HttpServletRequest request, @PathParam("site") String site,
       @PathParam("requestId") String requestId) {
     Optional<String> dialectId = this.resolveDialectId(request, site);
-    if (!callingUserHasLanguageAdministratorPermissions(dialectId.get())) {
+    if (!ctx.getPrincipal().isAdministrator()
+        && !callingUserHasLanguageAdministratorPermissions(dialectId.get())) {
       return Response.status(403).build();
     }
     return new SiteAdministrationDelegate(ctx.getCoreSession(),
@@ -204,7 +206,8 @@ public class SitesObject extends DefaultObject {
       @Context HttpServletRequest request, @PathParam("site") String site,
       @PathParam("requestId") String requestId, SiteMembershipUpdateRequest updateRequest) {
     Optional<String> dialectId = this.resolveDialectId(request, site);
-    if (!callingUserHasLanguageAdministratorPermissions(dialectId.get())) {
+    if (!ctx.getPrincipal().isAdministrator()
+        && !callingUserHasLanguageAdministratorPermissions(dialectId.get())) {
       return Response.status(403).build();
     }
     return new SiteAdministrationDelegate(ctx.getCoreSession(), dialectId)
@@ -278,7 +281,7 @@ public class SitesObject extends DefaultObject {
 
     boolean canProceed = status.equals(DialectMembershipHelper.DialectMembershipStatus.AVAILABLE);
 
-    if (!canProceed) {
+    if (!canProceed || ctx.getPrincipal().isAdministrator()) {
       return Response.status(400).entity(
           "Preconditions for joining this dialect have not been " + "satisfied").build();
     }
@@ -289,7 +292,7 @@ public class SitesObject extends DefaultObject {
     Map<String, Object> params = new HashMap<>();
     params.put("dialect", dialectId.get());
     params.put("interestReason", membershipRequest.getInterestReason());
-    params.put("comments", membershipRequest.getComment());
+    params.put("comment", membershipRequest.getComment());
     params.put("languageTeam", membershipRequest.isLanguageTeam());
     params.put("communityMember", membershipRequest.isCommunityMember());
 
