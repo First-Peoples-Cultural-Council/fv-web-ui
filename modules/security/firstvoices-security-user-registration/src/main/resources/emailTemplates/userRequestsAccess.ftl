@@ -2,23 +2,14 @@
     <body>
 
     Hello!<br /><br />
-    ${traditionalName} ${firstName} ${lastName} wants to join <strong>${dialect}</strong> on FirstVoices as a community member.<br /><br />
-
-    Additional details from them:
-    <dl>
-        <#if comment != "">
-            <dt><strong>Comment</strong></dt>
-            <dd>${comment}</dd>
-        </#if>
-        <#if interestReason != "">
-            <dt><strong>Interest Reason</strong></dt>
-            <dd>${interestReason}</dd>
-        </#if>
-        <dt><strong>Community Member</strong></dt>
-        <dd>${communityMember?string("Yes", "No")}</dd>
-        <dt><strong>Language Team Member</strong></dt>
-        <dd>${languageTeam?string("Yes", "No")}</dd>
-    </dl>
+    ${traditionalName} ${firstName} ${lastName} wants to join <strong>${siteName}</strong> on FirstVoices as a community member.<br /><br />
+    <p>
+        ${interestReasons.${interestReason}}
+        <strong>Comment</strong>: &quot;${comment!"Not Provided"}&quot;<br/><br/>
+        <strong>Interest Reason</strong>: ${interestReason?switch('teacher', 'I am a teacher/educator', 'student' 'I am a learner/student', 'learner-1', 'I am interested in learning MY language', 'learner-2', 'I am interested in learning A language', 'other', 'Other')!"Not Provided"}<br/><br/>
+        <strong>Community Member</strong>: ${communityMember?string("Yes", "No")}<br/><br/>
+        <strong>Language Team Member</strong>: ${languageTeam?string("Yes", "No")}
+    </p>
 
     <p>
         What next?<br/>

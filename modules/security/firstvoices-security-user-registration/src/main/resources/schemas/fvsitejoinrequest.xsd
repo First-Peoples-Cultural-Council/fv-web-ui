@@ -15,7 +15,7 @@
   <xs:element name="comment" type="xs:string"/>
 
   <xs:element name="status" type="xs:string"/>
-
   <xs:element name="messageToUser" type="xs:string"/>
+  <xs:element name="group" type="xs:string"/>
 
 </xs:schema>

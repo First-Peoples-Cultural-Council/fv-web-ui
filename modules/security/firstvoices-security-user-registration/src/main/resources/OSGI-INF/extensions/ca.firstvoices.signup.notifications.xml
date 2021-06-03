@@ -12,6 +12,11 @@
                   label="label.noLabel">
     </notification>
 
+    <notification name="registrationExpiring" channel="email" enabled="true"
+      autoSubscribed="true" template="registrationExpiring" subject="Your FirstVoices registration is about to expire"
+      label="label.noLabel">
+    </notification>
+
   </extension>
 
 
@@ -31,6 +36,7 @@
 
     <template name="userRequestsAccess" src="emailTemplates/userRequestsAccess.ftl" />
     <template name="joinRequestAccepted" src="emailTemplates/joinRequestAccepted.ftl" />
+    <template name="registrationExpiring" src="emailTemplates/registrationExpiring.ftl" />
 
   </extension>
 

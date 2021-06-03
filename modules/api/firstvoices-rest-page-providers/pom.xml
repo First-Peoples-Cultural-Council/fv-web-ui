@@ -11,6 +11,11 @@
   <name>Page Providers for REST API</name>
   <dependencies>
     <dependency>
+      <groupId>ca.firstvoices</groupId>
+      <artifactId>firstvoices-security</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.nuxeo.common</groupId>
       <artifactId>nuxeo-common</artifactId>
     </dependency>

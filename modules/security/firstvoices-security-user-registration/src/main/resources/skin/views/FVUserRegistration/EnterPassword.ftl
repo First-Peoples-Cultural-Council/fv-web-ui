@@ -88,7 +88,7 @@
         <h1 style="font-weight:500;">Choose a Password</h1>
 
         <div>
-            <form class="fv-form" action="${data['ValidationUrl']}" method="post"
+            <form class="fv-form" action="/nuxeo/site/fv/users/validate" method="post"
                   enctype="application/x-www-form-urlencoded" name="submitNewPassword"
                   onsubmit="return validateMyForm();">
                 <input type="hidden" id="RequestId" value="${data['RequestId']}" name="RequestId" />

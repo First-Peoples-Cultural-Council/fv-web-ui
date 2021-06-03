@@ -16,7 +16,7 @@ public class SiteMembershipUpdateRequestReader
   public SiteMembershipUpdateRequest read(final JsonNode jn) throws IOException {
 
     return new SiteMembershipUpdateRequest(jn.get("newStatus").asText(),
-        jn.get("messageToUser").asText());
+        jn.get("messageToUser").asText(), jn.get("group").asText());
   }
 
 }

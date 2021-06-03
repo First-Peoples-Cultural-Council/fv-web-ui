@@ -67,6 +67,11 @@ public class FVResolveSignupNotificationAudience implements EventListener {
     NotificationManager notificationManager = Framework.getService(NotificationManager.class);
     UserManager userManager = Framework.getService(UserManager.class);
 
+    String siteURL =
+        Framework.getProperty("nuxeo.url")
+            .replace("/nuxeo", "")
+            .replace("8080", "3001");
+
     switch (event.getName()) {
       case "joinRequestAccepted":
         CoreInstance.doPrivileged(ctx.getCoreSession(), session -> {
@@ -78,8 +83,9 @@ public class FVResolveSignupNotificationAudience implements EventListener {
 
           Map<String, Object> infoMap = new HashMap<>();
           infoMap.put("siteName", dialectDocument.getTitle());
+          infoMap.put("siteURL", siteURL);
 
-          notificationManager.sendNotification("userRequestAccess",
+          notificationManager.sendNotification("joinRequestAccepted",
               infoMap,
               ctx.getSourceDocument().getProperty(SITE_JOIN_REQUEST_SCHEMA, "user").toString());
         });
@@ -114,7 +120,8 @@ public class FVResolveSignupNotificationAudience implements EventListener {
             NuxeoPrincipal principal = userManager.getPrincipal(username);
             DocumentModel principalDoc = principal.getModel();
 
-            infoMap.put("dialectName", dialectDocument.getTitle());
+            infoMap.put("siteName", dialectDocument.getTitle());
+            infoMap.put("siteURL", siteURL);
             infoMap.put("username", username);
             infoMap.put("firstName", principal.getFirstName());
             infoMap.put("lastName", principal.getLastName());

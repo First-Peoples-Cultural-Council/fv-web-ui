@@ -67,6 +67,9 @@ public class FVRequestToJoinDialectAdminAction {
 
   private final List<String> validStartingStatuses = Arrays.asList("NEW", "IGNORE");
   private final List<String> validTargetStatuses = Arrays.asList("ACCEPT", "IGNORE");
+  private final List<String> validGroups = Arrays.asList(CustomSecurityConstants.MEMBERS_GROUP,
+      CustomSecurityConstants.LANGUAGE_ADMINS_GROUP, CustomSecurityConstants.RECORDERS_GROUP,
+      CustomSecurityConstants.RECORDERS_WITH_APPROVAL_GROUP);
 
   @Context protected CoreSession session;
 
@@ -77,6 +80,7 @@ public class FVRequestToJoinDialectAdminAction {
   @Param(name = "requestId", required = true) protected String requestId;
   @Param(name = "messageToUser", required = false) protected String messageToUser;
   @Param(name = "newStatus", required = true) protected String newStatus;
+  @Param(name = "group", required = false) protected String group;
 
   @OperationMethod
   public void run() {
@@ -85,7 +89,8 @@ public class FVRequestToJoinDialectAdminAction {
         user,
         requestId,
         newStatus,
-        messageToUser).runUnrestricted();
+        messageToUser,
+        group).runUnrestricted();
   }
 
   private class JoinRequestAdminActionRunner extends UnrestrictedSessionRunner {
@@ -93,17 +98,19 @@ public class FVRequestToJoinDialectAdminAction {
     private final String requestId;
     private final String newStatus;
     private final String messageToUser;
+    private final String group;
     private final NuxeoPrincipal callingUser;
 
 
     public JoinRequestAdminActionRunner(
         CoreSession session, final NuxeoPrincipal callingUser, final String requestId,
-        final String newStatus, final String messageToUser) {
+        final String newStatus, final String messageToUser, final String group) {
       super(session);
       this.callingUser = callingUser;
       this.requestId = requestId;
       this.newStatus = newStatus;
       this.messageToUser = messageToUser;
+      this.group = group;
     }
 
     @Override
@@ -128,6 +135,10 @@ public class FVRequestToJoinDialectAdminAction {
         throw new IllegalArgumentException("Invalid starting status");
       }
 
+      if (validGroups.stream().noneMatch(s -> s.equals(group))) {
+        throw new IllegalArgumentException("Invalid group to be assigned to `" + group + "`");
+      }
+
       //resolve target dialect
       String dialectId = joinRequestDocument
           .getProperty(SITE_JOIN_REQUEST_SCHEMA, "dialect")
@@ -147,10 +158,9 @@ public class FVRequestToJoinDialectAdminAction {
       for (ACE ace : dialectDocument.getACP().getACL(ACL.LOCAL_ACL).getACEs()) {
         String acePrincipal = ace.getUsername();
 
-        if (SecurityConstants.READ.equals(ace.getPermission())) {
-          if (acePrincipal.contains(CustomSecurityConstants.MEMBERS_GROUP) && ace.isGranted()) {
-            targetGroups.add(acePrincipal);
-          }
+        if (SecurityConstants.READ.equals(ace.getPermission())
+            && acePrincipal.contains(group) && ace.isGranted()) {
+          targetGroups.add(acePrincipal);
         }
 
         if (acePrincipal.contains(CustomSecurityConstants.LANGUAGE_ADMINS_GROUP)
@@ -212,6 +222,7 @@ public class FVRequestToJoinDialectAdminAction {
       // update request document
       joinRequestDocument.setProperty(SITE_JOIN_REQUEST_SCHEMA, "status", newStatus);
       joinRequestDocument.setProperty(SITE_JOIN_REQUEST_SCHEMA, "messageToUser", messageToUser);
+      joinRequestDocument.setProperty(SITE_JOIN_REQUEST_SCHEMA, "group", group);
       session.saveDocument(joinRequestDocument);
 
 

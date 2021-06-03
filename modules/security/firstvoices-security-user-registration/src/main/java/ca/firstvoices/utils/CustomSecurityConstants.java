@@ -22,6 +22,12 @@ package ca.firstvoices.utils;
 
 public class CustomSecurityConstants {
 
+  private CustomSecurityConstants() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static final String LANGUAGE_ADMINS_GROUP = "language_administrators";
   public static final String MEMBERS_GROUP = "members";
+  public static final String RECORDERS_GROUP = "recorders";
+  public static final String RECORDERS_WITH_APPROVAL_GROUP = "recorders_with_approval";
 }

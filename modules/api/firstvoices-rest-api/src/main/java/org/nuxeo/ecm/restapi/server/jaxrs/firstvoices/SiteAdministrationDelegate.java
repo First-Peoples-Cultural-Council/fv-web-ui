@@ -81,7 +81,7 @@ public class SiteAdministrationDelegate {
     params.put("requestId", requestId);
     params.put("messageToUser", joinRequest.getMessageToUser());
     params.put("newStatus", joinRequest.getNewStatus());
-
+    params.put("group", joinRequest.getGroup());
 
     try {
       automationService.run(operationContext, FVRequestToJoinDialectAdminAction.ID, params);
@@ -93,7 +93,7 @@ public class SiteAdministrationDelegate {
   }
 
   private static Function<DocumentModel, AdminSiteJoinRequest> mapper() {
-    return (d) -> {
+    return d -> {
 
       UserManager userManager = Framework.getService(UserManager.class);
       Map<String, Serializable> searchParameters = new HashMap<>();
