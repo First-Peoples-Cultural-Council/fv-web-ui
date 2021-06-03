@@ -52,7 +52,7 @@ const FVRegistrationTemplate = function template(locals) {
       <fieldset>
         <div className="col-md-6">{locals.inputs['userinfo:firstName']}</div>
         <div className="col-md-6">{locals.inputs['userinfo:lastName']}</div>
-        <div className="col-md-6">{locals.inputs['userinfo:traditionalName']}</div>
+        <div className="col-md-6">{locals.inputs['fvuserinfo:traditionalName']}</div>
         <div className="col-md-6">{locals.inputs['userinfo:email']}</div>
       </fieldset>
     </div>
@@ -1298,7 +1298,7 @@ const options = {
   FVResource: FVMedia,
   FVRegistration: {
     fields: {
-      'userinfo:traditionalName': {
+      'fvuserinfo:traditionalName': {
         label: 'Traditional Name',
       },
       'userinfo:firstName': {

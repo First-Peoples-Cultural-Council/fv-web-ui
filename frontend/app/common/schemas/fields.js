@@ -123,7 +123,7 @@ const fields = {
     }
   ),
   FVRegistration: {
-    'userinfo:traditionalName': t.maybe(t.String),
+    'fvuserinfo:traditionalName': t.maybe(t.String),
     'userinfo:firstName': t.String,
     'userinfo:lastName': t.String,
     'userinfo:email': Email,
