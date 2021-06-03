@@ -26,12 +26,12 @@ function useUser() {
       const dispatchObj = _getJoinRequests({ siteId })
       dispatch(dispatchObj)
     },
-    approveJoinRequest: ({ siteId, requestId, messageToUser, newStatus = 'ACCEPT' }) => {
-      const dispatchObj = _updateJoinRequest({ siteId, requestId, newStatus, messageToUser })
+    approveJoinRequest: ({ siteId, requestId, group, messageToUser, newStatus = 'ACCEPT' }) => {
+      const dispatchObj = _updateJoinRequest({ siteId, requestId, group, newStatus, messageToUser })
       dispatch(dispatchObj)
     },
-    ignoreJoinRequest: ({ siteId, requestId, messageToUser, newStatus = 'IGNORE' }) => {
-      const dispatchObj = _updateJoinRequest({ siteId, requestId, newStatus, messageToUser })
+    ignoreJoinRequest: ({ siteId, requestId, messageToUser, group = 'N/A', newStatus = 'IGNORE' }) => {
+      const dispatchObj = _updateJoinRequest({ siteId, requestId, group, newStatus, messageToUser })
       dispatch(dispatchObj)
     },
     getMembershipStatus: ({ siteId }) => {

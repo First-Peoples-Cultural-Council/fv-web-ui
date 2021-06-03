@@ -83,7 +83,7 @@ export const getJoinRequest = ({ siteId, requestId }) => {
     dispatch({
       type: FV_JOIN_REQUEST_FETCH_START,
       pathOrId: `api/v1/site/sections/${siteId}/administration/joinRequests`,
-      message: 'Request to join language site dispatched.',
+      message: 'Request to get a join request dispatched.',
     })
 
     return DirectoryOperations.getFromAPI(
@@ -105,7 +105,7 @@ export const getJoinRequests = ({ siteId }) => {
     dispatch({
       type: FV_JOIN_REQUESTS_FETCH_START,
       pathOrId: `api/v1/site/sections/${siteId}/administration`,
-      message: 'Request to join language site dispatched.',
+      message: 'Request to get join requests dispatched.',
     })
 
     return DirectoryOperations.getFromAPI(
@@ -123,12 +123,12 @@ export const getJoinRequests = ({ siteId }) => {
 }
 
 // Value for newStatus can be 'ACCEPT' or 'IGNORE'
-export const updateJoinRequest = ({ siteId, requestId, messageToUser, newStatus }) => {
+export const updateJoinRequest = ({ siteId, requestId, group, messageToUser, newStatus }) => {
   return (dispatch) => {
     dispatch({
       type: FV_JOIN_REQUEST_UPDATE_START,
       pathOrId: `api/v1/site/sections/${siteId}/administration/joinRequests`,
-      message: 'Request to join language site dispatched.',
+      message: 'Request to update a join request dispatched.',
     })
 
     return DirectoryOperations.postToAPIwithResponse(
@@ -136,6 +136,7 @@ export const updateJoinRequest = ({ siteId, requestId, messageToUser, newStatus 
       {
         newStatus,
         messageToUser,
+        group,
       }
     )
       .then((response) => {

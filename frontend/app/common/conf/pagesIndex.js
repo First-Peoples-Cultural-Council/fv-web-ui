@@ -129,9 +129,7 @@ const DashboardContainer = React.lazy(() => import('components/Dashboard/Dashboa
 const DashboardDetailTasksContainer = React.lazy(() =>
   import('components/DashboardDetailTasks/DashboardDetailTasksContainer')
 )
-const DashboardDetailMembership = React.lazy(() =>
-  import('components/DashboardDetailMembership/DashboardDetailMembershipContainer')
-)
+const Membership = React.lazy(() => import('components/Membership/MembershipContainer'))
 
 // MENTOR-APPRENTICE PHOTO PROJECT
 // ----------------------
@@ -227,5 +225,5 @@ export {
   // DASHBOARD
   DashboardContainer,
   DashboardDetailTasksContainer,
-  DashboardDetailMembership,
+  Membership,
 }

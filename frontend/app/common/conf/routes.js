@@ -2489,7 +2489,7 @@ const routes = [
     id: 'dashboard',
     path: ['dashboard', 'membership'],
     title: intl.translate({ key: 'dashboard', default: 'Dashboard', case: 'first' }),
-    page: <Pages.DashboardDetailMembership />,
+    page: <Pages.Membership />,
     breadcrumbs: false,
   },
   // Mentor-Apprentice Photo Project

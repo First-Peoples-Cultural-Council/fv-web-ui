@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 
 import useRegistrations from 'dataSources/useRegistrations'
-import { URL_QUERY_PLACEHOLDER } from 'common/Constants'
 /**
  * @summary WidgetLinksData
  * @version 1.0.1
@@ -42,15 +41,15 @@ function WidgetLinksData({ children }) {
         transKey: 'views.pages.explore.dialect.immersion',
         transform: 'words',
       },
-      {
-        url: `/dashboard/membership?task=${URL_QUERY_PLACEHOLDER}&page=1&pageSize=10&sortBy=date&sortOrder=desc`,
-        text: 'Membership Requests',
-      },
     ]
     if (id) {
       _links.push({
         url: `/tasks/users/${id}`,
         text: 'Registration requests',
+      })
+      _links.push({
+        url: `/dashboard/membership?siteId=${id}`,
+        text: 'Membership Requests',
       })
     }
 

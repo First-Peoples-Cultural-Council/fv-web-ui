@@ -121,6 +121,7 @@ function JoinData({ children }) {
       }
       requestMembership(currentUserRequest)
       setUserRequest(currentUserRequest)
+      window.scrollTo(0, 0)
     } else {
       window.scrollTo(0, 0)
     }
