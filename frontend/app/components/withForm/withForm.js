@@ -188,7 +188,7 @@ export default function withForm(ComposedFilter) {
     }
 
     render() {
-      const { computeLogin, context, fields, options, type } = this.props
+      const { computeLogin, context, fields, options, type, initialValues } = this.props
 
       const isRecorderWithApproval = ProviderHelpers.isRecorderWithApproval(computeLogin)
       const isAdmin = ProviderHelpers.isAdmin(computeLogin)
@@ -250,7 +250,7 @@ export default function withForm(ComposedFilter) {
                     }}
                     type={t.struct(selectn(type, fields))}
                     context={context}
-                    value={this.state.formValue || selectn('response.properties', computeItem)}
+                    value={this.state.formValue || initialValues || selectn('response.properties', computeItem)}
                     options={selectn(type, options)}
                   />
 

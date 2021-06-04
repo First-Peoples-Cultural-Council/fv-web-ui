@@ -216,18 +216,7 @@ export class ExploreDialectEdit extends Component {
         is403={this.state.is403}
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
-        <PromiseWrapper
-          computeEntities={Immutable.fromJS([
-            {
-              id: this.props.routeParams.dialect_path,
-              entity: this.props.fetchDialect2,
-            },
-            {
-              id: `${this.props.routeParams.dialect_path}/Portal`,
-              entity: this.props.fetchPortal,
-            },
-          ])}
-        >
+        <PromiseWrapper computeEntities={computeEntities}>
           <div className="ExploreDialectEdit">
             <h1 className="ExploreDialectEdit__heading">
               <FVLabel
