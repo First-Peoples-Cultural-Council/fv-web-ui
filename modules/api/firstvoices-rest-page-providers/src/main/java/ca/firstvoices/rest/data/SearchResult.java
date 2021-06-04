@@ -1,10 +1,8 @@
 package ca.firstvoices.rest.data;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.Nullable;
 
 
@@ -23,6 +21,8 @@ public class SearchResult implements Serializable {
   private String path;
 
   private String visibility;
+  private Boolean availableInChildrensArchive;
+  private Boolean availableInGames;
 
   private boolean exactMatch = false;
 
@@ -97,12 +97,28 @@ public class SearchResult implements Serializable {
     this.visibility = visibility;
   }
 
+  public Boolean isAvailableInChildrensArchive() {
+    return availableInChildrensArchive;
+  }
+
+  public Boolean isAvailableInGames() {
+    return availableInGames;
+  }
+
+  public void setAvailableInChildrensArchive(final @Nullable Boolean availableInChildrensArchive) {
+    this.availableInChildrensArchive = availableInChildrensArchive;
+  }
+
+  public void setAvailableInGames(final @Nullable Boolean availableInGames) {
+    this.availableInGames = availableInGames;
+  }
 
   public void setParentDialect(String id, String name, String shortUrl) {
     this.parentDialect = new ParentDialect(id, name, shortUrl);
   }
 
   public class ParentDialect implements Serializable {
+
     private final String name;
     private final String id;
     private final String shortUrl;

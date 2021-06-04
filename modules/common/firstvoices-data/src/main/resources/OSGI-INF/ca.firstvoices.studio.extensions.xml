@@ -22,6 +22,7 @@
     <schema name="domain_schema" prefix="domain_schema" override="true" src="data/schemas/domain_schema.xsd"/>
     <schema name="fv-alphabet" prefix="fv-alphabet" override="true" src="data/schemas/fv-alphabet.xsd"/>
     <schema name="fvaudio" prefix="fvaudio" override="true" src="data/schemas/fvaudio.xsd"/>
+    <schema name="fvaudience" prefix="fvaudience" override="true" src="data/schemas/fvaudience.xsd"/>
     <schema name="fvbook" prefix="fvbook" override="true" src="data/schemas/fvbook.xsd"/>
     <schema name="fvbookentry" prefix="fvbookentry" override="true" src="data/schemas/fvbookentry.xsd"/>
     <schema name="fvbooks" prefix="fvbooks" override="true" src="data/schemas/fvbooks.xsd"/>
@@ -136,6 +137,7 @@
       <schema name="fvancestry"/>
       <schema name="fvlegacy"/>
       <schema name="fvmedia"/>
+      <schema name="fvaudience"/>
       <facet name="NXTag"/>
     </doctype>
     <doctype name="FVResources" append="true">
@@ -156,6 +158,7 @@
       <schema name="fvancestry"/>
       <schema name="fvcore"/>
       <schema name="fvlegacy"/>
+      <schema name="fvaudience"/>
       <facet name="Folderish"/>
       <facet name="NXTag"/>
       <facet name="Publishable"/>
@@ -442,6 +445,7 @@
       <schema name="fvancestry"/>
       <schema name="fvcore"/>
       <schema name="fvlegacy"/>
+      <schema name="fvaudience"/>
       <facet name="NXTag"/>
       <facet name="Versionable"/>
       <facet name="Publishable"/>
@@ -458,6 +462,7 @@
       <schema name="fvancestry"/>
       <schema name="fvlegacy"/>
       <schema name="fvmedia"/>
+      <schema name="fvaudience"/>
       <facet name="NXTag"/>
     </doctype>
     <doctype name="FVResources" append="true">
@@ -478,6 +483,7 @@
       <schema name="fvancestry"/>
       <schema name="fvcore"/>
       <schema name="fvlegacy"/>
+      <schema name="fvaudience"/>
       <facet name="Versionable"/>
       <facet name="NXTag"/>
       <facet name="Publishable"/>
@@ -532,6 +538,7 @@
       <schema name="fvancestry"/>
       <schema name="fvcore"/>
       <schema name="fvlegacy"/>
+      <schema name="fvaudience"/>
       <facet name="NXTag"/>
       <facet name="Publishable"/>
     </doctype>
@@ -545,6 +552,7 @@
       <schema name="fvancestry"/>
       <schema name="fvlegacy"/>
       <schema name="fvmedia"/>
+      <schema name="fvaudience"/>
       <facet name="NXTag"/>
     </doctype>
     <doctype name="FVResources" append="true">

@@ -108,6 +108,10 @@ metadata:
     # networking.gke.io/managed-certificates: ingress-certificate
     # service.alpha.kubernetes.io/app-protocols:
     # nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-buffering: "on"
+    nginx.ingress.kubernetes.io/client-body-buffer-size: "500m"
+    nginx.ingress.kubernetes.io/proxy-body-size: "500m"
+
 spec:
   rules:
     - host: fves.iron.mapleleaf.intranet
