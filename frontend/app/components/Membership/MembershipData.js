@@ -17,7 +17,13 @@ import useUser from 'dataSources/useUser'
  *
  */
 function MembershipData({ children }) {
-  const { approveJoinRequest, ignoreJoinRequest, getJoinRequests, computeJoinRequests } = useUser()
+  const {
+    approveJoinRequest,
+    ignoreJoinRequest,
+    computeUpdateJoinRequest,
+    getJoinRequests,
+    computeJoinRequests,
+  } = useUser()
   const { computeLogin } = useLogin()
   const isAdmin = ProviderHelpers.isAdmin(computeLogin)
 
@@ -28,7 +34,9 @@ function MembershipData({ children }) {
   // Set up Dialog and Snackbar state
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [groupSelected, setGroupSelected] = useState('members')
-  const [currentRequest, setCurrentRequest] = useState('members')
+  const [currentRequest, setCurrentRequest] = useState({})
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false)
+  const [actionResponse, setActionResponse] = useState({})
 
   useEffect(() => {
     if (siteId) {
@@ -38,6 +46,30 @@ function MembershipData({ children }) {
       window.location.href = '/dashboard'
     }
   }, [])
+
+  const updateJoinRequestResponseStatus = selectn('message.status', computeUpdateJoinRequest)
+
+  useEffect(() => {
+    if (updateJoinRequestResponseStatus === 200) {
+      setActionResponse({
+        status: 200,
+        message: 'Your request has been processed',
+      })
+      setIsSnackbarOpen(true)
+      setTimeout(function closeSnackbar() {
+        setIsSnackbarOpen(false)
+      }, 1500)
+    } else if (Number.isFinite(updateJoinRequestResponseStatus)) {
+      setActionResponse({
+        status: updateJoinRequestResponseStatus,
+        message: `${updateJoinRequestResponseStatus} - Unfortunately we are unable to process your request at this time. Please contact hello@firstvoices.com if this error persists.`,
+      })
+      setIsSnackbarOpen(true)
+      setTimeout(function closeSnackbar() {
+        setIsSnackbarOpen(false)
+      }, 1500)
+    }
+  }, [updateJoinRequestResponseStatus])
 
   const onApproveClick = (request) => {
     setIsDialogOpen(true)
@@ -61,6 +93,10 @@ function MembershipData({ children }) {
     setGroupSelected(event.target.value)
   }
 
+  const handleSnackbarClose = () => {
+    setIsSnackbarOpen(false)
+  }
+
   const joinRequests = selectn('message.joinRequests', computeJoinRequests)
     ? selectn('message.joinRequests', computeJoinRequests)
     : []
@@ -73,6 +109,7 @@ function MembershipData({ children }) {
   ])
 
   return children({
+    actionResponse,
     computeEntities,
     currentRequest,
     isAdmin,
@@ -80,6 +117,8 @@ function MembershipData({ children }) {
     handleDialogOk,
     isDialogOpen,
     handleDialogClose,
+    handleSnackbarClose,
+    isSnackbarOpen,
     joinRequests,
     onApproveClick,
     onGroupSelectChange,
