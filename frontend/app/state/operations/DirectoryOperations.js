@@ -111,10 +111,10 @@ export default class DirectoryOperations {
     })
     return api.post(path, { json: bodyObject }).then(
       (response) => {
-        return { status: response.status, body: response.text() }
+        return { status: response.status }
       },
       (error) => {
-        return { status: error.response.status, body: error.response.text() }
+        return { status: error.response.status }
       }
     )
   }
