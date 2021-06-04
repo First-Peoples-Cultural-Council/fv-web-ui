@@ -2,7 +2,6 @@ import { useRef, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
-import useIntl from 'dataSources/useIntl'
 import useUser from 'dataSources/useUser'
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
@@ -17,7 +16,6 @@ import ProviderHelpers from 'common/ProviderHelpers'
  *
  */
 function RegisterData({ children }) {
-  const { intl } = useIntl()
   const { selfregisterUser, computeUserSelfregister } = useUser()
 
   const formRef = useRef()
@@ -36,7 +34,7 @@ function RegisterData({ children }) {
     if (status === 400 || status === 200) {
       setServerResponse({
         status: status,
-        message: selectn('response.value.entity', registrationResponse),
+        message: selectn('value.entity', registrationResponse),
       })
     }
   }, [registrationResponse])
@@ -62,12 +60,7 @@ function RegisterData({ children }) {
         id: selectn('userinfo:email', properties),
         properties: properties,
       }
-      selfregisterUser(
-        currentUserRequest,
-        null,
-        null,
-        intl.trans('views.pages.users.register.user_request_success', 'User request submitted successfully!')
-      )
+      selfregisterUser(currentUserRequest, null, null, null)
       setUserRequest(currentUserRequest)
     } else {
       window.scrollTo(0, 0)
