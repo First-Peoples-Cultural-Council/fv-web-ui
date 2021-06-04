@@ -33,15 +33,13 @@ import selectn from 'selectn'
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers, { routeHasChanged } from 'common/NavigationHelpers'
 import PromiseWrapper from 'components/PromiseWrapper'
-import EditableComponentHelper from 'components/EditableComponentHelper'
 import Header from 'components/Header'
 import { getDialectClassname } from 'common/Helpers'
 import PageToolbar from 'components/PageToolbar'
 import GridView from 'components/LearnBase/grid-view'
-import TextHeader from 'components/Typography/text-header'
-import AuthorizationFilter from 'components/AuthorizationFilter'
 import Kids from 'components/Kids'
 import FVLabel from 'components/FVLabel'
+import Preview from 'components/Preview'
 
 /**
  * Dialect portal page showing all the various components of this dialect.
@@ -92,12 +90,10 @@ export class ExploreDialect extends Component {
     )
   }
 
-  // Fetch data on initial render
   componentDidMount() {
     this.fetchData(this.props)
   }
 
-  // Refetch data on URL change
   componentDidUpdate(prevProps) {
     if (
       routeHasChanged({
@@ -120,9 +116,6 @@ export class ExploreDialect extends Component {
     this._onNavigateRequest(this.props.windowPath.replace(value === SECTIONS ? WORKSPACES : SECTIONS, value))
   }
 
-  /**
-   * Publish changes
-   */
   _publishChangesAction = () => {
     this.props.republishDialect(
       this.props.routeParams.dialect_path,
@@ -178,10 +171,8 @@ export class ExploreDialect extends Component {
       )
     }
 
-    const featuredWords = selectn('response.contextParameters.portal.fv-portal:featured_words', computePortal) || []
-
     /**
-     * Suppress Editing for Language Recorders with Approvers
+     * Suppress Editing for Language Recorders with Approval
      */
     const roles = selectn('response.contextParameters.dialect.roles', computeDialect2)
 
@@ -211,6 +202,38 @@ export class ExploreDialect extends Component {
       }
     }
     const dialectClassName = getDialectClassname(computeDialect2)
+    const portal = selectn('response', computePortal)
+    const dialectProperties = selectn('response.properties', computeDialect2)
+    const portalProperties = selectn('response.properties', computePortal)
+    const dialectDataAdaptor = {
+      greeting: dialectProperties?.['fvdialect:greeting'] || portalProperties?.['fv-portal:greeting'] || null,
+      audio: dialectProperties?.['fvdialect:featured_audio'] || portalProperties?.['fv-portal:featured_audio'] || null,
+      aboutUs: dialectProperties?.['fvdialect:about_us'] || portalProperties?.['fv-portal:about'] || null,
+      news: dialectProperties?.['fvdialect:news'] || portalProperties?.['fv-portal:news'] || null,
+      background:
+        dialectProperties?.['fvdialect:background_top_image'] ||
+        portalProperties?.['fv-portal:background_top_image'] ||
+        null,
+      logo: dialectProperties?.['fvdialect:logo'] || portalProperties?.['fv-portal:logo'] || null,
+      featuredWords:
+        dialectProperties?.['fvdialect:featured_words'] || portalProperties?.['fv-portal:featured_words'] || [],
+      relatedLinks: dialectProperties?.['fvdialect:related_links']?.length
+        ? dialectProperties?.['fvdialect:related_links']
+        : portalProperties?.['fv-portal:related_links'] || [],
+      country: dialectProperties?.['fvdialect:country'] || null,
+      region: dialectProperties?.['fvdialect:region'] || null,
+    }
+
+    const greetingAudio = dialectDataAdaptor.audio ? (
+      <audio id="portalFeaturedAudio" src={NavigationHelpers.getBaseURL() + dialectDataAdaptor.audio?.path} controls />
+    ) : null
+
+    const relatedLinks =
+      selectn('contextParameters.portal.fv-portal:related_links.length', portal) > 0
+        ? selectn('contextParameters.portal.fv-portal:related_links', portal)
+        : null
+    const featuredWords = selectn('response.contextParameters.portal.fv-portal:featured_words', computePortal) || []
+
     let toolbar = null
     if (this.props.routeParams.area === WORKSPACES) {
       if (selectn('response', computeDialect2)) {
@@ -226,68 +249,6 @@ export class ExploreDialect extends Component {
           />
         )
       }
-    }
-    let portalTitle = null
-    if (
-      selectn('isConnected', this.props.computeLogin) ||
-      selectn('response.properties.fv-portal:greeting', computePortal) ||
-      selectn('response.contextParameters.portal.fv-portal:featured_audio', computePortal)
-    ) {
-      const portalTitleAudio = selectn('response.contextParameters.portal.fv-portal:featured_audio', computePortal) ? (
-        <audio
-          id="portalFeaturedAudio"
-          src={
-            NavigationHelpers.getBaseURL() +
-            selectn('response.contextParameters.portal.fv-portal:featured_audio', computePortal).path
-          }
-          controls
-        />
-      ) : (
-        ''
-      )
-      portalTitle = (
-        <h1 className={classNames('display', 'dialect-greeting-container', dialectClassName)}>
-          <AuthorizationFilter
-            filter={{ permission: 'Write', entity: selectn('response', computeDialect2) }}
-            renderPartial
-          >
-            <EditableComponentHelper
-              dataTestid="EditableComponent__fv-portal-greeting"
-              className="fv-portal-greeting"
-              isSection={isSection}
-              computeEntity={computePortal}
-              updateEntity={this.props.updatePortal}
-              property="fv-portal:greeting"
-              entity={selectn('response', computePortal)}
-            />
-          </AuthorizationFilter>
-
-          {portalTitleAudio}
-        </h1>
-      )
-    }
-    let editableNews = null
-    if (!isSection || selectn('response.properties.fv-portal:news', computePortal)) {
-      editableNews = (
-        <AuthorizationFilter
-          filter={{ permission: 'Write', entity: selectn('response', computeDialect2) }}
-          renderPartial
-        >
-          <div>
-            <h3>
-              <FVLabel transKey="general.news" defaultStr="News" transform="first" />
-            </h3>
-            <EditableComponentHelper
-              dataTestid="EditableComponent__fv-portal-news"
-              isSection={isSection}
-              computeEntity={computePortal}
-              updateEntity={this.props.updatePortal}
-              property="fv-portal:news"
-              entity={selectn('response', computePortal)}
-            />
-          </div>
-        </AuthorizationFilter>
-      )
     }
 
     return (
@@ -337,145 +298,79 @@ export class ExploreDialect extends Component {
 
         <div className={classNames('row', 'dialect-body-container', dialectClassName)} style={{ marginTop: '15px' }}>
           <div className={classNames('col-xs-12', 'col-md-7')}>
-            <div>{portalTitle}</div>
-
+            <h1 className={classNames('display', 'dialect-greeting-container', dialectClassName)}>
+              <div>{dialectDataAdaptor.greeting}</div>
+              {greetingAudio}
+            </h1>
             <div className={dialectClassName}>
               <h2>
-                <FVLabel transKey="views.pages.explore.dialect.about_us" defaultStr="ABOUT US" transform="upper" />
+                <FVLabel transKey="views.pages.explore.dialect.about_us" defaultStr="About us" />
               </h2>
               <hr className="dialect-hr" />
-
-              <AuthorizationFilter
-                filter={{ permission: 'Write', entity: selectn('response', computeDialect2) }}
-                renderPartial
-              >
-                <EditableComponentHelper
-                  dataTestid="EditableComponent__fv-portal-about"
-                  className="fv-portal-about"
-                  isSection={isSection}
-                  computeEntity={computePortal}
-                  updateEntity={this.props.updatePortal}
-                  property="fv-portal:about"
-                  entity={selectn('response', computePortal)}
-                />
-              </AuthorizationFilter>
+              <div className="fv-portal-about" dangerouslySetInnerHTML={{ __html: dialectDataAdaptor.aboutUs }} />
             </div>
-
-            <div>{editableNews}</div>
+            <div>
+              <h2>
+                <FVLabel transKey="general.news" defaultStr="News" />
+              </h2>
+              <hr className="dialect-hr" />
+              <div className="fv-portal-about" dangerouslySetInnerHTML={{ __html: dialectDataAdaptor.news }} />
+            </div>
           </div>
 
           <div className={classNames('col-xs-12', 'col-md-4', 'col-md-offset-1')}>
             <div className="row">
               <div className={classNames('col-xs-12')}>
-                {featuredWords.length > 0 ? (
-                  <TextHeader
-                    tag="h2"
-                    title={this.props.intl.trans('first_words', 'FIRST WORDS', 'upper')}
-                    properties={this.props.properties}
-                  />
-                ) : (
-                  ''
+                {featuredWords?.length > 0 ? (
+                  <>
+                    <h2>
+                      <FVLabel transKey="first_words" defaultStr="First Words" />
+                    </h2>
+                    <hr className="dialect-hr" />
+                    <GridView
+                      action={this._handleSelectionChange}
+                      cols={3}
+                      cellHeight={194}
+                      type="FVWord"
+                      className="grid-view-first-words"
+                      metadata={selectn('response', computeDialect2)}
+                      items={featuredWords?.map((word) => {
+                        return {
+                          contextParameters: {
+                            word: {
+                              related_pictures: [selectn('fv:related_pictures[0]', word)],
+                              related_audio: [selectn('fv:related_audio[0]', word)],
+                            },
+                          },
+                          properties: word,
+                        }
+                      })}
+                    />
+                  </>
+                ) : null}
+                {(relatedLinks || !isSection) && (
+                  <>
+                    <h2>
+                      <FVLabel transKey="general.related_links" defaultStr="Related Links" />
+                    </h2>
+                    <hr className="dialect-hr" />
+                    {relatedLinks
+                      ? relatedLinks.map((link, i) => <Preview key={i} id={link.uid} type={'FVLink'} />)
+                      : null}
+                  </>
                 )}
-
-                <GridView
-                  action={this._handleSelectionChange}
-                  cols={3}
-                  cellHeight={194}
-                  type="FVWord"
-                  className="grid-view-first-words"
-                  metadata={selectn('response', computeDialect2)}
-                  items={featuredWords.map((word) => {
-                    return {
-                      contextParameters: {
-                        word: {
-                          related_pictures: [selectn('fv:related_pictures[0]', word)],
-                          related_audio: [selectn('fv:related_audio[0]', word)],
-                        },
-                      },
-                      properties: word,
-                    }
-                  })}
-                />
-                <div>
-                  {(selectn('response.contextParameters.portal.fv-portal:related_links.length', computePortal) > 0 ||
-                    !isSection) && (
-                    <AuthorizationFilter
-                      filter={{ permission: 'Write', entity: selectn('response', computePortal) }}
-                      renderPartial
-                    >
-                      <div>
-                        <h2>
-                          <FVLabel transKey="general.related_links" defaultStr="RELATED LINKS" transform="upper" />
-                        </h2>
-                        <hr className="dialect-hr" />
-                        <EditableComponentHelper
-                          dataTestid="EditableComponent__fv-portal-related_links"
-                          isSection={isSection}
-                          computeEntity={computePortal}
-                          updateEntity={this.props.updatePortal}
-                          context={computeDialect2}
-                          showPreview
-                          previewType="FVLink"
-                          property="fv-portal:related_links"
-                          sectionProperty="contextParameters.portal.fv-portal:related_links"
-                          entity={selectn('response', computePortal)}
-                        />
-                      </div>
-                    </AuthorizationFilter>
-                  )}
-                </div>
-              </div>
-
-              <div className={classNames('col-xs-12')}>
                 <h2>
-                  <FVLabel
-                    transKey="views.pages.explore.dialect.region_data"
-                    defaultStr="REGION DATA"
-                    transform="upper"
-                  />
+                  <FVLabel transKey="views.pages.explore.dialect.region_data" defaultStr="Region Data" />
                 </h2>
                 <hr className="dialect-hr" />
-
                 <div className={classNames('dialect-info-banner')}>
-                  <div>
-                    <div className="dib-body-row">
-                      <strong>
-                        <FVLabel transKey="country" defaultStr="Country" />:{' '}
-                      </strong>
-                      <AuthorizationFilter
-                        filter={{ permission: 'Write', entity: selectn('response', computeDialect2) }}
-                        renderPartial
-                      >
-                        <EditableComponentHelper
-                          className="EditableComponent--inline"
-                          dataTestid="EditableComponent__fv-dialect-country"
-                          isSection={isSection}
-                          computeEntity={computeDialect2}
-                          updateEntity={this.props.updateDialect2}
-                          property="fvdialect:country"
-                          entity={selectn('response', computeDialect2)}
-                        />
-                      </AuthorizationFilter>
-                    </div>
-                    <div className="dib-body-row">
-                      <strong>
-                        <FVLabel transKey="region" defaultStr="Region" transform="first" />:{' '}
-                      </strong>
-                      <AuthorizationFilter
-                        filter={{ permission: 'Write', entity: selectn('response', computeDialect2) }}
-                        renderPartial
-                      >
-                        <EditableComponentHelper
-                          className="EditableComponent--inline"
-                          dataTestid="EditableComponent__fv-dialect-region"
-                          isSection={isSection}
-                          computeEntity={computeDialect2}
-                          updateEntity={this.props.updateDialect2}
-                          property="fvdialect:region"
-                          entity={selectn('response', computeDialect2)}
-                        />
-                      </AuthorizationFilter>
-                    </div>
+                  <div className="dib-body-row">
+                    <FVLabel transKey="country" defaultStr="Country" />:{' '}
+                    <div dangerouslySetInnerHTML={{ __html: dialectDataAdaptor.country }} />
+                  </div>
+                  <div className="dib-body-row">
+                    <FVLabel transKey="region" defaultStr="Region" />:{' '}
+                    <div dangerouslySetInnerHTML={{ __html: dialectDataAdaptor.region }} />
                   </div>
                 </div>
               </div>
