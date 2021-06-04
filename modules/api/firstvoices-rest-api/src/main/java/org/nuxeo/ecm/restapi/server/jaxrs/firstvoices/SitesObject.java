@@ -155,7 +155,7 @@ public class SitesObject extends DefaultObject {
   }
 
   @GET
-  @Path("sections/{site}")
+  @Path("{site}")
   public Response findSiteSections(
       @Context HttpServletRequest request, @PathParam("site") String site,
       @QueryParam(value = "currentPage") Integer currentPage) {
@@ -173,7 +173,7 @@ public class SitesObject extends DefaultObject {
 
 
   @GET
-  @Path("sections/{site}/administration/joinRequests")
+  @Path("{site}/administration/joinRequests")
   public Response listJoinRequests(
       @Context HttpServletRequest request, @PathParam("site") String site) {
     Optional<String> dialectId = this.resolveDialectId(request, site);
@@ -186,7 +186,7 @@ public class SitesObject extends DefaultObject {
 
 
   @GET
-  @Path("sections/{site}/administration/joinRequests/{requestId}")
+  @Path("{site}/administration/joinRequests/{requestId}")
   public Response getJoinRequest(
       @Context HttpServletRequest request, @PathParam("site") String site,
       @PathParam("requestId") String requestId) {
@@ -201,7 +201,7 @@ public class SitesObject extends DefaultObject {
 
 
   @POST
-  @Path("sections/{site}/administration/joinRequests/{requestId}")
+  @Path("{site}/administration/joinRequests/{requestId}")
   public Response updateJoinRequest(
       @Context HttpServletRequest request, @PathParam("site") String site,
       @PathParam("requestId") String requestId, SiteMembershipUpdateRequest updateRequest) {
@@ -243,7 +243,7 @@ public class SitesObject extends DefaultObject {
 
 
   @GET
-  @Path("sections/{site}/membership")
+  @Path("{site}/membership")
   public Response getSiteMembership(
       @Context HttpServletRequest request, @PathParam("site") String site) {
 
@@ -264,7 +264,7 @@ public class SitesObject extends DefaultObject {
 
 
   @POST
-  @Path("sections/{site}/membership")
+  @Path("{site}/membership")
   public Response requestSiteMembership(
       @Context HttpServletRequest request, @PathParam("site") String site,
       SiteMembershipRequest membershipRequest) {

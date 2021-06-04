@@ -28,12 +28,12 @@ public class SiteMembershipUpdateRequest implements Serializable {
     List<String> validGroups = Arrays.asList(CustomSecurityConstants.MEMBERS_GROUP,
         CustomSecurityConstants.RECORDERS_GROUP,
         CustomSecurityConstants.RECORDERS_APPROVERS_GROUP,
-        CustomSecurityConstants.LANGUAGE_ADMINS_GROUP);
+        CustomSecurityConstants.LANGUAGE_ADMINS_GROUP, "N/A");
     if (validGroups.stream().noneMatch(s -> s.equals(this.group))) {
       throw new IllegalArgumentException("Invalid group");
     }
   }
-
+ 
   public String getMessageToUser() {
     return messageToUser;
   }

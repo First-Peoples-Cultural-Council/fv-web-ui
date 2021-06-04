@@ -69,7 +69,7 @@ public class FVRequestToJoinDialectAdminAction {
   private final List<String> validTargetStatuses = Arrays.asList("ACCEPT", "IGNORE");
   private final List<String> validGroups = Arrays.asList(CustomSecurityConstants.MEMBERS_GROUP,
       CustomSecurityConstants.LANGUAGE_ADMINS_GROUP, CustomSecurityConstants.RECORDERS_GROUP,
-      CustomSecurityConstants.RECORDERS_WITH_APPROVAL_GROUP);
+      CustomSecurityConstants.RECORDERS_WITH_APPROVAL_GROUP, "N/A");
 
   @Context protected CoreSession session;
 
@@ -158,7 +158,8 @@ public class FVRequestToJoinDialectAdminAction {
       for (ACE ace : dialectDocument.getACP().getACL(ACL.LOCAL_ACL).getACEs()) {
         String acePrincipal = ace.getUsername();
 
-        if (SecurityConstants.READ.equals(ace.getPermission())
+        if (newStatus.equals("ACCEPT")
+            && SecurityConstants.READ.equals(ace.getPermission())
             && acePrincipal.contains(group) && ace.isGranted()) {
           targetGroups.add(acePrincipal);
         }
