@@ -104,8 +104,7 @@ public class UpdateAudienceOperation {
 
                     if (childrensArchiveValue != null) {
                       document.setPropertyValue(
-                          "fvaudience:children",
-                          childrensArchiveValue.booleanValue());
+                          "fvaudience:children", childrensArchiveValue);
                       localSession.saveDocument(document);
                     }
 
@@ -119,7 +118,7 @@ public class UpdateAudienceOperation {
                     }
 
                     if (gamesArchive != null) {
-                      document.setPropertyValue("fvaudience:games", gamesArchive.booleanValue());
+                      document.setPropertyValue("fvaudience:games", gamesArchive);
 
                       localSession.saveDocument(document);
                     }
@@ -158,6 +157,7 @@ public class UpdateAudienceOperation {
         }
       } catch (InterruptedException e) {
         log.error(e);
+        Thread.currentThread().interrupt();
       }
 
     }
