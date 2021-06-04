@@ -21,7 +21,7 @@
 package ca.firstvoices.publisher.listeners;
 
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISH_TRANSITION;
-import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_CATEGORY;
+import static org.nuxeo.ecm.core.api.event.DocumentEventTypes.DOCUMENT_CREATED;
 
 import ca.firstvoices.core.io.utils.DialectUtils;
 import ca.firstvoices.core.io.utils.StateUtils;
@@ -31,24 +31,30 @@ import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 
-//  TODO: MOVE THIS LOGIC TO OPERATIONS MODULE AND REMOVE RELIANCE ON LISTENER
-public class PublishNewCategoryListener implements EventListener {
+/**
+ * Will automatically publish if document context is provided
+ * This is intended for new created documents, and is set in AutoPublishJsonInterceptor
+ */
+public class AutoPublishListener implements EventListener {
 
   @Override
   public void handleEvent(Event event) {
     EventContext ctx = event.getContext();
+
     if (!(ctx instanceof DocumentEventContext)) {
       return;
     }
-    DocumentModel doc = ((DocumentEventContext) ctx).getSourceDocument();
-    if (doc != null) {
 
-      // Skip proxies and versions
-      if (doc.isProxy() || doc.isVersion()) {
+    DocumentModel doc = ((DocumentEventContext) ctx).getSourceDocument();
+
+    if (DOCUMENT_CREATED.equals(event.getName()) && doc != null) {
+
+      if (!Boolean.parseBoolean(doc.getContextData("fv-publish").toString())) {
         return;
       }
 
-      if (!doc.getType().equals(FV_CATEGORY)) {
+      // Skip proxies, versions and trashed docs
+      if (doc.isProxy() || doc.isVersion() || doc.isTrashed()) {
         return;
       }
 

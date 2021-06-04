@@ -19,7 +19,9 @@ export const fetchCategories = query('FV_CATEGORIES', 'FVCategory', {
  * createCategory
  * --------------------------------------
  */
-export const createCategory = create('FV_CATEGORY', 'FVCategory')
+export const createCategory = create('FV_CATEGORY', 'FVCategory', {
+  headers: { 'fv-publish': true },
+})
 
 /*
  * deleteCategory
