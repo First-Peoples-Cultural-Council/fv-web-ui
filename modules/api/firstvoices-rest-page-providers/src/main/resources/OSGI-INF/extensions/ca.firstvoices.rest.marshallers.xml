@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <component name="ca.firstvoices.rest.marshallers" version="1.0.0">
   <extension target="org.nuxeo.ecm.core.io.MarshallerRegistry" point="marshallers">
+    <register class="ca.firstvoices.rest.marshallers.AdminSiteJoinRequestWriter" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.AdminSiteJoinRequestListWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.LabelWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.LabelListWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.LabelCategoryWriter" enable="true"/>
@@ -12,8 +14,10 @@
     <register class="ca.firstvoices.rest.marshallers.CategoryWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.SearchResultsWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.SearchResultWriter" enable="true"/>
-
-
+    <register class="ca.firstvoices.rest.marshallers.SiteMembershipRequestWriter" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.SiteMembershipRequestReader" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.SiteMembershipStatusWriter" enable="true"/>
+    <register class="ca.firstvoices.rest.marshallers.SiteMembershipUpdateRequestReader" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.AlphabetWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.CharacterWriter" enable="true"/>
     <register class="ca.firstvoices.rest.marshallers.LinkWriter" enable="true"/>

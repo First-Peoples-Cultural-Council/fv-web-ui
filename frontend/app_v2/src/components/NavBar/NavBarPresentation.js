@@ -181,6 +181,7 @@ const { array, bool, object, string, func } = PropTypes
 NavBarPresentation.propTypes = {
   currentUser: object,
   isHome: bool,
+  isSearchPage: bool,
   menuData: array,
   title: string,
   className: string,

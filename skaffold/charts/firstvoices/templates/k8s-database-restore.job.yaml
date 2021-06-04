@@ -1,0 +1,36 @@
+{{ if .Values.database.deploy }}
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: database-restore
+spec:
+  ttlSecondsAfterFinished: 1800
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: database-restore
+          image: {{ .Values.database_restoration.image }}
+          resources:
+            limits:
+              cpu: "250m"
+              memory: "1G"
+          env:
+            - name: 'PGUSER'
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-firstvoices-credentials
+                  key: username
+            - name: 'PGPASSWORD'
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-firstvoices-credentials
+                  key: password
+            - name: 'PGDATABASE'
+              value: 'fv'
+            - name: 'PGHOST'
+              value: 'postgresql-firstvoices'
+
+  {{ end }}

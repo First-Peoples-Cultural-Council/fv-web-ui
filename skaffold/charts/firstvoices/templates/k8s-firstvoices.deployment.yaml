@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firstvoices
+spec:
+  replicas: 1
+  minReadySeconds: 20
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      name: firstvoices-pod
+      labels:
+        app: firstvoices
+    spec:
+      {{ if .Values.firstvoices.databaseGCloudSidecar }}
+      serviceAccountName: gke-sql-sk2
+      {{ end }}
+      {{ if .Values.elastic.deploy }}
+      initContainers:
+        - name: init-elastic
+          image: busybox:1.28
+          command: ['sh', '-c', "until nslookup elastic.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for elastic; sleep 2; done"]
+      {{ end }}
+      containers:
+        {{ if .Values.firstvoices.databaseGCloudSidecar }}
+        - name: cloud-sql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.17
+          command:
+            - "/cloud_sql_proxy"
+            - {{ .Values.firstvoices.databaseGCloudSidecarParameters }}
+          securityContext:
+            runAsNonRoot: true
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu:    "1"
+        {{ end }}
+        - name: firstvoices
+          image: {{ .Values.firstvoices.image }}
+          resources:
+            requests:
+              cpu: "2"
+              memory: "7Gi"
+            limits:
+              cpu: "8"
+              memory: "7Gi"
+          env:
+            - name: NUXEO_DB_TYPE
+              value: postgresql
+            - name: NUXEO_DB_HOST
+              value: {{ .Values.firstvoices.databaseHost }}
+            - name: NUXEO_DB_NAME
+              value: {{ .Values.database.name }}
+            - name: NUXEO_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-firstvoices-credentials
+                  key: username
+            - name: NUXEO_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql-firstvoices-credentials
+                  key: password
+          ports:
+            - name: http-in
+              containerPort: 8080
+            - name: java-debug
+              containerPort: 8787
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /nuxeo/nodestatus
+            initialDelaySeconds: 30
+            failureThreshold: 3
+            successThreshold: 1
+            periodSeconds: 7
+  selector:
+    matchLabels:
+      app: firstvoices
+

@@ -1,19 +1,29 @@
 package org.nuxeo.ecm.restapi.server.jaxrs.firstvoices;
 
+import ca.firstvoices.operations.FVRequestToJoinDialect;
 import ca.firstvoices.rest.data.Site;
 import ca.firstvoices.rest.data.SiteList;
+import ca.firstvoices.rest.data.SiteMembershipRequest;
+import ca.firstvoices.rest.data.SiteMembershipStatus;
+import ca.firstvoices.rest.data.SiteMembershipUpdateRequest;
+import ca.firstvoices.rest.helpers.DialectMembershipHelper;
 import ca.firstvoices.rest.helpers.EtagHelper;
 import ca.firstvoices.rest.helpers.PageProviderHelper;
+import ca.firstvoices.utils.CustomSecurityConstants;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -23,12 +33,18 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.http.HttpHeaders;
+import org.nuxeo.ecm.automation.AutomationService;
+import org.nuxeo.ecm.automation.OperationContext;
+import org.nuxeo.ecm.automation.OperationException;
 import org.nuxeo.ecm.automation.features.PrincipalHelper;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
+import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.api.security.ACE;
+import org.nuxeo.ecm.core.api.security.ACL;
 import org.nuxeo.ecm.core.api.security.PermissionProvider;
 import org.nuxeo.ecm.core.api.security.SecurityConstants;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
@@ -112,6 +128,7 @@ public class SitesObject extends DefaultObject {
       return true;
     });
 
+
     return simplePageProviderResponse(request,
         Arrays.asList(PORTALS_LIST_SECTIONS_PP, PORTALS_LIST_WORKSPACES_PP),
         Arrays.asList(DIALECTS_LIST_SECTIONS_PP, DIALECTS_LIST_WORKSPACES_PP),
@@ -138,7 +155,7 @@ public class SitesObject extends DefaultObject {
   }
 
   @GET
-  @Path("sections/{site}")
+  @Path("{site}")
   public Response findSiteSections(
       @Context HttpServletRequest request, @PathParam("site") String site,
       @QueryParam(value = "currentPage") Integer currentPage) {
@@ -154,12 +171,194 @@ public class SitesObject extends DefaultObject {
         site);
   }
 
+
+  @GET
+  @Path("{site}/administration/joinRequests")
+  public Response listJoinRequests(
+      @Context HttpServletRequest request, @PathParam("site") String site) {
+    Optional<String> dialectId = this.resolveDialectId(request, site);
+    if (!ctx.getPrincipal().isAdministrator()
+        && !callingUserHasLanguageAdministratorPermissions(dialectId.get())) {
+      return Response.status(403).build();
+    }
+    return new SiteAdministrationDelegate(ctx.getCoreSession(), dialectId).listJoinRequests();
+  }
+
+
+  @GET
+  @Path("{site}/administration/joinRequests/{requestId}")
+  public Response getJoinRequest(
+      @Context HttpServletRequest request, @PathParam("site") String site,
+      @PathParam("requestId") String requestId) {
+    Optional<String> dialectId = this.resolveDialectId(request, site);
+    if (!ctx.getPrincipal().isAdministrator()
+        && !callingUserHasLanguageAdministratorPermissions(dialectId.get())) {
+      return Response.status(403).build();
+    }
+    return new SiteAdministrationDelegate(ctx.getCoreSession(),
+        dialectId).getJoinRequest(requestId);
+  }
+
+
+  @POST
+  @Path("{site}/administration/joinRequests/{requestId}")
+  public Response updateJoinRequest(
+      @Context HttpServletRequest request, @PathParam("site") String site,
+      @PathParam("requestId") String requestId, SiteMembershipUpdateRequest updateRequest) {
+    Optional<String> dialectId = this.resolveDialectId(request, site);
+    if (!ctx.getPrincipal().isAdministrator()
+        && !callingUserHasLanguageAdministratorPermissions(dialectId.get())) {
+      return Response.status(403).build();
+    }
+    return new SiteAdministrationDelegate(ctx.getCoreSession(), dialectId)
+        .updateJoinRequest(requestId, updateRequest);
+  }
+
+  // used for access control checks on administrative actions
+  private boolean callingUserHasLanguageAdministratorPermissions(String dialectId) {
+    final NuxeoPrincipal callingUser = ctx.getPrincipal();
+    if (dialectId == null) {
+      throw new IllegalArgumentException("no dialect specified");
+    }
+
+    DocumentModel dialectDocument = ctx.getCoreSession().getDocument(new IdRef(dialectId));
+    if (dialectDocument == null) {
+      return false; // if we can't read it with our current permissions, we're definitely not an
+      // admin
+    }
+
+    String languageAdminGroupName = null;
+
+    // resolve admin group name
+    for (ACE ace : dialectDocument.getACP().getACL(ACL.LOCAL_ACL).getACEs()) {
+      String acePrincipal = ace.getUsername();
+
+      if (acePrincipal.contains(CustomSecurityConstants.LANGUAGE_ADMINS_GROUP) && ace.isGranted()) {
+        languageAdminGroupName = acePrincipal;
+      }
+    }
+
+    return callingUser.isMemberOf(languageAdminGroupName);
+  }
+
+
+  @GET
+  @Path("{site}/membership")
+  public Response getSiteMembership(
+      @Context HttpServletRequest request, @PathParam("site") String site) {
+
+    final Optional<String> dialectId = resolveDialectId(request, site);
+    if (!dialectId.isPresent()) {
+      return Response.status(404).build();
+    }
+
+    DialectMembershipHelper.DialectMembershipStatus status =
+        DialectMembershipHelper.getMembershipStatus(ctx.getCoreSession(),
+            ctx.getPrincipal(),
+            dialectId.get());
+
+    SiteMembershipStatus membershipStatus = new SiteMembershipStatus(status.getStatus());
+
+    return Response.ok(membershipStatus).build();
+  }
+
+
+  @POST
+  @Path("{site}/membership")
+  public Response requestSiteMembership(
+      @Context HttpServletRequest request, @PathParam("site") String site,
+      SiteMembershipRequest membershipRequest) {
+
+    final Optional<String> dialectId = resolveDialectId(request, site);
+    if (!dialectId.isPresent()) {
+      return Response.status(404).build();
+    }
+
+    DialectMembershipHelper.DialectMembershipStatus status =
+        DialectMembershipHelper.getMembershipStatus(ctx.getCoreSession(),
+            ctx.getPrincipal(),
+            dialectId.get());
+
+    boolean canProceed = status.equals(DialectMembershipHelper.DialectMembershipStatus.AVAILABLE);
+
+    if (!canProceed || ctx.getPrincipal().isAdministrator()) {
+      return Response.status(400).entity(
+          "Preconditions for joining this dialect have not been " + "satisfied").build();
+    }
+
+    final AutomationService automationService = Framework.getService(AutomationService.class);
+    OperationContext operationContext = new OperationContext(ctx.getCoreSession());
+
+    Map<String, Object> params = new HashMap<>();
+    params.put("dialect", dialectId.get());
+    params.put("interestReason", membershipRequest.getInterestReason());
+    params.put("comment", membershipRequest.getComment());
+    params.put("languageTeam", membershipRequest.isLanguageTeam());
+    params.put("communityMember", membershipRequest.isCommunityMember());
+
+    try {
+      automationService.run(operationContext, FVRequestToJoinDialect.ID, params);
+    } catch (OperationException e) {
+      return Response.status(500).entity(
+          "Failed to request joining this dialect " + membershipRequest.toString()).build();
+    }
+
+    return Response.status(200).entity("Your request to join this dialect is now pending").build();
+  }
+
+
+  private Optional<String> resolveDialectId(HttpServletRequest request, String site) {
+
+    ResponseGeneratingQueryRunner queryRunner =
+        new ResponseGeneratingQueryRunner(ctx.getCoreSession(),
+            request,
+            PORTALS_FIND_PPLIST,
+            Collections.emptyList(),
+            true,
+            null,
+            null,
+            ACCEPT_ALL,
+            site);
+
+    queryRunner.run();
+
+    if (queryRunner.getPortalId() == null || queryRunner.getDialectId() == null) {
+      UnrestrictedSessionRunner checkIdDirectly =
+          new UnrestrictedSessionRunner(ctx.getCoreSession()) {
+            @Override
+            public void run() {
+              DocumentModel res = this.session.getDocument(new IdRef(site));
+              if (!res.getType().equals("FVDialect")) {
+                throw new IllegalArgumentException("ID is not for a dialect");
+              }
+            }
+          };
+      try {
+        checkIdDirectly.runUnrestricted();
+        return Optional.of(site);
+      } catch (IllegalArgumentException e) {
+        return Optional.of(null);
+      }
+    }
+
+    return Optional.of(queryRunner.getDialectId());
+
+  }
+
   private static class ResponseGeneratingQueryRunner extends UnrestrictedSessionRunner {
 
     private Response response;
 
     public Response getResponse() {
       return response;
+    }
+
+    public String getDialectId() {
+      return dialectId;
+    }
+
+    public String getPortalId() {
+      return portalId;
     }
 
     private final HttpServletRequest request;
@@ -170,6 +369,8 @@ public class SitesObject extends DefaultObject {
     private final ResultFilter resultFilter;
     private final boolean singleResult;
     private final Object[] params;
+    private String dialectId = null;
+    private String portalId = null;
 
     @SuppressWarnings("java:S107")
     ResponseGeneratingQueryRunner(
@@ -275,6 +476,11 @@ public class SitesObject extends DefaultObject {
           return null;
         }
 
+        if (this.singleResult) {
+          this.dialectId = associatedDialect.getId();
+          this.portalId = portal.getId();
+        }
+
         String logoImageId;
 
         if (portal.isProxy()) {
@@ -320,13 +526,16 @@ public class SitesObject extends DefaultObject {
               .collect(Collectors.toSet());
         }
 
+        String joinText = (String) associatedDialect.getPropertyValue("fvdialect:join_text");
+
         return new Site(associatedDialect.getPathAsString(),
             associatedDialect.getId(),
             roles,
             groups,
             String.valueOf(associatedDialect.getPropertyValue("dc:title")),
             (String) associatedDialect.getPropertyValue("fvdialect:parent_language"),
-            logoImageId);
+            logoImageId,
+            joinText);
 
       }).filter(Objects::nonNull).collect(Collectors.toList());
 

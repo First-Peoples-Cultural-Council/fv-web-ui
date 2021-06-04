@@ -1,0 +1,71 @@
+{{ if .Values.elastic.deploy }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastic
+spec:
+  replicas: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      name: elastic-pod
+      labels:
+        app: elastic
+    spec:
+      securityContext:
+        fsGroup: 1000
+      volumes:
+       - name: elastic-storage
+         persistentVolumeClaim:
+           claimName: elastic-pvc
+      initContainers:
+        - name: create
+          image: busybox:1.28
+          command: ['mkdir', '/usr/share/elasticsearch/data/nodes/']
+          volumeMounts:
+          - mountPath: /usr/share/elasticsearch/data
+            name: elastic-storage
+        - name: file-permissions
+          image: busybox:1.28
+          command: ['chown', '-R', '1000:1000', '/usr/share/elasticsearch/']
+          volumeMounts:
+          - mountPath: /usr/share/elasticsearch/data
+            name: elastic-storage
+      containers:
+        - name: elastic
+          image: docker.elastic.co/elasticsearch/elasticsearch:6.8.14
+          resources:
+            limits:
+              cpu: 4
+              memory: "4800M"
+          volumeMounts:
+            - mountPath: "/usr/share/elasticsearch/data"
+              name: elastic-storage
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 9200
+            initialDelaySeconds: 10
+            periodSeconds: 120
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 9200
+            initialDelaySeconds: 3
+            periodSeconds: 15
+          env:
+            - name: discovery.type
+              value: single-node
+            - name: cluster.name
+              value: elastic
+            - name: ES_JAVA_OPTS
+              value: "-Xms4000m -Xmx4000m"
+          ports:
+            - name: http
+              containerPort: 9200
+            - name: transport
+              containerPort: 9300
+  selector:
+    matchLabels:
+      app: elastic
+  {{ end }}

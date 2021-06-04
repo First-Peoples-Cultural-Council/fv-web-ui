@@ -1,0 +1,12 @@
+{{ if .Values.elastic.deploy }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: elastic-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  {{ end }}

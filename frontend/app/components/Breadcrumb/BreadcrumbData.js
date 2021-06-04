@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Immutable from 'immutable'
 import selectn from 'selectn'
@@ -14,16 +14,17 @@ import FVLabel from 'components/FVLabel'
 // DataSources
 import useDialect from 'dataSources/useDialect'
 import useIntl from 'dataSources/useIntl'
+import useLogin from 'dataSources/useLogin'
 import usePortal from 'dataSources/usePortal'
 import useProperties from 'dataSources/useProperties'
 import useRoute from 'dataSources/useRoute'
+import useUser from 'dataSources/useUser'
 import useWindowPath from 'dataSources/useWindowPath'
 
 import './Breadcrumb.css'
 
 /**
  * @summary BreadcrumbData
- * @version 1.0.1
  * @component
  *
  * @param {object} props
@@ -31,12 +32,15 @@ import './Breadcrumb.css'
  *
  */
 function BreadcrumbData({ children, matchedPage, routes }) {
-  const { computeDialect2 } = useDialect()
+  const { computeDialect2, fetchDialect2 } = useDialect()
   const { intl } = useIntl()
   const { fetchPortal, computePortal } = usePortal()
   const { properties } = useProperties()
   const { routeParams } = useRoute()
   const { pushWindowPath, splitWindowPath } = useWindowPath()
+
+  const { computeLogin } = useLogin()
+  const { getMembershipStatus, computeMembershipFetch } = useUser()
 
   const REMOVE_FROM_BREADCRUMBS = ['FV', 'sections', 'Data', 'Workspaces', 'search', 'nuxeo', 'app', 'explore']
   const isDialect = Object.prototype.hasOwnProperty.call(routeParams, 'dialect_path')
@@ -57,7 +61,7 @@ function BreadcrumbData({ children, matchedPage, routes }) {
 
   // FW-1534: Map translations in breadcrumbs to translation keys
   // These links are accessible in ExploreDialect.js
-  const mapTraslationKey = function (pathKey) {
+  const mapTraslationKey = (pathKey) => {
     switch (pathKey) {
       case 'learn':
         return 'views.pages.explore.dialect.learn_our_language'
@@ -81,12 +85,38 @@ function BreadcrumbData({ children, matchedPage, routes }) {
         action: fetchPortal,
         reducer: computePortal,
       })
+      ProviderHelpers.fetchIfMissing({
+        key: routeParams.dialect_path,
+        action: fetchDialect2,
+        reducer: computeDialect2,
+      })
     }
   }, [])
 
   const computedPortal = ProviderHelpers.getEntry(computePortal, portalPath)
   const portalLogo = selectn('response.contextParameters.portal.fv-portal:logo', computedPortal)
   const portalLogoSrc = UIHelpers.getThumbnail(portalLogo, 'Thumbnail')
+  const computedDialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
+  const dialect = selectn('response', computedDialect)
+  const membershipStatus = selectn('message.membershipStatus', computeMembershipFetch)
+
+  const isLoggedIn = computeLogin.success && computeLogin.isConnected
+  const [showJoin, setShowJoin] = useState(false)
+  const [fetching, setFetching] = useState(false)
+
+  useEffect(() => {
+    if (dialect && isLoggedIn && membershipStatus === undefined && !fetching) {
+      const siteId = dialect?.versionableId ? dialect?.versionableId : dialect?.uid
+      setFetching(true)
+      getMembershipStatus({ siteId: siteId })
+    }
+  }, [computedDialect])
+
+  useEffect(() => {
+    if (membershipStatus === 'available' || membershipStatus === 'pending') {
+      setShowJoin(true)
+    }
+  }, [computeMembershipFetch])
 
   // Figure out the index of the Dialect in splitPath
   let indexDialect = -1
@@ -208,8 +238,10 @@ function BreadcrumbData({ children, matchedPage, routes }) {
   })
   return children({
     breadcrumbs,
-    isDialect,
+    dialect,
     portalLogoSrc,
+    showJoin,
+    membershipStatus,
   })
 }
 // PROPTYPES

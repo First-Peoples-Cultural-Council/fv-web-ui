@@ -31,16 +31,6 @@ const i18nExt = {
 
 window.intl = IntlService.instance
 
-// const configExt = {
-//   config: {
-//     // for each of lg md sm xs you can specify the columns width
-//     horizontal: {
-//       md: [3, 9],
-//       sm: [6, 6],
-//     },
-//   },
-// }
-
 const FVPortalTemplate = function template(locals) {
   return (
     <fieldset>
@@ -78,44 +68,27 @@ const FVDialectTemplate = function template(locals) {
   )
 }
 
-const FVUserRegistrationTemplate = function template(locals) {
-  let selectedCommunityLanguageLabel = null
-
-  locals.onChange = new (function setSelectedCommunityLanguageLabel() {
-    const requestedSpaceElement = document.getElementById('registration-requested-space')
-
-    if (requestedSpaceElement !== null) {
-      const selectBox = requestedSpaceElement.getElementsByTagName('select')[0]
-
-      if (selectBox.selectedIndex !== 0) {
-        selectedCommunityLanguageLabel = selectBox.options[selectBox.selectedIndex].innerHTML
-        document.getElementById('language_team_member_name').innerHTML = document.getElementById(
-          'community_member_name'
-        ).innerHTML = selectedCommunityLanguageLabel
-      }
-    }
-  })()
-
+const FVRegistrationTemplate = function template(locals) {
   return (
     <div>
       <fieldset>
         <div className="col-md-6">{locals.inputs['userinfo:firstName']}</div>
         <div className="col-md-6">{locals.inputs['userinfo:lastName']}</div>
+        <div className="col-md-6">{locals.inputs['fvuserinfo:traditionalName']}</div>
         <div className="col-md-6">{locals.inputs['userinfo:email']}</div>
-        <div className="col-md-6">{locals.inputs['fvuserinfo:role']}</div>
-        <div className="col-md-6">{locals.inputs['fvuserinfo:ageGroup']}</div>
-        <div className="col-md-6" id="registration-requested-space">
-          {locals.inputs['fvuserinfo:requestedSpace']}
-        </div>
-
-        <div className={classNames('col-md-12', { hidden: !selectedCommunityLanguageLabel })}>
-          {locals.inputs['fvuserinfo:community_member']}
-        </div>
-        <div className={classNames('col-md-12', { hidden: !selectedCommunityLanguageLabel })}>
-          {locals.inputs['fvuserinfo:language_team_member']}
-        </div>
-
-        <div className="col-md-12">{locals.inputs['fvuserinfo:comment']}</div>
+      </fieldset>
+    </div>
+  )
+}
+const FVJoinTemplate = function template(locals) {
+  return (
+    <div>
+      <fieldset>
+        <div className={classNames({ hidden: true })}>{locals.inputs.siteId}</div>
+        <div className="col-md-6">{locals.inputs.interestReason}</div>
+        <div className="col-md-8">{locals.inputs.communityMember}</div>
+        <div className="col-md-8">{locals.inputs.languageTeam}</div>
+        <div className="col-md-8">{locals.inputs.comment}</div>
       </fieldset>
     </div>
   )
@@ -1392,8 +1365,11 @@ const options = {
   FVPicture: Object.assign({}, FVMedia),
   FVVideo: Object.assign({}, FVMedia),
   FVResource: FVMedia,
-  FVUser: {
+  FVRegistration: {
     fields: {
+      'fvuserinfo:traditionalName': {
+        label: 'Traditional Name',
+      },
       'userinfo:firstName': {
         label: intl.trans('first_name', 'First Name', 'first') + ' *',
         error: 'Please provide your first name.',
@@ -1406,46 +1382,33 @@ const options = {
         label: intl.trans('views.pages.explore.dialect.users.email_address', 'Email Address', 'first') + ' *',
         error: 'Please provide your email.',
       },
-      'fvuserinfo:ageGroup': {
-        label: 'Age Group',
+    },
+    template: FVRegistrationTemplate,
+  },
+  FVJoin: {
+    fields: {
+      siteId: {
+        label: 'FirstVoices language site',
       },
-      'fvuserinfo:requestedSpace': {
-        label:
-          intl.translate({
-            key: 'models.dialect_to_join',
-            default: 'Your FirstVoices community/language',
-          }) + ' *',
-        factory: SelectFactory,
-        attrs: {
-          // query:
-          //   "SELECT ecm:uuid, dc:title FROM FVDialect WHERE ecm:isTrashed = 0 AND ecm:isLatestVersion = 1 ORDER BY dc:title ASC",
-          queryId: 'dialect_titles_uids',
-          query: 'dialect_list',
-          label: 'Your FirstVoices community/language',
-          fancy: false,
-        },
-        error:
-          'Please choose a community portal/language to join. If you are not a member of a community, please skip registration and go straight to the "EXPLORE LANGUAGES" page',
-      },
-      'fvuserinfo:role': {
-        label: 'Why are you interested in FirstVoices?' + ' *',
+      interestReason: {
+        label: 'Why are you interested in FirstVoices?',
         factory: t.form.Select,
         nullOption: { value: '', text: 'Choose the main reason:' },
         options: ProviderHelpers.userRegistrationRoles,
         error: "Please let us know or pick the 'other' option.",
       },
-      'fvuserinfo:comment': {
+      comment: {
         label: 'Other Comments',
         type: 'textarea',
       },
-      'fvuserinfo:community_member': {
+      communityMember: {
         label: (
           <span>
             I am a member of the <strong id="community_member_name" /> community.
           </span>
         ),
       },
-      'fvuserinfo:language_team_member': {
+      languageTeam: {
         label: (
           <span>
             I am an authorized member of the <strong id="language_team_member_name" /> language team
@@ -1453,7 +1416,7 @@ const options = {
         ),
       },
     },
-    template: FVUserRegistrationTemplate,
+    template: FVJoinTemplate,
   },
   FVLink: {
     fields: {
@@ -1470,12 +1433,7 @@ const options = {
           'Specify URL if linking to external or internal links.',
           'first'
         ),
-      } /*,
-      'file:content': {
-        label: 'File',
-        help: 'Optional: For linking directly to a file.',
-        type: 'file'
-      },*/,
+      },
     },
   },
   FVLabel: {

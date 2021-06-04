@@ -105,6 +105,20 @@ export default class DirectoryOperations {
       }, apiErrorHandler)
   }
 
+  static postToAPIwithResponse(path, bodyObject) {
+    const api = ky.create({
+      timeout: TIMEOUT,
+    })
+    return api.post(path, { json: bodyObject }).then(
+      (response) => {
+        return response.text()
+      },
+      (error) => {
+        return error.response.text()
+      }
+    )
+  }
+
   /* NOTE: Currently only using with `simpleTaskRequestChanges` & `postRequestReview`.
   The endpoint returns nothing on success (just 200) so we don't want to run `response.json()`.
   We are intentionally returning nothing.
@@ -114,9 +128,14 @@ export default class DirectoryOperations {
     const api = ky.create({
       timeout: TIMEOUT,
     })
-    return api.post(path, { json: bodyObject }).then(() => {
-      return
-    }, apiErrorHandler)
+    return api.post(path, { json: bodyObject }).then(
+      () => {
+        return
+      },
+      (error) => {
+        return error.response.text()
+      }
+    )
   }
 
   /* NOTE: Currently only using with `simpleTaskApprove` & `simpleTaskIgnore`.

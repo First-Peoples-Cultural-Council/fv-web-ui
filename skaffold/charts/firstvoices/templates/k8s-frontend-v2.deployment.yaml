@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-v2
+spec:
+  replicas: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      name: frontend-v2
+      labels:
+        app: frontend-v2
+    spec:
+      containers:
+        - name: frontend-v2
+          image: {{ .Values.frontendV2.image }}
+          resources:
+            requests:
+              cpu: 100m
+              memory: "2000M"
+            limits:
+              cpu: 1
+              memory: "2000M"
+          args:
+            - "npm"
+            - "run"
+            - "startInSkaffold"
+          env:
+            - name: PUBLIC_PATH
+              value: "v2{{ .Values.hostSuffix }}{{ .Values.domainSuffix }}"
+          ports:
+            - containerPort: 8080
+  selector:
+    matchLabels:
+      app: frontend-v2

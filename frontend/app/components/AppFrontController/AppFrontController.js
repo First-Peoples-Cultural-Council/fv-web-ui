@@ -26,7 +26,6 @@ import { Redirector } from 'common/Redirector'
 // import UIHelpers from 'common/UIHelpers'
 import StringHelpers from 'common/StringHelpers'
 import FVButton from 'components/FVButton'
-import WorkspaceSwitcher from 'components/WorkspaceSwitcher'
 import KidsNavigation from 'components/Kids/navigation'
 import Breadcrumb from 'components/Breadcrumb'
 const PageError = React.lazy(() => import('components/PageError'))
@@ -280,22 +279,22 @@ export class AppFrontController extends Component {
     const themePalette = props.theme.palette
     const { computeLogin } = props
     const { routes } = this.state
-    let _workspaceSwitcher = null
     const area = selectn('routeParams.area', reactElement.props)
-    if (
+    const showWorkspaceSwitcher =
       area &&
       selectn('isConnected', computeLogin) &&
       matchedPage.get('disableWorkspaceSectionNav') !== true &&
       !ProviderHelpers.isSiteMember(selectn('response.properties.groups', computeLogin))
-    ) {
-      _workspaceSwitcher = <WorkspaceSwitcher className="AppFrontController__workspaceSwitcher" area={area} />
-    }
     return (
       <div>
         <div className="breadcrumbContainer row">
           <div className="AppFrontController__waypoint clearfix" style={{ backgroundColor: themePalette.accent4Color }}>
-            <Breadcrumb.Container matchedPage={matchedPage} routes={routes} />
-            {_workspaceSwitcher}
+            <Breadcrumb.Container
+              matchedPage={matchedPage}
+              routes={routes}
+              showWorkspaceSwitcher={showWorkspaceSwitcher}
+              area={area}
+            />
           </div>
         </div>
         <div className={'page-' + siteTheme + '-theme'}>{reactElement}</div>

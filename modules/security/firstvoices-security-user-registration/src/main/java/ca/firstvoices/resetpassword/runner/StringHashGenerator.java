@@ -48,8 +48,7 @@ public class StringHashGenerator {
   }
 
   /**
-   * Very basic check to see if the key is valid SHA-256
-   * and avoid potential XSS
+   * Very basic check to see if the key is valid SHA-256 and avoid potential XSS
    */
   public static boolean validateKey(String key) {
     String regex = "^[A-Fa-f0-9]{64}$";

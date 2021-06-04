@@ -24,6 +24,7 @@
     "start": "webpack serve --env V2_URL=http://0.0.0.0:3002 --color --progress --config build/webpack.development.js",
     "startPreprod": "npm run start -- --env NUXEO_URL=\"https://preprod.firstvoices.com/nuxeo/\"  --env CONTEXT_PATH=\"\"",
     "startDev": "npm run start -- --env NUXEO_URL=\"https://dev.firstvoices.com/nuxeo/\"  --env CONTEXT_PATH=\"\"",
+        "startInSkaffold": "webpack serve --progress --config build/webpack.skaffold.js",
     "test:mockDataSetup:local": "bash ./cypress/scripts/mockDataSetup.sh http://127.0.0.1:8080",
     "test:mockDataTeardown:local": "bash ./cypress/scripts/mockDataTeardown.sh http://127.0.0.1:8080",
     "test:mockDataSetup:dev": "bash ./cypress/scripts/mockDataSetup.sh https://dev.firstvoices.com",

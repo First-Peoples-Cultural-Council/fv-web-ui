@@ -1,6 +1,4 @@
 import { makeStyles } from '@material-ui/core/styles'
-import { withStyles } from '@material-ui/core/styles'
-import Tooltip from '@material-ui/core/Tooltip'
 
 export const DialectTileStyles = makeStyles({
   card: {
@@ -28,18 +26,18 @@ export const DialectTileStyles = makeStyles({
     position: 'absolute',
     right: '10px',
     top: '10px',
+    '&:hover': {
+      color: '#FFFFFF',
+    },
   },
-})
-
-export const CustomTooltip = withStyles({
-  tooltip: {
-    backgroundColor: '#F7EAA3',
-    borderColor: '#C9BB70',
-    color: 'inherit',
-    fontSize: '1.5rem',
-    margin: '0',
-    border: '1px solid #C9BB70',
-    padding: '10px',
+  dialogTitle: {
+    fontSize: 'large',
     textAlign: 'center',
   },
-})(Tooltip)
+  dialogDescription: {
+    textAlign: 'center',
+  },
+  dialogContent: {
+    textAlign: 'center',
+  },
+})

@@ -8,3 +8,6 @@ Bundle-ManifestVersion: 2
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: Nuxeo
 Fragment-Host: org.nuxeo.ecm.platform.restapi.server
+Import-Package: org.nuxeo.ecm.core,
+ javax.servlet,
+ javax.ws.rs

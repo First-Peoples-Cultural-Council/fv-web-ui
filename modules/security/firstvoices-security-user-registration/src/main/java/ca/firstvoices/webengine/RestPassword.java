@@ -74,16 +74,19 @@ public class RestPassword extends ModuleRoot {
     String email = formData.getString("EmailAddress");
     if (email == null || "".equals(email.trim())) {
       return redisplayFormWithErrorMessage("newPasswordRequest",
-          ctx.getMessage("label.registerForm.validation.email"), formData);
+          ctx.getMessage("label.registerForm.validation.email"),
+          formData);
     }
     email = email.trim();
     CreatePasswordResetLinkUnrestricted runner = new CreatePasswordResetLinkUnrestricted(
-        getDefaultRepositoryName(), email);
+        getDefaultRepositoryName(),
+        email);
     runner.runUnrestricted();
 
     String errorMessage = runner.getErrorMessage();
     if (errorMessage != null) {
-      return redisplayFormWithErrorMessage("newPasswordRequest", ctx.getMessage(errorMessage),
+      return redisplayFormWithErrorMessage("newPasswordRequest",
+          ctx.getMessage(errorMessage),
           formData);
     } else {
       String passwordResetLink = runner.getPasswordResetLink();
@@ -99,7 +102,8 @@ public class RestPassword extends ModuleRoot {
         return Response.status(500).build();
       }
       return redisplayFormWithInfoMessage("newPasswordRequest",
-          ctx.getMessage("label.sendPasswordMail.emailSent"), formData);
+          ctx.getMessage("label.sendPasswordMail.emailSent"),
+          formData);
     }
   }
 
@@ -108,8 +112,7 @@ public class RestPassword extends ModuleRoot {
   @Produces("text/html")
   public Object enterNewPassword(@PathParam("key") String key) {
     SearchRegistrationByResetPassKeyUnrestricted runner =
-        new SearchRegistrationByResetPassKeyUnrestricted(
-        getDefaultRepositoryName(), key);
+        new SearchRegistrationByResetPassKeyUnrestricted(getDefaultRepositoryName(), key);
     runner.runUnrestricted();
 
     if (!StringHashGenerator.validateKey(key)) {
@@ -134,23 +137,27 @@ public class RestPassword extends ModuleRoot {
     String passwordConfirmation = formData.getString("PasswordConfirmation");
     if (password == null || "".equals(password.trim())) {
       return redisplayFormWithErrorMessage("submitNewPassword",
-          ctx.getMessage("label.registerForm.validation.password"), formData);
+          ctx.getMessage("label.registerForm.validation.password"),
+          formData);
     }
     if (passwordConfirmation == null || "".equals(passwordConfirmation.trim())) {
       return redisplayFormWithErrorMessage("submitNewPassword",
-          ctx.getMessage("label.registerForm.validation.passwordconfirmation"), formData);
+          ctx.getMessage("label.registerForm.validation.passwordconfirmation"),
+          formData);
     }
     password = password.trim();
     passwordConfirmation = passwordConfirmation.trim();
     if (!password.equals(passwordConfirmation)) {
       return redisplayFormWithErrorMessage("submitNewPassword",
-          ctx.getMessage("label.registerForm.validation.passwordvalidation"), formData);
+          ctx.getMessage("label.registerForm.validation.passwordvalidation"),
+          formData);
     }
 
     String passwordKey = formData.getString("PasswordKey");
 
     SetNewPasswordUnrestricted runner = new SetNewPasswordUnrestricted(getDefaultRepositoryName(),
-        password, passwordKey);
+        password,
+        passwordKey);
     runner.runUnrestricted();
     Response response = runner.getResponse();
     if (response != null) {
@@ -158,16 +165,20 @@ public class RestPassword extends ModuleRoot {
     }
     String errorMessage = runner.getErrorMessage();
     if (errorMessage != null) {
-      return redisplayFormWithErrorMessage("submitNewPassword", ctx.getMessage(errorMessage),
+      return redisplayFormWithErrorMessage("submitNewPassword",
+          ctx.getMessage(errorMessage),
           formData).arg("key", passwordKey);
     } else {
       return redisplayFormWithInfoMessage("submitNewPassword",
-          ctx.getMessage("label.submitNewPassword.saved"), formData).arg("key", passwordKey);
+          ctx.getMessage("label.submitNewPassword.saved"),
+          formData).arg(
+          "key",
+          passwordKey);
     }
   }
 
-  protected Template redisplayFormWithMessage(String messageType, String formName, String message,
-      FormData data) {
+  protected Template redisplayFormWithMessage(
+      String messageType, String formName, String message, FormData data) {
     Map<String, String> savedData = new HashMap<String, String>();
     for (String key : data.getKeys()) {
       savedData.put(key, data.getString(key));
@@ -197,8 +208,8 @@ public class RestPassword extends ModuleRoot {
   private String getDefaultRepositoryName() {
     if (defaultRepositoryName == null) {
       try {
-        defaultRepositoryName = Framework.getService(RepositoryManager.class).getDefaultRepository()
-            .getName();
+        defaultRepositoryName =
+            Framework.getService(RepositoryManager.class).getDefaultRepository().getName();
       } catch (Exception e) {
         throw new RuntimeException(e);
       }

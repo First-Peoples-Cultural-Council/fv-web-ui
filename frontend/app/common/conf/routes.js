@@ -266,7 +266,7 @@ const REPORT_VIEW = {
       case: 'words',
     }) +
     ' | {$dialect_name}',
-  page: <Pages.PageDialectReportsView />,
+  page: <Pages.Reports />,
   extractPaths: true,
   redirects: [WORKSPACE_TO_SECTION_REDIRECT],
 }
@@ -444,9 +444,26 @@ const routes = [
     breadcrumbs: false,
   },
   {
+    path: ['join'],
+    title: intl.translate({ key: 'join', default: 'Join', case: 'first' }),
+    page: <Pages.Join />,
+    disableWorkspaceSectionNav: true,
+    redirects: [
+      {
+        condition: (params) => {
+          return selectn('isConnected', params.props.computeLogin) === false
+        },
+        target: () => {
+          window.location.href = '/nuxeo/logout?requestedUrl=login.jsp'
+        },
+      },
+    ],
+  },
+  {
     path: ['register'],
     title: intl.translate({ key: 'register', default: 'Register', case: 'first' }),
-    page: <Pages.PageUsersRegister />,
+    page: <Pages.Register />,
+    disableWorkspaceSectionNav: true,
   },
   {
     path: ['forgotpassword'],
@@ -528,7 +545,7 @@ const routes = [
         default: 'Registration',
         case: 'words',
       }),
-    page: <Pages.PageUsersRegister />,
+    page: <Pages.Register />,
     disableWorkspaceSectionNav: true,
     extractPaths: true,
   },
@@ -1120,7 +1137,7 @@ const routes = [
         default: 'Reports',
         case: 'words',
       }) + ' | {$dialect_name}',
-    page: <Pages.PageDialectReports />,
+    page: <Pages.Reports />,
     extractPaths: true,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
   },
@@ -2465,6 +2482,14 @@ const routes = [
     path: ['dashboard', 'tasks'],
     title: intl.translate({ key: 'dashboard', default: 'Dashboard', case: 'first' }),
     page: <Pages.DashboardDetailTasksContainer />,
+    breadcrumbs: false,
+  },
+  {
+    siteTheme: WORKSPACES,
+    id: 'dashboard',
+    path: ['dashboard', 'membership'],
+    title: intl.translate({ key: 'dashboard', default: 'Dashboard', case: 'first' }),
+    page: <Pages.Membership />,
     breadcrumbs: false,
   },
   // Mentor-Apprentice Photo Project
