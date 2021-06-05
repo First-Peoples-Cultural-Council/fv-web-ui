@@ -21,7 +21,7 @@ import javax.ws.rs.core.Response;
 
 
 @Path("/v1/search")
-@SecurityRequirement(name = "oauth2", scopes = {"archives:public"})
+@SecurityRequirement(name = "oauth2", scopes = {"sites:public"})
 @AdministrativelyDisabled("search")
 public class SearchEndpoint extends AbstractServiceEndpoint {
 

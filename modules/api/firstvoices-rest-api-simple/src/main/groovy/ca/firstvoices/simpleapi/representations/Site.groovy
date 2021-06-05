@@ -7,16 +7,16 @@ import ca.firstvoices.simpleapi.representations.traits.SwaggerFix
 import ca.firstvoices.simpleapi.representations.traits.Titled
 import io.swagger.v3.oas.annotations.media.Schema
 
-class ArchiveOverview implements Serializable, SwaggerFix, Titled, HasID {
+class SiteOverview implements Serializable, SwaggerFix, Titled, HasID {
   @NuxeoMapping(sourceField = "type", accessMethod = NuxeoMapping.PropertyAccessMethod.DIRECT)
   String type
 }
 
 
-trait ArchiveDetailCommon implements Serializable, Titled, HasID {
+trait SiteDetailCommon implements Serializable, Titled, HasID {
 
   @Schema(
-      description = 'The geographic region for this archive',
+      description = 'The geographic region for this site',
       example = "British Columbia"
   )
   @NuxeoMapping(sourceField = "region")
@@ -39,23 +39,23 @@ trait ArchiveDetailCommon implements Serializable, Titled, HasID {
 }
 
 @Schema(
-    description = 'A detailed view of an archive including the assets and entities'
+    description = 'A detailed view of an site including the assets and entities'
 )
-class ArchiveDetailPublic implements Serializable, SwaggerFix, ArchiveDetailCommon {
+class SiteDetailPublic implements Serializable, SwaggerFix, SiteDetailCommon {
   @Schema(
-      description = 'The set of web links within this archive'
+      description = 'The set of web links within this site'
   )
   @NuxeoSubqueryMapping(subqueryName = "links", mapAs = Link.class)
   Set<Link> links = new HashSet<>()
 
   @Schema(
-      description = 'The set of media assets (pictures, videos, audio) within this archive',
+      description = 'The set of media assets (pictures, videos, audio) within this site',
       minLength = 0
   )
   Set<Asset> media = new HashSet<>()
 
   @Schema(
-      description = 'The set of categories for entities within this archive',
+      description = 'The set of categories for entities within this site',
       example = '["animals", "people", "places"]',
       minLength = 0
   )
@@ -70,5 +70,5 @@ class ArchiveDetailPublic implements Serializable, SwaggerFix, ArchiveDetailComm
   Set<String> alphabet = new HashSet<>()
 }
 
-class ArchiveDetailPrivate implements Serializable, SwaggerFix, ArchiveDetailCommon {
+class SiteDetailPrivate implements Serializable, SwaggerFix, SiteDetailCommon {
 }

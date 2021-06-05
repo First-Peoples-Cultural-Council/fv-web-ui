@@ -7,37 +7,42 @@
   <extension target="org.nuxeo.ecm.platform.query.api.PageProviderService"
              point="providers">
 
-    <coreQueryPageProvider name="LIST_ARCHIVES_PP">
+    <coreQueryPageProvider name="LIST_SITES_PP">
       <pattern>
-        SELECT * FROM FVDialect, FVLanguage, FVLanguageFamily where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:path
-        STARTSWITH '/FV/sections/Data'
+        SELECT * FROM FVDialect WHERE
+          ecm:isTrashed = 0
+          AND ecm:isVersion = 0
+          AND ecm:path STARTSWITH '/FV/sections/Data'
       </pattern>
       <sort column="dc:title" ascending="true"/>
       <pageSize>50</pageSize>
     </coreQueryPageProvider>
-    <coreQueryPageProvider name="GET_ARCHIVE_PP">
-      <pattern>SELECT * FROM FVDialect, FVLanguage, FVLanguageFamily where ecm:isTrashed = 0 and ecm:isVersion = 0 and
-        ecm:path STARTSWITH '/FV/sections/Data' and ecm:uuid = ?
+    <coreQueryPageProvider name="GET_SITE_PP">
+      <pattern>
+        SELECT * FROM FVDialect WHERE
+          ecm:isTrashed = 0
+          AND ecm:isVersion = 0
+          AND ecm:path STARTSWITH '/FV/sections/Data' and ecm:uuid = ?
       </pattern>
       <pageSize>50</pageSize>
     </coreQueryPageProvider>
-    <coreQueryPageProvider name="WORDS_IN_ARCHIVE_PP">
+    <coreQueryPageProvider name="WORDS_IN_SITE_PP">
       <pattern>SELECT * FROM FVWord where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:ancestorId = ?</pattern>
       <pageSize>50</pageSize>
     </coreQueryPageProvider>
-    <coreQueryPageProvider name="LINKS_IN_ARCHIVE_PP">
+    <coreQueryPageProvider name="LINKS_IN_SITE_PP">
       <pattern>SELECT * FROM FVLink where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:ancestorId = ?</pattern>
       <pageSize>50</pageSize>
     </coreQueryPageProvider>
-    <coreQueryPageProvider name="PHRASES_IN_ARCHIVE_PP">
+    <coreQueryPageProvider name="PHRASES_IN_SITE_PP">
       <pattern>SELECT * FROM FVPhrase where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:ancestorId = ?</pattern>
       <pageSize>50</pageSize>
     </coreQueryPageProvider>
-    <coreQueryPageProvider name="STORIES_IN_ARCHIVE_PP">
+    <coreQueryPageProvider name="STORIES_IN_SITE_PP">
       <pattern>SELECT * FROM FVStory where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:ancestorId = ?</pattern>
       <pageSize>50</pageSize>
     </coreQueryPageProvider>
-    <coreQueryPageProvider name="SONGS_IN_ARCHIVE_PP">
+    <coreQueryPageProvider name="SONGS_IN_SITE_PP">
       <pattern>SELECT * FROM FVSong where ecm:isTrashed = 0 and ecm:isVersion = 0 and ecm:ancestorId = ?</pattern>
       <pageSize>50</pageSize>
     </coreQueryPageProvider>

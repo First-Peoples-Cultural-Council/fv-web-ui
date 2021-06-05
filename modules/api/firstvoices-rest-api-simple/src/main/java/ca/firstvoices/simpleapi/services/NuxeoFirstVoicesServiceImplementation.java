@@ -4,11 +4,11 @@ import ca.firstvoices.simpleapi.exceptions.NotFoundException;
 import ca.firstvoices.simpleapi.exceptions.NotImplementedException;
 import ca.firstvoices.simpleapi.model.AnnotationNuxeoMapper;
 import ca.firstvoices.simpleapi.model.QueryBean;
-import ca.firstvoices.simpleapi.representations.ArchiveDetailPublic;
-import ca.firstvoices.simpleapi.representations.ArchiveOverview;
 import ca.firstvoices.simpleapi.representations.Asset;
 import ca.firstvoices.simpleapi.representations.Link;
 import ca.firstvoices.simpleapi.representations.Phrase;
+import ca.firstvoices.simpleapi.representations.SiteDetailPublic;
+import ca.firstvoices.simpleapi.representations.SiteOverview;
 import ca.firstvoices.simpleapi.representations.Song;
 import ca.firstvoices.simpleapi.representations.Story;
 import ca.firstvoices.simpleapi.representations.Vocabulary;
@@ -137,12 +137,12 @@ public class NuxeoFirstVoicesServiceImplementation implements FirstVoicesService
   }
 
   @Override
-  public Metadata<List<ArchiveOverview>> getArchives(QueryBean queryParameters) {
+  public Metadata<List<SiteOverview>> getSites(QueryBean queryParameters) {
 
     return new ResponseHelper<>(
-        ArchiveOverview.class,
-        "LIST_ARCHIVES_PP",
-        "archive",
+        SiteOverview.class,
+        "LIST_SITES_PP",
+        "site",
         queryParameters,
         Collections.emptyMap(),
         true
@@ -151,68 +151,68 @@ public class NuxeoFirstVoicesServiceImplementation implements FirstVoicesService
   }
 
   @Override
-  public Metadata<ArchiveDetailPublic> getArchiveDetail(String archiveID) {
+  public Metadata<SiteDetailPublic> getSiteDetail(String siteID) {
     Map<String, String> extraQueries = new HashMap<>();
-    extraQueries.put("links", "LINKS_IN_ARCHIVE_PP");
+    extraQueries.put("links", "LINKS_IN_SITE_PP");
 
     return new ResponseHelper<>(
-        ArchiveDetailPublic.class,
-        "GET_ARCHIVE_PP",
-        "archive",
+        SiteDetailPublic.class,
+        "GET_SITE_PP",
+        "site",
         null,
         extraQueries,
         false,
-        archiveID
+        siteID
     ).single();
   }
 
   @Override
-  public Metadata<List<Word>> getWordsInArchive(
-      String archiveID,
+  public Metadata<List<Word>> getWordsInSite(
+      String siteID,
       QueryBean queryParameters
   ) {
     return new ResponseHelper<>(Word.class,
-        "WORDS_IN_ARCHIVE_PP",
+        "WORDS_IN_SITE_PP",
         "word",
         queryParameters,
         Collections.emptyMap(),
         true,
-        archiveID
+        siteID
     ).list();
   }
 
   @Override
-  public Metadata<List<Phrase>> getPhrasesInArchive(String archiveID, QueryBean queryParameters) {
+  public Metadata<List<Phrase>> getPhrasesInSite(String siteID, QueryBean queryParameters) {
     return new ResponseHelper<>(Phrase.class,
-        "PHRASES_IN_ARCHIVE_PP",
+        "PHRASES_IN_SITE_PP",
         "phrase",
         queryParameters,
         Collections.emptyMap(),
         true,
-        archiveID).list();
+        siteID).list();
   }
 
   @Override
-  public Metadata<List<Story>> getStoriesInArchive(String archiveID, QueryBean queryParameters) {
+  public Metadata<List<Story>> getStoriesInSite(String siteID, QueryBean queryParameters) {
     return new ResponseHelper<>(Story.class,
-        "STORIES_IN_ARCHIVE_PP",
+        "STORIES_IN_SITE_PP",
         "story",
         queryParameters,
         Collections.emptyMap(),
         true,
-        archiveID).list();
+        siteID).list();
 
   }
 
   @Override
-  public Metadata<List<Song>> getSongsInArchive(String archiveID, QueryBean queryParameters) {
+  public Metadata<List<Song>> getSongsInSite(String siteID, QueryBean queryParameters) {
     return new ResponseHelper<>(Song.class,
-        "SONGS_IN_ARCHIVE_PP",
+        "SONGS_IN_SITE_PP",
         "song",
         queryParameters,
         Collections.emptyMap(),
         true,
-        archiveID).list();
+        siteID).list();
   }
 
   @Override
