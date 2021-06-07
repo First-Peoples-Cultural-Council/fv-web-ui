@@ -48,23 +48,49 @@ const FVPortalTemplate = function template(locals) {
 
 const FVDialectTemplate = function template(locals) {
   return (
-    <fieldset>
-      <div className="col-md-12">{locals.inputs['fvdialect:greeting']}</div>
-      <div className="col-md-12">{locals.inputs['fvdialect:featured_audio']}</div>
-      <div className="col-md-12">{locals.inputs['fvdialect:about_us']}</div>
-      <div className="col-md-12">{locals.inputs['fvdialect:news']}</div>
-      <div className="col-md-12">{locals.inputs['fvdialect:background_top_image']}</div>
-      <div className="col-md-12">{locals.inputs['fvdialect:logo']}</div>
-      <div className="col-md-12">{locals.inputs['fvdialect:featured_words']}</div>
-      <div className="col-md-12">{locals.inputs['fvdialect:related_links']}</div>
-      <div className="col-md-12">{locals.inputs['fvdialect:about_our_language']}</div>
-      <div className="col-md-12">{locals.inputs['fvdialect:country']}</div>
-      <div className="col-md-12">{locals.inputs['fvdialect:dominant_language']}</div>
-      <div className="col-md-12">{locals.inputs['fvdialect:region']}</div>
-      <div className="col-md-12">{locals.inputs['fvdialect:keyboards']}</div>
-      <div className="col-md-12">{locals.inputs['fvdialect:language_resources']}</div>
-      <div className="col-md-12">{locals.inputs['fvdialect:contact_information']}</div>
-    </fieldset>
+    <div>
+      <fieldset>
+        <h2
+          className="col-md-12"
+          style={{
+            marginTop: '10px',
+            marginBottom: '10px',
+            color: 'rgb(0, 121, 107)',
+            fontSize: '1.5em',
+          }}
+        >
+          Home Page
+        </h2>
+        <div className="col-md-12">{locals.inputs['fvdialect:greeting']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:featured_audio']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:about_us']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:news']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:background_top_image']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:logo']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:featured_words']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:related_links']}</div>
+      </fieldset>
+      <fieldset>
+        <h2
+          className="col-md-12"
+          style={{
+            marginTop: '10px',
+            marginBottom: '10px',
+            color: 'rgb(0, 121, 107)',
+            fontSize: '1.5em',
+          }}
+        >
+          Learn Our Language Page
+        </h2>
+        <div className="col-md-12">{locals.inputs['fvdialect:about_our_language']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:country']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:dominant_language']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:region']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:keyboards']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:language_resources']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:contact_information']}</div>
+      </fieldset>
+    </div>
   )
 }
 

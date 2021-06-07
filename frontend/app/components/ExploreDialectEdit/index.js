@@ -16,6 +16,7 @@ limitations under the License.
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Immutable, { is } from 'immutable'
+import selectn from 'selectn'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -24,27 +25,20 @@ import { fetchDialect2 } from 'reducers/fvDialect'
 import { fetchPortal } from 'reducers/fvPortal'
 import { replaceWindowPath } from 'reducers/windowPath'
 
-import selectn from 'selectn'
-
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import AuthenticationFilter from 'components/AuthenticationFilter'
-import PromiseWrapper from 'components/PromiseWrapper'
-
-import StateLoading from 'components/Loading'
-import StateErrorBoundary from 'components/ErrorBoundary'
-import FVLabel from 'components/FVLabel'
-
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
-
-import withForm from 'components/withForm'
-
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
 
-import './ExploreDialectEdit.css'
-
+import AuthenticationFilter from 'components/AuthenticationFilter'
+import PromiseWrapper from 'components/PromiseWrapper'
+import StateLoading from 'components/Loading'
+import StateErrorBoundary from 'components/ErrorBoundary'
+import withForm from 'components/withForm'
 const EditViewWithForm = withForm(PromiseWrapper, true)
+
+import './ExploreDialectEdit.css'
 
 const { array, func, object } = PropTypes
 export class ExploreDialectEdit extends Component {
@@ -219,11 +213,7 @@ export class ExploreDialectEdit extends Component {
         <PromiseWrapper computeEntities={computeEntities}>
           <div className="ExploreDialectEdit">
             <h1 className="ExploreDialectEdit__heading">
-              <FVLabel
-                transKey="views.pages.explore.dialect.edit_x_community_portal"
-                defaultStr={'Edit ' + selectn('response.title', computeDialect2) + ' Community Portal'}
-                params={[selectn('response.title', computeDialect2)]}
-              />
+              {'Edit ' + selectn('response.title', computeDialect2) + ' Community Pages'}
             </h1>
 
             <EditViewWithForm
