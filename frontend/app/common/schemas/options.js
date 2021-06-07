@@ -31,21 +31,6 @@ const i18nExt = {
 
 window.intl = IntlService.instance
 
-const FVPortalTemplate = function template(locals) {
-  return (
-    <fieldset>
-      <div className="col-md-12">{locals.inputs['fv-portal:greeting']}</div>
-      <div className="col-md-12">{locals.inputs['fv-portal:about']}</div>
-      <div className="col-md-12">{locals.inputs['fv-portal:news']}</div>
-      <div className="col-md-12">{locals.inputs['fv-portal:featured_words']}</div>
-      <div className="col-md-12">{locals.inputs['fv-portal:related_links']}</div>
-      <div className="col-md-12">{locals.inputs['fv-portal:featured_audio']}</div>
-      <div className="col-md-6">{locals.inputs['fv-portal:background_top_image']}</div>
-      <div className="col-md-6">{locals.inputs['fv-portal:logo']}</div>
-    </fieldset>
-  )
-}
-
 const FVDialectTemplate = function template(locals) {
   return (
     <div>
@@ -1131,77 +1116,6 @@ const options = {
         },
       },
     },
-    i18n: i18nExt,
-  },
-
-  FVPortal: {
-    fields: {
-      'fv-portal:greeting': {
-        label: intl.trans('models.portal_greeting', 'Portal Greeting', 'first'),
-      },
-      'fv-portal:featured_audio': {
-        label: intl.trans('models.greeting_audio', 'Greeting Audio', 'first'),
-        factory: MediaFactory,
-        type: 'FVAudio',
-      },
-      'fv-portal:about': {
-        label: intl.trans('models.portal_introduction', 'Portal Introduction', 'first'),
-        type: 'textarea',
-        factory: WysiwygFactory,
-        attrs: {
-          dataTestId: 'wysiwyg-fv-portal_about',
-          idAlt: 'fv-portal_about',
-          nameAlt: 'fv-portal:about',
-          placeholder: intl.trans('models.enter_portal_description', 'Enter portal description here', 'first'),
-        },
-      },
-      'fv-portal:news': {
-        label: intl.trans('news', 'News', 'first'),
-        type: 'textarea',
-        factory: WysiwygFactory,
-        help: intl.trans('models.news_tip', 'Tip: Use * to start a bullet list!', 'first'),
-        attrs: {
-          dataTestId: 'wysiwyg-fv-portal_news',
-        },
-      },
-      'fv-portal:background_top_image': {
-        label: intl.trans('models.background_image', 'Background Image', 'first'),
-        factory: MediaFactory,
-        type: 'FVPicture',
-      },
-      'fv-portal:logo': {
-        label: intl.trans('logo', 'Logo', 'first'),
-        factory: MediaFactory,
-        type: 'FVPicture',
-      },
-      'fv-portal:featured_words': {
-        label: intl.trans('featured_words', 'Featured Words', 'first'),
-        item: {
-          factory: SelectSuggestFactory,
-          type: 'FVWord',
-          attrs: {
-            disableCreateNewButton: true,
-            previewProps: {
-              minimal: true,
-            },
-          },
-        },
-      },
-      'fv-portal:related_links': {
-        label: intl.trans('related_links', 'Related Links', 'first'),
-        item: {
-          factory: SelectSuggestFactory,
-          type: 'FVLink',
-          attrs: {
-            previewProps: {
-              minimal: true,
-            },
-            allowEdit: true,
-          },
-        },
-      },
-    },
-    template: FVPortalTemplate,
     i18n: i18nExt,
   },
 

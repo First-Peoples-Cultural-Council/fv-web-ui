@@ -81,16 +81,6 @@ const fields = {
     'fv:related_pictures': t.list(t.maybe(t.String)),
     'fv:related_videos': t.list(t.maybe(t.String)),
   }),
-  FVPortal: {
-    'fv-portal:greeting': t.String,
-    'fv-portal:featured_audio': t.maybe(t.String),
-    'fv-portal:about': t.String,
-    'fv-portal:news': t.maybe(t.String),
-    'fv-portal:background_top_image': t.String,
-    'fv-portal:logo': t.String,
-    'fv-portal:featured_words': t.list(t.String),
-    'fv-portal:related_links': t.list(t.String),
-  },
   FVGallery: Object.assign({}, Dublincore, {
     'fv:related_pictures': t.list(t.String),
   }),
