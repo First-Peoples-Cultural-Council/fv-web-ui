@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
@@ -22,6 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
+import javax.security.auth.login.LoginException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +32,6 @@ import org.nuxeo.ecm.automation.test.AutomationFeature;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.core.api.impl.DocumentModelImpl;
 import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
@@ -41,6 +42,7 @@ import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
 import org.nuxeo.ecm.core.test.CoreFeature;
 import org.nuxeo.ecm.core.test.annotations.Granularity;
 import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
+import org.nuxeo.ecm.platform.login.test.ClientLoginFeature;
 import org.nuxeo.ecm.platform.query.api.AbstractPageProvider;
 import org.nuxeo.ecm.platform.query.api.PageProviderService;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
@@ -53,7 +55,8 @@ import org.nuxeo.runtime.test.runner.FeaturesRunner;
 import org.nuxeo.runtime.transaction.TransactionHelper;
 
 @RunWith(FeaturesRunner.class)
-@Features({CoreFeature.class, AutomationFeature.class, MockitoFeature.class})
+@Features({CoreFeature.class, AutomationFeature.class, MockitoFeature.class,
+    ClientLoginFeature.class})
 @RepositoryConfig(cleanup = Granularity.METHOD)
 @Deploy({"FirstVoicesMaintenance", "FirstVoicesCoreTests:OSGI-INF/nuxeo.conf.override.xml"})
 @TestDataConfiguration(yaml = {"test-data/basic-structure.yaml", "test-data/test-language.yaml"})
@@ -71,6 +74,8 @@ public class PostCommitCleanupListenerTest extends AbstractTestDataCreatorTest {
   @Inject protected TrashService trashService;
 
   @Inject UserManager userManager;
+
+  @Inject ClientLoginFeature login;
 
   DocumentModel word = null;
 
@@ -211,6 +216,37 @@ public class PostCommitCleanupListenerTest extends AbstractTestDataCreatorTest {
     // Ensure required job was added
     assertTrue(RequiredJobsUtils.hasRequiredJobs(dialect,
         Constants.CLEAN_CATEGORY_REFERENCES_JOB_ID));
+  }
+
+  //================================================================================
+  // CLEAN LEGACY FIELDS TESTS (cleanLegacyFields)
+  //================================================================================
+
+  @Test
+  public void updateDialect() throws LoginException {
+    final String dialectFieldName = "fvdialect:greeting";
+    final String portalFieldName = "fv-portal:greeting";
+    dialect.setPropertyValue(dialectFieldName, "test");
+
+    DocumentModel portal = session.getChild(dialect.getRef(), "Portal");
+    portal.setPropertyValue(portalFieldName, "portal greeting");
+
+    session.saveDocument(portal);
+    session.saveDocument(dialect);
+
+    // Fire event as non-system admin user
+    EventContext ctx = new DocumentEventContext(session,
+        getNonAdminCoreSession().getPrincipal(),
+        dialect);
+    eventService.fireEvent(ctx.newEvent(DocumentEventTypes.DOCUMENT_UPDATED));
+
+    commitTransactionAndWait();
+
+    // Ensure portal field has been cleared
+    session.getChild(dialect.getRef(), "Portal");
+
+    assertNull(session.getChild(
+        dialect.getRef(), "Portal").getPropertyValue(portalFieldName));
   }
 
   //================================================================================
