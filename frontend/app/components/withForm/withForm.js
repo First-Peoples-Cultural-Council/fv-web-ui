@@ -229,6 +229,8 @@ export default function withForm(ComposedFilter) {
         </>
       )
 
+      const contributors = selectn('response.properties.dc:contributors', computeItem) || []
+
       return (
         <div className="row">
           <div className={classNames('col-xs-12', 'col-md-9')}>
@@ -340,7 +342,9 @@ export default function withForm(ComposedFilter) {
                     <FVLabel transKey="contributors" defaultStr="Contributors" transform="first" />
                   </span>
                   <div className="ViewWithForm__listGroupItem">
-                    {(selectn('response.properties.dc:contributors', computeItem) || []).join(',')}
+                    {contributors.map((contributor, i) => {
+                      return <p key={i}>{contributor}</p>
+                    })}
                   </div>
                 </li>
 
