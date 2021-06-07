@@ -13,7 +13,6 @@ import javax.ws.rs.core.Response;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
-import org.elasticsearch.index.query.PrefixQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.WildcardQueryBuilder;
@@ -21,19 +20,17 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.webengine.model.WebObject;
 
-@WebObject(type = "dictionary")
+@WebObject(type = "songs_and_stories")
 @Produces(MediaType.APPLICATION_JSON)
-public class DictionaryObject extends AbstractSearchlikeObject {
+public class SongsStoriesObject extends AbstractSearchlikeObject {
 
   @GET
   @Path("{dialect}")
   public Response getDictionary(
       @PathParam(value = "dialect") String dialect,
       @QueryParam(value = "q") String query,
-      @QueryParam(value = "docType") @DefaultValue("WORDS_AND_PHRASES") String docType,
-      @QueryParam(value = "alphabetCharacter") String alphabetCharacter,
+      @QueryParam(value = "docType") @DefaultValue("SONGS_AND_STORIES") String docType,
       @QueryParam(value = "kidsOnly") @DefaultValue("false") boolean kidsOnly,
-      @QueryParam(value = "gamesOnly") @DefaultValue("false") boolean gamesOnly,
       @QueryParam(value = "sortAscending") @DefaultValue("false") boolean sortAscending,
       @QueryParam(value = "sortBy") @DefaultValue("entry") String sortBy,
       @QueryParam(value = "perPage") @DefaultValue("25") Integer perPage,
@@ -100,12 +97,7 @@ public class DictionaryObject extends AbstractSearchlikeObject {
       combinedQuery.must(combinedLanguageQuery);
     }
 
-    if (alphabetCharacter != null && alphabetCharacter.length() > 0) {
-      PrefixQueryBuilder alphabetQuery = QueryBuilders.prefixQuery("dc:title", alphabetCharacter);
-      combinedQuery.must(alphabetQuery);
-    }
-
-    combinedQuery.must(audienceQuery(kidsOnly, gamesOnly));
+    combinedQuery.must(audienceQuery(kidsOnly, false));
 
     runSearch(searchResults,
         combinedQuery,

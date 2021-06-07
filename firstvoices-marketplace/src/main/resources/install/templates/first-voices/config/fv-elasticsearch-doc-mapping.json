@@ -108,6 +108,14 @@
     "ecm:isVersion": {
       "type": "boolean"
     },
+    "fvaudience:children": {
+      "type": "boolean",
+      "null_value": false
+    },
+    "fvaudience:games": {
+      "type": "boolean",
+      "null_value": false
+    },
     "common:icon": {
       "index": false,
       "type": "keyword"
