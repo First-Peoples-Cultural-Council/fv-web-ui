@@ -140,6 +140,46 @@ export class ExploreDialect extends Component {
     )
   }
 
+  _dataAdaptor = ({ dialect, portal, isSection }) => {
+    const dialectProperties = selectn('response.properties', dialect)
+    const portalProperties = selectn('response.properties', portal)
+    const dialectContextParams = selectn('response.contextParameters.dialect', dialect)
+    const portalContextParams = selectn('response.contextParameters.portal', portal)
+    if (!isSection) {
+      return {
+        greeting: dialectProperties?.['fvdialect:greeting'] || portalProperties?.['fv-portal:greeting'] || null,
+        audio:
+          dialectContextParams?.['fvdialect:featured_audio'] ||
+          portalContextParams?.['fv-portal:featured_audio'] ||
+          null,
+        aboutUs: dialectProperties?.['fvdialect:about_us'] || portalProperties?.['fv-portal:about'] || null,
+        news: dialectProperties?.['fvdialect:news'] || portalProperties?.['fv-portal:news'] || null,
+        background:
+          dialectProperties?.['fvdialect:background_top_image'] ||
+          portalProperties?.['fv-portal:background_top_image'] ||
+          null,
+        logo: dialectProperties?.['fvdialect:logo'] || portalProperties?.['fv-portal:logo'] || null,
+        featuredWords:
+          dialectContextParams?.['fvdialect:featured_words']?.length > 0
+            ? dialectContextParams?.['fvdialect:featured_words']
+            : portalContextParams?.['fv-portal:featured_words'] || [],
+        relatedLinks:
+          dialectContextParams?.['fvdialect:related_links']?.length > 0
+            ? dialectContextParams?.['fvdialect:related_links']
+            : portalContextParams?.['fv-portal:related_links'] || [],
+        country: dialectProperties?.['fvdialect:country'] || null,
+        region: dialectProperties?.['fvdialect:region'] || null,
+      }
+    }
+    return {
+      background:
+        dialectProperties?.['fvproxy:proxied_background_image'] ||
+        portalProperties?.['fvproxy:proxied_background_image'] ||
+        null,
+      logo: dialectProperties?.['fvproxy:proxied_logo'] || portalProperties?.['fvproxy:proxied_logo'] || null,
+    }
+  }
+
   render() {
     const computeEntities = Immutable.fromJS([
       {
@@ -202,33 +242,8 @@ export class ExploreDialect extends Component {
       }
     }
     const dialectClassName = getDialectClassname(computeDialect2)
-    const dialectProperties = selectn('response.properties', computeDialect2)
-    const portalProperties = selectn('response.properties', computePortal)
-    const dialectContextParams = selectn('response.contextParameters.dialect', computeDialect2)
-    const portalContextParams = selectn('response.contextParameters.portal', computePortal)
 
-    const dialectDataAdaptor = {
-      greeting: dialectProperties?.['fvdialect:greeting'] || portalProperties?.['fv-portal:greeting'] || null,
-      audio:
-        dialectContextParams?.['fvdialect:featured_audio'] || portalContextParams?.['fv-portal:featured_audio'] || null,
-      aboutUs: dialectProperties?.['fvdialect:about_us'] || portalProperties?.['fv-portal:about'] || null,
-      news: dialectProperties?.['fvdialect:news'] || portalProperties?.['fv-portal:news'] || null,
-      background:
-        dialectProperties?.['fvdialect:background_top_image'] ||
-        portalProperties?.['fv-portal:background_top_image'] ||
-        null,
-      logo: dialectProperties?.['fvdialect:logo'] || portalProperties?.['fv-portal:logo'] || null,
-      featuredWords:
-        dialectContextParams?.['fvdialect:featured_words'].length > 0
-          ? dialectContextParams?.['fvdialect:featured_words']
-          : portalContextParams?.['fv-portal:featured_words'] || [],
-      relatedLinks:
-        dialectContextParams?.['fvdialect:related_links']?.length > 0
-          ? dialectContextParams?.['fvdialect:related_links']
-          : portalContextParams?.['fv-portal:related_links'] || [],
-      country: dialectProperties?.['fvdialect:country'] || null,
-      region: dialectProperties?.['fvdialect:region'] || null,
-    }
+    const data = this._dataAdaptor({ dialect: computeDialect2, portal: computePortal, isSection: isSection })
 
     let toolbar = null
     if (this.props.routeParams.area === WORKSPACES) {
@@ -295,13 +310,9 @@ export class ExploreDialect extends Component {
         <div className={classNames('row', 'dialect-body-container', dialectClassName)} style={{ marginTop: '15px' }}>
           <div className={classNames('col-xs-12', 'col-md-7')}>
             <h1 className={classNames('display', 'dialect-greeting-container', dialectClassName)}>
-              <div>{dialectDataAdaptor.greeting}</div>
-              {dialectDataAdaptor?.audio?.path && (
-                <audio
-                  id="portalFeaturedAudio"
-                  src={NavigationHelpers.getBaseURL() + dialectDataAdaptor.audio?.path}
-                  controls
-                />
+              <div>{data?.greeting}</div>
+              {data?.audio?.path && (
+                <audio id="portalFeaturedAudio" src={NavigationHelpers.getBaseURL() + data?.audio?.path} controls />
               )}
             </h1>
             <div className={dialectClassName}>
@@ -309,21 +320,21 @@ export class ExploreDialect extends Component {
                 <FVLabel transKey="views.pages.explore.dialect.about_us" defaultStr="About us" />
               </h2>
               <hr className="dialect-hr" />
-              <div className="fv-portal-about" dangerouslySetInnerHTML={{ __html: dialectDataAdaptor.aboutUs }} />
+              <div className="fv-portal-about" dangerouslySetInnerHTML={{ __html: data?.aboutUs }} />
             </div>
             <div>
               <h2>
                 <FVLabel transKey="general.news" defaultStr="News" />
               </h2>
               <hr className="dialect-hr" />
-              <div className="fv-portal-about" dangerouslySetInnerHTML={{ __html: dialectDataAdaptor.news }} />
+              <div className="fv-portal-about" dangerouslySetInnerHTML={{ __html: data?.news }} />
             </div>
           </div>
 
           <div className={classNames('col-xs-12', 'col-md-4', 'col-md-offset-1')}>
             <div className="row">
               <div className={classNames('col-xs-12')}>
-                {dialectDataAdaptor.featuredWords?.length > 0 ? (
+                {data?.featuredWords?.length > 0 ? (
                   <>
                     <h2>
                       <FVLabel transKey="first_words" defaultStr="First Words" />
@@ -336,7 +347,7 @@ export class ExploreDialect extends Component {
                       type="FVWord"
                       className="grid-view-first-words"
                       metadata={selectn('response', computeDialect2)}
-                      items={dialectDataAdaptor.featuredWords?.map((word) => {
+                      items={data?.featuredWords?.map((word) => {
                         return {
                           contextParameters: {
                             word: {
@@ -350,13 +361,13 @@ export class ExploreDialect extends Component {
                     />
                   </>
                 ) : null}
-                {(dialectDataAdaptor?.relatedLinks.length > 0 || !isSection) && (
+                {(data?.relatedLinks?.length > 0 || !isSection) && (
                   <>
                     <h2>
                       <FVLabel transKey="general.related_links" defaultStr="Related Links" />
                     </h2>
                     <hr className="dialect-hr" />
-                    {dialectDataAdaptor.relatedLinks.map((link, i) => (
+                    {data?.relatedLinks?.map((link, i) => (
                       <Preview key={i} id={link.uid} type={'FVLink'} />
                     ))}
                   </>
@@ -368,11 +379,11 @@ export class ExploreDialect extends Component {
                 <div className={classNames('dialect-info-banner')}>
                   <div className="dib-body-row">
                     <FVLabel transKey="country" defaultStr="Country" />:{' '}
-                    <div dangerouslySetInnerHTML={{ __html: dialectDataAdaptor.country }} />
+                    <div dangerouslySetInnerHTML={{ __html: data?.country }} />
                   </div>
                   <div className="dib-body-row">
                     <FVLabel transKey="region" defaultStr="Region" />:{' '}
-                    <div dangerouslySetInnerHTML={{ __html: dialectDataAdaptor.region }} />
+                    <div dangerouslySetInnerHTML={{ __html: data?.region }} />
                   </div>
                 </div>
               </div>
