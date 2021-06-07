@@ -37,12 +37,14 @@ export default class Header extends Component {
   }
 
   render() {
-    const { portal } = this.props
+    const { dialect, portal } = this.props
 
     const backgroundImage = selectn(
-      'response.contextParameters.portal.fv-portal:background_top_image.path',
-      portal.compute
+      'response.contextParameters.dialect.fvdialect:background_top_image.path',
+      dialect.compute
     )
+      ? selectn('response.contextParameters.dialect.fvdialect:background_top_image.path', dialect.compute)
+      : selectn('response.contextParameters.portal.fv-portal:background_top_image.path', portal.compute)
 
     let portalBackgroundImagePath = 'assets/images/cover.png'
 
