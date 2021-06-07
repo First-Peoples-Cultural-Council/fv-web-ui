@@ -202,12 +202,15 @@ export class ExploreDialect extends Component {
       }
     }
     const dialectClassName = getDialectClassname(computeDialect2)
-    const portal = selectn('response', computePortal)
     const dialectProperties = selectn('response.properties', computeDialect2)
     const portalProperties = selectn('response.properties', computePortal)
+    const dialectContextParams = selectn('response.contextParameters.dialect', computeDialect2)
+    const portalContextParams = selectn('response.contextParameters.portal', computePortal)
+
     const dialectDataAdaptor = {
       greeting: dialectProperties?.['fvdialect:greeting'] || portalProperties?.['fv-portal:greeting'] || null,
-      audio: dialectProperties?.['fvdialect:featured_audio'] || portalProperties?.['fv-portal:featured_audio'] || null,
+      audio:
+        dialectContextParams?.['fvdialect:featured_audio'] || portalContextParams?.['fv-portal:featured_audio'] || null,
       aboutUs: dialectProperties?.['fvdialect:about_us'] || portalProperties?.['fv-portal:about'] || null,
       news: dialectProperties?.['fvdialect:news'] || portalProperties?.['fv-portal:news'] || null,
       background:
@@ -216,23 +219,16 @@ export class ExploreDialect extends Component {
         null,
       logo: dialectProperties?.['fvdialect:logo'] || portalProperties?.['fv-portal:logo'] || null,
       featuredWords:
-        dialectProperties?.['fvdialect:featured_words'] || portalProperties?.['fv-portal:featured_words'] || [],
-      relatedLinks: dialectProperties?.['fvdialect:related_links']?.length
-        ? dialectProperties?.['fvdialect:related_links']
-        : portalProperties?.['fv-portal:related_links'] || [],
+        dialectContextParams?.['fvdialect:featured_words'].length > 0
+          ? dialectContextParams?.['fvdialect:featured_words']
+          : portalContextParams?.['fv-portal:featured_words'] || [],
+      relatedLinks:
+        dialectContextParams?.['fvdialect:related_links']?.length > 0
+          ? dialectContextParams?.['fvdialect:related_links']
+          : portalContextParams?.['fv-portal:related_links'] || [],
       country: dialectProperties?.['fvdialect:country'] || null,
       region: dialectProperties?.['fvdialect:region'] || null,
     }
-
-    const greetingAudio = dialectDataAdaptor.audio ? (
-      <audio id="portalFeaturedAudio" src={NavigationHelpers.getBaseURL() + dialectDataAdaptor.audio?.path} controls />
-    ) : null
-
-    const relatedLinks =
-      selectn('contextParameters.portal.fv-portal:related_links.length', portal) > 0
-        ? selectn('contextParameters.portal.fv-portal:related_links', portal)
-        : null
-    const featuredWords = selectn('response.contextParameters.portal.fv-portal:featured_words', computePortal) || []
 
     let toolbar = null
     if (this.props.routeParams.area === WORKSPACES) {
@@ -300,7 +296,13 @@ export class ExploreDialect extends Component {
           <div className={classNames('col-xs-12', 'col-md-7')}>
             <h1 className={classNames('display', 'dialect-greeting-container', dialectClassName)}>
               <div>{dialectDataAdaptor.greeting}</div>
-              {greetingAudio}
+              {dialectDataAdaptor?.audio?.path && (
+                <audio
+                  id="portalFeaturedAudio"
+                  src={NavigationHelpers.getBaseURL() + dialectDataAdaptor.audio?.path}
+                  controls
+                />
+              )}
             </h1>
             <div className={dialectClassName}>
               <h2>
@@ -321,7 +323,7 @@ export class ExploreDialect extends Component {
           <div className={classNames('col-xs-12', 'col-md-4', 'col-md-offset-1')}>
             <div className="row">
               <div className={classNames('col-xs-12')}>
-                {featuredWords?.length > 0 ? (
+                {dialectDataAdaptor.featuredWords?.length > 0 ? (
                   <>
                     <h2>
                       <FVLabel transKey="first_words" defaultStr="First Words" />
@@ -334,7 +336,7 @@ export class ExploreDialect extends Component {
                       type="FVWord"
                       className="grid-view-first-words"
                       metadata={selectn('response', computeDialect2)}
-                      items={featuredWords?.map((word) => {
+                      items={dialectDataAdaptor.featuredWords?.map((word) => {
                         return {
                           contextParameters: {
                             word: {
@@ -348,15 +350,15 @@ export class ExploreDialect extends Component {
                     />
                   </>
                 ) : null}
-                {(relatedLinks || !isSection) && (
+                {(dialectDataAdaptor?.relatedLinks.length > 0 || !isSection) && (
                   <>
                     <h2>
                       <FVLabel transKey="general.related_links" defaultStr="Related Links" />
                     </h2>
                     <hr className="dialect-hr" />
-                    {relatedLinks
-                      ? relatedLinks.map((link, i) => <Preview key={i} id={link.uid} type={'FVLink'} />)
-                      : null}
+                    {dialectDataAdaptor.relatedLinks.map((link, i) => (
+                      <Preview key={i} id={link.uid} type={'FVLink'} />
+                    ))}
                   </>
                 )}
                 <h2>
