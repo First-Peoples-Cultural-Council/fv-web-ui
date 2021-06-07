@@ -16,8 +16,18 @@ limitations under the License.
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Immutable from 'immutable'
-
+import selectn from 'selectn'
 import classNames from 'classnames'
+
+import { withTheme } from '@material-ui/core/styles'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import CardHeader from '@material-ui/core/CardHeader'
+import Collapse from '@material-ui/core/Collapse'
+import IconButton from '@material-ui/core/IconButton'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
+import Typography from '@material-ui/core/Typography'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -43,38 +53,22 @@ import {
 import { fetchPortal, updatePortal } from 'reducers/fvPortal'
 import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 
-import selectn from 'selectn'
 import { routeHasChanged } from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
+import { getDialectClassname } from 'common/Helpers'
+import { WORKSPACES, SECTIONS } from 'common/Constants'
+
 import PromiseWrapper from 'components/PromiseWrapper'
 import Header from 'components/Header'
 import PageToolbar from 'components/PageToolbar'
-import EditableComponentHelper from 'components/EditableComponentHelper'
-
 import RecentActivityList from 'components/Dashboard/RecentActivityList'
-
-import AuthorizationFilter from 'components/AuthorizationFilter'
 import AuthenticationFilter from 'components/AuthenticationFilter'
 import FVLabel from 'components/FVLabel'
-
 import ToolbarNavigation from 'components/LearnBase/toolbar-navigation'
 import LearningSidebar from 'components/LearnBase/learning-sidebar'
 
-import { withTheme } from '@material-ui/core/styles'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import CardHeader from '@material-ui/core/CardHeader'
-import Collapse from '@material-ui/core/Collapse'
-import IconButton from '@material-ui/core/IconButton'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
-import Typography from '@material-ui/core/Typography'
-
-import { getDialectClassname } from 'common/Helpers'
-import { WORKSPACES, SECTIONS } from 'common/Constants'
 /**
  * Learn portion of the dialect portal
- * TODO: Reduce the amount of queries this page runs.
  */
 
 const { func, object, string } = PropTypes
@@ -354,6 +348,9 @@ export class DialectLearn extends Component {
 
     const themePalette = this.props.theme.palette
     const dialectClassName = getDialectClassname(computeDialect2)
+    const aboutOurLanguage = selectn('response.properties.fvdialect:about_our_language', computeDialect2)
+      ? selectn('response.properties.fvdialect:about_our_language', computeDialect2)
+      : selectn('response.properties.dc:description', computeDialect2)
 
     return (
       <PromiseWrapper computeEntities={computeEntities}>
@@ -377,38 +374,7 @@ export class DialectLearn extends Component {
                 />
               </h2>
               <hr className="dialect-hr" />
-              <AuthorizationFilter
-                filter={{ permission: 'Write', entity: selectn('response', computeDialect2) }}
-                renderPartial
-              >
-                {(() => {
-                  // FW-786/FW-1312: We want to start migrating away from dc:description due to character limit
-                  // and for better semantic placement of the about_our_language data
-                  const description = selectn('response.properties.dc:description', computeDialect2)
-
-                  const about_our_language = selectn(
-                    'response.properties.fvdialect:about_our_language',
-                    computeDialect2
-                  )
-
-                  if (description && !about_our_language) {
-                    // If description is available, and about our language is empty or null
-                    // assign it to about_our_language field
-                    computeDialect2.response.properties['fvdialect:about_our_language'] = description
-                  }
-
-                  return (
-                    <EditableComponentHelper
-                      dataTestid="EditableComponent__dc-description"
-                      isSection={isSection}
-                      computeEntity={computeDialect2}
-                      updateEntity={this.props.updateDialect2}
-                      property={about_our_language ? 'fvdialect:about_our_language' : 'dc:description'}
-                      entity={selectn('response', computeDialect2)}
-                    />
-                  )
-                })()}
-              </AuthorizationFilter>
+              <div className="fv-portal-about" dangerouslySetInnerHTML={{ __html: aboutOurLanguage }} />
             </div>
 
             <div className="row PrintHide" style={{ marginTop: '15px' }}>
