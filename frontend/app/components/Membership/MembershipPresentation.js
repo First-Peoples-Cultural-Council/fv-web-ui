@@ -16,12 +16,15 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import StringHelpers from 'common/StringHelpers'
 import PromiseWrapper from 'components/PromiseWrapper'
 import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
+import FVSnackbar from 'components/FVSnackbar'
 
 import './Membership.css'
 
@@ -40,7 +43,9 @@ function MembershipPresentation({
   handleDialogOk,
   isDialogOpen,
   handleDialogClose,
-  serverErrorMessage,
+  handleSnackbarClose,
+  isSnackbarOpen,
+  actionResponse,
   joinRequests,
   onApproveClick,
   onIgnoreClick,
@@ -72,7 +77,6 @@ function MembershipPresentation({
           </a>{' '}
           to learn more about the different roles on FirstVoices.
         </p>
-        {serverErrorMessage}
       </div>
       {joinRequests.length === 0 ? (
         <div className="Membership--empty">There are currently no membership requests.</div>
@@ -147,7 +151,7 @@ function MembershipPresentation({
         </TableContainer>
       )}
 
-      <Dialog fullWidth maxWidth="md" open={isDialogOpen} onClose={handleDialogClose}>
+      <Dialog fullWidth maxWidth="xs" open={isDialogOpen} onClose={handleDialogClose}>
         <DialogTitle>
           Add {currentRequest.requestUserFirstName} {currentRequest.requestUserLastName} as a:{' '}
         </DialogTitle>
@@ -183,6 +187,19 @@ function MembershipPresentation({
           </FVButton>
         </DialogActions>
       </Dialog>
+
+      <FVSnackbar
+        open={isSnackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        message={actionResponse.message}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        action={
+          <IconButton size="small" aria-label="close" color="inherit" onClick={handleSnackbarClose}>
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
+      />
     </PromiseWrapper>
   )
 }
@@ -195,7 +212,9 @@ MembershipPresentation.propTypes = {
   handleDialogOk: func,
   isDialogOpen: bool,
   handleDialogClose: func,
-  serverErrorMessage: string,
+  handleSnackbarClose: func,
+  isSnackbarOpen: bool,
+  actionResponse: object,
   joinRequests: array,
   onApproveClick: func,
   onIgnoreClick: func,

@@ -2,10 +2,10 @@ package ca.firstvoices.simpleapi.endpoints;
 
 import ca.firstvoices.simpleapi.AdministrativelyDisabled;
 import ca.firstvoices.simpleapi.model.QueryBean;
-import ca.firstvoices.simpleapi.representations.ArchiveDetailPrivate;
-import ca.firstvoices.simpleapi.representations.ArchiveDetailPublic;
-import ca.firstvoices.simpleapi.representations.ArchiveOverview;
 import ca.firstvoices.simpleapi.representations.Phrase;
+import ca.firstvoices.simpleapi.representations.SiteDetailPrivate;
+import ca.firstvoices.simpleapi.representations.SiteDetailPublic;
+import ca.firstvoices.simpleapi.representations.SiteOverview;
 import ca.firstvoices.simpleapi.representations.Song;
 import ca.firstvoices.simpleapi.representations.Story;
 import ca.firstvoices.simpleapi.representations.Word;
@@ -27,10 +27,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 
-@Path("/v1/archives")
-@SecurityRequirement(name = "oauth2", scopes = {"archives:public"})
-@AdministrativelyDisabled("archive")
-public class ArchiveEndpoint extends AbstractServiceEndpoint {
+@Path("/v1/sites")
+@SecurityRequirement(name = "oauth2", scopes = {"sites:public"})
+@AdministrativelyDisabled("site")
+public class SiteEndpoint extends AbstractServiceEndpoint {
 
   private static class WordOverviewResponse extends Metadata<List<Word>> {
   }
@@ -56,23 +56,23 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
   private static class StoryDetailResponse extends Metadata<Story> {
   }
 
-  private static class PublicLanguageResponse extends Metadata<ArchiveDetailPublic> {
+  private static class PublicLanguageResponse extends Metadata<SiteDetailPublic> {
   }
 
-  private static class AdminLanguageResponse extends Metadata<ArchiveDetailPrivate> {
+  private static class AdminLanguageResponse extends Metadata<SiteDetailPrivate> {
   }
 
-  private static class LanguageOverviewResponse extends Metadata<List<ArchiveOverview>> {
+  private static class LanguageOverviewResponse extends Metadata<List<SiteOverview>> {
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   @Operation(
-      description = "Get list of all archives",
-      operationId = "LIST ARCHIVES",
+      description = "Get list of all sites",
+      operationId = "LIST SITES",
       responses = {
           @ApiResponse(
-              description = "List of archives",
+              description = "List of sites",
               responseCode = "200",
               content = @Content(
                   schema = @Schema(
@@ -81,9 +81,9 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
               )
           )
       },
-      tags = {"Archive"}
+      tags = {"Site"}
   )
-  public Response getArchives(
+  public Response getSites(
       @Parameter(
           description = "The maximum number of results to return",
           schema = @Schema(
@@ -102,14 +102,14 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
       @DefaultValue("0")
           long index
   ) {
-    return Response.ok(getFirstVoicesService().getArchives(new QueryBean(pageSize, index))).build();
+    return Response.ok(getFirstVoicesService().getSites(new QueryBean(pageSize, index))).build();
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/{archiveID}/words")
+  @Path("/{siteID}/words")
   @Operation(
-      description = "Get list of all words in an archive",
+      description = "Get list of all words in an site",
       operationId = "LIST WORDS",
       security = {},
       responses = {
@@ -123,13 +123,13 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
               )
           ),
           @ApiResponse(
-              description = "Archive not found",
+              description = "Site not found",
               responseCode = "404"
           )
       },
-      tags = {"Archive"}
+      tags = {"Site"}
   )
-  public Response getWords(@PathParam("archiveID") String archive,
+  public Response getWords(@PathParam("siteID") String site,
                            @Parameter(
                                description = "The maximum number of results to return",
                                schema = @Schema(
@@ -150,17 +150,17 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
                                long index
 
   ) {
-    return Response.ok(getFirstVoicesService().getWordsInArchive(
-        archive, new QueryBean(pageSize, index))
+    return Response.ok(getFirstVoicesService().getWordsInSite(
+        site, new QueryBean(pageSize, index))
     ).build();
   }
 
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/{archiveID}/phrases")
+  @Path("/{siteID}/phrases")
   @Operation(
-      description = "Get list of all phrases in an archive",
+      description = "Get list of all phrases in an site",
       operationId = "LIST PHRASES",
       security = {},
       responses = {
@@ -175,13 +175,13 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
           )
           ,
           @ApiResponse(
-              description = "Archive not found",
+              description = "Site not found",
               responseCode = "404"
           )
       },
-      tags = {"Archive"}
+      tags = {"Site"}
   )
-  public Response getPhrases(@PathParam("archiveID") String archive,
+  public Response getPhrases(@PathParam("siteID") String site,
                              @Parameter(
                                  description = "The maximum number of results to return",
                                  schema = @Schema(
@@ -201,16 +201,16 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
                              @DefaultValue("0")
                                  long index
   ) {
-    return Response.ok(getFirstVoicesService().getPhrasesInArchive(
-        archive, new QueryBean(pageSize, index))
+    return Response.ok(getFirstVoicesService().getPhrasesInSite(
+        site, new QueryBean(pageSize, index))
     ).build();
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/{archiveID}/songs")
+  @Path("/{siteID}/songs")
   @Operation(
-      description = "Get list of all songs in an archive",
+      description = "Get list of all songs in an site",
       operationId = "LIST SONGS",
       security = {
       },
@@ -226,13 +226,13 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
           )
           ,
           @ApiResponse(
-              description = "Archive not found",
+              description = "Site not found",
               responseCode = "404"
           )
       },
-      tags = {"Archive"}
+      tags = {"Site"}
   )
-  public Response getSongs(@PathParam("archiveID") String archive,
+  public Response getSongs(@PathParam("siteID") String site,
                            @Parameter(
                                description = "The maximum number of results to return",
                                schema = @Schema(
@@ -252,16 +252,16 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
                            @DefaultValue("0")
                                long index
   ) {
-    return Response.ok(getFirstVoicesService().getSongsInArchive(
-        archive, new QueryBean(pageSize, index))
+    return Response.ok(getFirstVoicesService().getSongsInSite(
+        site, new QueryBean(pageSize, index))
     ).build();
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/{archiveID}/stories")
+  @Path("/{siteID}/stories")
   @Operation(
-      description = "Get list of all stories in an archive",
+      description = "Get list of all stories in an site",
       operationId = "LIST STORIES",
       security = {
       },
@@ -277,14 +277,14 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
           )
           ,
           @ApiResponse(
-              description = "Archive not found",
+              description = "Site not found",
               responseCode = "404"
           )
       },
-      tags = {"Archive"}
+      tags = {"Site"}
   )
   public Response getStories(
-      @PathParam("archiveID") String archive,
+      @PathParam("siteID") String site,
       @Parameter(
           description = "The maximum number of results to return",
           schema = @Schema(
@@ -303,18 +303,18 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
       @DefaultValue("0")
           long index
   ) {
-    return Response.ok(getFirstVoicesService().getStoriesInArchive(
-        archive, new QueryBean(pageSize, index))
+    return Response.ok(getFirstVoicesService().getStoriesInSite(
+        site, new QueryBean(pageSize, index))
     ).build();
   }
 
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/{archiveID}")
+  @Path("/{siteID}")
   @Operation(
-      description = "Get archive detail",
-      operationId = "GET ARCHIVE",
+      description = "Get site detail",
+      operationId = "GET SITE",
       security = {
           @SecurityRequirement(name = "oauth2", scopes = {"communities:public"}),
           @SecurityRequirement(name = "oauth2", scopes = {"communities:recorder"}),
@@ -337,16 +337,16 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
           ),
           @ApiResponse(responseCode = "404", description = "Language not found")
       },
-      tags = {"Archive"}
+      tags = {"Site"}
   )
-  public Response getLanguage(@PathParam("archiveID") String archive) {
-    return Response.ok(getFirstVoicesService().getArchiveDetail(archive)).build();
+  public Response getLanguage(@PathParam("siteID") String site) {
+    return Response.ok(getFirstVoicesService().getSiteDetail(site)).build();
   }
 
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/{archiveID}/words/{wordID}")
+  @Path("/{siteID}/words/{wordID}")
   @Operation(
       description = "Get word detail",
       operationId = "GET WORD",
@@ -367,10 +367,10 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
           ),
           @ApiResponse(responseCode = "404", description = "Word not found")
       },
-      tags = {"Archive"}
+      tags = {"Site"}
   )
   public Response getWord(
-      @PathParam("archiveID") String archiveId,
+      @PathParam("siteID") String siteId,
       @PathParam("wordID") String wordId
   ) {
     return Response.ok(getFirstVoicesService().getWordDetail(wordId)).build();
@@ -378,7 +378,7 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/{archiveID}/phrases/{phraseID}")
+  @Path("/{siteID}/phrases/{phraseID}")
   @Operation(
       description = "Get phrase detail",
       operationId = "GET PHRASE",
@@ -399,10 +399,10 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
           ),
           @ApiResponse(responseCode = "404", description = "Phrase not found")
       },
-      tags = {"Archive"}
+      tags = {"Site"}
   )
   public Response getPhrase(
-      @PathParam("archiveID") String archiveId,
+      @PathParam("siteID") String siteId,
       @PathParam("phraseID") String phraseID
   ) {
     return Response.ok(getFirstVoicesService().getPhraseDetail(phraseID)).build();
@@ -410,7 +410,7 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/{archiveID}/songs/{songID}")
+  @Path("/{siteID}/songs/{songID}")
   @Operation(
       description = "Get song detail",
       operationId = "GET SONG",
@@ -431,16 +431,16 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
           ),
           @ApiResponse(responseCode = "404", description = "Song not found")
       },
-      tags = {"Archive"}
+      tags = {"Site"}
   )
-  public Response getSong(@PathParam("archiveID") String archiveId,
+  public Response getSong(@PathParam("siteID") String siteId,
                           @PathParam("songID") String songID) {
     return Response.ok(getFirstVoicesService().getWordDetail(songID)).build();
   }
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  @Path("/{archiveID}/stories/{storyID}")
+  @Path("/{siteID}/stories/{storyID}")
   @Operation(
       description = "Get story detail",
       operationId = "GET STORY",
@@ -461,9 +461,9 @@ public class ArchiveEndpoint extends AbstractServiceEndpoint {
           ),
           @ApiResponse(responseCode = "404", description = "Story not found")
       },
-      tags = {"Archive"}
+      tags = {"Site"}
   )
-  public Response getStory(@PathParam("archiveID") String archiveId,
+  public Response getStory(@PathParam("siteID") String siteId,
                            @PathParam("storyID") String storyID) {
     return Response.ok(getFirstVoicesService().getStoryDetail(storyID)).build();
   }

@@ -23,7 +23,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/v1/vocabularies")
-@SecurityRequirement(name = "oauth2", scopes = {"archives:public"})
+@SecurityRequirement(name = "oauth2", scopes = {"sites:public"})
 @AdministrativelyDisabled("vocabulary")
 public class VocabularyEndpoint extends AbstractServiceEndpoint {
 

@@ -1,0 +1,11 @@
+<component name="ca.firstvoices.simpleapi.requestController">
+
+<require>org.nuxeo.ecm.platform.web.common.requestcontroller.service.RequestControllerService.defaultContrib</require>
+
+  <!-- See https://github.com/Redocly/redoc/issues/764 -->
+
+  <extension target="org.nuxeo.ecm.platform.web.common.requestcontroller.service.RequestControllerService" point="responseHeaders">
+    <header name="Content-Security-Policy">worker-src 'self' blob: *; img-src data: blob: *; default-src blob: *; script-src 'unsafe-inline' 'unsafe-eval' data: *; style-src 'unsafe-inline' *; font-src data: *</header>
+  </extension>
+
+</component>

@@ -23,7 +23,7 @@ import javax.ws.rs.core.Response;
 
 
 @Path("/v1/shared")
-@SecurityRequirement(name = "oauth2", scopes = {"archives:public"})
+@SecurityRequirement(name = "oauth2", scopes = {"sites:public"})
 @AdministrativelyDisabled("shared")
 public class SharedEndpoint extends AbstractServiceEndpoint {
 

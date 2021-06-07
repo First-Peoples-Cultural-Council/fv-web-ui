@@ -58,7 +58,7 @@ function JoinData({ children }) {
     }
   }, [computePortals])
 
-  const requestMembershipResponse = selectn('message', computeMembershipCreate)
+  const responseMessage = selectn('message', computeMembershipCreate)
   const membershipStatus = selectn('message.membershipStatus', computeMembershipFetch)
 
   useEffect(() => {
@@ -77,26 +77,19 @@ function JoinData({ children }) {
   }, [membershipStatus])
 
   useEffect(() => {
-    if (requestMembershipResponse === 'Your request to join this dialect is now pending') {
+    if (responseMessage?.status === 200) {
       setServerResponse({
         status: 200,
         message: 'Your request to join this dialect is now pending',
       })
-    }
-    if (requestMembershipResponse?.startsWith('Failed to request joining this dialect')) {
+    } else if (Number.isFinite(responseMessage?.status)) {
       setServerResponse({
-        status: 500,
+        status: responseMessage?.status,
         message:
           'Unfortunately we are unable to process your request at this time. Please contact hello@firstvoices.com if this error persists.',
       })
     }
-    if (requestMembershipResponse?.startsWith('Preconditions for joining this dialect have not been')) {
-      setServerResponse({
-        status: 400,
-        message: 'Unfortunately you are unable to request membership at this time. Please try again later.',
-      })
-    }
-  }, [requestMembershipResponse])
+  }, [responseMessage])
 
   const onRequestSaveForm = (event) => {
     event.preventDefault()

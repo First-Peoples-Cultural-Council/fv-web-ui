@@ -52,8 +52,8 @@ public class SimplifiedAPITest extends AbstractTestDataCreatorTest {
   }
 
   @Test
-  public void testGetArchives() {
-    final String url = jersey.getUrl("/v1/archives");
+  public void testGetSites() {
+    final String url = jersey.getUrl("/v1/sites");
 
     RESTTestHelper.builder(url).withAdministratorBasicAuth().execute(
         (node, response) -> {
@@ -71,9 +71,9 @@ public class SimplifiedAPITest extends AbstractTestDataCreatorTest {
   CoreSession session;
 
   @Test
-  public void testGetArchiveOK() {
+  public void testGetSiteOK() {
     final String url = jersey.getUrl(
-        "/v1/archives/" + this.dataCreator.getReference("testArchive_proxy")
+        "/v1/sites/" + this.dataCreator.getReference("testArchive_proxy")
     );
 
     RESTTestHelper.builder(url).withAdministratorBasicAuth().execute(
@@ -89,15 +89,15 @@ public class SimplifiedAPITest extends AbstractTestDataCreatorTest {
   }
 
   @Test
-  public void testMissingArchive404() {
-    final String url = jersey.getUrl("/v1/archives/asdf12345");
+  public void testMissingSite404() {
+    final String url = jersey.getUrl("/v1/sites/asdf12345");
     RESTTestHelper.builder(url).withAdministratorBasicAuth().withExpectedStatusCode(404).execute();
   }
 
   @Test
-  public void testGetArchiveWords() {
+  public void testGetSiteWords() {
     final String url = jersey.getUrl(
-        "/v1/archives/" + this.dataCreator.getReference("testArchive_proxy") + "/words"
+        "/v1/sites/" + this.dataCreator.getReference("testArchive_proxy") + "/words"
     );
 
     RESTTestHelper.builder(url).withAdministratorBasicAuth().execute(
@@ -113,9 +113,9 @@ public class SimplifiedAPITest extends AbstractTestDataCreatorTest {
   }
 
   @Test
-  public void testGetArchivePhrases() {
+  public void testGetSitePhrases() {
     final String url = jersey.getUrl(
-        "/v1/archives/" + this.dataCreator.getReference("testArchive_proxy") + "/phrases"
+        "/v1/sites/" + this.dataCreator.getReference("testArchive_proxy") + "/phrases"
     );
 
     RESTTestHelper.builder(url).withAdministratorBasicAuth().execute(
@@ -131,9 +131,9 @@ public class SimplifiedAPITest extends AbstractTestDataCreatorTest {
   }
 
   @Test
-  public void testGetArchiveSongs() {
+  public void testGetSiteSongs() {
     final String url = jersey.getUrl(
-        "/v1/archives/" + this.dataCreator.getReference("testArchive_proxy") + "/songs"
+        "/v1/sites/" + this.dataCreator.getReference("testArchive_proxy") + "/songs"
     );
 
     RESTTestHelper.builder(url).withAdministratorBasicAuth().execute(

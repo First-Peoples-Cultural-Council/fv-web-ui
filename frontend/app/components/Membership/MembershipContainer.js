@@ -16,6 +16,7 @@ function MembershipContainer() {
   return (
     <MembershipData>
       {({
+        actionResponse,
         computeEntities,
         currentRequest,
         isAdmin,
@@ -23,6 +24,8 @@ function MembershipContainer() {
         handleDialogOk,
         isDialogOpen,
         handleDialogClose,
+        handleSnackbarClose,
+        isSnackbarOpen,
         joinRequests,
         onApproveClick,
         onIgnoreClick,
@@ -30,12 +33,15 @@ function MembershipContainer() {
       }) => {
         return isAdmin ? (
           <MembershipPresentation
+            actionResponse={actionResponse}
             computeEntities={computeEntities}
             currentRequest={currentRequest}
             groupSelected={groupSelected}
             handleDialogOk={handleDialogOk}
             isDialogOpen={isDialogOpen}
             handleDialogClose={handleDialogClose}
+            handleSnackbarClose={handleSnackbarClose}
+            isSnackbarOpen={isSnackbarOpen}
             joinRequests={joinRequests}
             onApproveClick={onApproveClick}
             onIgnoreClick={onIgnoreClick}

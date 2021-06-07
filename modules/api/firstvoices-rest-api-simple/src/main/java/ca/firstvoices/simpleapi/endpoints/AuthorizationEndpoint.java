@@ -13,7 +13,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 @Path("/authorizations")
-@SecurityRequirement(name = "oauth2", scopes = {"archives:public"})
+@SecurityRequirement(name = "oauth2", scopes = {"sites:public"})
 @AdministrativelyDisabled("authorization")
 public class AuthorizationEndpoint extends AbstractServiceEndpoint {
 

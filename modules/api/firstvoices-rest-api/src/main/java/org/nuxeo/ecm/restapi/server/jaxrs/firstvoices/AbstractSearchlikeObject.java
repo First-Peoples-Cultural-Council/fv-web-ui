@@ -18,6 +18,7 @@ import org.elasticsearch.search.SearchHit;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.PropertyException;
 import org.nuxeo.ecm.core.api.SortInfo;
 import org.nuxeo.ecm.webengine.model.impl.DefaultObject;
 import org.nuxeo.elasticsearch.api.ElasticSearchService;
@@ -40,7 +41,7 @@ public abstract class AbstractSearchlikeObject extends DefaultObject {
       case "FVWord":
         return "word";
       default:
-        return "unknown";
+        return "unknown " + dm.getType();
     }
   }
 
@@ -109,12 +110,10 @@ public abstract class AbstractSearchlikeObject extends DefaultObject {
   protected BoolQueryBuilder typesQuery(SearchResults.DocumentTypes documentTypes) {
 
     BoolQueryBuilder typesQuery = QueryBuilders.boolQuery();
+    typesQuery.minimumShouldMatch(1);
 
     switch (documentTypes) {
 
-      case BOOK:
-        typesQuery.should(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVBook"));
-        break;
       case PHRASE:
         typesQuery.should(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVPhrase"));
         break;
@@ -125,6 +124,18 @@ public abstract class AbstractSearchlikeObject extends DefaultObject {
         typesQuery.should(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVWord"));
         typesQuery.should(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVPhrase"));
         break;
+      case BOOK:
+      case SONGS_AND_STORIES:
+        typesQuery.must(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVBook"));
+        break;
+      case SONGS:
+        typesQuery.must(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVBook"));
+        typesQuery.must(QueryBuilders.termQuery("fvbook:type", "song"));
+        break;
+      case STORIES:
+        typesQuery.must(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVBook"));
+        typesQuery.must(QueryBuilders.termQuery("fvbook:type", "story"));
+        break;
       case ALL:
       default:
         typesQuery.should(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVBook"));
@@ -133,7 +144,21 @@ public abstract class AbstractSearchlikeObject extends DefaultObject {
         break;
     }
 
-    typesQuery.minimumShouldMatch(1);
+    return typesQuery;
+  }
+
+
+  protected BoolQueryBuilder audienceQuery(boolean kidsOnly, boolean gamesArchive) {
+
+    BoolQueryBuilder typesQuery = QueryBuilders.boolQuery();
+
+    if (kidsOnly) {
+      typesQuery.must(QueryBuilders.termQuery("fvaudience:children", true));
+    }
+    if (gamesArchive) {
+      typesQuery.must(QueryBuilders.termQuery("fvaudience:games", true));
+    }
+
     return typesQuery;
   }
 
@@ -269,45 +294,54 @@ public abstract class AbstractSearchlikeObject extends DefaultObject {
       // need to load it from the DB to get the required fields
       DocumentModel dbDoc = session.getDocument(d.getRef());
       sr.setType(AbstractSearchlikeObject.getFriendlyType(dbDoc));
-
-      Object audio = dbDoc.getPropertyValue("fv:related_audio");
-      if (audio != null) {
-        if (audio instanceof String) {
-          sr.getAudio().add((String) audio);
-        }
-        if (audio instanceof List) {
-          for (Object s : (List) audio) {
-            if (s != null) {
-              if (s instanceof String) {
-                sr.getAudio().add((String) s);
-              } else {
-                sr.getAudio().add(s.toString());
+      try {
+        Object audio = dbDoc.getPropertyValue("fv:related_audio");
+        if (audio != null) {
+          if (audio instanceof String) {
+            sr.getAudio().add((String) audio);
+          }
+          if (audio instanceof List) {
+            for (Object s : (List) audio) {
+              if (s != null) {
+                if (s instanceof String) {
+                  sr.getAudio().add((String) s);
+                } else {
+                  sr.getAudio().add(s.toString());
+                }
+              }
+            }
+          }
+          if (audio instanceof Object[]) {
+            for (Object s : (Object[]) audio) {
+              if (s != null) {
+                if (s instanceof String) {
+                  sr.getAudio().add((String) s);
+                } else {
+                  sr.getAudio().add(s.toString());
+                }
               }
             }
           }
         }
-        if (audio instanceof Object[]) {
-          for (Object s : (Object[]) audio) {
-            if (s != null) {
-              if (s instanceof String) {
-                sr.getAudio().add((String) s);
-              } else {
-                sr.getAudio().add(s.toString());
-              }
-            }
+      } catch (PropertyException e) {
+        // no action needed
+      }
+
+
+      try {
+        List<Map<String, String>> definitions = (List<Map<String, String>>) dbDoc.getPropertyValue(
+            "fv:definitions");
+
+        for (Map<String, String> definition : definitions) {
+          if (definition.containsKey("translation")) {
+            String translation = definition.get("translation");
+            sr.getTranslations().add(translation);
           }
         }
+      } catch (PropertyException e) {
+        // no action needed
       }
 
-      List<Map<String, String>> definitions = (List<Map<String, String>>) dbDoc.getPropertyValue(
-          "fv:definitions");
-
-      for (Map<String, String> definition : definitions) {
-        if (definition.containsKey("translation")) {
-          String translation = definition.get("translation");
-          sr.getTranslations().add(translation);
-        }
-      }
       if (this.exactMatchP != null) {
         sr.setExactMatch(this.exactMatchP.test(dbDoc));
       }
@@ -321,6 +355,11 @@ public abstract class AbstractSearchlikeObject extends DefaultObject {
       }
 
       sr.setVisibility(StateUtils.stateToVisibility(dbDoc.getCurrentLifeCycleState()));
+
+      if (dbDoc.hasSchema("fvaudience")) {
+        sr.setAvailableInGames((Boolean) dbDoc.getPropertyValue("fvaudience:games"));
+        sr.setAvailableInChildrensArchive((Boolean) dbDoc.getPropertyValue("fvaudience:children"));
+      }
 
       rez.add(sr);
     }

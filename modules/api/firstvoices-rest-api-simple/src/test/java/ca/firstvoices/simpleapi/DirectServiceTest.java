@@ -2,7 +2,7 @@ package ca.firstvoices.simpleapi;
 
 import static org.junit.Assert.assertTrue;
 import ca.firstvoices.simpleapi.model.QueryBean;
-import ca.firstvoices.simpleapi.representations.ArchiveOverview;
+import ca.firstvoices.simpleapi.representations.SiteOverview;
 import ca.firstvoices.simpleapi.representations.containers.Metadata;
 import ca.firstvoices.simpleapi.services.FirstVoicesService;
 import ca.firstvoices.testUtil.AbstractTestDataCreatorTest;
@@ -37,8 +37,8 @@ public class  DirectServiceTest extends AbstractTestDataCreatorTest {
     QueryBean qb = new QueryBean();
     qb.index = 0;
     qb.pageSize = 30;
-    Metadata<List<ArchiveOverview>> archives = fvs.getArchives(qb);
-    assertTrue("nonzero returned archive count", archives.getCount() > 1);
+    Metadata<List<SiteOverview>> sites = fvs.getSites(qb);
+    assertTrue("nonzero returned site count", sites.getCount() > 1);
   }
 
 }

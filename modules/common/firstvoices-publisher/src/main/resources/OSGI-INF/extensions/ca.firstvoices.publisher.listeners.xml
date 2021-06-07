@@ -27,8 +27,8 @@
       <event>documentCreated</event>
     </listener>
 
-    <listener class="ca.firstvoices.publisher.listeners.PublishNewCategoryListener"
-      name="PublishNewCategoryListener"
+    <listener class="ca.firstvoices.publisher.listeners.AutoPublishListener"
+      name="AutoPublishListener"
       priority="250">
       <event>documentCreated</event>
     </listener>
