@@ -94,9 +94,13 @@ function BreadcrumbData({ children, matchedPage, routes }) {
   }, [])
 
   const computedPortal = ProviderHelpers.getEntry(computePortal, portalPath)
-  const portalLogo = selectn('response.contextParameters.portal.fv-portal:logo', computedPortal)
-  const portalLogoSrc = UIHelpers.getThumbnail(portalLogo, 'Thumbnail')
   const computedDialect = ProviderHelpers.getEntry(computeDialect2, routeParams.dialect_path)
+
+  const portalLogo =
+    selectn('response.contextParameters.dialect.fvdialect:logo', computedDialect) ||
+    selectn('response.contextParameters.portal.fv-portal:logo', computedPortal)
+  const portalLogoSrc = UIHelpers.getThumbnail(portalLogo, 'Thumbnail')
+
   const dialect = selectn('response', computedDialect)
   const membershipStatus = selectn('message.membershipStatus', computeMembershipFetch)
 
