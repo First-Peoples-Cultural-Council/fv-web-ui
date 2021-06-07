@@ -219,7 +219,7 @@ export class ExploreDialect extends Component {
         null,
       logo: dialectProperties?.['fvdialect:logo'] || portalProperties?.['fv-portal:logo'] || null,
       featuredWords:
-        dialectContextParams?.['fvdialect:featured_words'].length > 0
+        dialectContextParams?.['fvdialect:featured_words']?.length > 0
           ? dialectContextParams?.['fvdialect:featured_words']
           : portalContextParams?.['fv-portal:featured_words'] || [],
       relatedLinks:
