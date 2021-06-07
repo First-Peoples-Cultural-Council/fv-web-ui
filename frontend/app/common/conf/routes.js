@@ -654,6 +654,22 @@ const routes = [
     path: [
       KIDS_OR_DEFAULT,
       'FV',
+      WORKSPACES,
+      'Data',
+      ANYTHING_BUT_SLASH,
+      ANYTHING_BUT_SLASH,
+      ANYTHING_BUT_SLASH,
+      'learn',
+      'edit',
+    ],
+    title: intl.translate({ key: 'edit', default: 'Edit', case: 'words' }) + ' {$dialect_name}',
+    page: <Pages.PageExploreDialectEdit />,
+    extractPaths: true,
+  },
+  {
+    path: [
+      KIDS_OR_DEFAULT,
+      'FV',
       new paramMatch('area', WORKSPACE_OR_SECTION),
       'Data',
       ANYTHING_BUT_SLASH,

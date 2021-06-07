@@ -41,6 +41,7 @@ import {
   queryUserCreatedPhrases,
 } from 'reducers/fvPhrase'
 import { fetchPortal, updatePortal } from 'reducers/fvPortal'
+import { pushWindowPath, replaceWindowPath } from 'reducers/windowPath'
 
 import selectn from 'selectn'
 import { routeHasChanged } from 'common/NavigationHelpers'
@@ -103,6 +104,8 @@ export class DialectLearn extends Component {
     computeUserModifiedPhrases: object.isRequired,
     computeUserModifiedWords: object.isRequired,
     properties: object.isRequired,
+    pushWindowPath: func.isRequired,
+    replaceWindowPath: func.isRequired,
     windowPath: string.isRequired,
     // REDUX: actions/dispatch/func
     fetchDialect2: func.isRequired,
@@ -140,7 +143,7 @@ export class DialectLearn extends Component {
         stories: false,
       },
     }
-    ;['_publishChangesAction', '_loadRecentActivity'].forEach((method) => (this[method] = this[method].bind(this)))
+    ;['_loadRecentActivity'].forEach((method) => (this[method] = this[method].bind(this)))
   }
 
   fetchData(newProps) {
@@ -178,7 +181,7 @@ export class DialectLearn extends Component {
   /**
    * Toggle published dialect
    */
-  _publishChangesAction() {
+  _publishChangesAction = () => {
     this.props.republishDialect(
       this.props.routeParams.dialect_path,
       { value: 'Republish' },
@@ -194,7 +197,12 @@ export class DialectLearn extends Component {
     )
   }
 
-  _loadRecentActivity(key) {
+  _onNavigateRequest = (path, e) => {
+    this.props.pushWindowPath(path)
+    e.preventDefault()
+  }
+
+  _loadRecentActivity = (key) => {
     if (!this.state.fetchedRecentActivityLists.has(key)) {
       const dialectPath = this.props.routeParams.dialect_path
       const userName = selectn('response.properties.username', this.props.computeLogin)
@@ -327,33 +335,29 @@ export class DialectLearn extends Component {
       })
     }
 
+    let toolbar = null
+    if (this.props.routeParams.area === WORKSPACES) {
+      if (selectn('response', computeDialect2)) {
+        toolbar = (
+          <PageToolbar
+            label={this.props.intl.trans('portal', 'Portal', 'first')}
+            handleNavigateRequest={this._onNavigateRequest}
+            computeEntity={computeDialect2}
+            computeLogin={this.props.computeLogin}
+            actions={['dialect', 'edit', 'publish', 'more-options']}
+            publishChangesAction={this._publishChangesAction}
+            {...this.props}
+          />
+        )
+      }
+    }
+
     const themePalette = this.props.theme.palette
     const dialectClassName = getDialectClassname(computeDialect2)
 
     return (
       <PromiseWrapper computeEntities={computeEntities}>
-        {(() => {
-          if (this.props.routeParams.area === WORKSPACES) {
-            if (selectn('response', computeDialect2))
-              return (
-                <div className="row">
-                  <PageToolbar
-                    label={this.props.intl.trans(
-                      'views.pages.explore.dialect.learn.language_portal',
-                      'Language Portal',
-                      'words'
-                    )}
-                    computeEntity={computeDialect2}
-                    computeLogin={this.props.computeLogin}
-                    actions={['dialect', 'publish']}
-                    publishChangesAction={this._publishChangesAction}
-                    {...this.props}
-                  />
-                </div>
-              )
-          }
-        })()}
-
+        <div className="row">{toolbar}</div>
         <Header
           dialect={{ compute: computeDialect2, update: this.props.updateDialect2 }}
           portal={{ compute: computePortal, update: this.props.updatePortal }}
@@ -849,6 +853,8 @@ const mapDispatchToProps = {
   fetchDialect2,
   fetchPortal,
   updateDialect2,
+  pushWindowPath,
+  replaceWindowPath,
   republishDialect,
   queryModifiedWords,
   queryCreatedWords,
