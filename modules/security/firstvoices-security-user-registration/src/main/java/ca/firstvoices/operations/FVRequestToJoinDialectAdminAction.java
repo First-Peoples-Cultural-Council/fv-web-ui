@@ -159,8 +159,8 @@ public class FVRequestToJoinDialectAdminAction {
         String acePrincipal = ace.getUsername();
 
         if (newStatus.equals("ACCEPT")
-            && SecurityConstants.READ.equals(ace.getPermission())
-            && acePrincipal.contains(group) && ace.isGranted()) {
+            && isRelevantACE(group, ace)
+            && ace.isGranted()) {
           targetGroups.add(acePrincipal);
         }
 
@@ -227,6 +227,33 @@ public class FVRequestToJoinDialectAdminAction {
       session.saveDocument(joinRequestDocument);
 
 
+    }
+
+    /**
+     * Checks whether an ACE is relevant to a requested group; Looks at both permission and group
+     * name since otherwise users could be placed in recorders_with_approval
+     * when requesting recorders
+     * @param group requested group
+     * @param ace ace to evaluate
+     * @return whether this group
+     */
+    private boolean isRelevantACE(String group, ACE ace) {
+      switch (ace.getPermission()) {
+        case SecurityConstants.READ:
+          return CustomSecurityConstants.MEMBERS_GROUP.equals(group)
+              && ace.getUsername().contains(group);
+
+        case "Approve":
+          return CustomSecurityConstants.RECORDERS_WITH_APPROVAL_GROUP.equals(group)
+              && ace.getUsername().contains(group);
+
+        case "Record":
+          return CustomSecurityConstants.RECORDERS_GROUP.equals(group)
+              && ace.getUsername().contains(group);
+
+        default:
+          return false;
+      }
     }
   }
 
