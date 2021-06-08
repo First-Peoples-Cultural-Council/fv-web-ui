@@ -54,6 +54,9 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
   @Override
   public void addConfusables(CoreSession session, DocumentModel dialect) {
     DirectoryService directoryService = Framework.getService(DirectoryService.class);
+    CharactersCoreService cs =
+        Framework.getService(CharactersCoreService.class);
+
     try (Session directorySession = directoryService.open("confusable_characters")) {
 
       // Get all rows in the confusable_characters vocabulary
@@ -69,10 +72,11 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
             .stream(entry.getPropertyValue("confusable_unicode").toString().split(","))
             .map(StringEscapeUtils::unescapeJava).toArray(String[]::new);
 
-        String dialectUID = dialect.getId();
+        DocumentModel alphabet = cs.getAlphabet(dialect.getCoreSession(), dialect);
 
         // Do a query for the alphabet characters that match the spreadsheet
-        String query = "SELECT * FROM FVCharacter " + "WHERE fva:dialect='" + dialectUID + "' "
+        String query = "SELECT * FROM FVCharacter "
+            + "WHERE ecm:parentId='" + alphabet.getId() + "' "
             + "AND (dc:title='" + character + "' OR fvcharacter:upper_case_character='" + character
             + "') AND ecm:isProxy = 0 AND ecm:isVersion = 0 AND ecm:isTrashed = 0";
 
@@ -90,10 +94,19 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
   @Override
   public HashMap<String, HashSet<String>> getConfusablesFromAllDialects(CoreSession session,
       DocumentModel dialect) {
+    CharactersCoreService cs =
+        Framework.getService(CharactersCoreService.class);
+
     // Confusable map
     // key => lowercase or uppercase
     // value => list of confusables
     HashMap<String, HashSet<String>> confusables = new HashMap<>();
+
+    DocumentModel alphabet = null;
+
+    if (dialect != null) {
+      alphabet = cs.getAlphabet(dialect.getCoreSession(), dialect);
+    }
 
     // Grab all confusables across the site (except for current dialect)
     String query = String.format("SELECT "
@@ -104,7 +117,7 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
         + "WHERE ecm:isTrashed = 0 "
         + "AND ecm:isProxy = 0 "
         + "AND ecm:isVersion = 0 "
-        + "AND fva:dialect <> '%s'", (dialect == null) ? null : dialect.getId());
+        + "AND ecm:parentId <> '%s'", (alphabet == null) ? null : alphabet.getId());
 
     try (IterableQueryResult results = session
         .queryAndFetch(query, "NXQL")) {
@@ -145,15 +158,20 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
 
   @Override
   public void addConfusablesFromAllDialects(CoreSession session, DocumentModel dialect) {
+    CharactersCoreService cs =
+        Framework.getService(CharactersCoreService.class);
+
     HashMap<String, HashSet<String>> confusables =
         getConfusablesFromAllDialects(session, dialect);
 
+    DocumentModel alphabet = cs.getAlphabet(dialect.getCoreSession(), dialect);
+
     // Get all alphabet characters for the dialect
     String allCharactersQuery = String.format(
-        "SELECT * FROM FVCharacter WHERE fva:dialect='%s' "
+        "SELECT * FROM FVCharacter WHERE ecm:parentId='%s' "
         + "AND ecm:isProxy = 0 "
         + "AND ecm:isVersion = 0 "
-        + "AND ecm:isTrashed = 0", dialect.getId());
+        + "AND ecm:isTrashed = 0", alphabet.getId());
 
     DocumentModelList charactersDocs = session.query(allCharactersQuery);
 
