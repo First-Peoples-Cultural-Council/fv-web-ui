@@ -50,12 +50,8 @@ public class FVRegistrationConstants {
   public static final String SUB_GROUPS = "subGroups";
   public static final String PARENT_GROUPS = "parentGroups";
   // events
-  public static final String LADMIN_APPROVED_GROUP_CHANGE =
-      "newUserApprovedByLanguageAdministrator";
-  public static final String SYSTEM_APPROVED_GROUP_CHANGE = "newUserApprovedBySystem";
   public static final String INVITATION_VALIDATED = "invitationValidated";
   public static final String CHECK_REGISTRATION_TIMEOUT_EVENT_NAME = "checkRegistrationTimeout";
-  public static final String GROUP_NAME_ARG = "groupName";
   public static final String USER_NAME_ARG = "userName";
   public static final String GROUP_CHANGE_ARGS = "groupChangeArgs";
 
