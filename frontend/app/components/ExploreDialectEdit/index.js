@@ -213,7 +213,7 @@ export class ExploreDialectEdit extends Component {
         <PromiseWrapper computeEntities={computeEntities}>
           <div className="ExploreDialectEdit">
             <h1 className="ExploreDialectEdit__heading">
-              {'Edit ' + selectn('response.title', computeDialect2) + ' Community Pages'}
+              {'Edit ' + selectn('response.title', computeDialect2) + ' Site'}
             </h1>
 
             <EditViewWithForm

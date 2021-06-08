@@ -334,7 +334,7 @@ export class DialectLearn extends Component {
       if (selectn('response', computeDialect2)) {
         toolbar = (
           <PageToolbar
-            label={this.props.intl.trans('portal', 'Portal', 'first')}
+            label="Site"
             handleNavigateRequest={this._onNavigateRequest}
             computeEntity={computeDialect2}
             computeLogin={this.props.computeLogin}

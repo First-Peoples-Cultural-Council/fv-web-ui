@@ -242,7 +242,7 @@ export class ExploreDialect extends Component {
       if (selectn('response', computeDialect2)) {
         toolbar = (
           <PageToolbar
-            label={this.props.intl.trans('portal', 'Portal', 'first')}
+            label="Site"
             handleNavigateRequest={this._onNavigateRequest}
             computeEntity={computeDialect2}
             computeLogin={this.props.computeLogin}
@@ -258,7 +258,6 @@ export class ExploreDialect extends Component {
       <PromiseWrapper computeEntities={computeEntities}>
         <div className="row">{toolbar}</div>
         <Header
-          // backgroundImage={data?.backgroundImage}
           dialect={{ compute: computeDialect2, update: this.props.updateDialect2 }}
           portal={{ compute: computePortal, update: this.props.updatePortal }}
           routeParams={this.props.routeParams}
