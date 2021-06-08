@@ -172,25 +172,6 @@ export class DialectLearn extends Component {
     }
   }
 
-  /**
-   * Toggle published dialect
-   */
-  _publishChangesAction = () => {
-    this.props.republishDialect(
-      this.props.routeParams.dialect_path,
-      { value: 'Republish' },
-      null,
-      this.props.intl.trans(
-        'views.pages.explore.dialect.portal_published_successfully',
-        'Portal published successfully!',
-        'first',
-        [],
-        null,
-        '!'
-      )
-    )
-  }
-
   _onNavigateRequest = (path, e) => {
     this.props.pushWindowPath(path)
     e.preventDefault()
@@ -338,8 +319,7 @@ export class DialectLearn extends Component {
             handleNavigateRequest={this._onNavigateRequest}
             computeEntity={computeDialect2}
             computeLogin={this.props.computeLogin}
-            actions={['dialect', 'edit', 'publish', 'more-options']}
-            publishChangesAction={this._publishChangesAction}
+            actions={['dialect', 'edit', 'more-options']}
             {...this.props}
           />
         )

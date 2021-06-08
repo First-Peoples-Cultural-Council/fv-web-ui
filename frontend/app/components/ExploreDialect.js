@@ -246,8 +246,7 @@ export class ExploreDialect extends Component {
             handleNavigateRequest={this._onNavigateRequest}
             computeEntity={computeDialect2}
             computeLogin={this.props.computeLogin}
-            actions={['dialect', 'edit', 'publish', 'more-options']}
-            publishChangesAction={this._publishChangesAction}
+            actions={['dialect', 'edit', 'more-options']}
             {...this.props}
           />
         )
