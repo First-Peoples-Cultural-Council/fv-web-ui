@@ -22,19 +22,13 @@ package ca.firstvoices.utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.core.util.StringList;
-import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.DocumentRef;
-import org.nuxeo.ecm.core.api.NuxeoException;
-import org.nuxeo.ecm.platform.usermanager.UserManager;
-import org.nuxeo.runtime.api.Framework;
 
 public class FVRegistrationUtilities {
 
@@ -109,40 +103,5 @@ public class FVRegistrationUtilities {
         dialect);
 
     return session.query(query);
-  }
-
-  /**
-   * @param uregRef
-   */
-  public void registrationValidationHandler(DocumentRef uregRef, CoreSession s) {
-    UserManager userManager = Framework.getService(UserManager.class);
-
-    CoreInstance.doPrivileged(s, session -> {
-
-      DocumentModel ureg = session.getDocument(uregRef);
-      String username = (String) ureg.getPropertyValue("userinfo:login");
-      DocumentModel userDoc = userManager.getUserModel(username);
-
-      try {
-        // Set creation time
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date(System.currentTimeMillis()));
-
-        // Update user properties
-        userDoc.setPropertyValue("user:traditionalName",
-            ureg.getPropertyValue("fvuserinfo:traditionalName"));
-        userDoc.setPropertyValue("user:ua", ureg.getPropertyValue("fvuserinfo:ua"));
-        userDoc.setPropertyValue("user:ip", ureg.getPropertyValue("fvuserinfo:ip"));
-        userDoc.setPropertyValue("user:referer", ureg.getPropertyValue("fvuserinfo:referer"));
-        userDoc.setPropertyValue("user:created", calendar);
-        userManager.updateUser(userDoc);
-
-        // Add user to 'members' group
-        String newUserGroup = "members";
-      } catch (Exception e) {
-        log.error("Exception while updating user and completing registration " + e);
-        throw new NuxeoException(e);
-      }
-    });
   }
 }

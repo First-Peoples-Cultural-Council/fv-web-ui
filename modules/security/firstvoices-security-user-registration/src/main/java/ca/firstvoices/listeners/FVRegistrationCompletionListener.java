@@ -23,17 +23,27 @@ package ca.firstvoices.listeners;
 import static ca.firstvoices.utils.FVRegistrationConstants.GROUP_NAME_ARG;
 import static ca.firstvoices.utils.FVRegistrationConstants.INVITATION_VALIDATED;
 import static ca.firstvoices.utils.FVRegistrationConstants.LADMIN_APPROVED_GROUP_CHANGE;
+import static ca.firstvoices.utils.FVRegistrationConstants.MEMBERS;
 import static ca.firstvoices.utils.FVRegistrationConstants.SYSTEM_APPROVED_GROUP_CHANGE;
 import static ca.firstvoices.utils.FVRegistrationConstants.USER_NAME_ARG;
+
 import ca.firstvoices.services.FVMoveUserToDialectServiceImpl;
 import ca.firstvoices.utils.FVRegistrationUtilities;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.NuxeoException;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
 import org.nuxeo.ecm.core.event.EventListener;
 import org.nuxeo.ecm.core.event.impl.DocumentEventContext;
+import org.nuxeo.ecm.platform.usermanager.UserManager;
+import org.nuxeo.runtime.api.Framework;
 
 /**
  *
@@ -95,7 +105,7 @@ public class FVRegistrationCompletionListener implements EventListener {
         //  deleted on timeout
         break;
 
-      // This will be executed after a user has created a password.
+      // Event is fired after a user creates a password.
       case INVITATION_VALIDATED:
         args = docCtx.getArguments();
 
@@ -104,16 +114,54 @@ public class FVRegistrationCompletionListener implements EventListener {
             break;
           }
 
-          DocumentModel ureg = (DocumentModel) o;
-          String argument = ureg.getType();
+          DocumentModel registrationDoc = (DocumentModel) o;
 
-          if (argument.equals("FVUserRegistration")) {
-            regUtil.registrationValidationHandler(ureg.getRef(), ureg.getCoreSession());
+          if ("FVUserRegistration".equals(registrationDoc.getType())) {
+            completeUserRegistration(registrationDoc);
           }
         }
         break;
       default:
         break;
     }
+  }
+
+  private void completeUserRegistration(DocumentModel registrationDoc) {
+    UserManager userManager = Framework.getService(UserManager.class);
+
+    CoreInstance.doPrivileged(registrationDoc.getCoreSession(), session -> {
+      String username = (String) registrationDoc.getPropertyValue("userinfo:login");
+      NuxeoPrincipal principal = userManager.getPrincipal(username);
+      DocumentModel userDoc = userManager.getUserModel(username);
+
+      try {
+        // Set creation time
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date(System.currentTimeMillis()));
+
+        // Update user properties
+        userDoc.setPropertyValue("user:traditionalName",
+            registrationDoc.getPropertyValue("fvuserinfo:traditionalName"));
+        userDoc.setPropertyValue("user:ua",
+            registrationDoc.getPropertyValue("fvuserinfo:ua"));
+        userDoc.setPropertyValue("user:ip",
+            registrationDoc.getPropertyValue("fvuserinfo:ip"));
+        userDoc.setPropertyValue("user:referer",
+            registrationDoc.getPropertyValue("fvuserinfo:referer"));
+        userDoc.setPropertyValue("user:created", calendar);
+
+        // Update user doc properties
+        principal.setModel(userDoc);
+        // Add to default members group
+        principal.setGroups(Collections.singletonList(MEMBERS));
+
+        // Update user
+        userManager.updateUser(principal.getModel());
+
+      } catch (Exception e) {
+        log.error("Exception while updating user and completing registration " + e);
+        throw new NuxeoException(e);
+      }
+    });
   }
 }
