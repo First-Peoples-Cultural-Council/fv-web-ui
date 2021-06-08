@@ -23,8 +23,6 @@ package ca.firstvoices.utils;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -32,7 +30,9 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 
 public class FVRegistrationUtilities {
 
-  private static final Log log = LogFactory.getLog(FVRegistrationUtilities.class);
+  private FVRegistrationUtilities() {
+    throw new IllegalStateException("Utility class");
+  }
 
   /**
    * @param sl
