@@ -5,7 +5,7 @@
   <parent>
     <groupId>ca.firstvoices</groupId>
     <artifactId>modules.common</artifactId>
-    <version>3.5.6</version>
+    <version>3.5.7</version>
   </parent>
   <name>Service Health Monitoring Endpoint</name>
   <dependencies>
