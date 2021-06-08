@@ -23,34 +23,39 @@ function BreadcrumbPresentation({
   showWorkspaceSwitcher,
   area,
 }) {
-  return dialect ? (
-    <>
-      <div className="row Breadcrumb__container">
-        <div className="Breadcrumb__link">
-          <Avatar src={portalLogoSrc} size={50} />
-          <ul className="Breadcrumb breadcrumb fontBCSans">{breadcrumbs}</ul>
+  if (dialect) {
+    return (
+      <>
+        <div className="row Breadcrumb__container">
+          <div className="Breadcrumb__link">
+            <Avatar src={portalLogoSrc} size={50} />
+            <ul className="Breadcrumb breadcrumb fontBCSans">{breadcrumbs}</ul>
+          </div>
         </div>
-      </div>
-      {showJoin && (
-        <FVButton
-          variant="contained"
-          color="primary"
-          disabled={membershipStatus === 'pending'}
-          onClick={() =>
-            (window.location.href = `/join?requestedSite=${
-              dialect?.versionableId ? dialect?.versionableId : dialect?.uid
-            }`)
-          }
-          style={{ margin: '10px', float: 'right' }}
-        >
-          {membershipStatus === 'pending' ? 'Request submitted' : `Request to join ${dialect.title}`}
-        </FVButton>
-      )}
-      {showWorkspaceSwitcher && !showJoin && (
-        <WorkspaceSwitcher className="AppFrontController__workspaceSwitcher" area={area} />
-      )}
-    </>
-  ) : null
+        {showJoin && (
+          <FVButton
+            variant="contained"
+            color="primary"
+            disabled={membershipStatus === 'pending'}
+            onClick={() =>
+              (window.location.href = `/join?requestedSite=${
+                dialect?.versionableId ? dialect?.versionableId : dialect?.uid
+              }`)
+            }
+            style={{ margin: '10px', float: 'right' }}
+          >
+            {membershipStatus === 'pending' ? 'Request submitted' : `Request to join ${dialect.title}`}
+          </FVButton>
+        )}
+        {showWorkspaceSwitcher && !showJoin && (
+          <WorkspaceSwitcher className="AppFrontController__workspaceSwitcher" area={area} />
+        )}
+      </>
+    )
+  } else if (showWorkspaceSwitcher) {
+    return <WorkspaceSwitcher className="AppFrontController__workspaceSwitcher" area={area} />
+  }
+  return null
 }
 
 // PROPTYPES
