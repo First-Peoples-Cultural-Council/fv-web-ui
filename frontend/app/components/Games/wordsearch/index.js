@@ -97,7 +97,7 @@ export class Wordsearch extends Component {
         '/* IS NOT NULL' +
         '&currentPageIndex=' +
         pageIndex +
-        '&pageSize=150&sortBy=dc:created&sortOrder=DESC'
+        '&pageSize=75&sortBy=dc:created&sortOrder=DESC'
     )
   }
 
