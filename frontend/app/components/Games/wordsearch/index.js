@@ -81,7 +81,7 @@ export class Wordsearch extends Component {
         '/* IS NOT NULL' +
         '&currentPageIndex=' +
         pageIndex +
-        '&pageSize=10&sortBy=dc:created&sortOrder=DESC'
+        '&pageSize=50&sortBy=dc:created&sortOrder=DESC'
     )
   }
 
@@ -159,19 +159,17 @@ export class Wordsearch extends Component {
         return formatWord(word)
       })
       .filter((v) => v.word.length < 12 && v.word.length > 0)
-
     if (characterArray?.length < 5 || wordArray?.length < MIN_REQ_WORDS) {
       return (
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
           {characterArray?.length < 5 ? (
             <div>Game not available: An alphabet needs to be uploaded to FirstVoices for this game to function.</div>
-          ) : null}
-          {wordArray?.length < MIN_REQ_WORDS ? (
+          ) : (
             <div>
               Game not available: At least 5 words that meet the requirements with audio and an image are required for
-              this game... Found <strong>{selectn('response.resultsCount', computeWords)}</strong> words.
+              this game.
             </div>
-          ) : null}
+          )}
         </PromiseWrapper>
       )
     }

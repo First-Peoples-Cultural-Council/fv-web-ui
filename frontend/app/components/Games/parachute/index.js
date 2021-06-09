@@ -28,7 +28,6 @@ import ParachuteGame from 'components/Games/parachute/ParachuteGame'
 import PromiseWrapper from 'components/PromiseWrapper'
 
 const PUZZLES = 25
-const MIN_REQ_WORDS = 5
 
 const { func, object } = PropTypes
 export class Parachute extends Component {
@@ -200,14 +199,13 @@ export class Parachute extends Component {
             <h1>Parachute</h1>
             <h3>Game not available</h3>
             {alphabetArray?.length < 5 ? (
-              <p>An alphabet needs to be uploaded to FirstVoices for this game to function.</p>
-            ) : null}
-            {words?.length < MIN_REQ_WORDS ? (
-              <p>
-                At least 5 words that meet the requirements with audio and an image are required for this game... Found{' '}
-                <strong>{selectn('response.resultsCount', computeWords)}</strong> words.
-              </p>
-            ) : null}
+              <div>Game not available: An alphabet needs to be uploaded to FirstVoices for this game to function.</div>
+            ) : (
+              <div>
+                Game not available: At least 5 words that meet the requirements with audio and an image are required for
+                this game.
+              </div>
+            )}
           </div>
         </PromiseWrapper>
       )
