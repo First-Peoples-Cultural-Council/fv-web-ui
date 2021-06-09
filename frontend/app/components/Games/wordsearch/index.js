@@ -66,9 +66,15 @@ export class Wordsearch extends Component {
         '&currentPageIndex=0&pageSize=100&sortOrder=asc&sortBy=fvcharacter:alphabet_order'
     )
 
+    // Conditions for words:
+    // 1) marked as available in childrens archive
+    // 2) all letters have a recognized character in custom order (NOT LIKE "~")
+    // 3) at least one photo exists
+    // 4) at least one audio exists
+
     props.fetchWords(
       props.routeParams.dialect_path + '/Dictionary',
-      ' AND fv:available_in_childrens_archive = 1 AND fv:custom_order IS NOT NULL AND ' +
+      ' AND fv:available_in_childrens_archive = 1 AND fv:custom_order NOT LIKE "~" AND ' +
         ProviderHelpers.switchWorkspaceSectionKeys('fv:related_pictures', this.props.routeParams.area) +
         '/* IS NOT NULL AND ' +
         ProviderHelpers.switchWorkspaceSectionKeys('fv:related_audio', this.props.routeParams.area) +

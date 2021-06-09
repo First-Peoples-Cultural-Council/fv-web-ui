@@ -89,10 +89,16 @@ export class Parachute extends Component {
     if (resultCount / PUZZLES < 10 && this.state.resultCount === undefined) {
       //We refine our intial query/guess based on the first one
       //This should only happen once
+
+      // Conditions for words:
+      // 1) marked as available in childrens archive
+      // 2) all letters have a recognized character in custom order (NOT LIKE "~")
+      // 3) at least one audio exists
+
       this.setState({ resultCount: resultCount })
       await props.fetchWords(
         props.routeParams.dialect_path + '/Dictionary',
-        ' AND fv:available_in_childrens_archive = 1 AND fv:custom_order IS NOT NULL AND ' +
+        ' AND fv:available_in_childrens_archive = 1 AND fv:custom_order NOT LIKE "~" AND ' +
           ProviderHelpers.switchWorkspaceSectionKeys('fv:related_audio', this.props.routeParams.area) +
           '/* IS NOT NULL' +
           '&currentPageIndex=' +
