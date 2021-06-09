@@ -45,6 +45,7 @@ export class Wordsearch extends Component {
     super(props, context)
 
     this._changeContent = this._changeContent.bind(this)
+    this._normalize = this._normalize.bind(this)
   }
   componentDidMount() {
     this.fetchData(this.props, 0)
@@ -58,30 +59,45 @@ export class Wordsearch extends Component {
     this.fetchData(this.props, nextPage)
   }
 
+  /**
+   * Do some basic normalizing until confusables are cleaned
+   * Replace common types of single quotes, trim
+   */
+  _normalize(text) {
+    if (text != null) {
+      return text.normalize('NFC').replace('’', "'").replace('`', "'").trim()
+    }
+    return null
+  }
+
   /* Fetch list of characters */
   fetchData(props, pageIndex /*, pageSize, sortOrder, sortBy*/) {
+    // We can fetch all characters since custom_order is done on the FE
+    // Adding `AND fv:custom_order IS NOT NULL` will work as soon as all sites are computed
+    // We need to filter edge cases where dc:title is null
     props.fetchCharacters(
       props.routeParams.dialect_path + '/Alphabet',
-      'AND fv:custom_order IS NOT NULL' +
+      ' AND dc:title IS NOT NULL' + // AND fv:custom_order IS NOT NULL
         '&currentPageIndex=0&pageSize=100&sortOrder=asc&sortBy=fvcharacter:alphabet_order'
     )
 
     // Conditions for words:
     // 1) marked as available in childrens archive
-    // 2) all letters have a recognized character in custom order (NOT LIKE "~")
+    // 2) all letters have a recognized character in custom order (fv:custom_order NOT LIKE "~")
+    // Note: #2 is currently not required since custom order is calculate on FE
     // 3) at least one photo exists
     // 4) at least one audio exists
 
     props.fetchWords(
       props.routeParams.dialect_path + '/Dictionary',
-      ' AND fv:available_in_childrens_archive = 1 AND fv:custom_order NOT LIKE "~" AND ' +
+      ' AND fv:available_in_childrens_archive = 1 AND ' +
         ProviderHelpers.switchWorkspaceSectionKeys('fv:related_pictures', this.props.routeParams.area) +
         '/* IS NOT NULL AND ' +
         ProviderHelpers.switchWorkspaceSectionKeys('fv:related_audio', this.props.routeParams.area) +
         '/* IS NOT NULL' +
         '&currentPageIndex=' +
         pageIndex +
-        '&pageSize=50&sortBy=dc:created&sortOrder=DESC'
+        '&pageSize=150&sortBy=dc:created&sortOrder=DESC'
     )
   }
 
@@ -110,12 +126,17 @@ export class Wordsearch extends Component {
     )
 
     const characterArray = (selectn('response.entries', computeCharacters) || []).map((char) => {
-      return selectn('properties.dc:title', char)
+      return this._normalize(selectn('properties.dc:title', char))
     })
 
-    const customOrderValues = (selectn('response.entries', computeCharacters) || []).map((char) => {
-      const title = selectn('properties.dc:title', char)
-      const customOrder = selectn('properties.fv:custom_order', char)
+    const customOrderValues = (selectn('response.entries', computeCharacters) || []).map((char, index) => {
+      const title = this._normalize(selectn('properties.dc:title', char))
+
+      // Get custom order from BE
+      //const customOrder = selectn('properties.fv:custom_order', char)
+
+      // Calculate custom order on FE
+      const customOrder = String.fromCharCode(32 + index)
       return { customOrder, title }
     })
 
@@ -177,6 +198,11 @@ export class Wordsearch extends Component {
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
         <div className="row">
+          {/*<div className="col-xs-12">
+            <pre>{JSON.stringify(characterArray, null, '\t')}</pre>
+            <pre>{JSON.stringify(customOrderValues, null, '\t')}</pre>
+            <pre>{JSON.stringify(wordArray, null, '\t')}</pre>
+          </div>*/}
           <div className="col-xs-12" style={{ textAlign: 'center' }}>
             <a
               href="#"
