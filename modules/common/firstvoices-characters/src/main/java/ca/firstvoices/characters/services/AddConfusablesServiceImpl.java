@@ -93,7 +93,7 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
 
   @Override
   public HashMap<String, HashSet<String>> getConfusablesFromAllDialects(CoreSession session,
-      DocumentModel dialect) {
+      DocumentModel dialect, boolean processUpperCase) {
     CharactersCoreService cs =
         Framework.getService(CharactersCoreService.class);
 
@@ -110,14 +110,26 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
 
     // Grab all confusables across the site (except for current dialect)
     String query = String.format("SELECT "
-        + "dc:title, fvcharacter:upper_case_character, "
-        + "fvcharacter:confusable_characters/*, "
-        + "fvcharacter:upper_case_confusable_characters/* "
+        + "dc:title, "
+        + "fvcharacter:confusable_characters/* "
         + "FROM FVCharacter "
         + "WHERE ecm:isTrashed = 0 "
         + "AND ecm:isProxy = 0 "
         + "AND ecm:isVersion = 0 "
         + "AND ecm:parentId <> '%s'", (alphabet == null) ? null : alphabet.getId());
+
+    if (processUpperCase) {
+      // Combining uppercase and lower case in one query will not return all the results
+      // Due to some fields being null and not handled properly
+      query = String.format("SELECT "
+          + "fvcharacter:upper_case_character, "
+          + "fvcharacter:upper_case_confusable_characters/* "
+          + "FROM FVCharacter "
+          + "WHERE ecm:isTrashed = 0 "
+          + "AND ecm:isProxy = 0 "
+          + "AND ecm:isVersion = 0 "
+          + "AND ecm:parentId <> '%s'", (alphabet == null) ? null : alphabet.getId());
+    }
 
     try (IterableQueryResult results = session
         .queryAndFetch(query, "NXQL")) {
@@ -127,12 +139,14 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
         String lowerCaseConfusable = StringEscapeUtils.unescapeJava(
             String.valueOf(item.get("fvcharacter:confusable_characters/*")));
 
-        if (confusables.containsKey(title)) {
-          // Add to existing confusables list
-          confusables.get(title).add(lowerCaseConfusable);
-        } else {
-          // Add to new list
-          confusables.put(title, new HashSet<>(Collections.singletonList(lowerCaseConfusable)));
+        if (title != null) {
+          if (confusables.containsKey(title)) {
+            // Add to existing confusables list
+            confusables.get(title).add(lowerCaseConfusable);
+          } else {
+            // Add to new list
+            confusables.put(title, new HashSet<>(Collections.singletonList(lowerCaseConfusable)));
+          }
         }
 
         if (item.get("fvcharacter:upper_case_character") != null) {
@@ -162,7 +176,12 @@ public class AddConfusablesServiceImpl implements AddConfusablesService {
         Framework.getService(CharactersCoreService.class);
 
     HashMap<String, HashSet<String>> confusables =
-        getConfusablesFromAllDialects(session, dialect);
+        getConfusablesFromAllDialects(session, dialect, false);
+
+    HashMap<String, HashSet<String>> uppercaseConfusables =
+        getConfusablesFromAllDialects(session, dialect, true);
+
+    confusables.putAll(uppercaseConfusables);
 
     DocumentModel alphabet = cs.getAlphabet(dialect.getCoreSession(), dialect);
 

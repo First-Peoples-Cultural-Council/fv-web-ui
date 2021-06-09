@@ -44,7 +44,7 @@ public interface AddConfusablesService {
    * Returns a list of uppercase and lowercase confusables across the site
    */
   HashMap<String, HashSet<String>> getConfusablesFromAllDialects(CoreSession session,
-      DocumentModel dialect);
+      DocumentModel dialect, boolean processUpperCase);
 
   DocumentModel updateConfusableCharacters(CoreSession session, DocumentModel characterDocument,
       DocumentModel dialect, String characterToUpdate, String[] newConfusables);
