@@ -251,6 +251,10 @@ public class FVRequestToJoinDialectAdminAction {
           return CustomSecurityConstants.RECORDERS_GROUP.equals(group)
               && ace.getUsername().contains(group);
 
+        case SecurityConstants.EVERYTHING:
+          return CustomSecurityConstants.LANGUAGE_ADMINS_GROUP.equals(group)
+              && ace.getUsername().contains(group);
+
         default:
           return false;
       }
