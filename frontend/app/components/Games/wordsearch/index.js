@@ -64,10 +64,47 @@ export class Wordsearch extends Component {
    * Replace common types of single quotes, trim
    */
   _normalize(text) {
-    if (text != null) {
+    if (text !== null) {
       return text.normalize('NFC').replace('’', "'").replace('`', "'").trim()
     }
     return null
+  }
+
+  _sortByCharLength() {
+
+  }
+
+  _getCharacterArray(word, characters) {
+    if (word === null) {
+      return [];
+    }
+    
+    let iterations = 0;
+    
+    let processedWord = word;
+    let customOrderArray = [];
+
+    characters.sort((a, b) => b.title.length - a.title.length);
+
+    while (processedWord.replaceAll("~", "").length > 0 && iterations < 5) {
+      characters.map((char) => {
+        let firstOccurence = processedWord.indexOf(char.title);
+        if (firstOccurence !== -1) {
+          customOrderArray[firstOccurence] = char.title;
+          processedWord = processedWord.replace(char.title, '~'.repeat(char.title.length))
+          return char.customOrder;
+        }
+      });
+      
+      ++iterations;
+    }
+    
+    if (iterations === 5) {
+      //console.warn("Exhausted iterations. Most likely a character not in the alphabet.");
+      return [];
+    }
+
+    return customOrderArray;
   }
 
   /* Fetch list of characters */
@@ -97,7 +134,7 @@ export class Wordsearch extends Component {
         '/* IS NOT NULL' +
         '&currentPageIndex=' +
         pageIndex +
-        '&pageSize=75&sortBy=dc:created&sortOrder=DESC'
+        '&pageSize=50&sortBy=dc:created&sortOrder=DESC'
     )
   }
 
@@ -141,28 +178,35 @@ export class Wordsearch extends Component {
     })
 
     const formatWord = (word) => {
+      let wordValue = selectn('properties.dc:title', word);
       // Create an array of the characters in the word
       // (done using fv:custom_order to avoid character splitting)
-      let containsCharacterNotInAlphabet = false
-      const customOrderArray = (selectn('properties.fv:custom_order', word) || '').split('')
-      const characters = customOrderArray.map((customOrder) => {
-        const character = customOrderValues.find((obj) => {
-          return obj.customOrder === customOrder
-        })
-        if (!character?.title) {
-          containsCharacterNotInAlphabet = true
-          return null
-        }
-        return character.title
-      })
-      // Don't include any words that contain characters not found in the alphabet
-      if (containsCharacterNotInAlphabet) {
-        return { word: '' }
+      // let containsCharacterNotInAlphabet = false
+      // const customOrderArray = (selectn('properties.fv:custom_order', word) || '').split('')
+      // const characters = customOrderArray.map((customOrder) => {
+      //   const character = customOrderValues.find((obj) => {
+      //     return obj.customOrder === customOrder
+      //   })
+      //   if (!character?.title) {
+      //     containsCharacterNotInAlphabet = true
+      //     return null
+      //   }
+      //   return character.title
+      // })
+      // // Don't include any words that contain characters not found in the alphabet
+      // if (containsCharacterNotInAlphabet) {
+      //   return { word: '' }
+      // }
+
+      let wordCharArray = this._getCharacterArray(wordValue, customOrderValues).filter((c) => c !== undefined)
+
+      if (wordCharArray.length === 0) {
+        return {word: ''}
       }
 
       return {
-        word: characters.join(''), // Wordsearch requires that the casing of `characters` and `word` match. Using `.join` ensures this
-        characters,
+        word: wordValue, // Wordsearch requires that the casing of `characters` and `word` match. Using `.join` ensures this
+        characters: wordCharArray,
         translation:
           selectn('properties.fv:literal_translation[0].translation', word) ||
           selectn('properties.fv:definitions[0].translation', word),
