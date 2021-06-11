@@ -66,6 +66,7 @@ public class OverwriteAuditEventListener extends StreamAuditEventListener {
         || "documentCheckedIn".equals(event.getName())
         || "documentUnlocked".equals(event.getName())
         || "documentCheckedOut".equals(event.getName())
+        || "search".equals(event.getName())
         || "sectionContentPublished".equals(event.getName());
   }
 
