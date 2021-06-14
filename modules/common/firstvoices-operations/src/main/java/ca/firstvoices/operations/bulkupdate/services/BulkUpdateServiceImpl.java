@@ -2,6 +2,7 @@ package ca.firstvoices.operations.bulkupdate.services;
 
 import ca.firstvoices.operations.bulkupdate.BulkUpdateMode;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -36,9 +37,9 @@ public class BulkUpdateServiceImpl implements BulkUpdateService {
         if (currentValue == null) {
           doc.setPropertyValue(field, (Serializable) Collections.singletonList(value));
         } else {
-          List<Serializable> asList = Arrays.asList(currentValue);
+          ArrayList<Serializable> asList = new ArrayList<>(Arrays.asList(currentValue));
           asList.add(value);
-          doc.setPropertyValue(field, (Serializable) asList);
+          doc.setPropertyValue(field, asList);
         }
       }
     }
