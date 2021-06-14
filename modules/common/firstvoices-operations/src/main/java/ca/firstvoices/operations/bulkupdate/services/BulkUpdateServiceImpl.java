@@ -39,7 +39,7 @@ public class BulkUpdateServiceImpl implements BulkUpdateService {
         } else {
           ArrayList<Serializable> asList = new ArrayList<>(Arrays.asList(currentValue));
           asList.add(value);
-          doc.setPropertyValue(field, (Serializable) asList);
+          doc.setPropertyValue(field, asList);
         }
       }
     }
