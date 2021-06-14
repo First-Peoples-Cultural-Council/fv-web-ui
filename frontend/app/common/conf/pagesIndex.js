@@ -15,7 +15,7 @@ limitations under the License.
 */
 import React from 'react'
 
-const PageExploreDialects = React.lazy(() => import('components/ExploreDialects'))
+const ExploreLanguages = React.lazy(() => import('components/ExploreLanguages/ExploreLanguagesContainer'))
 const PageExploreFamily = React.lazy(() => import('components/ExploreFamily'))
 const PageExploreLanguage = React.lazy(() => import('components/ExploreLanguage'))
 const PageExploreDialect = React.lazy(() => import('components/ExploreDialect'))
@@ -142,7 +142,7 @@ export {
   PageError,
   PageHome,
   PageContent,
-  PageExploreDialects,
+  ExploreLanguages,
   PageExploreFamily,
   PageExploreLanguage,
   PageExploreDialect,

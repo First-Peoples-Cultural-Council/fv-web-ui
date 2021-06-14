@@ -39,7 +39,7 @@ function RegisterPresentation({ fvUserFields, fvUserOptions, formRef, formValue,
               <p>Your registration is not complete until you have set your password.</p>
               <p>
                 Go to our <Link href="/">home page</Link> or{' '}
-                <Link href="/explore/FV/sections/Data/">explore our community portals</Link>.
+                <Link href="/explore/FV/sections/Data/">explore our language sites</Link>.
               </p>
             </div>
           </div>

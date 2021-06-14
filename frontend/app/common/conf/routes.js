@@ -518,7 +518,7 @@ const routes = [
       params: ['{$siteTheme}'],
     }),
     // title: '{$siteTheme} Dialects',
-    page: <Pages.PageExploreDialects />,
+    page: <Pages.ExploreLanguages />,
     redirects: [WORKSPACE_TO_SECTION_REDIRECT],
   },
   // SEARCH
