@@ -23,27 +23,27 @@ import {
 function TopicsPresentationTopic({ audio, heading, image, listCount, subheading, type, url: _url }) {
   const { sitename } = useParams()
   const url = `${sitename}/${_url}`
-  let bgColor
+  let typeColor
   let icon
   let textSize
   switch (type) {
     case WIDGET_LIST_WORD:
-      bgColor = 'bg-fv-turquoise'
+      typeColor = 'word'
       icon = 'ChatBubble'
       textSize = 'text-4xl lg:text-5xl'
       break
     case WIDGET_LIST_PHRASE:
-      bgColor = 'bg-fv-orange'
+      typeColor = 'phrase'
       icon = 'Quote'
       textSize = 'text-3xl lg:text-4xl'
       break
     case WIDGET_LIST_SONG:
-      bgColor = 'bg-fv-red'
+      typeColor = 'song'
       icon = 'MusicNote'
       textSize = 'text-3xl lg:text-4xl'
       break
     case WIDGET_LIST_STORY:
-      bgColor = 'bg-fv-purple'
+      typeColor = 'story'
       icon = 'Book'
       textSize = 'text-3xl lg:text-4xl'
       break
@@ -63,7 +63,7 @@ function TopicsPresentationTopic({ audio, heading, image, listCount, subheading,
           : {}
       }
       className={`
-        ${bgColor}
+        bg-${typeColor}
         bg-center
         bg-cover
         flex
@@ -87,7 +87,7 @@ function TopicsPresentationTopic({ audio, heading, image, listCount, subheading,
       {audio && <AudioMinimal.Container src={audio} iconStyling="fill-current w-7 h-7 lg:w-8 lg:h-8 mt-3" />}
 
       {listCount > 0 && (
-        <div className="text-lg lg:text-xl text-center text-fv-yellow">
+        <div className="text-lg lg:text-xl text-center text-yellow-300">
           {listCount === 1 && `${listCount} phrase`}
           {listCount > 1 && `${listCount} phrases`}
         </div>

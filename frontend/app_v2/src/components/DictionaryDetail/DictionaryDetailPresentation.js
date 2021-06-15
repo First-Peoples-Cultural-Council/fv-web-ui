@@ -170,7 +170,7 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, sitename })
                       to={`/${sitename}/categories/${category.uid}`}
                       className={`${
                         i === 0 ? 'ml-0' : ''
-                      } m-1 p-1.5 inline-flex text-sm font-semibold rounded-md bg-fv-turquoise text-white`}
+                      } m-1 p-1.5 inline-flex text-sm font-semibold rounded-md bg-tertiaryA text-white`}
                     >
                       {category['dc:title']}
                     </Link>

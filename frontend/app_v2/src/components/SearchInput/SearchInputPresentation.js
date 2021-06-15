@@ -29,7 +29,7 @@ function SearchInputPresentation({
         <li
           className={`${
             currentOption.id === option.id ? 'font-semibold' : ''
-          }font-normal block truncate text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 hover:text-white hover:bg-fv-blue`}
+          }font-normal block truncate text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 hover:text-white hover:bg-primary`}
           key={`filterlist-key-${index}`}
           id={`filterlist-option-${option.id}`}
           role="option"

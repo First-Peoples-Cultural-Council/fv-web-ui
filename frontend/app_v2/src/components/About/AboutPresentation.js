@@ -11,7 +11,7 @@ import PropTypes from 'prop-types'
  */
 function AboutPresentation({ title, text, image, link }) {
   const renderLink = (l) => (
-    <a className="bg-fv-orange text-white px-4 py-4 rounded-xl font-bold text-l" href={l.href}>
+    <a className="bg-secondary text-white px-4 py-4 rounded-xl font-bold text-l" href={l.href}>
       {l.title}
     </a>
   )
@@ -20,7 +20,7 @@ function AboutPresentation({ title, text, image, link }) {
     <section className="bg-white" data-testid="AboutPresentation">
       <div className="relative overflow-hidden py-4">
         <div className="z-10 md:w-2/4 md:my-32 md:-right-32 px-6 py-6 bg-white relative ">
-          <h2 className="mb-4 lg:mb-10 lg:text-4xl text-fv-orange font-bold text-3xl uppercase">
+          <h2 className="mb-4 lg:mb-10 lg:text-4xl text-secondary font-bold text-3xl uppercase">
             <span className="inline-block">{title}</span>
           </h2>
           <span

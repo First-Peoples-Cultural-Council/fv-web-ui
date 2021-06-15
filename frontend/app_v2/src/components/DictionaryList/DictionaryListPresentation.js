@@ -19,7 +19,6 @@ import Loading from 'components/Loading'
  * @returns {node} jsx markup
  */
 function DictionaryListPresentation({ actions, isLoading, items, moreActions, sitename, wholeDomain }) {
-  const typeColor = { word: 'fv-turquoise', phrase: 'fv-orange', song: 'fv-red', story: 'fv-purple' }
   return (
     <Loading.Container isLoading={isLoading}>
       {items !== undefined && items?.length > 0 ? (
@@ -108,7 +107,7 @@ function DictionaryListPresentation({ actions, isLoading, items, moreActions, si
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
-                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${typeColor[type]} capitalize text-white`}
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${type} capitalize text-white`}
                         >
                           {type}
                         </span>

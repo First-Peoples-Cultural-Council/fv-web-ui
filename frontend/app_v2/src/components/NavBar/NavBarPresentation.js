@@ -69,7 +69,7 @@ function NavBarPresentation({
             </Link>
             {!isHome && (
               <Link
-                className="text-white flex items-center group p-1 bg-fv-charcoal rounded-md text-lg font-medium hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-fv-turquoise"
+                className="text-white flex items-center group p-1 bg-fv-charcoal rounded-md text-lg font-medium hover:text-gray-100"
                 to={`/${sitename}/`}
               >
                 <span className="sr-only">{title}</span>
@@ -91,7 +91,7 @@ function NavBarPresentation({
                 </a>
                 <a
                   href="/register?requestedUrl=/register"
-                  className="hidden ml-4 whitespace-nowrap xl:inline-flex items-center justify-center py-2 px-4 border border-transparent rounded-3xl  shadow-sm text-base font-medium text-white bg-fv-orange hover:bg-fv-orange-dark"
+                  className="hidden ml-4 whitespace-nowrap xl:inline-flex items-center justify-center py-2 px-4 border border-transparent rounded-3xl  shadow-sm text-base font-medium text-white bg-tertiaryA hover:bg-tertiaryA-dark"
                 >
                   Register
                 </a>
@@ -109,7 +109,7 @@ function NavBarPresentation({
               >
                 {/* User Avatar */}
                 <button
-                  className="max-w-xs p-3 bg-fv-orange hover:bg-fv-orange-dark text-white text-xl rounded-full h-12 w-12 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-fv-turquoise"
+                  className="max-w-xs p-3 bg-secondary hover:bg-secondary-dark text-white text-xl rounded-full h-12 w-12 flex items-center justify-center"
                   id="user-menu"
                   onClick={() => {
                     onMenuClick(userMenuId)

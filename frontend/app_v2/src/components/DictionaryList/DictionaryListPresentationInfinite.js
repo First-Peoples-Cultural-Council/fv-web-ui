@@ -20,7 +20,6 @@ import ActionsMenu from 'components/ActionsMenu'
  */
 
 function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items, moreActions, sitename, wholeDomain }) {
-  const typeColor = { word: 'fv-turquoise', phrase: 'fv-orange', song: 'fv-red', story: 'fv-purple' }
   const { isFetchingNextPage, fetchNextPage, hasNextPage, loadButtonLabel, loadButtonRef } = infiniteScroll
 
   return (
@@ -113,7 +112,7 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span
-                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${typeColor[type]} capitalize text-white`}
+                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${type} capitalize text-white`}
                             >
                               {type}
                             </span>
@@ -144,7 +143,7 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
                 <button
                   ref={loadButtonRef}
                   className={
-                    'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-fv-blue capitalize text-white'
+                    'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-primary capitalize text-white'
                   }
                   onClick={() => fetchNextPage()}
                   disabled={!hasNextPage || isFetchingNextPage}

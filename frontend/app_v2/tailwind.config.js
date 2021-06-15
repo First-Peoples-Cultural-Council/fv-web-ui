@@ -35,43 +35,49 @@ module.exports = {
         },
       },
       colors: {
-        'fv-red': {
-          light: '#b36e54',
-          DEFAULT: '#A04A29',
-          dark: '#803b21',
+        primary: {
+          light: '#93a3a9',
+          DEFAULT: '#264653',
+          dark: '#13232a',
         },
-        'fv-orange': {
-          light: '#e09938',
-          DEFAULT: '#D87F06',
-          dark: '#ad6605',
+        secondary: {
+          light: '#c79b90',
+          DEFAULT: '#8E3720',
+          dark: '#471c10',
         },
-        'fv-blue': {
-          light: '#1870A7',
-          DEFAULT: '#3A6880',
-          dark: '#2e5366',
+        tertiaryA: {
+          light: '#aaaca5',
+          DEFAULT: '#54584A',
+          dark: '#3b3e34',
         },
-        'fv-turquoise': {
-          light: '#c2dedc',
-          DEFAULT: '#35928A',
-          dark: '#2a756e',
+        tertiaryB: {
+          light: '#a89dab',
+          DEFAULT: '#513B56',
+          dark: '#291e2b',
         },
-        'fv-purple': {
-          light: '#785d72',
-          DEFAULT: '#56354f',
-          dark: '#452a3f',
+        word: {
+          light: '#95cec7',
+          DEFAULT: '#2A9D8F',
+          dark: '#264653',
+        },
+        phrase: {
+          DEFAULT: '#C37829',
+          dark: '#9A270A',
+        },
+        song: {
+          DEFAULT: '#830042',
+          dark: '#830042',
+        },
+        story: {
+          DEFAULT: '#E9C46A',
+          dark: '#8C5822',
         },
         'fv-charcoal': {
           light: '#646363',
           DEFAULT: '#313133',
         },
-        'fv-green': {
-          DEFAULT: '#7EC71A',
-        },
         'fv-warning-red': {
           DEFAULT: '#D64A4A',
-        },
-        'fv-yellow': {
-          DEFAULT: '#F4E31E',
         },
       },
     },

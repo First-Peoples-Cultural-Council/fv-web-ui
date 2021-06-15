@@ -34,7 +34,7 @@ function ErrorHandlerPresentation({ status, heading, content }) {
           </button>
         </div>
         <a
-          className="bg-fv-blue hover:bg-fv-blue-light text-white font-semibold px-6 py-3 rounded-md"
+          className="bg-primary hover:bg-primary-light text-white font-semibold px-6 py-3 rounded-md"
           href="https://support.firstvoices.com/servicedesk/customer/portal/1"
         >
           Report Problem

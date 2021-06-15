@@ -29,7 +29,7 @@ function ContactUsPresentation({ title, contactFormRef, contactText, formErrors,
 
   const socialIcons = links
     ? links.map((link) => (
-        <li key={getIconName(link)} className="mr-3 h-9 w-9 inline-flex align-center rounded text-fv-turquoise">
+        <li key={getIconName(link)} className="mr-3 h-9 w-9 inline-flex align-center rounded text-primary">
           <a
             href={link}
             target="_blank"
@@ -53,7 +53,7 @@ function ContactUsPresentation({ title, contactFormRef, contactText, formErrors,
   return (
     <section className="bg-white py-12 mx-10">
       <div className="relative mx-10">
-        <h2 className="mb-12 relative z-10 text-center text-4xl text-fv-blue font-bold uppercase sm:text-5xl">
+        <h2 className="mb-12 relative z-10 text-center text-4xl text-primary font-bold uppercase sm:text-5xl">
           <span className="inline-block px-4 sm:px-8 lg:px-20 bg-white">{title}</span>
         </h2>
         <hr className="absolute z-0 w-full" style={{ top: '50%' }} />
@@ -63,7 +63,7 @@ function ContactUsPresentation({ title, contactFormRef, contactText, formErrors,
           <form ref={contactFormRef} className="col-span-6 sm:col-span-3" onSubmit={handleSubmit}>
             <div className="grid grid-cols-7 gap-3">
               {errorListItems && <ul className="col-start-3 col-span-4">{errorListItems}</ul>}
-              <label className="col-span-2 uppercase tracking-wide text-fv-blue text-xl font-bold mb-2" htmlFor="Name">
+              <label className="col-span-2 uppercase tracking-wide text-primary text-xl font-bold mb-2" htmlFor="Name">
                 Name:
               </label>
               <input
@@ -72,7 +72,7 @@ function ContactUsPresentation({ title, contactFormRef, contactText, formErrors,
                 name="Name"
                 type="text"
               />
-              <label className="col-span-2 uppercase tracking-wide text-fv-blue text-xl font-bold mb-2" htmlFor="Email">
+              <label className="col-span-2 uppercase tracking-wide text-primary text-xl font-bold mb-2" htmlFor="Email">
                 E-mail:
               </label>
               <input
@@ -82,7 +82,7 @@ function ContactUsPresentation({ title, contactFormRef, contactText, formErrors,
                 type="email"
               />
               <div className="col-span-7">
-                <label className="block uppercase tracking-wide text-fv-blue text-xl font-bold mb-2" htmlFor="Message">
+                <label className="block uppercase tracking-wide text-primary text-xl font-bold mb-2" htmlFor="Message">
                   Message:
                 </label>
                 <textarea
@@ -94,16 +94,16 @@ function ContactUsPresentation({ title, contactFormRef, contactText, formErrors,
               </div>
             </div>
             <button
-              className="flex items-center shadow bg-fv-blue hover:bg-fv-blue-dark focus:shadow-outline text-white font-bold ml-3 py-2 px-4 rounded-3xl"
+              className="flex items-center shadow bg-primary hover:bg-primary-dark focus:shadow-outline text-white font-bold ml-3 py-2 px-4 rounded-3xl"
               type="submit"
             >
               Submit
             </button>
           </form>
           <div className="col-span-6 sm:col-start-5 sm:col-span-2 mt-8 sm:mt-0">
-            <h3 className="block uppercase tracking-wide text-fv-blue text-xl font-bold mb-2">Address</h3>
+            <h3 className="block uppercase tracking-wide text-primary text-xl font-bold mb-2">Address</h3>
             <div className="block mb-6" dangerouslySetInnerHTML={{ __html: contactText }} />
-            <h3 className="block uppercase tracking-wide text-fv-blue text-xl font-bold mb-2">Follow us</h3>
+            <h3 className="block uppercase tracking-wide text-primary text-xl font-bold mb-2">Follow us</h3>
             <ul className="block mb-2">{socialIcons}</ul>
           </div>
         </div>
