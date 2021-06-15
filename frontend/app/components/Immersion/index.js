@@ -175,7 +175,7 @@ class PageDialectImmersionList extends PageDialectLearnBase {
 
     const pageTitle = `${
       selectn('response.contextParameters.ancestry.dialect.dc:title', computePortal) || ''
-    } Immersion Portal` // need locale key
+    } Immersion Labels` // need locale key
 
     const wordListView = selectn('response.uid', computeDocument) ? (
       <ImmersionListView

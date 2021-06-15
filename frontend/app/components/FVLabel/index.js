@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import Menu from '@material-ui/core/Menu'
 import ListItem from '@material-ui/core/ListItem'
 import { PlayArrow, Edit, Add, Close } from '@material-ui/icons'
-import { setEditingLabel } from 'reducers/locale'
 
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
@@ -27,7 +26,6 @@ function FVLabel({
   intl,
   isInHelpMode,
   labelIds,
-  startEditingLabel,
   computeDialect2,
   computeDirectory,
   routeParams,
@@ -95,7 +93,7 @@ function FVLabel({
     event.preventDefault()
     event.stopPropagation()
     setAnchorElement(undefined)
-    startEditingLabel(actualTransKey)
+    window.open('/explore' + routeParams.dialect_path + '/immersion')
   }
 
   const defaultLabel = <span className="fv-label">{translation}</span>
@@ -173,7 +171,7 @@ function FVLabel({
   return defaultLabel
 }
 
-const { string, array, object, bool, func } = proptypes
+const { string, array, object, bool } = proptypes
 
 FVLabel.propTypes = {
   transKey: string.isRequired,
@@ -189,7 +187,6 @@ FVLabel.propTypes = {
   labelIds: object.isRequired,
   computeDialect2: object.isRequired,
   computeDirectory: object.isRequired,
-  startEditingLabel: func.isRequired,
   routeParams: object.isRequired,
 }
 
@@ -209,8 +206,4 @@ const mapStateToProps = (state /*, ownProps*/) => {
   }
 }
 
-const mapDispatchToProps = {
-  startEditingLabel: setEditingLabel,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FVLabel)
+export default connect(mapStateToProps)(FVLabel)
