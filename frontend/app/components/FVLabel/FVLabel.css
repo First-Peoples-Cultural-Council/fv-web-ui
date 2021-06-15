@@ -3,10 +3,11 @@
 }
 
 .fv-label-click-cover:hover {
-  background: radial-gradient(transparent, #88585867);
+  padding: 2px;
   text-decoration: none;
-  border: 2px solid#820000;
-  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 5px 5px rgba(0, 0, 0, 0.04);
+  border: 3px solid#B40000;
+  box-shadow: inset 1px 1px rgba(255, 255, 255), inset -1px -1px rgba(255, 255, 255);
+  cursor: context-menu;
 }
 
 .fv-label-immersion-menu {
@@ -35,9 +36,10 @@
 
 @media (max-width: 768px) {
   .fv-label-click-cover {
-    background: radial-gradient(transparent, #88585867);
+    padding: 2px;
     text-decoration: none;
-    border: 2px solid#820000;
-    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 5px 5px rgba(0, 0, 0, 0.04);
+    border: 3px solid#B40000;
+    box-shadow: inset 1px 1px rgba(255, 255, 255), inset -1px -1px rgba(255, 255, 255);
+    cursor: context-menu;
   }
 }
