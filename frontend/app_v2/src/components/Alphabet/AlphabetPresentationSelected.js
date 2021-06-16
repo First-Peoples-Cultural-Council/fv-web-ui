@@ -97,10 +97,9 @@ const AlphabetPresentationSelected = ({ sitename, selectedData, onVideoClick, vi
           <button
             onClick={onVideoClick}
             className="
-            bg-secondary
+            border-4
+            border-primary
             hover:bg-secondary-dark
-            border
-            border-transparent
             flex
             font-medium
             items-center
@@ -111,7 +110,7 @@ const AlphabetPresentationSelected = ({ sitename, selectedData, onVideoClick, vi
             shadow-sm
             text-base
             text-center
-            text-white"
+            text-primary"
           >
             {useIcon('Play', 'fill-current mr-2 -ml-1 h-8 w-8')}
             Play Video
