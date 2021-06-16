@@ -77,7 +77,7 @@ function ActionsMenuPresentation({
               >
                 <Menu.Items
                   static
-                  className="z-10 origin-top-right absolute top-5 right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  className="z-10 origin-top-right absolute top-5 right-0 mt-2 w-40 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                 >
                   <div className="py-1">
                     {moreActions.includes('share') && (

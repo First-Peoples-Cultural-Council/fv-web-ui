@@ -12,9 +12,6 @@ module.exports = {
       animation: {
         'pulse-blur': 'pulse-blur 2.5s linear infinite',
       },
-      borderRadius: {
-        '4xl': '3rem',
-      },
       fontSize: {
         xxs: '.5rem',
       },
@@ -35,46 +32,66 @@ module.exports = {
         },
       },
       colors: {
+        // Dark Blue
         primary: {
-          light: '#93a3a9',
+          light: '#677e87',
           DEFAULT: '#264653',
-          dark: '#13232a',
+          dark: '#1b313a',
         },
+        // Dark Orange
         secondary: {
-          light: '#c79b90',
+          light: '#b07363',
           DEFAULT: '#8E3720',
-          dark: '#471c10',
+          dark: '#632716',
         },
+        // Green/Grey
         tertiaryA: {
-          light: '#aaaca5',
+          light: '#878a80',
           DEFAULT: '#54584A',
           dark: '#3b3e34',
         },
+        // Purple
         tertiaryB: {
-          light: '#a89dab',
+          light: '#857689',
           DEFAULT: '#513B56',
-          dark: '#291e2b',
+          dark: '#39293c',
         },
         word: {
-          light: '#95cec7',
+          light: '#6ABAB1',
           DEFAULT: '#2A9D8F',
-          dark: '#264653',
+          dark: '#1D6E64',
         },
         phrase: {
+          light: '#D5A169',
           DEFAULT: '#C37829',
-          dark: '#9A270A',
+          dark: '#89541D',
         },
         song: {
+          light: '#a84d7b',
           DEFAULT: '#830042',
-          dark: '#830042',
+          dark: '#5c002e',
         },
         story: {
+          light: '#f0d697',
           DEFAULT: '#E9C46A',
-          dark: '#8C5822',
+          dark: '#a3894a',
+        },
+        wordText: {
+          DEFAULT: '#264653',
+        },
+        phraseText: {
+          DEFAULT: '#9A270A',
+        },
+        songText: {
+          DEFAULT: '#830042',
+        },
+        storyText: {
+          DEFAULT: '#8C5822',
         },
         'fv-charcoal': {
-          light: '#646363',
+          light: '#54584A',
           DEFAULT: '#313133',
+          dark: '#222224',
         },
         'fv-warning-red': {
           DEFAULT: '#D64A4A',

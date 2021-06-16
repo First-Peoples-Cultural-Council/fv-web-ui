@@ -67,7 +67,7 @@ function ContactUsPresentation({ title, contactFormRef, contactText, formErrors,
                 Name:
               </label>
               <input
-                className="col-span-5 bg-white border border-gray-500 rounded-xl py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                className="col-span-5 bg-white border border-gray-500 rounded-lg py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                 id="Name"
                 name="Name"
                 type="text"
@@ -76,7 +76,7 @@ function ContactUsPresentation({ title, contactFormRef, contactText, formErrors,
                 E-mail:
               </label>
               <input
-                className="col-span-5 inline bg-white border border-gray-500 rounded-xl py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                className="col-span-5 inline bg-white border border-gray-500 rounded-lg py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                 id="Email"
                 name="Email"
                 type="email"
@@ -86,7 +86,7 @@ function ContactUsPresentation({ title, contactFormRef, contactText, formErrors,
                   Message:
                 </label>
                 <textarea
-                  className=" no-resize appearance-none block w-full bg-white border border-gray-500 rounded-xl py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 h-48 resize-none"
+                  className=" no-resize appearance-none block w-full bg-white border border-gray-500 rounded-lg py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 h-48 resize-none"
                   id="Message"
                   name="Message"
                   defaultValue={''}
@@ -94,7 +94,7 @@ function ContactUsPresentation({ title, contactFormRef, contactText, formErrors,
               </div>
             </div>
             <button
-              className="flex items-center shadow bg-primary hover:bg-primary-dark focus:shadow-outline text-white font-bold ml-3 py-2 px-4 rounded-3xl"
+              className="flex items-center shadow bg-primary hover:bg-primary-dark focus:shadow-outline text-white font-bold ml-3 py-2 px-4 rounded-lg"
               type="submit"
             >
               Submit

@@ -23,11 +23,10 @@ function WordOfTheDayPresentation({ audio, hasShare, heading, subheading, title,
         <hr className="absolute z-0 w-full" style={{ top: '50%' }} />
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* <h2 className="mb-12 text-4xl text-primary font-bold uppercase sm:text-5xl">{title}</h2> */}
-        <div className="mt-2 max-w-2xl inline-flex items-center text-4xl font-bold text-black md:mx-auto sm:text-5xl">
+        <div className="mt-2 max-w-2xl inline-flex items-center text-4xl font-bold text-secondary md:mx-auto sm:text-5xl">
           <a href={url}>{heading}</a>
           {audio && (
-            <div className="ml-4 inline">
+            <div className="ml-4 inline text-black">
               <AudioMinimal.Container
                 src={audio}
                 icons={{
@@ -39,7 +38,7 @@ function WordOfTheDayPresentation({ audio, hasShare, heading, subheading, title,
             </div>
           )}
         </div>
-        <p className="mt-4 max-w-2xl text-2xl text-gray-500 md:mx-auto sm:text-3xl">{subheading}</p>
+        <p className="mt-4 max-w-2xl text-2xl md:mx-auto sm:text-3xl">{subheading}</p>
         {hasShare === true && (
           <>
             <h3 className="mt-8 max-w-2xl text-lg text-secondary md:mx-auto sm:text-xl">Share on:</h3>

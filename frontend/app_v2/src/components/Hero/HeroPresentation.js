@@ -84,7 +84,7 @@ function HeroPresentation({ background, foreground, foregroundIcon, search, vari
           z-0
           bg-gradient-to-b
           from-word
-          to-primary
+          to-word-dark
           h-1/5
           lg:h-1/4"
         >

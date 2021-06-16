@@ -107,7 +107,7 @@ const AlphabetPresentationSelected = ({ sitename, selectedData, onVideoClick, vi
             justify-center
             px-5
             py-2
-            rounded-3xl
+            rounded-lg
             shadow-sm
             text-base
             text-center

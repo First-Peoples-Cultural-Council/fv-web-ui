@@ -41,7 +41,7 @@ function WordsPresentation({
           className="inline-block transition duration-500 ease-in-out md:block md:my-2 md:mx-5 flex-grow"
         >
           <Link
-            className={`inline-block transition duration-500 ease-in-out md:block p-3 flex-grow rounded-xl capitalize cursor-pointer ${filterIsActiveClass}`}
+            className={`inline-block transition duration-500 ease-in-out md:block p-3 flex-grow rounded-lg capitalize cursor-pointer ${filterIsActiveClass}`}
             to={`${location.pathname}?q=${searchTerm}&docType=${filter.type}`}
             onClick={() => {
               handleFilter(filter.type)
@@ -62,7 +62,7 @@ function WordsPresentation({
 
   return (
     <>
-      <section className="bg-gradient-to-b from-primary to-word p-5">
+      <section className="bg-gradient-to-b from-word to-word-dark p-5">
         <div className="mx-auto lg:w-3/5">
           <SearchInput.Container docType={'WORD'} />
         </div>
