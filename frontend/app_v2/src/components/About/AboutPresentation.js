@@ -11,9 +11,9 @@ import PropTypes from 'prop-types'
  */
 function AboutPresentation({ title, text, image, link }) {
   return (
-    <section className="py-12 mx-10" data-testid="AboutPresentation">
+    <section className="py-6 mx-10" data-testid="AboutPresentation">
       <div className="lg:inline-flex">
-        <div className="z-10 lg:-mr-20 lg:w-2/4 p-6 bg-white my-20">
+        <div className="z-10 lg:-mr-20 lg:w-2/4 p-6 bg-white my-11">
           <h2 className="mb-6 lg:text-4xl text-secondary font-bold text-3xl">
             <span className="inline-block">{title}</span>
           </h2>
