@@ -49,7 +49,8 @@ public class AutoPublishListener implements EventListener {
 
     if (DOCUMENT_CREATED.equals(event.getName()) && doc != null) {
 
-      if (!Boolean.parseBoolean(doc.getContextData("fv-publish").toString())) {
+      if (doc.getContextData("fv-publish") == null
+          || !Boolean.parseBoolean(doc.getContextData("fv-publish").toString())) {
         return;
       }
 

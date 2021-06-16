@@ -80,7 +80,8 @@ public class ExecuteGlobalJobsListener implements EventListener {
             session -> {
               // Get all relevant types to populate ancestry information
               String query = "SELECT * FROM FVUserRegistration WHERE "
-                  + "dc:created NOT BETWEEN DATE '2010-01-01' AND DATE '2021-03-01'";
+                  + "dc:created NOT BETWEEN DATE '2010-01-01' AND DATE '2021-03-01' "
+                  + "AND docinfo:documentId IS NOT NULL";
 
               long pageSize = 500;
 
@@ -101,19 +102,23 @@ public class ExecuteGlobalJobsListener implements EventListener {
                   final DocumentModel joinRequest =
                       session.createDocumentModel(SITE_JOIN_REQUEST_SCHEMA);
 
-                  joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "user",
+                  String username = String.valueOf(
                       oldUserRequest.getPropertyValue("userinfo:email"));
 
-                  joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "dialect",
-                      oldUserRequest.getPropertyValue("docinfo:documentId"));
+                  if (username != null) {
+                    joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "user", username);
 
-                  joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "requestTime",
-                      oldUserRequest.getPropertyValue("dc:created"));
+                    joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "dialect",
+                        oldUserRequest.getPropertyValue("docinfo:documentId"));
 
-                  joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "status", "NEW");
+                    joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "requestTime",
+                        oldUserRequest.getPropertyValue("dc:created"));
 
-                  final DocumentModel joinRequestDocument = session.createDocument(joinRequest);
-                  session.saveDocument(joinRequestDocument);
+                    joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "status", "NEW");
+
+                    final DocumentModel joinRequestDocument = session.createDocument(joinRequest);
+                    session.saveDocument(joinRequestDocument);
+                  }
                 } catch (Exception e) {
                   log.severe(
                       () -> "Failed when trying to execute global jobs with message: " + e
