@@ -22,8 +22,11 @@ package ca.firstvoices.maintenance.listeners;
 
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 
+import ca.firstvoices.core.io.services.AssignAncestorsService;
+import ca.firstvoices.core.io.utils.SessionUtils;
 import ca.firstvoices.maintenance.Constants;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 import org.nuxeo.ecm.core.CoreService;
 import org.nuxeo.ecm.core.api.AbstractSession;
@@ -44,6 +47,8 @@ import org.nuxeo.runtime.transaction.TransactionHelper;
  */
 public class ExecuteGlobalJobsListener implements EventListener {
 
+  public static final String SITE_JOIN_REQUEST_SCHEMA = "FVSiteJoinRequest";
+
   // Get logger
   private static final Logger log = Logger
       .getLogger(ExecuteGlobalJobsListener.class.getCanonicalName());
@@ -60,6 +65,150 @@ public class ExecuteGlobalJobsListener implements EventListener {
       return;
     }
 
+    processAssignAncestry();
+    processRepublishDocuments();
+    processMigrateUserRequests();
+  }
+
+  /**
+   * Will convert older user registration documents to newer ones
+   * Cut off date is March 2021, previous registration requests will remain untouched
+   */
+  private void processMigrateUserRequests() {
+    CoreInstance
+        .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
+            session -> {
+              // Get all relevant types to populate ancestry information
+              String query = "SELECT * FROM FVUserRegistration WHERE "
+                  + "dc:created NOT BETWEEN DATE '2010-01-01' AND DATE '2021-03-01'";
+
+              long pageSize = 500;
+
+              DocumentModelList requests = session.query(query, null, pageSize, 0, true);
+
+              // Nothing to process
+              if (requests == null || requests.isEmpty()) {
+                return;
+              }
+
+              // Log warning since we shouldn't get to this situation
+              log.warning(
+                  () -> "GLOBAL JOB: Found " + requests.totalSize()
+                      + " user requests to convert.");
+
+              for (DocumentModel oldUserRequest : requests) {
+                try {
+                  final DocumentModel joinRequest =
+                      session.createDocumentModel(SITE_JOIN_REQUEST_SCHEMA);
+
+                  joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "user",
+                      oldUserRequest.getPropertyValue("userinfo:email"));
+
+                  joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "dialect",
+                      oldUserRequest.getPropertyValue("docinfo:documentId"));
+
+                  joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "requestTime",
+                      oldUserRequest.getPropertyValue("dc:created"));
+
+                  joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "status", "NEW");
+
+                  final DocumentModel joinRequestDocument = session.createDocument(joinRequest);
+                  session.saveDocument(joinRequestDocument);
+                } catch (Exception e) {
+                  log.severe(
+                      () -> "Failed when trying to execute global jobs with message: " + e
+                          .getMessage()
+                          + " user registration migration with id " + oldUserRequest.getId());
+                }
+              }
+
+              session.save();
+
+              // commit the first page
+              TransactionHelper.commitOrRollbackTransaction();
+            });
+  }
+
+  /**
+   * Will get all documents with missing ancestry information, and correct them
+   * excluding documents in the republished state
+   */
+  private void processAssignAncestry() {
+    CoreInstance
+        .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
+            session -> {
+              // Get all relevant types to populate ancestry information
+              String query = "SELECT * FROM FVWord, FVPhrase, FVBook, FVPage WHERE "
+                  + " fva:dialect IS NULL AND "
+                  + " ecm:currentLifeCycleState NOT LIKE 'Republish' AND "
+                  + " ecm:isTrashed = 0 AND "
+                  + " ecm:isProxy = 0 AND "
+                  + " ecm:isVersion = 0";
+
+              long pageSize = 500;
+
+              DocumentModelList documents = session.query(query, null, pageSize, 0, true);
+
+              // Nothing to process
+              if (documents == null || documents.isEmpty()) {
+                return;
+              }
+
+              // Log warning since we shouldn't get to this situation
+              log.warning(
+                  () -> "GLOBAL JOB: Found " + documents.totalSize()
+                      + " docs to fix ancestry.");
+
+              populateAncestry(session, documents);
+              session.save();
+
+              // commit the first page
+              TransactionHelper.commitOrRollbackTransaction();
+
+              // loop on other children
+              long nbChildren = documents.totalSize();
+              for (long offset = pageSize; offset < nbChildren; offset += pageSize) {
+                long i = offset;
+                // start a new transaction
+                TransactionHelper.runInTransaction(() -> {
+                  DocumentModelList docs =
+                      session.query(query, null, pageSize, i, false);
+                  populateAncestry(session, docs);
+                  session.save();
+                });
+              }
+
+              // start a new transaction for following
+              TransactionHelper.startTransaction();
+            });
+  }
+
+  private void populateAncestry(CoreSession session, DocumentModelList docs) {
+    AssignAncestorsService assignAncestorsService =
+        Framework.getService(AssignAncestorsService.class);
+
+    ArrayList<String> eventsToDisable = new ArrayList<>();
+    eventsToDisable.add("disableCharacterAssetListener");
+    eventsToDisable.add("disableAncestryListener");
+
+    for (DocumentModel docWithoutAncestors : docs) {
+      try {
+        DocumentModel doc = assignAncestorsService.assignAncestors(docWithoutAncestors);
+        SessionUtils.saveDocumentWithoutEvents(session, doc, true, eventsToDisable);
+      } catch (Exception e) {
+        log.severe(
+            () -> "Failed when trying to execute global jobs with message: " + e
+                .getMessage()
+                + " republish failed on doc with id " + docWithoutAncestors.getId());
+      }
+    }
+  }
+
+  /**
+   * Will get all documents stuck in republished
+   * and ensure they are transitioned to published.
+   */
+  private void processRepublishDocuments() {
     CoreInstance
         .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
             session -> {
@@ -106,7 +255,6 @@ public class ExecuteGlobalJobsListener implements EventListener {
               // start a new transaction for following
               TransactionHelper.startTransaction();
             });
-
   }
 
   private void republishDocuments(CoreSession session, DocumentModelList docs) {
