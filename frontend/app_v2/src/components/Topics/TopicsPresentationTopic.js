@@ -52,32 +52,21 @@ function TopicsPresentationTopic({ audio, heading, image, listCount, subheading,
       // nothing
       break
   }
+
+  const conditionalClass = image
+    ? 'bg-center bg-cover text-white'
+    : `border-12 border-${typeColor} text-${typeColor}Text`
+  const conditionalStyle = image
+    ? { backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)), url(${image})` }
+    : {}
+
   return (
     <div
       data-testid="TopicsPresentationTopic"
-      style={
-        image
-          ? {
-              backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)), url(${image})`,
-            }
-          : {}
-      }
-      className={`
-        bg-${typeColor}
-        bg-center
-        bg-cover
-        flex
-        flex-col
-        items-center
-        justify-between
-        rounded-lg
-        xl:rounded-lg
-        p-8
-        text-white
-        w-full
-      `}
+      style={conditionalStyle}
+      className={`${conditionalClass} flex flex-col items-center justify-between rounded-lg p-8 w-full`}
     >
-      {useIcon(icon, `${image ? 'fill-current' : 'opacity-30'} w-7 h-7 lg:w-10 lg:h-10 xl:w-14 xl:h-14`)}
+      {useIcon(icon, `${image ? '' : `text-${typeColor}`} fill-current w-7 h-7 lg:w-10 lg:h-10 xl:w-14 xl:h-14`)}
       {heading && (
         <h1 className={`${textSize} text-center font-medium my-3`}>
           <Link to={url}>{heading}</Link>
@@ -85,9 +74,8 @@ function TopicsPresentationTopic({ audio, heading, image, listCount, subheading,
       )}
       {subheading && <h2 className="text-xl lg:text-2xl text-center">{subheading}</h2>}
       {audio && <AudioMinimal.Container src={audio} iconStyling="fill-current w-7 h-7 lg:w-8 lg:h-8 mt-3" />}
-
       {listCount > 0 && (
-        <div className="text-lg lg:text-xl text-center text-yellow-300">
+        <div className="text-lg lg:text-xl text-center">
           {listCount === 1 && `${listCount} phrase`}
           {listCount > 1 && `${listCount} phrases`}
         </div>
