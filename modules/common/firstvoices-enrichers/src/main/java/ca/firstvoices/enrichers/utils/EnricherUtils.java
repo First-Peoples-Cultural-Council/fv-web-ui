@@ -21,6 +21,7 @@
 package ca.firstvoices.enrichers.utils;
 
 import ca.firstvoices.core.io.utils.DialectUtils;
+import ca.firstvoices.core.io.utils.PropertyUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -109,7 +111,6 @@ public class EnricherUtils {
       }
       String filename = fileObj.getFilename();
       String mimeType = fileObj.getMimeType();
-      // TODO: not sure how to retrieve this value from the object, so build it manually for now
       String binaryPath = "nxfile/default/" + binaryDoc.getId() + "/file:content/" + filename;
 
       // Build JSON node
@@ -119,6 +120,18 @@ public class EnricherUtils {
       binaryJsonObj.put("path", binaryPath);
       binaryJsonObj.put("dc:title", (String) binaryDoc.getPropertyValue("dc:title"));
       binaryJsonObj.put("dc:description", (String) binaryDoc.getPropertyValue("dc:description"));
+
+      // Get speaker(s) information
+      List<String> speakerNames = PropertyUtils.getValuesAsList(binaryDoc, "fvm:source")
+          .stream().map(speakerId ->
+            String.valueOf(
+            session.getDocument(new IdRef(speakerId))
+                .getPropertyValue("dc:title"))
+          ).collect(Collectors.toList());
+
+      if (!speakerNames.isEmpty()) {
+        binaryJsonObj.put("speaker", String.join(",", speakerNames));
+      }
 
       // Get thumbnails
       if (binaryDoc.hasSchema("picture")) {
