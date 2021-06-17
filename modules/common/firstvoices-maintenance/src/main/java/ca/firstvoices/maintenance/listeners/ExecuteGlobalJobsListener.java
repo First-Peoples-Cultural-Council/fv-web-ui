@@ -24,6 +24,7 @@ import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
 
 import ca.firstvoices.core.io.services.AssignAncestorsService;
 import ca.firstvoices.core.io.utils.SessionUtils;
+import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.maintenance.Constants;
 import ca.firstvoices.publisher.services.FirstVoicesPublisherService;
 import java.util.ArrayList;
@@ -78,9 +79,11 @@ public class ExecuteGlobalJobsListener implements EventListener {
     CoreInstance
         .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
             session -> {
-              // Get all relevant types to populate ancestry information
+              // Get all user registrations after March 2021
+              // Only 'accepted' meaning the user account was created
               String query = "SELECT * FROM FVUserRegistration WHERE "
                   + "dc:created NOT BETWEEN DATE '2010-01-01' AND DATE '2021-03-01' "
+                  + "AND ecm:currentLifeCycleState = 'accepted' "
                   + "AND docinfo:documentId IS NOT NULL";
 
               long pageSize = 500;
@@ -106,18 +109,26 @@ public class ExecuteGlobalJobsListener implements EventListener {
                       oldUserRequest.getPropertyValue("userinfo:email"));
 
                   if (username != null) {
-                    joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "user", username);
 
-                    joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "dialect",
-                        oldUserRequest.getPropertyValue("docinfo:documentId"));
+                    if (!joinRequestExists(session, username)) {
+                      // A new join request does not exist
+                      joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "user", username);
 
-                    joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "requestTime",
-                        oldUserRequest.getPropertyValue("dc:created"));
+                      joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "dialect",
+                          oldUserRequest.getPropertyValue("docinfo:documentId"));
 
-                    joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "status", "NEW");
+                      joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "requestTime",
+                          oldUserRequest.getPropertyValue("dc:created"));
 
-                    final DocumentModel joinRequestDocument = session.createDocument(joinRequest);
-                    session.saveDocument(joinRequestDocument);
+                      joinRequest.setProperty(SITE_JOIN_REQUEST_SCHEMA, "status", "NEW");
+
+                      final DocumentModel joinRequestDocument = session.createDocument(joinRequest);
+                      session.saveDocument(joinRequestDocument);
+                    }
+
+                    // Modify original user registration
+                    StateUtils.followTransitionIfAllowed(oldUserRequest, "process");
+                    session.saveDocument(oldUserRequest);
                   }
                 } catch (Exception e) {
                   log.severe(
@@ -132,6 +143,15 @@ public class ExecuteGlobalJobsListener implements EventListener {
               // commit the first page
               TransactionHelper.commitOrRollbackTransaction();
             });
+  }
+
+  private boolean joinRequestExists(CoreSession session, String username) {
+    String query = "SELECT * FROM FVSiteJoinRequest "
+        + "WHERE fvjoinrequest:user LIKE '" + username + "'";
+
+    DocumentModelList existingRequests = session.query(query, null, 1, 0, true);
+
+    return (existingRequests != null && !existingRequests.isEmpty());
   }
 
   /**
