@@ -31,25 +31,36 @@ function SearchData() {
 
   // Local State
   const [currentFilter, setCurrentFilter] = useState(docTypeFilter)
+  const [items, setItems] = useState([])
 
   // Data fetch
-  const response = useQuery(['search', location.search], () => searchApi.get(`${location.search}&ancestorId=${uid}`), {
-    // The query will not execute until the siteId exists and a search term has been provided
-    enabled: !!uid && !!searchTerm,
-  })
-  const { data, error, isError, isLoading } = response
+  const { data, error, isError, isLoading } = useQuery(
+    ['search', location.search],
+    () => searchApi.get(`${location.search}&ancestorId=${uid}`),
+    {
+      // The query will not execute until the siteId exists and a search term has been provided
+      enabled: !!uid && !!searchTerm,
+    }
+  )
 
   // DataAdaptor
-  const items = data?.results
-    ? data?.results.map((result) => {
-        if (!Array.isArray(result.translations)) {
-          const modifiedResult = Object.assign({}, result)
-          modifiedResult.translations = result.translations.translation ? [result.translations] : []
-          return modifiedResult
-        }
-        return result
-      })
-    : []
+  const dataAdaptor = (results) => {
+    const modifiedResults = results.map((result) => {
+      if (!Array.isArray(result.translations)) {
+        const modifiedResult = Object.assign({}, result)
+        modifiedResult.translations = result.translations.translation ? [result.translations] : []
+        return modifiedResult
+      }
+      return result
+    })
+    setItems(modifiedResults)
+  }
+
+  useEffect(() => {
+    if (data?.results) {
+      dataAdaptor(data.results)
+    }
+  }, [data])
 
   useEffect(() => {
     if (isError) triggerError(error, history)

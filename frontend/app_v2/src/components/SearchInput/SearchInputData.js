@@ -55,13 +55,14 @@ function SearchInputData({ docType }) {
 
   const baseUrl = sitename ? `/${sitename}` : ''
 
-  const handleSearchSubmit = () => {
+  const handleSearchSubmit = (event) => {
     if (searchValue && searchValue !== searchTerm) {
       history.push({
         pathname: `${baseUrl}/${path}`,
         search: `?q=${searchValue}&domain=${currentOption.id}&docType=${type}`,
       })
     }
+    event.preventDefault()
   }
   const menuRef = useRef()
 
