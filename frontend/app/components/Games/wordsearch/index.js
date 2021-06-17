@@ -66,16 +66,21 @@ export class Wordsearch extends Component {
         '&currentPageIndex=0&pageSize=100&sortOrder=asc&sortBy=fvcharacter:alphabet_order'
     )
 
+    // Conditions for words:
+    // 1) marked as available in childrens archive
+    // 2) all letters have a recognized character in custom order (NOT LIKE "~")
+    // 3) at least one audio exists
+
     props.fetchWords(
       props.routeParams.dialect_path + '/Dictionary',
-      ' AND fv:available_in_childrens_archive = 1 AND fv:custom_order IS NOT NULL AND ' +
+      ' AND fv:available_in_childrens_archive = 1 AND fv:custom_order NOT LIKE "~" AND ' +
         ProviderHelpers.switchWorkspaceSectionKeys('fv:related_pictures', this.props.routeParams.area) +
         '/* IS NOT NULL AND ' +
         ProviderHelpers.switchWorkspaceSectionKeys('fv:related_audio', this.props.routeParams.area) +
         '/* IS NOT NULL' +
         '&currentPageIndex=' +
         pageIndex +
-        '&pageSize=10&sortBy=dc:created&sortOrder=DESC'
+        '&pageSize=50&sortBy=dc:created&sortOrder=DESC'
     )
   }
 
@@ -159,13 +164,12 @@ export class Wordsearch extends Component {
         <PromiseWrapper renderOnError computeEntities={computeEntities}>
           {characterArray?.length < 5 ? (
             <div>Game not available: An alphabet needs to be uploaded to FirstVoices for this game to function.</div>
-          ) : null}
-          {wordArray?.length < MIN_REQ_WORDS ? (
+          ) : (
             <div>
               Game not available: At least 5 words that meet the requirements with audio and an image are required for
-              this game... Found <strong>{selectn('response.resultsCount', computeWords)}</strong> words.
+              this game.
             </div>
-          ) : null}
+          )}
         </PromiseWrapper>
       )
     }

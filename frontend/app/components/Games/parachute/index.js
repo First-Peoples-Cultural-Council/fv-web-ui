@@ -28,7 +28,6 @@ import ParachuteGame from 'components/Games/parachute/ParachuteGame'
 import PromiseWrapper from 'components/PromiseWrapper'
 
 const PUZZLES = 25
-const MIN_REQ_WORDS = 5
 
 const { func, object } = PropTypes
 export class Parachute extends Component {
@@ -89,10 +88,16 @@ export class Parachute extends Component {
     if (resultCount / PUZZLES < 10 && this.state.resultCount === undefined) {
       //We refine our intial query/guess based on the first one
       //This should only happen once
+
+      // Conditions for words:
+      // 1) marked as available in childrens archive
+      // 2) all letters have a recognized character in custom order (NOT LIKE "~")
+      // 3) at least one audio exists
+
       this.setState({ resultCount: resultCount })
       await props.fetchWords(
         props.routeParams.dialect_path + '/Dictionary',
-        ' AND fv:available_in_childrens_archive = 1 AND fv:custom_order IS NOT NULL AND ' +
+        ' AND fv:available_in_childrens_archive = 1 AND fv:custom_order NOT LIKE "~" AND ' +
           ProviderHelpers.switchWorkspaceSectionKeys('fv:related_audio', this.props.routeParams.area) +
           '/* IS NOT NULL' +
           '&currentPageIndex=' +
@@ -194,14 +199,13 @@ export class Parachute extends Component {
             <h1>Parachute</h1>
             <h3>Game not available</h3>
             {alphabetArray?.length < 5 ? (
-              <p>An alphabet needs to be uploaded to FirstVoices for this game to function.</p>
-            ) : null}
-            {words?.length < MIN_REQ_WORDS ? (
-              <p>
-                At least 5 words that meet the requirements with audio and an image are required for this game... Found{' '}
-                <strong>{selectn('response.resultsCount', computeWords)}</strong> words.
-              </p>
-            ) : null}
+              <div>Game not available: An alphabet needs to be uploaded to FirstVoices for this game to function.</div>
+            ) : (
+              <div>
+                Game not available: At least 5 words that meet the requirements with audio and an image are required for
+                this game.
+              </div>
+            )}
           </div>
         </PromiseWrapper>
       )
