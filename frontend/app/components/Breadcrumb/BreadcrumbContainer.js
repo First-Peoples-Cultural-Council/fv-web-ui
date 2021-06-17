@@ -12,20 +12,32 @@ import BreadcrumbData from 'components/Breadcrumb/BreadcrumbData'
  *
  * @returns {node} jsx markup
  */
-function BreadcrumbContainer({ matchedPage, routes }) {
+function BreadcrumbContainer({ matchedPage, routes, showWorkspaceSwitcher, area }) {
   return (
     <BreadcrumbData matchedPage={matchedPage} routes={routes}>
-      {({ breadcrumbs, isDialect, portalLogoSrc }) => {
-        return <BreadcrumbPresentation breadcrumbs={breadcrumbs} isDialect={isDialect} portalLogoSrc={portalLogoSrc} />
+      {({ breadcrumbs, dialect, showJoin, portalLogoSrc, membershipStatus }) => {
+        return (
+          <BreadcrumbPresentation
+            breadcrumbs={breadcrumbs}
+            dialect={dialect}
+            showJoin={showJoin}
+            membershipStatus={membershipStatus}
+            portalLogoSrc={portalLogoSrc}
+            showWorkspaceSwitcher={showWorkspaceSwitcher}
+            area={area}
+          />
+        )
       }}
     </BreadcrumbData>
   )
 }
 // PROPTYPES
-const { object } = PropTypes
+const { bool, object, string } = PropTypes
 BreadcrumbContainer.propTypes = {
   matchedPage: object,
   routes: object.isRequired,
+  showWorkspaceSwitcher: bool,
+  area: string,
 }
 
 export default BreadcrumbContainer

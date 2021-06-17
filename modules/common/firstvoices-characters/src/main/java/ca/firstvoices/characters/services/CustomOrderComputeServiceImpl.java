@@ -108,8 +108,9 @@ public class CustomOrderComputeServiceImpl implements CustomOrderComputeService 
                 (String) charDoc.getPropertyValue(DOCUMENT_TITLE),
                 (String) charDoc.getPropertyValue("fvcharacter:upper_case_character"))).findFirst()
             .orElse(null);
-        if (characterDoc != null) {
-          // The character exists in the archive: /////// check if `null`
+        if (characterDoc != null && characterDoc
+            .getPropertyValue(FV_CUSTOM_ORDER) != null) {
+          // The character exists in the archive:
           String computedCharacterOrder = (String) characterDoc
               .getPropertyValue(FV_CUSTOM_ORDER);
           nativeTitle.append(computedCharacterOrder);

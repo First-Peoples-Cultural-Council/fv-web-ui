@@ -9,6 +9,8 @@ import t from 'tcomb-form'
 
 // Material UI
 import { Popover } from '@material-ui/core'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
 
 // FPCC
 import { updateDocument, updateAndPublishDocument } from 'reducers/document'
@@ -17,6 +19,7 @@ import NavigationHelpers from 'common/NavigationHelpers'
 import StringHelpers from 'common/StringHelpers'
 import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
+import FVSnackbar from 'components/FVSnackbar'
 import WarningBanner from 'components/WarningBanner'
 import RequestReview from 'components/RequestReview'
 import './withForm.css'
@@ -24,12 +27,18 @@ import './withForm.css'
 const confirmationButtonsStyle = { padding: '4px', marginLeft: '5px', border: '1px solid gray' }
 
 export default function withForm(ComposedFilter) {
+  const _navigateOnSave = (path, method) => {
+    setTimeout(function navigateAfterTimeout() {
+      NavigationHelpers.navigateUp(path, method)
+    }, 1000)
+  }
   class ViewWithForm extends Component {
     static propTypes = {
-      initialValues: PropTypes.object,
+      context: PropTypes.object,
       fields: PropTypes.object.isRequired,
       options: PropTypes.object.isRequired,
       type: PropTypes.string.isRequired,
+      initialValues: PropTypes.object,
       itemId: PropTypes.string.isRequired,
       cancelMethod: PropTypes.func,
       currentPath: PropTypes.array,
@@ -52,6 +61,7 @@ export default function withForm(ComposedFilter) {
         formValue: null,
         showCancelWarning: false,
         saved: false,
+        snackBarOpen: false,
       }
     }
 
@@ -98,10 +108,12 @@ export default function withForm(ComposedFilter) {
         }
 
         this.setState({
+          snackBarOpen: true,
           saved: true,
           formValue: properties,
         })
-        NavigationHelpers.navigateUp(this.props.currentPath, this.props.navigationMethod)
+
+        _navigateOnSave(this.props.currentPath, this.props.navigationMethod)
       } else {
         window.scrollTo(0, 0)
       }
@@ -123,6 +135,10 @@ export default function withForm(ComposedFilter) {
           formValue: formValue,
         })
       }
+    }
+
+    _handleSnackbarClose = () => {
+      this.setState({ snackBarOpen: false })
     }
 
     _hasPendingReview = (item) => {
@@ -147,6 +163,17 @@ export default function withForm(ComposedFilter) {
       ) : null
     }
 
+    _setInitialFormValues = (value) => {
+      if (value) {
+        this.setState({ formValue: value })
+      }
+    }
+
+    componentDidMount() {
+      const { initialValues } = this.props
+      this._setInitialFormValues(initialValues)
+    }
+
     componentWillReceiveProps(nextProps) {
       if (this.state.saved) {
         const currentWord = this._getComputeItem(this.props)
@@ -161,7 +188,7 @@ export default function withForm(ComposedFilter) {
     }
 
     render() {
-      const { computeLogin, initialValues, fields, options, type } = this.props
+      const { computeLogin, context, fields, options, type, initialValues } = this.props
 
       const isRecorderWithApproval = ProviderHelpers.isRecorderWithApproval(computeLogin)
       const isAdmin = ProviderHelpers.isAdmin(computeLogin)
@@ -202,6 +229,8 @@ export default function withForm(ComposedFilter) {
         </>
       )
 
+      const contributors = selectn('response.properties.dc:contributors', computeItem) || []
+
       return (
         <div className="row">
           <div className={classNames('col-xs-12', 'col-md-9')}>
@@ -222,8 +251,8 @@ export default function withForm(ComposedFilter) {
                       this['form_' + type] = element
                     }}
                     type={t.struct(selectn(type, fields))}
-                    context={initialValues}
-                    value={this.state.formValue || selectn('response.properties', computeItem)}
+                    context={context}
+                    value={this.state.formValue || initialValues || selectn('response.properties', computeItem)}
                     options={selectn(type, options)}
                   />
 
@@ -313,7 +342,9 @@ export default function withForm(ComposedFilter) {
                     <FVLabel transKey="contributors" defaultStr="Contributors" transform="first" />
                   </span>
                   <div className="ViewWithForm__listGroupItem">
-                    {(selectn('response.properties.dc:contributors', computeItem) || []).join(',')}
+                    {contributors.map((contributor, i) => {
+                      return <p key={i}>{contributor}</p>
+                    })}
                   </div>
                 </li>
 
@@ -329,6 +360,18 @@ export default function withForm(ComposedFilter) {
               </ul>
             </div>
           </div>
+          <FVSnackbar
+            open={this.state.snackBarOpen}
+            autoHideDuration={3000}
+            onClose={this._handleSnackbarClose}
+            message="Saved!"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            action={
+              <IconButton size="small" aria-label="close" color="inherit" onClick={this._handleSnackbarClose}>
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            }
+          />
         </div>
       )
     }

@@ -23,6 +23,7 @@ import useNavigationHelpers from 'common/useNavigationHelpers'
 import { getDialectClassname } from 'common/Helpers'
 import NavigationHelpers from 'common/NavigationHelpers'
 import ProviderHelpers from 'common/ProviderHelpers'
+import StringHelpers from 'common/StringHelpers'
 import UIHelpers from 'common/UIHelpers'
 
 // Components
@@ -57,7 +58,7 @@ import {
  *
  */
 
-function WordsListData({ children }) {
+function WordsListData({ children, reportFilter }) {
   const { computeDocument, fetchDocument } = useDocument()
   const { computeDialect2, fetchDialect2 } = useDialect()
   const { intl } = useIntl()
@@ -85,8 +86,8 @@ function WordsListData({ children }) {
     searchPartOfSpeech: querySearchPartOfSpeech,
     searchStyle: querySearchStyle,
     searchTerm: querySearchTerm,
-    sortBy: querySortBy,
-    sortOrder: querySortOrder,
+    sortBy,
+    sortOrder,
   } = getSearchAsObject({
     defaults: {
       searchPartOfSpeech: SEARCH_PART_OF_SPEECH_ANY,
@@ -99,6 +100,21 @@ function WordsListData({ children }) {
   })
   const dictionaryKey = `${dialectPath}/Dictionary`
   const portalKey = `${dialectPath}/Portal`
+  const DEFAULT_LANGUAGE = 'english'
+  const defaultCols = [
+    'title',
+    'fv:definitions',
+    'related_audio',
+    'related_pictures',
+    'fv-word:part_of_speech',
+    'fv-word:categories',
+    'state',
+  ]
+  const [columnsFilter, setColumnsFilter] = useState(reportFilter?.cols ? reportFilter?.cols : defaultCols)
+  const [columns, setColumns] = useState(getColumns(columnsFilter))
+
+  const querySortBy = reportFilter?.sortBy ? reportFilter.sortBy : sortBy
+  const querySortOrder = reportFilter?.sortOrder ? reportFilter.sortOrder : sortOrder
 
   // Fetch Dialect, Document, Portal
   useEffect(() => {
@@ -137,7 +153,9 @@ function WordsListData({ children }) {
   useEffect(() => {
     if (curFetchDocumentAction === 'FV_DOCUMENT_FETCH_SUCCESS') {
       let currentAppliedFilter
-      if (queryCategory) {
+      if (reportFilter) {
+        currentAppliedFilter = reportFilter?.query
+      } else if (queryCategory) {
         currentAppliedFilter = ` AND ${
           area === 'Workspaces' ? 'fv-word:categories' : 'fvproxy:proxied_categories'
         }/* IN ("${queryCategory}") &enrichment=category_children`
@@ -179,6 +197,7 @@ function WordsListData({ children }) {
     querySearchTerm,
     querySortBy,
     querySortOrder,
+    reportFilter,
   ])
 
   // Parts of speech
@@ -218,8 +237,12 @@ function WordsListData({ children }) {
     }
   }, [computeDirectory])
 
-  const DEFAULT_LANGUAGE = 'english'
-  const [columns] = useState(getColumns())
+  useEffect(() => {
+    if (reportFilter?.cols && reportFilter?.cols?.length > 0) {
+      setColumnsFilter(reportFilter.cols)
+      setColumns(getColumns(reportFilter.cols))
+    }
+  }, [reportFilter])
 
   const computeEntities = Immutable.fromJS([
     {
@@ -235,7 +258,7 @@ function WordsListData({ children }) {
     role: ['Record', 'Approve', 'Everything'],
   }
 
-  function getColumns() {
+  function getColumns(_columnFilter) {
     const columnsArray = [
       {
         name: 'title',
@@ -359,24 +382,45 @@ function WordsListData({ children }) {
     ]
     // NOTE: Append `categories` & `state` columns if on Workspaces
     if (area === WORKSPACES) {
-      columnsArray.push({
-        name: 'fv-word:categories',
-        title: intl.trans('categories', 'Categories', 'first'),
-        render: (v, data) => {
-          return UIHelpers.generateDelimitedDatumFromDataset({
-            dataSet: selectn('contextParameters.word.categories', data),
-            extractDatum: (entry) => selectn('dc:title', entry),
-          })
+      const workspacesColumns = [
+        {
+          name: 'fv-word:categories',
+          title: intl.trans('categories', 'Categories', 'first'),
+          render: (v, data) => {
+            return UIHelpers.generateDelimitedDatumFromDataset({
+              dataSet: selectn('contextParameters.word.categories', data),
+              extractDatum: (entry) => selectn('dc:title', entry),
+            })
+          },
         },
-      })
-      columnsArray.push({
-        name: 'state',
-        title: 'Visibility',
-        columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
-        columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomState,
-      })
+        {
+          name: 'state',
+          title: 'Visibility',
+          columnDataTemplate: dictionaryListSmallScreenColumnDataTemplate.custom,
+          columnDataTemplateCustom: dictionaryListSmallScreenColumnDataTemplateCustomState,
+        },
+        {
+          name: 'dc:modified',
+          width: 210,
+          title: intl.trans('date_modified', 'Date Modified'),
+          render: (v, data) => {
+            return StringHelpers.formatLocalDateString(selectn('lastModified', data))
+          },
+        },
+        {
+          name: 'dc:created',
+          width: 210,
+          title: intl.trans('date_created', 'Date Added to FirstVoices'),
+          render: (v, data) => {
+            return StringHelpers.formatLocalDateString(selectn('properties.dc:created', data))
+          },
+        },
+      ]
+      columnsArray.push(...workspacesColumns)
     }
-    return columnsArray
+
+    // Filter columns as specified by reportFilter or default
+    return columnsArray.filter((v) => _columnFilter.indexOf(v.name) !== -1)
   }
 
   function onPagination({ currentPageIndex: page, pageSize }) {
@@ -385,10 +429,10 @@ function WordsListData({ children }) {
     )
   }
 
-  const sortHandler = ({ page, pageSize, sortBy, sortOrder } = {}) => {
+  const sortHandler = ({ page, pageSize, sortBy: _sortBy, sortOrder: _sortOrder } = {}) => {
     navigate(
       `${window.location.pathname}?${convertObjToUrlQuery(
-        Object.assign({}, getSearchAsObject(), { page, pageSize, sortBy, sortOrder })
+        Object.assign({}, getSearchAsObject(), { page, pageSize, sortBy: _sortBy, sortOrder: _sortOrder })
       )}`
     )
   }

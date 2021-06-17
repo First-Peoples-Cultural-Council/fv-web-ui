@@ -1,0 +1,12 @@
+{{ if .Values.smtplogger.deploy }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: smtplogger
+spec:
+  selector:
+    app: smtplogger
+  ports:
+    - port: 2500
+      targetPort: 2500
+{{ end }}

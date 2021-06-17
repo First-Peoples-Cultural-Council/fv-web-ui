@@ -12,8 +12,8 @@ module.exports = {
       animation: {
         'pulse-blur': 'pulse-blur 2.5s linear infinite',
       },
-      borderRadius: {
-        '4xl': '3rem',
+      borderWidth: {
+        12: '12px',
       },
       fontSize: {
         xxs: '.5rem',
@@ -35,43 +35,69 @@ module.exports = {
         },
       },
       colors: {
-        'fv-red': {
-          light: '#b36e54',
-          DEFAULT: '#A04A29',
-          dark: '#803b21',
+        // Dark Blue
+        primary: {
+          light: '#677e87',
+          DEFAULT: '#264653',
+          dark: '#1b313a',
         },
-        'fv-orange': {
-          light: '#e09938',
-          DEFAULT: '#D87F06',
-          dark: '#ad6605',
+        // Dark Orange
+        secondary: {
+          light: '#b07363',
+          DEFAULT: '#8E3720',
+          dark: '#632716',
         },
-        'fv-blue': {
-          light: '#1870A7',
-          DEFAULT: '#3A6880',
-          dark: '#2e5366',
+        // Green/Grey
+        tertiaryA: {
+          light: '#878a80',
+          DEFAULT: '#54584A',
+          dark: '#3b3e34',
         },
-        'fv-turquoise': {
-          light: '#c2dedc',
-          DEFAULT: '#35928A',
-          dark: '#2a756e',
+        // Purple
+        tertiaryB: {
+          light: '#857689',
+          DEFAULT: '#513B56',
+          dark: '#39293c',
         },
-        'fv-purple': {
-          light: '#785d72',
-          DEFAULT: '#56354f',
-          dark: '#452a3f',
+        word: {
+          light: '#6ABAB1',
+          DEFAULT: '#2A9D8F',
+          dark: '#1D6E64',
+        },
+        phrase: {
+          light: '#D5A169',
+          DEFAULT: '#C37829',
+          dark: '#89541D',
+        },
+        song: {
+          light: '#a84d7b',
+          DEFAULT: '#830042',
+          dark: '#5c002e',
+        },
+        story: {
+          light: '#f0d697',
+          DEFAULT: '#E9C46A',
+          dark: '#a3894a',
+        },
+        wordText: {
+          DEFAULT: '#264653',
+        },
+        phraseText: {
+          DEFAULT: '#9A270A',
+        },
+        songText: {
+          DEFAULT: '#830042',
+        },
+        storyText: {
+          DEFAULT: '#8C5822',
         },
         'fv-charcoal': {
-          light: '#646363',
+          light: '#54584A',
           DEFAULT: '#313133',
-        },
-        'fv-green': {
-          DEFAULT: '#7EC71A',
+          dark: '#222224',
         },
         'fv-warning-red': {
           DEFAULT: '#D64A4A',
-        },
-        'fv-yellow': {
-          DEFAULT: '#F4E31E',
         },
       },
     },

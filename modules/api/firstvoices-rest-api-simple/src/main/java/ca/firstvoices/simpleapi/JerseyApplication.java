@@ -1,10 +1,10 @@
 package ca.firstvoices.simpleapi;
 
 
-import ca.firstvoices.simpleapi.endpoints.ArchiveEndpoint;
 import ca.firstvoices.simpleapi.endpoints.AuthorizationEndpoint;
 import ca.firstvoices.simpleapi.endpoints.SearchEndpoint;
 import ca.firstvoices.simpleapi.endpoints.SharedEndpoint;
+import ca.firstvoices.simpleapi.endpoints.SiteEndpoint;
 import ca.firstvoices.simpleapi.endpoints.UserEndpoint;
 import ca.firstvoices.simpleapi.endpoints.VocabularyEndpoint;
 import ca.firstvoices.simpleapi.exceptions.mappers.NotFoundExceptionMapper;
@@ -40,7 +40,7 @@ import javax.ws.rs.core.Application;
             email = "info@fpcc.ca")
     ),
     security = {
-        @SecurityRequirement(name = "List Archives", scopes = {"archives:public"})
+        @SecurityRequirement(name = "List Sites", scopes = {"sites:public"})
     },
     servers = {
         @Server(
@@ -54,12 +54,12 @@ import javax.ws.rs.core.Application;
     flows = @OAuthFlows(
         implicit = @OAuthFlow(authorizationUrl = "http://localhost:8888/auth",
             scopes = {
-                @OAuthScope(name = "archives:public",
-                    description = "read public archive data"),
-                @OAuthScope(name = "archives:recorder",
+                @OAuthScope(name = "sites:public",
+                    description = "read public site data"),
+                @OAuthScope(name = "sites:recorder",
                     description = "view unpublished content and submit new content"),
-                @OAuthScope(name = "archives:admin",
-                    description = "administer archives and publish new content")
+                @OAuthScope(name = "sites:admin",
+                    description = "administer sites and publish new content")
             }
         )
     )
@@ -73,7 +73,7 @@ public class JerseyApplication extends Application {
   public Set<Object> getSingletons() {
     Set<Object> singletons = new HashSet<>();
 
-    singletons.add(new ArchiveEndpoint());
+    singletons.add(new SiteEndpoint());
     singletons.add(new AuthorizationEndpoint());
     singletons.add(new SearchEndpoint());
     singletons.add(new SharedEndpoint());

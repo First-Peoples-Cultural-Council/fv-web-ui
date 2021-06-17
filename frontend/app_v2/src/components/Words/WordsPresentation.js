@@ -33,7 +33,7 @@ function WordsPresentation({
   const getFilterListItems = () => {
     return filters.map((filter) => {
       const filterIsActiveClass =
-        currentFilter === filter.type ? 'border-l-4 border-fv-turquoise bg-fv-turquoise text-white' : 'text-fv-charcoal'
+        currentFilter === filter.type ? 'border-l-4 border-primary bg-primary text-white' : 'text-fv-charcoal'
       return (
         <li
           key={filter.label}
@@ -41,14 +41,14 @@ function WordsPresentation({
           className="inline-block transition duration-500 ease-in-out md:block md:my-2 md:mx-5 flex-grow"
         >
           <Link
-            className={`inline-block transition duration-500 ease-in-out md:block p-3 flex-grow rounded-xl capitalize cursor-pointer ${filterIsActiveClass}`}
+            className={`inline-block transition duration-500 ease-in-out md:block p-3 flex-grow rounded-lg capitalize cursor-pointer ${filterIsActiveClass}`}
             to={`${location.pathname}?q=${searchTerm}&docType=${filter.type}`}
             onClick={() => {
               handleFilter(filter.type)
             }}
           >
             {currentFilter !== 'ALL' && filter.type === 'ALL' ? (
-              <>{useIcon('BackArrow', 'inline-flex pb-2 h-7 text-fv-turquoise fill-current')} Back to all results</>
+              <>{useIcon('BackArrow', 'inline-flex pb-2 h-7 text-primary fill-current')} Back to all results</>
             ) : (
               <>
                 {filter.label} {filter.count ? `(${filter.count})` : null}
@@ -62,7 +62,7 @@ function WordsPresentation({
 
   return (
     <>
-      <section className="bg-gradient-to-b to-fv-turquoise from-fv-blue-light p-5">
+      <section className="bg-gradient-to-b from-word to-word-dark p-5">
         <div className="mx-auto lg:w-3/5">
           <SearchInput.Container docType={'WORD'} />
         </div>

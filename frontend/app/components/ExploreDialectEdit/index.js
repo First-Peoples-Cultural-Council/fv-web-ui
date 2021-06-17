@@ -16,6 +16,7 @@ limitations under the License.
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Immutable, { is } from 'immutable'
+import selectn from 'selectn'
 
 // REDUX
 import { connect } from 'react-redux'
@@ -24,27 +25,20 @@ import { fetchDialect2 } from 'reducers/fvDialect'
 import { fetchPortal } from 'reducers/fvPortal'
 import { replaceWindowPath } from 'reducers/windowPath'
 
-import selectn from 'selectn'
-
 import ProviderHelpers from 'common/ProviderHelpers'
 import NavigationHelpers from 'common/NavigationHelpers'
-import AuthenticationFilter from 'components/AuthenticationFilter'
-import PromiseWrapper from 'components/PromiseWrapper'
-
-import StateLoading from 'components/Loading'
-import StateErrorBoundary from 'components/ErrorBoundary'
-import FVLabel from 'components/FVLabel'
-
 import fields from 'common/schemas/fields'
 import options from 'common/schemas/options'
-
-import withForm from 'components/withForm'
-
 import { STATE_LOADING, STATE_DEFAULT, STATE_ERROR_BOUNDARY } from 'common/Constants'
 
-import './ExploreDialectEdit.css'
-
+import AuthenticationFilter from 'components/AuthenticationFilter'
+import PromiseWrapper from 'components/PromiseWrapper'
+import StateLoading from 'components/Loading'
+import StateErrorBoundary from 'components/ErrorBoundary'
+import withForm from 'components/withForm'
 const EditViewWithForm = withForm(PromiseWrapper, true)
+
+import './ExploreDialectEdit.css'
 
 const { array, func, object } = PropTypes
 export class ExploreDialectEdit extends Component {
@@ -174,50 +168,66 @@ export class ExploreDialectEdit extends Component {
     const computeDialect2 = ProviderHelpers.getEntry(this.props.computeDialect2, this.props.routeParams.dialect_path)
 
     let context = {}
+    let initialValues = {}
 
     // Set initial values
     if (selectn('response', computeDialect2) && selectn('response', computePortal)) {
       context = Object.assign(selectn('response', computeDialect2), {
         otherContext: { parentId: selectn('response.uid', computePortal) },
       })
+      const dialectProperties = selectn('response.properties', computeDialect2)
+      const portalProperties = selectn('response.properties', computePortal)
+
+      initialValues = {
+        'fvdialect:greeting': dialectProperties['fvdialect:greeting'] || portalProperties['fv-portal:greeting'] || null,
+        'fvdialect:featured_audio':
+          dialectProperties['fvdialect:featured_audio'] || portalProperties['fv-portal:featured_audio'] || null,
+        'fvdialect:about_us': dialectProperties['fvdialect:about_us'] || portalProperties['fv-portal:about'] || null,
+        'fvdialect:news': dialectProperties['fvdialect:news'] || portalProperties['fv-portal:news'] || null,
+        'fvdialect:background_top_image':
+          dialectProperties['fvdialect:background_top_image'] ||
+          portalProperties['fv-portal:background_top_image'] ||
+          null,
+        'fvdialect:logo': dialectProperties['fvdialect:logo'] || portalProperties['fv-portal:logo'] || null,
+        'fvdialect:featured_words': dialectProperties['fvdialect:featured_words']?.length
+          ? dialectProperties['fvdialect:featured_words']
+          : portalProperties['fv-portal:featured_words'] || [],
+        'fvdialect:related_links': dialectProperties['fvdialect:related_links']?.length
+          ? dialectProperties['fvdialect:related_links']
+          : portalProperties['fv-portal:related_links'] || [],
+        'fvdialect:about_our_language':
+          dialectProperties['fvdialect:about_our_language'] || dialectProperties['dc:description'] || null,
+        'fvdialect:country': dialectProperties['fvdialect:country'] || null,
+        'fvdialect:dominant_language': dialectProperties['fvdialect:dominant_language'] || null,
+        'fvdialect:region': dialectProperties['fvdialect:region'] || null,
+        'fvdialect:keyboards': dialectProperties['fvdialect:keyboards'] || [],
+        'fvdialect:language_resources': dialectProperties['fvdialect:language_resources'] || [],
+        'fvdialect:contact_information': dialectProperties['fvdialect:contact_information'] || null,
+      }
     }
     return (
       <AuthenticationFilter.Container
         is403={this.state.is403}
         notAuthenticatedComponent={<StateErrorBoundary copy={this.state.copy} errorMessage={this.state.errorMessage} />}
       >
-        <PromiseWrapper
-          computeEntities={Immutable.fromJS([
-            {
-              id: this.props.routeParams.dialect_path,
-              entity: this.props.fetchDialect2,
-            },
-            {
-              id: `${this.props.routeParams.dialect_path}/Portal`,
-              entity: this.props.fetchPortal,
-            },
-          ])}
-        >
+        <PromiseWrapper computeEntities={computeEntities}>
           <div className="ExploreDialectEdit">
             <h1 className="ExploreDialectEdit__heading">
-              <FVLabel
-                transKey="views.pages.explore.dialect.edit_x_community_portal"
-                defaultStr={'Edit ' + selectn('response.title', computeDialect2) + ' Community Portal'}
-                params={[selectn('response.title', computeDialect2)]}
-              />
+              {'Edit ' + selectn('response.title', computeDialect2) + ' Site'}
             </h1>
 
             <EditViewWithForm
               computeEntities={computeEntities}
               computeDialect={computeDialect2}
-              initialValues={context}
-              itemId={portalPath}
+              context={context}
+              initialValues={initialValues}
+              itemId={this.props.routeParams.dialect_path}
               fields={fields}
               options={options}
               cancelMethod={this._handleCancel}
               currentPath={this.props.splitWindowPath}
               navigationMethod={this.props.replaceWindowPath}
-              type="FVPortal"
+              type="FVDialect"
               routeParams={this.props.routeParams}
             />
           </div>

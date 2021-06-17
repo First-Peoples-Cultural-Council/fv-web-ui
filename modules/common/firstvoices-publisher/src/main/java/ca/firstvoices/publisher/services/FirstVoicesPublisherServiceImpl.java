@@ -50,7 +50,7 @@ import ca.firstvoices.core.io.utils.StateUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -284,6 +284,13 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
     dependencies.put("fvdialect:keyboards", "fvproxy:proxied_keyboards");
     dependencies.put("fvdialect:language_resources", "fvproxy:proxied_language_resources");
 
+    // Migration fields (from FVPortal to FVDialect)
+    dependencies.put("fvdialect:featured_audio", "fvproxy:proxied_featured_audio");
+    dependencies.put("fvdialect:featured_words", "fvproxy:proxied_words");
+    dependencies.put("fvdialect:background_top_image", "fvproxy:proxied_background_image");
+    dependencies.put("fvdialect:logo", "fvproxy:proxied_logo");
+    dependencies.put("fvdialect:related_links", "fvproxy:proxied_related_links");
+
     handleProxyDependencies(proxy, dependencies, null);
 
     // Save changes to property values
@@ -422,9 +429,9 @@ public class FirstVoicesPublisherServiceImpl implements FirstVoicesPublisherServ
 
           if (workspaceProperty.isList()) {
             workspacePropertyValues =
-                new HashSet<>(PropertyUtils.getValuesAsList(proxy, workspaceFieldName));
+                new LinkedHashSet<>(PropertyUtils.getValuesAsList(proxy, workspaceFieldName));
           } else {
-            workspacePropertyValues = new HashSet<>(
+            workspacePropertyValues = new LinkedHashSet<>(
                 Collections.singleton(String.valueOf(workspaceProperty.getValueForWrite())));
           }
 

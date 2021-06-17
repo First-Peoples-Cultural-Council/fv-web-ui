@@ -20,11 +20,15 @@
 
 package ca.firstvoices.characters.operations;
 
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
+import static ca.firstvoices.data.schemas.DialectTypesConstants.FV_ALPHABET;
+
 import ca.firstvoices.characters.Constants;
 import ca.firstvoices.characters.services.CharactersCoreService;
 import ca.firstvoices.characters.services.CustomOrderComputeService;
 import ca.firstvoices.characters.workers.ComputeCustomOrderWorker;
 import ca.firstvoices.core.io.utils.DialectUtils;
+import ca.firstvoices.core.io.utils.StateUtils;
 import ca.firstvoices.maintenance.common.AbstractMaintenanceOperation;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import java.util.logging.Logger;
@@ -92,7 +96,7 @@ public class ComputeCustomOrder extends AbstractMaintenanceOperation {
   @Override
   protected void executeWorkPhase(DocumentModel doc) {
     if (DialectUtils.isDialect(doc)) {
-
+      // Operation for dialects: complete recompute
       DocumentModelList characters =
           cs.getCharacters(session, doc);
       DocumentModel alphabet =
@@ -112,9 +116,24 @@ public class ComputeCustomOrder extends AbstractMaintenanceOperation {
       } else {
         log.severe("Alphabet out of order for dialect `" + doc.getTitle() + "`");
       }
+    } else if (FV_ALPHABET.equals(doc.getType())) {
+      // Operation for alphabet: set correct custom_order values on alphabet
+      DocumentModelList characters =
+          cs.getCharacters(session, doc);
+
+      customOrderComputeService.updateCustomOrderCharacters(
+          session, doc, characters);
+
+      session.save();
+
+      // Republish alphabet changes
+      if (StateUtils.isPublished(doc)) {
+        StateUtils.followTransitionIfAllowed(doc, REPUBLISH_TRANSITION);
+      }
+
     } else {
       try {
-        // compute for asset
+        // Operation for assets: recompute single word, phrase, etc.
         computeForAsset(doc);
       } catch (OperationException e) {
         log.warning(e.getMessage());

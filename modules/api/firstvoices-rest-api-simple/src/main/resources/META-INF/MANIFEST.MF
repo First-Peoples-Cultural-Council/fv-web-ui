@@ -10,5 +10,6 @@ Nuxeo-Component: OSGI-INF/extensions/ca.firstvoices.simpleapi.service.xml,
     OSGI-INF/extensions/ca.firstvoices.simpleapi.pageproviders.xml,
     OSGI-INF/extensions/ca.firstvoices.simpleapi.usercontext.xml,
     OSGI-INF/extensions/ca.firstvoices.simpleapi.config.xml,
-    OSGI-INF/extensions/ca.firstvoices.simpleapi.keyresolver.xml
+    OSGI-INF/extensions/ca.firstvoices.simpleapi.keyresolver.xml,
+    OSGI-INF/extensions/ca.firstvoices.simpleapi.requestController.xml
 

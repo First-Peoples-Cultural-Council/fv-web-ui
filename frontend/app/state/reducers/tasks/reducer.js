@@ -31,10 +31,6 @@ const initialState = {
 }
 
 const computeTasksOperation = computeOperation('tasks')
-const computeCountTotalTasksFactory = computeOperation('count_total_tasks')
-const computeUserRegistrationTasksFactory = computeOperation('user_registration')
-const computeUserRegistrationApproveOperation = computeOperation('user_registration_approve')
-const computeUserRegistrationRejectOperation = computeOperation('user_registration_reject')
 
 export const tasksReducer = combineReducers({
   computeSimpleTasks(state = initialState, action) {
@@ -193,8 +189,4 @@ export const tasksReducer = combineReducers({
     return state ? state : []
   },
   computeTasks: computeTasksOperation.computeTasks,
-  computeCountTotalTasks: computeCountTotalTasksFactory.computeCountTotalTasks,
-  computeUserRegistrationTasks: computeUserRegistrationTasksFactory.computeUserRegistration,
-  computeUserRegistrationApprove: computeUserRegistrationApproveOperation.computeUserRegistrationApprove,
-  computeUserRegistrationReject: computeUserRegistrationRejectOperation.computeUserRegistrationReject,
 })

@@ -46,8 +46,8 @@ public class SetNewPasswordUnrestricted extends UnrestrictedSessionRunner {
 
   protected String errorMessage;
 
-  public SetNewPasswordUnrestricted(String defaultRepositoryName, String password,
-      String passwordKey) {
+  public SetNewPasswordUnrestricted(
+      String defaultRepositoryName, String password, String passwordKey) {
     super(defaultRepositoryName);
     this.password = password;
     this.passwordKey = passwordKey;
@@ -61,8 +61,7 @@ public class SetNewPasswordUnrestricted extends UnrestrictedSessionRunner {
   public void run() {
 
     SearchRegistrationByResetPassKeyUnrestricted runner =
-        new SearchRegistrationByResetPassKeyUnrestricted(
-        session, passwordKey);
+        new SearchRegistrationByResetPassKeyUnrestricted(session, passwordKey);
     runner.runUnrestricted();
     DocumentModel registration = runner.getRegistration();
     if (registration == null) {

@@ -18,6 +18,22 @@ import PropTypes from 'prop-types'
 import FVButton from 'components/FVButton'
 import FVLabel from 'components/FVLabel'
 
+/* eslint-disable */
+/* Game libraries
+============================================================
+Note: using the inline format for expose-loader so we
+don't have to configure an entry bundle just for games
+
+https://github.com/webpack-contrib/expose-loader#inline
+*/
+import pixi from 'expose-loader?exposes[]=PIXI!pixi'
+import p2 from 'expose-loader?exposes[]=p2!p2'
+// IMPORTANT: Phaser is last
+import Phaser from 'expose-loader?exposes[]=Phaser!phaser'
+/* END: Game libraries
+============================================================ */
+/* eslint-enable */
+
 const borderStyle = {
   border: '1px solid #CCC',
 }
@@ -34,80 +50,129 @@ const spotStyle = {
   position: 'relative',
   overflow: 'hidden',
 }
+
+/**
+ * Play games
+ */
 export default class ParachuteGame extends Component {
+  /**
+   * Constructor
+   */
   constructor(props, context) {
     super(props, context)
+
     this.audio = React.createRef()
+
     //Get default start
     this.state = this.getDefaultState()
+
     //Prebind functions
     this.restart = this.restart.bind(this)
   }
 
+  /**
+   * Get Default State
+   */
   getDefaultState(props = this.props) {
     return {
-      puzzle: this.preparePuzzle(props.word.puzzleParts),
+      puzzle: this.preparePuzzle(props),
       guessesLeft: 7,
       alphabet: props.alphabet,
-      guessedCharacters: [],
+      guessedLetters: [],
       succeeded: false,
       failed: false,
       startTime: Date.now(),
     }
   }
 
-  /* Restart with same puzzle */
+  /**
+   * Retart with same puzzle
+   */
   restart() {
     this.setState(this.getDefaultState())
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.word.puzzle !== this.props.word.puzzle) {
+    if (nextProps.puzzle !== this.props.puzzle) {
       this.setState(this.getDefaultState(nextProps))
     }
   }
 
-  /* Prepare puzzle - creates array of characters with an initial value for 'found' */
-  preparePuzzle(puzzleParts) {
-    let character = []
-    const characters = []
+  /**
+   * Prepare puzzle
+   * breaks up puzzle into letters
+   */
+  escapeRegExp(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
+  }
+  preparePuzzle(props) {
+    const puzzle = props.puzzle
+    const letters = props.alphabet
+    const letterCount = letters.length
+    let letterRegexStr = ''
 
-    puzzleParts.map((part, index, parts) => {
-      if (part === ' ') {
-        characters.push(character)
-        character = []
+    for (let i = 0; i < letterCount; i++) {
+      letterRegexStr += '(' + this.escapeRegExp(letters[i]) + ')|'
+    }
+
+    const letterRegex = new RegExp(letterRegexStr, 'g')
+
+    const puzzleParts = puzzle.split(letterRegex).filter((l) => {
+      return l !== undefined && l.length !== 0
+    })
+
+    let word = []
+
+    const words = []
+
+    puzzleParts.map((letter, index, parts) => {
+      if (letter === ' ') {
+        words.push(word)
+        word = []
       } else {
-        character.push({ character: part, found: false })
+        word.push({ letter, found: false })
       }
       if (index === parts.length - 1) {
-        characters.push(character)
+        words.push(word)
       }
     })
-    return characters
+
+    return words
   }
 
-  /* Guess character */
-  guessCharacter = (character) => {
+  /**
+   * Prepare Alphabet
+   */
+  prepareAlphabet(props) {
+    return props.alphabet.map((letter) => {
+      return letter.toUpperCase()
+    })
+  }
+
+  /**
+   * Guess letter
+   */
+  guessLetter = (letter) => {
     let guessesLeft = this.state.guessesLeft
 
-    const guessedCharacters = this.state.guessedCharacters
+    const guessedLetters = this.state.guessedLetters
 
     let succeeded = this.state.succeeded
 
     if (guessesLeft > 0 && succeeded === false) {
       const puzzle = this.state.puzzle
 
-      if (guessedCharacters.indexOf(character) === -1) {
-        guessedCharacters.push(character)
+      if (guessedLetters.indexOf(letter) === -1) {
+        guessedLetters.push(letter)
 
-        let characterFound = false
+        let letterFound = false
 
         succeeded = true
 
         puzzle.forEach((word) => {
           word.forEach((part) => {
-            if (part.character === character) {
-              characterFound = true
+            if (part.letter === letter) {
+              letterFound = true
               part.found = true
             }
             if (part.found === false) {
@@ -116,7 +181,7 @@ export default class ParachuteGame extends Component {
           })
         })
 
-        if (characterFound === false) {
+        if (letterFound === false) {
           guessesLeft = guessesLeft - 1
         }
 
@@ -129,29 +194,30 @@ export default class ParachuteGame extends Component {
         if (succeeded) {
           this.audio.current.play()
         }
-        this.setState({ guessedCharacters, puzzle, guessesLeft, succeeded, failed })
+        this.setState({ guessedLetters, puzzle, guessesLeft, succeeded, failed })
       }
     }
   }
 
   renderKeyboard() {
-    const guessedCharacters = this.state.guessedCharacters
+    const guessedLetters = this.state.guessedLetters
+
     return (
       <div className="keyboard" style={{ width: '100%', maxWidth: '530px', margin: 'auto' }}>
-        {this.state.alphabet.map((character, index) => {
+        {this.state.alphabet.map((letter, index) => {
           let guessed = false
 
-          if (guessedCharacters.indexOf(character.title) !== -1) {
+          if (guessedLetters.indexOf(letter) !== -1) {
             guessed = true
           }
 
           return (
-            <Character
+            <Letter
               key={index}
               guessed={guessed}
-              character={character.title}
+              letter={letter}
               onClick={() => {
-                this.guessCharacter(character.title)
+                this.guessLetter(letter)
               }}
             />
           )
@@ -188,7 +254,10 @@ export default class ParachuteGame extends Component {
       </div>
     )
   }
-  // Render for ParachuteGame
+
+  /**
+   * Render
+   */
   render() {
     return (
       <div className="parachute-game" style={{ textAlign: 'center' }}>
@@ -221,10 +290,10 @@ export default class ParachuteGame extends Component {
             }
             return (
               <div style={wordStyle} key={index}>
-                {word.map((character, index2) => {
+                {word.map((letter, index2) => {
                   return (
                     <div key={index2} className="spot" style={{ ...spotStyle, ...borderStyle }}>
-                      <div className="character">{character.found ? character.character : false}</div>
+                      <div className="letter">{letter.found ? letter.letter : false}</div>
                     </div>
                   )
                 })}
@@ -232,9 +301,13 @@ export default class ParachuteGame extends Component {
             )
           })}
         </div>
-        <div>Hint: {this.props.word.translation} </div>
-        <audio style={{ margin: '5px', maxWidth: '350px' }} ref={this.audio} src={this.props.word.audio} controls />
+
+        <div>Hint: {this.props.translation} </div>
+
+        <audio style={{ maxWidth: '350px' }} ref={this.audio} src={this.props.audio} controls />
+
         <div />
+
         {this.state.succeeded || this.state.failed ? false : this.renderKeyboard()}
         {this.state.succeeded ? this.renderSuccess() : false}
         {this.state.failed ? this.renderFailure() : false}
@@ -265,7 +338,7 @@ export default class ParachuteGame extends Component {
   }
 }
 
-const characterStyle = {
+const letterStyle = {
   backgroundColor: 'WhiteSmoke',
   textAlign: 'center',
   fontSize: '25px',
@@ -279,7 +352,7 @@ const characterStyle = {
   margin: '5px',
 }
 
-const characterHoverStyle = {
+const letterHoverStyle = {
   backgroundColor: '#CCCCCC',
   cursor: 'pointer',
 }
@@ -290,7 +363,7 @@ const guessedStyle = {
   backgroundColor: '#FFFFFF',
 }
 
-class Character extends Component {
+class Letter extends Component {
   constructor(props, context) {
     super(props, context)
 
@@ -314,27 +387,25 @@ class Character extends Component {
   onOut() {
     this.setState({ hovering: false })
   }
-  // Render for Character
+
   render() {
-    let style = { ...characterStyle }
+    let style = { ...letterStyle }
+
+    let action = false
 
     if (this.state.hovering) {
-      style = { ...style, ...characterHoverStyle }
+      style = { ...style, ...letterHoverStyle }
     }
 
-    if (this.props.guessed === true) {
+    if (this.props.guessed === false) {
+      action = this.onClick
+    } else {
       style = { ...style, ...guessedStyle }
     }
 
     return (
-      <div
-        className="character"
-        onMouseOver={this.onOver}
-        onMouseOut={this.onOut}
-        onClick={this.props.guessed === false ? this.onClick : undefined}
-        style={style}
-      >
-        {this.props.character}
+      <div className="letter" onMouseOver={this.onOver} onMouseOut={this.onOut} onClick={action} style={style}>
+        {this.props.letter}
       </div>
     )
   }
@@ -362,15 +433,16 @@ const seconds2time = (seconds) => {
 }
 
 // PROPTYPES
-const { array, any, bool, func, shape, string } = PropTypes
+const { any, bool, func, string } = PropTypes
 ParachuteGame.propTypes = {
-  alphabet: array,
+  puzzle: string,
+  translation: any,
+  audio: string,
   newPuzzle: func,
-  word: shape({ puzzle: string, translation: any, audio: string }),
 }
 
-Character.propTypes = {
+Letter.propTypes = {
   onClick: func,
   guessed: bool,
-  character: string,
+  letter: string,
 }

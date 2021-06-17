@@ -21,13 +21,12 @@
 package ca.firstvoices.services;
 
 import static ca.firstvoices.services.FVUserGroupUpdateUtilities.updateFVProperty;
-import static ca.firstvoices.utils.FVOperationCredentialsVerification.terminateOnInvalidCredentials_GroupUpdate;
-import static ca.firstvoices.utils.FVOperationCredentialsVerification.terminateOnInvalidCredentials_NewUserHomeChange;
+import static ca.firstvoices.utils.FVOperationCredentialsVerification.groupUpdate;
+import static ca.firstvoices.utils.FVOperationCredentialsVerification.newUserHomeChange;
 import static ca.firstvoices.utils.FVRegistrationConstants.APPEND;
 import static ca.firstvoices.utils.FVRegistrationConstants.GROUP_SCHEMA;
 import static ca.firstvoices.utils.FVRegistrationConstants.MEMBERS;
 import static ca.firstvoices.utils.FVRegistrationConstants.REMOVE;
-
 import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -39,19 +38,20 @@ public class FVMoveUserToDialectServiceImpl implements FVMoveUserToDialectServic
 
   private UserManager userManager = null;
 
-  public void placeNewUserInGroup(DocumentModel dialect, String groupName, String newUsername)
-      throws Exception {
+  public void placeNewUserInGroup(DocumentModel dialect, String groupName, String newUsername) {
     CoreSession session = dialect.getCoreSession();
     userManager = Framework.getService(UserManager.class);
 
-    if (terminateOnInvalidCredentials_GroupUpdate(session, groupName.toLowerCase())) {
-      throw new Exception(
+    if (groupUpdate(session, groupName.toLowerCase())) {
+      throw new IllegalArgumentException(
           "placeNewUserInGroup: No sufficient privileges to modify group: " + groupName);
     }
 
-    if (terminateOnInvalidCredentials_NewUserHomeChange(session, userManager, newUsername,
+    if (newUserHomeChange(session,
+        userManager,
+        newUsername,
         dialect.getId())) {
-      throw new Exception(
+      throw new IllegalArgumentException(
           "placeNewUserInGroup: No sufficient privileges to modify user: " + newUsername);
     }
 
@@ -60,15 +60,15 @@ public class FVMoveUserToDialectServiceImpl implements FVMoveUserToDialectServic
     systemPlaceNewUserInGroup(dialect, groupName, newUsername, session);
   }
 
-  public void systemPlaceNewUserInGroup(DocumentModel dialect, String groupName, String newUsername,
-      CoreSession session) throws Exception {
+  public void systemPlaceNewUserInGroup(
+      DocumentModel dialect, String groupName, String newUsername, CoreSession session) {
     CoreInstance.doPrivileged(session, s -> {
       moveUserBetweenGroups(dialect, newUsername, "members", groupName.toLowerCase());
     });
   }
 
-  public void moveUserBetweenGroups(DocumentModel dialect, String userName, String fromGroupName,
-      String toGroupName) {
+  public void moveUserBetweenGroups(
+      DocumentModel dialect, String userName, String fromGroupName, String toGroupName) {
     if (userManager == null) {
       userManager = Framework.getService(UserManager.class);
     }
@@ -79,11 +79,6 @@ public class FVMoveUserToDialectServiceImpl implements FVMoveUserToDialectServic
     toGroupName = toGroupName.toLowerCase();
 
     DocumentModel toGroup = userManager.getGroupModel(toGroupName);
-
-    //        if (toGroup == null) {
-    //            throw new Exception("moveUserBetweenGroups: Cannot update non-existent group:
-    //            " + toGroupName);
-    //        }
 
     if (toGroup != null) {
       DocumentModel membersGroup = userManager.getGroupModel(fromGroupName);
@@ -98,59 +93,5 @@ public class FVMoveUserToDialectServiceImpl implements FVMoveUserToDialectServic
     }
   }
 
-  @Override
-  public void removeUserFromGroup(DocumentModel dialect, String fromGroupName) {
-    if (userManager == null) {
-      userManager = Framework.getService(UserManager.class);
-    }
-  }
-
-  @Override
-  public void addUserToGroup(DocumentModel dialect, String toGroupName) {
-    if (userManager == null) {
-      userManager = Framework.getService(UserManager.class);
-    }
-  }
 
 }
-
-/*
- * OperationContext ctx = new OperationContext(session); // // Map<String, Object> params = new
- * HashMap<>(); //
- * params.put("groupname", "members"); // params.put("members", username ); // params.put
- * ("membersAction", REMOVE ); //
- * // automationService.run(ctx, "FVUpdateGroup", params); // // params.put("groupname",
- * newUserGroup); //
- * params.put("members", username ); // params.put("membersAction", APPEND ); // //
- * automationService.run(ctx,
- * "FVUpdateGroup", params); // // params.clear(); // params.put("username", username); //
- * params.put("groups",
- * newUserGroup); // params.put("groupsAction", UPDATE); // automationService.run(ctx,
- * "FVUpdateUser", params);
- * DocumentModel groupDoc = userManager.getGroupModel(groupName.toLowerCase()); if (groupDoc ==
- * null) { throw new
- * OperationException("Cannot update non-existent group: " + groupName); } if(
- * terminateOnInvalidCredentials_GU(
- * session, userManager, groupName ) ) return; // invalid credentials if( members != null ) {
- * updateFVProperty(
- * membersAction, groupDoc, members, GROUP_SCHEMA, MEMBERS ); } if (subGroups != null) {
- * StringList alwaysLowerCase =
- * new StringList(); for(String gn : subGroups ) { alwaysLowerCase.add( gn.toLowerCase()); }
- * updateFVProperty(
- * subGroupsAction, groupDoc, alwaysLowerCase, GROUP_SCHEMA, SUB_GROUPS ); } if (parentGroups !=
- *  null ) { StringList
- * alwaysLowerCase = new StringList(); for(String gn : parentGroups ) { alwaysLowerCase.add( gn
- * .toLowerCase()); }
- * updateFVProperty( parentGroupsAction, groupDoc, alwaysLowerCase, GROUP_SCHEMA, PARENT_GROUPS
- * ); } for (Entry<String,
- * String> entry : Arrays.asList( new SimpleEntry<>(GROUP_LABEL, groupLabel), new SimpleEntry<>
- (GROUP_DESCRIPTION,
- * groupDescription))) { String key = entry.getKey(); String value = entry.getValue(); if
- * (StringUtils.isNotBlank(value)) { properties.put(key, value); } } for (Entry<String, String>
- entry :
- * properties.entrySet()) { String key = entry.getKey(); String value = entry.getValue(); if
- * (key.startsWith(GROUP_COLON)) { key = key.substring(GROUP_COLON.length()); } groupDoc
- * .setProperty(GROUP_SCHEMA, key,
- * value); } userManager.updateGroup(groupDoc); groupDoc = userManager.getGroupModel(groupName
- * .toLowerCase());
- */

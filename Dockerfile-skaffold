@@ -1,0 +1,33 @@
+FROM maven:3-openjdk-11 AS builder
+
+COPY skaffold/dockerfiles/firstvoices/settings.xml /root/.m2/settings.xml
+
+RUN mkdir -p /opt/src && mkdir -p /opt/src/firstvoices-marketplace && mkdir -p /opt/src/modules
+WORKDIR /opt/src
+
+COPY pom.xml .
+COPY modules modules
+COPY firstvoices-marketplace firstvoices-marketplace
+
+RUN ["/usr/local/bin/mvn-entrypoint.sh", "mvn", "install", "-DskipTests", "-T1.5C"]
+
+FROM nuxeo:10.10
+
+COPY skaffold/dockerfiles/firstvoices/nuxeo.conf /docker-entrypoint-initnuxeo.d/nuxeo.conf
+COPY skaffold/dockerfiles/firstvoices/setup.sh /docker-entrypoint-initnuxeo.d/setup.sh
+COPY skaffold/dockerfiles/firstvoices/log4j2.xml /opt/nuxeo/server/lib/log4j2.xml
+
+USER root
+
+RUN echo "deb http://httpredir.debian.org/debian jessie non-free" >> /etc/apt/sources.list
+RUN apt-get update && apt-get install -y --no-install-recommends vim
+
+COPY skaffold/dockerfiles/firstvoices/initialsetup.sh /opt/nuxeo/server/tmp/
+RUN ["chmod", "+x", "/opt/nuxeo/server/tmp/initialsetup.sh"]
+
+COPY skaffold/dockerfiles/firstvoices/nuxeo-diff-1.9.3 /opt/nuxeo/server/tmp/
+COPY skaffold/dockerfiles/firstvoices/nuxeo-jsf-ui-10.10.0 /opt/nuxeo/server/tmp/
+COPY skaffold/dockerfiles/firstvoices/nuxeo-platform-user-registration-1.9.4 /opt/nuxeo/server/tmp/
+COPY skaffold/dockerfiles/firstvoices/saml2-authentication-1.4.3 /opt/nuxeo/server/tmp/
+
+COPY --from=builder opt/src/firstvoices-marketplace/target/firstvoices-marketplace-package-latest.zip /opt/nuxeo/server/tmp/

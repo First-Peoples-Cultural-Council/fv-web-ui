@@ -12,7 +12,7 @@
       <event>newUserApprovedByLanguageAdministrator</event>
       <event>documentRemoved</event>
     </listener>
-    
+
 
   </extension>
 

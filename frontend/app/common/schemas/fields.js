@@ -10,10 +10,6 @@ const Email = t.subtype(t.String, (email) => {
   return reg.test(email)
 })
 
-const AgeRanges = t.enums.of(
-  '6-10 11-15 16-20 21-25 26-30 31-35 36-40 41-45 46-50 51-55 56-60 61-65 66-70 71-75 76-80 81-85 86-90 91-95 96-100 100+'
-)
-
 const fields = {
   FVWord: Object.assign({}, Dublincore, FVCore, {
     'fv-word:categories': t.list(t.String),
@@ -85,16 +81,6 @@ const fields = {
     'fv:related_pictures': t.list(t.maybe(t.String)),
     'fv:related_videos': t.list(t.maybe(t.String)),
   }),
-  FVPortal: {
-    'fv-portal:greeting': t.String,
-    'fv-portal:featured_audio': t.maybe(t.String),
-    'fv-portal:about': t.String,
-    'fv-portal:news': t.maybe(t.String),
-    'fv-portal:background_top_image': t.String,
-    'fv-portal:logo': t.String,
-    'fv-portal:featured_words': t.list(t.String),
-    'fv-portal:related_links': t.list(t.String),
-  },
   FVGallery: Object.assign({}, Dublincore, {
     'fv:related_pictures': t.list(t.String),
   }),
@@ -106,15 +92,23 @@ const fields = {
     'fvcategory:image': t.maybe(t.String),
   }),
   FVContributor: Object.assign({}, Dublincore),
-  FVDialect: Object.assign({}, Dublincore, {
-    'fvdialect:about_our_language': t.String,
-    'fvdialect:country': t.String,
-    'fvdialect:dominant_language': t.String,
-    'fvdialect:region': t.String,
+  FVDialect: {
+    'fvdialect:greeting': t.String,
+    'fvdialect:featured_audio': t.maybe(t.String),
+    'fvdialect:about_us': t.maybe(t.String),
+    'fvdialect:news': t.maybe(t.String),
+    'fvdialect:background_top_image': t.String,
+    'fvdialect:logo': t.String,
+    'fvdialect:featured_words': t.list(t.String),
+    'fvdialect:related_links': t.list(t.String),
+    'fvdialect:about_our_language': t.maybe(t.String),
+    'fvdialect:country': t.maybe(t.String),
+    'fvdialect:dominant_language': t.maybe(t.String),
+    'fvdialect:region': t.maybe(t.String),
     'fvdialect:keyboards': t.list(t.String),
     'fvdialect:language_resources': t.list(t.String),
     'fvdialect:contact_information': t.String,
-  }),
+  },
   FVCharacter: Object.assign(
     {},
     {
@@ -126,22 +120,22 @@ const fields = {
       'fv:related_videos': t.list(t.String),
     }
   ),
-  FVUser: {
+  FVRegistration: {
+    'fvuserinfo:traditionalName': t.maybe(t.String),
     'userinfo:firstName': t.String,
     'userinfo:lastName': t.String,
     'userinfo:email': Email,
-    'fvuserinfo:requestedSpace': t.String,
-    'fvuserinfo:role': t.String,
-    'fvuserinfo:ageGroup': t.maybe(AgeRanges),
-    'fvuserinfo:phone': t.maybe(t.String),
-    'fvuserinfo:comment': t.maybe(t.String),
-    'fvuserinfo:community_member': t.maybe(t.Boolean),
-    'fvuserinfo:language_team_member': t.maybe(t.Boolean),
+  },
+  FVJoin: {
+    siteId: t.String,
+    interestReason: t.maybe(t.String),
+    comment: t.String,
+    communityMember: t.maybe(t.Boolean),
+    languageTeam: t.maybe(t.Boolean),
   },
   FVLink: Object.assign({}, Dublincore, {
     'dc:description': t.maybe(t.String),
-    'fvlink:url': t.maybe(t.String) /*,
-    'file:content': t.maybe(t.form.File)*/,
+    'fvlink:url': t.maybe(t.String),
   }),
   FVLabel: Object.assign(
     {},

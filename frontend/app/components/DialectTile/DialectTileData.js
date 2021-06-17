@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import selectn from 'selectn'
 
@@ -7,16 +8,18 @@ import NavigationHelpers from 'common/NavigationHelpers'
 
 /**
  * @summary DialectTileData
- * @version 1.0.1
  * @component
  *
  * @param {object} props
  * @param {function} props.children
  *
  */
-function DialectTileData({ children, dialectGroups, dialectTitle, href, isWorkspaces }) {
+function DialectTileData({ children, dialectGroups, dialectId, href, isWorkspaces }) {
   const { computeLogin } = useLogin()
   const { pushWindowPath } = useWindowPath()
+
+  // Set up Dialog and Tooltipstate
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   // Check if user is a member of the dialect
   let userIsMember = false
@@ -35,11 +38,23 @@ function DialectTileData({ children, dialectGroups, dialectTitle, href, isWorksp
 
   const onDialectClick = (e) => {
     e.preventDefault()
-    // If it is a private site, but the user is already a logged in FirstVoices member, use mailto
-    if (isPrivate && isLoggedIn) {
-      window.location.href = `mailto:hello@firstvoices.com?subject=Request to join ${dialectTitle}&body=${computeLogin.response.id} would like to request access to the ${dialectTitle} Language Site`
+    if (isPrivate) {
+      setIsDialogOpen(true)
     } else {
       NavigationHelpers.navigate(hrefToUse, pushWindowPath, false)
+    }
+  }
+
+  const handleDialogCancel = () => {
+    setIsDialogOpen(false)
+  }
+
+  const handleDialogOk = () => {
+    setIsDialogOpen(false)
+    if (isLoggedIn) {
+      window.location.href = `/join?requestedSite=${dialectId}`
+    } else {
+      window.location.href = '/register'
     }
   }
 
@@ -48,6 +63,10 @@ function DialectTileData({ children, dialectGroups, dialectTitle, href, isWorksp
     isLoggedIn,
     isPrivate,
     onDialectClick,
+    // Dialog
+    isDialogOpen,
+    handleDialogCancel,
+    handleDialogOk,
   })
 }
 // PROPTYPES

@@ -1,0 +1,10 @@
+{{ if .Values.ingress.useManagedCertificate }}
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: ingress-certificate
+spec:
+  domains:
+    - fv{{ .Values.hostSuffix }}{{ .Values.domainSuffix }}
+    - v2{{ .Values.hostSuffix }}{{ .Values.domainSuffix }}
+{{ end }}

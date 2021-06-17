@@ -15,8 +15,8 @@ function AlphabetPresentation({ sitename, characters, selectedData, links, onVid
     <section className="py-12 bg-white" data-testid="AlphabetPresentation">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative">
-          <h2 className="mb-5 relative z-10 text-center text-4xl text-fv-blue font-bold sm:text-5xl uppercase">
-            <span className="inline-block bg-white px-4 sm:px-8 lg:px-20">Alphabet</span>
+          <h2 className="mb-5 relative z-10 text-center text-4xl text-primary font-bold sm:text-5xl">
+            <span className="inline-block bg-white px-4 sm:px-8 lg:px-20">ALPHABET</span>
           </h2>
           <hr className="absolute z-0 w-full border-gray-300" style={{ top: '50%' }} />
         </div>
@@ -27,7 +27,7 @@ function AlphabetPresentation({ sitename, characters, selectedData, links, onVid
             items-center
             justify-center
             text-center
-            text-fv-blue
+            text-primary
             mb-5"
         >
           {links && (
@@ -59,7 +59,7 @@ function AlphabetPresentation({ sitename, characters, selectedData, links, onVid
                       rounded
                       shadow
                       text-2xl
-                      ${selectedData?.title === title ? 'bg-fv-blue text-white' : ''}
+                      ${selectedData?.title === title ? 'bg-primary text-white' : ''}
                       `}
                   key={id}
                   to={`/${sitename}/alphabet/${title}`}
@@ -73,7 +73,7 @@ function AlphabetPresentation({ sitename, characters, selectedData, links, onVid
           {selectedData?.title === undefined && (
             <div
               data-testid="AlphabetPresentation__noCharacter"
-              className="text-center font-bold sm:text-3xl text-2xl text-fv-blue m-10"
+              className="text-center font-bold sm:text-3xl text-2xl text-primary m-10"
             >
               Please select a character
             </div>

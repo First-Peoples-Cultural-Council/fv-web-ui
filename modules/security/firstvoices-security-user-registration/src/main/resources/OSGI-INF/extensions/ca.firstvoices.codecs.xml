@@ -2,7 +2,7 @@
 
   <!-- Until upgrade to 8.2 -->
   <extension point="codecs" target="org.nuxeo.ecm.automation.io.services.IOComponent">
-    <codec class="ca.firstvoices.codecs.NuxeoPrincipalCodec" />
+    <codec class="ca.firstvoices.codecs.NuxeoPrincipalCodec"/>
   </extension>
 
 </component>

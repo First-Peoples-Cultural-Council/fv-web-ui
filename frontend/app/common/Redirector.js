@@ -26,3 +26,5 @@ export class Redirector extends Component {
     )
   }
 }
+
+export default Redirector

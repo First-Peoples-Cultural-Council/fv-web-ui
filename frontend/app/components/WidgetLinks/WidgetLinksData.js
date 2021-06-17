@@ -44,8 +44,8 @@ function WidgetLinksData({ children }) {
     ]
     if (id) {
       _links.push({
-        url: `/tasks/users/${id}`,
-        text: 'Registration requests',
+        url: `/dashboard/membership?siteId=${id}`,
+        text: 'Membership Requests',
       })
     }
 

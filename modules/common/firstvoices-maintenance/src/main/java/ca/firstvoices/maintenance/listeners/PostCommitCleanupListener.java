@@ -5,6 +5,7 @@ import static ca.firstvoices.maintenance.dialect.categories.Constants.CLEAN_CATE
 
 import ca.firstvoices.core.io.utils.DialectUtils;
 import ca.firstvoices.core.io.utils.DocumentUtils;
+import ca.firstvoices.core.io.utils.SessionUtils;
 import ca.firstvoices.maintenance.common.RequiredJobsUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -46,6 +48,8 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
 
   private ArrayList<String> cleanReferencesEvents = new ArrayList<>();
 
+  private ArrayList<String> cleanLegacyFields = new ArrayList<>();
+
   @Override
   public void handleEvent(EventBundle events) {
     if (eventShouldBeHandled(events)) {
@@ -72,6 +76,7 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
         endRelatedTask(event, doc);
         unpublishTrashedDocs(event, doc);
         cleanReferences(event, doc);
+        cleanLegacyFields(event, doc);
       }
     }
   }
@@ -98,8 +103,12 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
     cleanReferencesEvents = new ArrayList<>();
     cleanReferencesEvents.add(TrashService.DOCUMENT_TRASHED);
 
+    // Events that trigger cleaning an older field
+    cleanLegacyFields = new ArrayList<>();
+    cleanLegacyFields.add(DocumentEventTypes.DOCUMENT_UPDATED);
+
     // Return combined set of all events
-    return Stream.of(endTaskEvents, unpublishEvents, cleanReferencesEvents)
+    return Stream.of(endTaskEvents, unpublishEvents, cleanReferencesEvents, cleanLegacyFields)
         .flatMap(Collection::stream)
         .collect(Collectors.toSet());
   }
@@ -184,6 +193,31 @@ public class PostCommitCleanupListener implements PostCommitEventListener {
             task.followTransition(action);
           }
         }
+      }
+    }
+  }
+
+  /**
+   * Will remove (clear) fields for FVPortal which is being transitioned to FVDialect.
+   * Should only fire when a user initiates the update since migrations happen on the FE
+   *
+   * @param event the current event handled in the bundle
+   * @param doc   the document to remove proxies for
+   */
+  private void cleanLegacyFields(Event event, DocumentModel doc) {
+    CoreSession session = event.getContext().getCoreSession();
+
+    if (!event.getContext().getPrincipal().isAdministrator()
+        && cleanLegacyFields.contains(event.getName())
+        && DocumentUtils.isMutable(doc)) {
+      if (DialectUtils.isDialect(doc)) {
+        // Clear all FVPortal fields
+        DocumentModel portal = session.getChild(doc.getRef(), "Portal");
+        for (Entry<String, Object> prop : portal.getProperties("fv-portal").entrySet()) {
+          portal.setPropertyValue(prop.getKey(), null);
+        }
+        SessionUtils.saveDocumentWithoutEvents(session, portal,
+            true, null);
       }
     }
   }

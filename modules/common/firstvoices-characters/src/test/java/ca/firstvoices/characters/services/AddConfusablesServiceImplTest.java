@@ -106,7 +106,12 @@ public class AddConfusablesServiceImplTest extends AbstractFirstVoicesDataTest {
     session.save();
 
     HashMap<String, HashSet<String>> confusables =
-        addConfusablesService.getConfusablesFromAllDialects(session, dialect);
+        addConfusablesService.getConfusablesFromAllDialects(session, dialect, false);
+
+    HashMap<String, HashSet<String>> uppercaseConfusables =
+        addConfusablesService.getConfusablesFromAllDialects(session, dialect, true);
+
+    confusables.putAll(uppercaseConfusables);
 
     // Ensure all lowercase confusables are present for 't'
     for (String expectedConfusable : expectedConfusables) {

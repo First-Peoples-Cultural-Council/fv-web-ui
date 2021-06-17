@@ -13,7 +13,7 @@ function ContentPresentation({ heading, body }) {
   return (
     <div className="flex justify-center">
       <section className="max-w-screen-xl py-4 px-4 lg:py-14 lg:px-24">
-        <h1 className="border-b border-gray-500 font-bold mb-5 pb-5 text-5xl text-fv-blue">{heading}</h1>
+        <h1 className="border-b border-gray-500 font-bold mb-5 pb-5 text-5xl text-primary">{heading}</h1>
         <div className="prose-xl">{body}</div>
       </section>
     </div>

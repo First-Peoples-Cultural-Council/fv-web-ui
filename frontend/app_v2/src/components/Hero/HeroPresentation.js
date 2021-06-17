@@ -82,9 +82,9 @@ function HeroPresentation({ background, foreground, foregroundIcon, search, vari
           inset-x-0
           bottom-0
           z-0
-          bg-gradient-to-r
-          to-fv-turquoise
-          from-fv-blue-light
+          bg-gradient-to-b
+          from-word
+          to-word-dark
           h-1/5
           lg:h-1/4"
         >

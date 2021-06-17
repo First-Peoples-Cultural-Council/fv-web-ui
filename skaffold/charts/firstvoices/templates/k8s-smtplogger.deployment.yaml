@@ -1,0 +1,28 @@
+{{ if .Values.smtplogger.deploy }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smtplogger
+spec:
+  replicas: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      name: smtplogger
+      labels:
+        app: smtplogger
+    spec:
+      containers:
+        - name: smtplogger
+          image: {{ .Values.smtplogger.image }}
+          resources:
+            limits:
+              cpu: "10m"
+              memory: "50M"
+          ports:
+            - name: smtp
+              containerPort: 2500
+  selector:
+    matchLabels:
+      app: smtplogger
+{{ end }}

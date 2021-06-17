@@ -15,7 +15,7 @@ limitations under the License.
 */
 import React from 'react'
 
-const PageExploreDialects = React.lazy(() => import('components/ExploreDialects'))
+const ExploreLanguages = React.lazy(() => import('components/ExploreLanguages/ExploreLanguagesContainer'))
 const PageExploreFamily = React.lazy(() => import('components/ExploreFamily'))
 const PageExploreLanguage = React.lazy(() => import('components/ExploreLanguage'))
 const PageExploreDialect = React.lazy(() => import('components/ExploreDialect'))
@@ -33,8 +33,7 @@ const PageConcentration = React.lazy(() => import('components/Games/concentratio
 
 const PageDialectGalleries = React.lazy(() => import('components/Gallery'))
 const PageDialectGalleryView = React.lazy(() => import('components/Gallery/view'))
-const PageDialectReports = React.lazy(() => import('components/Reports'))
-const PageDialectReportsView = React.lazy(() => import('components/Reports/ReportsView'))
+const Reports = React.lazy(() => import('components/Reports/ReportsContainer'))
 
 const PageDialectLearnWords = React.lazy(() => import('components/Words/WordsContainer'))
 const PageDialectLearnPhrases = React.lazy(() => import('components/Phrases/PhrasesContainer'))
@@ -62,8 +61,8 @@ const PageHome = React.lazy(() => import('components/HomeLayout'))
 const PageContent = React.lazy(() => import('components/PageContent'))
 const PagePlay = React.lazy(() => import('components/Games'))
 const PageSearch = React.lazy(() => import('components/SearchDictionary/SearchDictionaryContainer'))
-const PageUserTasks = React.lazy(() => import('components/UserTasks'))
-const PageUsersRegister = React.lazy(() => import('components/Register'))
+const Join = React.lazy(() => import('components/Join/JoinContainer'))
+const Register = React.lazy(() => import('components/Register/RegisterContainer'))
 const PageUsersForgotPassword = React.lazy(() => import('components/Users/forgotpassword'))
 
 // KIDS
@@ -129,6 +128,7 @@ const DashboardContainer = React.lazy(() => import('components/Dashboard/Dashboa
 const DashboardDetailTasksContainer = React.lazy(() =>
   import('components/DashboardDetailTasks/DashboardDetailTasksContainer')
 )
+const Membership = React.lazy(() => import('components/Membership/MembershipContainer'))
 
 // MENTOR-APPRENTICE PHOTO PROJECT
 // ----------------------
@@ -141,7 +141,7 @@ export {
   PageError,
   PageHome,
   PageContent,
-  PageExploreDialects,
+  ExploreLanguages,
   PageExploreFamily,
   PageExploreLanguage,
   PageExploreDialect,
@@ -162,12 +162,11 @@ export {
   PageDialectPlay,
   PageDialectGalleries,
   PageDialectGalleryView,
-  PageDialectReports,
-  PageDialectReportsView,
+  Reports,
   PagePlay,
   PageSearch,
-  PageUserTasks,
-  PageUsersRegister,
+  Join,
+  Register,
   PageUsersForgotPassword,
   PageDialectImmersionList,
   //GAMES
@@ -224,4 +223,5 @@ export {
   // DASHBOARD
   DashboardContainer,
   DashboardDetailTasksContainer,
+  Membership,
 }

@@ -31,69 +31,75 @@ const i18nExt = {
 
 window.intl = IntlService.instance
 
-// const configExt = {
-//   config: {
-//     // for each of lg md sm xs you can specify the columns width
-//     horizontal: {
-//       md: [3, 9],
-//       sm: [6, 6],
-//     },
-//   },
-// }
-
-const FVPortalTemplate = function template(locals) {
+const FVDialectTemplate = function template(locals) {
   return (
-    <fieldset>
-      <div className="col-md-12">{locals.inputs['fv-portal:greeting']}</div>
-      <div className="col-md-12">{locals.inputs['fv-portal:about']}</div>
-      <div className="col-md-12">{locals.inputs['fv-portal:news']}</div>
-      <div className="col-md-12">{locals.inputs['fv-portal:featured_words']}</div>
-      <div className="col-md-12">{locals.inputs['fv-portal:related_links']}</div>
-      <div className="col-md-12">{locals.inputs['fv-portal:featured_audio']}</div>
-      <div className="col-md-6">{locals.inputs['fv-portal:background_top_image']}</div>
-      <div className="col-md-6">{locals.inputs['fv-portal:logo']}</div>
-    </fieldset>
+    <div>
+      <fieldset>
+        <h2
+          className="col-md-12"
+          style={{
+            marginTop: '10px',
+            marginBottom: '10px',
+            color: 'rgb(0, 121, 107)',
+            fontSize: '1.5em',
+          }}
+        >
+          Home Page
+        </h2>
+        <div className="col-md-12">{locals.inputs['fvdialect:greeting']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:featured_audio']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:about_us']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:news']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:background_top_image']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:logo']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:featured_words']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:related_links']}</div>
+      </fieldset>
+      <fieldset>
+        <h2
+          className="col-md-12"
+          style={{
+            marginTop: '10px',
+            marginBottom: '10px',
+            color: 'rgb(0, 121, 107)',
+            fontSize: '1.5em',
+          }}
+        >
+          Learn Our Language Page
+        </h2>
+        <div className="col-md-12">{locals.inputs['fvdialect:about_our_language']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:country']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:dominant_language']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:region']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:keyboards']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:language_resources']}</div>
+        <div className="col-md-12">{locals.inputs['fvdialect:contact_information']}</div>
+      </fieldset>
+    </div>
   )
 }
 
-const FVUserRegistrationTemplate = function template(locals) {
-  let selectedCommunityLanguageLabel = null
-
-  locals.onChange = new (function setSelectedCommunityLanguageLabel() {
-    const requestedSpaceElement = document.getElementById('registration-requested-space')
-
-    if (requestedSpaceElement !== null) {
-      const selectBox = requestedSpaceElement.getElementsByTagName('select')[0]
-
-      if (selectBox.selectedIndex !== 0) {
-        selectedCommunityLanguageLabel = selectBox.options[selectBox.selectedIndex].innerHTML
-        document.getElementById('language_team_member_name').innerHTML = document.getElementById(
-          'community_member_name'
-        ).innerHTML = selectedCommunityLanguageLabel
-      }
-    }
-  })()
-
+const FVRegistrationTemplate = function template(locals) {
   return (
     <div>
       <fieldset>
         <div className="col-md-6">{locals.inputs['userinfo:firstName']}</div>
         <div className="col-md-6">{locals.inputs['userinfo:lastName']}</div>
+        <div className="col-md-6">{locals.inputs['fvuserinfo:traditionalName']}</div>
         <div className="col-md-6">{locals.inputs['userinfo:email']}</div>
-        <div className="col-md-6">{locals.inputs['fvuserinfo:role']}</div>
-        <div className="col-md-6">{locals.inputs['fvuserinfo:ageGroup']}</div>
-        <div className="col-md-6" id="registration-requested-space">
-          {locals.inputs['fvuserinfo:requestedSpace']}
-        </div>
-
-        <div className={classNames('col-md-12', { hidden: !selectedCommunityLanguageLabel })}>
-          {locals.inputs['fvuserinfo:community_member']}
-        </div>
-        <div className={classNames('col-md-12', { hidden: !selectedCommunityLanguageLabel })}>
-          {locals.inputs['fvuserinfo:language_team_member']}
-        </div>
-
-        <div className="col-md-12">{locals.inputs['fvuserinfo:comment']}</div>
+      </fieldset>
+    </div>
+  )
+}
+const FVJoinTemplate = function template(locals) {
+  return (
+    <div>
+      <fieldset>
+        <div className={classNames({ hidden: true })}>{locals.inputs.siteId}</div>
+        <div className="col-md-6">{locals.inputs.interestReason}</div>
+        <div className="col-md-8">{locals.inputs.communityMember}</div>
+        <div className="col-md-8">{locals.inputs.languageTeam}</div>
+        <div className="col-md-8">{locals.inputs.comment}</div>
       </fieldset>
     </div>
   )
@@ -1113,47 +1119,41 @@ const options = {
     i18n: i18nExt,
   },
 
-  FVPortal: {
+  FVDialect: {
     fields: {
-      'fv-portal:greeting': {
-        label: intl.trans('models.portal_greeting', 'Portal Greeting', 'first'),
+      'fvdialect:greeting': {
+        label: intl.trans('models.portal_greeting', 'Greeting', 'first'),
       },
-      'fv-portal:featured_audio': {
+      'fvdialect:featured_audio': {
         label: intl.trans('models.greeting_audio', 'Greeting Audio', 'first'),
         factory: MediaFactory,
         type: 'FVAudio',
       },
-      'fv-portal:about': {
-        label: intl.trans('models.portal_introduction', 'Portal Introduction', 'first'),
+      'fvdialect:about_us': {
+        label: intl.trans('views.pages.explore.dialect.about_us', 'About Us', 'first'),
         type: 'textarea',
         factory: WysiwygFactory,
         attrs: {
-          dataTestId: 'wysiwyg-fv-portal_about',
-          idAlt: 'fv-portal_about',
-          nameAlt: 'fv-portal:about',
-          placeholder: intl.trans('models.enter_portal_description', 'Enter portal description here', 'first'),
+          placeholder: intl.trans('models.enter_portal_description', 'Enter language site description here', 'first'),
         },
       },
-      'fv-portal:news': {
+      'fvdialect:news': {
         label: intl.trans('news', 'News', 'first'),
         type: 'textarea',
         factory: WysiwygFactory,
         help: intl.trans('models.news_tip', 'Tip: Use * to start a bullet list!', 'first'),
-        attrs: {
-          dataTestId: 'wysiwyg-fv-portal_news',
-        },
       },
-      'fv-portal:background_top_image': {
+      'fvdialect:background_top_image': {
         label: intl.trans('models.background_image', 'Background Image', 'first'),
         factory: MediaFactory,
         type: 'FVPicture',
       },
-      'fv-portal:logo': {
+      'fvdialect:logo': {
         label: intl.trans('logo', 'Logo', 'first'),
         factory: MediaFactory,
         type: 'FVPicture',
       },
-      'fv-portal:featured_words': {
+      'fvdialect:featured_words': {
         label: intl.trans('featured_words', 'Featured Words', 'first'),
         item: {
           factory: SelectSuggestFactory,
@@ -1166,7 +1166,7 @@ const options = {
           },
         },
       },
-      'fv-portal:related_links': {
+      'fvdialect:related_links': {
         label: intl.trans('related_links', 'Related Links', 'first'),
         item: {
           factory: SelectSuggestFactory,
@@ -1179,27 +1179,8 @@ const options = {
           },
         },
       },
-    },
-    template: FVPortalTemplate,
-    i18n: i18nExt,
-  },
-
-  FVDialect: {
-    fields: {
-      'dc:title': {
-        label: intl.trans('models.dialect_name', 'Dialect Name', 'first'),
-        type: 'text',
-      },
-      'dc:description': {
-        label: intl.trans('models.about_dialect', 'About Dialect', 'first'),
-        type: 'textarea',
-        factory: WysiwygFactory,
-        attrs: {
-          dataTestId: 'wysiwyg-dc_description',
-        },
-      },
       'fvdialect:about_our_language': {
-        label: intl.trans('models.about_dialect', 'About Dialect', 'first'),
+        label: intl.trans('views.pages.explore.dialect.learn.about_our_language', 'About Our Language', 'first'),
         type: 'textarea',
         factory: WysiwygFactory,
         attrs: {
@@ -1261,6 +1242,7 @@ const options = {
         },
       },
     },
+    template: FVDialectTemplate,
     i18n: i18nExt,
   },
 
@@ -1323,8 +1305,11 @@ const options = {
   FVPicture: Object.assign({}, FVMedia),
   FVVideo: Object.assign({}, FVMedia),
   FVResource: FVMedia,
-  FVUser: {
+  FVRegistration: {
     fields: {
+      'fvuserinfo:traditionalName': {
+        label: 'Traditional Name',
+      },
       'userinfo:firstName': {
         label: intl.trans('first_name', 'First Name', 'first') + ' *',
         error: 'Please provide your first name.',
@@ -1337,46 +1322,33 @@ const options = {
         label: intl.trans('views.pages.explore.dialect.users.email_address', 'Email Address', 'first') + ' *',
         error: 'Please provide your email.',
       },
-      'fvuserinfo:ageGroup': {
-        label: 'Age Group',
+    },
+    template: FVRegistrationTemplate,
+  },
+  FVJoin: {
+    fields: {
+      siteId: {
+        label: 'FirstVoices language site',
       },
-      'fvuserinfo:requestedSpace': {
-        label:
-          intl.translate({
-            key: 'models.dialect_to_join',
-            default: 'Your FirstVoices community/language',
-          }) + ' *',
-        factory: SelectFactory,
-        attrs: {
-          // query:
-          //   "SELECT ecm:uuid, dc:title FROM FVDialect WHERE ecm:isTrashed = 0 AND ecm:isLatestVersion = 1 ORDER BY dc:title ASC",
-          queryId: 'dialect_titles_uids',
-          query: 'dialect_list',
-          label: 'Your FirstVoices community/language',
-          fancy: false,
-        },
-        error:
-          'Please choose a community portal/language to join. If you are not a member of a community, please skip registration and go straight to the "EXPLORE LANGUAGES" page',
-      },
-      'fvuserinfo:role': {
-        label: 'Why are you interested in FirstVoices?' + ' *',
+      interestReason: {
+        label: 'Why are you interested in FirstVoices?',
         factory: t.form.Select,
         nullOption: { value: '', text: 'Choose the main reason:' },
         options: ProviderHelpers.userRegistrationRoles,
         error: "Please let us know or pick the 'other' option.",
       },
-      'fvuserinfo:comment': {
+      comment: {
         label: 'Other Comments',
         type: 'textarea',
       },
-      'fvuserinfo:community_member': {
+      communityMember: {
         label: (
           <span>
             I am a member of the <strong id="community_member_name" /> community.
           </span>
         ),
       },
-      'fvuserinfo:language_team_member': {
+      languageTeam: {
         label: (
           <span>
             I am an authorized member of the <strong id="language_team_member_name" /> language team
@@ -1384,7 +1356,7 @@ const options = {
         ),
       },
     },
-    template: FVUserRegistrationTemplate,
+    template: FVJoinTemplate,
   },
   FVLink: {
     fields: {
@@ -1401,12 +1373,7 @@ const options = {
           'Specify URL if linking to external or internal links.',
           'first'
         ),
-      } /*,
-      'file:content': {
-        label: 'File',
-        help: 'Optional: For linking directly to a file.',
-        type: 'file'
-      },*/,
+      },
     },
   },
   FVLabel: {

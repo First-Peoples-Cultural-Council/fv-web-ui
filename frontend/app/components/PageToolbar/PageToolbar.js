@@ -99,7 +99,7 @@ export class PageToolbar extends Component {
 
     const permissionEntity = selectn('response', computePermissionEntity) ? computePermissionEntity : computeEntity
     const computeEntities = Immutable.fromJS([{ id: selectn('response.uid', computeEntity), entity: computeEntity }])
-    const hasUpublishedChanges = selectn(
+    const hasUnpublishedChanges = selectn(
       'response.contextParameters.unpublished_changes.unpublished_changes_exist',
       computeEntity
     )
@@ -177,7 +177,7 @@ export class PageToolbar extends Component {
                     data-guide-role="publish-changes"
                     onClick={this._publishChanges}
                     variant="contained"
-                    disabled={!hasUpublishedChanges}
+                    disabled={!hasUnpublishedChanges}
                   >
                     <FVLabel transKey="publish_changes" defaultStr="Publish Changes" transform="words" />
                   </FVButton>

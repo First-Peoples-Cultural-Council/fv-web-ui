@@ -83,7 +83,7 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, sitename })
                       Pause: useIcon('Pause', 'fill-current h-6 w-6 md:w-4 md:h-4 mr-2'),
                       Error: useIcon('Exclamation', 'fill-current h-6 w-6 md:w-4 md:h-4 mr-2'),
                     }}
-                    buttonStyling="bg-fv-charcoal-light text-white text-sm rounded-md inline-flex items-center py-1.5 px-2 mr-2 mb-2"
+                    buttonStyling="bg-fv-charcoal-light text-white text-sm rounded-lg inline-flex items-center py-1.5 px-2 mr-2 mb-2"
                     label={audioFile.speaker}
                     src={getMediaUrl({ type: 'audio', id: audioFile.uid })}
                   />
@@ -170,7 +170,7 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, sitename })
                       to={`/${sitename}/categories/${category.uid}`}
                       className={`${
                         i === 0 ? 'ml-0' : ''
-                      } m-1 p-1.5 inline-flex text-sm font-semibold rounded-md bg-fv-turquoise text-white`}
+                      } m-1 p-1.5 inline-flex text-sm font-semibold rounded-lg bg-tertiaryA text-white`}
                     >
                       {category['dc:title']}
                     </Link>

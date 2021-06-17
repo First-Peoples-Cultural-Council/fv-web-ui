@@ -53,7 +53,7 @@ export const fetchBooksAll = (path /*, type*/) => {
 }
 
 export const fetchBook = fetch('FV_BOOK', 'FVBook', {
-  headers: { 'enrichers.document': 'ancestry,permissions,book' },
+  headers: { 'enrichers.document': 'ancestry,permissions,book,unpublished_changes' },
 })
 
 export const fetchBooks = query('FV_BOOKS', 'FVBook', {

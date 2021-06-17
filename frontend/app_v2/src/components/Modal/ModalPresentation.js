@@ -49,7 +49,7 @@ function ModalPresentation({ children, isOpen, closeHandler }) {
               <div className="mt-5 text-center sm:mt-6">
                 <button
                   type="button"
-                  className="inline-flex justify-center w-1/4 rounded-md border border-transparent shadow-sm px-4 py-2 bg-fv-orange text-base font-medium text-white hover:bg-fv-red-light sm:text-sm"
+                  className="inline-flex justify-center w-1/4 rounded-lg border border-transparent shadow-sm px-4 py-2 bg-secondary text-base font-medium text-white hover:bg-secondary-light sm:text-sm"
                   onClick={closeHandler}
                 >
                   Cancel

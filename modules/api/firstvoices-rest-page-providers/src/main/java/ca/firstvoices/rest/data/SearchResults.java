@@ -16,8 +16,6 @@ public class SearchResults implements Serializable {
 
   private final List<SearchResult> results = new LinkedList<>();
 
-
-
   public String getQuery() {
     return query;
   }
@@ -67,6 +65,10 @@ public class SearchResults implements Serializable {
     WORD("word"),
     PHRASE("phrase"),
     BOOK("book"),
+    WORDS_AND_PHRASES("words_and_phrases"),
+    SONGS("songs"),
+    STORIES("stories"),
+    SONGS_AND_STORIES("songs_and_stories"),
     ALL("all");
 
     DocumentTypes(String value) {

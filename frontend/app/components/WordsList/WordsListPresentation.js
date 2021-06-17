@@ -70,6 +70,7 @@ function WordsListPresentation(props) {
     onClickCreate,
     pageTitle,
     pushWindowPath,
+    reportFilter,
     routeParams,
     rowClickHandler,
     setRouteParams,
@@ -179,27 +180,29 @@ function WordsListPresentation(props) {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div>
-        <h1 className="DialectPageTitle">{pageTitle}</h1>
+        <h1 className="DialectPageTitle">{reportFilter?.name ? reportFilter?.name : pageTitle}</h1>
 
-        <AuthorizationFilter filter={filter} hideFromSections routeParams={routeParams}>
-          <div id="CreateNewWord" className="text-right">
-            <FVButton
-              variant="contained"
-              href={hrefCreate}
-              onClick={(e) => {
-                e.preventDefault()
-                onClickCreate(hrefCreate)
-              }}
-              color="primary"
-            >
-              <FVLabel
-                transKey="views.pages.explore.dialect.learn.words.create_new_word"
-                defaultStr="Create New Word"
-                transform="words"
-              />
-            </FVButton>
-          </div>
-        </AuthorizationFilter>
+        {reportFilter ? null : (
+          <AuthorizationFilter filter={filter} hideFromSections routeParams={routeParams}>
+            <div id="CreateNewWord" className="text-right">
+              <FVButton
+                variant="contained"
+                href={hrefCreate}
+                onClick={(e) => {
+                  e.preventDefault()
+                  onClickCreate(hrefCreate)
+                }}
+                color="primary"
+              >
+                <FVLabel
+                  transKey="views.pages.explore.dialect.learn.words.create_new_word"
+                  defaultStr="Create New Word"
+                  transform="words"
+                />
+              </FVButton>
+            </div>
+          </AuthorizationFilter>
+        )}
         <div className={dialectClassName}>
           {childrenSearch}
           {/* {chldrenListButtons} */}
@@ -208,6 +211,7 @@ function WordsListPresentation(props) {
             clickHandlerViewMode: wordsListClickHandlerViewMode,
             dictionaryListViewMode,
             hasViewModeButtons,
+            reportFilter,
           })}
           <Media
             queries={{
@@ -284,8 +288,12 @@ function WordsListPresentation(props) {
 
 // generateListButtons
 // ------------------------------------
-function generateListButtons({ hasViewModeButtons }) {
-  return <div className="WordsList__ListButtonsGroup">{hasViewModeButtons && <FlashcardButton.Container />}</div>
+function generateListButtons({ hasViewModeButtons, reportFilter }) {
+  return (
+    <div className="WordsList__ListButtonsGroup">
+      {hasViewModeButtons && !reportFilter && <FlashcardButton.Container />}
+    </div>
+  )
 }
 
 // generateSortTitleLargeSmall
@@ -425,6 +433,7 @@ WordsListPresentation.propTypes = {
   hasViewModeButtons: bool, // NOTE: Toggles all of the view mode buttons (currently there is only Flashcard but there used to be more options)
   items: oneOfType([array, instanceOf(List)]), // NOTE: Important prop. Primary source of data (filteredItems is also used!)
   pageTitle: string,
+  reportFilter: object,
   rowClickHandler: func, // NOTE: this list view is used in the browse mode where you can select items to add to other documents (eg: add a contributor to a word). This is the event handler for that action
   sortHandler: func, // NOTE: event handler for sort actions. If not defined, the url will be updated instead.
   childrenSearch: node,

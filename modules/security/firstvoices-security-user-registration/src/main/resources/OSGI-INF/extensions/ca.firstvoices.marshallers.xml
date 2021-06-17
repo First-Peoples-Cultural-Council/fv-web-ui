@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <component name="ca.firstvoices.uregistration.marshallers.contrib" version="1.0.0">
-    <extension target="org.nuxeo.ecm.core.io.MarshallerRegistry" point="marshallers">
-        <register class="ca.firstvoices.marshallers.CustomPreferencesJSONReader" enable="true" />
-    </extension>
+  <extension target="org.nuxeo.ecm.core.io.MarshallerRegistry" point="marshallers">
+    <register class="ca.firstvoices.marshallers.CustomPreferencesJSONReader" enable="true"/>
+  </extension>
 </component>

@@ -12,8 +12,8 @@ import PropTypes from 'prop-types'
  * @returns {node} jsx markup
  */
 function FVTogglePresentation({ toggled, toggleCallback, styling }) {
-  const toggleInputClass = toggled ? ' border-fv-green right-0' : ' border-fv-warning-red'
-  const toggleLabelClass = toggled ? ' bg-fv-green right-0' : ' bg-fv-warning-red'
+  const toggleInputClass = toggled ? ' border-secondary right-0' : ' border-fv-warning-red'
+  const toggleLabelClass = toggled ? ' bg-secondary right-0' : ' bg-fv-warning-red'
 
   const onToggleClick = () => {
     toggleCallback()

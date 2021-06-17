@@ -29,8 +29,6 @@ const BookTypes = t.enums({
 const ReportItemTypes = t.enums({
   words: intl.trans('words', 'Words', 'first'),
   phrases: intl.trans('phrases', 'Phrases', 'first'),
-  songs: intl.trans('songs', 'Songs', 'first'),
-  stories: intl.trans('stories', 'Stories', 'first'),
 })
 
 const MaxMB = t.refinement(t.Number, (n) => {

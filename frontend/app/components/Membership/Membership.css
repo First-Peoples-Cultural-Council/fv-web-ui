@@ -1,0 +1,31 @@
+.Membership {
+  float: left;
+  padding-bottom: 10px;
+}
+
+.Membership__header {
+  margin: 10px;
+}
+
+.Membership__button {
+  margin: 5px;
+  display: inline-flex;
+}
+
+.Membership__btngrp {
+  display: inline-flex;
+}
+
+.Membership--dashboardDetail .Membership__select {
+  background-color: #fff;
+  display: inline-flex;
+}
+.Membership__menuItemGroup {
+  display: flex;
+  align-items: center;
+}
+
+.Membership--empty {
+  margin: 40px;
+  font-size: 1.5em;
+}

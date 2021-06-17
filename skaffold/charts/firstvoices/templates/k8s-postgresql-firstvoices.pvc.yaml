@@ -1,0 +1,12 @@
+{{ if .Values.database.deploy }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgresql-firstvoices-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.firstvoicesPostgresql.pvc.size }}
+  {{ end }}

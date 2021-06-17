@@ -31,7 +31,9 @@ import org.nuxeo.ecm.platform.usermanager.io.NuxeoPrincipalJsonWriter;
 public class NuxeoPrincipalCodec extends AbstractMarshallingRegistryCodec<NuxeoPrincipal> {
 
   public NuxeoPrincipalCodec() {
-    super(NuxeoPrincipal.class, "user", NuxeoPrincipalJsonReader.class,
+    super(NuxeoPrincipal.class,
+        "user",
+        NuxeoPrincipalJsonReader.class,
         NuxeoPrincipalJsonWriter.class);
   }
 }

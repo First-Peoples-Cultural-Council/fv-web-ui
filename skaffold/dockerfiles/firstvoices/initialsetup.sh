@@ -1,0 +1,2 @@
+#!/bin/bash
+curl --max-time 3000 --connect-timeout 120 -o /dev/null -s -w "%{response_code}\n" -X POST "${TARGET}"'/nuxeo/site/automation/Document.InitialDatabaseSetup' -H 'Nuxeo-Transaction-Timeout: 300' -H 'X-NXproperties: *' -H 'X-NXRepository: default' -H 'X-NXVoidOperation: false' -H 'content-type: application/json' -d '{"params":{"generateData":"true"},"context":{}}' -u Administrator:Administrator

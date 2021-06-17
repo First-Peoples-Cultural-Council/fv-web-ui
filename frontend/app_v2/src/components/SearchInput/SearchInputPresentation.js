@@ -29,7 +29,7 @@ function SearchInputPresentation({
         <li
           className={`${
             currentOption.id === option.id ? 'font-semibold' : ''
-          }font-normal block truncate text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 hover:text-white hover:bg-fv-blue`}
+          }font-normal block truncate text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 hover:text-white hover:bg-primary`}
           key={`filterlist-key-${index}`}
           id={`filterlist-option-${option.id}`}
           role="option"
@@ -48,7 +48,7 @@ function SearchInputPresentation({
 
   return (
     <>
-      <div className="flex rounded-md">
+      <div className="flex rounded-lg">
         <form onSubmit={handleSearchSubmit} className="flex items-stretch flex-grow">
           <input
             data-testid="SearchInput"
@@ -66,7 +66,7 @@ function SearchInputPresentation({
           <button
             type="button"
             onClick={onSearchOptionsClick}
-            className="w-24 relative rounded-md pl-3 pr-16 py-2 mr-1 text-left cursor-default sm:text-sm"
+            className="w-24 relative rounded-lg pl-3 pr-16 py-2 mr-1 text-left cursor-default sm:text-sm"
             aria-haspopup="listbox"
           >
             {currentOption.label}
@@ -76,7 +76,7 @@ function SearchInputPresentation({
           </button>
           {isMenuOpen ? (
             <ul
-              className="absolute top-14 left-0 z-10 py-1 transition-opacity ease-in duration-100 w-full bg-white shadow-lg max-h-60 rounded-md text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+              className="absolute top-14 left-0 z-10 py-1 transition-opacity ease-in duration-100 w-full bg-white shadow-lg max-h-60 rounded-lg text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
               tabIndex={-1}
               role="listbox"
               ref={menuRef}

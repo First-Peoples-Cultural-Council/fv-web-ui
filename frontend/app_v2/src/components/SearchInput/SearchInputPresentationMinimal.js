@@ -13,7 +13,7 @@ import useIcon from 'common/useIcon'
  */
 function SearchInputPresentationMinimal({ handleSearchSubmit, handleTextFieldChange, searchValue }) {
   return (
-    <div className="flex rounded-md ml-4 h-10 ">
+    <div className="flex rounded-lg ml-4 h-10 ">
       <form onSubmit={handleSearchSubmit} className="flex items-stretch flex-grow">
         <input
           data-testid="SearchInput"

@@ -35,6 +35,8 @@ import org.nuxeo.runtime.api.Framework;
  */
 public class AncestryAssignmentListener implements EventListener {
 
+  public static final String DISABLE_ANCESTRY_LISTENER = "disableAncestryListener";
+
   protected EventContext eventCtx;
 
   protected DocumentEventContext docCtx;
@@ -64,6 +66,11 @@ public class AncestryAssignmentListener implements EventListener {
     doc = docCtx.getSourceDocument();
 
     if (!(eventCtx instanceof DocumentEventContext) || !listenerCriteria()) {
+      return;
+    }
+
+    Boolean block = (Boolean) event.getContext().getProperty(DISABLE_ANCESTRY_LISTENER);
+    if (Boolean.TRUE.equals(block)) {
       return;
     }
 

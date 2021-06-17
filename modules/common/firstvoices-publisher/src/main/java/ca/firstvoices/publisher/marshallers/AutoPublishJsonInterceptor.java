@@ -26,6 +26,13 @@ public class AutoPublishJsonInterceptor extends DocumentModelJsonReader {
 
     boolean fvPublish = ctx.getBooleanParameter("fv-publish");
 
+    if (!jn.has("uid")) {
+      // New documents (i.e. create) will not have a uid set yet
+      // Attempt to publish in a listener via context data
+      doc.putContextData("fv-publish", fvPublish);
+      return doc;
+    }
+
     // If parameter `fv-publish` provided
     // change transitions on doc so can be published async
     if (fvPublish && !doc.isProxy() && !doc.isTrashed() && !doc.isVersion()) {

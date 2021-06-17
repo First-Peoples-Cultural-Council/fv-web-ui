@@ -15,15 +15,12 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import selectn from 'selectn'
 
-import { Table, TableBody, TableCell, TableRow, TableFooter, TablePagination } from '@material-ui/core'
-import TablePaginationActions from './tablepagination'
+import { Table, TableBody, TableCell, TableRow } from '@material-ui/core'
 import SortingHeader from './sortingheader'
 
 import Preview from 'components/Preview'
 import FVLabel from 'components/FVLabel'
-import { windowLocationPathnameWithoutPagination } from 'common/NavigationHelpers'
 import { withStyles } from '@material-ui/core/styles'
 import './immersiontable.css'
 
@@ -84,45 +81,10 @@ class ImmersionTable extends Component {
   constructor(props, context) {
     super(props, context)
 
-    const { pageNumber, pageSize } = this._getURLPageProps()
-
     this.state = {
       order: 'desc',
       orderBy: 'translation',
-      pageNumber: pageNumber,
-      pageSize: pageSize,
     }
-  }
-  _getURLPageProps() {
-    const pageProps = { pageNumber: 1, pageSize: 10 }
-    const page = selectn('page', this.props.routeParams)
-    const pageSize = selectn('pageSize', this.props.routeParams)
-
-    if (page) {
-      pageProps.pageNumber = parseInt(page, 10) - 1
-    }
-    if (pageSize) {
-      pageProps.pageSize = parseInt(pageSize, 10)
-    }
-
-    return pageProps
-  }
-
-  handleChangePage = (event, pageNumber) => {
-    const { pageSize } = this.state
-    const newUrl =
-      window.location.origin + '/' + windowLocationPathnameWithoutPagination() + '/' + pageSize + '/' + (pageNumber + 1)
-    window.history.pushState({}, '', newUrl)
-    this.setState({ pageNumber })
-  }
-
-  handleChangeRowsPerPage = (event) => {
-    const pageSize = event.target.value
-    const { pageNumber } = this.state
-    const newUrl =
-      window.location.origin + '/' + windowLocationPathnameWithoutPagination() + '/' + pageSize + '/' + (pageNumber + 1)
-    window.history.pushState({}, '', newUrl)
-    this.setState({ pageSize })
   }
 
   handleRequestSort = (event, property) => {
@@ -156,8 +118,8 @@ class ImmersionTable extends Component {
   }
 
   render() {
-    const { mappedTranslations, selectedFilter, classes } = this.props
-    const { order, orderBy, pageNumber, pageSize } = this.state
+    const { mappedTranslations, selectedFilter } = this.props
+    const { order, orderBy } = this.state
     const filteredTranslations = mappedTranslations.filter((label) => {
       if (selectedFilter === 'untranslated') {
         return !label.translation
@@ -167,7 +129,6 @@ class ImmersionTable extends Component {
       }
       return true
     })
-    const emptyRows = pageSize - Math.min(pageSize, (filteredTranslations.length || 1) - pageNumber * pageSize)
 
     return (
       <div style={{ flexShrink: 0, overflowX: 'scroll' }}>
@@ -199,45 +160,42 @@ class ImmersionTable extends Component {
           <TableBody>
             {filteredTranslations.length !== 0 ? (
               <>
-                {filteredTranslations
-                  .sort(getSorting(order, orderBy))
-                  .slice(pageNumber * pageSize, pageNumber * pageSize + pageSize)
-                  .map((row) => {
-                    return (
-                      <TableRow
-                        key={row.labelKey}
-                        className="DictionaryList__row DictionaryList__row--a"
-                        style={{ background: 'white' }}
-                      >
-                        <TableCell className="DictionaryList__data DictionaryList__data--translation DictionaryList__data--title">
-                          <a
-                            className="translation-cell DictionaryList__link DictionaryList__link--indigenous"
-                            onClick={row.editClick}
-                          >
-                            {row.translation ? this.renderTranslation(row, 'translation') : <span>UNTRANSLATED</span>}
-                          </a>
-                          {row.editButton}
-                        </TableCell>
-                        <TableCell className="DictionaryList__data DictionaryList__data--base">
-                          {this.renderTranslation(row, 'base')}
-                        </TableCell>
-                        <TableCell className="DictionaryList__data DictionaryList__data--audio">
-                          {row.relatedAudio && (
-                            <Preview
-                              id={row.relatedAudio}
-                              minimal
-                              tagProps={{ preload: 'none' }}
-                              styles={{ padding: 0 }}
-                              tagStyles={{ width: '100%', minWidth: '230px' }}
-                              type="FVAudio"
-                            />
-                          )}
-                        </TableCell>
-                        <TableCell className="DictionaryList__data DictionaryList__data--state"> {row.state}</TableCell>
-                        <TableCell className="DictionaryList__data DictionaryList__data--type"> {row.type}</TableCell>
-                      </TableRow>
-                    )
-                  })}
+                {filteredTranslations.sort(getSorting(order, orderBy)).map((row) => {
+                  return (
+                    <TableRow
+                      key={row.labelKey}
+                      className="DictionaryList__row DictionaryList__row--a"
+                      style={{ background: 'white' }}
+                    >
+                      <TableCell className="DictionaryList__data DictionaryList__data--translation DictionaryList__data--title">
+                        <a
+                          className="translation-cell DictionaryList__link DictionaryList__link--indigenous"
+                          onClick={row.editClick}
+                        >
+                          {row.translation ? this.renderTranslation(row, 'translation') : <span>UNTRANSLATED</span>}
+                        </a>
+                        {row.editButton}
+                      </TableCell>
+                      <TableCell className="DictionaryList__data DictionaryList__data--base">
+                        {this.renderTranslation(row, 'base')}
+                      </TableCell>
+                      <TableCell className="DictionaryList__data DictionaryList__data--audio">
+                        {row.relatedAudio && (
+                          <Preview
+                            id={row.relatedAudio}
+                            minimal
+                            tagProps={{ preload: 'none' }}
+                            styles={{ padding: 0 }}
+                            tagStyles={{ width: '100%', minWidth: '230px' }}
+                            type="FVAudio"
+                          />
+                        )}
+                      </TableCell>
+                      <TableCell className="DictionaryList__data DictionaryList__data--state"> {row.state}</TableCell>
+                      <TableCell className="DictionaryList__data DictionaryList__data--type"> {row.type}</TableCell>
+                    </TableRow>
+                  )
+                })}
               </>
             ) : (
               <TableRow style={{ background: 'white' }}>
@@ -246,29 +204,7 @@ class ImmersionTable extends Component {
                 </TableCell>
               </TableRow>
             )}
-            {emptyRows > 0 && (
-              <TableRow>
-                <TableCell colSpan={5} />
-              </TableRow>
-            )}
           </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                classes={{ caption: classes.font, input: classes.font, select: classes.select }}
-                colSpan={6}
-                count={filteredTranslations.length}
-                rowsPerPage={pageSize}
-                page={pageNumber}
-                onChangePage={this.handleChangePage}
-                onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
-                labelDisplayedRows={({ from, to, count }) => {
-                  return `Results: ${from}-${to} of ${count}` // need locale key for this
-                }}
-              />
-            </TableRow>
-          </TableFooter>
         </Table>
       </div>
     )

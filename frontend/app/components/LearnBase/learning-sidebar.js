@@ -15,24 +15,21 @@ limitations under the License.
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-
-// REDUX
 import { connect } from 'react-redux'
-
 import classNames from 'classnames'
 import selectn from 'selectn'
-import AuthorizationFilter from 'components/AuthorizationFilter'
-import EditableComponentHelper from 'components/EditableComponentHelper'
 
+import Preview from 'components/Preview'
 import FVLabel from 'components/FVLabel'
 
 /**
  * Sidebar for learning page
  */
-const { bool, object } = PropTypes
+const { any, bool, object } = PropTypes
 export class LearningSidebar extends Component {
   static propTypes = {
     dialect: object.isRequired,
+    dialectClassName: any,
     isSection: bool.isRequired,
     // REDUX: reducers/state
     properties: object.isRequired,
@@ -46,107 +43,50 @@ export class LearningSidebar extends Component {
   render() {
     const { dialect, dialectClassName, isSection } = this.props
 
+    const languageResources = selectn('response.contextParameters.dialect.language_resources', dialect.compute) || []
+    const keyboards = selectn('response.contextParameters.dialect.keyboards', dialect.compute) || []
+    const contactInfo = selectn('response.properties.fvdialect:contact_information', dialect.compute)
+
     return (
       <div className={classNames('row', dialectClassName)}>
         <div className={classNames('col-xs-12')}>
-          {(() => {
-            if (
-              selectn('response.contextParameters.dialect.language_resources.length', dialect.compute) > 0 ||
-              !isSection
-            ) {
-              return (
-                <AuthorizationFilter
-                  filter={{ permission: 'Write', entity: selectn('response', dialect.compute) }}
-                  renderPartial
-                >
-                  <div>
-                    <h2>
-                      <FVLabel
-                        transKey="general.language_resources"
-                        defaultStr="Language Resources"
-                        transform="upper"
-                      />
-                    </h2>
-                    <hr className="dialect-hr" />
-                    <EditableComponentHelper
-                      dataTestid="EditableComponent__fvdialect-language_resources"
-                      isSection={isSection}
-                      computeEntity={dialect.compute}
-                      updateEntity={dialect.update}
-                      showPreview
-                      previewType="FVLink"
-                      property="fvdialect:language_resources"
-                      sectionProperty="contextParameters.dialect.language_resources"
-                      entity={selectn('response', dialect.compute)}
-                    />
-                  </div>
-                </AuthorizationFilter>
-              )
-            }
-          })()}
+          {(languageResources?.length > 0 || !isSection) && (
+            <div>
+              <h2>
+                <FVLabel transKey="general.language_resources" defaultStr="Language Resources" transform="upper" />
+              </h2>
+              <hr className="dialect-hr" />
+              {languageResources?.map((resource, i) => (
+                <Preview key={i} id={resource.uid} type={'FVLink'} />
+              ))}
+            </div>
+          )}
         </div>
 
         <div className={classNames('col-xs-12', 'PrintHide')}>
-          {(() => {
-            if (selectn('response.contextParameters.dialect.keyboards.length', dialect.compute) > 0 || !isSection) {
-              return (
-                <AuthorizationFilter
-                  filter={{ permission: 'Write', entity: selectn('response', dialect.compute) }}
-                  renderPartial
-                >
-                  <div>
-                    <h2>
-                      <FVLabel transKey="general.our_keyboards" defaultStr="OUR KEYBOARDS" transform="upper" />
-                    </h2>
-                    <hr className="dialect-hr" />
-                    <EditableComponentHelper
-                      dataTestid="EditableComponent__fvdialect-keyboards"
-                      isSection={isSection}
-                      computeEntity={dialect.compute}
-                      updateEntity={dialect.update}
-                      showPreview
-                      previewType="FVLink"
-                      property="fvdialect:keyboards"
-                      sectionProperty="contextParameters.dialect.keyboards"
-                      entity={selectn('response', dialect.compute)}
-                    />
-                  </div>
-                </AuthorizationFilter>
-              )
-            }
-          })()}
+          {(keyboards?.length > 0 || !isSection) && (
+            <div>
+              <h2>
+                <FVLabel transKey="general.our_keyboards" defaultStr="OUR KEYBOARDS" transform="upper" />
+              </h2>
+              <hr className="dialect-hr" />
+              {keyboards?.map((keyboard, i) => (
+                <Preview key={i} id={keyboard.uid} type={'FVLink'} />
+              ))}
+            </div>
+          )}
         </div>
 
         <div className={classNames('col-xs-12')}>
-          {(() => {
-            if (selectn('response.properties.fvdialect:contact_information', dialect.compute) || !isSection) {
-              return (
-                <AuthorizationFilter
-                  filter={{ permission: 'Write', entity: selectn('response', dialect.compute) }}
-                  renderPartial
-                >
-                  <div>
-                    <h2>
-                      <FVLabel
-                        transKey="general.contact_information"
-                        defaultStr="CONTACT INFORMATION"
-                        transform="upper"
-                      />
-                    </h2>
-                    <hr className="dialect-hr" />
-                    <EditableComponentHelper
-                      dataTestid="EditableComponent__fvdialect-contact_information"
-                      isSection={isSection}
-                      computeEntity={dialect.compute}
-                      updateEntity={dialect.update}
-                      property="fvdialect:contact_information"
-                      entity={selectn('response', dialect.compute)}
-                    />
-                  </div>
-                </AuthorizationFilter>
-              )
-            }
-          })()}
+          {(contactInfo || !isSection) && (
+            <div>
+              <h2>
+                <FVLabel transKey="general.contact_information" defaultStr="CONTACT INFORMATION" transform="upper" />
+              </h2>
+              <hr className="dialect-hr" />
+              <div className="fv-portal-about" dangerouslySetInnerHTML={{ __html: contactInfo }} />
+            </div>
+          )}
         </div>
       </div>
     )

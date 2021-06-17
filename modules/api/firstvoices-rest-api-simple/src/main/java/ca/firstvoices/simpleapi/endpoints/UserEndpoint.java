@@ -16,7 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/v1/users")
-@SecurityRequirement(name = "oauth2", scopes = {"archives:public"})
+@SecurityRequirement(name = "oauth2", scopes = {"sites:public"})
 @JWTAuth //requiredScopes omitted -- only requires a successful decode/key verification
 @AdministrativelyDisabled("user")
 public class UserEndpoint extends AbstractServiceEndpoint {

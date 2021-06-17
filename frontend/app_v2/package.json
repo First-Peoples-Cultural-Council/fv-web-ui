@@ -8,6 +8,7 @@
         "start": "webpack serve --env V1_URL=http://0.0.0.0:3001 --config webpack/webpack.development.js",
         "startDev": "webpack serve --env V1_URL=http://0.0.0.0:3001 API_URL=https://dev.firstvoices.com/nuxeo/api/v1/ --config webpack/webpack.development.js",
         "startPreprod": "webpack serve --env V1_URL=http://0.0.0.0:3001 API_URL=https://preprod.firstvoices.com/nuxeo/api/v1/ --config webpack/webpack.development.js",
+                "startInSkaffold": "webpack serve --progress --config webpack/webpack.skaffold.js",
         "build:production": "webpack --color --progress --config webpack/webpack.production.js",
         "build:production:serve": "npm run build:production; npx copyfiles src/assets/server.js dist -f; node dist/server.js",
         "styleguide:assets": "npx tailwindcss-cli@latest build -o ./dist/styleguide/tailwind.css; npx copyfiles src/assets/images/TestPhoto.jpg dist/styleguide -f",
