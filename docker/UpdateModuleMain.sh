@@ -36,7 +36,7 @@ else
     echo ''
 fi
 
-JAR_FILE=$(find target -name "*.jar" ! -name "*-tests.jar" -exec basename \{} . \;)
+JAR_FILE=$(find target -name "*.jar" ! -name "*-tests.jar" ! -name "original-*.jar" -exec basename \{} . \;)
 CURRENT_VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate -Dexpression=project.version -q -DforceStdout)
 echo "Module has been built: $JAR_FILE with version $CURRENT_VERSION"
 
