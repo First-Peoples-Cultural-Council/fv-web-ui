@@ -61,7 +61,6 @@ const PageHome = React.lazy(() => import('components/HomeLayout'))
 const PageContent = React.lazy(() => import('components/PageContent'))
 const PagePlay = React.lazy(() => import('components/Games'))
 const PageSearch = React.lazy(() => import('components/SearchDictionary/SearchDictionaryContainer'))
-const PageUserTasks = React.lazy(() => import('components/UserTasks'))
 const Join = React.lazy(() => import('components/Join/JoinContainer'))
 const Register = React.lazy(() => import('components/Register/RegisterContainer'))
 const PageUsersForgotPassword = React.lazy(() => import('components/Users/forgotpassword'))
@@ -166,7 +165,6 @@ export {
   Reports,
   PagePlay,
   PageSearch,
-  PageUserTasks,
   Join,
   Register,
   PageUsersForgotPassword,

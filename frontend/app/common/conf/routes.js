@@ -437,13 +437,6 @@ const routes = [
     page: <Pages.PagePlay />,
   },
   {
-    siteTheme: WORKSPACES,
-    path: ['tasks', 'users', new paramMatch('dialect', ANYTHING_BUT_SLASH)],
-    title: intl.translate({ key: 'tasks', default: 'Tasks', case: 'first' }),
-    page: <Pages.PageUserTasks type="users" />,
-    breadcrumbs: false,
-  },
-  {
     path: ['join'],
     title: intl.translate({ key: 'join', default: 'Join', case: 'first' }),
     page: <Pages.Join />,

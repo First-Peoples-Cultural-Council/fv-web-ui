@@ -43,7 +43,7 @@ public class FVChangeUserGroupToDialectGroup {
 
   public static final String ID = "FVChangeUserGroupToDialectGroup";
 
-  private static final Log log = LogFactory.getLog(FVGetPendingUserRegistrations.class);
+  private static final Log log = LogFactory.getLog(FVChangeUserGroupToDialectGroup.class);
 
   @Context protected CoreSession session;
 

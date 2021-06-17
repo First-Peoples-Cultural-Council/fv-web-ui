@@ -20,7 +20,6 @@
 
 package ca.firstvoices.workers;
 
-import static ca.firstvoices.operations.FVGetPendingUserRegistrations.APPROVED;
 import static ca.firstvoices.utils.FVRegistrationConstants.MID_REGISTRATION_PERIOD_ACT;
 import static ca.firstvoices.utils.FVRegistrationConstants.MID_REGISTRATION_PERIOD_IN_DAYS;
 import static ca.firstvoices.utils.FVRegistrationConstants.REGISTRATION_DELETION_ACT;
@@ -87,8 +86,7 @@ public class FVRegistrationTimeOutWorker extends AbstractWork {
         .getDefaultRepositoryName(),
         session -> {
         DocumentModelList registrations = session.query(
-            "SELECT * FROM FVUserRegistration WHERE ecm:currentLifeCycleState = '"
-                + APPROVED + "'");
+            "SELECT * FROM FVUserRegistration WHERE ecm:currentLifeCycleState = 'approved'");
 
         for (DocumentModel registration : registrations) {
           Calendar regCreated = (Calendar) registration.getPropertyValue("dc:created");
