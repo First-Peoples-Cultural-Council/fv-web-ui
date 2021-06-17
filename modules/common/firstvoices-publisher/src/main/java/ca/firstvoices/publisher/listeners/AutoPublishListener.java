@@ -48,6 +48,9 @@ public class AutoPublishListener implements EventListener {
     DocumentModel doc = ((DocumentEventContext) ctx).getSourceDocument();
 
     if (DOCUMENT_CREATED.equals(event.getName()) && doc != null) {
+      if (doc.getContextData().isEmpty()) {
+        return;
+      }
 
       if (doc.getContextData("fv-publish") == null
           || !Boolean.parseBoolean(doc.getContextData("fv-publish").toString())) {
