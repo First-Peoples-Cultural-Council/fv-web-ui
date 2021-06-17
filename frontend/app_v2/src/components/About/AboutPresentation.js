@@ -10,34 +10,33 @@ import PropTypes from 'prop-types'
  * @returns {node} jsx markup
  */
 function AboutPresentation({ title, text, image, link }) {
-  const renderLink = (l) => (
-    <a className="bg-fv-orange text-white px-4 py-4 rounded-xl font-bold text-l" href={l.href}>
-      {l.title}
-    </a>
-  )
-
   return (
-    <section className="bg-white" data-testid="AboutPresentation">
-      <div className="relative overflow-hidden py-4">
-        <div className="z-10 md:w-2/4 md:my-32 md:-right-32 px-6 py-6 bg-white relative ">
-          <h2 className="mb-4 lg:mb-10 lg:text-4xl text-fv-orange font-bold text-3xl uppercase">
+    <section className="py-6 mx-10" data-testid="AboutPresentation">
+      <div className="lg:inline-flex">
+        <div className="z-10 lg:-mr-20 lg:w-2/4 p-6 bg-white my-11">
+          <h2 className="mb-6 lg:text-4xl text-secondary font-bold text-3xl">
             <span className="inline-block">{title}</span>
           </h2>
-          <span
+          <div
             className="
+            z-10
             text-bold
             text-justify
             text-fv-charcoal
             inline-block
-            mb-4
+            mb-6
             lg:mb-10"
           >
             {text}
-          </span>
-          {link && renderLink(link)}
+          </div>
+          {link && (
+            <a className="bg-secondary text-white px-4 py-4 rounded-lg font-bold text-l" href={link.href}>
+              {link.title}
+            </a>
+          )}
         </div>
-        <div className="invisible md:visible  z-9 my-auto w-2/4 absolute top-2/4 inset-y-0 right-0 w-16">
-          <img className="transform -translate-y-2/4" src={image.href} />
+        <div className="z-9 my-auto">
+          <img src={image.href} />
         </div>
       </div>
     </section>

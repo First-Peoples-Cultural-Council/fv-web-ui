@@ -46,12 +46,12 @@ function ActionsMenuPresentation({
       {actions.includes('share') && (
         <button
           id="ShareAction"
-          className="ml-2 pl-2 relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal hover:text-black border-l border-gray-300"
+          className="ml-2 pl-2 relative inline-flex items-center text-sm font-semibold text-fv-charcoal hover:text-black border-l border-gray-300"
           onClick={() => setShareModalOpen(true)}
         >
           <span className="sr-only">Share</span>
           {useIcon('WebShare', 'fill-current h-8 w-8 md:h-6 md:w-6')}
-          {withLabels ? <span className="mx-2">Share</span> : null}
+          {withLabels ? <span className="mx-2">SHARE</span> : null}
         </button>
       )}
 
@@ -60,9 +60,9 @@ function ActionsMenuPresentation({
         <Menu as="div" className="relative inline-flex text-left">
           {({ open }) => (
             <>
-              <Menu.Button className="ml-2 pl-2 relative inline-flex items-center text-sm font-semibold uppercase text-fv-charcoal hover:text-black border-l border-gray-300">
+              <Menu.Button className="ml-2 pl-2 relative inline-flex items-center text-sm font-semibold text-fv-charcoal hover:text-black border-l border-gray-300">
                 {useIcon('More', 'fill-current h-8 w-8 md:h-6 md:w-6')}
-                {withLabels ? <span className="mx-2">More</span> : null}
+                {withLabels ? <span className="mx-2">MORE</span> : null}
               </Menu.Button>
 
               <Transition
@@ -77,7 +77,7 @@ function ActionsMenuPresentation({
               >
                 <Menu.Items
                   static
-                  className="z-10 origin-top-right absolute top-5 right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  className="z-10 origin-top-right absolute top-5 right-0 mt-2 w-40 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                 >
                   <div className="py-1">
                     {moreActions.includes('share') && (
@@ -87,13 +87,13 @@ function ActionsMenuPresentation({
                             id="ShareAction"
                             className={classNames(
                               active ? 'bg-gray-100 text-fv-charcoal' : 'text-fv-charcoal-light',
-                              'w-full group flex items-center px-4 py-2 text-sm uppercase'
+                              'w-full group flex items-center px-4 py-2 text-sm'
                             )}
                             onClick={() => setShareModalOpen(true)}
                           >
                             <span className="sr-only">Share</span>
                             {useIcon('WebShare', 'fill-current h-8 w-8 md:h-6 md:w-6')}
-                            <span className="ml-2">Share</span>
+                            <span className="ml-2">SHARE</span>
                           </button>
                         )}
                       </Menu.Item>

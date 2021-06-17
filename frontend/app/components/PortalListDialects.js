@@ -77,7 +77,7 @@ export class PortalListDialects extends Component {
     const href = encodeURI(`/${this.props.siteTheme}${tile.path.replace('/Portal', '')}`)
     const dialectTitle = selectn('title', tile)
     const dialectGroups = selectn('groups', tile) || []
-    const joinText = selectn('fvdialect:join_text', tile) || 'Are you a member of the community or language team?'
+    const joinText = selectn('joinText', tile) || 'Are you a member of the community or language team?'
 
     return (
       <DialectTile

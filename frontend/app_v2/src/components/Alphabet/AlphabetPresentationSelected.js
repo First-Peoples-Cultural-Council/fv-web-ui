@@ -30,7 +30,7 @@ const AlphabetPresentationSelected = ({ sitename, selectedData, onVideoClick, vi
             sm:text-4xl
             text-3xl
             text-center
-            text-fv-blue
+            text-primary
             mb-5"
       >
         {title}
@@ -52,7 +52,7 @@ const AlphabetPresentationSelected = ({ sitename, selectedData, onVideoClick, vi
           <table className="table-auto mx-auto my-5 w-3/4">
             <thead>
               <tr>
-                <th colSpan="3" className="sm:text-2xl font-medium text-xl text-center text-fv-blue p-3">
+                <th colSpan="3" className="sm:text-2xl font-medium text-xl text-center text-primary p-3">
                   Example words
                 </th>
               </tr>
@@ -97,21 +97,20 @@ const AlphabetPresentationSelected = ({ sitename, selectedData, onVideoClick, vi
           <button
             onClick={onVideoClick}
             className="
-            bg-fv-orange
-            hover:bg-fv-orange-dark
-            border
-            border-transparent
+            border-4
+            border-primary
+            hover:bg-secondary-dark
             flex
             font-medium
             items-center
             justify-center
             px-5
             py-2
-            rounded-3xl
+            rounded-lg
             shadow-sm
             text-base
             text-center
-            text-white"
+            text-primary"
           >
             {useIcon('Play', 'fill-current mr-2 -ml-1 h-8 w-8')}
             Play Video

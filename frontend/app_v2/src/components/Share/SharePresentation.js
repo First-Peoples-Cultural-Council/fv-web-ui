@@ -15,7 +15,7 @@ function SharePresentation({ url, title }) {
       {navigator.share ? (
         <li>
           <button
-            className="my-2 mx-1 h-9 w-9 inline-flex items-center align-center justify-center rounded text-white bg-fv-purple"
+            className="my-2 mx-1 h-9 w-9 inline-flex items-center align-center justify-center rounded text-white bg-tertiaryB"
             onClick={() =>
               navigator.share({
                 title: title,
@@ -59,7 +59,7 @@ function SharePresentation({ url, title }) {
       </li>
       <li>
         <a
-          className="my-2 mx-1 h-9 w-9 inline-flex items-center align-center justify-center rounded text-white bg-fv-red"
+          className="my-2 mx-1 h-9 w-9 inline-flex items-center align-center justify-center rounded text-white bg-secondary"
           href={`mailto:?subject=${title}&body=${url}`}
         >
           {useIcon('Mail', 'fill-current h-7 w-7')}

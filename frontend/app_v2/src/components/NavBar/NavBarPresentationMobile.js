@@ -29,10 +29,10 @@ function NavBarPresentationMobile({ menuData }) {
         <button
           type="button"
           onClick={() => onMenuClick(item)}
-          className="w-full m-3 p-1 text-fv-blue flex items-center hover:bg-gray-50 focus:outline-none focus:ring-0"
+          className="w-full m-3 p-1 text-primary flex items-center hover:bg-gray-50 focus:outline-none focus:ring-0"
         >
           {useIcon(item.title, 'fill-current h-12 w-8')}
-          <p className="ml-3 text-fv-blue font-medium hover:text-fv-blue-dark">{item.title}</p>
+          <p className="ml-3 text-primary font-medium hover:text-primary-dark">{item.title}</p>
           {!Array.isArray(item.itemsData) || !item.itemsData.length
             ? null
             : useIcon('ChevronRight', 'absolute right-3 fill-current w-10')}
@@ -51,16 +51,16 @@ function NavBarPresentationMobile({ menuData }) {
               <button
                 href="/nuxeo/logout?requestedUrl=login.jsp"
                 type="button"
-                className="w-full m-3 p-1 text-fv-blue flex items-center hover:bg-gray-50 focus:outline-none"
+                className="w-full m-3 p-1 text-primary flex items-center hover:bg-gray-50 focus:outline-none"
               >
                 {useIcon('Login', 'fill-current h-12 w-8')}
-                <p className="ml-3 text-fv-blue font-medium hover:text-fv-blue-dark">Sign in</p>
+                <p className="ml-3 text-primary font-medium hover:text-primary-dark">Sign in</p>
               </button>
             </li>
             <li key="Register_id" className="py-5 px-5 space-y-6 w-full flex items-center">
               <a
                 href="/register"
-                className="ml-8 whitespace-nowrap inline-flex items-center justify-center py-2 px-4 border border-transparent rounded-3xl  shadow-sm text-base font-medium text-white bg-fv-orange hover:bg-fv-orange-dark"
+                className="ml-8 whitespace-nowrap inline-flex items-center justify-center py-2 px-4 border border-transparent rounded-lg  shadow-sm text-base font-medium text-white bg-secondary hover:bg-secondary-dark"
               >
                 Register
               </a>
@@ -73,10 +73,10 @@ function NavBarPresentationMobile({ menuData }) {
               <button
                 type="button"
                 onClick={() => setSelectedMenu(null)}
-                className="w-full m-3 p-1 text-fv-blue flex items-center hover:bg-gray-50 focus:outline-none"
+                className="w-full m-3 p-1 text-primary flex items-center hover:bg-gray-50 focus:outline-none"
               >
                 {useIcon('ChevronLeft', 'fill-current h-12 w-8')}
-                <p className="ml-3 text-fv-blue font-medium hover:text-fv-blue-dark">Back</p>
+                <p className="ml-3 text-primary font-medium hover:text-primary-dark">Back</p>
               </button>
             </li>
           </ul>
