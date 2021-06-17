@@ -15,6 +15,9 @@ public class SimpleAPINuxeoConfigurationDescriptorImpl implements SimpleAPINuxeo
   @XNode("disabledEndpoints")
   public String disabledEndpoints;
 
+  @XNode("allowedSites")
+  public String allowedSites;
+
   @Override
   public String getJwksUrl() {
     return jwksUrl;
@@ -23,6 +26,13 @@ public class SimpleAPINuxeoConfigurationDescriptorImpl implements SimpleAPINuxeo
   @Override
   public Set<String> getDisabledEndpoints() {
     return Arrays.stream(disabledEndpoints.split(","))
+        .map(String::trim)
+        .collect(Collectors.toSet());
+  }
+
+  @Override
+  public Set<String> getAllowedSites() {
+    return Arrays.stream(allowedSites.split(","))
         .map(String::trim)
         .collect(Collectors.toSet());
   }

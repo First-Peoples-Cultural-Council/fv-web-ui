@@ -15,6 +15,7 @@
         <configuration>
             <jwksUrl>${fv.simplifiedapi.jwksUrl}</jwksUrl>
             <disabledEndpoints>${fv.simplifiedapi.disabledEndpoints}</disabledEndpoints>
+            <allowedSites>${fv.simplifiedapi.allowedSites}</allowedSites>
         </configuration>
 
     </extension>
