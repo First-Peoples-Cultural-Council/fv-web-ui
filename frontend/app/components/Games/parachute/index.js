@@ -16,18 +16,24 @@ limitations under the License.
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Immutable from 'immutable'
-import { connect } from 'react-redux'
-import selectn from 'selectn'
 
-// FPCC
+import ParachuteGame from './ParachuteGame'
+
+// REDUX
+import { connect } from 'react-redux'
+// REDUX: actions/dispatch/func
 import { fetchCharacters } from 'reducers/fvCharacter'
 import { fetchWords } from 'reducers/fvWord'
-import ProviderHelpers from 'common/ProviderHelpers'
-import NavigationHelpers from 'common/NavigationHelpers'
-import ParachuteGame from 'components/Games/parachute/ParachuteGame'
+
+import selectn from 'selectn'
+
 import PromiseWrapper from 'components/PromiseWrapper'
 
+import ProviderHelpers from 'common/ProviderHelpers'
+import NavigationHelpers from 'common/NavigationHelpers'
+
 const PUZZLES = 25
+const MIN_REQ_WORDS = 5
 
 const { func, object } = PropTypes
 export class Parachute extends Component {
@@ -63,16 +69,19 @@ export class Parachute extends Component {
   async fetchData(props /*, pageIndex, pageSize, sortOrder, sortBy*/) {
     await props.fetchCharacters(
       props.routeParams.dialect_path + '/Alphabet',
-      'AND fv:custom_order IS NOT NULL' +
-        '&currentPageIndex=0&pageSize=100&sortOrder=asc&sortBy=fvcharacter:alphabet_order'
+      '&currentPageIndex=0' + '&pageSize=100' + '&sortOrder=asc' + '&sortBy=fvcharacter:alphabet_order'
     )
     //First we make a guess about the word results
     await props.fetchWords(
       props.routeParams.dialect_path + '/Dictionary',
-      ' AND fv:available_in_childrens_archive = 1 AND fv:custom_order IS NOT NULL AND ' +
+      //' AND ' + ProviderHelpers.switchWorkspaceSectionKeys('fv:related_pictures', this.props.routeParams.area) +'/* IS NOT NULL' +
+      ' AND fv:available_in_childrens_archive = 1' +
+        ' AND ' +
         ProviderHelpers.switchWorkspaceSectionKeys('fv:related_audio', this.props.routeParams.area) +
         '/* IS NOT NULL' +
+        //' AND fv-word:available_in_games = 1' +
         '&currentPageIndex=' +
+        //currentPageIndex +
         this.randomIntBetween(0, Math.ceil(this.state.resultCount / PUZZLES) || 10) +
         '&pageSize=' +
         PUZZLES
@@ -88,19 +97,17 @@ export class Parachute extends Component {
     if (resultCount / PUZZLES < 10 && this.state.resultCount === undefined) {
       //We refine our intial query/guess based on the first one
       //This should only happen once
-
-      // Conditions for words:
-      // 1) marked as available in childrens archive
-      // 2) all letters have a recognized character in custom order (NOT LIKE "~")
-      // 3) at least one audio exists
-
       this.setState({ resultCount: resultCount })
       await props.fetchWords(
         props.routeParams.dialect_path + '/Dictionary',
-        ' AND fv:available_in_childrens_archive = 1 AND fv:custom_order NOT LIKE "~" AND ' +
+        //' AND ' + ProviderHelpers.switchWorkspaceSectionKeys('fv:related_pictures', this.props.routeParams.area) +'/* IS NOT NULL' +
+        ' AND fv:available_in_childrens_archive = 1' +
+          ' AND ' +
           ProviderHelpers.switchWorkspaceSectionKeys('fv:related_audio', this.props.routeParams.area) +
           '/* IS NOT NULL' +
+          //' AND fv-word:available_in_games = 1' +
           '&currentPageIndex=' +
+          //currentPageIndex +
           this.randomIntBetween(0, Math.ceil(resultCount / PUZZLES)) +
           '&pageSize=' +
           PUZZLES
@@ -136,10 +143,17 @@ export class Parachute extends Component {
       this.setState({
         currentPuzzleIndex: 0,
       })
+      //,await () => {this.fetchData(this.props)}
+      //, () => {} Add fetchData here if puzzle index needs to be updated first
     }
   }
 
+  /**
+   * Render
+   */
   render() {
+    let game = ''
+
     const computeEntities = Immutable.fromJS([
       {
         id: this.props.routeParams.dialect_path + '/Alphabet',
@@ -150,78 +164,66 @@ export class Parachute extends Component {
         entity: this.props.computeWords,
       },
     ])
-
+    /*
     const computeCharacters = ProviderHelpers.getEntry(
       this.props.computeCharacters,
       this.props.routeParams.dialect_path + '/Alphabet'
     )
-
+    */
     const computeWords = ProviderHelpers.getEntry(
       this.props.computeWords,
       this.props.routeParams.dialect_path + '/Dictionary'
     )
 
-    const alphabetArray = (selectn('response.entries', computeCharacters) || []).map((char) => {
-      const title = selectn('properties.dc:title', char)
-      const customOrder = selectn('properties.fv:custom_order', char)
-      return { customOrder, title }
-    })
+    if (selectn('response.resultsCount', computeWords) < MIN_REQ_WORDS) {
+      return (
+        <div>
+          Game not available: At least 5 child-friendly words with audio are required for this game... Found{' '}
+          <strong>{selectn('response.resultsCount', computeWords)}</strong> words.
+        </div>
+      )
+    }
+    // For now, don't use built in alphabets as most are incomplete
+    /*const alphabet_array = (selectn('response.entries', computeCharacters) || []).map(function(char) {
+          return selectn('properties.dc:title', char);
+        });*/
 
     const words = (selectn('response.entries', computeWords) || []).map((word) => {
-      const customOrderArray = (selectn('properties.fv:custom_order', word) || '').split('')
-      const puzzleParts = customOrderArray.map((customOrder) => {
-        const character = alphabetArray.find((obj) => {
-          return obj.customOrder === customOrder
-        })
-        if (!character?.title) {
-          return null
-        }
-        return character.title
-      })
-      const audio = selectn('contextParameters.word.related_audio[0].path', word)
-        ? `${NavigationHelpers.getBaseURL()}${word.contextParameters?.word.related_audio[0].path}?inline=true`
-        : ''
-
       return {
         puzzle: selectn('properties.dc:title', word),
-        puzzleParts: puzzleParts,
         translation:
           selectn('properties.fv:literal_translation[0].translation', word) ||
           selectn('properties.fv:definitions[0].translation', word),
-        audio: audio,
+        audio:
+          NavigationHelpers.getBaseURL() +
+          selectn('contextParameters.word.related_audio[0].path', word) +
+          '?inline=true',
       }
     })
 
-    if (alphabetArray?.length < 1 || words?.length < 1) {
-      return (
-        <PromiseWrapper renderOnError computeEntities={computeEntities}>
-          <div className="parachute-game" style={{ textAlign: 'center', padding: '10px' }}>
-            <h1>Parachute</h1>
-            <h3>Game not available</h3>
-            {alphabetArray?.length < 5 ? (
-              <div>Game not available: An alphabet needs to be uploaded to FirstVoices for this game to function.</div>
-            ) : (
-              <div>
-                Game not available: At least 5 words that meet the requirements with audio and an image are required for
-                this game.
-              </div>
-            )}
-          </div>
-        </PromiseWrapper>
-      )
+    // const word_obj_array = selectn('response.entries', computeWords)
+    function shuffle(array) {
+      //Based on Fisher-Yates shuffle
+      for (let i = array.length - 1; i > 0; i--) {
+        const rand = Math.floor(Math.random() * (1 + i))
+        const temp = array[i]
+        array[i] = array[rand]
+        array[rand] = temp
+      }
     }
 
-    // words[this.state.currentPuzzleIndex].alphabet = alphabetArray
+    if (words.length > 0) {
+      //Since the alphabet isn't complete, we need fill in the rest
+      const character = words.map((word) => word.puzzle).join('')
+      const uniqueCharacters = Array.from(new Set(character.split(/(?!$)/u))).filter((v) => v !== ' ')
+      shuffle(uniqueCharacters)
+      words[this.state.currentPuzzleIndex].alphabet = uniqueCharacters // (alphabet_array.length > 0) ? alphabet_array :
+      game = <ParachuteGame newPuzzle={this.newPuzzle} {...words[this.state.currentPuzzleIndex]} />
+    }
 
     return (
       <PromiseWrapper renderOnError computeEntities={computeEntities}>
-        <div className="parachute-game">
-          <ParachuteGame
-            newPuzzle={this.newPuzzle}
-            alphabet={alphabetArray}
-            word={words[this.state.currentPuzzleIndex]}
-          />
-        </div>
+        <div className="parachute-game">{game}</div>
       </PromiseWrapper>
     )
   }
