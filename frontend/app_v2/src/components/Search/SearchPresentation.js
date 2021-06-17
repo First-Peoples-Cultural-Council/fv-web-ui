@@ -49,9 +49,7 @@ function SearchPresentation({
             {currentFilter !== 'ALL' && filter.type === 'ALL' ? (
               <>{useIcon('BackArrow', 'inline-flex pb-2 h-7 text-primary fill-current')} Back to all results</>
             ) : (
-              <>
-                {filter.label} {filter.count ? `(${filter.count})` : null}
-              </>
+              <>{filter.label}</>
             )}
           </Link>
         </li>

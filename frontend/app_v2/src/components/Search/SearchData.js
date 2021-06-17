@@ -5,6 +5,7 @@ import { useHistory, useLocation, useParams } from 'react-router-dom'
 import useGetSite from 'common/useGetSite'
 import searchApi from 'services/api/search'
 import { triggerError } from 'common/navigationHelpers'
+import { makePlural } from 'common/urlHelpers'
 
 /**
  * @summary SearchData
@@ -71,7 +72,7 @@ function SearchData() {
   const countsByType = data?.statistics.countsByType ? data.statistics.countsByType : {}
 
   for (const [key, value] of Object.entries(countsByType)) {
-    filters.push({ type: getType(key), label: key, count: value })
+    filters.push({ type: getType(key), label: makePlural(key), count: value })
   }
 
   function getType(countKey) {
