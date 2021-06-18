@@ -44,14 +44,14 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
         return (
           <>
             {link}
-            <Word.Container docId={'a5c17a6c-31dd-458a-bc4a-d00ac3306eca'} />
+            <Word.Container docId={selectedItem.id} />
           </>
         )
       case 'phrase':
         return (
           <>
             {link}
-            <Phrase.Container docId={'a5c17a6c-31dd-458a-bc4a-d00ac3306eca'} />
+            <Phrase.Container docId={selectedItem.id} />
           </>
         )
       default:
