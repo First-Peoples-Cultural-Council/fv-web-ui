@@ -7,7 +7,7 @@
   <parent>
     <artifactId>modules.common</artifactId>
     <groupId>ca.firstvoices</groupId>
-    <version>3.5.7</version>
+    <version>3.5.8</version>
   </parent>
   <dependencies>
     <dependency>

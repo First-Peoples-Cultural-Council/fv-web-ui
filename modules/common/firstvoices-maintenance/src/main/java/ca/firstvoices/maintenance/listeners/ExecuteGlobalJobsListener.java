@@ -21,6 +21,7 @@
 package ca.firstvoices.maintenance.listeners;
 
 import static ca.firstvoices.data.lifecycle.Constants.PUBLISHED_STATE;
+import static ca.firstvoices.data.lifecycle.Constants.REPUBLISH_TRANSITION;
 
 import ca.firstvoices.core.io.services.AssignAncestorsService;
 import ca.firstvoices.core.io.utils.SessionUtils;
@@ -163,14 +164,14 @@ public class ExecuteGlobalJobsListener implements EventListener {
         .doPrivileged(Framework.getService(RepositoryManager.class).getDefaultRepositoryName(),
             session -> {
               // Get all relevant types to populate ancestry information
-              String query = "SELECT * FROM FVWord, FVPhrase, FVBook, FVPage WHERE "
+              String query = "SELECT * FROM FVWord, FVPhrase, FVBook WHERE "
                   + " fva:dialect IS NULL AND "
                   + " ecm:currentLifeCycleState NOT LIKE 'Republish' AND "
                   + " ecm:isTrashed = 0 AND "
                   + " ecm:isProxy = 0 AND "
                   + " ecm:isVersion = 0";
 
-              long pageSize = 500;
+              long pageSize = 1000;
 
               DocumentModelList documents = session.query(query, null, pageSize, 0, true);
 
@@ -184,31 +185,12 @@ public class ExecuteGlobalJobsListener implements EventListener {
                   () -> "GLOBAL JOB: Found " + documents.totalSize()
                       + " docs to fix ancestry.");
 
-              populateAncestry(session, documents);
+              populateAncestryAndPublish(session, documents);
               session.save();
-
-              // commit the first page
-              TransactionHelper.commitOrRollbackTransaction();
-
-              // loop on other children
-              long nbChildren = documents.totalSize();
-              for (long offset = pageSize; offset < nbChildren; offset += pageSize) {
-                long i = offset;
-                // start a new transaction
-                TransactionHelper.runInTransaction(() -> {
-                  DocumentModelList docs =
-                      session.query(query, null, pageSize, i, false);
-                  populateAncestry(session, docs);
-                  session.save();
-                });
-              }
-
-              // start a new transaction for following
-              TransactionHelper.startTransaction();
             });
   }
 
-  private void populateAncestry(CoreSession session, DocumentModelList docs) {
+  private void populateAncestryAndPublish(CoreSession session, DocumentModelList docs) {
     AssignAncestorsService assignAncestorsService =
         Framework.getService(AssignAncestorsService.class);
 
@@ -219,7 +201,12 @@ public class ExecuteGlobalJobsListener implements EventListener {
     for (DocumentModel docWithoutAncestors : docs) {
       try {
         DocumentModel doc = assignAncestorsService.assignAncestors(docWithoutAncestors);
-        SessionUtils.saveDocumentWithoutEvents(session, doc, true, eventsToDisable);
+        DocumentModel savedDoc =
+            SessionUtils.saveDocumentWithoutEvents(session, doc, true, eventsToDisable);
+
+        if (StateUtils.isPublished(savedDoc)) {
+          StateUtils.followTransitionIfAllowed(savedDoc, REPUBLISH_TRANSITION);
+        }
       } catch (Exception e) {
         log.severe(
             () -> "Failed when trying to execute global jobs with message: " + e
