@@ -182,18 +182,16 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
                   ))}
                 </tbody>
               </table>
-              <div>
-                <button
-                  ref={loadButtonRef}
-                  className={
-                    'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-primary capitalize text-white'
-                  }
-                  onClick={() => fetchNextPage()}
-                  disabled={!hasNextPage || isFetchingNextPage}
-                >
-                  {loadButtonLabel}
-                </button>
-              </div>
+            </div>
+            <div>
+              <button
+                ref={loadButtonRef}
+                className={'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-primary text-white'}
+                onClick={() => fetchNextPage()}
+                disabled={!hasNextPage || isFetchingNextPage}
+              >
+                {loadButtonLabel}
+              </button>
             </div>
           </div>
         </div>

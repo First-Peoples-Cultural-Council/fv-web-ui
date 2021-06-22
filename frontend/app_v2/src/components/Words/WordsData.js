@@ -48,7 +48,7 @@ function WordsData() {
   if (isFetchingNextPage) {
     loadButtonLabel = 'Loading more...'
   } else if (hasNextPage) {
-    loadButtonLabel = 'Load More'
+    loadButtonLabel = 'Load more'
   } else {
     loadButtonLabel = 'Nothing more to load'
   }

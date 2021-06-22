@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import PhraseData from 'components/Phrase/PhraseData'
 import DictionaryDetail from 'components/DictionaryDetail'
 import Loading from 'components/Loading'
@@ -17,6 +18,12 @@ function PhraseContainer({ docId }) {
       <DictionaryDetail.Presentation actions={actions} entry={entry} moreActions={moreActions} sitename={sitename} />
     </Loading.Container>
   )
+}
+
+// PROPTYPES
+const { string } = PropTypes
+PhraseContainer.propTypes = {
+  docId: string,
 }
 
 export default PhraseContainer
