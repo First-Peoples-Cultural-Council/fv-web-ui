@@ -22,7 +22,7 @@ import Phrase from 'components/Phrase'
  * @returns {node} jsx markup
  */
 
-function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items, moreActions, sitename, wholeDomain }) {
+function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items, moreActions, sitename }) {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [selectedItem, setselectedItem] = useState({})
   const { isFetchingNextPage, fetchNextPage, hasNextPage, loadButtonLabel, loadButtonRef } = infiniteScroll
@@ -88,20 +88,6 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
                     >
                       Translation
                     </th>
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-fv-charcoal-light uppercase tracking-wider"
-                    >
-                      Type
-                    </th>
-                    {wholeDomain ? (
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-fv-charcoal-light uppercase tracking-wider"
-                      >
-                        Language Site
-                      </th>
-                    ) : null}
                     <th scope="col" className="relative px-6 py-3">
                       <span className="sr-only">Actions</span>
                     </th>
@@ -153,18 +139,6 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
                               </ol>
                             ) : null}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span
-                              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${type} capitalize text-white`}
-                            >
-                              {type}
-                            </span>
-                          </td>
-                          {wholeDomain ? (
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-fv-charcoal-light">
-                              <Link to={`/${parentDialect.shortUrl}`}>{parentDialect.name}</Link>
-                            </td>
-                          ) : null}
                           <td className="text-right px-6">
                             <ActionsMenu.Container
                               docId={id}
@@ -214,11 +188,9 @@ DictionaryListPresentation.propTypes = {
   items: object,
   moreActions: array,
   sitename: string,
-  wholeDomain: bool,
 }
 
 DictionaryListPresentation.defaultProps = {
-  wholeDomain: false,
   actions: [],
   moreActions: [],
 }

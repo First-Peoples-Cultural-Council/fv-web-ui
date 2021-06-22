@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 
@@ -16,15 +16,12 @@ import dictionaryApi from 'services/api/dictionary'
  *
  */
 function WordsData() {
-  const { title, uid } = useGetSite()
+  const { uid } = useGetSite()
   const location = useLocation()
   const history = useHistory()
   const { sitename } = useParams()
 
-  const searchTerm = new URLSearchParams(location.search).get('q') ? new URLSearchParams(location.search).get('q') : ''
   const query = location.search ? location.search : '?&docType=WORD&perPage=5&sortBy=entry'
-
-  const [currentFilter, setCurrentFilter] = useState('WORD')
 
   // Param options: perPage=100&page=1&kidsOnly=false&gamesOnly=false&sortBy=entry&docType=WORDS_AND_PHRASES&sortAscending=true&q=Appla&alphabetCharacter=A
   const response = useInfiniteQuery(
@@ -62,38 +59,11 @@ function WordsData() {
   // Props needed for infinite scroll
   const infiniteScroll = { fetchNextPage, hasNextPage, isFetchingNextPage, loadButtonLabel, loadButtonRef }
 
-  // Get Filters
-  const filters = [{ type: 'ALL', label: 'All Results', count: data?.pages?.[0].statistics.resultCount }]
-  const countsByType = data?.pages?.[0].statistics.countsByType ? data.pages[0].statistics.countsByType : {}
-
-  for (const [key, value] of Object.entries(countsByType)) {
-    filters.push({ type: getType(key), label: key, count: value })
-  }
-
-  function getType(countKey) {
-    if (countKey === 'word' || countKey === 'phrase') {
-      return countKey.toUpperCase()
-    }
-    if (countKey === 'song' || countKey === 'story') {
-      return 'BOOK'
-    }
-    return 'ALL'
-  }
-
-  const handleFilter = (filter) => {
-    setCurrentFilter(filter)
-  }
-
   return {
-    currentFilter,
-    siteTitle: title ? title : 'FirstVoices',
-    filters,
-    handleFilter,
     isLoading: isLoading || isError,
     items: data ? data : {},
     actions: ['copy'],
     moreActions: ['share'],
-    searchTerm,
     sitename,
     infiniteScroll,
   }

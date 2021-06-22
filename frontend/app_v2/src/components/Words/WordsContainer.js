@@ -11,37 +11,14 @@ import WordsData from 'components/Words/WordsData'
  * @returns {node} jsx markup
  */
 function WordsContainer() {
-  const {
-    actions,
-    currentFilter,
-    filters,
-    handleFilter,
-    handleSearchSubmit,
-    handleTextFieldChange,
-    isLoading,
-    items,
-    moreActions,
-    newSearchValue,
-    searchTerm,
-    sitename,
-    siteTitle,
-    infiniteScroll,
-  } = WordsData()
+  const { isLoading, items, actions, moreActions, sitename, infiniteScroll } = WordsData()
   return (
     <WordsPresentation
       actions={actions}
-      currentFilter={currentFilter}
-      filters={filters}
-      handleFilter={handleFilter}
-      handleSearchSubmit={handleSearchSubmit}
-      handleTextFieldChange={handleTextFieldChange}
       isLoading={isLoading}
       items={items}
       moreActions={moreActions}
-      newSearchValue={newSearchValue}
-      searchTerm={searchTerm}
       sitename={sitename}
-      siteTitle={siteTitle}
       infiniteScroll={infiniteScroll}
     />
   )
