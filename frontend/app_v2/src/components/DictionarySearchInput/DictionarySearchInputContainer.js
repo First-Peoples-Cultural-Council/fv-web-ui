@@ -1,12 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import SearchInputPresentation from 'components/SearchInput/SearchInputPresentation'
-import SearchInputPresentationMinimal from 'components/SearchInput/SearchInputPresentationMinimal'
-import SearchInputData from 'components/SearchInput/SearchInputData'
+import DictionarySearchInputPresentation from 'components/DictionarySearchInput/DictionarySearchInputPresentation'
+import DictionarySearchInputData from 'components/DictionarySearchInput/DictionarySearchInputData'
 
 /**
- * @summary SearchInputContainer
+ * @summary DictionarySearchInputContainer
  * @component
  *
  * @param {object} props
@@ -14,7 +13,7 @@ import SearchInputData from 'components/SearchInput/SearchInputData'
  *
  * @returns {node} jsx markup
  */
-function SearchInputContainer({ minimal }) {
+function DictionarySearchInputContainer({ docType }) {
   const {
     currentOption,
     handleSearchSubmit,
@@ -26,16 +25,9 @@ function SearchInputContainer({ minimal }) {
     options,
     searchValue,
     siteTitle,
-  } = SearchInputData()
-  return minimal ? (
-    <SearchInputPresentationMinimal
-      handleSearchSubmit={handleSearchSubmit}
-      handleTextFieldChange={handleTextFieldChange}
-      searchValue={searchValue}
-      siteTitle={siteTitle}
-    />
-  ) : (
-    <SearchInputPresentation
+  } = DictionarySearchInputData({ docType })
+  return (
+    <DictionarySearchInputPresentation
       currentOption={currentOption}
       handleSearchSubmit={handleSearchSubmit}
       handleTextFieldChange={handleTextFieldChange}
@@ -51,9 +43,9 @@ function SearchInputContainer({ minimal }) {
 }
 
 // PROPTYPES
-const { bool } = PropTypes
-SearchInputContainer.propTypes = {
-  minimal: bool,
+const { string } = PropTypes
+DictionarySearchInputContainer.propTypes = {
+  docType: string.isRequired,
 }
 
-export default SearchInputContainer
+export default DictionarySearchInputContainer

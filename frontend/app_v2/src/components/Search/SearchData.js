@@ -23,7 +23,7 @@ function SearchData() {
 
   // Extract search term from URL search params
   const searchTerm = new URLSearchParams(location.search).get('q') ? new URLSearchParams(location.search).get('q') : ''
-  const docTypeFilter = new URLSearchParams(location.search).get('docType')
+  const docType = new URLSearchParams(location.search).get('docType')
     ? new URLSearchParams(location.search).get('docType')
     : 'ALL'
   const domain = new URLSearchParams(location.search).get('domain')
@@ -31,7 +31,7 @@ function SearchData() {
     : 'BOTH'
 
   // Local State
-  const [currentFilter, setCurrentFilter] = useState(docTypeFilter)
+  const [currentFilter, setCurrentFilter] = useState(docType)
   const [items, setItems] = useState([])
 
   // Data fetch

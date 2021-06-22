@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 import DictionaryListPresentation from 'components/DictionaryList/DictionaryListPresentation'
-import SearchInput from 'components/SearchInput'
+import DictionarySearchInput from 'components/DictionarySearchInput'
 
 /**
  * @summary PhrasesPresentation
@@ -18,7 +18,7 @@ function PhrasesPresentation({ isLoading, items, actions, moreActions, sitename,
     <>
       <section className="bg-gradient-to-b from-phrase to-phrase-dark p-5">
         <div className="mx-auto lg:w-3/5">
-          <SearchInput.Container docType={'WORD'} />
+          <DictionarySearchInput.Container docType={'PHRASE'} />
         </div>
       </section>
       <div className="grid grid-cols-11 md:p-2">

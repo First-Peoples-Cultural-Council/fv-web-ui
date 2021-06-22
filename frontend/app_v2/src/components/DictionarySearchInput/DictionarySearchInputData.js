@@ -2,17 +2,18 @@ import { useEffect, useRef, useState } from 'react'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
+import { makePlural } from 'common/urlHelpers'
 import useGetSite from 'common/useGetSite'
 
 /**
- * @summary SearchInputData
+ * @summary DictionarySearchInputData
  * @component
  *
  * @param {object} props
  * @param {function} props.children
  *
  */
-function SearchInputData() {
+function DictionarySearchInputData({ docType }) {
   const { title } = useGetSite()
   const { sitename } = useParams()
   const history = useHistory()
@@ -23,16 +24,13 @@ function SearchInputData() {
   const domain = new URLSearchParams(location.search).get('domain')
     ? new URLSearchParams(location.search).get('domain')
     : 'BOTH'
-  const type = new URLSearchParams(location.search).get('docType')
-    ? new URLSearchParams(location.search).get('docType')
-    : 'ALL'
   const domainLabel = getLabel(domain)
 
   // Local State
   const [searchValue, setSearchValue] = useState(searchTerm)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [currentOption, setCurrentOption] = useState({ label: domainLabel, id: domain })
-
+  const path = makePlural(docType).toLowerCase()
   const options = [
     { label: 'All', id: 'BOTH' },
     { label: 'English', id: 'ENGLISH' },
@@ -59,8 +57,8 @@ function SearchInputData() {
   const handleSearchSubmit = (event) => {
     if (searchValue && searchValue !== searchTerm) {
       history.push({
-        pathname: `${baseUrl}/search`,
-        search: `?q=${searchValue}&domain=${currentOption.id}&docType=${type}`,
+        pathname: `${baseUrl}/${path}`,
+        search: `?q=${searchValue}&domain=${currentOption.id}&docType=${docType}`,
       })
     }
     event.preventDefault()
@@ -109,8 +107,8 @@ function SearchInputData() {
 
 // PROPTYPES
 const { string } = PropTypes
-SearchInputData.propTypes = {
-  docType: string,
+DictionarySearchInputData.propTypes = {
+  docType: string.isRequired,
 }
 
-export default SearchInputData
+export default DictionarySearchInputData
