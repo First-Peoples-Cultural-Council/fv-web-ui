@@ -19,10 +19,7 @@ function wordDataAdaptor(data) {
     modified: localDateMDYT(properties['dc:modified']) || '',
     version: properties['uid:major_version'] || '',
     categories: wordContextParams?.categories || [],
-    audio:
-      wordContextParams?.related_audio?.map((file) => {
-        return { ...file, speaker: 'Name of speaker' }
-      }) || [],
+    audio: wordContextParams?.related_audio || [],
     relatedPhrases: wordContextParams?.related_phrases || [],
     relatedAssets: wordContextParams?.related_assets || [],
     pictures: wordContextParams?.related_pictures || [],
