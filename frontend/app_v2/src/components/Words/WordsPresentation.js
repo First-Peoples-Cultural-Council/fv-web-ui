@@ -60,7 +60,6 @@ WordsPresentation.propTypes = {
   isLoading: bool,
   items: object,
   sitename: string,
-  siteTitle: string,
   infiniteScroll: object,
 }
 
