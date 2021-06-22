@@ -5,7 +5,7 @@
   <parent>
     <groupId>ca.firstvoices</groupId>
     <artifactId>modules.api</artifactId>
-    <version>3.5.7</version>
+    <version>3.5.8</version>
   </parent>
   <artifactId>firstvoices-rest-api-simple</artifactId>
   <name>Simplified API</name>
