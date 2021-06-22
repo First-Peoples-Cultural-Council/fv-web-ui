@@ -30,7 +30,7 @@ function DrawerPresentation({ children, isOpen, closeHandler }) {
             >
               <div className="w-screen max-w-2xl">
                 <div className="h-full flex flex-col py-6 bg-white shadow-xl overflow-y-scroll">
-                  <div className="flex justify-end px-4 sm:px-6 mt-6 ml-3">
+                  <div className="flex justify-end mt-12 mr-2">
                     <button
                       className="bg-white h-7 rounded-md text-fv-charcoal-light hover:text-fv-charcoal focus:outline-black"
                       onClick={closeHandler}

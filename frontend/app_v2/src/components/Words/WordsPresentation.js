@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useLocation, Link } from 'react-router-dom'
 
-import DictionaryListPresentation from 'components/DictionaryList/DictionaryListPresentationInfinite'
+import DictionaryListPresentation from 'components/DictionaryList/DictionaryListPresentation'
 import SearchInput from 'components/SearchInput'
 import useIcon from 'common/useIcon'
 
