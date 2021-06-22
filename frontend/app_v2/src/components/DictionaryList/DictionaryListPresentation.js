@@ -32,10 +32,10 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
 
     const link = type ? (
       <Link
-        className="font-medium text-fv-charcoal ml-5 inline-flex items-center float-left"
+        className="ml-2 -mt-7 w-min whitespace-nowrap bg-primary hover:bg-primary-dark font-medium px-5 py-2 rounded-lg shadow-sm text-base text-center text-white"
         to={`/${parentDialect?.shortUrl ? parentDialect.shortUrl : sitename}/${makePlural(type)}/${id}`}
       >
-        Go to {type} {useIcon('ForwardArrow', 'fill-current h-10 w-10')}
+        Go to {type}
       </Link>
     ) : null
 

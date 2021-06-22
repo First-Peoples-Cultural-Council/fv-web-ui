@@ -45,7 +45,7 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, sitename })
               </div>
             </div>
 
-            <div className="mx-4 md:mx-16">
+            <div className="ml-5">
               {/* Translations/Definitions */}
               {entry?.translations?.length > 0 && (
                 <div className="p-3">
@@ -74,7 +74,7 @@ function DictionaryDetailPresentation({ actions, moreActions, entry, sitename })
             </div>
             {/* Audio */}
             {entry?.audio.length > 0 && (
-              <div className="p-3 md:mx-10 text-fv-charcoal">
+              <div className="ml-3 text-fv-charcoal">
                 {entry.audio.map((audioFile, index) => (
                   <AudioMinimal.Container
                     key={`${audioFile.uid}_${index}`}

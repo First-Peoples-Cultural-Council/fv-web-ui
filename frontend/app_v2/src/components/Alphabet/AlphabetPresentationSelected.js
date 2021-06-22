@@ -96,21 +96,7 @@ const AlphabetPresentationSelected = ({ sitename, selectedData, onVideoClick, vi
         <div className="flex justify-center">
           <button
             onClick={onVideoClick}
-            className="
-            border-4
-            border-primary
-            hover:bg-secondary-dark
-            flex
-            font-medium
-            items-center
-            justify-center
-            px-5
-            py-2
-            rounded-lg
-            shadow-sm
-            text-base
-            text-center
-            text-primary"
+            className="border-4 border-primary hover:border-primary-dark font-medium items-center justify-center px-5 py-2 rounded-lg shadow-sm text-base text-center text-primary"
           >
             {useIcon('Play', 'fill-current mr-2 -ml-1 h-8 w-8')}
             Play Video
