@@ -1,5 +1,5 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import Loading from 'components/Loading'
 import CategoriesPresentation from 'components/Categories/CategoriesPresentation'
 import CategoriesData from 'components/Categories/CategoriesData'
 
@@ -11,14 +11,14 @@ import CategoriesData from 'components/Categories/CategoriesData'
  *
  * @returns {node} jsx markup
  */
+
 function CategoriesContainer() {
-  const { exampleOutput } = CategoriesData({ exampleInput: 'passedInToData' })
-  return <CategoriesPresentation exampleProp={exampleOutput} />
-}
-// PROPTYPES
-// const { string } = PropTypes
-CategoriesContainer.propTypes = {
-  //   something: string,
+  const { categories, isLoading, sitename } = CategoriesData()
+  return (
+    <Loading.Container isLoading={isLoading}>
+      <CategoriesPresentation categories={categories} sitename={sitename} />
+    </Loading.Container>
+  )
 }
 
 export default CategoriesContainer
