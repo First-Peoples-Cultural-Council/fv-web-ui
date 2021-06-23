@@ -1,5 +1,6 @@
 package ca.firstvoices.simpleapi.representations.traits
 
+import ca.firstvoices.simpleapi.model.NuxeoMapping
 import io.swagger.v3.oas.annotations.media.Schema
 
 trait Translatable {
@@ -27,5 +28,6 @@ trait Translatable {
 		description = "The set of translations for this entity",
 		nullable = false
 	)
-	Set<Translation> translations = new HashSet<>()
+	@NuxeoMapping(sourceField = "fv:definitions", accessMethod = NuxeoMapping.PropertyAccessMethod.NUXEO)
+	ArrayList<Translation> translations = new ArrayList<>()
 }

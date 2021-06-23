@@ -7,4 +7,6 @@ public interface SimpleAPINuxeoConfiguration {
   String getJwksUrl();
 
   Set<String> getDisabledEndpoints();
+
+  Set<String> getAllowedSites();
 }

@@ -1,5 +1,6 @@
 package ca.firstvoices.simpleapi;
 
+import ca.firstvoices.simpleapi.security.EarlyAccessFilter;
 import ca.firstvoices.simpleapi.security.JWTFilter;
 import org.apache.catalina.filters.CorsFilter;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -13,6 +14,7 @@ public class SimpleAPIServlet extends ServletContainer {
             .register(new JWTFilter())
             .register(CorsFilter.class)
             .register(new AdministrativelyDisabledFilter())
+            .register(new EarlyAccessFilter())
     );
   }
 }
