@@ -3,7 +3,7 @@ import { useQuery } from 'react-query'
 import { useHistory, useParams } from 'react-router-dom'
 
 import wordDataAdaptor from 'components/Word/wordDataAdaptor'
-import documentApi from 'services/api/document'
+import api from 'services/api'
 import { triggerError } from 'common/navigationHelpers'
 
 /**
@@ -21,7 +21,7 @@ function WordData({ docId }) {
   const id = docId ? docId : wordId
 
   // Data fetch
-  const response = useQuery(['word', id], () => documentApi.get({ id: id, contextParameters: 'word' }), {
+  const response = useQuery(['word', id], () => api.document.get({ id: id, contextParameters: 'word' }), {
     // The query will not execute until the wordId has been provided
     enabled: !!id,
   })

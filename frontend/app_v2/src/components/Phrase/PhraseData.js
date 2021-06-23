@@ -3,7 +3,7 @@ import { useQuery } from 'react-query'
 import { useHistory, useParams } from 'react-router-dom'
 
 import phraseDataAdaptor from 'components/Phrase/phraseDataAdaptor'
-import documentApi from 'services/api/document'
+import api from 'services/api'
 import { triggerError } from 'common/navigationHelpers'
 
 /**
@@ -20,7 +20,7 @@ function PhraseData({ docId }) {
   const id = docId ? docId : phraseId
 
   // Data fetch
-  const response = useQuery(['phrase', id], () => documentApi.get({ id: id, contextParameters: 'phrase' }), {
+  const response = useQuery(['phrase', id], () => api.document.get({ id: id, contextParameters: 'phrase' }), {
     // The query will not execute until the phraseId has been provided
     enabled: !!id,
   })

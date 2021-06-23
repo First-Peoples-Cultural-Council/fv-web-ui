@@ -1,4 +1,6 @@
 import alphabet from 'services/api/alphabet'
+import category from 'services/api/category'
+import dictionary from 'services/api/dictionary'
 import document from 'services/api/document'
 import home from 'services/api/home'
 import mail from 'services/api/mail'
@@ -9,6 +11,8 @@ import user from 'services/api/user'
 
 export default {
   alphabet,
+  category,
+  dictionary,
   document,
   home,
   mail,

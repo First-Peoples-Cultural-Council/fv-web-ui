@@ -3,7 +3,7 @@ import { useQuery } from 'react-query'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 
 import useGetSite from 'common/useGetSite'
-import searchApi from 'services/api/search'
+import api from 'services/api'
 import { triggerError } from 'common/navigationHelpers'
 import { makePlural } from 'common/urlHelpers'
 
@@ -37,7 +37,7 @@ function SearchData() {
   // Data fetch
   const { data, error, isError, isLoading } = useQuery(
     ['search', location.search],
-    () => searchApi.get(`${location.search}&ancestorId=${uid}`),
+    () => api.search.get(`${location.search}&ancestorId=${uid}`),
     {
       // The query will not execute until the siteId exists and a search term has been provided
       enabled: !!uid && !!searchTerm,
