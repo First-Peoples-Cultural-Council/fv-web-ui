@@ -44,14 +44,14 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
         return (
           <>
             {link}
-            <Word.Container docId={selectedItem.id} />
+            <Word.Container docId={selectedItem.id} isDrawer />
           </>
         )
       case 'phrase':
         return (
           <>
             {link}
-            <Phrase.Container docId={selectedItem.id} />
+            <Phrase.Container docId={selectedItem.id} isDrawer />
           </>
         )
       default:

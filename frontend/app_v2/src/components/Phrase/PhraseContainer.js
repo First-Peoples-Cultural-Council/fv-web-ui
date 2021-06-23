@@ -11,19 +11,29 @@ import Loading from 'components/Loading'
  *
  * @returns {node} jsx markup
  */
-function PhraseContainer({ docId }) {
+function PhraseContainer({ docId, isDrawer }) {
   const { actions, entry, isLoading, moreActions, sitename } = PhraseData({ docId })
   return (
     <Loading.Container isLoading={isLoading}>
-      <DictionaryDetail.Presentation actions={actions} entry={entry} moreActions={moreActions} sitename={sitename} />
+      {isDrawer ? (
+        <DictionaryDetail.PresentationDrawer
+          actions={actions}
+          entry={entry}
+          moreActions={moreActions}
+          sitename={sitename}
+        />
+      ) : (
+        <DictionaryDetail.Presentation actions={actions} entry={entry} moreActions={moreActions} sitename={sitename} />
+      )}
     </Loading.Container>
   )
 }
 
 // PROPTYPES
-const { string } = PropTypes
+const { bool, string } = PropTypes
 PhraseContainer.propTypes = {
   docId: string,
+  isDrawer: bool,
 }
 
 export default PhraseContainer
