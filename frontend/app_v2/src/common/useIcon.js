@@ -17,6 +17,7 @@ import Facebook from 'common/icons/Facebook'
 import FVLogo from 'common/icons/FVLogo'
 import FVShortLogo from 'common/icons/FVShortLogo'
 import ForwardArrow from 'common/icons/ForwardArrow'
+import Grid from 'common/icons/Grid'
 import HamburgerMenu from 'common/icons/HamburgerMenu'
 import Home from 'common/icons/Home'
 import Instagram from 'common/icons/Instagram'
@@ -66,6 +67,7 @@ function useIcon(iconName, iconStyling) {
     FVLogo,
     FVShortLogo,
     ForwardArrow,
+    Grid,
     HamburgerMenu,
     Home,
     Instagram,

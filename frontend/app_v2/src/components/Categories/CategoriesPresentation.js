@@ -41,7 +41,7 @@ function CategoriesPresentation({ categories, filter, setFilter, sitename }) {
                   onClick={() => setIsGridView(true)}
                   className="ml-0.5 bg-white p-1.5 rounded-lg shadow-sm text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-fv-charcoal"
                 >
-                  {useIcon('MusicNote', 'h-5 w-5')}
+                  {useIcon('Grid', 'h-5 w-5')}
                   <span className="sr-only">Use grid view</span>
                 </button>
               </div>
@@ -99,7 +99,7 @@ function CategoriesPresentation({ categories, filter, setFilter, sitename }) {
                         isGridView ? 'bg-white shadow-sm text-primary' : 'hover:bg-white hover:shadow-sm text-gray-400'
                       } ml-0.5 p-1.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-inset focus:ring-fv-charcoal`}
                     >
-                      {useIcon('MusicNote', 'fill-current h-5 w-5')}
+                      {useIcon('Grid', 'fill-current h-5 w-5')}
                       <span className="sr-only">Use grid view</span>
                     </button>
                   </div>
