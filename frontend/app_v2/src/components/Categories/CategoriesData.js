@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useQuery } from 'react-query'
 
@@ -29,13 +29,34 @@ function CategoriesData() {
   )
   const { status, isLoading, error, isError, data } = response
 
+  const [categoriesToShow, setCategoriesToShow] = useState([])
+
+  const [filter, setFilter] = useState('all')
+
+  function filterCategories(category) {
+    return category.type === filter
+  }
+
   useEffect(() => {
     if (isError) triggerError(error, history)
-  }, [status, isError])
+  }, [isError])
+
+  useEffect(() => {
+    if (data && status === 'success' && !isError) {
+      if (filter === 'word' || filter === 'phrase') {
+        const filteredCategories = data?.categories?.filter(filterCategories)
+        setCategoriesToShow(filteredCategories)
+      } else {
+        setCategoriesToShow(data?.categories)
+      }
+    }
+  }, [status, filter])
 
   return {
-    categories: data?.categories,
+    categories: categoriesToShow,
+    filter,
     isLoading: isLoading || status === 'idle' || isError,
+    setFilter,
     sitename,
   }
 }

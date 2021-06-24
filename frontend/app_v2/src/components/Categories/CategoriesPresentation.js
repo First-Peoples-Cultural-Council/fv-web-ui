@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import useIcon from 'common/useIcon'
+
 /**
  * @summary CategoriesPresentation
  * @component
@@ -9,11 +10,11 @@ import useIcon from 'common/useIcon'
  *
  * @returns {node} jsx markup
  */
-function CategoriesPresentation({ categories, sitename }) {
+function CategoriesPresentation({ categories, filter, setFilter, sitename }) {
   const tabs = [
-    { name: 'Word Categories', href: '?docType=WORD', current: false },
-    { name: 'Phrase Categories', href: '?docType=PHRASE', current: false },
-    { name: 'All Categories', href: '?docType=BOTH', current: true },
+    { name: 'Word Categories', value: 'word', current: filter === 'word' },
+    { name: 'Phrase Categories', value: 'phrase', current: filter === 'phrase' },
+    { name: 'All Categories', value: 'all', current: filter === 'all' },
   ]
   const currentCategory = '617e467e-cf92-4230-9b75-b567d3e903f7'
 
@@ -66,9 +67,9 @@ function CategoriesPresentation({ categories, sitename }) {
                 <div className="flex items-center border-b border-gray-200">
                   <nav className="flex-1 -mb-px flex space-x-6 xl:space-x-8" aria-label="Tabs">
                     {tabs.map((tab) => (
-                      <a
+                      <button
                         key={tab.name}
-                        href={tab.href}
+                        onClick={() => setFilter(tab.value)}
                         aria-current={tab.current ? 'page' : undefined}
                         className={`${
                           tab.current
@@ -77,7 +78,7 @@ function CategoriesPresentation({ categories, sitename }) {
                         } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
                       >
                         {tab.name}
-                      </a>
+                      </button>
                     ))}
                   </nav>
                   <div className="hidden ml-6 bg-gray-100 p-0.5 rounded-lg items-center sm:flex">
@@ -173,8 +174,11 @@ function CategoriesPresentation({ categories, sitename }) {
   )
 }
 // PROPTYPES
-const { string } = PropTypes
+const { array, func, string } = PropTypes
 CategoriesPresentation.propTypes = {
+  categories: array,
+  filter: string,
+  setFilter: func,
   sitename: string,
 }
 
