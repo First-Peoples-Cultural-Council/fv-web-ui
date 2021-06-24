@@ -12,11 +12,15 @@ import useIcon from 'common/useIcon'
  */
 function CategoriesPresentation({ categories, filter, setFilter, sitename }) {
   const tabs = [
-    { name: 'Word Categories', value: 'word', current: filter === 'word' },
-    { name: 'Phrase Categories', value: 'phrase', current: filter === 'phrase' },
-    { name: 'All Categories', value: 'all', current: filter === 'all' },
+    { name: 'WORDS', icon: 'Word', value: 'word', current: filter === 'word' },
+    { name: 'PHRASES', icon: 'Phrase', value: 'phrase', current: filter === 'phrase' },
+    { name: 'ALL', icon: 'All', value: 'all', current: filter === 'all' },
   ]
   const currentCategory = '617e467e-cf92-4230-9b75-b567d3e903f7'
+
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(' ')
+  }
 
   const [isGridView, setIsGridView] = useState(true)
   return (
@@ -46,7 +50,8 @@ function CategoriesPresentation({ categories, filter, setFilter, sitename }) {
                 </button>
               </div>
             </div>
-            <div className="mt-3 sm:mt-2">
+
+            <div className="">
               <div className="sm:hidden">
                 <label htmlFor="tabs" className="sr-only">
                   Select a tab
@@ -54,29 +59,33 @@ function CategoriesPresentation({ categories, filter, setFilter, sitename }) {
                 <select
                   id="tabs"
                   name="tabs"
+                  onChange={(event) => setFilter(event.target.value)}
                   className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-fv-charcoal focus:border-fv-charcoal sm:text-sm rounded-lg"
-                  defaultValue="Recently Viewed"
+                  defaultValue="all"
                 >
-                  <option>Word</option>
-                  <option>Phrase</option>
-                  <option>Both</option>
+                  <option value="word">Word</option>
+                  <option value="phrase">Phrase</option>
+                  <option value="all">All</option>
                 </select>
               </div>
               {/* Desktop View */}
-              <div className="hidden sm:block">
-                <div className="flex items-center border-b border-gray-200">
-                  <nav className="flex-1 -mb-px flex space-x-6 xl:space-x-8" aria-label="Tabs">
-                    {tabs.map((tab) => (
+              <div className="hidden sm:block border-b border-gray-200 py-4">
+                <h2 className="text-gray-500 text-sm p-1">SHOW CATEGORIES FOR:</h2>
+                <div className="flex items-center">
+                  <nav className="relative w-auto -mb-px flex-1 rounded-lg" aria-label="Tabs">
+                    {tabs.map((tab, tabIndex) => (
                       <button
                         key={tab.name}
                         onClick={() => setFilter(tab.value)}
+                        className={classNames(
+                          tab.current ? 'text-white bg-primary' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100',
+                          tabIndex === 0 ? 'rounded-l-lg border-r-0' : '',
+                          tabIndex === tabs.length - 1 ? 'rounded-r-lg border-l-0' : '',
+                          'group relative min-w-auto  flex-1 border-gray-200 border-2 py-2 px-4 font-medium text-center'
+                        )}
                         aria-current={tab.current ? 'page' : undefined}
-                        className={`${
-                          tab.current
-                            ? 'border-primary text-primary'
-                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                        } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm`}
                       >
+                        {tab.icon !== 'All' ? useIcon(tab.icon, 'inline-flex fill-current w-5 h-5 mr-2') : ''}
                         {tab.name}
                       </button>
                     ))}
@@ -124,7 +133,7 @@ function CategoriesPresentation({ categories, filter, setFilter, sitename }) {
                           className="bg-tertiaryB text-white text-lg group w-full px-5 py-10 rounded-lg flex flex-col items-center font-medium group-hover:opacity-75"
                           aria-current={category.id === currentCategory ? 'page' : undefined}
                         >
-                          {useIcon('MusicNote', 'fill-current h-28 w-28')}
+                          {useIcon('Song', 'fill-current h-28 w-28')}
                           <span className="m-5">{category.title}</span>
                         </a>
                         <button type="button" className="absolute inset-0 focus:outline-none">
@@ -154,7 +163,7 @@ function CategoriesPresentation({ categories, filter, setFilter, sitename }) {
                           aria-current={category.id === currentCategory ? 'page' : undefined}
                         >
                           <div className="inline-flex bg-tertiaryB text-white group p-2 rounded-lg items-center">
-                            {useIcon('MusicNote', 'fill-current h-6 w-6')}
+                            {useIcon('Song', 'fill-current h-6 w-6')}
                           </div>
                           <div className="inline-flex m-3 text-lg font-medium">{category.title}</div>
                         </a>
