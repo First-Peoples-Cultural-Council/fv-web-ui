@@ -19,27 +19,20 @@ function CategoriesData() {
   const history = useHistory()
 
   // Data fetch
-  const response = useQuery(
+  const { status, isLoading, error, isError, data } = useQuery(
     ['categories', uid],
-    () => api.category.get({ siteId: 'ea255adb-1d8e-41ea-9834-0ef9851f1189' }),
+    () => api.category.get({ siteId: uid, parentsOnly: 'true', inUseOnly: 'false' }),
     {
-      // The query will not execute until the siteId exists
-      enabled: !!uid,
+      enabled: !!uid, // The query will not execute until the siteId exists
     }
   )
-  const { status, isLoading, error, isError, data } = response
 
   const [categoriesToShow, setCategoriesToShow] = useState([])
-
   const [filter, setFilter] = useState('all')
 
   function filterCategories(category) {
     return category.type === filter
   }
-
-  useEffect(() => {
-    if (isError) triggerError(error, history)
-  }, [isError])
 
   useEffect(() => {
     if (data && status === 'success' && !isError) {
@@ -51,6 +44,10 @@ function CategoriesData() {
       }
     }
   }, [status, filter])
+
+  useEffect(() => {
+    if (isError) triggerError(error, history)
+  }, [isError])
 
   return {
     categories: categoriesToShow,
