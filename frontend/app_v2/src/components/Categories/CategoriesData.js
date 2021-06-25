@@ -6,6 +6,7 @@ import { useQuery } from 'react-query'
 import useGetSite from 'common/useGetSite'
 import api from 'services/api'
 import { triggerError } from 'common/navigationHelpers'
+
 /**
  * @summary CategoriesData
  * @component
@@ -21,7 +22,7 @@ function CategoriesData() {
   // Data fetch
   const { status, isLoading, error, isError, data } = useQuery(
     ['categories', uid],
-    () => api.category.get({ siteId: uid, parentsOnly: 'true', inUseOnly: 'false' }),
+    () => api.category.get({ siteId: uid, parentsOnly: 'false', inUseOnly: 'true' }),
     {
       enabled: !!uid, // The query will not execute until the siteId exists
     }
@@ -30,17 +31,32 @@ function CategoriesData() {
   const [categoriesToShow, setCategoriesToShow] = useState([])
   const [filter, setFilter] = useState('all')
 
-  function filterCategories(category) {
-    return category.type === filter
+  function filterCategoriesByType(category) {
+    return category?.type === filter
+  }
+
+  function filterParentCategories(category) {
+    return category?.parentId === null
+  }
+
+  function getChildren(parentId) {
+    return data?.categories?.filter((category) => {
+      return category?.parentId === parentId
+    })
   }
 
   useEffect(() => {
     if (data && status === 'success' && !isError) {
+      const parentCategories = data?.categories?.filter(filterParentCategories)
+      const categoriesInclChildren = parentCategories.map((category) => ({
+        ...category,
+        children: getChildren(category.id),
+      }))
       if (filter === 'word' || filter === 'phrase') {
-        const filteredCategories = data?.categories?.filter(filterCategories)
+        const filteredCategories = categoriesInclChildren.filter(filterCategoriesByType)
         setCategoriesToShow(filteredCategories)
       } else {
-        setCategoriesToShow(data?.categories)
+        setCategoriesToShow(categoriesInclChildren)
       }
     }
   }, [status, filter])
