@@ -64,8 +64,8 @@ spec:
 #          image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
           resources:
             limits:
-              cpu: "4"
-              memory: "4800M"
+              cpu: "250m"
+              memory: "1800M"
           volumeMounts:
             - mountPath: "/usr/share/elasticsearch/data"
               name: elastic-storage
@@ -87,7 +87,7 @@ spec:
             - name: cluster.name
               value: elastic
             - name: ES_JAVA_OPTS
-              value: "-Xms4000m -Xmx4000m"
+              value: "-Xms1650m -Xmx1650m"
           ports:
             - name: http
               containerPort: 9200

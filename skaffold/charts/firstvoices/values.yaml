@@ -1,5 +1,5 @@
 domainSuffix: .fvgke.mapleleafsoftware.io # all created ingresses will be under this domain
-hostSuffix: -sk2
+hostSuffix: -devtest
 environment: g1
 
 frontendV1:
@@ -7,7 +7,7 @@ frontendV1:
 frontendV2:
   image: frontend-v2:latest
 firstvoices:
-  image: firstvoices:latest
+  image: firstvoices-skaffold:latest
   databaseGCloudSidecar: false
   databaseGCloudSidecarParameters: ""
   databaseHost: datacube2.mapleleaf.intranet
