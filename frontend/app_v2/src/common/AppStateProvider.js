@@ -3,6 +3,7 @@ import React, { useReducer, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import useLocalStorage from 'react-use-localstorage'
+import useRoute from 'app_v1/useRoute'
 
 import AppStateContext from 'common/AppStateContext'
 import { reducerInitialState, reducer } from 'common/reducer'
@@ -39,6 +40,21 @@ function AppStateProvider({ children }) {
       dispatch({ type: 'api.user.get', payload: userData })
     }
   }, [userIsLoading, userError])
+
+  // Sets internal Redux > routeParams value over in V1
+  // (eg: used for displaying words)
+  // --------------------------------
+  const path = siteData?.path
+  const { setRouteParams } = useRoute()
+  useEffect(() => {
+    if (path) {
+      setRouteParams({
+        matchedRouteParams: {
+          dialect_path: path,
+        },
+      })
+    }
+  }, [path])
 
   return (
     <AppStateContext.Provider
