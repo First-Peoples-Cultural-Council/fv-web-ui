@@ -10,7 +10,8 @@
     <sonar.coverage.jacoco.xmlReportPaths>${it.jacoco.destFile}</sonar.coverage.jacoco.xmlReportPaths>
     <sonar.scanner.force-deprecated-java-version-grace-period>true</sonar.scanner.force-deprecated-java-version-grace-period>
     <it.failsafe.argLine/>
-  </properties>
+</properties>
+
 
   <parent>
     <groupId>org.nuxeo.ecm.distribution</groupId>
