@@ -5,7 +5,6 @@ import javax.naming.NamingException;
 import javax.transaction.SystemException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.kafka.common.protocol.types.Field;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
@@ -84,7 +83,6 @@ public class AudioFixOperation {
           ACL[] wordACLs = wordDocument.getACP().getACLs();
           for (ACL acl : wordACLs) {
             ACE[] wordACES = acl.getACEs();
-            String aclName = acl.getName();
             for (ACE ace : wordACES) {
               if (ace.getPermission().equalsIgnoreCase("read") && ace.isGranted() && ace
                   .getUsername()
