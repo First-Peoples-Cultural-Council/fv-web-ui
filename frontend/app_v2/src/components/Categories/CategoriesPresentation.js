@@ -11,13 +11,7 @@ import useCategoryIcon from 'common/useCategoryIcon'
  *
  * @returns {node} jsx markup
  */
-function CategoriesPresentation({ categories, filter, setFilter, sitename }) {
-  const tabs = [
-    { label: 'WORDS', icon: 'Word', value: 'WORDS', current: filter === 'WORDS' },
-    { label: 'PHRASES', icon: 'Phrase', value: 'PHRASES', current: filter === 'PHRASES' },
-    { label: 'ALL', icon: 'All', value: 'WORDS_AND_PHRASES', current: filter === 'WORDS_AND_PHRASES' },
-  ]
-
+function CategoriesPresentation({ categories, filter, setFilter, sitename, tabs }) {
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
   }
