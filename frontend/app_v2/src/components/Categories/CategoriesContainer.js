@@ -13,10 +13,16 @@ import CategoriesData from 'components/Categories/CategoriesData'
  */
 
 function CategoriesContainer() {
-  const { categories, filter, isLoading, setFilter, sitename } = CategoriesData()
+  const { categories, filter, isLoading, setFilter, sitename, tabs } = CategoriesData()
   return (
     <Loading.Container isLoading={isLoading}>
-      <CategoriesPresentation categories={categories} filter={filter} setFilter={setFilter} sitename={sitename} />
+      <CategoriesPresentation
+        categories={categories}
+        filter={filter}
+        setFilter={setFilter}
+        sitename={sitename}
+        tabs={tabs}
+      />
     </Loading.Container>
   )
 }

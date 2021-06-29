@@ -13,11 +13,10 @@ import useCategoryIcon from 'common/useCategoryIcon'
  */
 function CategoriesPresentation({ categories, filter, setFilter, sitename }) {
   const tabs = [
-    { name: 'WORDS', icon: 'Word', value: 'word', current: filter === 'word' },
-    { name: 'PHRASES', icon: 'Phrase', value: 'phrase', current: filter === 'phrase' },
-    { name: 'ALL', icon: 'All', value: 'all', current: filter === 'all' },
+    { label: 'WORDS', icon: 'Word', value: 'WORDS', current: filter === 'WORDS' },
+    { label: 'PHRASES', icon: 'Phrase', value: 'PHRASES', current: filter === 'PHRASES' },
+    { label: 'ALL', icon: 'All', value: 'WORDS_AND_PHRASES', current: filter === 'WORDS_AND_PHRASES' },
   ]
-  const currentCategory = '617e467e-cf92-4230-9b75-b567d3e903f7'
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -75,7 +74,7 @@ function CategoriesPresentation({ categories, filter, setFilter, sitename }) {
                   <nav className="relative w-auto -mb-px flex-1 rounded-lg" aria-label="Tabs">
                     {tabs.map((tab, tabIndex) => (
                       <button
-                        key={tab.name}
+                        key={tab.label}
                         onClick={() => setFilter(tab.value)}
                         className={classNames(
                           tab.current
@@ -88,7 +87,7 @@ function CategoriesPresentation({ categories, filter, setFilter, sitename }) {
                         aria-current={tab.current ? 'page' : undefined}
                       >
                         {tab.icon !== 'All' ? useIcon(tab.icon, 'inline-flex fill-current w-5 h-5 mr-2') : ''}
-                        {tab.name}
+                        {tab.label}
                       </button>
                     ))}
                   </nav>
@@ -135,9 +134,8 @@ function CategoriesPresentation({ categories, filter, setFilter, sitename }) {
                       <div className="focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-tertiaryB group block w-full rounded-lg bg-gray-100 overflow-hidden">
                         <a
                           key={category.id}
-                          href={`/${sitename}/categories/${category.id}`}
+                          href={`/${sitename}/categories/${category.id}?docType=${filter}`}
                           className="bg-tertiaryB text-white text-lg group w-full px-5 py-10 rounded-lg flex flex-col items-center font-medium group-hover:opacity-75"
-                          aria-current={category.id === currentCategory ? 'page' : undefined}
                         >
                           {useCategoryIcon(category.title, 'fill-current h-28 w-28')}
                           <span className="m-5">{category.title}</span>
@@ -156,14 +154,13 @@ function CategoriesPresentation({ categories, filter, setFilter, sitename }) {
                   Recently viewed
                 </h2>
                 <ul role="list" className="grid grid-cols-2 gap-x-3 gap-y-3 lg:grid-cols-3">
-                  {categories.map((category) => (
+                  {categories?.map((category) => (
                     <li key={category.id} className="relative">
                       <div className="group block w-full overflow-hidden border-b-2 border-gray-200">
                         <a
                           key={category.id}
-                          href={`/${sitename}/categories/${category.id}`}
+                          href={`/${sitename}/categories/${category.id}?docType=${filter}`}
                           className="group w-full px-5 rounded-lg inline-flex items-center group-hover:opacity-75"
-                          aria-current={category.id === currentCategory ? 'page' : undefined}
                         >
                           <div className="inline-flex bg-white text-tertiaryB group p-2 rounded-lg items-center">
                             {useCategoryIcon(category.title, 'fill-current h-10 w-10')}
@@ -173,6 +170,23 @@ function CategoriesPresentation({ categories, filter, setFilter, sitename }) {
                         <button type="button" className="absolute inset-0 focus:outline-none">
                           <span className="sr-only">Go to {category.title}</span>
                         </button>
+                        {category?.children?.map((child) => (
+                          <div key={child.id} className="group block w-full overflow-hidden ml-10">
+                            <a
+                              key={child.id}
+                              href={`/${sitename}/categories/${child.id}`}
+                              className="group w-full px-5 rounded-lg inline-flex items-center group-hover:opacity-75"
+                            >
+                              <div className="inline-flex bg-white text-tertiaryB group p-2 rounded-lg items-center">
+                                {useCategoryIcon(child.title, 'fill-current h-6 w-6')}
+                              </div>
+                              <div className="inline-flex m-2 font-medium">{child.title}</div>
+                            </a>
+                            <button type="button" className="absolute inset-0 focus:outline-none">
+                              <span className="sr-only">Go to {child.title}</span>
+                            </button>
+                          </div>
+                        ))}
                       </div>
                     </li>
                   ))}
