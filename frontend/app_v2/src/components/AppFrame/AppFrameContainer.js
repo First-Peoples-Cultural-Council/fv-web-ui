@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet'
 
 import Alphabet from 'components/Alphabet'
 import Categories from 'components/Categories'
+import Category from 'components/Category'
 import ErrorHandler from 'components/ErrorHandler'
 import Home from 'components/Home'
 import Games from 'components/Games'
@@ -80,6 +81,12 @@ function AppFrameContainer() {
                 <title>Alphabet</title>
               </Helmet>
               <Alphabet.Container />
+            </Route>
+            <Route path="/:sitename/categories/:categoryId">
+              <Helmet>
+                <title>Category</title>
+              </Helmet>
+              <Category.Container />
             </Route>
             <Route path="/:sitename/categories">
               <Helmet>

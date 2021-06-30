@@ -21,13 +21,15 @@ function CategoriesData() {
   const history = useHistory()
 
   // Data fetch
-  const { status, isLoading, error, isError, data } = useQuery(
+  const response = useQuery(
     ['categories', uid],
     () => api.category.get({ siteId: uid, parentsOnly: 'false', inUseOnly: 'true' }),
     {
       enabled: !!uid, // The query will not execute until the siteId exists
     }
   )
+
+  const { status, isLoading, error, isError, data } = response
 
   const [categoriesToShow, setCategoriesToShow] = useState([])
   const [filter, setFilter] = useState('WORDS_AND_PHRASES')
@@ -74,6 +76,8 @@ function CategoriesData() {
 
   return {
     categories: categoriesToShow,
+    // categoriesResponse is used by CategoryData component
+    categoriesResponse: response,
     filter,
     isLoading: isLoading || status === 'idle' || isError,
     setFilter,
