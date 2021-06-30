@@ -1,14 +1,23 @@
 apiVersion: skaffold/v2beta13
 kind: Config
 build:
+  tagPolicy:
+    customTemplate:
+      template: "rob_{{.HASH}}"
+      components:
+        - name: HASH
+          gitCommit: {}
   cluster:
     concurrency: 1
+    namespace: kaniko
+#    annotations:
+#    - transient: true
     # pullSecretName: kaniko-secret
     timeout: 120m # can be slow to build first time since pulling nuxeo deps takes forever
-    volumes:
-      - name: m2-cache
-        persistentVolumeClaim:
-          claimName: m2-cache-claim
+#    volumes:
+#      - name: m2-cache
+#        persistentVolumeClaim:
+#          claimName: m2-cache-claim
     resources:
       requests:
         cpu: 1
@@ -40,16 +49,16 @@ build:
         dockerfile: Dockerfile-skaffold
         cache:
           repo: ""
-    - image: firstvoices
+    - image: firstvoices-skaffold
       context: ../
       kaniko:
         singleSnapshot: true
         dockerfile: Dockerfile-skaffold
         cache:
           repo: ""
-        volumeMounts:
-          - name: m2-cache
-            mountPath: /root/.m2
+#        volumeMounts:
+#          - name: m2-cache
+#            mountPath: /root/.m2
     - image: smtplogger
       context:  dockerfiles/smtplogger
       kaniko:
@@ -57,15 +66,58 @@ build:
         dockerfile: Dockerfile
         cache:
           repo: ""
+#deploy:
+#  helm:
+#    releases:
+#      - name: skaffold-helm-release
+#        chartPath: ./charts/firstvoices
+#        setValueTemplates:
+#          domainSuffix: .iron.mapleleaf.intranet
+#          ingress.useManagedCertificate: false
+#          database.enable: false
+#          google-cloud-db-enable: false
+#        artifactOverrides:
+#          frontendV1:
+#            image: frontend-v1
+#          frontendV2:
+#            image: frontend-v2
+#          firstvoices:
+#            image: firstvoices
+#          database_restoration:
+#            image: database_restoration
+#          smtplogger:
+#            image: smtplogger
+#apiVersion: skaffold/v2beta13
+#kind: Config
+#build:
+#  artifacts:
+#    - image: database_restoration
+#      context: dockerfiles/database
+#    - image: frontend-v1
+#      context: ../frontend
+#      docker:
+#        dockerfile: Dockerfile-skaffold
+##        buildArgs:
+##          NPM_CONFIG_REGISTRY: http://gravitas.mapleleaf.intranet:8081/repository/npm/
+#    - image: frontend-v2
+#      context: ../frontend/app_v2
+#      docker:
+#        dockerfile: Dockerfile-skaffold
+##        buildArgs:
+##          NPM_CONFIG_REGISTRY: http://gravitas.mapleleaf.intranet:8081/repository/npm/
+#    - image: firstvoices
+#      context: ../
+#    - image: smtplogger
+#      context:  dockerfiles/smtplogger
 deploy:
   helm:
     releases:
       - name: skaffold-helm-release
         chartPath: ./charts/firstvoices
         setValueTemplates:
-          domainSuffix: .iron.mapleleaf.intranet
+          domainSuffix: .eks.firstvoices.com
           ingress.useManagedCertificate: false
-          database.enable: false
+          database.enable: true
           google-cloud-db-enable: false
         artifactOverrides:
           frontendV1:
@@ -73,7 +125,7 @@ deploy:
           frontendV2:
             image: frontend-v2
           firstvoices:
-            image: firstvoices
+            image: firstvoices-skaffold
           database_restoration:
             image: database_restoration
           smtplogger:
