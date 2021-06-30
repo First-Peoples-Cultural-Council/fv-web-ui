@@ -1,8 +1,10 @@
 package ca.firstvoices.operations.audiofix;
 
 import java.util.List;
+import java.util.Optional;
 import javax.naming.NamingException;
 import javax.transaction.SystemException;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.automation.core.Constants;
@@ -58,6 +60,7 @@ public class AudioFixOperation {
       long membersReadGranted = 0;
       long languageTeamReadGranted = 0;
       long audioFilesChecked = 0;
+      long proxiedCount = 0;
 
 
       ScrollResult<String> scrollResult = session.scroll("SELECT * FROM FVWord where "
@@ -107,8 +110,25 @@ public class AudioFixOperation {
           }
 
           String[] relatedAudioIds = (String[]) wordDocument.getPropertyValue("fv:related_audio");
-          if (relatedAudioIds != null) {
-            for (String audioId : relatedAudioIds) {
+          String[] proxiedAudioIds = (String[]) wordDocument
+              .getPropertyValue("fvproxy:proxied_audio");
+
+          String[] mergedAudioIdList;
+
+          if (relatedAudioIds != null && proxiedAudioIds != null) {
+            mergedAudioIdList = ArrayUtils.addAll(relatedAudioIds, proxiedAudioIds);
+          } else {
+            mergedAudioIdList = Optional.ofNullable(relatedAudioIds).orElse(proxiedAudioIds);
+          }
+
+          if (proxiedAudioIds != null) {
+            proxiedCount += proxiedAudioIds.length;
+          }
+
+
+
+          if (mergedAudioIdList != null) {
+            for (String audioId : mergedAudioIdList) {
               audioFilesChecked++;
               DocumentModel audioDocument = session.getDocument(new IdRef(audioId));
               // check acls on audioDocument
@@ -170,10 +190,12 @@ public class AudioFixOperation {
       }
 
       output.append(String.format("Checked %d files\n"
+          + "\t%d were proxies\n"
           + "\tAdded PUBLIC READ permission to %d audio files\n"
           + "\tAdded MEMBERS READ permission to %d audio files\n"
           + "\tAdded LANGUAGE TEAM MEMBERS READ permission to %d audio files\n",
-          audioFilesChecked, publicReadGranted, membersReadGranted, languageTeamReadGranted));
+          audioFilesChecked, proxiedCount, publicReadGranted, membersReadGranted,
+          languageTeamReadGranted));
 
       if (dryRun) {
         output.append("\n\n---DRY RUN (NO CHANGES MADE)---");
