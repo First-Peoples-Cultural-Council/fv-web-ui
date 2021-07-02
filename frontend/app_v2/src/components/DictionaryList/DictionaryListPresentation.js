@@ -22,7 +22,7 @@ import Phrase from 'components/Phrase'
  * @returns {node} jsx markup
  */
 
-function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items, moreActions, sitename }) {
+function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items, moreActions, sitename, showType }) {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [selectedItem, setselectedItem] = useState({})
   const { isFetchingNextPage, fetchNextPage, hasNextPage, loadButtonLabel, loadButtonRef } = infiniteScroll
@@ -88,6 +88,14 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
                     >
                       Translation
                     </th>
+                    {showType && (
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Type
+                      </th>
+                    )}
                     <th scope="col" className="relative px-6 py-3">
                       <span className="sr-only">Actions</span>
                     </th>
@@ -139,6 +147,15 @@ function DictionaryListPresentation({ actions, infiniteScroll, isLoading, items,
                               </ol>
                             ) : null}
                           </td>
+                          {showType && (
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <span
+                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${type} capitalize text-white`}
+                              >
+                                {type}
+                              </span>
+                            </td>
+                          )}
                           <td className="text-right px-6">
                             <ActionsMenu.Container
                               docId={id}
@@ -187,6 +204,7 @@ DictionaryListPresentation.propTypes = {
   isLoading: bool,
   items: object,
   moreActions: array,
+  showType: bool,
   sitename: string,
 }
 

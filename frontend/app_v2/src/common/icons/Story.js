@@ -1,17 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 /**
- * @summary Book
+ * @summary Story
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function Book({ styling }) {
+function Story({ styling }) {
   return (
     <svg
-      data-testid="Book"
+      data-testid="Story"
       xmlns="http://www.w3.org/2000/svg"
       height="24"
       viewBox="0 0 24 24"
@@ -25,8 +25,8 @@ function Book({ styling }) {
 }
 // PROPTYPES
 const { string } = PropTypes
-Book.propTypes = {
+Story.propTypes = {
   styling: string,
 }
 
-export default Book
+export default Story

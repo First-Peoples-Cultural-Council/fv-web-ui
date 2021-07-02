@@ -5,7 +5,7 @@ import { useHistory, useLocation, useParams } from 'react-router-dom'
 import useGetSite from 'common/useGetSite'
 import { triggerError } from 'common/navigationHelpers'
 import useIntersectionObserver from 'common/useIntersectionObserver'
-import dictionaryApi from 'services/api/dictionary'
+import api from 'services/api'
 
 /**
  * @summary WordsData
@@ -26,7 +26,7 @@ function WordsData() {
   // Param options: perPage=100&page=1&kidsOnly=false&gamesOnly=false&sortBy=entry&docType=WORDS_AND_PHRASES&sortAscending=true&q=Appla&alphabetCharacter=A
   const response = useInfiniteQuery(
     ['words', query],
-    ({ pageParam = 1 }) => dictionaryApi.get({ sitename: uid, query: query, pageParam: pageParam }),
+    ({ pageParam = 1 }) => api.dictionary.get({ sitename: uid, query: query, pageParam: pageParam }),
     {
       // The query will not execute until the siteId exists and a search term has been provided
       enabled: !!uid,

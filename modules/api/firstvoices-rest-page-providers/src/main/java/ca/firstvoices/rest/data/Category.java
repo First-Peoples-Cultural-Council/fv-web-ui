@@ -11,9 +11,7 @@ public class Category implements Serializable {
   private final String parentId;
 
   public enum CategoryTypes {
-    WORD("word"),
-    PHRASE("phrase"),
-    ALL("all");
+    WORD("WORDS"), PHRASE("PHRASES"), ALL("WORDS_AND_PHRASES");
 
     private final String value;
 
@@ -26,9 +24,7 @@ public class Category implements Serializable {
     }
   }
 
-  public Category(
-      final String id, final String parentId, final String title,
-      final String type) {
+  public Category(final String id, final String parentId, final String title, final String type) {
     this.id = id;
     this.title = title;
     this.type = type;
@@ -51,4 +47,3 @@ public class Category implements Serializable {
     return type;
   }
 }
-

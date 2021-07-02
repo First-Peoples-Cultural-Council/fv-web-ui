@@ -3,8 +3,7 @@ import React from 'react'
 import About from 'common/icons/About'
 import Audio from 'common/icons/Audio'
 import BackArrow from 'common/icons/BackArrow'
-import Book from 'common/icons/Book'
-import ChatBubble from 'common/icons/ChatBubble'
+
 import Checkmark from 'common/icons/Checkmark'
 import ChevronDown from 'common/icons/ChevronDown'
 import ChevronLeft from 'common/icons/ChevronLeft'
@@ -17,6 +16,7 @@ import Facebook from 'common/icons/Facebook'
 import FVLogo from 'common/icons/FVLogo'
 import FVShortLogo from 'common/icons/FVShortLogo'
 import ForwardArrow from 'common/icons/ForwardArrow'
+import Grid from 'common/icons/Grid'
 import HamburgerMenu from 'common/icons/HamburgerMenu'
 import Home from 'common/icons/Home'
 import Instagram from 'common/icons/Instagram'
@@ -28,13 +28,11 @@ import LinkedIn from 'common/icons/LinkedIn'
 import Login from 'common/icons/Login'
 import Mail from 'common/icons/Mail'
 import More from 'common/icons/More'
-import MusicNote from 'common/icons/MusicNote'
 import Pause from 'common/icons/Pause'
 import PauseCircle from 'common/icons/PauseCircle'
 import PlaceHolder from 'common/icons/PlaceHolder'
 import Play from 'common/icons/Play'
 import PlayCircle from 'common/icons/PlayCircle'
-import Quote from 'common/icons/Quote'
 import Search from 'common/icons/Search'
 import Spinner from 'common/icons/Spinner'
 import Resources from 'common/icons/Resources'
@@ -44,6 +42,11 @@ import UnfoldMore from 'common/icons/UnfoldMore'
 import WebShare from 'common/icons/WebShare'
 import Youtube from 'common/icons/Youtube'
 
+import Phrase from 'common/icons/Phrase'
+import Song from 'common/icons/Song'
+import Story from 'common/icons/Story'
+import Word from 'common/icons/Word'
+
 // a helper function that given a string name returns an icon, if no string is supplied it will return a blank placeholder icon
 
 function useIcon(iconName, iconStyling) {
@@ -52,8 +55,8 @@ function useIcon(iconName, iconStyling) {
     About,
     Audio,
     BackArrow,
-    Book,
-    ChatBubble,
+    Story,
+    Word,
     Checkmark,
     ChevronDown,
     ChevronLeft,
@@ -66,6 +69,7 @@ function useIcon(iconName, iconStyling) {
     FVLogo,
     FVShortLogo,
     ForwardArrow,
+    Grid,
     HamburgerMenu,
     Home,
     Instagram,
@@ -77,13 +81,13 @@ function useIcon(iconName, iconStyling) {
     Login,
     Mail,
     More,
-    MusicNote,
+    Song,
     Pause,
     PauseCircle,
     PlaceHolder,
     Play,
     PlayCircle,
-    Quote,
+    Phrase,
     Resources,
     Search,
     Spinner,

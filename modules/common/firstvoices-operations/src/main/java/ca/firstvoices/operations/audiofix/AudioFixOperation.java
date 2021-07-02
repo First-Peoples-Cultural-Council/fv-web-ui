@@ -110,6 +110,7 @@ public class AudioFixOperation {
             }
           }
 
+
           String[] mergedAudioIdList = null;
 
           try {
@@ -131,6 +132,7 @@ public class AudioFixOperation {
           } catch (PropertyException e) {
             // don't care
           }
+
 
           if (mergedAudioIdList != null) {
             for (String audioId : mergedAudioIdList) {

@@ -29,22 +29,22 @@ function TopicsPresentationTopic({ audio, heading, image, listCount, subheading,
   switch (type) {
     case WIDGET_LIST_WORD:
       typeColor = 'word'
-      icon = 'ChatBubble'
+      icon = 'Word'
       textSize = 'text-4xl lg:text-5xl'
       break
     case WIDGET_LIST_PHRASE:
       typeColor = 'phrase'
-      icon = 'Quote'
+      icon = 'Phrase'
       textSize = 'text-3xl lg:text-4xl'
       break
     case WIDGET_LIST_SONG:
       typeColor = 'song'
-      icon = 'MusicNote'
+      icon = 'Song'
       textSize = 'text-3xl lg:text-4xl'
       break
     case WIDGET_LIST_STORY:
       typeColor = 'story'
-      icon = 'Book'
+      icon = 'Story'
       textSize = 'text-3xl lg:text-4xl'
       break
 

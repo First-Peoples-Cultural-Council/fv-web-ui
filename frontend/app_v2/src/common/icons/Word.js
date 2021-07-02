@@ -1,17 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 /**
- * @summary MusicNote
+ * @summary Word
  * @component
  *
  * @param {object} props
  *
  * @returns {node} jsx markup
  */
-function MusicNote({ styling }) {
+function Word({ styling }) {
   return (
     <svg
-      data-testid="MusicNote"
+      data-testid="Word"
       xmlns="http://www.w3.org/2000/svg"
       height="24"
       viewBox="0 0 24 24"
@@ -19,14 +19,14 @@ function MusicNote({ styling }) {
       className={styling}
     >
       <path d="M0 0h24v24H0z" fill="none" />
-      <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
     </svg>
   )
 }
 // PROPTYPES
 const { string } = PropTypes
-MusicNote.propTypes = {
+Word.propTypes = {
   styling: string,
 }
 
-export default MusicNote
+export default Word
