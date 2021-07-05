@@ -122,7 +122,8 @@ public class EnricherUtils {
       binaryJsonObj.put("dc:description", (String) binaryDoc.getPropertyValue("dc:description"));
 
       // Get speaker(s) information
-      List<String> speakerNames = PropertyUtils.getValuesAsList(binaryDoc, "fvm:source")
+      String sourceField = (!binaryDoc.isProxy()) ? "fvm:source" : "fvproxy:proxied_source";
+      List<String> speakerNames = PropertyUtils.getValuesAsList(binaryDoc, sourceField)
           .stream().map(speakerId ->
             String.valueOf(
             session.getDocument(new IdRef(speakerId))
