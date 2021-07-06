@@ -35,6 +35,9 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ca-central-1
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-duration-seconds: 14400
+          role-session-name: github-action
 
       - name: Hydrate kubeconfig
         env:
@@ -50,8 +53,6 @@ jobs:
           sudo install kubectl /usr/local/bin/
           echo "version:"
           kubectl version
-          echo "verifying kube connectivity"
-          kubectl get nodes
 
       - name: Login to Amazon ECR
         id: login-ecr
