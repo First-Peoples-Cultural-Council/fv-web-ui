@@ -108,7 +108,7 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.10",
+    "@babel/core": "^7.14.6",
     "@babel/eslint-parser": "^7.14.7",
     "@babel/parser": "^7.14.7",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
@@ -136,7 +136,7 @@
     "dom-testing-library": "^5.0.0",
     "eslint": "^7.15.0",
     "eslint-plugin-cypress": "^2.11.2",
-    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react": "^7.24.0",
     "expect": "^26.6.2",
     "expose-loader": "^1.0.3",
     "express": "^4.17.1",
