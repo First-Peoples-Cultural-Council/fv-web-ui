@@ -29,6 +29,12 @@ jobs:
           tar xzvf helm-v3.6.2-linux-amd64.tar.gz
           sudo install linux-amd64/helm /usr/local/bin
 
+      - name: Install IAM Authenticator
+        run: |
+          curl -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.19.6/2021-01-05/bin/linux/amd64/aws-iam-authenticator
+          chmod +x ./aws-iam-authenticator
+          sudo install aws-iam-authenticator /usr/local/bin
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
