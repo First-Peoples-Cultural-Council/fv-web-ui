@@ -109,6 +109,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
+    "@babel/eslint-parser": "^7.14.7",
     "@babel/parser": "^7.14.7",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-proposal-decorators": "^7.12.1",
@@ -119,7 +120,6 @@
     "@testing-library/cypress": "^7.0.3",
     "@testing-library/dom": "^7.29.1",
     "@testing-library/react": "^11.2.3",
-    "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-react-jsx-location": "^0.2.0",
