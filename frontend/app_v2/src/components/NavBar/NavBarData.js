@@ -22,7 +22,10 @@ function NavBarData() {
   const { openMenu } = context
   const location = useLocation()
   const isHome = location.pathname === `/${sitename}/`
-  const isSearchPage = location.pathname.startsWith(`/${sitename}/search`)
+  const isSearchPage =
+    location.pathname.startsWith(`/${sitename}/search`) ||
+    location.pathname.startsWith(`/${sitename}/words`) ||
+    location.pathname.startsWith(`/${sitename}/phrases`)
 
   const { title } = useGetSite()
   const { value: workspaceToggleValue, set } = useWorkspaceToggle()
