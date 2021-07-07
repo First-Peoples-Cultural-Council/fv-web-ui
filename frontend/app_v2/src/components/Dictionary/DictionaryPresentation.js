@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 import DictionaryListPresentation from 'components/DictionaryList/DictionaryListPresentation'
 import DictionarySearchInput from 'components/DictionarySearchInput'
+import useIcon from 'common/useIcon'
 
 /**
  * @summary DictionaryPresentation
@@ -23,18 +24,24 @@ function DictionaryPresentation({ docType, isLoading, items, actions, moreAction
         </div>
       </section>
       <div className="grid grid-cols-11 md:p-2">
-        <div className="col-span-11 md:col-span-2 mt-2">
-          <h2 className="hidden md:block text-2xl ml-8">BROWSE BY:</h2>
+        <div className="col-span-11 md:col-span-2 mt-5">
+          <h2 className="hidden md:block text-2xl font-semibold ml-8">BROWSE BY:</h2>
           <ul className="inline-block md:block list-none m-2 md:m-0 md:space-y-4 ">
             <li
               id={'DictionaryFilter'}
               className="inline-block transition duration-500 ease-in-out md:block md:my-2 md:mx-5 flex-grow"
             >
               <Link
-                className="inline-block transition duration-500 ease-in-out md:block p-3 flex-grow rounded-lg capitalize cursor-pointer border-l-4 border-primary bg-primary text-white"
+                className="inline-block transition duration-500 ease-in-out md:block p-3 flex-grow rounded-lg capitalize cursor-pointer text-xl text-fv-charcoal"
                 to={`/${sitename}/categories?docType=${docType}`}
               >
-                Categories
+                {useIcon('Categories', 'inline-flex fill-current h-8 mr-5')}Categories
+              </Link>
+              <Link
+                className="inline-block transition duration-500 ease-in-out md:block p-3 flex-grow rounded-lg capitalize cursor-pointer text-xl text-fv-charcoal"
+                to={`/${sitename}/categories?docType=${docType}`}
+              >
+                {useIcon('Alphabet', 'inline-flex fill-current h-10 mr-5')}Alphabet
               </Link>
             </li>
           </ul>
