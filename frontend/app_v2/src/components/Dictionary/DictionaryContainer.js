@@ -10,11 +10,12 @@ import DictionaryData from 'components/Dictionary/DictionaryData'
  *
  * @returns {node} jsx markup
  */
-function DictionaryContainer() {
-  const { isLoading, items, actions, moreActions, sitename, infiniteScroll } = DictionaryData()
+function DictionaryContainer({ docType }) {
+  const { isLoading, items, actions, moreActions, sitename, infiniteScroll } = DictionaryData({ docType })
   return (
     <DictionaryPresentation
       actions={actions}
+      docType={docType}
       isLoading={isLoading}
       items={items}
       moreActions={moreActions}

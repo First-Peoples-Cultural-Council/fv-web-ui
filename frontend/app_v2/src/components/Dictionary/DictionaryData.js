@@ -15,17 +15,17 @@ import api from 'services/api'
  * @param {function} props.children
  *
  */
-function DictionaryData() {
+function DictionaryData({ docType }) {
   const { uid } = useGetSite()
   const location = useLocation()
   const history = useHistory()
   const { sitename } = useParams()
 
-  const query = location.search ? location.search : '?&docType=WORD&perPage=5&sortBy=entry'
+  const query = location.search ? location.search : `?&docType=${docType}&perPage=5&sortBy=entry`
 
   // Param options: perPage=100&page=1&kidsOnly=false&gamesOnly=false&sortBy=entry&docType=WORDS_AND_PHRASES&sortAscending=true&q=Appla&alphabetCharacter=A
   const response = useInfiniteQuery(
-    ['words', query],
+    [docType, query],
     ({ pageParam = 1 }) => api.dictionary.get({ sitename: uid, query: query, pageParam: pageParam }),
     {
       // The query will not execute until the siteId exists and a search term has been provided

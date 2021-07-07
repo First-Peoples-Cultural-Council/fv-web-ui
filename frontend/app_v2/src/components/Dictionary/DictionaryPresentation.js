@@ -13,12 +13,13 @@ import DictionarySearchInput from 'components/DictionarySearchInput'
  *
  * @returns {node} jsx markup
  */
-function DictionaryPresentation({ isLoading, items, actions, moreActions, sitename, infiniteScroll }) {
+function DictionaryPresentation({ docType, isLoading, items, actions, moreActions, sitename, infiniteScroll }) {
+  const docTypeClass = docType.toLowerCase()
   return (
     <>
-      <section className="bg-gradient-to-b from-word to-word-dark p-5">
+      <section className={`bg-gradient-to-b from-${docTypeClass} to-${docTypeClass}-dark p-5`}>
         <div className="mx-auto lg:w-3/5">
-          <DictionarySearchInput.Container docType={'WORD'} />
+          <DictionarySearchInput.Container docType={docType} />
         </div>
       </section>
       <div className="grid grid-cols-11 md:p-2">
@@ -31,7 +32,7 @@ function DictionaryPresentation({ isLoading, items, actions, moreActions, sitena
             >
               <Link
                 className="inline-block transition duration-500 ease-in-out md:block p-3 flex-grow rounded-lg capitalize cursor-pointer border-l-4 border-primary bg-primary text-white"
-                to={`/${sitename}/categories?docType=WORD`}
+                to={`/${sitename}/categories?docType=${docType}`}
               >
                 Categories
               </Link>

@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet'
 import Alphabet from 'components/Alphabet'
 import Categories from 'components/Categories'
 import Category from 'components/Category'
+import Dictionary from 'components/Dictionary'
 import ErrorHandler from 'components/ErrorHandler'
 import Home from 'components/Home'
 import Games from 'components/Games'
@@ -14,7 +15,6 @@ import Lists from 'components/Lists'
 import List from 'components/List'
 import NavBar from 'components/NavBar'
 import Page from 'components/Page'
-import Phrases from 'components/Phrases'
 import Phrase from 'components/Phrase'
 import Resource from 'components/Resource'
 import Search from 'components/Search'
@@ -22,7 +22,6 @@ import Songs from 'components/Songs'
 import Song from 'components/Song'
 import Stories from 'components/Stories'
 import Story from 'components/Story'
-import Words from 'components/Words'
 import Word from 'components/Word'
 
 /**
@@ -56,7 +55,7 @@ function AppFrameContainer() {
               <Helmet>
                 <title>Words</title>
               </Helmet>
-              <Words.Container />
+              <Dictionary.Container docType={'WORD'} />
             </Route>
             <Route path="/:sitename/phrases/:phraseId">
               <Helmet>
@@ -68,7 +67,7 @@ function AppFrameContainer() {
               <Helmet>
                 <title>Phrases</title>
               </Helmet>
-              <Phrases.Container />
+              <Dictionary.Container docType={'PHRASE'} />
             </Route>
             <Route path="/:sitename/alphabet/:character">
               <Helmet>
