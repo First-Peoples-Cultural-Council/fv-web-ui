@@ -13,7 +13,7 @@ import Plants from 'common/categoryIcons/Seedling'
 import Spirit from 'common/categoryIcons/Feather'
 import Question from 'common/categoryIcons/QuestionMark'
 
-import Default from 'common/categoryIcons/CampFire'
+import Default from 'common/icons/Categories'
 
 // a helper function that given a string name returns an icon, if no string is supplied it will return a default icon
 
