@@ -30,7 +30,7 @@ function DictionarySearchInputData({ docType }) {
   const [searchValue, setSearchValue] = useState(searchTerm)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [currentOption, setCurrentOption] = useState({ label: domainLabel, id: domain })
-  const path = makePlural(docType).toLowerCase()
+  const typePlural = makePlural(docType).toLowerCase()
   const options = [
     { label: 'All', id: 'BOTH' },
     { label: 'English', id: 'ENGLISH' },
@@ -57,7 +57,7 @@ function DictionarySearchInputData({ docType }) {
   const handleSearchSubmit = (event) => {
     if (searchValue && searchValue !== searchTerm) {
       history.push({
-        pathname: `${baseUrl}/${path}`,
+        pathname: `${baseUrl}/${typePlural}`,
         search: `?q=${searchValue}&domain=${currentOption.id}&docType=${docType}`,
       })
     }
@@ -102,6 +102,7 @@ function DictionarySearchInputData({ docType }) {
     onSearchOptionsClick,
     searchValue,
     siteTitle: title ? title : 'FirstVoices',
+    typePlural,
   }
 }
 

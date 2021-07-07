@@ -25,6 +25,7 @@ function DictionarySearchInputContainer({ docType }) {
     options,
     searchValue,
     siteTitle,
+    typePlural,
   } = DictionarySearchInputData({ docType })
   return (
     <DictionarySearchInputPresentation
@@ -38,6 +39,7 @@ function DictionarySearchInputContainer({ docType }) {
       options={options}
       searchValue={searchValue}
       siteTitle={siteTitle}
+      typePlural={typePlural}
     />
   )
 }

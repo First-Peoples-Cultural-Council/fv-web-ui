@@ -22,6 +22,7 @@ function DictionarySearchInputPresentation({
   options,
   searchValue,
   siteTitle,
+  typePlural,
 }) {
   const getFilterListItems = () => {
     return options.map((option, index) => {
@@ -54,7 +55,7 @@ function DictionarySearchInputPresentation({
             data-testid="DictionarySearchInput"
             className="block w-full focus text-2xl text-fv-charcoal-light rounded-none rounded-l-md pl-4"
             type="text"
-            placeholder={`Search ${siteTitle}`}
+            placeholder={`Search ${typePlural} in ${siteTitle}`}
             onChange={handleTextFieldChange}
             value={searchValue}
           />
