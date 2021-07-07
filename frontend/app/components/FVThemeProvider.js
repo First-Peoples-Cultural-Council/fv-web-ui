@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { ThemeProvider, createTheme } from '@material-ui/core/styles'
 import FirstVoices from 'common/themes/FirstVoices.js'
 import FirstVoicesKids from 'common/themes/FirstVoicesKids.js' /// Fix this
 import FirstVoicesWorkspace from 'common/themes/FirstVoicesWorkspace.js' /// Fix this
@@ -16,19 +16,19 @@ import { useSelector } from 'react-redux'
  */
 function FVThemeProvider({ children }) {
   const siteTheme = useSelector((state) => state.navigation.properties.siteTheme)
-  const [muiTheme, setMuiTheme] = useState(createMuiTheme(FirstVoices))
+  const [muiTheme, setMuiTheme] = useState(createTheme(FirstVoices))
   useEffect(() => {
     switch (siteTheme) {
       case 'kids': {
-        setMuiTheme(createMuiTheme(FirstVoicesKids))
+        setMuiTheme(createTheme(FirstVoicesKids))
         break
       }
       case 'workspace': {
-        setMuiTheme(createMuiTheme(FirstVoicesWorkspace))
+        setMuiTheme(createTheme(FirstVoicesWorkspace))
         break
       }
       default: {
-        setMuiTheme(createMuiTheme(FirstVoices))
+        setMuiTheme(createTheme(FirstVoices))
         break
       }
     }
