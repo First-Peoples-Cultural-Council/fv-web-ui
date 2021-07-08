@@ -68,6 +68,12 @@ function DictionarySearchInputData({ docType }) {
   const onOptionClick = (filter) => {
     setCurrentOption(filter)
     setIsMenuOpen(false)
+    if (searchValue) {
+      history.push({
+        pathname: `${baseUrl}/${typePlural}`,
+        search: `?q=${searchValue}&domain=${filter.id}&docType=${docType}`,
+      })
+    }
   }
 
   const onSearchOptionsClick = () => {
