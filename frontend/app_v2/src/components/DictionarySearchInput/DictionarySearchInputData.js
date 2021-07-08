@@ -76,6 +76,16 @@ function DictionarySearchInputData({ docType }) {
     }
   }
 
+  const resetSearch = (event) => {
+    event.preventDefault()
+    setCurrentOption({ label: 'All', id: 'BOTH' })
+    setSearchValue('')
+    history.push({
+      pathname: `${baseUrl}/${typePlural}`,
+      search: `?domain=BOTH&docType=${docType}`,
+    })
+  }
+
   const onSearchOptionsClick = () => {
     setIsMenuOpen(!isMenuOpen)
   }
@@ -106,6 +116,7 @@ function DictionarySearchInputData({ docType }) {
     menuRef,
     onOptionClick,
     onSearchOptionsClick,
+    resetSearch,
     searchValue,
     siteTitle: title ? title : 'FirstVoices',
     typePlural,

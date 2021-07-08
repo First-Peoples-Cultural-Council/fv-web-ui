@@ -20,6 +20,7 @@ function DictionarySearchInputPresentation({
   onSearchOptionsClick,
   onOptionClick,
   options,
+  resetSearch,
   searchValue,
   siteTitle,
   typePlural,
@@ -90,6 +91,15 @@ function DictionarySearchInputPresentation({
             {useIcon('Search', 'fill-current h-7 w-7 ')}
           </button>
         </div>
+        {searchValue && (
+          <button
+            type="button"
+            className="inline-flex items-center ml-4 my-1 px-2 text-fv-charcoal-light border-gray-300 text-sm font-medium rounded-md bg-gray-50 hover:bg-gray-100"
+            onClick={(event) => resetSearch(event)}
+          >
+            Reset Search
+          </button>
+        )}
       </div>
     </>
   )

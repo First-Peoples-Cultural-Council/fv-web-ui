@@ -23,6 +23,7 @@ function DictionarySearchInputContainer({ docType }) {
     onSearchOptionsClick,
     onOptionClick,
     options,
+    resetSearch,
     searchValue,
     siteTitle,
     typePlural,
@@ -37,6 +38,7 @@ function DictionarySearchInputContainer({ docType }) {
       onSearchOptionsClick={onSearchOptionsClick}
       onOptionClick={onOptionClick}
       options={options}
+      resetSearch={resetSearch}
       searchValue={searchValue}
       siteTitle={siteTitle}
       typePlural={typePlural}
