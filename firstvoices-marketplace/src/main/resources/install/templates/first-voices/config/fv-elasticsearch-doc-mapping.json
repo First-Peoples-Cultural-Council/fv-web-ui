@@ -125,11 +125,13 @@
       "type": "keyword"
     },
     "fv-phrase:phrase_books": {
+      "type": "keyword",
       "copy_to": [
         "category_ids"
       ]
     },
     "fv-word:categories": {
+      "type": "keyword",
       "copy_to": [
         "category_ids"
       ]

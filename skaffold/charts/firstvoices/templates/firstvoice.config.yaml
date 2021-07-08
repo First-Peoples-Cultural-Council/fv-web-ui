@@ -1,4 +1,4 @@
-{{- $xmx := dict "XS" "1700m" "S" "2200m" "M" "3500m" "L" "5100m" "XL" "7300m" "XXL" "18000m" "CUSTOM" "4000m"}}
+{{- $xmx := dict "XS" "1700m" "S" "2200m" "M" "3500m" "L" "5100m" "XL" "7300m" "XXL" "18000m" "CUSTOM" "6000m"}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -40,10 +40,10 @@ data:
     elasticsearch.reindex.bucketReadSize=5000
     elasticsearch.reindex.bucketWriteSize=5000
     elasticsearch.index.translog.durability=async
-    elasticsearch.indexing.maxThreads=3
+    elasticsearch.indexing.maxThreads=8
     elasticsearch.indexNumberOfShards=1
-    elasticsearch.reindex.bucketReadSize=50
-    elasticsearch.reindex.bucketWriteSize=50
+    elasticsearch.reindex.bucketReadSize=500
+    elasticsearch.reindex.bucketWriteSize=500
     {{ else if .Values.elastic.useExternal }}
     elasticsearch.client=RestClient
     elasticsearch.addressList={{ .Values.elastic.externalConfiguration.url }}
@@ -55,10 +55,10 @@ data:
     elasticsearch.reindex.bucketReadSize=5000
     elasticsearch.reindex.bucketWriteSize=5000
     elasticsearch.index.translog.durability=async
-    elasticsearch.indexing.maxThreads=3
+    elasticsearch.indexing.maxThreads=8
     elasticsearch.indexNumberOfShards=1
-    elasticsearch.reindex.bucketReadSize=50
-    elasticsearch.reindex.bucketWriteSize=50
+    elasticsearch.reindex.bucketReadSize=500
+    elasticsearch.reindex.bucketWriteSize=500
     {{ else }}
     # use internal
     {{ end }}

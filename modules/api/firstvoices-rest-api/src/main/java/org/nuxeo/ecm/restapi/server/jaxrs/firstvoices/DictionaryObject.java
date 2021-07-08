@@ -81,11 +81,11 @@ public class DictionaryObject extends AbstractSearchlikeObject {
       basicConstraints = basicConstraints.must(ancestryContraints.get());
     }
 
-    BoolQueryBuilder combinedQuery = new BoolQueryBuilder().must(basicConstraints);
-
     if (categoryDocument != null) {
       basicConstraints = basicConstraints.must(QueryBuilders.matchQuery("category_ids", category));
     }
+
+    BoolQueryBuilder combinedQuery = new BoolQueryBuilder().must(basicConstraints);
 
     if (query != null) {
 
@@ -117,7 +117,7 @@ public class DictionaryObject extends AbstractSearchlikeObject {
       String substitutedCharacter = null;
 
       DocumentModelList characterSearchResults = getContext().getCoreSession().query(
-          
+
           "SELECT * " + "from FVCharacter where ecm:ancestorId = " + NXQL.escapeString(dialect)
               + " and " + "dc:title = " + NXQL.escapeString(alphabetCharacter) + " and "
               + "ecm:isVersion=0 and ecm:isTrashed=0 and ecm:isProxy=0");
