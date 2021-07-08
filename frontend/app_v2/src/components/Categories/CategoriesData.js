@@ -6,7 +6,6 @@ import { useQuery } from 'react-query'
 import useGetSite from 'common/useGetSite'
 import api from 'services/api'
 import { triggerError } from 'common/navigationHelpers'
-import { makePlural } from 'common/urlHelpers'
 
 /**
  * @summary CategoriesData

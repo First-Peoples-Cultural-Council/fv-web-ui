@@ -39,7 +39,7 @@ function DictionaryPresentation({ docType, isLoading, items, actions, moreAction
               </Link>
               <Link
                 className="inline-block transition duration-500 ease-in-out md:block p-3 flex-grow rounded-lg capitalize cursor-pointer text-xl text-fv-charcoal"
-                to={`/${sitename}/categories?docType=${docType}`}
+                to={`/${sitename}/alphabet?docType=${docType}`}
               >
                 {useIcon('Alphabet', 'inline-flex fill-current h-10 mr-5')}Alphabet
               </Link>
