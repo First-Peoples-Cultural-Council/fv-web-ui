@@ -25,7 +25,7 @@ function DictionaryPresentation({ docType, isLoading, items, actions, moreAction
       </section>
       <div className="grid grid-cols-11 md:p-2">
         <div className="col-span-11 md:col-span-2 mt-5">
-          <h2 className="hidden md:block text-2xl font-semibold ml-8">BROWSE BY:</h2>
+          <h2 className="hidden md:block text-2xl font-semibold ml-8 text-fv-charcoal">BROWSE BY:</h2>
           <ul className="inline-block md:block list-none m-2 md:m-0 md:space-y-4 ">
             <li
               id={'DictionaryFilter'}

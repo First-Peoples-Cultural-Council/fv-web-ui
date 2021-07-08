@@ -47,7 +47,7 @@ function DictionaryData({ docType }) {
   } else if (hasNextPage) {
     loadButtonLabel = 'Load more'
   } else {
-    loadButtonLabel = 'Nothing more to load'
+    loadButtonLabel = 'End of list.'
   }
 
   useIntersectionObserver({
