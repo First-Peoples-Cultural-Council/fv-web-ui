@@ -1,5 +1,5 @@
 // an action helper for copying a given string to the clipboard
-// See SerachData -> DictionaryList for an example of implementation with tooltip
+// See SearchData -> DictionaryList for an example of implementation with tooltip
 export const copy = {
   actionTitle: 'copy',
   iconName: 'Copy',

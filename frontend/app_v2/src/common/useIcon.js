@@ -9,6 +9,8 @@ import Checkmark from 'common/icons/Checkmark'
 import ChevronDown from 'common/icons/ChevronDown'
 import ChevronLeft from 'common/icons/ChevronLeft'
 import ChevronRight from 'common/icons/ChevronRight'
+import ChevronUp from 'common/icons/ChevronUp'
+import ChevronUpDown from 'common/icons/ChevronUpDown'
 import Close from 'common/icons/Close'
 import Copy from 'common/icons/Copy'
 import Dictionary from 'common/icons/Dictionary'
@@ -62,6 +64,8 @@ function useIcon(iconName, iconStyling) {
     ChevronDown,
     ChevronLeft,
     ChevronRight,
+    ChevronUp,
+    ChevronUpDown,
     Close,
     Copy,
     Dictionary,
