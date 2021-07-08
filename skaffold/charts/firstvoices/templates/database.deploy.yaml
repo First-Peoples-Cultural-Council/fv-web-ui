@@ -1,6 +1,6 @@
 {{ if .Values.database.deploy }}
-{{- $cpu := dict "XS" "100m" "S" "250m" "M" "500m" "L" "1000m" "XL" "2000m" "XXL" "6000m" }}
-{{- $mem := dict "XS" "400Mi" "S" "1000Mi" "M" "1200Mi" "L" "2500Mi" "XL" "6Gi" "XXL" "24Gi" }}
+{{- $cpu := dict "XS" "100m" "S" "250m" "M" "500m" "L" "1000m" "XL" "2000m" "XXL" "6000m" "CUSTOM" "1000m"}}
+{{- $mem := dict "XS" "400M" "S" "1000M" "M" "1200M" "L" "2500M" "XL" "6G" "XXL" "24G" "CUSTOM" "400M"}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:

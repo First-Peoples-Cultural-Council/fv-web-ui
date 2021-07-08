@@ -72,6 +72,10 @@
     "ecm:acl": {
       "type": "keyword"
     },
+    "category_ids": {
+      "type": "keyword",
+      "ignore_above": 256
+    },
     "ecm:binarytext": {
       "type": "text",
       "analyzer": "fulltext",
@@ -119,6 +123,16 @@
     "common:icon": {
       "index": false,
       "type": "keyword"
+    },
+    "fv-phrase:phrase_books": {
+      "copy_to": [
+        "category_ids"
+      ]
+    },
+    "fv-word:categories": {
+      "copy_to": [
+        "category_ids"
+      ]
     },
     "dc:title": {
       "type": "text",

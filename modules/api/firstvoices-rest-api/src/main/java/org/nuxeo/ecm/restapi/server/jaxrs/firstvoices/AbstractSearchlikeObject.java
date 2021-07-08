@@ -120,19 +120,19 @@ public abstract class AbstractSearchlikeObject extends DefaultObject {
       case WORD:
         typesQuery.should(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVWord"));
         break;
-      case WORDS_AND_PHRASES:
+      case WORD_AND_PHRASE:
         typesQuery.should(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVWord"));
         typesQuery.should(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVPhrase"));
         break;
       case BOOK:
-      case SONGS_AND_STORIES:
+      case SONG_AND_STORY:
         typesQuery.must(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVBook"));
         break;
-      case SONGS:
+      case SONG:
         typesQuery.must(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVBook"));
         typesQuery.must(QueryBuilders.termQuery("fvbook:type", "song"));
         break;
-      case STORIES:
+      case STORY:
         typesQuery.must(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVBook"));
         typesQuery.must(QueryBuilders.termQuery("fvbook:type", "story"));
         break;
