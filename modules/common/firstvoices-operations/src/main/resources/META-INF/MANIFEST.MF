@@ -16,5 +16,4 @@ Nuxeo-component: OSGI-INF/dialect/categories/categories-operations.xml,
  OSGI-INF/dialect/visibility/visibility-services.xml,
  OSGI-INF/bulkupdate/bulkupdate-operations.xml,
  OSGI-INF/bulkupdate/bulkupdate-services.xml,
- OSGI-INF/audience/audience-operations.xml,
- OSGI-INF/audiofix/audiofix-operations.xml
+ OSGI-INF/audience/audience-operations.xml

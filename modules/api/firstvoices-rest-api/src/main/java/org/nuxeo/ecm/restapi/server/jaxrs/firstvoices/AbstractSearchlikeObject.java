@@ -81,7 +81,7 @@ public abstract class AbstractSearchlikeObject extends DefaultObject {
   }
 
   protected enum SortOrdering {
-    ENTRY("entry", "dc:title"), TRANSLATION("translation", "fv:definitions[0]/translation");
+    ENTRY("entry", "fv:custom_order"), TRANSLATION("translation", "fv:definitions[0]/translation");
 
     private final String value;
     private final String column;

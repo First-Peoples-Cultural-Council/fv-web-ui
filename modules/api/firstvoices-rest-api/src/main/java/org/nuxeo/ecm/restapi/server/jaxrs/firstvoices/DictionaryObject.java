@@ -145,12 +145,20 @@ public class DictionaryObject extends AbstractSearchlikeObject {
 
       if (characterSearchResults.size() == 1) {
         DocumentModel fvchar = characterSearchResults.get(0);
-        substitutedCharacter = (String) fvchar.getPropertyValue("fvcharacter:alphabet_order");
+        substitutedCharacter = (String) fvchar.getPropertyValue("fv:custom_order");
+
+        if (substitutedCharacter != null) {
+          PrefixQueryBuilder alphabetByCustomOrderQuery =
+              QueryBuilders.prefixQuery("fv:custom_order", substitutedCharacter);
+          combinedQuery.must(alphabetByCustomOrderQuery);
+        }
       }
 
-      PrefixQueryBuilder alphabetQuery = QueryBuilders.prefixQuery("dc:title",
-          substitutedCharacter != null ? substitutedCharacter : alphabetCharacter);
-      combinedQuery.must(alphabetQuery);
+      if (substitutedCharacter == null) {
+        PrefixQueryBuilder alphabetQuery =
+            QueryBuilders.prefixQuery("dc:title", alphabetCharacter);
+        combinedQuery.must(alphabetQuery);
+      }
     }
 
     combinedQuery.must(audienceQuery(kidsOnly, gamesOnly));
