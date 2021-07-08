@@ -1,6 +1,8 @@
 package org.nuxeo.ecm.restapi.server.jaxrs.firstvoices;
 
 import ca.firstvoices.rest.data.SearchResults;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -45,7 +47,9 @@ public class DictionaryObject extends AbstractSearchlikeObject {
       perPage = 100;
     }
     final int offset = (from - 1) * perPage;
-    DocumentModel categoryDocument = null;
+
+    List<String> categoryIds = new ArrayList<>();
+
 
     try {
       DocumentModel dialectDocument = getContext().getCoreSession().getDocument(new IdRef(dialect));
@@ -53,10 +57,20 @@ public class DictionaryObject extends AbstractSearchlikeObject {
         throw new IllegalArgumentException("Not a dialect");
       }
       if (category != null && category.length() > 0) {
-        categoryDocument = getContext().getCoreSession().getDocument(new IdRef(dialect));
-        if (!"FVCategory".equals(dialectDocument.getType())) {
+        DocumentModel categoryDocument = getContext().getCoreSession().getDocument(new IdRef(
+            category));
+        if (!"FVCategory".equals(categoryDocument.getType())) {
           throw new IllegalArgumentException("Not a category");
         }
+        categoryIds.add(category);
+        // expand child categories
+        DocumentModelList categoryDOMList = getContext().getCoreSession().query(
+            "Select * from FVCategory where ecm:isVersion=0 and "
+                + "ecm:isTrashed=0 and ecm:parentId = " + NXQL.escapeString(category));
+        for (DocumentModel subCategory : categoryDOMList) {
+          categoryIds.add(subCategory.getId());
+        }
+
       }
     } catch (Exception e) {
       throw new IllegalArgumentException();
@@ -81,8 +95,15 @@ public class DictionaryObject extends AbstractSearchlikeObject {
       basicConstraints = basicConstraints.must(ancestryContraints.get());
     }
 
-    if (categoryDocument != null) {
-      basicConstraints = basicConstraints.must(QueryBuilders.matchQuery("category_ids", category));
+    if (!categoryIds.isEmpty()) {
+      BoolQueryBuilder categoriesQuery = QueryBuilders.boolQuery();
+      categoriesQuery.minimumShouldMatch(1);
+
+      for (String categoryId : categoryIds) {
+        categoriesQuery.should(QueryBuilders.matchQuery("category_ids", categoryId));
+      }
+
+      basicConstraints = basicConstraints.must(categoriesQuery);
     }
 
     BoolQueryBuilder combinedQuery = new BoolQueryBuilder().must(basicConstraints);
