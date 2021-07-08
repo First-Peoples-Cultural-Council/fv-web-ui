@@ -66,6 +66,7 @@ function HomeData(props) {
   if (accessButtons.length === 0) {
     accessButtons.push({
       url: NavigationHelpers.generateStaticURL('/explore/FV/sections/Data/'),
+      text: 'Get Started!',
     })
   }
 

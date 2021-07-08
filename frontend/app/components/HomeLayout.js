@@ -63,7 +63,7 @@ export class HomeLayout extends Component {
               position: 'relative',
               minHeight: '155px',
               backgroundAttachment: 'fixed',
-              background: `transparent url("assets/images/fv-intro-background.jpg") bottom ${
+              background: `transparent url("assets/images/fv-intro-background-2.png") ${
                 isMobile ? 'left' : 'center'
               } no-repeat`,
               backgroundSize: 'cover',
@@ -104,13 +104,7 @@ export class HomeLayout extends Component {
                                 }}
                                 style={{ marginRight: '10px', height: '50px' }}
                               >
-                                {text ? (
-                                  text
-                                ) : (
-                                  <>
-                                    <FVLabel transKey="get_started!" defaultStr="Get Started!" transform="words" />!
-                                  </>
-                                )}
+                                {text}
                               </FVButton>
                             )
                           })}
