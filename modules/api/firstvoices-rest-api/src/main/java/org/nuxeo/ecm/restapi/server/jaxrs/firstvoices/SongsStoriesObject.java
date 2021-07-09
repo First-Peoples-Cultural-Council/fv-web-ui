@@ -26,10 +26,10 @@ public class SongsStoriesObject extends AbstractSearchlikeObject {
 
   @GET
   @Path("{dialect}")
-  public Response getDictionary(
+  public Response getSongsAndStories(
       @PathParam(value = "dialect") String dialect,
       @QueryParam(value = "q") String query,
-      @QueryParam(value = "docType") @DefaultValue("SONGS_AND_STORIES") String docType,
+      @QueryParam(value = "docType") @DefaultValue("SONG_AND_STORY") String docType,
       @QueryParam(value = "kidsOnly") @DefaultValue("false") boolean kidsOnly,
       @QueryParam(value = "sortAscending") @DefaultValue("false") boolean sortAscending,
       @QueryParam(value = "sortBy") @DefaultValue("entry") String sortBy,
@@ -60,11 +60,14 @@ public class SongsStoriesObject extends AbstractSearchlikeObject {
 
     BoolQueryBuilder basicConstraints;
 
-    basicConstraints = QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("ecm:isVersion",
-        false));
+    basicConstraints = QueryBuilders.boolQuery().must(QueryBuilders.termQuery("ecm:isVersion",
+    false));
 
     basicConstraints = basicConstraints.must(typesQuery(documentTypes));
+
+
     Optional<WildcardQueryBuilder> ancestryContraints = ancestryQuery(dialect);
+
     if (ancestryContraints.isPresent()) {
       basicConstraints = basicConstraints.must(ancestryContraints.get());
     }
@@ -100,7 +103,7 @@ public class SongsStoriesObject extends AbstractSearchlikeObject {
     combinedQuery.must(audienceQuery(kidsOnly, false));
 
     runSearch(searchResults,
-        combinedQuery,
+        basicConstraints,
         perPage,
         offset,
         sortOptions,

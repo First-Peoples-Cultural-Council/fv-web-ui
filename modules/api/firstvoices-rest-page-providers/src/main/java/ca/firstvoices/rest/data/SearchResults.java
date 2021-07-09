@@ -65,10 +65,10 @@ public class SearchResults implements Serializable {
     WORD("word"),
     PHRASE("phrase"),
     BOOK("book"),
-    WORDS_AND_PHRASES("words_and_phrases"),
-    SONGS("songs"),
-    STORIES("stories"),
-    SONGS_AND_STORIES("songs_and_stories"),
+    WORD_AND_PHRASE("word_and_phrase"),
+    SONG("song"),
+    STORY("story"),
+    SONG_AND_STORY("song_and_story"),
     ALL("all");
 
     DocumentTypes(String value) {

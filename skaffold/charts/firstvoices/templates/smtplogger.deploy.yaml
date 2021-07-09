@@ -1,6 +1,6 @@
 {{ if .Values.smtplogger.deploy }}
-{{- $cpu := dict "XS" "10m" "S" "10m" "M" "10m" "L" "10m" "XL" "10m" "XXL" "10m" }}
-{{- $mem := dict "XS" "50Mi" "S" "50Mi" "M" "50Mi" "L" "50Mi" "XL" "50Mi" "XXL" "50Mi" }}
+{{- $cpu := dict "XS" "10m" "S" "10m" "M" "10m" "L" "10m" "XL" "10m" "XXL" "10m" "CUSTOM" "10m" }}
+{{- $mem := dict "XS" "50Mi" "S" "50M" "M" "50M" "L" "50M" "XL" "50M" "XXL" "50M" "CUSTOM" "50M" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:

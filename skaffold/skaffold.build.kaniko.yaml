@@ -6,7 +6,7 @@ profiles:
       tagPolicy:
         inputDigest: {}
       cluster:
-        concurrency: 1
+        concurrency: 2
         timeout: 120m
         resources:
           limits:

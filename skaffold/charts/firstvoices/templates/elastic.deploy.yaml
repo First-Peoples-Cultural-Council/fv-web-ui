@@ -1,7 +1,7 @@
 {{ if .Values.elastic.deploy }}
-{{- $cpu := dict "XS" "250m" "S" "500m" "M" "500m" "L" "1000m" "XL" "3000m" "XXL" "8000m" }}
-{{- $mem := dict "XS" "1800Mi" "S" "2200Mi" "M" "3800Mi" "L" "5600Mi" "XL" "8Gi" "XXL" "20Gi" }}
-{{- $xmx := dict "XS" "1650m" "S" "1800m" "M" "3100m" "L" "5000m" "XL" "6900m" "XXL" "18000m" }}
+{{- $cpu := dict "XS" "250m" "S" "500m" "M" "500m" "L" "1000m" "XL" "3000m" "XXL" "8000m" "CUSTOM" "1000m"}}
+{{- $mem := dict "XS" "1800M" "S" "2200M" "M" "3800M" "L" "5600M" "XL" "8G" "XXL" "20G" "CUSTOM" "5500M" }}
+{{- $xmx := dict "XS" "1250m" "S" "1500m" "M" "3000m" "L" "4400m" "XL" "6200m" "XXL" "16380m" "CUSTOM" "3000m"}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -27,7 +27,7 @@ spec:
       initContainers:
         - name: create
           image: busybox:1.28
-          command: ['mkdir', '/usr/share/elasticsearch/data/nodes/']
+          command: ['mkdir', '-p', '/usr/share/elasticsearch/data/nodes/']
           volumeMounts:
           - mountPath: /usr/share/elasticsearch/data
             name: elastic-storage
@@ -71,6 +71,8 @@ spec:
               value: single-node
             - name: cluster.name
               value: elastic
+            - name: bootstrap.memory_lock
+              value: 'true'
             - name: ES_JAVA_OPTS
               value: "-Xms{{get $xmx .Values.resourceSizing}} -Xmx{{get $xmx .Values.resourceSizing}}"
           ports:

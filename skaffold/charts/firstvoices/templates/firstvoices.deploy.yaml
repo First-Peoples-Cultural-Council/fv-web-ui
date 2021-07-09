@@ -1,5 +1,5 @@
-{{- $cpu := dict "XS" "100m" "S" "250m" "M" "500m" "L" "1000m" "XL" "3000m" "XXL" "8000m" }}
-{{- $mem := dict "XS" "2000Mi" "S" "2400Mi" "M" "3800Mi" "L" "5600Mi" "XL" "8Gi" "XXL" "20Gi" }}
+{{- $cpu := dict "XS" "100m" "S" "250m" "M" "500m" "L" "1000m" "XL" "3000m" "XXL" "8000m" "CUSTOM" "5000m"}}
+{{- $mem := dict "XS" "2000M" "S" "2400M" "M" "3800M" "L" "5600M" "XL" "8G" "XXL" "20G" "CUSTOM" "8500M" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:

@@ -1,4 +1,4 @@
-{{- $xmx := dict "XS" "1700m" "S" "2200m" "M" "3500m" "L" "5100m" "XL" "7300m" "XXL" "18000m" }}
+{{- $xmx := dict "XS" "1700m" "S" "2200m" "M" "3500m" "L" "5100m" "XL" "7300m" "XXL" "18000m" "CUSTOM" "6000m"}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8,6 +8,11 @@ data:
   nuxeo.conf: |
     # this value is related to the value specified in the helm chart deploymentconfig (and could possibly be supplied by same if desired)
     JAVA_OPTS=$JAVA_OPTS -Xms{{get $xmx .Values.resourceSizing }} -Xmx{{get $xmx .Values.resourceSizing }}
+    JAVA_OPTS=$JAVA_OPTS -Dfile.encoding=UTF-8 -Dmail.mime.decodeparameters=true
+    JAVA_OPTS=$JAVA_OPTS -Dnet.sf.ehcache.skipUpdateCheck=true
+    JAVA_OPTS=$JAVA_OPTS -Djava.util.Arrays.useLegacyMergeSort=true
+    JAVA_OPTS=$JAVA_OPTS -Dsun.net.http.retryPost=false
+
     {{ if .Values.firstvoices.javaDebug }}
     JAVA_OPTS=$JAVA_OPTS -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n
     {{ end }}
@@ -35,6 +40,10 @@ data:
     elasticsearch.reindex.bucketReadSize=5000
     elasticsearch.reindex.bucketWriteSize=5000
     elasticsearch.index.translog.durability=async
+    elasticsearch.indexing.maxThreads=8
+    elasticsearch.indexNumberOfShards=1
+    elasticsearch.reindex.bucketReadSize=500
+    elasticsearch.reindex.bucketWriteSize=500
     {{ else if .Values.elastic.useExternal }}
     elasticsearch.client=RestClient
     elasticsearch.addressList={{ .Values.elastic.externalConfiguration.url }}
@@ -46,22 +55,42 @@ data:
     elasticsearch.reindex.bucketReadSize=5000
     elasticsearch.reindex.bucketWriteSize=5000
     elasticsearch.index.translog.durability=async
+    elasticsearch.indexing.maxThreads=8
+    elasticsearch.indexNumberOfShards=1
+    elasticsearch.reindex.bucketReadSize=500
+    elasticsearch.reindex.bucketWriteSize=500
     {{ else }}
     # use internal
     {{ end }}
 
     {{ if .Values.database.deploy }}
+    nuxeo.templates=postgresql
     nuxeo.db.name={{.Values.database.inClusterConfiguration.name}}
     nuxeo.db.host=postgresql-firstvoices
     nuxeo.db.port=5432
     nuxeo.db.user={{.Values.database.inClusterConfiguration.username}}
     nuxeo.db.password={{.Values.database.inClusterConfiguration.password}}
+    nuxeo.db.min-pool-size=10
+    nuxeo.db.max-pool-size=100
+    nuxeo.vcs.min-pool-size=20
+    nuxeo.vcs.blocking-timeout-millis=2500
+    nuxeo.vcs.max-pool-size=100
+    nuxeo.db.transactiontimeout=900
+    nuxeo.db.idle-timeout-minutes=5
+    nuxeo.vcs.idle-timeout-minutes=5
     {{ else if .Values.database.useExternal }}
+    nuxeo.templates=postgresql
     nuxeo.db.name={{.Values.database.externalConfiguration.name}}
     nuxeo.db.host={{.Values.database.externalConfiguration.host}}
     nuxeo.db.port={{.Values.database.externalConfiguration.port}}
     nuxeo.db.user={{.Values.database.externalConfiguration.username}}
     nuxeo.db.password={{.Values.database.externalConfiguration.password}}
+    nuxeo.vcs.min-pool-size=20
+    nuxeo.vcs.blocking-timeout-millis=4000
+    nuxeo.vcs.max-pool-size=200
+    nuxeo.db.transactiontimeout=900
+    nuxeo.db.idle-timeout-minutes=5
+    nuxeo.vcs.idle-timeout-minutes=5
     {{ else }}
     # use internal HSQLDB
     {{ end }}
