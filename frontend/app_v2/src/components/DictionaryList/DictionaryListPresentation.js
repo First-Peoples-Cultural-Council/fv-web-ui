@@ -79,7 +79,6 @@ function DictionaryListPresentation({
     if (sorting?.sortBy === field && sorting?.sortAscending === false) {
       return useIcon('ChevronUp', 'inline-flex h-6 fill-current')
     }
-
     return useIcon('ChevronUpDown', 'inline-flex h-6 fill-current')
   }
 

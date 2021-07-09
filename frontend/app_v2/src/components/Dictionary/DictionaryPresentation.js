@@ -22,12 +22,9 @@ function DictionaryPresentation({
   handleTextFieldChange,
   infiniteScroll,
   isLoadingEntries,
-  isMenuOpen,
   items,
-  menuRef,
   moreActions,
   onOptionClick,
-  onSearchOptionsClick,
   onSortByClick,
   options,
   resetSearch,
@@ -46,9 +43,6 @@ function DictionaryPresentation({
             currentOption={currentOption}
             handleSearchSubmit={handleSearchSubmit}
             handleTextFieldChange={handleTextFieldChange}
-            isMenuOpen={isMenuOpen}
-            menuRef={menuRef}
-            onSearchOptionsClick={onSearchOptionsClick}
             onOptionClick={onOptionClick}
             options={options}
             resetSearch={resetSearch}
@@ -103,14 +97,26 @@ function DictionaryPresentation({
   )
 }
 // PROPTYPES
-const { array, bool, object, string } = PropTypes
+const { array, bool, func, object, string } = PropTypes
 DictionaryPresentation.propTypes = {
   actions: array,
-  moreActions: array,
+  currentOption: object,
+  docType: string,
+  handleSearchSubmit: func,
+  handleTextFieldChange: func,
+  infiniteScroll: object,
   isLoadingEntries: bool,
   items: object,
+  moreActions: array,
+  onOptionClick: func,
+  onSortByClick: func,
+  options: array,
+  resetSearch: func,
+  searchValue: string,
   sitename: string,
-  infiniteScroll: object,
+  siteTitle: string,
+  sorting: object,
+  typePlural: string,
 }
 
 export default DictionaryPresentation

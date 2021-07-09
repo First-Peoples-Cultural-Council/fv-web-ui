@@ -23,12 +23,9 @@ function DictionaryContainer({ docType }) {
     infiniteScroll,
     isLoading,
     isLoadingEntries,
-    isMenuOpen,
     items,
-    menuRef,
     moreActions,
     onOptionClick,
-    onSearchOptionsClick,
     onSortByClick,
     options,
     resetSearch,
@@ -48,12 +45,9 @@ function DictionaryContainer({ docType }) {
         handleTextFieldChange={handleTextFieldChange}
         infiniteScroll={infiniteScroll}
         isLoadingEntries={isLoadingEntries}
-        isMenuOpen={isMenuOpen}
         items={items}
-        menuRef={menuRef}
         moreActions={moreActions}
         onOptionClick={onOptionClick}
-        onSearchOptionsClick={onSearchOptionsClick}
         onSortByClick={onSortByClick}
         options={options}
         resetSearch={resetSearch}
