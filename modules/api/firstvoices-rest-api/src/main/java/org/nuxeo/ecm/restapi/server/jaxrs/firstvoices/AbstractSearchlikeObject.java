@@ -471,7 +471,7 @@ public abstract class AbstractSearchlikeObject extends DefaultObject {
 
         // retrieve pageCount
         DocumentModelList pages = session.query(
-            "select * from FVPage where ecm:ancestorId = " + NXQL.escapeString(dbDoc.getId()));
+            "SELECT * FROM FVBookEntry where ecm:parentId = " + NXQL.escapeString(dbDoc.getId()));
         bsr.setPageCount(pages.size());
 
       }
