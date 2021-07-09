@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 public class SearchResult implements Serializable {
 
   private List<String> audio = new LinkedList<>();
+  private List<String> photos = new LinkedList<>();
+  private List<String> videos = new LinkedList<>();
 
   private String type;
 
@@ -74,6 +76,14 @@ public class SearchResult implements Serializable {
 
   public List<String> getAudio() {
     return audio;
+  }
+
+  public List<String> getVideos() {
+    return videos;
+  }
+
+  public List<String> getPhotos() {
+    return photos;
   }
 
   @Nullable
@@ -143,4 +153,5 @@ public class SearchResult implements Serializable {
   }
 
 }
+
 

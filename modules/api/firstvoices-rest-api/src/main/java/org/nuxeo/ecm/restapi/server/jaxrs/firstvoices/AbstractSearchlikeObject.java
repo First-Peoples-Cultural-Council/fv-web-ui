@@ -1,9 +1,11 @@
 package org.nuxeo.ecm.restapi.server.jaxrs.firstvoices;
 
 import ca.firstvoices.core.io.utils.StateUtils;
+import ca.firstvoices.rest.data.BookSearchResult;
 import ca.firstvoices.rest.data.SearchResult;
 import ca.firstvoices.rest.data.SearchResults;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +19,11 @@ import org.elasticsearch.index.query.WildcardQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.PropertyException;
 import org.nuxeo.ecm.core.api.SortInfo;
+import org.nuxeo.ecm.core.query.sql.NXQL;
 import org.nuxeo.ecm.webengine.model.impl.DefaultObject;
 import org.nuxeo.elasticsearch.api.ElasticSearchService;
 import org.nuxeo.elasticsearch.api.EsResult;
@@ -81,7 +85,7 @@ public abstract class AbstractSearchlikeObject extends DefaultObject {
   }
 
   protected enum SortOrdering {
-    ENTRY("entry", "fv:custom_order"), TRANSLATION("translation", "fv:definitions[0]/translation");
+    ENTRY("entry", "dc:title"), TRANSLATION("translation", "fv:definitions[0]/translation");
 
     private final String value;
     private final String column;
@@ -110,37 +114,38 @@ public abstract class AbstractSearchlikeObject extends DefaultObject {
   protected BoolQueryBuilder typesQuery(SearchResults.DocumentTypes documentTypes) {
 
     BoolQueryBuilder typesQuery = QueryBuilders.boolQuery();
-    typesQuery.minimumShouldMatch(1);
 
     switch (documentTypes) {
 
       case PHRASE:
-        typesQuery.should(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVPhrase"));
+        typesQuery.must(QueryBuilders.termQuery(ECM_PRIMARY_TYPE, "FVPhrase"));
         break;
       case WORD:
-        typesQuery.should(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVWord"));
+        typesQuery.must(QueryBuilders.termQuery(ECM_PRIMARY_TYPE, "FVWord"));
         break;
       case WORD_AND_PHRASE:
-        typesQuery.should(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVWord"));
-        typesQuery.should(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVPhrase"));
+        typesQuery.should(QueryBuilders.termQuery(ECM_PRIMARY_TYPE, "FVWord"));
+        typesQuery.should(QueryBuilders.termQuery(ECM_PRIMARY_TYPE, "FVPhrase"));
+        typesQuery.minimumShouldMatch(1);
         break;
       case BOOK:
       case SONG_AND_STORY:
-        typesQuery.must(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVBook"));
+        typesQuery.must(QueryBuilders.termQuery(ECM_PRIMARY_TYPE, "FVBook"));
         break;
       case SONG:
-        typesQuery.must(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVBook"));
+        typesQuery.must(QueryBuilders.termQuery(ECM_PRIMARY_TYPE, "FVBook"));
         typesQuery.must(QueryBuilders.termQuery("fvbook:type", "song"));
         break;
       case STORY:
-        typesQuery.must(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVBook"));
+        typesQuery.must(QueryBuilders.termQuery(ECM_PRIMARY_TYPE, "FVBook"));
         typesQuery.must(QueryBuilders.termQuery("fvbook:type", "story"));
         break;
       case ALL:
       default:
-        typesQuery.should(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVBook"));
-        typesQuery.should(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVPhrase"));
-        typesQuery.should(QueryBuilders.matchQuery(ECM_PRIMARY_TYPE, "FVWord"));
+        typesQuery.should(QueryBuilders.termQuery(ECM_PRIMARY_TYPE, "FVBook"));
+        typesQuery.should(QueryBuilders.termQuery(ECM_PRIMARY_TYPE, "FVPhrase"));
+        typesQuery.should(QueryBuilders.termQuery(ECM_PRIMARY_TYPE, "FVWord"));
+        typesQuery.minimumShouldMatch(1);
         break;
     }
 
@@ -277,7 +282,13 @@ public abstract class AbstractSearchlikeObject extends DefaultObject {
         return;
       }
 
-      SearchResult sr = new SearchResult();
+      SearchResult sr;
+      if ("FVBook".equals(d.getType())) {
+        sr = new BookSearchResult();
+      } else {
+        sr = new SearchResult();
+      }
+
       sr.setId(d.getId());
       sr.setTitle(d.getTitle());
       sr.setPath(d.getPathAsString());
@@ -325,6 +336,144 @@ public abstract class AbstractSearchlikeObject extends DefaultObject {
         }
       } catch (PropertyException e) {
         // no action needed
+      }
+
+      try {
+        Object picture = dbDoc.getPropertyValue("fv:related_pictures");
+        if (picture != null) {
+          if (picture instanceof String) {
+            sr.getPhotos().add((String) picture);
+          }
+          if (picture instanceof List) {
+            for (Object s : (List) picture) {
+              if (s != null) {
+                if (s instanceof String) {
+                  sr.getPhotos().add((String) s);
+                } else {
+                  sr.getPhotos().add(s.toString());
+                }
+              }
+            }
+          }
+          if (picture instanceof Object[]) {
+            for (Object s : (Object[]) picture) {
+              if (s != null) {
+                if (s instanceof String) {
+                  sr.getPhotos().add((String) s);
+                } else {
+                  sr.getPhotos().add(s.toString());
+                }
+              }
+            }
+          }
+        }
+      } catch (PropertyException e) {
+        // no action needed
+      }
+
+
+      try {
+        Object video = dbDoc.getPropertyValue("fv:related_videos");
+        if (video != null) {
+          if (video instanceof String) {
+            sr.getVideos().add((String) video);
+          }
+          if (video instanceof List) {
+            for (Object s : (List) video) {
+              if (s != null) {
+                if (s instanceof String) {
+                  sr.getVideos().add((String) s);
+                } else {
+                  sr.getVideos().add(s.toString());
+                }
+              }
+            }
+          }
+          if (video instanceof Object[]) {
+            for (Object s : (Object[]) video) {
+              if (s != null) {
+                if (s instanceof String) {
+                  sr.getVideos().add((String) s);
+                } else {
+                  sr.getVideos().add(s.toString());
+                }
+              }
+            }
+          }
+        }
+      } catch (PropertyException e) {
+        // no action needed
+      }
+
+
+      if (sr instanceof BookSearchResult) {
+
+        BookSearchResult bsr = (BookSearchResult) sr;
+
+        Object introduction = dbDoc.getPropertyValue("fvbook:introduction");
+        if (introduction != null && introduction instanceof String) {
+          bsr.setIntroduction((String) introduction);
+        }
+
+        try {
+          List<Map<String, String>> titleTranslations =
+              (List<Map<String, String>>) dbDoc.getPropertyValue(
+                  "fvbook" + ":title_literal_translation");
+
+          if (titleTranslations != null) {
+
+            bsr.setTitleTranslation(titleTranslations.stream().map(map -> {
+              return map.get("translation");
+            }).collect(Collectors.joining("; ")));
+          }
+
+        } catch (ClassCastException e) {
+          // @todo log this
+        }
+
+
+        try {
+          List<Map<String, String>> introductionTranslation =
+              (List<Map<String, String>>) dbDoc.getPropertyValue(
+                  "fvbook" + ":introduction_literal_translation");
+
+          if (introductionTranslation != null) {
+
+            bsr.setIntroductionTranslation(introductionTranslation.stream().map(map -> {
+              return map.get("translation");
+            }).collect(Collectors.joining("; ")));
+          }
+
+        } catch (ClassCastException e) {
+          // @todo log this
+        }
+
+
+        Object author = dbDoc.getPropertyValue("fvbook:author");
+        if (author != null) {
+          if (author instanceof String) {
+            bsr.setAuthor((String) author);
+          }
+          if (author instanceof List) {
+            bsr.setAuthor((String) ((List) author)
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.joining("; ")));
+          }
+          if (author instanceof Object[]) {
+            List<Object> authorList = Arrays.asList(author);
+            bsr.setAuthor((String) (authorList
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.joining("; "))));
+          }
+        }
+
+        // retrieve pageCount
+        DocumentModelList pages = session.query(
+            "select * from FVPage where ecm:ancestorId = " + NXQL.escapeString(dbDoc.getId()));
+        bsr.setPageCount(pages.size());
+
       }
 
 
