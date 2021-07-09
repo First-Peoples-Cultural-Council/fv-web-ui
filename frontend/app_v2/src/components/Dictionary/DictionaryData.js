@@ -25,7 +25,7 @@ function DictionaryData({ docType }) {
 
   const query = location.search ? location.search : `?&docType=${docType}&perPage=100`
 
-  // Param options: perPage=100&page=1&kidsOnly=false&gamesOnly=false&sortBy=entry&docType=WORDS_AND_PHRASES&sortAscending=true&q=Appla&alphabetCharacter=A
+  // Param options: perPage=100&page=1&kidsOnly=false&gamesOnly=false&sortBy=entry&docType=WORD_AND_PHRASE&sortAscending=true&q=Appla&alphabetCharacter=A
   const { data, error, fetchNextPage, hasNextPage, isError, isFetchingNextPage, isLoading } = useInfiniteQuery(
     [docType, query],
     ({ pageParam = 1 }) => api.dictionary.get({ sitename: uid, query: query, pageParam: pageParam }),

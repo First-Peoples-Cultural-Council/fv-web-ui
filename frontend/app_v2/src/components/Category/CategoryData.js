@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useInfiniteQuery, useQuery } from 'react-query'
+import { useInfiniteQuery } from 'react-query'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 
 // FPCC
@@ -26,11 +26,11 @@ function CategoryData() {
 
   const docType = new URLSearchParams(location.search).get('docType')
     ? new URLSearchParams(location.search).get('docType')
-    : 'WORDS_AND_PHRASES'
+    : 'WORD_AND_PHRASE'
 
   const query = `?&docType=${docType}&perPage=100&sortBy=entry&category=${categoryId}`
 
-  // Param options: perPage=100&page=1&kidsOnly=false&gamesOnly=false&sortBy=entry&docType=WORDS_AND_PHRASES&sortAscending=true&q=Appla&alphabetCharacter=A
+  // Param options: perPage=100&page=1&kidsOnly=false&gamesOnly=false&sortBy=entry&docType=WORD_AND_PHRASE&sortAscending=true&q=Appla&alphabetCharacter=A
   const { data, error, fetchNextPage, hasNextPage, isError, isFetchingNextPage, isLoading } = useInfiniteQuery(
     ['category', query],
     ({ pageParam = 1 }) => api.dictionary.get({ sitename: uid, query: query, pageParam: pageParam }),

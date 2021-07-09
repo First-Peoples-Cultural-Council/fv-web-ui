@@ -33,7 +33,7 @@ public class DictionaryObject extends AbstractSearchlikeObject {
   @Path("{dialect}")
   public Response getDictionary(
       @PathParam(value = "dialect") String dialect, @QueryParam(value = "q") String query,
-      @QueryParam(value = "docType") @DefaultValue("WORDS_AND_PHRASES") String docType,
+      @QueryParam(value = "docType") @DefaultValue("WORD_AND_PHRASE") String docType,
       @QueryParam(value = "alphabetCharacter") String alphabetCharacter,
       @QueryParam(value = "category") String category,
       @QueryParam(value = "kidsOnly") @DefaultValue("false") boolean kidsOnly,

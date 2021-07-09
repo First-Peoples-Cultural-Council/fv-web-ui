@@ -101,20 +101,20 @@ function DictionaryListPresentation({
                   <tr>
                     <th scope="col" className="px-6 py-3">
                       <button
-                        onClick={() => onSortByClick('entry')}
+                        onClick={() => onSortByClick('ENTRY')}
                         className="flex items-center text-left text-xs font-medium text-fv-charcoal-light tracking-wider"
                       >
                         <div className="inline-flex">ENTRY</div>
-                        {getIcon('entry')}
+                        {getIcon('ENTRY')}
                       </button>
                     </th>
                     <th scope="col" className="px-6 py-3">
                       <button
-                        onClick={() => onSortByClick('translation')}
+                        onClick={() => onSortByClick('TRANSLATION')}
                         className="flex items-center text-left text-xs font-medium text-fv-charcoal-light tracking-wider"
                       >
                         <div className="inline-flex">TRANSLATION</div>
-                        {getIcon('translation')}
+                        {getIcon('TRANSLATION')}
                       </button>
                     </th>
                     {showType && (
@@ -231,6 +231,7 @@ DictionaryListPresentation.propTypes = {
   onSortByClick: func,
   showType: bool,
   sitename: string,
+  sorting: object,
 }
 
 DictionaryListPresentation.defaultProps = {
