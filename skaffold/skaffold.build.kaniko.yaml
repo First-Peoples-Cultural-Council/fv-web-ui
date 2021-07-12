@@ -1,4 +1,4 @@
-apiVersion: skaffold/v2beta17
+apiVersion: skaffold/v2beta18
 kind: Config
 profiles:
   - name: kaniko-build
@@ -9,10 +9,14 @@ profiles:
         concurrency: 2
         timeout: 120m
         resources:
-          limits:
+          requests:
             cpu: 1
-            ephemeralStorage: 10Gi
-            memory: 3Gi
+            ephemeralStorage: 4G
+            memory: 3000M
+          limits:
+            cpu: 6
+            ephemeralStorage: 4G
+            memory: 5000M
       artifacts:
       - image: firstvoices-skaffold
         context: ../
@@ -76,3 +80,16 @@ profiles:
       - op: add
         path: /build/cluster/namespace
         value: kaniko
+  - name: kaniko-use-node-selector
+    # affinities
+    patches:
+      - op: add
+        path: /build/cluster/tolerations
+        value:
+          - key: kaniko-builder
+            operator: 'Exists'
+            effect: NoSchedule
+      - op: add
+        path: /build/cluster/nodeSelector
+        value:
+          role: kaniko-builder
