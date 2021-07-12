@@ -19,6 +19,10 @@ function CategoriesData() {
   const { sitename } = useParams()
   const history = useHistory()
 
+  const docType = new URLSearchParams(location.search).get('docType')
+    ? new URLSearchParams(location.search).get('docType')
+    : 'WORD_AND_PHRASE'
+
   // Data fetch
   const response = useQuery(
     ['categories', uid],
@@ -31,7 +35,7 @@ function CategoriesData() {
   const { status, isLoading, error, isError, data } = response
 
   const [categoriesToShow, setCategoriesToShow] = useState([])
-  const [filter, setFilter] = useState('WORD_AND_PHRASE')
+  const [filter, setFilter] = useState(docType)
 
   function filterCategoriesByType(category) {
     return category?.type === filter
@@ -75,8 +79,6 @@ function CategoriesData() {
 
   return {
     categories: categoriesToShow,
-    // categoriesResponse is used by CategoryData component
-    categoriesResponse: response,
     filter,
     isLoading: isLoading || status === 'idle' || isError,
     setFilter,
