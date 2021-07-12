@@ -16,6 +16,9 @@ profiles:
   - name: use-kaniko-namespace
     activation:
       - env: USE_KANIKO_NAMESPACE=true
+  - name: use-kaniko-node-selector
+    activation:
+      - env: USE_KANIKO_NODE_SELECTOR=true
 requires:
   - path: skaffold.build.docker.yaml
 
@@ -29,4 +32,6 @@ requires:
         activatedBy: [ kaniko-apply-dockerconfig ]
       - name: kaniko-use-namespace
         activatedBy: [ use-kaniko-namespace ]
+      - name: kaniko-use-node-selector
+        activatedBy: [ use-kaniko-node-selector]
   - path: skaffold.deploy.yaml

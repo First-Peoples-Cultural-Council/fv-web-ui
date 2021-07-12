@@ -1,6 +1,7 @@
 FROM maven:3-openjdk-11 AS builder
 
-COPY skaffold/dockerfiles/firstvoices/settings.xml /root/.m2/settings.xml
+COPY skaffold/dockerfiles/firstvoices/settings.xml .
+RUN cat settings.xml > /root/.m2/settings.xml
 
 RUN mkdir -p /opt/src && mkdir -p /opt/src/firstvoices-marketplace && mkdir -p /opt/src/modules
 WORKDIR /opt/src

@@ -4,8 +4,8 @@ metadata:
   name: m2-cache-claim
 spec:
   accessModes:
-    - ReadWriteOnce
-  storageClassName: gp2
+    - ReadWriteMany
+  storageClassName: efs
   resources:
     requests:
       storage: 10Gi
