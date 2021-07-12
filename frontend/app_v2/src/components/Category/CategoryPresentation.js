@@ -14,26 +14,52 @@ import useCategoryIcon from 'common/useCategoryIcon'
  * @returns {node} jsx markup
  */
 function CategoryPresentation({
-  isLoading,
-  items,
   actions,
-  docType,
-  moreActions,
-  sitename,
-  infiniteScroll,
   categories,
   currentCategory,
   currentParentCategory,
-  onCategoryClick,
+  docType,
+  infiniteScroll,
+  isLoading,
+  items,
+  moreActions,
+  sitename,
 }) {
   const getConditionalClass = (category) => {
-    if (category.id === currentCategory.id) {
-      return 'border-l-4 border-tertiaryB bg-tertiaryB text-white pb-2'
-    }
-    if (category.parentId === currentCategory.id) {
-      return 'border-l-4 border-tertiaryB-light bg-tertiaryB-light text-white'
+    if (category.id === currentCategory.id || category.id === currentParentCategory.id) {
+      return 'border-l-4 border-tertiaryB bg-tertiaryB text-white'
     }
     return 'text-tertiaryB'
+  }
+
+  const getCurrentCategory = () => {
+    return (
+      <>
+        <Link
+          className="transition duration-500 ease-in-out md:my-2 md:mx-5 rounded-lg flex items-center cursor-pointer border-l-4 border-tertiaryB bg-tertiaryB text-white"
+          to={`/${sitename}/categories/${currentParentCategory.id}?docType=${docType}`}
+        >
+          {useCategoryIcon(currentParentCategory.title, 'inline-flex p-2 rounded-lg fill-current h-10 w-10')}
+          <div className="inline-flex text-lg font-medium">{currentParentCategory.title}</div>
+        </Link>
+        {currentParentCategory?.children?.length > 0
+          ? currentParentCategory?.children?.map((child) => {
+              return (
+                <Link
+                  key={child.id}
+                  className={`transition duration-500 ease-in-out md:my-2 md:mr-5 ml-10 rounded-lg flex items-center cursor-pointer ${getConditionalClass(
+                    child
+                  )}`}
+                  to={`/${sitename}/categories/${child.id}?docType=${docType}`}
+                >
+                  {useCategoryIcon(child.title, 'inline-flex p-2 rounded-lg fill-current h-10 w-10')}
+                  <div className="inline-flex text-lg font-medium">{child.title}</div>
+                </Link>
+              )
+            })
+          : null}
+      </>
+    )
   }
 
   const getFilterListItems = () => {
@@ -42,51 +68,25 @@ function CategoryPresentation({
         <li
           key={category.id}
           id={'SearchFilter' + category.id}
-          className={`inline-block transition duration-500 ease-in-out md:block md:my-2 md:mx-5 flex-grow rounded-lg ${getConditionalClass(
-            category
-          )}`}
+          className="inline-block transition duration-500 ease-in-out md:block md:my-2 md:mx-5 flex-grow rounded-lg text-tertiaryB"
         >
           <Link
-            className={`transition duration-500 ease-in-out flex items-center  cursor-pointer `}
+            className={'transition duration-500 ease-in-out flex items-center  cursor-pointer '}
             to={`/${sitename}/categories/${category.id}?docType=${docType}`}
-            onClick={() => onCategoryClick(category)}
           >
             {useCategoryIcon(category.title, 'inline-flex p-2 rounded-lg fill-current h-10 w-10')}
             <div className="inline-flex text-lg font-medium">{category.title}</div>
           </Link>
-          {(category.id === currentParentCategory || category.id === currentCategory.id) && (
-            <ul className="inline-block md:block list-none m-2 md:m-0 md:space-y-4">
-              {category?.children?.map((child) => {
-                console.log('Child', child)
-                return (
-                  <li
-                    key={child.id}
-                    className="inline-block transition duration-500 ease-in-out md:block md:my-2 md:mx-5 flex-grow"
-                  >
-                    <Link
-                      className={`transition duration-500 ease-in-out flex items-center rounded-lg cursor-pointer ${getConditionalClass(
-                        child
-                      )}`}
-                      to={`/${sitename}/categories/${child.id}?docType=${docType}`}
-                      onClick={() => onCategoryClick(child)}
-                    >
-                      {useCategoryIcon(child.title, 'inline-flex p-2 rounded-lg fill-current h-10 w-10')}
-                      <div className="inline-flex text-lg font-medium">{child.title}</div>
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          )}
         </li>
       )
     })
   }
   return (
     <>
+      <h2 className="hidden md:block text-2xl ml-8">Categories</h2>
       <div className="grid grid-cols-11 md:p-2">
-        <div className="col-span-11 md:col-span-2 mt-2">
-          <h2 className="hidden md:block text-2xl ml-8">Categories</h2>
+        <div className="col-span-11 md:col-span-2 mt-2  divide-y-4 divide-gray-300">
+          <div className="inline-flex align-center md:block m-2 md:m-0 h-56">{getCurrentCategory()}</div>
           <ul className="inline-block md:block list-none m-2 md:m-0 md:space-y-4">{getFilterListItems()}</ul>
         </div>
         <div className="min-h-220 col-span-11 md:col-span-9">
@@ -108,11 +108,15 @@ function CategoryPresentation({
 const { array, bool, object, string } = PropTypes
 CategoryPresentation.propTypes = {
   actions: array,
-  moreActions: array,
+  categories: array,
+  currentCategory: object,
+  currentParentCategory: object,
+  docType: string,
+  infiniteScroll: object,
   isLoading: bool,
   items: object,
+  moreActions: array,
   sitename: string,
-  infiniteScroll: object,
 }
 
 export default CategoryPresentation
